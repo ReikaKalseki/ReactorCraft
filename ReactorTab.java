@@ -10,8 +10,8 @@
 package Reika.ReactorCraft;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +24,7 @@ public class ReactorTab extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Item.diamond);
+		return ReactorItems.WASTE.getStackOf();
 	}
 
 	@Override

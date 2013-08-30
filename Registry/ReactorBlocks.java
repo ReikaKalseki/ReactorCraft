@@ -93,6 +93,8 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 	@Override
 	public String getMultiValuedName(int meta) {
 		switch(this) {
+		case MATS:
+			return MatBlocks.matList[meta].getName();
 		default:
 			return "";
 		}
@@ -105,7 +107,14 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 
 	@Override
 	public int getNumberMetadatas() {
-		return 1;
+		switch(this) {
+		case TILEENTITY:
+			return ReactorTiles.TEList.length;
+		case MATS:
+			return MatBlocks.matList.length;
+		default:
+			return 1;
+		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Base;
 
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityReactorBase extends TileEntityBase {
 
@@ -21,6 +22,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 	@Override
 	protected String getTEName() {
-		return "Fuel Core";
+		return ReactorTiles.TEList[this.getIndex()].getName();
 	}
+
+	public abstract int getIndex();
 }

@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityCPU extends TileEntityReactorBase {
 
@@ -22,6 +23,11 @@ public class TileEntityCPU extends TileEntityReactorBase {
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public int getIndex() {
+		return ReactorTiles.CPU.ordinal();
 	}
 
 }

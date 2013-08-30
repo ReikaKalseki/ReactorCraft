@@ -9,27 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import net.minecraft.world.World;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.potion.PotionEffect;
 
-public class CommonProxy {
+public class RadiationEffects {
 
-	public void registerRenderers()
-	{
-
-	}
-
-	public void addArmorRenders() {}
-
-	public World getClientWorld() {
-		return null;
-	}
-
-	public void registerRenderInformation() {
-
-	}
-
-	public void registerSounds() {
-
+	public static void applyEffects(EntityLiving e) {
+		if (!e.isPotionActive(ReactorCraft.radiation))
+			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
 	}
 
 }

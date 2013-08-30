@@ -9,6 +9,45 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ClientProxy extends CommonProxy {
+
+	public static final ItemSpriteSheetRenderer[] items = {
+		new ItemSpriteSheetRenderer(ReactorCraft.class, "Textures/Items/items1.png", ""),
+	};
+
+	@Override
+	public void registerSounds() {
+		//MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, SoundRegistry.soundList));
+	}
+
+	@Override
+	public void registerRenderers() {
+		this.loadModels();
+
+		this.registerSpriteSheets();
+	}
+
+	private void registerSpriteSheets() {
+
+		for (int i = 0; i < ReactorItems.itemList.length; i++) {
+			MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getShiftedItemID(), items[ReactorItems.itemList[i].getSpriteSheet()]);
+		}
+	}
+
+	public void loadModels() {
+
+	}
+
+	@Override
+	public World getClientWorld()
+	{
+		return FMLClientHandler.instance().getClient().theWorld;
+	}
 
 }

@@ -13,7 +13,12 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWaterPipe extends TileEntityReactorBase {
+public class TileEntityTurbineCore extends TileEntityReactorBase {
+
+	@Override
+	public int getIndex() {
+		return ReactorTiles.TURBINECORE.ordinal();
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -23,11 +28,6 @@ public class TileEntityWaterPipe extends TileEntityReactorBase {
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
-	}
-
-	@Override
-	public int getIndex() {
-		return ReactorTiles.COOLANT.ordinal();
 	}
 
 }

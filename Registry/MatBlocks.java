@@ -11,7 +11,19 @@ package Reika.ReactorCraft.Registry;
 
 public enum MatBlocks {
 
-	CONCRETE(),
-	SLAG();
+	CONCRETE("Concrete"),
+	SLAG("Fuel Slag");
+
+	private String name;
+
+	public static final MatBlocks[] matList = values();
+
+	private MatBlocks(String n) {
+		name = n;
+	}
+
+	public String getName() {
+		return name;
+	}
 
 }

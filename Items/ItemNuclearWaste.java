@@ -10,26 +10,17 @@
 package Reika.ReactorCraft.Items;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.RadiationEffects;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
 
-public class ItemNuclearWaste extends Item implements IndexedItemSprites {
-
-	private int index;
+public class ItemNuclearWaste extends ReactorItemBase {
 
 	public ItemNuclearWaste(int ID, int tex) {
-		super(ID);
-		index = tex;
-		this.setCreativeTab(ReactorCraft.tabRctr);
-	}
-
-	@Override
-	public int getItemSpriteIndex(ItemStack is) {
-		return index;
+		super(ID, tex);
 	}
 
 	@Override
@@ -53,6 +44,12 @@ public class ItemNuclearWaste extends Item implements IndexedItemSprites {
 		ei.motionZ = location.motionZ;
 		ei.delayBeforeCanPickup = 10;
 		return ei;
+	}
+
+	@Override
+	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
+		if (e instanceof EntityLiving)
+			RadiationEffects.applyEffects((EntityLiving)e);
 	}
 
 }

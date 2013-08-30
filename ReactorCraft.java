@@ -27,6 +27,7 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -56,6 +57,11 @@ public class ReactorCraft extends DragonAPIMod {
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
+	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true, 0xaa00ff).setPotionName("Radiation Sickness");
+
+	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
+	public static CommonProxy proxy;
+
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
@@ -66,14 +72,16 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	@Init
 	public void load(FMLInitializationEvent event) {
+		proxy.registerRenderers();
 		this.addBlocks();
 		this.addItems();
+		ReactorRecipes.addRecipes();
 	}
 
 	@Override
 	@PostInit
 	public void postload(FMLPostInitializationEvent evt) {
-
+		ReactorRecipes.addModInterface();
 	}
 
 	private static void addItems() {

@@ -11,15 +11,21 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Items.ItemDepleted;
+import Reika.ReactorCraft.Items.ItemFuelPellet;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
 
 public enum ReactorItems implements RegistrationList, IDRegistry {
 
-	WASTE(0, "Nuclear Waste", ItemNuclearWaste.class);
+	WASTE(0,	"Nuclear Waste", 	ItemNuclearWaste.class),
+	FUEL(1,		"Uranium Pellet",	ItemFuelPellet.class),
+	DEPLETED(2, "Depleted Uranium",	ItemDepleted.class);
 
 	private String name;
 	private Class itemClass;
@@ -71,6 +77,11 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	@Override
 	public String getMultiValuedName(int meta) {
 		switch(this) {
+		case FUEL:
+			if (meta == 0)
+				return this.getBasicName()+" (Fresh)";
+			else
+				return this.getBasicName()+" ("+(meta*10)+"% Depleted)";
 		default:
 			return "";
 		}
@@ -79,6 +90,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	@Override
 	public boolean hasMultiValuedName() {
 		switch(this) {
+		case FUEL:
+			return true;
 		default:
 			return false;
 		}
@@ -87,6 +100,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
+		case FUEL:
+			return 10;
 		default:
 			return 1;
 		}
@@ -117,7 +132,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	@Override
 	public int getDefaultID() {
-		return 18000;
+		return 18000+this.ordinal();
 	}
 
 	@Override
@@ -137,6 +152,40 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	public boolean isDummiedOut() {
 		return itemClass == null;
+	}
+
+	public ItemStack getCraftedProduct(int amt) {
+		return new ItemStack(this.getShiftedItemID(), amt, 0);
+	}
+
+	public ItemStack getCraftedMetadataProduct(int amt, int meta) {
+		return new ItemStack(this.getShiftedItemID(), amt, meta);
+	}
+
+	public ItemStack getStackOf() {
+		return this.getCraftedProduct(1);
+	}
+
+	public ItemStack getStackOfMetadata(int meta) {
+		return this.getCraftedMetadataProduct(1, meta);
+	}
+
+	public Item getItemInstance() {
+		return ReactorCraft.items[this.ordinal()];
+	}
+
+	public static ReactorItems getEntryByID(int id) {
+		for (int i = 0; i < itemList.length; i++) {
+			if (itemList[i].getShiftedItemID() == id)
+				return itemList[i];
+		}
+		throw new RegistrationException(ReactorCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
+	}
+
+	public static ReactorItems getEntry(ItemStack is) {
+		if (is == null)
+			return null;
+		return getEntryByID(is.itemID);
 	}
 
 }

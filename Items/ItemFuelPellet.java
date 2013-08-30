@@ -7,29 +7,14 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft;
+package Reika.ReactorCraft.Items;
 
-import net.minecraft.world.World;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
-public class CommonProxy {
+public class ItemFuelPellet extends ReactorItemBase {
 
-	public void registerRenderers()
-	{
-
-	}
-
-	public void addArmorRenders() {}
-
-	public World getClientWorld() {
-		return null;
-	}
-
-	public void registerRenderInformation() {
-
-	}
-
-	public void registerSounds() {
-
+	public ItemFuelPellet(int ID, int tex) {
+		super(ID, tex);
 	}
 
 }
