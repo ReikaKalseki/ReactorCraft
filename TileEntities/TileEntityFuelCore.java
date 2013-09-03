@@ -11,10 +11,12 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityFuelCore extends TileEntityInventoriedReactorBase {
+public class TileEntityFuelCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE {
 
 	ItemStack[] inv = new ItemStack[9];
 
@@ -56,5 +58,10 @@ public class TileEntityFuelCore extends TileEntityInventoriedReactorBase {
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public void onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+
 	}
 }

@@ -10,12 +10,15 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
-import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWaterPipe extends TileEntityReactorBase implements ReactorCoreTE {
+public class TileEntityCondenser extends TileEntityReactorBase {
+
+	@Override
+	public int getIndex() {
+		return ReactorTiles.CONDENSER.ordinal();
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -24,16 +27,6 @@ public class TileEntityWaterPipe extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public int getIndex() {
-		return ReactorTiles.COOLANT.ordinal();
-	}
-
-	@Override
-	public void onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 
 	}
 

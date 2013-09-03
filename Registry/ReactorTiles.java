@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.tileentity.TileEntity;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelCore;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineBlade;
@@ -24,7 +25,8 @@ public enum ReactorTiles {
 	COOLANT("Coolant Cell", TileEntityWaterPipe.class),
 	CPU("Central Control", TileEntityCPU.class),
 	TURBINEBLADE("Turbine Blade", TileEntityTurbineBlade.class),
-	TURBINECORE("Turbine Core", TileEntityTurbineCore.class);
+	TURBINECORE("Turbine Core", TileEntityTurbineCore.class),
+	CONDENSER("Condenser", TileEntityCondenser.class);
 
 	private String name;
 	private Class teClass;

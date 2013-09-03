@@ -14,7 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Blocks.BlockMeltdown;
 import Reika.ReactorCraft.Blocks.BlockMeltdownFlowing;
@@ -77,7 +77,7 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 
 	@Override
 	public String getUnlocalizedName() {
-		return ReikaJavaLibrary.stripSpaces(blockName);
+		return ReikaStringParser.stripSpaces(blockName);
 	}
 
 	@Override
