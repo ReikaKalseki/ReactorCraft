@@ -9,11 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import net.minecraft.nbt.NBTTagCompound;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityReactorBase extends TileEntityBase {
+
+	protected int temperature;
 
 	@Override
 	public int getTileEntityBlockID() {
@@ -26,4 +29,29 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	}
 
 	public abstract int getIndex();
+
+	public int getTextureState() {
+		return 0;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBT.setInteger("temp", temperature);
+
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		temperature = NBT.getInteger("temp");
+
+	}
 }

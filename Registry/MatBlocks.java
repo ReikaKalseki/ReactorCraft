@@ -26,4 +26,8 @@ public enum MatBlocks {
 		return name;
 	}
 
+	public boolean isMultiSidedTexture() {
+		return false;
+	}
+
 }

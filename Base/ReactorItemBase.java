@@ -32,6 +32,7 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 		if (this.getDataValues() > 0) {
 			hasSubtypes = true;
 			this.setMaxDamage(0);
+			maxStackSize = 1;
 		}
 	}
 

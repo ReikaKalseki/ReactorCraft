@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -43,8 +44,18 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	}
 
 	@Override
-	public void onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return ReikaMathLibrary.doWithChance(50);
+	}
 
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
 	}
 
 }

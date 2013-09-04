@@ -7,17 +7,15 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft;
+package Reika.ReactorCraft.Items;
 
-import net.minecraft.world.World;
-import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
-public interface ReactorCoreTE {
+public class ItemHeavyBucket extends ReactorItemBase {
 
-	public abstract boolean onNeutron(EntityNeutron e, World world, int x, int y, int z);
-
-	public abstract int getTemperature();
-
-	public void setTemperature(int T);
+	public ItemHeavyBucket(int ID, int tex) {
+		super(ID, tex);
+		maxStackSize = 1;
+	}
 
 }

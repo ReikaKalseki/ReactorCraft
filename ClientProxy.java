@@ -18,7 +18,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 public class ClientProxy extends CommonProxy {
 
 	public static final ItemSpriteSheetRenderer[] items = {
-		new ItemSpriteSheetRenderer(ReactorCraft.class, "Textures/Items/items1.png", ""),
+		new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png", ""),
 	};
 
 	@Override
@@ -36,6 +36,7 @@ public class ClientProxy extends CommonProxy {
 	private void registerSpriteSheets() {
 
 		for (int i = 0; i < ReactorItems.itemList.length; i++) {
+			if (ReactorItems.itemList[i].getSpriteIndex() > -1)
 			MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getShiftedItemID(), items[ReactorItems.itemList[i].getSpriteSheet()]);
 		}
 	}

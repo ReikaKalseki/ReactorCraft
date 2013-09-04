@@ -14,6 +14,14 @@ import java.net.URL;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidDictionary;
+import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
@@ -34,6 +42,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 //Addon for RC - adds nuclear power to gen LOTS of shaft power
 //Requires RC (in code) and is useless w/o IC2; uses its uranium
@@ -57,6 +68,9 @@ public class ReactorCraft extends DragonAPIMod {
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
+	//Get by mining deep ocean
+	public static LiquidStack D2O;
+
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true, 0xaa00ff).setPotionName("Radiation Sickness");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
@@ -65,16 +79,22 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
+		MinecraftForge.EVENT_BUS.register(this);
+
+		this.checkAPI();
+
 		config.initProps(evt);
 		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
+
+		this.addBlocks();
+		this.addItems();
+		this.addLiquids();
 	}
 
 	@Override
 	@Init
 	public void load(FMLInitializationEvent event) {
 		proxy.registerRenderers();
-		this.addBlocks();
-		this.addItems();
 		ReactorRecipes.addRecipes();
 	}
 
@@ -82,6 +102,23 @@ public class ReactorCraft extends DragonAPIMod {
 	@PostInit
 	public void postload(FMLPostInitializationEvent evt) {
 		ReactorRecipes.addModInterface();
+	}
+
+	@ForgeSubscribe
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Post event) {
+		setupLiquidIcons();
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void setupLiquidIcons() {
+		logger.log("Loading Liquid Icons");
+
+		Item d2o = items[ReactorItems.WATER.ordinal()];
+		LiquidDictionary.getCanonicalLiquid("Heavy Water").setRenderingIcon(d2o.getIconFromDamage(0));
+
+		D2O.canonical().setRenderingIcon(d2o.getIconFromDamage(0));
+		D2O.canonical().setTextureSheet("/gui/items.png");
 	}
 
 	private static void addItems() {
@@ -92,6 +129,20 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaRegistryHelper.instantiateAndRegisterBlocks(instance, ReactorBlocks.blockList, blocks, logger.shouldLog());
 		for (int i = 0; i < ReactorTiles.TEList.length; i++)
 			GameRegistry.registerTileEntity(ReactorTiles.TEList[i].getTEClass(), "Reactor"+ReactorTiles.TEList[i].getName());
+	}
+
+	private static void addLiquids() {
+		logger.log("Loading And Registering Liquids");
+
+		Item d2o = items[ReactorItems.WATER.ordinal()];
+
+		LanguageRegistry.addName(d2o, "Heavy Water");
+
+		D2O = new LiquidStack(d2o, LiquidContainerRegistry.BUCKET_VOLUME);
+
+		LiquidDictionary.getOrCreateLiquid("Heavy Water", D2O);
+
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Heavy Water", LiquidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOf(), new ItemStack(Item.bucketEmpty)));
 	}
 
 	@Override

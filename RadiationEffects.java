@@ -19,4 +19,9 @@ public class RadiationEffects {
 			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
 	}
 
+	public static void applyPulseEffects(EntityLiving e) {
+		if (!e.isPotionActive(ReactorCraft.radiation))
+			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 20, 0));
+	}
+
 }

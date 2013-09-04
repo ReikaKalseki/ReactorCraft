@@ -47,4 +47,10 @@ public class ItemBlockReactorMat extends ItemBlock {
 		int d = is.getItemDamage();
 		return super.getUnlocalizedName() + "." + d;
 	}
+
+	@Override
+	public int getMetadata(int meta)
+	{
+		return meta;
+	}
 }
