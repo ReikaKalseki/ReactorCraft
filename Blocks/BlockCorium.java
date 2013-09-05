@@ -19,9 +19,9 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockMeltdown extends BlockStationary implements ILiquid {
+public class BlockCorium extends BlockStationary implements ILiquid {
 
-	public BlockMeltdown(int par1, Material par2Material) {
+	public BlockCorium(int par1, Material par2Material) {
 		super(par1, par2Material);
 
 		this.setHardness(100F);
@@ -35,7 +35,7 @@ public class BlockMeltdown extends BlockStationary implements ILiquid {
 
 	@Override
 	public int stillLiquidId() {
-		return ReactorBlocks.MELTDOWNSTILL.getBlockID();
+		return ReactorBlocks.CORIUMSTILL.getBlockID();
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public class BlockMeltdown extends BlockStationary implements ILiquid {
 	protected void setNotStationary(World par1World, int par2, int par3, int par4)
 	{
 		int l = par1World.getBlockMetadata(par2, par3, par4);
-		par1World.setBlock(par2, par3, par4, ReactorBlocks.MELTDOWNFLOWING.getBlockID(), l, 2);
-		par1World.scheduleBlockUpdate(par2, par3, par4, ReactorBlocks.MELTDOWNFLOWING.getBlockID(), this.tickRate(par1World));
+		par1World.setBlock(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), l, 2);
+		par1World.scheduleBlockUpdate(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), this.tickRate(par1World));
 	}
 
 }

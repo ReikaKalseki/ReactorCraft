@@ -20,8 +20,8 @@ import net.minecraft.util.FoodStats;
 
 public class PotionRadiation extends Potion {
 
-	public PotionRadiation(int par1, boolean par2, int par3) {
-		super(par1, par2, par3);
+	public PotionRadiation(int par1, boolean par2) {
+		super(par1, par2, 0x111111);
 	}
 
 	@Override

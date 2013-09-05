@@ -22,13 +22,13 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockMeltdownFlowing extends BlockFlowing implements ILiquid {
+public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 
 	int numAdjacentSources = 0;
 	boolean isOptimalFlowDirection[] = new boolean[4];
 	int flowCost[] = new int[4];
 
-	public BlockMeltdownFlowing(int i, Material material) {
+	public BlockCoriumFlowing(int i, Material material) {
 		super(i, material);
 
 		this.setHardness(100F);
@@ -42,7 +42,7 @@ public class BlockMeltdownFlowing extends BlockFlowing implements ILiquid {
 
 	private void updateFlow(World par1World, int par2, int par3, int par4) {
 		int l = par1World.getBlockMetadata(par2, par3, par4);
-		par1World.setBlock(par2, par3, par4, ReactorBlocks.MELTDOWNSTILL.getBlockID(), l, 2);
+		par1World.setBlock(par2, par3, par4, ReactorBlocks.CORIUMSTILL.getBlockID(), l, 2);
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class BlockMeltdownFlowing extends BlockFlowing implements ILiquid {
 
 	@Override
 	public int stillLiquidId() {
-		return ReactorBlocks.MELTDOWNSTILL.getBlockID();
+		return ReactorBlocks.CORIUMSTILL.getBlockID();
 	}
 
 	@Override

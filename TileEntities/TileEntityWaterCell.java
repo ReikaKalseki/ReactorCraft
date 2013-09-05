@@ -103,36 +103,48 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		return 0;
 	}
 
+	enum LiquidStates {
+		EMPTY(null),
+		WATER(LiquidDictionary.getCanonicalLiquid("Water")),
+		HEAVY(ReactorCraft.D2O);
+
+		private LiquidStack liquid;
+
+		public static final LiquidStates[] list = values();
+
+		private LiquidStates(LiquidStack liq) {
+			liquid = liq;
+		}
+
+		public static LiquidStates getState(LiquidStack l) {
+			if (l == null)
+				return EMPTY;
+			for (int i = 0; i < list.length; i++) {
+				LiquidStack liq = list[i].liquid;
+				if (liq != null && l.isLiquidEqual(liq)) {
+					return list[i];
+				}
+			}
+
+			return null;
+		}
+
+		public LiquidStack getLiquid() {
+			return liquid;
+		}
+	}
+
 	@Override
 	public int getTextureState() {
 		return this.getLiquidState();
 	}
 
 	public int getLiquidState() {
-		if (internalLiquid == null)
-			return 0;
-		if (internalLiquid.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water"))) {
-			return 1;
-		}
-		if (internalLiquid.isLiquidEqual(ReactorCraft.D2O)) {
-			return 2;
-		}
-		return 0;
+		return LiquidStates.getState(internalLiquid).ordinal();
 	}
 
-	/** 0 = empty, 1 = water, 2 = heavy */
 	public void setLiquidState(int liq) {
-		switch(liq) {
-		case 0:
-			internalLiquid = null;
-			break;
-		case 1:
-			internalLiquid = LiquidDictionary.getCanonicalLiquid("Water");
-			break;
-		case 2:
-			internalLiquid = ReactorCraft.D2O;
-			break;
-		}
+		internalLiquid = LiquidStates.list[liq].getLiquid();
 	}
 
 	@Override

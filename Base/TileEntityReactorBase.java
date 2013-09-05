@@ -12,7 +12,6 @@ package Reika.ReactorCraft.Base;
 import net.minecraft.nbt.NBTTagCompound;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityReactorBase extends TileEntityBase {
@@ -20,10 +19,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	protected StepTimer thermalTicker = new StepTimer(20);
 
 	protected double temperature;
+	protected float phi;
 
 	@Override
 	public int getTileEntityBlockID() {
-		return ReactorBlocks.TILEENTITY.getBlockID();
+		return ReactorTiles.TEList[this.getIndex()].getBlockID();
 	}
 
 	@Override
@@ -44,6 +44,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 		NBT.setDouble("temp", temperature);
 
+		NBT.setFloat("ang", phi);
+
 	}
 
 	/**
@@ -55,6 +57,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 		super.readFromNBT(NBT);
 
 		temperature = NBT.getDouble("temp");
+
+		phi = NBT.getFloat("ang");
 
 	}
 

@@ -25,12 +25,19 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
 
-	private ItemStack[] inv = new ItemStack[9];
+	private ItemStack[] inv = new ItemStack[4];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (par5Random.nextInt(20) == 0)
+		if (this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+
+		//this.collapseInventory();
+
+		if (world.getBlockId(x, y+1, z) == 3) {
+			this.feed();
+			world.setBlock(x, y+1, z, 2);
+		}
 	}
 
 	@Override
@@ -45,7 +52,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public int getSizeInventory() {
-		return 9;
+		return 4;
 	}
 
 	@Override
@@ -60,7 +67,13 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
-		return is.itemID == ReactorItems.FUEL.getShiftedItemID();
+		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
+			return true;
+		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
+			return true;
+		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+			return true;
+		return false;
 	}
 
 	@Override
@@ -71,6 +84,12 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
+			int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
+			ItemStack is = inv[slot];
+			if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas())
+				inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
+			else
+				inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 			this.spawnNeutronBurst(world, x, y, z);
 			double E = ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
@@ -107,22 +126,38 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		int id = world.getBlockId(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = world.getBlockTileEntity(x, y-1, z);
-		if (this.isThisTE(id, meta)) {
-			TileEntityFuelRod te = (TileEntityFuelRod)tile;
-			int slot =	this.getFirstFuelSlot();
-			if (slot == -1)
-				return false;
-			if (ReikaInventoryHelper.addToIInv(inv[slot], te)) {
-				ReikaInventoryHelper.decrStack(slot, inv);
-				return true;
-			}
-			else
-				return false;
-		}
-		else if (tile instanceof Feedable) {
+		if (tile instanceof Feedable) {
+			((Feedable) tile).feed();
+			if (((Feedable) tile).feedIn(inv[3])) {
+				inv[3] = inv[2];
+				inv[2] = inv[1];
+				inv[1] = inv[0];
 
+				id = world.getBlockId(x, y-1, z);
+				meta = world.getBlockMetadata(x, y-1, z);
+				tile = world.getBlockTileEntity(x, y-1, z);
+				if (tile instanceof Feedable) {
+					inv[0] = ((Feedable) tile).feedOut();
+				}
+				else
+					inv[0] = null;
+			}
 		}
+
 		return false;
+	}
+
+	//seems to be duping items, but have no idea why
+	//may be an inter-Te reaction
+	private void collapseInventory() {
+		for (int i = 0; i < 4; i++) {
+			for (int k = 3; k > 0; k--) {
+				if (inv[k] == null) {
+					inv[k] = inv[k-1];
+					inv[k-1] = null;
+				}
+			}
+		}
 	}
 
 	private int getFirstFuelSlot() {
@@ -141,14 +176,24 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean feedIn(ItemStack is) {
-		return ReikaInventoryHelper.addToIInv(is, this);
+		if (is == null)
+			return true;
+		if (!this.isStackValidForSlot(0, is))
+			return false;
+		if (inv[0] == null || inv[0].stackSize+is.stackSize <= inv[0].getMaxStackSize()) {
+			if (inv[0] == null) {
+				inv[0] = is.copy();
+			}
+			else {
+				inv[0].stackSize += is.stackSize;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public ItemStack feedOut() {
-		if (this.isFissile())
-			return inv[this.getFirstFuelSlot()];
-		else
-			return null;
+		return inv[3];
 	}
 }

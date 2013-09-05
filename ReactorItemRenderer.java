@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -17,7 +18,6 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class ReactorItemRenderer implements IItemRenderer {
@@ -49,12 +49,12 @@ public class ReactorItemRenderer implements IItemRenderer {
 		if (item.getItemDamage() >= ReactorTiles.TEList.length)
 			return;
 		ReactorTiles machine = ReactorTiles.TEList[item.getItemDamage()];
-		if (machine.hasModel())
+		if (machine.hasRender())
 			TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
 		else {
 			RenderBlocks rb = new RenderBlocks();
 			Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
-			rb.renderBlockAsItem(ReactorBlocks.TILEENTITY.getBlockVariable(), item.getItemDamage(), 1);
+			rb.renderBlockAsItem(Block.blocksList[machine.getBlockID()], machine.getBlockMetadata(), 1);
 		}
 	}
 }

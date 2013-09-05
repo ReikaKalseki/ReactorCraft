@@ -16,35 +16,38 @@ import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Blocks.BlockMeltdown;
-import Reika.ReactorCraft.Blocks.BlockMeltdownFlowing;
+import Reika.ReactorCraft.Blocks.BlockCorium;
+import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 
 public enum ReactorBlocks implements RegistrationList, IDRegistry {
 
-	TILEENTITY(BlockReactorTile.class, "Tile Entity"),
-	MATS(BlockReactorMat.class, ItemBlockReactorMat.class, "Reactor Materials"),
-	MELTDOWNFLOWING(BlockMeltdownFlowing.class, "Molten Reactor Fuel (Flowing)"),
-	MELTDOWNSTILL(BlockMeltdown.class, "Molten Reactor Fuel");
+	REACTOR(BlockReactorTile.class, 							"Reactor", false),
+	MATS(BlockReactorMat.class, ItemBlockReactorMat.class, 		"Reactor Materials", false),
+	CORIUMFLOWING(BlockCoriumFlowing.class, 					"Molten Corium (Flowing)", false),
+	CORIUMSTILL(BlockCorium.class, 								"Molten Corium", false),
+	MODELREACTOR(BlockReactorTile.class, 						"ReactorModelled", true),
+	MACHINE(BlockReactorTile.class, 							"Machine", false),
+	MODELMACHINE(BlockReactorTile.class, 						"MachineModelled", true);
 
 	private Class blockClass;
 	private String blockName;
 	private Class itemBlock;
+	private boolean model;
 
 	public static final ReactorBlocks[] blockList = values();
 
-	private ReactorBlocks(Class <? extends Block> cl, Class<? extends ItemBlock> ib, String n) {
+	private ReactorBlocks(Class <? extends Block> cl, Class<? extends ItemBlock> ib, String n, boolean m) {
 		blockClass = cl;
 		blockName = n;
 		itemBlock = ib;
+		model = m;
 	}
 
-	private ReactorBlocks(Class <? extends Block> cl, String n) {
-		blockClass = cl;
-		blockName = n;
-		itemBlock = null;
+	private ReactorBlocks(Class <? extends Block> cl, String n, boolean m) {
+		this(cl, null, n, m);
 	}
 
 	public int getBlockID() {
@@ -55,10 +58,10 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 		switch(this) {
 		case MATS:
 			return Material.rock;
-		case MELTDOWNFLOWING:
-		case MELTDOWNSTILL:
+		case CORIUMFLOWING:
+		case CORIUMSTILL:
 			return Material.lava;
-		case TILEENTITY:
+		case REACTOR:
 			return Material.iron;
 		default:
 			return Material.iron;
@@ -108,8 +111,11 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
-		case TILEENTITY:
-			return ReactorTiles.TEList.length;
+		case REACTOR:
+		case MODELREACTOR:
+		case MACHINE:
+		case MODELMACHINE:
+			return ReactorTiles.getTilesOfBlock(this).size();
 		case MATS:
 			return MatBlocks.matList.length;
 		default:
@@ -158,6 +164,10 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 
 	public Block getBlockVariable() {
 		return ReactorCraft.blocks[this.ordinal()];
+	}
+
+	public boolean isModelled() {
+		return model;
 	}
 
 }

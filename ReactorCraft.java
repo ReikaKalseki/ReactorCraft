@@ -26,7 +26,9 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
@@ -42,6 +44,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -73,7 +76,7 @@ public class ReactorCraft extends DragonAPIMod {
 	//Get by mining deep ocean
 	public static LiquidStack D2O;
 
-	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true, 0xaa00ff).setPotionName("Radiation Sickness");
+	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -97,6 +100,8 @@ public class ReactorCraft extends DragonAPIMod {
 		proxy.registerRenderers();
 		ReactorRecipes.addRecipes();
 		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
+		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
 	}
 
 	@Override
@@ -128,8 +133,10 @@ public class ReactorCraft extends DragonAPIMod {
 
 	private static void addBlocks() {
 		ReikaRegistryHelper.instantiateAndRegisterBlocks(instance, ReactorBlocks.blockList, blocks, logger.shouldLog());
-		for (int i = 0; i < ReactorTiles.TEList.length; i++)
+		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			GameRegistry.registerTileEntity(ReactorTiles.TEList[i].getTEClass(), "Reactor"+ReactorTiles.TEList[i].getName());
+			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass());
+		}
 	}
 
 	private static void addLiquids() {

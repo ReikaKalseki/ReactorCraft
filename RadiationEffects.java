@@ -10,12 +10,13 @@
 package Reika.ReactorCraft;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 
 public class RadiationEffects {
 
 	public static void applyEffects(EntityLiving e) {
-		if (!e.isPotionActive(ReactorCraft.radiation))
+		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
 			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
 	}
 
