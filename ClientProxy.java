@@ -12,8 +12,10 @@ package Reika.ReactorCraft;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
 
@@ -31,13 +33,15 @@ public class ClientProxy extends CommonProxy {
 		this.loadModels();
 
 		this.registerSpriteSheets();
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityNeutron.class, new RenderNeutron());
 	}
 
 	private void registerSpriteSheets() {
 
 		for (int i = 0; i < ReactorItems.itemList.length; i++) {
 			if (ReactorItems.itemList[i].getSpriteIndex() > -1)
-			MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getShiftedItemID(), items[ReactorItems.itemList[i].getSpriteSheet()]);
+				MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getShiftedItemID(), items[ReactorItems.itemList[i].getSpriteSheet()]);
 		}
 	}
 

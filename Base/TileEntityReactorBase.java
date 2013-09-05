@@ -10,13 +10,22 @@
 package Reika.ReactorCraft.Base;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityReactorBase extends TileEntityBase {
 
-	protected int temperature;
+	protected StepTimer thermalTicker = new StepTimer(20);
+
+	protected double temperature;
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		thermalTicker.update();
+	}
 
 	@Override
 	public int getTileEntityBlockID() {
@@ -39,7 +48,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setInteger("temp", temperature);
+		NBT.setDouble("temp", temperature);
 
 	}
 
@@ -51,7 +60,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	{
 		super.readFromNBT(NBT);
 
-		temperature = NBT.getInteger("temp");
+		temperature = NBT.getDouble("temp");
 
 	}
 }

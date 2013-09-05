@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
@@ -20,6 +21,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineBlade;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
 
 public enum ReactorTiles {
 
@@ -29,7 +31,9 @@ public enum ReactorTiles {
 	CPU("Central Control", TileEntityCPU.class),
 	TURBINEBLADE("Turbine Blade", TileEntityTurbineBlade.class),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class),
-	CONDENSER("Condenser", TileEntityCondenser.class);
+	CONDENSER("Condenser", TileEntityCondenser.class),
+	WATERLINE("Water Line", TileEntityWaterLine.class);
+	//Heavy Water Pump
 
 	private String name;
 	private Class teClass;
@@ -96,6 +100,10 @@ public enum ReactorTiles {
 			return TEList[iba.getBlockMetadata(x, y, z)];
 		}
 		return null;
+	}
+
+	public ItemStack getCraftedProduct() {
+		return new ItemStack(ReactorItems.PLACER.getShiftedItemID(), 1, this.ordinal());
 	}
 
 }

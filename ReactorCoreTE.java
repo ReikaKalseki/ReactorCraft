@@ -16,8 +16,8 @@ public interface ReactorCoreTE {
 
 	public abstract boolean onNeutron(EntityNeutron e, World world, int x, int y, int z);
 
-	public abstract int getTemperature();
+	public abstract double getTemperature();
 
-	public void setTemperature(int T);
+	public void setTemperature(double T);
 
 }

@@ -13,19 +13,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
+import Reika.ReactorCraft.Feedable;
 import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE {
+public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
 
 	private ItemStack[] inv = new ItemStack[9];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateEntity(world, x, y, z, meta);
 		if (par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
 	}
@@ -69,18 +72,20 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (ReikaMathLibrary.doWithChance(25)) {
 			this.spawnNeutronBurst(world, x, y, z);
+			double E = ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY);
+			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public int getTemperature() {
+	public double getTemperature() {
 		return temperature;
 	}
 
 	@Override
-	public void setTemperature(int T) {
+	public void setTemperature(double T) {
 		temperature = T;
 	}
 

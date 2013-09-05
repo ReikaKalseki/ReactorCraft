@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
-import Reika.DragonAPI.Libraries.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Items.ItemDepleted;
 import Reika.ReactorCraft.Items.ItemFuelPellet;

@@ -9,8 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -22,7 +23,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+		super.updateEntity(world, x, y, z, meta);
 	}
 
 	@Override
@@ -45,17 +46,37 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		return ReikaMathLibrary.doWithChance(50);
+		return this.isActive() ? ReikaMathLibrary.doWithChance(50) : false;
 	}
 
 	@Override
-	public int getTemperature() {
+	public double getTemperature() {
 		return temperature;
 	}
 
 	@Override
-	public void setTemperature(int T) {
+	public void setTemperature(double T) {
 		temperature = T;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBT.setBoolean("down", lowered);
+
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		lowered = NBT.getBoolean("down");
 	}
 
 }

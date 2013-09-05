@@ -22,6 +22,8 @@ public class BlockReactorMat extends Block {
 
 	public BlockReactorMat(int par1, Material par2Material) {
 		super(par1, par2Material);
+		this.setHardness(1.5F);
+		this.setResistance(10F);
 		this.setCreativeTab(ReactorCraft.tabRctr);
 	}
 

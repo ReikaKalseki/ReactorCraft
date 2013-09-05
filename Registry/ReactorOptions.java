@@ -18,7 +18,8 @@ import Reika.RotaryCraft.RotaryCraft;
 public enum ReactorOptions implements ConfigList {
 
 	LOGLOADING("Console Loading Info", true),
-	DEBUGMODE("Debug Mode", false);
+	DEBUGMODE("Debug Mode", false),
+	VISIBLENEUTRONS("Visible Neutrons", true);
 
 	private String label;
 	private boolean defaultState;

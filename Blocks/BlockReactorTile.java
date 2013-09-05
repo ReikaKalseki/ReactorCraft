@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -30,6 +31,8 @@ public class BlockReactorTile extends Block {
 
 	public BlockReactorTile(int par1, Material par2Material) {
 		super(par1, par2Material);
+		this.setHardness(2F);
+		this.setResistance(10F);
 	}
 
 	@Override
@@ -120,32 +123,42 @@ public class BlockReactorTile extends Block {
 			case 0:
 				if (is.itemID == Item.bucketWater.itemID) {
 					te.setLiquidState(1);
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 					return true;
 				}
 				if (is.itemID == ReactorItems.BUCKET.getShiftedItemID()) {
 					te.setLiquidState(2);
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 					return true;
 				}
 				break;
 			case 1:
 				if (is.itemID == Item.bucketEmpty.itemID) {
 					te.setLiquidState(0);
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketWater));
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketWater));
 					return true;
 				}
 				break;
 			case 2:
 				if (is.itemID == Item.bucketEmpty.itemID) {
 					te.setLiquidState(0);
-					ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
 					return true;
 				}
 				break;
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition vec, World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(vec.blockX, vec.blockY, vec.blockZ);
+		return ReactorTiles.TEList[meta].getCraftedProduct();
 	}
 
 }
