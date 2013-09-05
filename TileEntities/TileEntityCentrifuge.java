@@ -13,11 +13,11 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWaterLine extends TileEntityReactorBase {
+public class TileEntityCentrifuge extends TileEntityReactorBase {
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.WATERLINE.ordinal();
+		return ReactorTiles.CENTRIFUGE.ordinal();
 	}
 
 	@Override
@@ -29,5 +29,4 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 
 	}
-
 }

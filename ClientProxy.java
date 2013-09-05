@@ -23,6 +23,8 @@ public class ClientProxy extends CommonProxy {
 		new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png", ""),
 	};
 
+	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();
+
 	@Override
 	public void registerSounds() {
 		//MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, SoundRegistry.soundList));
@@ -46,7 +48,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void loadModels() {
-
+		MinecraftForgeClient.registerItemRenderer(ReactorItems.PLACER.getShiftedItemID(), reactor);
 	}
 
 	@Override

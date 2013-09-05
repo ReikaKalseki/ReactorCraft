@@ -13,11 +13,11 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityTurbineBlade extends TileEntityReactorBase {
+public class TileEntityUProcessor extends TileEntityReactorBase {
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+	public int getIndex() {
+		return ReactorTiles.PROCESSOR.ordinal();
 	}
 
 	@Override
@@ -26,8 +26,7 @@ public class TileEntityTurbineBlade extends TileEntityReactorBase {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.TURBINEBLADE.ordinal();
-	}
+	public void updateEntity(World world, int x, int y, int z, int meta) {
 
+	}
 }

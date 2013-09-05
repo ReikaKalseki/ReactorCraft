@@ -23,7 +23,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		super.updateEntity(world, x, y, z, meta);
+
 	}
 
 	@Override

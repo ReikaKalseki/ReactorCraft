@@ -83,8 +83,6 @@ public class ReactorCraft extends DragonAPIMod {
 	public void preload(FMLPreInitializationEvent evt) {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		this.checkAPI();
-
 		config.initProps(evt);
 		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
 

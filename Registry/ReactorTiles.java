@@ -15,11 +15,14 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineBlade;
+import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.TileEntityULine;
+import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
 
@@ -29,11 +32,13 @@ public enum ReactorTiles {
 	CONTROL("Control Rod", TileEntityControlRod.class),
 	COOLANT("Coolant Cell", TileEntityWaterCell.class),
 	CPU("Central Control", TileEntityCPU.class),
-	TURBINEBLADE("Turbine Blade", TileEntityTurbineBlade.class),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class),
 	CONDENSER("Condenser", TileEntityCondenser.class),
-	WATERLINE("Water Line", TileEntityWaterLine.class);
-	//Heavy Water Pump
+	WATERLINE("Water Line", TileEntityWaterLine.class),
+	ITEMLINE("Fuel Supply Line", TileEntityULine.class),
+	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class),
+	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class),
+	PROCESSOR("Uranium Processor", TileEntityUProcessor.class);
 
 	private String name;
 	private Class teClass;
@@ -104,6 +109,24 @@ public enum ReactorTiles {
 
 	public ItemStack getCraftedProduct() {
 		return new ItemStack(ReactorItems.PLACER.getShiftedItemID(), 1, this.ordinal());
+	}
+
+	public TileEntity createTEInstanceForRender() {
+		try {
+			return (TileEntity)teClass.newInstance();
+		}
+		catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
+		}
+		catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
+		}
+	}
+
+	public boolean hasModel() {
+		return false;
 	}
 
 }

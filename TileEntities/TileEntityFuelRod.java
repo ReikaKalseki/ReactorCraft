@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -28,7 +29,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		super.updateEntity(world, x, y, z, meta);
 		if (par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
 	}
@@ -59,8 +59,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		return false;
+	public boolean isStackValidForSlot(int i, ItemStack is) {
+		return is.itemID == ReactorItems.FUEL.getShiftedItemID();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (ReikaMathLibrary.doWithChance(25)) {
+		if (this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
 			this.spawnNeutronBurst(world, x, y, z);
 			double E = ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
@@ -106,8 +106,9 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		int z = zCoord;
 		int id = world.getBlockId(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
-		if (id == this.getTileEntityBlockID() && meta == this.getIndex()) {
-			TileEntityFuelRod te = (TileEntityFuelRod)world.getBlockTileEntity(x, y-1, z);
+		TileEntity tile = world.getBlockTileEntity(x, y-1, z);
+		if (this.isThisTE(id, meta)) {
+			TileEntityFuelRod te = (TileEntityFuelRod)tile;
 			int slot =	this.getFirstFuelSlot();
 			if (slot == -1)
 				return false;
@@ -117,6 +118,9 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			}
 			else
 				return false;
+		}
+		else if (tile instanceof Feedable) {
+
 		}
 		return false;
 	}
@@ -129,5 +133,22 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public int getInventoryStackLimit() {
 		return 1;
+	}
+
+	public boolean isFissile() {
+		return ReikaInventoryHelper.checkForItem(ReactorItems.FUEL.getShiftedItemID(), inv);
+	}
+
+	@Override
+	public boolean feedIn(ItemStack is) {
+		return ReikaInventoryHelper.addToIInv(is, this);
+	}
+
+	@Override
+	public ItemStack feedOut() {
+		if (this.isFissile())
+			return inv[this.getFirstFuelSlot()];
+		else
+			return null;
 	}
 }

@@ -30,7 +30,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		super.updateEntity(world, x, y, z, meta);
+		thermalTicker.update();
 		int id = world.getBlockId(x, y-1, z);
 		int metadata = world.getBlockMetadata(x, y-1, z);
 		if (id == this.getTileEntityBlockID() && metadata == this.getIndex()) {

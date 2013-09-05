@@ -156,4 +156,8 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 		return blockClass == null;
 	}
 
+	public Block getBlockVariable() {
+		return ReactorCraft.blocks[this.ordinal()];
+	}
+
 }
