@@ -13,8 +13,10 @@ import java.net.URL;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -33,6 +35,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -151,6 +154,20 @@ public class ReactorCraft extends DragonAPIMod {
 		LiquidDictionary.getOrCreateLiquid("Heavy Water", D2O);
 
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Heavy Water", LiquidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOf(), new ItemStack(Item.bucketEmpty)));
+	}
+
+	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			Object GUI = ReactorGuiHandler.instance.getClientGuiElement(0, ep, world, x, y, z);
+			if (GUI != null)
+				return true;
+		}
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			Object GUI = ReactorGuiHandler.instance.getServerGuiElement(0, ep, world, x, y, z);
+			if (GUI != null)
+				return true;
+		}
+		return false;
 	}
 
 	@Override

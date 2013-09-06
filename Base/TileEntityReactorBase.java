@@ -65,4 +65,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	public boolean isThisTE(int id, int meta) {
 		return id == this.getTileEntityBlockID() && meta == this.getIndex();
 	}
+
+	public final String getName() {
+		return this.getTEName();
+	}
 }

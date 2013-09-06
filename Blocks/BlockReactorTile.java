@@ -62,7 +62,7 @@ public class BlockReactorTile extends Block {
 	public void registerIcons(IconRegister ico) {
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			if (!r.hasRender()) {
+			if (r.isReactorBlock()) {
 				if (r.hasTextureStates()) {
 					for (int k = 0; k < r.getTextureStates(); k++) {
 						if (r.hasSidedTextures()) {
@@ -105,6 +105,9 @@ public class BlockReactorTile extends Block {
 						}
 					}
 				}
+			}
+			else {
+
 			}
 		}
 	}
@@ -179,7 +182,7 @@ public class BlockReactorTile extends Block {
 			}
 		}
 
-		if (r.hasGui()) {
+		if (ReactorCraft.hasGui(world, x, y, z, ep)) {
 			ep.openGui(ReactorCraft.instance, 0, world, x, y, z);
 			return true;
 		}

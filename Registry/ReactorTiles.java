@@ -201,15 +201,6 @@ public enum ReactorTiles {
 		}
 	}
 
-	public boolean hasGui() {
-		switch(this) {
-		case FUEL:
-			return true;
-		default:
-			return false;
-		}
-	}
-
 	public int getBlockID() {
 		return this.getBlockVariable().blockID;
 	}

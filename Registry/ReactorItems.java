@@ -17,6 +17,7 @@ import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.WasteManager;
 import Reika.ReactorCraft.Items.ItemDepleted;
 import Reika.ReactorCraft.Items.ItemFuelPellet;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
@@ -90,6 +91,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 				return this.getBasicName()+" ("+(meta*10)+"% Depleted)";
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
+		case WASTE:
+			return this.getBasicName();
 		default:
 			return "";
 		}
@@ -100,6 +103,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		switch(this) {
 		case FUEL:
 		case PLACER:
+		case WASTE:
 			return true;
 		default:
 			return false;
@@ -109,6 +113,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
+		case WASTE:
+			return WasteManager.getNumberWastes();
 		case FUEL:
 			return 10;
 		case PLACER:

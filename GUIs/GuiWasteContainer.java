@@ -11,19 +11,18 @@ package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
-import Reika.ReactorCraft.Container.ContainerFuelRod;
-import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.Container.ContainerWasteContainer;
+import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 
-public class GuiFuelRod extends ReactorGuiBase {
+public class GuiWasteContainer extends ReactorGuiBase {
 
-	public GuiFuelRod(EntityPlayer player, TileEntityFuelRod fuel) {
-		super(new ContainerFuelRod(player, fuel), player, fuel);
-		ySize = 182;
+	public GuiWasteContainer(EntityPlayer player, TileEntityWasteContainer fuel) {
+		super(new ContainerWasteContainer(player, fuel), player, fuel);
+		ySize = 175;
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "fuelrod";
+		return "wastecontainer2";
 	}
-
 }

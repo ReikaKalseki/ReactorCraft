@@ -10,6 +10,8 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -18,6 +20,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.ReactorCraft.Feedable;
 import Reika.ReactorCraft.ReactorCoreTE;
+import Reika.ReactorCraft.WasteManager;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -83,16 +86,21 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
+		if (!world.isRemote && this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
 			int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
 			ItemStack is = inv[slot];
-			if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas())
+			if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
 				inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
 			else
 				inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 			this.spawnNeutronBurst(world, x, y, z);
 			double E = ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
+
+			if (ReikaMathLibrary.doWithChance(10)) {
+				ReikaInventoryHelper.addToIInv(WasteManager.getRandomWasteItem(), this);
+			}
+
 			return true;
 		}
 		return false;
@@ -195,5 +203,48 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public ItemStack feedOut() {
 		return inv[3];
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 }

@@ -29,7 +29,7 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 		super(ID);
 		index = tex;
 		this.setCreativeTab(ReactorCraft.tabRctr);
-		if (this.getDataValues() > 0) {
+		if (this.getDataValues() > 1) {
 			hasSubtypes = true;
 			this.setMaxDamage(0);
 			maxStackSize = 1;

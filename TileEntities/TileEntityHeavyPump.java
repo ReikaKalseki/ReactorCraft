@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -19,6 +18,7 @@ import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -30,6 +30,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	private int torque;
 	private int omega;
 	private long power;
+
+	private StepTimer timer = new StepTimer(20);
 
 	private LiquidTank tank = new LiquidTank(4000);
 
@@ -92,7 +94,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	@Override
 	public boolean canReadFromBlock(int x, int y, int z) {
-		return x == xCoord && y == yCoord && z == zCoord;
+		return x == xCoord && y == yCoord+1 && z == zCoord;
 	}
 
 	@Override
@@ -107,28 +109,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	@Override
-	public String getName() {
-		return this.getTEName();
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (power >= MINPOWER && this.canHarvest(world, x, y, z)) {
+		timer.update();
+		if (timer.checkCap() && power >= MINPOWER && this.canHarvest(world, x, y, z)) {
 			this.harvest();
-		}
-		if (tank.getLiquid() != null) {
-			for (int i = 0; i < 6; i++) {
-				ForgeDirection dir = ForgeDirection.values()[i];
-				int dx = x+dir.offsetX;
-				int dy = y+dir.offsetY;
-				int dz = z+dir.offsetZ;
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof ITankContainer) {
-					ITankContainer ic = (ITankContainer)te;
-					LiquidStack is = this.drain(0, tank.getLiquid().amount, true);
-					ic.fill(dir, is, true);
-				}
-			}
 		}
 	}
 
@@ -138,7 +122,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	private boolean canHarvest(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		return (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean) && y < 30 && this.isOceanFloor(world, x, y, z);
+		return (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean) && y < 36 && this.isOceanFloor(world, x, y, z);
 	}
 
 	private boolean isOceanFloor(World world, int x, int y, int z) {
@@ -176,7 +160,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	@Override
 	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return this.drain(0, maxDrain, doDrain);
+		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
+			return null;
+		else
+			return this.drain(0, maxDrain, doDrain);
 	}
 
 	@Override
@@ -185,13 +172,19 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[]{tank};
+	public ILiquidTank[] getTanks(ForgeDirection from) {
+		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
+			return new ILiquidTank[0];
+		else
+			return new ILiquidTank[]{tank};
 	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		return tank;
+	public ILiquidTank getTank(ForgeDirection from, LiquidStack type) {
+		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
+			return null;
+		else
+			return tank;
 	}
 
 	public boolean hasABucket() {
@@ -200,6 +193,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	public void subtractBucket() {
 		tank.drain(LiquidContainerRegistry.BUCKET_VOLUME, true);
+	}
+
+	public int getTankLevel() {
+		return tank.getLiquid() != null ? tank.getLiquid().amount : 0;
 	}
 
 }
