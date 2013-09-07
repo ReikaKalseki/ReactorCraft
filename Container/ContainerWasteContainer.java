@@ -31,7 +31,7 @@ public class ContainerWasteContainer extends CoreContainer {
 		}
 		for (int i = 0; i < h; i++) {
 			for (int k = 0; k < w; k++) {
-				this.addSlotToContainer(new Slot(te, i*5+k, 44+k*18+dx, 22+i*18));
+				this.addSlotToContainer(new Slot(te, i*w+k, 44+k*18+dx, 22+i*18));
 			}
 		}
 

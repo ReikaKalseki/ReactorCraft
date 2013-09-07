@@ -17,9 +17,7 @@ import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.WasteManager;
-import Reika.ReactorCraft.Items.ItemDepleted;
-import Reika.ReactorCraft.Items.ItemFuelPellet;
+import Reika.ReactorCraft.Base.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemLiquid;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
@@ -28,11 +26,12 @@ import Reika.ReactorCraft.Items.ItemReactorPlacer;
 public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	WASTE(0,	"Nuclear Waste", 		ItemNuclearWaste.class),
-	FUEL(1,		"Uranium Pellet",		ItemFuelPellet.class),
-	DEPLETED(2, "Depleted Uranium",		ItemDepleted.class),
+	FUEL(1,		"Uranium Pellet",		ItemReactorBasic.class),
+	DEPLETED(2, "Depleted Uranium",		ItemReactorBasic.class),
 	PLACER(-1,	"Part Placer",			ItemReactorPlacer.class),
 	WATER(-1,	"Heavy Water",			ItemLiquid.class),
-	BUCKET(3,	"Heavy Water Bucket", 	ItemHeavyBucket.class);
+	BUCKET(3,	"Heavy Water Bucket", 	ItemHeavyBucket.class),
+	RAW(4,		"Raw Uranium",			ItemReactorBasic.class); //also has yellowcake
 
 	private String name;
 	private Class itemClass;
@@ -91,8 +90,6 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 				return this.getBasicName()+" ("+(meta*10)+"% Depleted)";
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
-		case WASTE:
-			return this.getBasicName();
 		default:
 			return "";
 		}
@@ -103,7 +100,6 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		switch(this) {
 		case FUEL:
 		case PLACER:
-		case WASTE:
 			return true;
 		default:
 			return false;
@@ -113,8 +109,6 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
-		case WASTE:
-			return WasteManager.getNumberWastes();
 		case FUEL:
 			return 10;
 		case PLACER:

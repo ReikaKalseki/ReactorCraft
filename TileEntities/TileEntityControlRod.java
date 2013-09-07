@@ -12,7 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -77,6 +77,15 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 		super.readFromNBT(NBT);
 
 		lowered = NBT.getBoolean("down");
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 0;
+	}
+
+	private void onMeltdown(World world, int x, int y, int z) {
+
 	}
 
 }

@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Entities;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,14 +18,20 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.InertEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
 public class EntityRadiation extends InertEntity {
 
-	public static final double RANGE = 16;
+	public final int effectRange;
 
 	public EntityRadiation(World par1World) {
 		super(par1World);
+		effectRange = 16;
+	}
+
+	public EntityRadiation(World world, int range) {
+		super(world);
+		effectRange = range;
 	}
 
 	@Override
@@ -54,14 +61,22 @@ public class EntityRadiation extends InertEntity {
 		double x = posX;
 		double y = posY;
 		double z = posZ;
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x, y, z).expand(RANGE, RANGE, RANGE);
+		Random r = new Random();
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x, y, z).expand(effectRange, effectRange, effectRange);
 		List<EntityLiving> inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLiving e = inbox.get(i);
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
-			if (dd <= RANGE) {
+			if (dd <= effectRange) {
 				RadiationEffects.applyEffects(e);
 			}
+		}
+
+		if (r.nextInt(20) == 0) {
+			int dx = (int)x-effectRange+r.nextInt(effectRange*2+1);
+			int dy = (int)y-effectRange+r.nextInt(effectRange*2+1);
+			int dz = (int)z-effectRange+r.nextInt(effectRange*2+1);
+			RadiationEffects.transformBlock(world, dx, dy, dz);
 		}
 	}
 

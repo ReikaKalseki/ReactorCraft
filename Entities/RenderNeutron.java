@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft;
+package Reika.ReactorCraft.Entities;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 
 public class RenderNeutron extends Render
@@ -76,6 +75,6 @@ public class RenderNeutron extends Render
 	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
 	{
 		if (ReactorOptions.VISIBLENEUTRONS.getState())
-			this.renderTheNeutron((EntityNeutron)par1Entity, par2, par4+0.5, par6, par8, par9);
+			this.renderTheNeutron((EntityNeutron)par1Entity, par2, par4+0*0.5, par6, par8, par9);
 	}
 }

@@ -10,16 +10,20 @@
 package Reika.ReactorCraft.Base;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ShaftMachine;
 
 public abstract class TileEntityReactorBase extends TileEntityBase {
+
+	protected ForgeDirection[] dirs = ForgeDirection.values();
 
 	protected StepTimer thermalTicker = new StepTimer(20);
 
 	protected double temperature;
-	protected float phi;
+	public float phi;
 
 	@Override
 	public int getTileEntityBlockID() {
@@ -68,5 +72,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 	public final String getName() {
 		return this.getTEName();
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		ReactorTiles r = ReactorTiles.TEList[this.getIndex()];
+		return pass == 0 || ((r.renderInPass1() || this instanceof ShaftMachine) && pass == 1);
 	}
 }

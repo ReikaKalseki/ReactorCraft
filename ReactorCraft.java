@@ -29,6 +29,8 @@ import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.ReactorCraft.Auxiliary.PotionRadiation;
+import Reika.ReactorCraft.Auxiliary.ReactorOreGenerator;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -105,6 +107,7 @@ public class ReactorCraft extends DragonAPIMod {
 		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
 		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
+		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
 	}
 
 	@Override

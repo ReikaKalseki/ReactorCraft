@@ -12,9 +12,13 @@ package Reika.ReactorCraft;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.RenderNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
@@ -48,6 +52,13 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void loadModels() {
+		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
+			ReactorTiles m = ReactorTiles.TEList[i];
+			if (m.hasRender() && m.renderWorks()) {
+				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), ReactorRenderList.instantiateRenderer(m));
+			}
+		}
+
 		MinecraftForgeClient.registerItemRenderer(ReactorItems.PLACER.getShiftedItemID(), reactor);
 	}
 

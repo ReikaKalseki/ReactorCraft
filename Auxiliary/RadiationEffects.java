@@ -1,0 +1,124 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package Reika.ReactorCraft.Auxiliary;
+
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Entities.EntityRadiation;
+
+public class RadiationEffects {
+
+	public static void applyEffects(EntityLiving e) {
+		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
+			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
+	}
+
+	public static void applyPulseEffects(EntityLiving e) {
+		if (!e.isPotionActive(ReactorCraft.radiation))
+			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 20, 0));
+	}
+
+	public static void contaminateArea(World world, int x, int y, int z, int range) {
+		Random r = new Random();
+		for (int i = 0; i < Math.sqrt(range); i++) {
+			int dx = x-range+r.nextInt(range*2+1);
+			int dy = y-range+r.nextInt(range*2+1);
+			int dz = z-range+r.nextInt(range*2+1);
+			EntityRadiation rad = new EntityRadiation(world, range);
+			rad.setLocationAndAngles(dx, dy, dz, 0, 0);
+			if (!world.isRemote)
+				world.spawnEntityInWorld(rad);
+		}
+	}
+
+	public static void transformBlock(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		if (id == 0)
+			return;
+		Block b = Block.blocksList[id];
+		if (id == Block.leaves.blockID)
+			world.setBlock(x, y, z, 0);
+		if (id == Block.reed.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.tallGrass.blockID)
+			world.setBlock(x, y, z, Block.deadBush.blockID);
+		if (id == Block.vine.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.waterlily.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.plantRed.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.plantYellow.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.crops.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.carrot.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.potato.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.cactus.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.pumpkin.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.pumpkinStem.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.melon.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.melonStem.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.sapling.blockID)
+			world.setBlock(x, y, z, Block.deadBush.blockID);
+		if (id == Block.cocoaPlant.blockID) {
+			b.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, 0);
+		}
+		if (id == Block.cobblestoneMossy.blockID)
+			world.setBlock(x, y, z, Block.cobblestone.blockID);
+		if (id == Block.grass.blockID)
+			world.setBlock(x, y, z, Block.dirt.blockID);
+		if (id == Block.silverfish.blockID)
+			world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);
+	}
+
+}

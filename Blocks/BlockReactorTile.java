@@ -34,17 +34,11 @@ import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 public class BlockReactorTile extends Block {
 
 	private Icon[][][] icons = new Icon[16][6][16];
-	private boolean model = false;
 
 	public BlockReactorTile(int par1, Material par2Material) {
 		super(par1, par2Material);
 		this.setHardness(2F);
 		this.setResistance(10F);
-	}
-
-	public BlockReactorTile setModelled() {
-		model = true;
-		return this;
 	}
 
 	@Override
@@ -205,22 +199,22 @@ public class BlockReactorTile extends Block {
 
 	@Override
 	public int getRenderType() {
-		return model ? -1 : 0;
+		return 0;
 	}
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return !model;
+		return true;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return !model;
+		return true;
 	}
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
-		return model ? 0 : 255;
+		return 255;
 	}
 
 	@Override

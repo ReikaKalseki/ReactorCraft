@@ -18,9 +18,9 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
-import Reika.ReactorCraft.Feedable;
-import Reika.ReactorCraft.ReactorCoreTE;
-import Reika.ReactorCraft.WasteManager;
+import Reika.ReactorCraft.Auxiliary.Feedable;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -34,13 +34,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
-
-		//this.collapseInventory();
-
-		if (world.getBlockId(x, y+1, z) == 3) {
-			this.feed();
-			world.setBlock(x, y+1, z, 2);
-		}
 	}
 
 	@Override
@@ -118,7 +111,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	public ForgeDirection getRandomDirection() {
 		int r = 2+par5Random.nextInt(4);
-		return ForgeDirection.values()[r];
+		return dirs[r];
 	}
 
 	private void spawnNeutronBurst(World world, int x, int y, int z) {
@@ -246,5 +239,14 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 0;
+	}
+
+	private void onMeltdown(World world, int x, int y, int z) {
+
 	}
 }

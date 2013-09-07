@@ -15,15 +15,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase {
+public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase implements Temperatured {
 
 	public static final int WIDTH = 9;
 	public static final int HEIGHT = 3;
@@ -41,11 +46,9 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase {
 
 		if (thermalTicker.checkCap()) {
 			int waste = this.countWaste();
-			temperature += ReikaNuclearHelper.getWasteDecayHeat();
+			temperature += waste*ReikaNuclearHelper.getWasteDecayHeat();
 			this.distributeHeat(world, x, y, z);
 		}
-
-		this.leakRadiation(world, x, y, z);
 
 		if (!world.isRemote)
 			this.decayWaste();
@@ -55,13 +58,22 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase {
 
 	private void distributeHeat(World world, int x, int y, int z) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world.getBiomeGenForCoords(x, z));
-		int side = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
-		if (side != -1) {
-			temperature -= 0.0115*ReikaThermoHelper.getTemperatureIncrease(1, 15000, ReikaThermoHelper.WATER_BLOCK_HEAT);
-			if (temperature < Tamb)
-				temperature = Tamb;
-			//ReikaJavaLibrary.pConsole(temperature);
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 6);
+		//ReikaJavaLibrary.pConsole(temperature);
+		if (temperature > Tamb) {
+			int side = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
+			if (side != -1) {
+				temperature -= ReikaThermoHelper.getTemperatureIncrease(1, 15000, ReikaThermoHelper.WATER_BLOCK_HEAT);
+				//ReikaJavaLibrary.pConsole(temperature);
+				if (temperature > 100)
+					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+				else
+					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 6);
+			}
+		}
+		if (temperature < Tamb)
+			temperature = Tamb;
+		if (temperature > this.getMaxTemperature()) {
+			this.onMeltdown(world, x, y, z);
 		}
 	}
 
@@ -77,13 +89,18 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase {
 	}
 
 	private void leakRadiation(World world, int x, int y, int z) {
-
+		ForgeDirection dir = dirs[par5Random.nextInt(dirs.length)];
+		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir));
 	}
 
 	private void decayWaste() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].itemID == ReactorItems.WASTE.getShiftedItemID() && inv[i].stackTagCompound != null) {
 				Isotopes atom = Isotopes.getIsotope(inv[i].stackTagCompound.getInteger("iso"));
+				if (ReikaMathLibrary.doWithChance(0.125*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
+					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
+					this.leakRadiation(worldObj, xCoord, yCoord, zCoord);
+				}
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
 				if (ReikaNuclearHelper.shouldDecay(atom)) {
 					inv[i] = null;
@@ -179,6 +196,26 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase {
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public double getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(double T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 600;
+	}
+
+	public void onMeltdown(World world, int x, int y, int z) {
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 9, true);
+		RadiationEffects.contaminateArea(world, x, y, z, 9);
 	}
 
 }

@@ -24,8 +24,8 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.InertEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.RadiationEffects;
-import Reika.ReactorCraft.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -73,6 +73,10 @@ public class EntityNeutron extends InertEntity {
 	{
 		this.onEntityUpdate();
 
+		if (motionX == 0 && motionY == 0 && motionZ == 0 && ticksExisted > 20)
+			this.setDead();
+		if (posY > 256 && posY < 0)
+			this.setDead();
 
 		//ReikaJavaLibrary.pConsole(String.format("%d, %d, %d :: %d, %d, %d", oldBlockX, oldBlockY, oldBlockZ, this.getBlockX(), this.getBlockY(), this.getBlockZ()));
 		//ReikaJavaLibrary.pConsole(this.getBlockX()+", "+this.getBlockY()+", "+this.getBlockZ());
@@ -144,7 +148,7 @@ public class EntityNeutron extends InertEntity {
 			return ReikaMathLibrary.doWithChance(60);
 		}
 		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID)
-			return ReikaMathLibrary.doWithChance(20);
+			return ReikaMathLibrary.doWithChance(30);
 		if (id != 0) {
 			Block b = Block.blocksList[id];
 			return b.isOpaqueCube() ? b.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || r.nextInt((int)(12 - b.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-b.getLightOpacity(world, x, y, z) == 0 ? r.nextInt(b.getLightOpacity(world, x, y, z)) > 0 : r.nextInt(1000) == 0;

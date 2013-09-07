@@ -19,18 +19,22 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Blocks.BlockCorium;
 import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockReactorMat;
+import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
+import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
+import Reika.ReactorCraft.Items.ItemBlockReactorOre;
 
 public enum ReactorBlocks implements RegistrationList, IDRegistry {
 
-	REACTOR(BlockReactorTile.class, 							"Reactor", false),
-	MATS(BlockReactorMat.class, ItemBlockReactorMat.class, 		"Reactor Materials", false),
-	CORIUMFLOWING(BlockCoriumFlowing.class, 					"Molten Corium (Flowing)", false),
-	CORIUMSTILL(BlockCorium.class, 								"Molten Corium", false),
-	MODELREACTOR(BlockReactorTile.class, 						"ReactorModelled", true),
-	MACHINE(BlockReactorTile.class, 							"Machine", false),
-	MODELMACHINE(BlockReactorTile.class, 						"MachineModelled", true);
+	REACTOR(		BlockReactorTile.class, 							"Reactor", 					false),
+	MATS(			BlockReactorMat.class, ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
+	CORIUMFLOWING(	BlockCoriumFlowing.class, 							"Molten Corium (Flowing)", 	false),
+	CORIUMSTILL(	BlockCorium.class, 									"Molten Corium", 			false),
+	MODELREACTOR(	BlockReactorTileModelled.class, 					"ReactorModelled", 			true),
+	MACHINE(		BlockReactorTile.class, 							"Machine", 					false),
+	MODELMACHINE(	BlockReactorTileModelled.class, 					"MachineModelled", 			true),
+	ORE(			BlockReactorOre.class, ItemBlockReactorOre.class,	"Ore", 						false);
 
 	private Class blockClass;
 	private String blockName;
@@ -118,6 +122,8 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 			return ReactorTiles.getTilesOfBlock(this).size();
 		case MATS:
 			return MatBlocks.matList.length;
+		case ORE:
+			return ReactorOres.oreList.length;
 		default:
 			return 1;
 		}

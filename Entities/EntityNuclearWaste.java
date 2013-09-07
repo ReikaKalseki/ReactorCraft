@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
 public class EntityNuclearWaste extends EntityItem {
 

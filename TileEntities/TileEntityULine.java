@@ -11,7 +11,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.ReactorCraft.Feedable;
+import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 

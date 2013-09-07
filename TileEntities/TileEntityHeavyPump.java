@@ -30,6 +30,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	private int torque;
 	private int omega;
 	private long power;
+	private int iotick;
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -43,8 +44,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 		if (power > 0) {
-			phi += 0.05F;
+			phi += 10F;
 		}
+		iotick -= 8;
 	}
 
 	@Override
@@ -75,21 +77,6 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	@Override
 	public long getPower() {
 		return power;
-	}
-
-	@Override
-	public int[] getInputBlocksX() {
-		return new int[0];
-	}
-
-	@Override
-	public int[] getInputBlocksY() {
-		return new int[0];
-	}
-
-	@Override
-	public int[] getInputBlocksZ() {
-		return new int[0];
 	}
 
 	@Override
@@ -197,6 +184,31 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	public int getTankLevel() {
 		return tank.getLiquid() != null ? tank.getLiquid().amount : 0;
+	}
+
+	@Override
+	public int getIORenderAlpha() {
+		return iotick;
+	}
+
+	@Override
+	public int getMachineX() {
+		return xCoord;
+	}
+
+	@Override
+	public int getMachineY() {
+		return yCoord;
+	}
+
+	@Override
+	public int getMachineZ() {
+		return zCoord;
+	}
+
+	@Override
+	public void setIORenderAlpha(int io) {
+		iotick = io;
 	}
 
 }

@@ -20,10 +20,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.ReactorCoreTE;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ShaftMachine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -73,9 +74,13 @@ public class ItemReactorPlacer extends Item {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(x, y, z);
 		te.placer = ep.getEntityName();
-		if (te instanceof ReactorCoreTE) {
+		if (te instanceof Temperatured) {
 			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
-			((ReactorCoreTE)te).setTemperature(Tb);
+			((Temperatured)te).setTemperature(Tb);
+		}
+		if (te instanceof ShaftMachine) {
+			ShaftMachine sm = (ShaftMachine)te;
+			sm.setIORenderAlpha(512);
 		}
 
 		return true;
