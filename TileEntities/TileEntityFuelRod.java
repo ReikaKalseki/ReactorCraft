@@ -32,7 +32,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (this.isFissile() && par5Random.nextInt(20) == 0)
+		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
 	}
 

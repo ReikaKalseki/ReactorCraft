@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 
 public class RadiationEffects {
 
@@ -28,7 +29,7 @@ public class RadiationEffects {
 	}
 
 	public static void applyPulseEffects(EntityLiving e) {
-		if (!e.isPotionActive(ReactorCraft.radiation))
+		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
 			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 20, 0));
 	}
 
@@ -119,6 +120,10 @@ public class RadiationEffects {
 			world.setBlock(x, y, z, Block.dirt.blockID);
 		if (id == Block.silverfish.blockID)
 			world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);
+		if (id == ReactorBlocks.FLUORITE.getBlockID() || id == ReactorBlocks.FLUORITEORE.getBlockID()) {
+			world.setBlock(x, y, z, id, meta+8, 3);
+			world.markBlockForRenderUpdate(x, y, z);
+		}
 	}
 
 }

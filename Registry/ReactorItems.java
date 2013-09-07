@@ -17,6 +17,7 @@ import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Base.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemLiquid;
@@ -31,7 +32,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	PLACER(-1,	"Part Placer",			ItemReactorPlacer.class),
 	WATER(-1,	"Heavy Water",			ItemLiquid.class),
 	BUCKET(3,	"Heavy Water Bucket", 	ItemHeavyBucket.class),
-	RAW(4,		"Raw Uranium",			ItemReactorBasic.class); //also has yellowcake
+	RAW(4,		"Raw Uranium",			ItemReactorBasic.class), //also has yellowcake & ingots
+	FLUORITE(5, "Fluorite",				ItemReactorBasic.class);
 
 	private String name;
 	private Class itemClass;
@@ -90,6 +92,10 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 				return this.getBasicName()+" ("+(meta*10)+"% Depleted)";
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
+		case RAW:
+			return ReactorNames.rawNames[meta];
+		case FLUORITE:
+			return FluoriteTypes.colorList[meta].getItemName();
 		default:
 			return "";
 		}
@@ -100,6 +106,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		switch(this) {
 		case FUEL:
 		case PLACER:
+		case RAW:
+		case FLUORITE:
 			return true;
 		default:
 			return false;
@@ -113,6 +121,10 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return 10;
 		case PLACER:
 			return ReactorTiles.TEList.length;
+		case RAW:
+			return ReactorNames.rawNames.length;
+		case FLUORITE:
+			return FluoriteTypes.colorList.length;
 		default:
 			return 1;
 		}

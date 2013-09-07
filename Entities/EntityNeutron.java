@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -146,6 +147,10 @@ public class EntityNeutron extends InertEntity {
 		}
 		if (id == ReactorBlocks.MATS.getBlockID() && meta == MatBlocks.CONCRETE.ordinal()) {
 			return ReikaMathLibrary.doWithChance(60);
+		}
+		if ((id == ReactorBlocks.FLUORITE.getBlockID() || id == ReactorBlocks.FLUORITEORE.getBlockID()) && meta < FluoriteTypes.colorList.length) {
+			world.setBlock(x, y, z, id, meta+8, 3);
+			world.markBlockForRenderUpdate(x, y, z);
 		}
 		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID)
 			return ReikaMathLibrary.doWithChance(30);

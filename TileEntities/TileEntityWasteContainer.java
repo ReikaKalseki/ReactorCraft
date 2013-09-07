@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
@@ -70,10 +71,19 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 6);
 			}
 		}
+		//ReikaJavaLibrary.pConsole(temperature);
 		if (temperature < Tamb)
 			temperature = Tamb;
 		if (temperature > this.getMaxTemperature()) {
 			this.onMeltdown(world, x, y, z);
+		}
+		else if (temperature > this.getMaxTemperature()/2 && par5Random.nextInt(6) == 0) {
+			world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1, z+par5Random.nextDouble(), 0, 0, 0);
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+		}
+		else if (temperature > this.getMaxTemperature()/4 && par5Random.nextInt(20) == 0) {
+			world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1, z+par5Random.nextDouble(), 0, 0, 0);
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 		}
 	}
 
@@ -123,7 +133,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null) {
 				if (inv[i].itemID == ReactorItems.WASTE.getShiftedItemID()) {
-					count++;
+					count += inv[i].stackSize;
 				}
 			}
 		}
