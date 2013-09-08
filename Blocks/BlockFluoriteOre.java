@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
@@ -51,6 +60,24 @@ public class BlockFluoriteOre extends BlockFluorite {
 	public int getLightValue(IBlockAccess world, int x, int y, int z) //may need to call lighting updates on generate
 	{
 		return this.isActivated(world, x, y, z) ? 12 : 6;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return true;
+	}
+
+	@Override
+	public float getAmbientOcclusionLightValue(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+	{
+		return 0.7F;
+	}
+
+	@Override
+	public int getLightOpacity(World world, int x, int y, int z)
+	{
+		return 0;
 	}
 
 }
