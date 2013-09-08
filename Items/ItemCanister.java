@@ -7,16 +7,14 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft;
+package Reika.ReactorCraft.Items;
 
-public class ReactorNames {
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
-	public static final String[] rawNames = {
-		"Hydrogen Fluoride", "Enriched Uranium Dust", "Depleted Uranium Dust"
-	};
+public class ItemCanister extends ReactorItemBase {
 
-	public static final String[] canNames = {
-		"Empty Canister", "Uranium Hexafluoride Canister", "Hydrofluoric Acid Canister"
-	};
+	public ItemCanister(int ID, int tex) {
+		super(ID, tex);
+	}
 
 }

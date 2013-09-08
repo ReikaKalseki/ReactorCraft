@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorOreGenerator;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -82,6 +83,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 	//Get by mining deep ocean
 	public static LiquidStack D2O;
+	public static LiquidStack HF;
+	public static LiquidStack UF6;
 
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
@@ -129,11 +132,19 @@ public class ReactorCraft extends DragonAPIMod {
 	private static void setupLiquidIcons() {
 		logger.log("Loading Liquid Icons");
 
-		Item d2o = items[ReactorItems.WATER.ordinal()];
+		Item d2o = items[ReactorItems.HEAVYWATER.ordinal()];
+		Item hf = items[ReactorItems.HF.ordinal()];
+		Item uf6 = items[ReactorItems.UF6.ordinal()];
 		LiquidDictionary.getCanonicalLiquid("Heavy Water").setRenderingIcon(d2o.getIconFromDamage(0));
+		LiquidDictionary.getCanonicalLiquid("Hydrofluoric Acid").setRenderingIcon(hf.getIconFromDamage(0));
+		LiquidDictionary.getCanonicalLiquid("Uranium Hexafluoride").setRenderingIcon(uf6.getIconFromDamage(0));
 
 		D2O.canonical().setRenderingIcon(d2o.getIconFromDamage(0));
 		D2O.canonical().setTextureSheet("/gui/items.png");
+		HF.canonical().setRenderingIcon(hf.getIconFromDamage(0));
+		HF.canonical().setTextureSheet("/gui/items.png");
+		UF6.canonical().setRenderingIcon(uf6.getIconFromDamage(0));
+		UF6.canonical().setTextureSheet("/gui/items.png");
 	}
 
 	private static void addItems() {
@@ -151,15 +162,26 @@ public class ReactorCraft extends DragonAPIMod {
 	private static void addLiquids() {
 		logger.log("Loading And Registering Liquids");
 
-		Item d2o = items[ReactorItems.WATER.ordinal()];
+		Item d2o = items[ReactorItems.HEAVYWATER.ordinal()];
+		Item uf6 = items[ReactorItems.UF6.ordinal()];
+		Item hf = items[ReactorItems.HF.ordinal()];
 
 		LanguageRegistry.addName(d2o, "Heavy Water");
+		LanguageRegistry.addName(uf6, "Uranium Hexafluoride");
+		LanguageRegistry.addName(hf, "Hydrofluoric Acid");
 
 		D2O = new LiquidStack(d2o, LiquidContainerRegistry.BUCKET_VOLUME);
+		UF6 = new LiquidStack(uf6, LiquidContainerRegistry.BUCKET_VOLUME);
+		HF = new LiquidStack(hf, LiquidContainerRegistry.BUCKET_VOLUME);
 
 		LiquidDictionary.getOrCreateLiquid("Heavy Water", D2O);
+		LiquidDictionary.getOrCreateLiquid("Hydrofluoric Acid", HF);
+		LiquidDictionary.getOrCreateLiquid("Uranium Hexafluoride", UF6);
 
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Heavy Water", LiquidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOf(), new ItemStack(Item.bucketEmpty)));
+
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Uranium Hexafluoride", LiquidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Hydrofluoric Acid", LiquidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan));
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

@@ -23,12 +23,16 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 
 public class BlockReactorTile extends Block {
@@ -173,7 +177,36 @@ public class BlockReactorTile extends Block {
 			if (te.hasABucket()) {
 				te.subtractBucket();
 				ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+				return true;
 			}
+		}
+		if (r == ReactorTiles.PROCESSOR && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
+			TileEntityUProcessor te = (TileEntityUProcessor)world.getBlockTileEntity(x, y, z);
+			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= LiquidContainerRegistry.BUCKET_VOLUME) {
+				if (!ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
+				te.drain(0, LiquidContainerRegistry.BUCKET_VOLUME, true);
+			}
+			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreHF(LiquidContainerRegistry.BUCKET_VOLUME)) {
+				if (!ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan.copy());
+				te.addHF(LiquidContainerRegistry.BUCKET_VOLUME);
+			}
+			return true;
+		}
+		if (r == ReactorTiles.CENTRIFUGE && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
+			TileEntityCentrifuge te = (TileEntityCentrifuge)world.getBlockTileEntity(x, y, z);
+			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= LiquidContainerRegistry.BUCKET_VOLUME) {
+				if (!ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
+				te.drain(0, LiquidContainerRegistry.BUCKET_VOLUME, true);
+			}
+			else if (is.getItemDamage() == ReactorStacks.uf6can.getItemDamage() && te.canAcceptMoreUF6(LiquidContainerRegistry.BUCKET_VOLUME)) {
+				if (!ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan.copy());
+				te.addUF6(LiquidContainerRegistry.BUCKET_VOLUME);
+			}
+			return true;
 		}
 
 		if (ReactorCraft.hasGui(world, x, y, z, ep)) {

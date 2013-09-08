@@ -7,7 +7,9 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Base;
+package Reika.ReactorCraft.Items;
+
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemReactorBasic extends ReactorItemBase {
 

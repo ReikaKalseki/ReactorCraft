@@ -37,9 +37,8 @@ public class BlockReactorOre extends Block {
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
-		ReactorOres ore = ReactorOres.getOre(world, x, y, z);
-		ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, ore.getBlockMetadata());
-		li.add(is.copy());
+		ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, metadata);
+		li.add(is);
 		return li;
 	}
 
@@ -62,4 +61,9 @@ public class BlockReactorOre extends Block {
 		return icons[meta];
 	}
 
+	@Override
+	public boolean canDragonDestroy(World world, int x, int y, int z)
+	{
+		return ReactorOres.getOre(world, x, y, z) != ReactorOres.ENDBLENDE;
+	}
 }

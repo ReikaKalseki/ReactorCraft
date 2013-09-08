@@ -19,7 +19,8 @@ public enum ReactorOptions implements ConfigList {
 
 	LOGLOADING("Console Loading Info", true),
 	DEBUGMODE("Debug Mode", false),
-	VISIBLENEUTRONS("Visible Neutrons", true);
+	VISIBLENEUTRONS("Visible Neutrons", true),
+	SILVERORE("Generate Silver Ore", true);
 
 	private String label;
 	private boolean defaultState;

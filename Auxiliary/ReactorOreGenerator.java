@@ -11,7 +11,6 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -25,7 +24,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkgen, IChunkProvider provider) {
 		for (int i = 0; i < ReactorOres.oreList.length; i++) {
 			ReactorOres ore = ReactorOres.oreList[i];
-			if (world.provider.dimensionId == ore.dimensionID) {
+			if (ore.canGenerateInChunk(world, chunkX, chunkZ)) {
 				this.generate(ore, world, random, chunkX*16, chunkZ*16);
 			}
 		}
@@ -42,8 +41,15 @@ public class ReactorOreGenerator implements IWorldGenerator {
 			int posX = chunkX + random.nextInt(16);
 			int posZ = chunkZ + random.nextInt(16);
 			int posY = ore.minY + random.nextInt(ore.maxY-ore.minY);
-			(new WorldGenMinable(id, meta, ore.veinSize, Block.stone.blockID)).generate(world, random, posX, posY, posZ);
-			world.markBlockForRenderUpdate(posX, posY, posZ);
+			(new WorldGenMinable(id, meta, ore.veinSize, ore.getReplaceableBlock())).generate(world, random, posX, posY, posZ);
+			int r = 3;
+			for (int k = -r; k <= r; k++) {
+				for (int l = -r; l <= r; l++) {
+					for (int m = -r; m <= r; m++) {
+						world.markBlockForRenderUpdate(posX, posY, posZ);
+					}
+				}
+			}
 		}
 	}
 

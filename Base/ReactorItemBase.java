@@ -51,9 +51,11 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int ID, CreativeTabs cr, List li)
 	{
+		ReactorItems ri = ReactorItems.getEntryByID(ID);
 		for (int i = 0; i < this.getDataValues(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
-			li.add(item);
+			if (ri.isAvailableInCreative(item))
+				li.add(item);
 		}
 	}
 

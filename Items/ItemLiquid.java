@@ -16,24 +16,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemLiquid extends Item {
 
-	private String iconName;
+	private final String iconName;
 
-	public ItemLiquid(int ID, int tex) {
+	public ItemLiquid(int ID, String icon) {
 		super(ID);
 		maxStackSize = 64;
 		this.setCreativeTab(null);
-	}
-
-	@Override
-	public Item setUnlocalizedName(String par1Str) {
-		iconName = par1Str;
-		return super.setUnlocalizedName(par1Str);
+		iconName = icon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerIcons(IconRegister ico) {
-		itemIcon = ico.registerIcon("ReactorCraft:heavywater");
+		itemIcon = ico.registerIcon("ReactorCraft:"+iconName);
 	}
 
 }

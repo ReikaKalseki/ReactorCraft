@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -209,6 +210,32 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	@Override
 	public void setIORenderAlpha(int io) {
 		iotick = io;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		if (NBT.hasKey("internalLiquid")) {
+			tank.setLiquid(new LiquidStack(NBT.getInteger("liquidId"), NBT.getInteger("internalLiquid")));
+		}
+		else if (NBT.hasKey("tank")) {
+			tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("tank")));
+		}
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		if (tank.getLiquid() != null) {
+			NBT.setTag("tank", tank.getLiquid().writeToNBT(new NBTTagCompound()));
+		}
 	}
 
 }

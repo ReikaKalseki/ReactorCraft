@@ -9,18 +9,23 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 
 
 public enum ReactorOres {
 
-	FLUORITE(		32, 56, 8, 12, 0, 	false,	"Fluorite"),
-	PITCHBLENDE(	8, 24, 16, 1, 0,	true,	"Pitchblende"), //only if !Industrial ??
-	CADMIUM(		12, 32, 9, 3, 0,	true,	"Cadmium Ore"),
-	INDIUM(			0, 16, 7, 2, 0,		true,	"Indium Ore"),
-	SILVER(			16, 40, 9, 2, 0,	true, 	"Silver Ore");
+	FLUORITE(		32, 56, 8, 	12, 0, 	false,	"Fluorite"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	true,	"Pitchblende"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	true,	"Cadmium Ore"),
+	INDIUM(			0, 	16, 7, 	2, 	0,	true,	"Indium Ore"),
+	SILVER(			16, 40, 9, 	2, 	0,	true, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	true,	"Pitchblende");
 
 	public final int minY;
 	public final int maxY;
@@ -74,7 +79,10 @@ public enum ReactorOres {
 	public String getProductDictionaryName() {
 		switch(this) {
 		case FLUORITE:
-			return "shard"+ReikaStringParser.capFirstChar(this.name());
+			return "gem"+ReikaStringParser.capFirstChar(this.name());
+		case PITCHBLENDE:
+		case ENDBLENDE:
+			return "ingotUranium";
 		default:
 			return "ingot"+ReikaStringParser.capFirstChar(this.name());
 		}
@@ -103,12 +111,67 @@ public enum ReactorOres {
 		switch(this) {
 		case FLUORITE:
 			return ReactorItems.FLUORITE.getStackOfMetadata(FluoriteTypes.WHITE.ordinal());
+		case ENDBLENDE:
+			return PITCHBLENDE.getProduct();
 		default:
-			return ReactorItems.INGOTS.getStackOfMetadata(this.ordinal()-1);
+			return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
 		}
 	}
 
+	public int getProductMetadata() {
+		return this.ordinal()-1;
+	}
+
 	public String getProductName() {
-		return oreName+" Ingot";
+		switch(this) {
+		case FLUORITE:
+			return "Fluorite Crystal";
+		case PITCHBLENDE:
+		case ENDBLENDE:
+			return "Raw Uranium Ingot";
+		default:
+			return oreName+" Ingot";
+		}
+	}
+
+	public int getReplaceableBlock() {
+		switch(dimensionID) {
+		case 0:
+			return Block.stone.blockID;
+		case 1:
+			return Block.whiteStone.blockID;
+		case -1:
+			return Block.netherrack.blockID;
+		case 7:
+			return Block.stone.blockID;
+		default:
+			return Block.stone.blockID;
+		}
+	}
+
+	public boolean isValidDimension(int id) {
+		if (id == dimensionID)
+			return true;
+		if (id == ReikaTwilightHelper.TWILIGHT_ID && dimensionID == 0)
+			return true;
+		return false;
+	}
+
+	public boolean isValidBiome(BiomeGenBase biome) {
+		switch(this) {
+		case PITCHBLENDE:
+			return biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
+		default:
+			return true;
+		}
+	}
+
+	public boolean canGenerateInChunk(World world, int chunkX, int chunkZ) {
+		int id = world.provider.dimensionId;
+		if (!shouldGen)
+			return false;
+		if (!this.isValidDimension(id))
+			return false;
+		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.TWILIGHT_ID;
 	}
 }

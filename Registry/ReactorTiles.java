@@ -40,8 +40,8 @@ public enum ReactorTiles {
 	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
 	WATERLINE("Water Line", TileEntityWaterLine.class, 2, ""),
 	ITEMLINE("Fuel Supply Line", TileEntityULine.class, 3, ""),
-	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"), //looks like vertical impeller
-	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, ""),
+	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
+	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 1),
 	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 4, "");
 
