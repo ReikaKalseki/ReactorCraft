@@ -24,6 +24,7 @@ import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
@@ -36,6 +37,7 @@ import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
+import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -97,6 +99,7 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addBlocks();
 		this.addItems();
 		this.addLiquids();
+		this.registerOres();
 	}
 
 	@Override
@@ -171,6 +174,14 @@ public class ReactorCraft extends DragonAPIMod {
 				return true;
 		}
 		return false;
+	}
+
+	private static void registerOres() {
+		for (int i = 0; i < ReactorOres.oreList.length; i++) {
+			ReactorOres ore = ReactorOres.oreList[i];
+			OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock()); //only white fluorite gets registered
+			OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
+		}
 	}
 
 	@Override

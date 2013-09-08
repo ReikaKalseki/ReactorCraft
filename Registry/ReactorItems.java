@@ -32,8 +32,9 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	PLACER(-1,	"Part Placer",			ItemReactorPlacer.class),
 	WATER(-1,	"Heavy Water",			ItemLiquid.class),
 	BUCKET(3,	"Heavy Water Bucket", 	ItemHeavyBucket.class),
-	RAW(4,		"Raw Uranium",			ItemReactorBasic.class), //also has yellowcake & ingots
-	FLUORITE(5, "Fluorite",				ItemReactorBasic.class);
+	RAW(4,		"Raw Uranium",			ItemReactorBasic.class), //also has yellowcake
+	FLUORITE(16,"Fluorite",				ItemReactorBasic.class),
+	INGOTS(32,	"Ingots",				ItemReactorBasic.class);
 
 	private String name;
 	private Class itemClass;
@@ -67,6 +68,16 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		return spritesheet;
 	}
 
+	public boolean hasMetadataSprites() {
+		switch(this) {
+		case FUEL:
+		case WASTE:
+			return false;
+		default:
+			return true;
+		}
+	}
+
 	@Override
 	public String getUnlocalizedName() {
 		return ReikaStringParser.stripSpaces(name);
@@ -96,6 +107,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return ReactorNames.rawNames[meta];
 		case FLUORITE:
 			return FluoriteTypes.colorList[meta].getItemName();
+		case INGOTS:
+			return ReactorOres.oreList[meta+1].getProductName();
 		default:
 			return "";
 		}
@@ -108,6 +121,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case PLACER:
 		case RAW:
 		case FLUORITE:
+		case INGOTS:
 			return true;
 		default:
 			return false;
@@ -125,6 +139,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return ReactorNames.rawNames.length;
 		case FLUORITE:
 			return FluoriteTypes.colorList.length;
+		case INGOTS:
+			return ReactorOres.oreList.length-1;
 		default:
 			return 1;
 		}

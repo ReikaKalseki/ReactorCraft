@@ -37,7 +37,11 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
-		return index;
+		return index+this.getTextureOffset(is);
+	}
+
+	public int getTextureOffset(ItemStack is) {
+		return ReactorItems.getEntry(is).hasMetadataSprites() ? is.getItemDamage() : 0;
 	}
 
 	@Override

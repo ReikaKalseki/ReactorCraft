@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 
 public enum ReactorOres {
@@ -65,6 +67,19 @@ public enum ReactorOres {
 		return "ReactorCraft:"+this.name().toLowerCase();
 	}
 
+	public String getDictionaryName() {
+		return "ore"+ReikaStringParser.capFirstChar(this.name());
+	}
+
+	public String getProductDictionaryName() {
+		switch(this) {
+		case FLUORITE:
+			return "shard"+ReikaStringParser.capFirstChar(this.name());
+		default:
+			return "ingot"+ReikaStringParser.capFirstChar(this.name());
+		}
+	}
+
 	public int getBlockID() {
 		if (this == FLUORITE)
 			return ReactorBlocks.FLUORITEORE.getBlockID();
@@ -75,8 +90,25 @@ public enum ReactorOres {
 
 	public int getBlockMetadata() {
 		if (this == FLUORITE)
-			return 0;
+			return FluoriteTypes.WHITE.ordinal();
 		else
 			return this.ordinal();
+	}
+
+	public ItemStack getOreBlock() {
+		return new ItemStack(this.getBlockID(), 1, this.getBlockMetadata());
+	}
+
+	public ItemStack getProduct() {
+		switch(this) {
+		case FLUORITE:
+			return ReactorItems.FLUORITE.getStackOfMetadata(FluoriteTypes.WHITE.ordinal());
+		default:
+			return ReactorItems.INGOTS.getStackOfMetadata(this.ordinal()-1);
+		}
+	}
+
+	public String getProductName() {
+		return oreName+" Ingot";
 	}
 }
