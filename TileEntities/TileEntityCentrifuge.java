@@ -83,12 +83,17 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (this.canMake()) {
-			timer.update();
-			if (timer.checkCap()) {
-				if (!world.isRemote)
-					this.make();
+		if (omega >= MINSPEED) {
+			if (this.canMake()) {
+				timer.update();
+				if (timer.checkCap()) {
+					if (!world.isRemote)
+						this.make();
+				}
 			}
+		}
+		else {
+			timer.reset();
 		}
 		if (!world.isRemote) {
 			split = timer.getTick();
