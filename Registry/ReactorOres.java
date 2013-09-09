@@ -20,12 +20,12 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 
 public enum ReactorOres {
 
-	FLUORITE(		32, 56, 8, 	12, 0, 	false,	"Fluorite"),
-	PITCHBLENDE(	8, 	24, 16, 3, 	0,	true,	"Pitchblende"),
-	CADMIUM(		12, 32, 9, 	3, 	0,	true,	"Cadmium Ore"),
-	INDIUM(			0, 	16, 7, 	2, 	0,	true,	"Indium Ore"),
-	SILVER(			16, 40, 9, 	2, 	0,	true, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
-	ENDBLENDE(		0, 	64, 16, 6, 	1,	true,	"Pitchblende");
+	FLUORITE(		32, 56, 8, 	12, 0, 	0.2F,	"Fluorite"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	1F,		"Pitchblende"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	0.7F,	"Cadmium Ore"),
+	INDIUM(			0, 	16, 7, 	2, 	0,	1F,		"Indium Ore"),
+	SILVER(			16, 40, 9, 	2, 	0,	0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	1F,		"Pitchblende");
 
 	public final int minY;
 	public final int maxY;
@@ -34,15 +34,15 @@ public enum ReactorOres {
 	public final boolean shouldGen;
 	public final int dimensionID;
 	public final String oreName;
-	public final boolean dropsSelf;
+	public final float xpDropped;
 
 	public static final ReactorOres[] oreList = values();
 
-	private ReactorOres(int min, int max, int size, int count, int dim, boolean drop, String name) {
-		this(min, max, size, count, dim, drop, name, true);
+	private ReactorOres(int min, int max, int size, int count, int dim, float xp, String name) {
+		this(min, max, size, count, dim, xp, name, true);
 	}
 
-	private ReactorOres(int min, int max, int size, int count, int dim, boolean drop, String name, boolean gen) {
+	private ReactorOres(int min, int max, int size, int count, int dim, float xp, String name, boolean gen) {
 		minY = min;
 		maxY = max;
 		veinSize = size;
@@ -50,7 +50,7 @@ public enum ReactorOres {
 		shouldGen = gen;
 		dimensionID = dim;
 		oreName = name;
-		dropsSelf = drop;
+		xpDropped = xp;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public enum ReactorOres {
 		case ENDBLENDE:
 			return "Raw Uranium Ingot";
 		default:
-			return oreName+" Ingot";
+			return oreName.substring(0, oreName.length()-4)+" Ingot";
 		}
 	}
 
