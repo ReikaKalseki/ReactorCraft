@@ -203,7 +203,11 @@ public class ReactorCraft extends DragonAPIMod {
 			ReactorOres ore = ReactorOres.oreList[i];
 			OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock()); //only white fluorite gets registered
 			OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
+			if (ore != ReactorOres.FLUORITE)
+				MinecraftForge.setBlockHarvestLevel(ReactorBlocks.ORE.getBlockVariable(), ore.getBlockMetadata(), "pickaxe", ore.harvestLevel);
 		}
+		Block b = ReactorBlocks.FLUORITEORE.getBlockVariable();
+		MinecraftForge.setBlockHarvestLevel(b, "pickaxe", ReactorOres.FLUORITE.harvestLevel);
 	}
 
 	@Override

@@ -20,12 +20,12 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 
 public enum ReactorOres {
 
-	FLUORITE(		32, 56, 8, 	12, 0, 	0.2F,	"Fluorite"),
-	PITCHBLENDE(	8, 	24, 16, 3, 	0,	1F,		"Pitchblende"),
-	CADMIUM(		12, 32, 9, 	3, 	0,	0.7F,	"Cadmium Ore"),
-	INDIUM(			0, 	16, 7, 	2, 	0,	1F,		"Indium Ore"),
-	SILVER(			16, 40, 9, 	2, 	0,	0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
-	ENDBLENDE(		0, 	64, 16, 6, 	1,	1F,		"Pitchblende");
+	FLUORITE(		32, 56, 8, 	12, 0, 	0, 0.2F,	"Fluorite"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2, 1F,		"Pitchblende"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	2, 0.7F,	"Cadmium Ore"),
+	INDIUM(			0, 	16, 7, 	2, 	0,	2, 1F,		"Indium Ore"),
+	SILVER(			16, 40, 9, 	2, 	0,	2, 0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	2, 1F,		"Pitchblende");
 
 	public final int minY;
 	public final int maxY;
@@ -35,14 +35,15 @@ public enum ReactorOres {
 	public final int dimensionID;
 	public final String oreName;
 	public final float xpDropped;
+	public final int harvestLevel;
 
 	public static final ReactorOres[] oreList = values();
 
-	private ReactorOres(int min, int max, int size, int count, int dim, float xp, String name) {
-		this(min, max, size, count, dim, xp, name, true);
+	private ReactorOres(int min, int max, int size, int count, int dim, int level, float xp, String name) {
+		this(min, max, size, count, dim, level, xp, name, true);
 	}
 
-	private ReactorOres(int min, int max, int size, int count, int dim, float xp, String name, boolean gen) {
+	private ReactorOres(int min, int max, int size, int count, int dim, int level, float xp, String name, boolean gen) {
 		minY = min;
 		maxY = max;
 		veinSize = size;
@@ -51,6 +52,7 @@ public enum ReactorOres {
 		dimensionID = dim;
 		oreName = name;
 		xpDropped = xp;
+		harvestLevel = level;
 	}
 
 	@Override
