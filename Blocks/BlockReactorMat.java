@@ -48,4 +48,9 @@ public class BlockReactorMat extends Block {
 		return icons[meta][s];
 	}
 
+	@Override
+	public int damageDropped(int meta) {
+		return meta;
+	}
+
 }
