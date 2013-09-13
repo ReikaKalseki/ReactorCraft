@@ -75,6 +75,8 @@ public enum ReactorOres {
 	}
 
 	public String getDictionaryName() {
+		if (this == ENDBLENDE)
+			return PITCHBLENDE.getDictionaryName();
 		return "ore"+ReikaStringParser.capFirstChar(this.name());
 	}
 
