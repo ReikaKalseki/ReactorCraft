@@ -22,6 +22,7 @@ import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemLiquid;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
+import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
 
@@ -38,7 +39,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
 	CANISTER(48,	"Gas Canister",			ItemCanister.class),
 	UF6(-1, 		"Uranium Hexafluoride",	ItemLiquid.class),
-	HF(-1,			"Hydrofluoric Acid",	ItemLiquid.class);
+	HF(-1,			"Hydrofluoric Acid",	ItemLiquid.class),
+	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class);
 
 	private String name;
 	private Class itemClass;

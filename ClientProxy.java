@@ -14,7 +14,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Entities.RenderNeutron;
+import Reika.ReactorCraft.Entities.RenderRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -41,6 +43,7 @@ public class ClientProxy extends CommonProxy {
 		this.registerSpriteSheets();
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityNeutron.class, new RenderNeutron());
+		RenderingRegistry.registerEntityRenderingHandler(EntityRadiation.class, new RenderRadiation());
 	}
 
 	private void registerSpriteSheets() {

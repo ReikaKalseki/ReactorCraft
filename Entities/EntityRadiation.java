@@ -23,6 +23,8 @@ import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 public class EntityRadiation extends InertEntity {
 
 	public final int effectRange;
+	private boolean isRendering;
+	private int renderTimer;
 
 	public EntityRadiation(World par1World) {
 		super(par1World);
@@ -54,6 +56,10 @@ public class EntityRadiation extends InertEntity {
 	{
 		this.onEntityUpdate();
 		this.applyRadiation();
+		if (renderTimer > 0)
+			renderTimer--;
+		if (renderTimer <= 0)
+			isRendering = false;
 	}
 
 	private void applyRadiation() {
@@ -78,6 +84,15 @@ public class EntityRadiation extends InertEntity {
 			int dz = (int)z-effectRange+r.nextInt(effectRange*2+1);
 			RadiationEffects.transformBlock(world, dx, dy, dz);
 		}
+	}
+
+	public boolean isRendered() {
+		return isRendering;
+	}
+
+	public void setRendered() {
+		isRendering = true;
+		renderTimer = 3;
 	}
 
 }

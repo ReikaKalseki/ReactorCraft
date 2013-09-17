@@ -1,12 +1,3 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2013
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,25 +9,20 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.ReactorCraft.Registry.ReactorOptions;
 
-public class RenderNeutron extends Render
-{
-	public RenderNeutron()
-	{
-		shadowSize = 0.15F;
-		shadowOpaque = 0.75F;
-	}
+public class RenderRadiation extends Render {
 
-	public void renderTheNeutron(EntityNeutron par1EntityNeutron, double par2, double par4, double par6, float par8, float par9)
+	public void renderEntity(EntityRadiation er, double par2, double par4, double par6, float par8, float par9)
 	{
+		if (!er.isRendered())
+			return;
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		Tessellator v5 = new Tessellator();
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		int var19 = par1EntityNeutron.getBrightnessForRender(par9);
+		int var19 = er.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
 		int var21 = var19 / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
@@ -64,16 +50,9 @@ public class RenderNeutron extends Render
 		GL11.glPopMatrix();
 	}
 
-	/**
-	 * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
-	 * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
-	 * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
-	 * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
-	 */
 	@Override
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
-	{
-		if (ReactorOptions.VISIBLENEUTRONS.getState())
-			this.renderTheNeutron((EntityNeutron)par1Entity, par2, par4+0*0.5, par6, par8, par9);
+	public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par10) {
+		this.renderEntity((EntityRadiation)entity, par2, par4, par6, par8, par10);
 	}
+
 }
