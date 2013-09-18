@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -223,7 +225,12 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@Override
 	public URL getDocumentationSite() {
-		return null;
+		try {
+			return new URL("http://www.minecraftforum.net/topic/1969694-");
+		}
+		catch (MalformedURLException e) {
+			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
+		}
 	}
 
 	@Override

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
@@ -23,7 +32,7 @@ public class FuelNetwork {
 
 	}
 
-	public void addSource(Feedable source) {
+	public void addSource(Feedable src) {
 
 	}
 
@@ -41,19 +50,21 @@ public class FuelNetwork {
 	}
 
 	public void merge(FuelNetwork fuel) {
+		if (fuel == null)
+			return;
 		rods.addAll(fuel.rods);
 		sources.addAll(fuel.sources);
-		fuel.destroy();
+		fuel.destroy(this);
 	}
 
-	public void destroy() {
+	public void destroy(FuelNetwork repl) {
 		for (int i = 0; i < rods.size(); i++) {
 			TileEntityFuelRod rod = rods.get(i);
-			rod.setNetwork(this);
+			rod.setNetwork(repl);
 		}
-		for (int i = 0; i < sources.size(); i++) { //set to everything else
+		for (int i = 0; i < sources.size(); i++) {
 			Feedable feed = sources.get(i);
-			feed.setNetwork(this);
+			feed.setNetwork(repl);
 		}
 		rods.clear();
 		sources.clear();

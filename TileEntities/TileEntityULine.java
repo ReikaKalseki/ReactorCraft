@@ -69,10 +69,9 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 	}
 
 	@Override
-	public FuelNetwork getOrCreateNetwork(World world, int x, int y, int z) {
+	public void getOrCreateNetwork(World world, int x, int y, int z) {
 		FuelNetwork ntw = new FuelNetwork();
 		ntw.addPipeTile(this);
-		boolean flag = false;
 		for (int i = 0; i < 6; i++) {
 			int dx = x+dirs[i].offsetX;
 			int dy = y+dirs[i].offsetY;
@@ -82,11 +81,10 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 				FuelNetwork net = ((Feedable)te).getNetwork();
 				if (net != null) {
 					ntw.merge(net);
-					flag = true;
 				}
 			}
 		}
-		return ntw;
+		this.setNetwork(ntw);
 	}
 
 	@Override
