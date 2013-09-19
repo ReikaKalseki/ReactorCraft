@@ -28,4 +28,6 @@ public interface Feedable {
 
 	public void setNetwork(FuelNetwork fuel);
 
+	public void deleteFromNetwork();
+
 }

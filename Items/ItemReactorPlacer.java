@@ -83,7 +83,7 @@ public class ItemReactorPlacer extends Item {
 			ShaftMachine sm = (ShaftMachine)te;
 			sm.setIORenderAlpha(512);
 		}
-		if (te instanceof Feedable) {
+		if (te instanceof Feedable && !world.isRemote) {
 			((Feedable) te).getOrCreateNetwork(world, x, y, z);
 		}
 

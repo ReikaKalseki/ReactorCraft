@@ -97,6 +97,10 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 		network = fuel;
 	}
 
+	public void deleteFromNetwork() {
+		network.deletePipeTile(this);
+	}
+
 	public boolean isConnectedOnSide(ForgeDirection side) {
 		TileEntity te = worldObj.getBlockTileEntity(xCoord+side.offsetX, yCoord+side.offsetY, zCoord+side.offsetZ);
 		return te instanceof Feedable;

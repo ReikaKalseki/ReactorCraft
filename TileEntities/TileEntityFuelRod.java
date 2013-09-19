@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
@@ -26,6 +27,7 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
 
@@ -46,10 +48,15 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				FuelNetwork net = ((Feedable)te).getNetwork();
 				if (net != null) {
 					ntw.merge(net);
+					generating a new one each time!
 				}
 			}
 		}
 		this.setNetwork(ntw);
+	}
+
+	public void deleteFromNetwork() {
+		network.deleteFuelCell(this);
 	}
 
 	@Override
@@ -82,6 +89,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+		ReikaJavaLibrary.pConsoleSideOnly(network, Side.SERVER);
 	}
 
 	@Override
@@ -229,7 +237,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			return true;
 		if (!this.isStackValidForSlot(0, is))
 			return false;
-		if (inv[0] == null || inv[0].stackSize+is.stackSize <= inv[0].getMaxStackSize()) {
+		if (inv[0] == null || inv[0].stackSize+is.stackSize <= Math.min(inv[0].getMaxStackSize(), this.getInventoryStackLimit())) {
 			if (inv[0] == null) {
 				inv[0] = is.copy();
 			}
