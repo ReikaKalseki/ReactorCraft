@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -49,7 +50,22 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+		TileEntity te = world.getBlockTileEntity(x, y+1, z);
+		if (te instanceof IInventory) {
+			IInventory ii = (IInventory)te;
+			boolean flag = false;
+			for (int i = 0; i < ii.getSizeInventory(); i++) {
+				if (ii.getStackInSlot(i) != null) {
+					network.addItem(ii.getStackInSlot(i));
+					ii.setInventorySlotContents(i, null);
+					flag = true;
+				}
+			}
+			if (flag) {
+				network.distribute();
+				world.setBlock(x, y+1, z, 49);
+			}
+		}
 	}
 
 	public boolean hasNetworkAdjacent(World world, int x, int y, int z) {
@@ -72,6 +88,7 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 	public void getOrCreateNetwork(World world, int x, int y, int z) {
 		FuelNetwork ntw = new FuelNetwork();
 		ntw.addPipeTile(this);
+		boolean flag = false;
 		for (int i = 0; i < 6; i++) {
 			int dx = x+dirs[i].offsetX;
 			int dy = y+dirs[i].offsetY;
@@ -79,12 +96,17 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 			if (te instanceof Feedable) {
 				FuelNetwork net = ((Feedable)te).getNetwork();
+				//ReikaJavaLibrary.pConsole(te.toString()+" with "+net.toString());
 				if (net != null) {
-					ntw.merge(net);
+					net.merge(ntw);
+					this.setNetwork(net);
+					ntw = net;
+					flag = true;
 				}
 			}
 		}
-		this.setNetwork(ntw);
+		if (!flag)
+			this.setNetwork(ntw);
 	}
 
 	@Override

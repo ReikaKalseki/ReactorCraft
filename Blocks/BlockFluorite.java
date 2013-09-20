@@ -79,7 +79,7 @@ public class BlockFluorite extends Block {
 		//ReikaJavaLibrary.pConsole(r+":"+g+":"+b);
 		if (this.isActivated(world, x, y, z)) {
 			for (int i = 0; i < 4; i++)
-				world.spawnParticle("reddust", x-offset+rand.nextDouble()*(1+offset*2), y-offset+rand.nextDouble()*(1+offset*2), z-offset+rand.nextDouble()*(1+offset*2), b, g, r);
+				world.spawnParticle("reddust", x-offset+rand.nextDouble()*(1+offset*2), y-offset+rand.nextDouble()*(1+offset*2), z-offset+rand.nextDouble()*(1+offset*2), r, g, b);
 		}
 	}
 

@@ -11,7 +11,6 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -95,16 +94,19 @@ public final class FuelNetwork {
 				items.add(is);
 		}
 
+		ArrayList<ItemStack> toremove = new ArrayList();
 		for (int i = 0; i < rods.size(); i++) {
-			Iterator<ItemStack> iter = items.iterator();
-			while (iter.hasNext()) {
-				ItemStack is = iter.next();
-				if (rods.get(i).feedIn(is)) {
-					iter.remove();
-					break;
+			TileEntityFuelRod rod = rods.get(i);
+			for (int k = 0; k < items.size(); k++) {
+				ItemStack is = items.get(k);
+				if (!toremove.contains(is)) {
+					if (rod.feedIn(is)) {
+						toremove.add(is);
+					}
 				}
 			}
 		}
+		items.removeAll(toremove);
 	}
 
 	public void merge(FuelNetwork fuel) {

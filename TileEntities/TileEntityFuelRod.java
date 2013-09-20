@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
@@ -27,7 +26,6 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
 
@@ -39,6 +37,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void getOrCreateNetwork(World world, int x, int y, int z) {
 		FuelNetwork ntw = new FuelNetwork();
 		ntw.addFuelCell(this);
+		boolean flag = false;
 		for (int i = 0; i < 6; i++) {
 			int dx = x+dirs[i].offsetX;
 			int dy = y+dirs[i].offsetY;
@@ -46,17 +45,22 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 			if (te instanceof Feedable) {
 				FuelNetwork net = ((Feedable)te).getNetwork();
+				//ReikaJavaLibrary.pConsole(te.toString()+" with "+net.toString());
 				if (net != null) {
-					ntw.merge(net);
-					generating a new one each time!
+					net.merge(ntw);
+					this.setNetwork(net);
+					ntw = net;
+					flag = true;
 				}
 			}
 		}
-		this.setNetwork(ntw);
+		if (!flag)
+			this.setNetwork(ntw);
 	}
 
 	public void deleteFromNetwork() {
-		network.deleteFuelCell(this);
+		if (network != null)
+			network.deleteFuelCell(this);
 	}
 
 	@Override
@@ -89,7 +93,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
-		ReikaJavaLibrary.pConsoleSideOnly(network, Side.SERVER);
 	}
 
 	@Override
@@ -237,7 +240,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			return true;
 		if (!this.isStackValidForSlot(0, is))
 			return false;
-		if (inv[0] == null || inv[0].stackSize+is.stackSize <= Math.min(inv[0].getMaxStackSize(), this.getInventoryStackLimit())) {
+		if ((inv[0] == null && is.stackSize <= this.getInventoryStackLimit()) || inv[0].stackSize+is.stackSize <= Math.min(inv[0].getMaxStackSize(), this.getInventoryStackLimit())) {
 			if (inv[0] == null) {
 				inv[0] = is.copy();
 			}
