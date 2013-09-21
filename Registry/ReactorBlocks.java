@@ -193,4 +193,13 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 		return model;
 	}
 
+	public int getID() {
+		return this.getBlockID();
+	}
+
+	@Override
+	public boolean overwritingItem() {
+		return false;
+	}
+
 }

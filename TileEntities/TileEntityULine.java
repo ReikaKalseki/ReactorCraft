@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.FuelNetwork;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 
@@ -25,7 +24,7 @@ public class TileEntityULine extends TileEntityReactorBase implements Feedable {
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.ITEMLINE.ordinal();
+		return 0;//return ReactorTiles.ITEMLINE.ordinal();
 	}
 
 	@Override

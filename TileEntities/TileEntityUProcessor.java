@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import java.util.ArrayList;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,9 +23,11 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
@@ -86,7 +90,16 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public boolean canMakeUF6() {
-		return ReikaItemHelper.matchStacks(inv[2], ReactorOres.PITCHBLENDE.getProduct()) && this.getHF() > ACID_PER_UNIT && this.canAcceptMoreUF6(LiquidContainerRegistry.BUCKET_VOLUME);
+		return (this.hasUranium()) && this.getHF() > ACID_PER_UNIT && this.canAcceptMoreUF6(LiquidContainerRegistry.BUCKET_VOLUME);
+	}
+
+	private boolean hasUranium() {
+		if (inv[2] == null)
+			return false;
+		if (ReikaItemHelper.matchStacks(inv[2], ReactorOres.PITCHBLENDE.getProduct()))
+			return true;
+		ArrayList<ItemStack> ingots = OreDictionary.getOres("ingotUranium");
+		return ReikaItemHelper.listContainsItemStack(ingots, inv[2]);
 	}
 
 	public boolean canMakeAcid() {
@@ -184,7 +197,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
 		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
-			return i == 1;
+			return i == 2;
+		if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
+			return i == 2;
 		if (is.itemID == ReactorItems.FLUORITE.getShiftedItemID())
 			return i == 0;
 		if (is.itemID == Item.bucketWater.itemID)
@@ -306,5 +321,15 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		if (output.getLiquid() != null) {
 			NBT.setTag("output", output.getLiquid().writeToNBT(new NBTTagCompound()));
 		}
+	}
+
+	public int getLiquid(LiquidStack liquid) {
+		if (liquid.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")))
+			return this.getWater();
+		if (liquid.isLiquidEqual(ReactorCraft.HF))
+			return this.getHF();
+		if (liquid.isLiquidEqual(ReactorCraft.UF6))
+			return this.getUF6();
+		return 0;
 	}
 }

@@ -266,4 +266,13 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		}
 	}
 
+	public int getID() {
+		return this.getItemID();
+	}
+
+	@Override
+	public boolean overwritingItem() {
+		return false;
+	}
+
 }

@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -54,7 +53,7 @@ public class ReactorItemRenderer implements IItemRenderer {
 		else {
 			RenderBlocks rb = new RenderBlocks();
 			Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
-			rb.renderBlockAsItem(Block.blocksList[machine.getBlockID()], machine.getBlockMetadata(), 1);
+			rb.renderBlockAsItem(machine.getBlockVariable(), item.getItemDamage(), 1);
 		}
 	}
 }

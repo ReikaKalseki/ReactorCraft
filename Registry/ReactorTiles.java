@@ -24,7 +24,6 @@ import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
-import Reika.ReactorCraft.TileEntities.TileEntityULine;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
@@ -34,16 +33,16 @@ public enum ReactorTiles {
 
 	FUEL("Fuel Core", TileEntityFuelRod.class, 0),
 	CONTROL("Control Rod", TileEntityControlRod.class, 1),
-	COOLANT("Coolant Cell", TileEntityWaterCell.class, 2),
+	COOLANT("Water Cell", TileEntityWaterCell.class, 2),
 	CPU("Central Control", TileEntityCPU.class, 0),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, ""),
 	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
 	WATERLINE("Water Line", TileEntityWaterLine.class, 2, ""),
-	ITEMLINE("Fuel Supply Line", TileEntityULine.class, 3, ""),
+	//ITEMLINE("Fuel Supply Line", TileEntityULine.class, 3, ""),
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
-	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 1),
-	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 4, "");
+	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
+	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2);
 
 	private String name;
 	private Class teClass;
@@ -122,6 +121,7 @@ public enum ReactorTiles {
 		switch(this) {
 		case FUEL:
 		case CONTROL:
+		case WASTECONTAINER:
 			return true;
 		default:
 			return false;
@@ -182,9 +182,8 @@ public enum ReactorTiles {
 		case CONDENSER:
 		case CONTROL:
 		case FUEL:
-		case ITEMLINE:
+			//case ITEMLINE:
 		case TURBINECORE:
-		case WASTECONTAINER:
 		case WATERLINE:
 			return true;
 		default:
@@ -233,7 +232,12 @@ public enum ReactorTiles {
 	}
 
 	public boolean renderInPass1() {
-		return false;
+		switch(this) {
+		case PROCESSOR:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	// A development feature, really

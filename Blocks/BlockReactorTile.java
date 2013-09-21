@@ -61,52 +61,47 @@ public class BlockReactorTile extends Block {
 	public void registerIcons(IconRegister ico) {
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			if (r.isReactorBlock()) {
-				if (r.hasTextureStates()) {
-					for (int k = 0; k < r.getTextureStates(); k++) {
-						if (r.hasSidedTextures()) {
-							for (int j = 0; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j+"_#"+k);
-							}
-						}
-						else if (r.isEndTextured()) {
-							for (int j = 0; j < 2; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top"+"_#"+k);
-							}
-							for (int j = 2; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
-							}
-						}
-						else {
-							for (int j = 0; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
-							}
-						}
-					}
-				}
-				else {
+			if (r.hasTextureStates()) {
+				for (int k = 0; k < r.getTextureStates(); k++) {
 					if (r.hasSidedTextures()) {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j);
+							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j+"_#"+k);
 						}
 					}
 					else if (r.isEndTextured()) {
 						for (int j = 0; j < 2; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top");
+							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top"+"_#"+k);
 						}
 						for (int j = 2; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
 						}
 					}
 					else {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
 						}
 					}
 				}
 			}
 			else {
-
+				if (r.hasSidedTextures()) {
+					for (int j = 0; j < 6; j++) {
+						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j);
+					}
+				}
+				else if (r.isEndTextured()) {
+					for (int j = 0; j < 2; j++) {
+						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top");
+					}
+					for (int j = 2; j < 6; j++) {
+						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+					}
+				}
+				else {
+					for (int j = 0; j < 6; j++) {
+						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+					}
+				}
 			}
 		}
 	}
@@ -116,14 +111,13 @@ public class BlockReactorTile extends Block {
 		ReactorTiles r = ReactorTiles.getTE(iba, x, y, z);
 		if (r == null)
 			return null;
-		int meta = iba.getBlockMetadata(x, y, z);
 		if (r.hasTextureStates()) {
 			TileEntityReactorBase te = (TileEntityReactorBase)iba.getBlockTileEntity(x, y, z);
 			int k = te.getTextureState();
-			return icons[meta][s][k];
+			return icons[r.ordinal()][s][k];
 		}
 		else {
-			return icons[meta][s][0];
+			return icons[r.ordinal()][s][0];
 		}
 	}
 

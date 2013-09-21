@@ -37,10 +37,10 @@ public class WasteManager {
 		addWaste(Isotopes.Xe135, 6.33);
 		addWaste(Isotopes.Zr93, 6.30);
 		addWaste(Isotopes.Mo99, 6.10);
-		addWaste(Isotopes.Cs137, 6.09); //Cs-137
+		addWaste(Isotopes.Cs137, 6.09);
 		addWaste(Isotopes.Tc99, 6.05);
-		addWaste(Isotopes.Sr90, 5.75); //Sr-90
-		addWaste(Isotopes.I131, 2.83); //I-131
+		addWaste(Isotopes.Sr90, 5.75);
+		addWaste(Isotopes.I131, 2.83);
 		addWaste(Isotopes.Pm147, 2.27);
 		addWaste(Isotopes.I129, 0.66);
 		addWaste(Isotopes.Sm151, 0.42);
@@ -84,6 +84,14 @@ public class WasteManager {
 
 	public static ItemStack getRandomWasteItem() {
 		Isotopes atom = getRandomWaste();
+		ItemStack is = ReactorItems.WASTE.getStackOf();
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("iso", atom.ordinal());
+		return is;
+	}
+
+	public static ItemStack getFullyRandomWasteItem() {
+		Isotopes atom = getFullyRandomWaste();
 		ItemStack is = ReactorItems.WASTE.getStackOf();
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("iso", atom.ordinal());

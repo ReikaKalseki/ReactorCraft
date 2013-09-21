@@ -27,6 +27,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE {
 
 	private LiquidStack internalLiquid;
+	private double storedEnergy;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -40,25 +41,22 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 				this.setLiquidState(0);
 			}
 		}
-		//ReikaJavaLibrary.pConsoleIf(temperature, x == 377 && z == 309);
-		if (thermalTicker.checkCap()) {
-			this.accrueHeat(world, x, y, z);
-			this.disposeHeat(world, x, y, z);
+
+		if (thermalTicker.checkCap() && !world.isRemote) {
+			//this.accrueEnergy(world, x, y, z);
+			this.transferEnergy(world, x, y, z);
+			//ReikaJavaLibrary.pConsoleIf(storedEnergy, y == 73);
 		}
 	}
 
-	private void disposeHeat(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y+1, z);
-		int meta = world.getBlockMetadata(x, y+1, z);
-		TileEntity te = world.getBlockTileEntity(x, y+1, z);
+	private void transferEnergy(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y-1, z);
+		int meta = world.getBlockMetadata(x, y-1, z);
+		TileEntity te = world.getBlockTileEntity(x, y-1, z);
 		if (id == this.getTileEntityBlockID() && meta == this.getIndex()) {
 			TileEntityWaterCell wc = (TileEntityWaterCell)te;
-			double T = wc.getTemperature();
-			if (T > this.getTemperature()) {
-				double dT = T - this.getTemperature();
-				wc.setTemperature(T+dT/2);
-				this.setTemperature(this.getTemperature()-dT/2);
-			}
+			wc.storedEnergy += storedEnergy;
+			storedEnergy = 0;
 		}
 	}
 
@@ -76,6 +74,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (ReikaMathLibrary.doWithChance(this.getChanceToStop())) {
 			temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.WATER_HEAT, 1000, ReikaNuclearHelper.getUraniumFissionNeutronE());
+			storedEnergy += ReikaNuclearHelper.getUraniumFissionNeutronE(); //3.8kJ per neutron (kinetic energy)
 			return true;
 		}
 		return false;
@@ -167,22 +166,15 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		this.setLiquidState(NBT.getInteger("liq"));
 	}
 
-	public void accrueHeat(World world, int x, int y, int z) {
+	public void accrueEnergy(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = ForgeDirection.values()[i];
 			int id = world.getBlockId(x+dir.offsetX, y, z+dir.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX, y, z+dir.offsetZ);
-			if (id == this.getTileEntityBlockID() && meta != this.getIndex()) {
-				TileEntity te = world.getBlockTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
-				if (te instanceof ReactorCoreTE) {
-					ReactorCoreTE rc = (ReactorCoreTE)te;
-					double T = rc.getTemperature();
-					if (T > temperature) {
-						double dT = T-temperature;
-						temperature += dT/4D;
-						rc.setTemperature(T-dT/4D);
-					}
-				}
+			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.FUEL.ordinal()) {
+				TileEntityFuelRod te = (TileEntityFuelRod)world.getBlockTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
+				storedEnergy += te.storedEnergy;
+				te.storedEnergy = 0;
 			}
 		}
 	}

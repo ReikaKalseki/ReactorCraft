@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Items;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,11 +22,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftMachine;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -75,6 +76,7 @@ public class ItemReactorPlacer extends Item {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(x, y, z);
 		te.placer = ep.getEntityName();
+		te.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		if (te instanceof Temperatured) {
 			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 			((Temperatured)te).setTemperature(Tb);
@@ -82,10 +84,10 @@ public class ItemReactorPlacer extends Item {
 		if (te instanceof ShaftMachine) {
 			ShaftMachine sm = (ShaftMachine)te;
 			sm.setIORenderAlpha(512);
-		}
+		}/*
 		if (te instanceof Feedable && !world.isRemote) {
 			((Feedable) te).getOrCreateNetwork(world, x, y, z);
-		}
+		}*/
 
 		return true;
 	}
@@ -116,5 +118,8 @@ public class ItemReactorPlacer extends Item {
 		int d = is.getItemDamage();
 		return super.getUnlocalizedName() + "." + String.valueOf(d);
 	}
+
+	@Override
+	public final void registerIcons(IconRegister ico) {}
 
 }

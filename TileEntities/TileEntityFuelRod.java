@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -32,6 +34,9 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	private ItemStack[] inv = new ItemStack[4];
 
 	private FuelNetwork network;
+
+	public double storedEnergy = 0;
+	private ArrayList<ItemStack> missingWaste = new ArrayList();
 
 	@Override
 	public void getOrCreateNetwork(World world, int x, int y, int z) {
@@ -93,6 +98,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+		//ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
+		this.feed();
 	}
 
 	@Override
@@ -122,6 +129,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
+		if (inv[i] != null)
+			return false;
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
 			return true;
 		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
@@ -132,8 +141,21 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canExtractItem(int i, ItemStack is, int j) {
+		if (j != 0)
+			return false;
+		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
+			return true;
+		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
+			return true;
+		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+			return true;
 		return false;
+	}
+
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		return j == 1 && this.isStackValidForSlot(i, itemstack) && itemstack.itemID != ReactorItems.DEPLETED.getShiftedItemID();
 	}
 
 	@Override
@@ -146,11 +168,14 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			else
 				inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 			this.spawnNeutronBurst(world, x, y, z);
-			double E = ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY);
+			double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
+			storedEnergy += E;
 
 			if (ReikaMathLibrary.doWithChance(10)) {
-				ReikaInventoryHelper.addToIInv(WasteManager.getRandomWasteItem(), this);
+				ItemStack waste = WasteManager.getRandomWasteItem();
+				if (ReikaInventoryHelper.addToIInv(waste, this))
+					missingWaste.add(waste);
 			}
 
 			return true;
@@ -187,15 +212,14 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = world.getBlockTileEntity(x, y-1, z);
 		if (tile instanceof Feedable) {
-			((Feedable) tile).feed();
 			if (((Feedable) tile).feedIn(inv[3])) {
 				inv[3] = inv[2];
 				inv[2] = inv[1];
 				inv[1] = inv[0];
 
-				id = world.getBlockId(x, y-1, z);
-				meta = world.getBlockMetadata(x, y-1, z);
-				tile = world.getBlockTileEntity(x, y-1, z);
+				id = world.getBlockId(x, y+1, z);
+				meta = world.getBlockMetadata(x, y+1, z);
+				tile = world.getBlockTileEntity(x, y+1, z);
 				if (tile instanceof Feedable) {
 					inv[0] = ((Feedable) tile).feedOut();
 				}
@@ -203,18 +227,22 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 					inv[0] = null;
 			}
 		}
-
+		this.collapseInventory();
 		return false;
 	}
 
-	//seems to be duping items, but have no idea why
-	//may be an inter-Te reaction
 	private void collapseInventory() {
 		for (int i = 0; i < 4; i++) {
 			for (int k = 3; k > 0; k--) {
 				if (inv[k] == null) {
-					inv[k] = inv[k-1];
-					inv[k-1] = null;
+					if (!missingWaste.isEmpty()) {
+						inv[k] = missingWaste.get(0);
+						missingWaste.remove(0);
+					}
+					else {
+						inv[k] = inv[k-1];
+						inv[k-1] = null;
+					}
 				}
 			}
 		}
@@ -240,13 +268,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			return true;
 		if (!this.isStackValidForSlot(0, is))
 			return false;
-		if ((inv[0] == null && is.stackSize <= this.getInventoryStackLimit()) || inv[0].stackSize+is.stackSize <= Math.min(inv[0].getMaxStackSize(), this.getInventoryStackLimit())) {
-			if (inv[0] == null) {
-				inv[0] = is.copy();
-			}
-			else {
-				inv[0].stackSize += is.stackSize;
-			}
+		if (inv[0] == null) {
+			inv[0] = is.copy();
 			return true;
 		}
 		return false;
@@ -254,7 +277,19 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public ItemStack feedOut() {
-		return inv[3];
+		if (inv[3] == null)
+			return null;
+		else {
+			ItemStack is = inv[3].copy();
+			if (!missingWaste.isEmpty()) {
+				inv[3] = missingWaste.get(0);
+				missingWaste.remove(0);
+			}
+			else {
+				inv[3] = null;
+			}
+			return is;
+		}
 	}
 
 	@Override
@@ -274,6 +309,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+
+		storedEnergy = NBT.getDouble("energy");
 	}
 
 	/**
@@ -298,11 +335,13 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		NBT.setDouble("energy", storedEnergy);
 	}
 
 	@Override
 	public int getMaxTemperature() {
-		return 0;
+		return 300;
 	}
 
 	private void onMeltdown(World world, int x, int y, int z) {
