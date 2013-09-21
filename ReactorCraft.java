@@ -26,6 +26,7 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.RetroGenController;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
@@ -33,7 +34,6 @@ import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
-import Reika.ReactorCraft.Auxiliary.ReactorOreGenerator;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityRadiation;
@@ -42,6 +42,8 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.World.ReactorRetroGen;
+import Reika.ReactorCraft.World.ReactorOreGenerator;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -117,6 +119,10 @@ public class ReactorCraft extends DragonAPIMod {
 		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
 		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
 		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
+		if (ReactorOptions.RETROGEN.getState()) {
+			RetroGenController.getInstance().addRetroGenerator(new ReactorRetroGen());
+			//Set state back
+		}
 	}
 
 	@Override

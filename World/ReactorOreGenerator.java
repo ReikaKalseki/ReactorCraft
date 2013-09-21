@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Auxiliary;
+package Reika.ReactorCraft.World;
 
 import java.util.Random;
 
@@ -30,7 +30,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 		}
 	}
 
-	private void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
+	public static void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
 		//ReikaJavaLibrary.pConsole("Generating "+ore);
 		int id = ore.getBlockID();
 		int meta = ore.getBlockMetadata();
