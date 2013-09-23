@@ -16,13 +16,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
 
-public class RenderCentrifuge extends RotaryTERenderer
+public class RenderCentrifuge extends ReactorRenderBase
 {
 	private ModelCentrifuge CentrifugeModel = new ModelCentrifuge();
 

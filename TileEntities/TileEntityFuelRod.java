@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.FuelNetwork;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -168,13 +167,13 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			else
 				inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 			this.spawnNeutronBurst(world, x, y, z);
-			double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
+			//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
-			storedEnergy += E;
+			//storedEnergy += E;
 
 			if (ReikaMathLibrary.doWithChance(10)) {
 				ItemStack waste = WasteManager.getRandomWasteItem();
-				if (ReikaInventoryHelper.addToIInv(waste, this))
+				if (!ReikaInventoryHelper.addToIInv(waste, this))
 					missingWaste.add(waste);
 			}
 

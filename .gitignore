@@ -82,6 +82,8 @@ build/
 *.jpg
 *.ogg
 *.txt
+*.tcn
+*.xml
 
 # Visual C++ cache files
 ipch/

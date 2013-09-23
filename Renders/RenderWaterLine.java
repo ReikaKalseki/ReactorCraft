@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -18,23 +19,16 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Models.ModelHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
 
-public class RenderHeavyPump extends ReactorRenderBase
-{
-	private ModelHeavyPump HeavyPumpModel = new ModelHeavyPump();
+public class RenderWaterLine extends ReactorRenderBase {
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityHeavyPumpAt(TileEntityHeavyPump tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityWaterLineAt(TileEntityWaterLine tile, double par2, double par4, double par6, float par8)
 	{
-		ModelHeavyPump var14;
-		var14 = HeavyPumpModel;
-
-		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/heavypump.png");
+		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/waterline.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -45,7 +39,9 @@ public class RenderHeavyPump extends ReactorRenderBase
 		int var11 = 0;
 		float var13;
 
-		var14.renderAll(null, -tile.phi);
+		for (int i = 0; i < 6; i++) {
+			this.renderFace(tile, par2, par4, par6, dirs[i]);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -54,19 +50,27 @@ public class RenderHeavyPump extends ReactorRenderBase
 
 	}
 
+	private void renderFace(TileEntityWaterLine tile, double par2, double par4, double par6, ForgeDirection dir) {
+		if (tile.isConnectedOnSideAt(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, dir)) {
+
+		}
+		else {
+
+		}
+	}
+
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityHeavyPumpAt((TileEntityHeavyPump)tile, par2, par4, par6, par8);
+			this.renderTileEntityWaterLineAt((TileEntityWaterLine)tile, par2, par4, par6, par8);
 		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			IORenderer.renderIO(tile, par2, par4, par6);
-			//IOAPI.renderIO((ShaftMachine)tile, par2, par4, par6);
+
 		}
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "heavypump.png";
+		return "waterline.png";
 	}
 }

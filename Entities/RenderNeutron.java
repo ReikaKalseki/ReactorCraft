@@ -33,7 +33,7 @@ public class RenderNeutron extends Render
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		Tessellator v5 = new Tessellator();
-		float var16 = 1.0F;
+		float var16 = 0.25F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
 		int var19 = par1EntityNeutron.getBrightnessForRender(par9);
@@ -54,8 +54,8 @@ public class RenderNeutron extends Render
 		v5.setColorOpaque(0, 0, 128);
 		v5.addVertex(0.0F - var17, 0.0F - var18, 0.0D);
 		v5.addVertex(var16 - var17, 0.0F - var18, 0.0D);
-		v5.addVertex(var16 - var17, 1.0F - var18, 0.0D);
-		v5.addVertex(0.0F - var17, 1.0F - var18, 0.0D);
+		v5.addVertex(var16 - var17, var16 - var18, 0.0D);
+		v5.addVertex(0.0F - var17, var16 - var18, 0.0D);
 		v5.draw();
 
 		ReikaRenderHelper.exitGeoDraw();

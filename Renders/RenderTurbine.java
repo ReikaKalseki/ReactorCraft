@@ -18,23 +18,22 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Models.ModelHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
-public class RenderHeavyPump extends ReactorRenderBase
+public class RenderTurbine extends ReactorRenderBase
 {
-	private ModelHeavyPump HeavyPumpModel = new ModelHeavyPump();
+	//private ModelTurbine TurbineModel = new ModelTurbine();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityHeavyPumpAt(TileEntityHeavyPump tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityTurbineCoreAt(TileEntityTurbineCore tile, double par2, double par4, double par6, float par8)
 	{
-		ModelHeavyPump var14;
-		var14 = HeavyPumpModel;
+		//ModelTurbine var14;
+		//var14 = TurbineModel;
 
-		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/heavypump.png");
+		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/turbine.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -45,7 +44,7 @@ public class RenderHeavyPump extends ReactorRenderBase
 		int var11 = 0;
 		float var13;
 
-		var14.renderAll(null, -tile.phi);
+		//var14.renderAll(null, -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -58,7 +57,7 @@ public class RenderHeavyPump extends ReactorRenderBase
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityHeavyPumpAt((TileEntityHeavyPump)tile, par2, par4, par6, par8);
+			this.renderTileEntityTurbineCoreAt((TileEntityTurbineCore)tile, par2, par4, par6, par8);
 		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 			//IOAPI.renderIO((ShaftMachine)tile, par2, par4, par6);
@@ -67,6 +66,6 @@ public class RenderHeavyPump extends ReactorRenderBase
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "heavypump.png";
+		return "turbine.png";
 	}
 }

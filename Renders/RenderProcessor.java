@@ -19,13 +19,13 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
 import buildcraft.core.render.LiquidRenderer;
 
-public class RenderProcessor extends RotaryTERenderer
+public class RenderProcessor extends ReactorRenderBase
 {
 	private ModelProcessor ProcessorModel = new ModelProcessor();
 

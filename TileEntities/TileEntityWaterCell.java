@@ -34,7 +34,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		thermalTicker.update();
 		int id = world.getBlockId(x, y-1, z);
 		int metadata = world.getBlockMetadata(x, y-1, z);
-		if (id == this.getTileEntityBlockID() && metadata == this.getIndex()) {
+		if (id == this.getTileEntityBlockID() && metadata == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y-1, z);
 			if (te.getLiquidState() == 0 && this.getLiquidState() != 0) {
 				te.setLiquidState(this.getLiquidState());
@@ -53,7 +53,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		int id = world.getBlockId(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity te = world.getBlockTileEntity(x, y-1, z);
-		if (id == this.getTileEntityBlockID() && meta == this.getIndex()) {
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell wc = (TileEntityWaterCell)te;
 			wc.storedEnergy += storedEnergy;
 			storedEnergy = 0;
@@ -63,6 +63,16 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
+	}
+
+	public double getEnergy() {
+		return storedEnergy;
+	}
+
+	protected double removeEnergy() {
+		double E = storedEnergy;
+		storedEnergy = 0;
+		return E;
 	}
 
 	@Override
@@ -146,32 +156,12 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		internalLiquid = LiquidStates.list[liq].getLiquid();
 	}
 
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-
-		NBT.setInteger("liq", this.getLiquidState());
-
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-
-		this.setLiquidState(NBT.getInteger("liq"));
-	}
-
 	public void accrueEnergy(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = ForgeDirection.values()[i];
 			int id = world.getBlockId(x+dir.offsetX, y, z+dir.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX, y, z+dir.offsetZ);
-			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.FUEL.ordinal()) {
+			if (id == ReactorTiles.FUEL.getBlockID() && meta == ReactorTiles.FUEL.getBlockMetadata()) {
 				TileEntityFuelRod te = (TileEntityFuelRod)world.getBlockTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
 				storedEnergy += te.storedEnergy;
 				te.storedEnergy = 0;
@@ -186,5 +176,28 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 	private void onMeltdown(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		storedEnergy = NBT.getDouble("energy");
+
+		this.setLiquidState(NBT.getInteger("liq"));
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBT.setDouble("energy", storedEnergy);
+
+		NBT.setInteger("liq", this.getLiquidState());
 	}
 }
