@@ -14,18 +14,18 @@ import java.util.HashMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ReactorRenderList {
 
-	private static HashMap<ReactorTiles, RotaryTERenderer> renders = new HashMap<ReactorTiles, RotaryTERenderer>();
+	private static HashMap<ReactorTiles, ReactorRenderBase> renders = new HashMap<ReactorTiles, ReactorRenderBase>();
 	private static HashMap<ReactorTiles, ReactorTiles> overrides = new HashMap<ReactorTiles, ReactorTiles>();
 
-	public static boolean addRender(ReactorTiles m, RotaryTERenderer r) {
+	public static boolean addRender(ReactorTiles m, ReactorRenderBase r) {
 		if (!renders.containsValue(r)) {
 			renders.put(m, r);
 			return true;
@@ -37,7 +37,7 @@ public class ReactorRenderList {
 		}
 	}
 
-	public static RotaryTERenderer getRenderForMachine(ReactorTiles m) {
+	public static ReactorRenderBase getRenderForMachine(ReactorTiles m) {
 		if (overrides.containsKey(m))
 			return renders.get(overrides.get(m));
 		return renders.get(m);
@@ -49,7 +49,7 @@ public class ReactorRenderList {
 
 	public static TileEntitySpecialRenderer instantiateRenderer(ReactorTiles m) {
 		try {
-			RotaryTERenderer r = (RotaryTERenderer)Class.forName(m.getRenderer()).newInstance();
+			ReactorRenderBase r = (ReactorRenderBase)Class.forName(m.getRenderer()).newInstance();
 			if (addRender(m, r))
 				return r;
 			else
