@@ -51,7 +51,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 	}
 
 	private void renderFace(TileEntityWaterLine tile, double par2, double par4, double par6, ForgeDirection dir) {
-		if (tile.isConnectedOnSideAt(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, dir)) {
+		if (tile.isInWorld() && tile.isConnectedOnSideAt(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, dir)) {
 
 		}
 		else {

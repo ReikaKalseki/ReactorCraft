@@ -16,23 +16,28 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.ReactorCraft.Base.ModelTurbine;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Models.ModelTurbine1;
+import Reika.ReactorCraft.Models.ModelTurbine2;
+import Reika.ReactorCraft.Models.ModelTurbine3;
+import Reika.ReactorCraft.Models.ModelTurbine4;
+import Reika.ReactorCraft.Models.ModelTurbine5;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderTurbine extends ReactorRenderBase
 {
-	//private ModelTurbine TurbineModel = new ModelTurbine();
+	private ModelTurbine[] TurbineModels = {
+			new ModelTurbine1(), new ModelTurbine2(), new ModelTurbine3(), new ModelTurbine4(), new ModelTurbine5()
+	};
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
 	public void renderTileEntityTurbineCoreAt(TileEntityTurbineCore tile, double par2, double par4, double par6, float par8)
 	{
-		//ModelTurbine var14;
-		//var14 = TurbineModel;
-
 		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/turbine.png");
 
 		GL11.glPushMatrix();
@@ -44,7 +49,7 @@ public class RenderTurbine extends ReactorRenderBase
 		int var11 = 0;
 		float var13;
 
-		//var14.renderAll(null, -tile.phi);
+		TurbineModels[tile.getStage()].renderAll(null, -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

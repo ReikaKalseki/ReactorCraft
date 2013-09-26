@@ -12,12 +12,10 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
@@ -41,13 +39,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		this.accumulateEnergy(world, x, y, z, meta);
 		this.useEnergy();
 		this.updateSpeed();
-		ReikaJavaLibrary.pConsoleSideOnly(storedEnergy, Side.SERVER);
 	}
 
 	private void updateSpeed() {
 		accelTicker.update();
 		accelTicker.setCap(this.getAccelDelay());
-		if (storedEnergy > 0) {
+		if (this.getGenTorque() > 0 && storedEnergy > 0) {
 			if (accelTicker.checkCap())
 				omega = ReikaMathLibrary.extrema(omega+1, GEN_OMEGA, "absmin");
 		}
@@ -77,11 +74,15 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private double getEfficiency() {
-		return 1;
+		return 0.2*this.getNumberStagesTotal();
 	}
 
-	private double getBladeSize() {
-		return 1;
+	public int getStage() {
+		return zCoord%5;
+	}
+
+	public int getNumberStagesTotal() {
+		return 5;
 	}
 
 	private void accumulateEnergy(World world, int x, int y, int z, int meta) {
@@ -118,6 +119,11 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 		iotick -= 8;
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += 0.5F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	public double getEnergy() {
