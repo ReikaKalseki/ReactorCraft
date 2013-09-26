@@ -33,7 +33,6 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getEnergyFromCell(world, x, y, z);
 		this.getPipeEnergies(world, x, y, z);
-		storedEnergy += 40000000;
 	}
 
 	private void getEnergyFromCell(World world, int x, int y, int z) {
