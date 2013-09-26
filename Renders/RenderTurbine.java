@@ -46,10 +46,26 @@ public class RenderTurbine extends ReactorRenderBase
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		int var11 = 0;
-		float var13;
 
-		TurbineModels[tile.getStage()].renderAll(null, -tile.phi);
+		switch(tile.getBlockMetadata()) {
+		case 0:
+			GL11.glRotatef(90, 0, 1, 0);
+			break;
+		case 1:
+			GL11.glRotatef(180, 0, 1, 0);
+			break;
+		case 2:
+			GL11.glRotatef(270, 0, 1, 0);
+			break;
+		case 3:
+			GL11.glRotatef(0, 0, 1, 0);
+			break;
+		}
+
+		if (tile.isInWorld())
+			TurbineModels[tile.getStage()].renderAll(null, -tile.phi);
+		else
+			TurbineModels[0].renderAll(null, -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

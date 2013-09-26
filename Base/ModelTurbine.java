@@ -13,4 +13,8 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public abstract class ModelTurbine extends RotaryModelBase {
 
+	//public abstract int getBladeLength();
+
+	//protected abstract void renderBlades();
+
 }

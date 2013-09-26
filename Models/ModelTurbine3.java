@@ -177,17 +177,41 @@ public class ModelTurbine3 extends ModelTurbine
 	@Override
 	public void renderAll(List li, float phi)
 	{
+		double vo = 0.875;
+
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 		Shape1.render(f5);
 		Shape1a.render(f5);
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(-phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 
 		double off = 0.25;
 		double sc = 1.2D;
 		GL11.glTranslated(0, 0, off);
+
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 		this.renderBlades();
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(-phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
+
 		GL11.glTranslated(0, 0, -off);
 		GL11.glTranslated(0, 0, -off);
 		GL11.glScaled(sc, sc, 1);
+
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 		this.renderBlades();
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(-phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
+
 		GL11.glScaled(1D/sc, 1D/sc, 1);
 		GL11.glTranslated(0, 0, off);
 

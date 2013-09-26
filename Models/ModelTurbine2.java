@@ -18,6 +18,9 @@ package Reika.ReactorCraft.Models;
 import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.ReactorCraft.Base.ModelTurbine;
 
 public class ModelTurbine2 extends ModelTurbine
@@ -300,8 +303,14 @@ public class ModelTurbine2 extends ModelTurbine
 	@Override
 	public void renderAll(List li, float phi)
 	{
+		double vo = 0.875;
+
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 		Shape1.render(f5);
 		Shape1a.render(f5);
+		Shape2a.render(f5);
 		Shape2.render(f5);
 		Shape2b.render(f5);
 		Shape2c.render(f5);
@@ -336,8 +345,10 @@ public class ModelTurbine2 extends ModelTurbine
 		Shape3o.render(f5);
 		Shape3q.render(f5);
 		Shape3p.render(f5);
-		Shape2a.render(f5);
 		Shape3.render(f5);
+		GL11.glTranslated(0, vo, 0);
+		GL11.glRotatef(-phi, 0, 0, 1);
+		GL11.glTranslated(0, -vo, 0);
 	}
 
 	@Override

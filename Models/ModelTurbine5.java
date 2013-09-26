@@ -231,7 +231,7 @@ public class ModelTurbine5 extends ModelTurbine
 		GL11.glTranslated(0, 0, off);
 	}
 
-	private void renderBlades() {
+	protected void renderBlades() {
 		Shape3a.render(f5);
 		Shape3b.render(f5);
 		Shape3c.render(f5);

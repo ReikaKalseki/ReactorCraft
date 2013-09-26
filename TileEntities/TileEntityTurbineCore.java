@@ -24,10 +24,19 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	public static final int GEN_OMEGA = 512; //377 real
 	public static final int TORQUE_CAP = 8388608;
 
+	public static final long MAX_POWER = 8589934592L; //8.5 GW, biggest in world (Kashiwazaki)
+
 	private int omega;
 	private int iotick;
 
 	private StepTimer accelTicker = new StepTimer(1);
+
+	private int readx;
+	private int ready;
+	private int readz;
+	private int writex;
+	private int writey;
+	private int writez;
 
 	@Override
 	public int getIndex() {
@@ -36,9 +45,47 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getIOSides(world, x, y, z, meta);
 		this.accumulateEnergy(world, x, y, z, meta);
-		this.useEnergy();
+		if (this.isAtEndOFLine())
+			this.useEnergy();
 		this.updateSpeed();
+	}
+	private void getIOSides(World world, int x, int y, int z, int meta) {
+		switch(meta) {
+		case 0:
+			readx = x+1;
+			ready = y;
+			readz = z;
+			writex = x-1;
+			writey = y;
+			writez = z;
+			break;
+		case 1:
+			readx = x-1;
+			ready = y;
+			readz = z;
+			writex = x+1;
+			writey = y;
+			writez = z;
+			break;
+		case 2:
+			readx = x;
+			ready = y;
+			readz = z+1;
+			writex = x;
+			writey = y;
+			writez = z-1;
+			break;
+		case 3:
+			readx = x;
+			ready = y;
+			readz = z-1;
+			writex = x;
+			writey = y;
+			writez = z+1;
+			break;
+		}
 	}
 
 	private void updateSpeed() {
@@ -51,6 +98,18 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else {
 			omega = ReikaMathLibrary.extrema(omega-1, 0, "max");
 		}
+	}
+
+	public boolean isAtEndOFLine() {
+		int id = worldObj.getBlockId(readx, ready, readz);
+		int meta = worldObj.getBlockMetadata(readx, ready, readz);
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
+			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private int getAccelDelay() {
@@ -70,48 +129,54 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private long getGenPower() {
-		return (long) (storedEnergy*this.getEfficiency());
+		return (long) Math.min(MAX_POWER, storedEnergy*this.getEfficiency());
 	}
 
 	private double getEfficiency() {
-		return 0.2*this.getNumberStagesTotal();
+		return Math.min(0.2*this.getNumberStagesTotal(), 1);
 	}
 
 	public int getStage() {
-		return zCoord%5;
+		int id = worldObj.getBlockId(readx, ready, readz);
+		int meta = worldObj.getBlockMetadata(readx, ready, readz);
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
+			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
+				int stage = tile.getStage();
+				if (stage == 4)
+					return 4;
+				else
+					return stage+1;
+			}
+		}
+		return 0;
 	}
 
 	public int getNumberStagesTotal() {
-		return 5;
+		int id = worldObj.getBlockId(readx, ready, readz);
+		int meta = worldObj.getBlockMetadata(readx, ready, readz);
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
+			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
+				int stages = tile.getNumberStagesTotal();
+				return stages+1;
+			}
+		}
+		return 1;
 	}
 
 	private void accumulateEnergy(World world, int x, int y, int z, int meta) {
-		if (meta < 2) {
-			int id = world.getBlockId(x+1, y, z);
-			int bmeta = world.getBlockMetadata(x+1, y, z);
-			if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(x+1, y, z);
-				storedEnergy += te.removeEnergy();
-			}
-			id = world.getBlockId(x-1, y, z);
-			bmeta = world.getBlockMetadata(x-1, y, z);
-			if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(x-1, y, z);
-				storedEnergy += te.removeEnergy();
-			}
+		int id = world.getBlockId(readx, ready, readz);
+		int bmeta = world.getBlockMetadata(readx, ready, readz);
+		if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
+			TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(readx, ready, readz);
+			storedEnergy += te.removeEnergy();
 		}
-		else {
-			int id = world.getBlockId(x, y, z+1);
-			int bmeta = world.getBlockMetadata(x, y, z+1);
-			if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(x, y, z+1);
-				storedEnergy += te.removeEnergy();
-			}
-			id = world.getBlockId(x, y, z-1);
-			bmeta = world.getBlockMetadata(x, y, z-1);
-			if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(x, y, z-1);
-				storedEnergy += te.removeEnergy();
+		if (id == this.getTileEntityBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
+			if (tile.writex == x && tile.writey == y && tile.writez == z) {
+				storedEnergy = tile.storedEnergy;
+				omega = tile.omega;
 			}
 		}
 	}
@@ -178,17 +243,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public boolean canWriteToBlock(int x, int y, int z) {
-		switch(this.getBlockMetadata()) {
-		case 0:
-			return x == xCoord-1 && y == yCoord && z == zCoord;
-		case 1:
-			return x == xCoord+1 && y == yCoord && z == zCoord;
-		case 2:
-			return x == xCoord && y == yCoord && z == zCoord-1;
-		case 3:
-			return x == xCoord && y == yCoord && z == zCoord+1;
-		}
-		return false;
+		return x == writex && y == writey && z == writez;
 	}
 
 	@Override
