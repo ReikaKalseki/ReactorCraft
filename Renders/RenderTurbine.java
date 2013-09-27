@@ -16,22 +16,26 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.ReactorCraft.Base.ModelTurbine;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Models.ModelTurbine1;
-import Reika.ReactorCraft.Models.ModelTurbine2;
-import Reika.ReactorCraft.Models.ModelTurbine3;
-import Reika.ReactorCraft.Models.ModelTurbine4;
-import Reika.ReactorCraft.Models.ModelTurbine5;
+import Reika.ReactorCraft.Models.ModelTurbine;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderTurbine extends ReactorRenderBase
 {
-	private ModelTurbine[] TurbineModels = {
-			new ModelTurbine1(), new ModelTurbine2(), new ModelTurbine3(), new ModelTurbine4(), new ModelTurbine5()
-	};
+	private ModelTurbine[] models = new ModelTurbine[5];
+
+	public RenderTurbine() {
+		super();
+		this.buildModels();
+	}
+
+	private void buildModels() {
+		for (int i = 0; i < models.length; i++) {
+			models[i] = new ModelTurbine(i);
+		}
+	}
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -52,10 +56,10 @@ public class RenderTurbine extends ReactorRenderBase
 			GL11.glRotatef(90, 0, 1, 0);
 			break;
 		case 1:
-			GL11.glRotatef(180, 0, 1, 0);
+			GL11.glRotatef(270, 0, 1, 0);
 			break;
 		case 2:
-			GL11.glRotatef(270, 0, 1, 0);
+			GL11.glRotatef(180, 0, 1, 0);
 			break;
 		case 3:
 			GL11.glRotatef(0, 0, 1, 0);
@@ -63,9 +67,14 @@ public class RenderTurbine extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld())
-			TurbineModels[tile.getStage()].renderAll(null, -tile.phi);
-		else
-			TurbineModels[0].renderAll(null, -tile.phi);
+			models[tile.getStage()].renderAll(null, -tile.phi);
+		else {
+			double sc = 0.6;
+			GL11.glScaled(sc, sc, sc);
+			GL11.glTranslated(-0.1, 0.8, 0);
+			models[0].renderAll(null, -tile.phi);
+			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

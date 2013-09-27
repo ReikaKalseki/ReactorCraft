@@ -160,22 +160,24 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (!world.isRemote && this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
-			int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
-			ItemStack is = inv[slot];
-			if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
-				inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
-			else
-				inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
+			if (ReikaMathLibrary.doWithChance(5)) {
+				int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
+				ItemStack is = inv[slot];
+				if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
+					inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
+				else
+					inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
+
+				if (ReikaMathLibrary.doWithChance(10)) {
+					ItemStack waste = WasteManager.getRandomWasteItem();
+					if (!ReikaInventoryHelper.addToIInv(waste, this))
+						missingWaste.add(waste);
+				}
+			}
 			this.spawnNeutronBurst(world, x, y, z);
 			//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
 			//storedEnergy += E;
-
-			if (ReikaMathLibrary.doWithChance(10)) {
-				ItemStack waste = WasteManager.getRandomWasteItem();
-				if (!ReikaInventoryHelper.addToIInv(waste, this))
-					missingWaste.add(waste);
-			}
 
 			return true;
 		}

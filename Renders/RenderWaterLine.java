@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
@@ -33,9 +34,8 @@ public class RenderWaterLine extends ReactorRenderBase {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 1.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;
 		float var13;
 
@@ -51,12 +51,166 @@ public class RenderWaterLine extends ReactorRenderBase {
 	}
 
 	private void renderFace(TileEntityWaterLine tile, double par2, double par4, double par6, ForgeDirection dir) {
+		double size = 0.333333;
+		Tessellator v5 = new Tessellator();
+		v5.startDrawingQuads();
 		if (tile.isInWorld() && tile.isConnectedOnSideAt(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, dir)) {
-
+			switch(dir) {
+			case DOWN:
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5-size/2, 0, 0);
+				break;
+			case EAST:
+				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5-size/2, 0, 0);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2+size, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2+size, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2+size, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2+size, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2+size, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2+size, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2+size, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2+size, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2+size, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2+size, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2+size, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2+size, 1, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2+size, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2+size, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2+size, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2+size, 1, 1);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2-size, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2-size, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2-size, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2-size, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2-size, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2-size, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2-size, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2-size, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2-size, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2-size, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2-size, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2-size, 1, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2-size, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2-size, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2-size, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2-size, 1, 1);
+				break;
+			case UP:
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5-size/2, 0, 0);
+				break;
+			case WEST:
+				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5-size/2, 0, 0);
+				break;
+			default:
+				break;
+			}
 		}
 		else {
-
+			switch(dir) {
+			case DOWN:
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 0, 0);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 1, 1);
+				break;
+			case EAST:
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 0, 0);
+				break;
+			case WEST:
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 0, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 1, 1);
+				break;
+			case UP:
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 0, 0);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 0, 1);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 1, 1);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 0, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 1, 1);
+				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 1, 0);
+				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 0, 0);
+				break;
+			default:
+				break;
+			}
 		}
+		v5.draw();
 	}
 
 	@Override

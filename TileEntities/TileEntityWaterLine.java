@@ -40,6 +40,8 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		int meta = world.getBlockMetadata(x, y+1, z);
 		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y+1, z);
+			if (te.getEnergy() > 0)
+				te.setLiquidState(0);
 			storedEnergy += te.removeEnergy();
 		}
 	}
@@ -76,7 +78,7 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.WATERLINE.getBlockMetadata())
 			return true;
-		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata())
+		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata() && dir == ForgeDirection.UP)
 			return true;
 		if (id == ReactorTiles.TURBINECORE.getBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata())
 			return true;
