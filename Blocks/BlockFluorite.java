@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 
@@ -78,8 +79,7 @@ public class BlockFluorite extends Block {
 		double b = fl.blue/255D;
 		//ReikaJavaLibrary.pConsole(r+":"+g+":"+b);
 		if (this.isActivated(world, x, y, z)) {
-			for (int i = 0; i < 4; i++)
-				world.spawnParticle("reddust", x-offset+rand.nextDouble()*(1+offset*2), y-offset+rand.nextDouble()*(1+offset*2), z-offset+rand.nextDouble()*(1+offset*2), r, g, b);
+			ReikaParticleHelper.spawnColoredParticlesWithOutset(world, x, y, z, r, g, b, 4, offset);
 		}
 	}
 
