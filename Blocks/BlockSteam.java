@@ -18,7 +18,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 
 public class BlockSteam extends Block {
 
@@ -32,7 +37,7 @@ public class BlockSteam extends Block {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		//world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 	}
 
 	@Override
@@ -41,16 +46,22 @@ public class BlockSteam extends Block {
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand) {/*
+	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int id = world.getBlockId(x, y+1, z);
-		if (ReikaWorldHelper.softBlocks(world, x, y+1, z) && id != blockID) {
-			if (ReikaMathLibrary.doWithChance(160)) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta != 1 && ReikaMathLibrary.doWithChance(0)) {
+			world.setBlock(x, y, z, 0);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+			return;
+		}
+		else if (ReikaWorldHelper.softBlocks(world, x, y+1, z) && id != blockID) {
+			if (meta == 1 || ReikaMathLibrary.doWithChance(80))
 				world.setBlock(x, y+1, z, blockID);
-				world.setBlock(x, y, z, 0);
-			}
-			else {
-				world.setBlock(x, y, z, 0);
-			}
+			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(x, y+1, z);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 			return;
 		}
 		else {
@@ -64,24 +75,19 @@ public class BlockSteam extends Block {
 				if (ReikaWorldHelper.softBlocks(world, dx, dy, dz) && id2 != blockID) {
 					world.setBlock(dx, dy, dz, blockID);
 					world.setBlock(x, y, z, 0);
+					//ReikaJavaLibrary.pConsole(x+","+y+","+z+"->"+dx+","+dy+","+dz);
 					world.markBlockForRenderUpdate(x, y, z);
 					world.markBlockForRenderUpdate(dx, dy, dz);
+					world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 					return;
 				}
 			}
-			int dx = x+ForgeDirection.DOWN.offsetX;
-			int dy = y+ForgeDirection.DOWN.offsetY;
-			int dz = z+ForgeDirection.DOWN.offsetZ;
-			int id2 = world.getBlockId(dx, dy, dz);
-			if (ReikaWorldHelper.softBlocks(world, dx, dy, dz) && id2 != blockID) {
-				//world.setBlock(dx, dy, dz, blockID);
-				//world.setBlock(x, y, z, 0);
-				world.markBlockForRenderUpdate(x, y, z);
-				world.markBlockForRenderUpdate(dx, dy, dz);
-				return;
-			}
 		}
-		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));*/
+		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+	}
+
+	public boolean canBlockReplace(World world, int x, int y, int z) {
+
 	}
 
 	@Override
@@ -131,12 +137,27 @@ public class BlockSteam extends Block {
 
 	@Override
 	public Icon getIcon(int s, int meta) {
-		return this.blockIcon;
+		return blockIcon;
 	}
 
 	@Override
 	public void registerIcons(IconRegister ico) {
 		blockIcon = ico.registerIcon("ReactorCraft:steam");
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int side) {
+		ForgeDirection dir = ForgeDirection.values()[side];
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		int id = iba.getBlockId(dx, dy, dz);
+		return id != blockID && id != ReactorBlocks.MODELREACTOR.getBlockID();
+	}
+
+	@Override
+	public boolean isBlockReplaceable(World world, int x, int y, int z) {
+		return true;
 	}
 
 }

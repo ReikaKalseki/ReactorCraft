@@ -52,6 +52,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private int writez;
 
 	private BlockArray contact = new BlockArray();
+	private boolean isFull;
 
 	@Override
 	public int getIndex() {
@@ -191,7 +192,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		}
 		for (int i = 0; i < contact.getSize(); i++) {
 			int[] xyz = contact.getNthBlock(i);
-			if (xyz[0] != x || xyz[1] != y || xyz[2] != z) {
+			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= 1+this.getStage()/2) {
 				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2])) {
 					phi = 0;
@@ -200,34 +201,61 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				}
 				else if (Block.blocksList[id2] instanceof BlockFluid) {
 					phi = phi/1.25F;
+					omega = 1+(int)(omega/1.25F);
+				}
+				else if (id2 != ReactorBlocks.STEAM.getBlockID()) {
+					phi = phi/1.0625F;
+					omega = 1+(int)(omega/1.0625F);
 				}
 			}
 		}
-		int[] xyz = contact.getNextAndMoveOn();
-		int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-		if (storedEnergy > 2000 && omega > 0) {
+		if (this.canCreateSteam(world, x, y, z)) {
+			int[] xyz = contact.getNextAndMoveOn();
+			int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 			if (id3 != ReactorBlocks.STEAM.getBlockID() && (id3 == 0 || Block.blocksList[id3].isAirBlock(world, xyz[0], xyz[1], xyz[2]))) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], ReactorBlocks.STEAM.getBlockID());
+				world.setBlock(xyz[0], xyz[1], xyz[2], ReactorBlocks.STEAM.getBlockID(), 1, 3);
 				storedEnergy -= 1000;
+				isFull = false;
 			}
+			else
+				isFull = true;
 		}
 		else {
-			if (id3 == ReactorBlocks.STEAM.getBlockID()) {
+			int[] xyz = contact.getNextAndMoveOn();
+			int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			int meta3 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			if (id3 == ReactorBlocks.STEAM.getBlockID() && (meta3 == 1 || omega == 0 || storedEnergy == 0)) {
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				isFull = false;
 			}
+		}
+		if (omega <= 1)
+			phi = 0;
+	}
+
+	private boolean canCreateSteam(World world, int x, int y, int z) {
+		int id = world.getBlockId(readx, ready, readz);
+		int meta = world.getBlockMetadata(readx, ready, readz);
+		if (id != this.getTileEntityBlockID() && id != ReactorTiles.WATERLINE.getBlockID())
+			return false;
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
+			return te.isFull && storedEnergy > 2000 && omega > 0;
+		}
+		else {
+			return meta == ReactorTiles.WATERLINE.getBlockMetadata() && storedEnergy > 2000 && omega > 0;
 		}
 	}
 
 	private void fillSurroundings(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
-		int r = (int)(1+(this.getStage()+0.5)/2F);
+		int r = 3;
 		switch(meta) {
 		case 2:
 		case 3:
 			for (int i = x-r; i <= x+r; i++) {
 				for (int j = y-r; j <= y+r; j++) {
-					double dd = ReikaMathLibrary.py3d(i-x, y-j, 0);
-					if (dd <= r+0.25 && (x != i || y != j))
+					if (x != i || y != j)
 						contact.addBlockCoordinate(i, j, z);
 				}
 			}
@@ -236,8 +264,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		case 1:
 			for (int i = z-r; i <= z+r; i++) {
 				for (int j = y-r; j <= y+r; j++) {
-					double dd = ReikaMathLibrary.py3d(0, y-j, i-z);
-					if (dd <= r+0.25 && (z != i || y != j))
+					if (z != i || y != j)
 						contact.addBlockCoordinate(x, j, i);
 				}
 			}
@@ -391,6 +418,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		storedEnergy = NBT.getLong("energy");
 		omega = NBT.getInteger("speed");
+		isFull = NBT.getBoolean("full");
 	}
 
 	/**
@@ -403,6 +431,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		NBT.setLong("energy", storedEnergy);
 		NBT.setInteger("speed", omega);
+		NBT.setBoolean("full", isFull);
 	}
 
 	@Override
