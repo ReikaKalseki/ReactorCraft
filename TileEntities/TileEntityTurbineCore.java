@@ -11,13 +11,22 @@ package Reika.ReactorCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 
@@ -42,6 +51,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private int writey;
 	private int writez;
 
+	private BlockArray contact = new BlockArray();
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.TURBINECORE.ordinal();
@@ -53,8 +64,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		this.accumulateEnergy(world, x, y, z, meta);
 		if (this.isAtEndOFLine())
 			this.useEnergy();
+		this.readSurroundings(world, x, y, z, meta);
 		this.enviroTest(world, x, y, z, meta);
 	}
+
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
@@ -172,13 +185,93 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		return box;
 	}
 
+	private void readSurroundings(World world, int x, int y, int z, int meta) {
+		if (contact.isEmpty()) {
+			this.fillSurroundings(world, x, y, z, meta);
+		}
+		for (int i = 0; i < contact.getSize(); i++) {
+			int[] xyz = contact.getNthBlock(i);
+			if (xyz[0] != x || xyz[1] != y || xyz[2] != z) {
+				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2])) {
+					phi = 0;
+					omega = 0;
+					storedEnergy = 0;
+				}
+				else if (Block.blocksList[id2] instanceof BlockFluid) {
+					phi = phi/1.25F;
+				}
+			}
+		}
+		int[] xyz = contact.getNextAndMoveOn();
+		int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+		if (storedEnergy > 2000 && omega > 0) {
+			if (id3 != ReactorBlocks.STEAM.getBlockID() && (id3 == 0 || Block.blocksList[id3].isAirBlock(world, xyz[0], xyz[1], xyz[2]))) {
+				world.setBlock(xyz[0], xyz[1], xyz[2], ReactorBlocks.STEAM.getBlockID());
+				storedEnergy -= 1000;
+			}
+		}
+		else {
+			if (id3 == ReactorBlocks.STEAM.getBlockID()) {
+				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+			}
+		}
+	}
+
+	private void fillSurroundings(World world, int x, int y, int z, int meta) {
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		int r = (int)(1+(this.getStage()+0.5)/2F);
+		switch(meta) {
+		case 2:
+		case 3:
+			for (int i = x-r; i <= x+r; i++) {
+				for (int j = y-r; j <= y+r; j++) {
+					double dd = ReikaMathLibrary.py3d(i-x, y-j, 0);
+					if (dd <= r+0.25 && (x != i || y != j))
+						contact.addBlockCoordinate(i, j, z);
+				}
+			}
+			break;
+		case 0:
+		case 1:
+			for (int i = z-r; i <= z+r; i++) {
+				for (int j = y-r; j <= y+r; j++) {
+					double dd = ReikaMathLibrary.py3d(0, y-j, i-z);
+					if (dd <= r+0.25 && (z != i || y != j))
+						contact.addBlockCoordinate(x, j, i);
+				}
+			}
+			break;
+		}
+
+	}
+
 	private void enviroTest(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB box = this.getBoundingBox(world, x, y, z, meta);
+		int r = 2+this.getStage()/2;
 		List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
 		for (int i = 0; i < li.size(); i++) {
 			EntityLiving e = li.get(i);
-			if (this.getOmega() > 0)
-				world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 0.5F*(float)ReikaMathLibrary.logbase(this.getOmega(), 2), true);
+			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
+				Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
+				e.motionX += 0.4*(e.posX-x-0.5)+par5Random.nextDouble()*0.1;
+				e.motionY += 0.4*(e.posY-y-0.5);
+				e.motionZ += 0.4*(e.posZ-z-0.5)+par5Random.nextDouble()*0.1;
+				this.breakTurbine();
+				e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
+			}
+		}
+		int id = world.getBlockId(readx, ready, readz);
+		int bmeta = world.getBlockMetadata(readx, ready, readz);
+		if (id == ReactorTiles.TURBINECORE.getBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
+			if (tile.writex == x && tile.writey == y && tile.writez == z) {
+				if (phi != tile.phi) {
+					ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, x, y, z, 5);
+					if (par5Random.nextInt(3) == 0)
+						ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "mob.blaze.hit");
+				}
+			}
 		}
 	}
 

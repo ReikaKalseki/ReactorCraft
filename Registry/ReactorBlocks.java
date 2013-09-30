@@ -24,6 +24,7 @@ import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
+import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Items.ItemBlockFluorite;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
@@ -39,7 +40,8 @@ public enum ReactorBlocks implements RegistrationList, IDRegistry {
 	MODELMACHINE(	BlockReactorTileModelled.class, 					"MachineModelled", 			true),
 	ORE(			BlockReactorOre.class, ItemBlockReactorOre.class,	"Ore", 						false),
 	FLUORITE(		BlockFluorite.class, ItemBlockFluorite.class,		"Fluorite",					false),
-	FLUORITEORE(	BlockFluoriteOre.class, ItemBlockFluorite.class,	"Fluorite Ore",				false);
+	FLUORITEORE(	BlockFluoriteOre.class, ItemBlockFluorite.class,	"Fluorite Ore",				false),
+	STEAM(			BlockSteam.class,									"Steam",					false);
 
 	private Class blockClass;
 	private String blockName;

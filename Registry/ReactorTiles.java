@@ -38,7 +38,6 @@ public enum ReactorTiles {
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, "RenderTurbine"),
 	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
 	WATERLINE("Water Line", TileEntityWaterLine.class, 2, "RenderWaterLine"),
-	//ITEMLINE("Fuel Supply Line", TileEntityULine.class, 3, ""),
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),

@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
@@ -33,6 +34,18 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getEnergyFromCell(world, x, y, z);
 		this.getPipeEnergies(world, x, y, z);
+		storedEnergy += 1000;
+		if (storedEnergy > 0) {
+			for (int i = 0; i < 6; i++) {
+				int dx = x+dirs[i].offsetX;
+				int dy = y+dirs[i].offsetY;
+				int dz = z+dirs[i].offsetZ;
+				if (!this.isConnectedOnSideAt(world, x, y, z, dirs[i]) && ReikaWorldHelper.softBlocks(world, dx, dy, dz)) {
+					//world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID());
+					//storedEnergy -= 1000;
+				}
+			}
+		}
 	}
 
 	private void getEnergyFromCell(World world, int x, int y, int z) {
@@ -41,7 +54,7 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y+1, z);
 			if (te.getEnergy() > 0)
-				te.setLiquidState(0);
+				;//te.setLiquidState(0);
 			storedEnergy += te.removeEnergy();
 		}
 	}
