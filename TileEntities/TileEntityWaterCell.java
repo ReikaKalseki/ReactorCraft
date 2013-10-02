@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -46,6 +48,22 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 			//this.accrueEnergy(world, x, y, z);
 			this.transferEnergy(world, x, y, z);
 			//ReikaJavaLibrary.pConsoleIf(storedEnergy, y == 73);
+		}
+
+		if (this.getLiquidState() == LiquidStates.EMPTY.ordinal()) {
+			TileEntity te = world.getBlockTileEntity(x, y+1, z);
+			if (te instanceof ITankContainer) {
+				ITankContainer ic = (ITankContainer)te;
+				LiquidStack liq = ic.drain(ForgeDirection.DOWN, LiquidContainerRegistry.BUCKET_VOLUME, true);
+				if (liq != null && liq.amount >= LiquidContainerRegistry.BUCKET_VOLUME) {
+					if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water"))) {
+						this.setLiquidState(LiquidStates.WATER.ordinal());
+					}
+					else if (liq.isLiquidEqual(ReactorCraft.D2O)) {
+						this.setLiquidState(LiquidStates.HEAVY.ordinal());
+					}
+				}
+			}
 		}
 	}
 
@@ -96,7 +114,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public void setTemperature(double T) {
+	public void setTemperature(int T) {
 		temperature = T;
 	}
 

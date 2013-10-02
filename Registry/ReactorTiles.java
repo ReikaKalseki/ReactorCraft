@@ -13,9 +13,11 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
@@ -28,6 +30,9 @@ import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
 
@@ -37,7 +42,7 @@ public enum ReactorTiles {
 	CPU("Central Control", TileEntityCPU.class, 0),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, "RenderTurbine"),
 	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
-	WATERLINE("Water Line", TileEntityWaterLine.class, 2, "RenderWaterLine"),
+	WATERLINE("Steam Line", TileEntityWaterLine.class, 2, "RenderWaterLine"),
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
@@ -249,5 +254,46 @@ public enum ReactorTiles {
 			return false;
 		}
 	}
+
+	public boolean isDummiedOut() {
+		return false;
+	}
+
+	public void addRecipe(IRecipe ir) {
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
+	}
+
+	public void addRecipe(ItemStack is, Object... obj) {
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(is, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
+			}
+		}
+	}
+
+	public void addCrafting(Object... obj) {
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
+			}
+		}
+	}
+
+	public void addSizedCrafting(int num, Object... obj) {
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			}
+		}
+	}
+
 
 }

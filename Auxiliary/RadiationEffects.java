@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Auxiliary;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -40,7 +41,7 @@ public class RadiationEffects {
 			int dy = y-range+r.nextInt(range*2+1);
 			int dz = z-range+r.nextInt(range*2+1);
 			EntityRadiation rad = new EntityRadiation(world, range);
-			rad.setLocationAndAngles(dx, dy, dz, 0, 0);
+			rad.setLocationAndAngles(dx+0.5, dy+0.5, dz+0.5, 0, 0);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(rad);
 		}
@@ -52,7 +53,7 @@ public class RadiationEffects {
 		if (id == 0)
 			return;
 		Block b = Block.blocksList[id];
-		if (id == Block.leaves.blockID)
+		if (id == Block.leaves.blockID || b.blockMaterial == Material.leaves)
 			world.setBlock(x, y, z, 0);
 		if (id == Block.reed.blockID) {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
@@ -88,7 +89,7 @@ public class RadiationEffects {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
 			world.setBlock(x, y, z, 0);
 		}
-		if (id == Block.cactus.blockID) {
+		if (id == Block.cactus.blockID || b.blockMaterial == Material.cactus) {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
 			world.setBlock(x, y, z, 0);
 		}
@@ -108,7 +109,7 @@ public class RadiationEffects {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
 			world.setBlock(x, y, z, 0);
 		}
-		if (id == Block.sapling.blockID)
+		if (id == Block.sapling.blockID || b.blockMaterial == Material.plants)
 			world.setBlock(x, y, z, Block.deadBush.blockID);
 		if (id == Block.cocoaPlant.blockID) {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
@@ -116,7 +117,7 @@ public class RadiationEffects {
 		}
 		if (id == Block.cobblestoneMossy.blockID)
 			world.setBlock(x, y, z, Block.cobblestone.blockID);
-		if (id == Block.grass.blockID)
+		if (id == Block.grass.blockID || b.blockMaterial == Material.grass)
 			world.setBlock(x, y, z, Block.dirt.blockID);
 		if (id == Block.silverfish.blockID)
 			world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);

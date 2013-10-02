@@ -22,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.InertEntity;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
@@ -156,7 +157,18 @@ public class EntityNeutron extends InertEntity {
 			return ReikaMathLibrary.doWithChance(30);
 		if (id != 0) {
 			Block b = Block.blocksList[id];
-			return b.isOpaqueCube() ? b.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || r.nextInt((int)(12 - b.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-b.getLightOpacity(world, x, y, z) == 0 ? r.nextInt(b.getLightOpacity(world, x, y, z)) > 0 : r.nextInt(1000) == 0;
+			boolean flag =  b.isOpaqueCube() ? b.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || r.nextInt((int)(12 - b.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-b.getLightOpacity(world, x, y, z) == 0 ? r.nextInt(b.getLightOpacity(world, x, y, z)) > 0 : r.nextInt(1000) == 0;
+			if (flag) {
+				if (ReikaMathLibrary.doWithChance(20)) {
+					AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
+					List inbox = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+					if (inbox.size() < 10)
+						RadiationEffects.contaminateArea(world, x, y, z, 1);
+				}
+				if (ReikaMathLibrary.doWithChance(50))
+					RadiationEffects.transformBlock(world, x, y, z);
+			}
+			return flag;
 		}
 
 		return r.nextInt(1000) == 0;

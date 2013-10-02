@@ -13,12 +13,19 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ReactorRecipes {
@@ -34,9 +41,17 @@ public class ReactorRecipes {
 	public static void addRecipes() {
 
 		addMachines();
+		addCrafting();
 		addItems();
 		addMisc();
 		addSmelting();
+	}
+
+	private static void addCrafting() {
+		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', RotaryCraft.obsidianglass);
+		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', ItemStacks.steelingot, 'C', Block.chest);
+		CraftingItems.ROD.addRecipe("SAS", "SAS", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem());
+		GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 	}
 
 	private static void addSmelting() {
@@ -61,6 +76,8 @@ public class ReactorRecipes {
 			ItemStack shard = ReactorItems.FLUORITE.getStackOfMetadata(fl.ordinal());
 			GameRegistry.addRecipe(block, "CCC", "CCC", "CCC", 'C', shard);
 		}
+
+		GameRegistry.addShapelessRecipe(new ItemStack(ReactorBlocks.MATS.getBlockID(), 2, MatBlocks.CONCRETE.ordinal()), Block.blockClay, Block.sand, Item.bucketWater);
 	}
 
 	private static void addItems() {
@@ -71,7 +88,15 @@ public class ReactorRecipes {
 	}
 
 	private static void addMachines() {
-
+		ReactorTiles.FUEL.addCrafting("SHS", "PCP", "SCS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', CraftingItems.CANISTER.getItem(), 'H', Block.hopperBlock);
+		ReactorTiles.CONTROL.addCrafting("SGS", " R ", "PPP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'R', CraftingItems.ROD.getItem(), 'G', ItemStacks.gearunit);
+		ReactorTiles.COOLANT.addCrafting("SPS", "GRG", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'G', Block.glass, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ItemStacks.compoundturb);
+		ReactorTiles.WATERLINE.addCrafting("NPN", "NPN", "NPN", 'N', Block.netherBrick, 'P', ItemStacks.pipe);
+		ReactorTiles.HEAVYPUMP.addCrafting("PSP", "GIG", "PpP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Block.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
+		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "P P", "PGP", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit16);
+		ReactorTiles.PROCESSOR.addCrafting("POP", "OMO", 'O', CraftingItems.TANK.getItem(), 'M', ItemStacks.mixer, 'P', ItemStacks.pipe);
+		ReactorTiles.WASTECONTAINER.addCrafting("SCS", "CcC", "SCS", 'S', ItemStacks.steelingot, 'C', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'c', Block.chest);
 	}
 
 }

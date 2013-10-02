@@ -40,7 +40,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	CANISTER(48,	"Gas Canister",			ItemCanister.class),
 	UF6(-1, 		"Uranium Hexafluoride",	ItemLiquid.class),
 	HF(-1,			"Hydrofluoric Acid",	ItemLiquid.class),
-	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class);
+	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class),
+	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class);
 
 	private String name;
 	private Class itemClass;
@@ -136,6 +137,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return ReactorOres.oreList[meta+1].getProductName();
 		case CANISTER:
 			return ReactorNames.canNames[meta];
+		case CRAFTING:
+			return CraftingItems.partList[meta].itemName;
 		default:
 			return "";
 		}
@@ -150,6 +153,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case FLUORITE:
 		case INGOTS:
 		case CANISTER:
+		case CRAFTING:
 			return true;
 		default:
 			return false;
@@ -171,6 +175,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return ReactorOres.oreList.length-1;
 		case CANISTER:
 			return ReactorNames.canNames.length;
+		case CRAFTING:
+			return CraftingItems.partList.length;
 		default:
 			return 1;
 		}

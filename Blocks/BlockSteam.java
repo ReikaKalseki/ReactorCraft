@@ -14,7 +14,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,7 +35,7 @@ public class BlockSteam extends Block {
 		super(par1, mat);
 		this.setCreativeTab(ReactorCraft.tabRctr);
 		this.setTickRandomly(true);
-		this.setResistance(0);
+		this.setResistance(3600000);
 		this.setLightOpacity(0);
 	}
 
@@ -47,14 +51,13 @@ public class BlockSteam extends Block {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		int id = world.getBlockId(x, y+1, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta != 1 && ReikaMathLibrary.doWithChance(0)) {
 			world.setBlock(x, y, z, 0);
 			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 			return;
 		}
-		else if (ReikaWorldHelper.softBlocks(world, x, y+1, z) && id != blockID) {
+		else if (this.canMoveInto(world, x, y+1, z)) {
 			if (meta == 1 || ReikaMathLibrary.doWithChance(80))
 				world.setBlock(x, y+1, z, blockID);
 			world.setBlock(x, y, z, 0);
@@ -71,8 +74,7 @@ public class BlockSteam extends Block {
 				int dx = x+dir[i].offsetX;
 				int dy = y+dir[i].offsetY;
 				int dz = z+dir[i].offsetZ;
-				int id2 = world.getBlockId(dx, dy, dz);
-				if (ReikaWorldHelper.softBlocks(world, dx, dy, dz) && id2 != blockID) {
+				if (this.canMoveInto(world, dx, dy, dz)) {
 					world.setBlock(dx, dy, dz, blockID);
 					world.setBlock(x, y, z, 0);
 					//ReikaJavaLibrary.pConsole(x+","+y+","+z+"->"+dx+","+dy+","+dz);
@@ -86,8 +88,11 @@ public class BlockSteam extends Block {
 		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 	}
 
-	public boolean canBlockReplace(World world, int x, int y, int z) {
-
+	public boolean canMoveInto(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (id == blockID)
+			return false;
+		return ReikaWorldHelper.softBlocks(world, x, y, z);
 	}
 
 	@Override
@@ -158,6 +163,13 @@ public class BlockSteam extends Block {
 	@Override
 	public boolean isBlockReplaceable(World world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
+		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
+			e.attackEntityFrom(DamageSource.onFire, 1);
+		}
 	}
 
 }

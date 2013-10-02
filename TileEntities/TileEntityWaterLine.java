@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
@@ -53,8 +54,8 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		int meta = world.getBlockMetadata(x, y+1, z);
 		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y+1, z);
-			if (te.getEnergy() > 0)
-				;//te.setLiquidState(0);
+			if (te.getEnergy() > 0 && ReikaMathLibrary.doWithChance(10) && !world.isRemote)
+				te.setLiquidState(0);
 			storedEnergy += te.removeEnergy();
 		}
 	}

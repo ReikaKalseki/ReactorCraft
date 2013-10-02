@@ -18,6 +18,14 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.liquids.ILiquid;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +40,9 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		super(i, material);
 
 		this.setHardness(100F);
-		this.setLightOpacity(3);
+		this.setLightOpacity(0);
+		this.setResistance(500);
+		this.setCreativeTab(ReactorCraft.tabRctr);
 	}
 
 	@Override
@@ -40,23 +50,23 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		return 4;
 	}
 
-	private void updateFlow(World par1World, int par2, int par3, int par4) {
-		int l = par1World.getBlockMetadata(par2, par3, par4);
-		par1World.setBlock(par2, par3, par4, ReactorBlocks.CORIUMSTILL.getBlockID(), l, 2);
+	private void updateFlow(World world, int x, int y, int z) {
+		int l = world.getBlockMetadata(x, y, z);
+		world.setBlock(x, y, z, ReactorBlocks.CORIUMSTILL.getBlockID(), l, 2);
 	}
 
 	/**
 	 * How many world ticks before ticking
 	 */
 	@Override
-	public int tickRate(World par1World) {
-		return 20;
+	public int tickRate(World world) {
+		return 40;
 	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		int oldDecay = this.getFlowDecay(world, x, y, z);
-		byte viscosity = 2;
+		byte viscosity = 1;
 		int flowDecay;
 
 		if (oldDecay > 0) {
@@ -145,6 +155,14 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				this.flowIntoBlock(world, x, y, z + 1, flowDecay);
 			}
 		}
+
+		this.freezeWithChance(world, x, y, z);
+	}
+
+	private void freezeWithChance(World world, int x, int y, int z) {
+		if (ReikaMathLibrary.doWithChance(5) && !world.provider.isHellWorld) {
+			world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+		}
 	}
 
 	private void flowIntoBlock(World world, int i, int j, int k, int l) {
@@ -154,6 +172,23 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				Block.blocksList[blockId].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 			}
 			world.setBlock(i, j, k, blockID, l, 3);
+			if (ReikaMathLibrary.doWithChance(12.5))
+				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1);
+		}
+
+		int iceside = ReikaWorldHelper.checkForAdjBlock(world, i, j, k, Block.ice.blockID);
+		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, i, j, k, Material.water);
+		if (iceside != -1 || waterside != -1) {
+			if (ReikaMathLibrary.doWithChance(15))
+				world.setBlock(i, j, k, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+			if (iceside != -1) {
+				ReikaWorldHelper.changeAdjBlock(world, i, j, k, iceside, Block.waterMoving.blockID, 0);
+			}
+			if (waterside != -1) {
+				ReikaWorldHelper.changeAdjBlock(world, i, j, k, waterside, 0, 0);
+				ReikaSoundHelper.playSoundAtBlock(world, i, j, k, "random.fizz");
+				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, i, j, k, 8);
+			}
 		}
 	}
 
@@ -239,8 +274,8 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		return isOptimalFlowDirection;
 	}
 
-	private boolean blockBlocksFlow(World par1World, int par2, int par3, int par4) {
-		int l = par1World.getBlockId(par2, par3, par4);
+	private boolean blockBlocksFlow(World world, int x, int y, int z) {
+		int l = world.getBlockId(x, y, z);
 
 		if (l != Block.doorWood.blockID && l != Block.doorIron.blockID && l != Block.signPost.blockID && l != Block.ladder.blockID && l != Block.reed.blockID) {
 			if (l == 0) {
@@ -257,8 +292,8 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 	}
 
 	@Override
-	protected int getSmallestFlowDecay(World par1World, int par2, int par3, int par4, int par5) {
-		int i1 = this.getFlowDecay(par1World, par2, par3, par4);
+	protected int getSmallestFlowDecay(World world, int x, int y, int z, int par5) {
+		int i1 = this.getFlowDecay(world, x, y, z);
 
 		if (i1 < 0) {
 			return par5;
@@ -308,7 +343,37 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		theIcon = new Icon[]{iconRegister.registerIcon("buildcraft:oil"), iconRegister.registerIcon("buildcraft:oil_flow")};
+		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
+	}
+
+	private void checkForHarden(World world, int x, int y, int z)
+	{
+		if (world.getBlockId(x, y, z) == blockID) {
+			boolean flag = false;
+
+			if (flag || world.getBlockMaterial(x, y, z - 1) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x, y, z + 1) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x - 1, y, z) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x + 1, y, z) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x, y + 1, z) == Material.water)
+				flag = true;
+
+			if (flag) {
+				world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+				this.triggerLavaMixEffects(world, x, y, z);
+			}
+		}
+	}
+
+	@Override
+	public void onBlockAdded(World world, int par2, int par3, int par4)
+	{
+		this.checkForHarden(world, par2, par3, par4);
+		world.scheduleBlockUpdate(par2, par3, par4, blockID, this.tickRate(world));
 	}
 
 }

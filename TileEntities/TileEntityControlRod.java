@@ -55,7 +55,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	}
 
 	@Override
-	public void setTemperature(double T) {
+	public void setTemperature(int T) {
 		temperature = T;
 	}
 

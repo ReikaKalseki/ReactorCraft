@@ -13,7 +13,7 @@ public interface Temperatured {
 
 	public abstract double getTemperature();
 
-	public void setTemperature(double T);
+	public void setTemperature(int T);
 
 	public int getMaxTemperature();
 

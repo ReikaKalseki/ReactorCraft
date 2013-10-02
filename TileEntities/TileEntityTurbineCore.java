@@ -111,7 +111,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		accelTicker.setCap(this.getAccelDelay());
 		if (up) {
 			if (accelTicker.checkCap())
-				omega = ReikaMathLibrary.extrema(omega+1, GEN_OMEGA, "absmin");
+				omega = ReikaMathLibrary.extrema(omega+1, isFull ? GEN_OMEGA : 16, "absmin");
 		}
 		else {
 			omega = ReikaMathLibrary.extrema(omega-1, 0, "max");
@@ -200,12 +200,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 					storedEnergy = 0;
 				}
 				else if (Block.blocksList[id2] instanceof BlockFluid) {
-					phi = phi/1.25F;
 					omega = 1+(int)(omega/1.25F);
+					phi -= 0.2F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 				}
 				else if (id2 != ReactorBlocks.STEAM.getBlockID()) {
-					phi = phi/1.0625F;
 					omega = 1+(int)(omega/1.0625F);
+					phi -= 0.1F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 				}
 			}
 		}
@@ -229,8 +229,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				isFull = false;
 			}
 		}
-		if (omega <= 1)
+		if (omega <= 0) {
 			phi = 0;
+		}
 	}
 
 	private boolean canCreateSteam(World world, int x, int y, int z) {
@@ -288,12 +289,16 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
 			}
 		}
+		if (storedEnergy == 0) {
+			phi = 0;
+			omega = 0;
+		}
 		int id = world.getBlockId(readx, ready, readz);
 		int bmeta = world.getBlockMetadata(readx, ready, readz);
 		if (id == ReactorTiles.TURBINECORE.getBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
-				if (phi != tile.phi) {
+				if (phi != tile.phi && omega > 0) {
 					ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, x, y, z, 5);
 					if (par5Random.nextInt(3) == 0)
 						ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "mob.blaze.hit");

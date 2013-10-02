@@ -214,7 +214,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	}
 
 	@Override
-	public void setTemperature(double T) {
+	public void setTemperature(int T) {
 		temperature = T;
 	}
 

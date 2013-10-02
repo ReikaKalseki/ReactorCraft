@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.liquids.ILiquid;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +26,9 @@ public class BlockCorium extends BlockStationary implements ILiquid {
 		super(par1, par2Material);
 
 		this.setHardness(100F);
-		this.setLightOpacity(255);
+		this.setLightOpacity(0);
+		this.setResistance(500);
+
 	}
 
 	@Override
@@ -56,7 +59,7 @@ public class BlockCorium extends BlockStationary implements ILiquid {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		theIcon = new Icon[]{iconRegister.registerIcon("buildcraft:oil"), iconRegister.registerIcon("buildcraft:oil_flow")};
+		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
 	}
 
 	/**
@@ -67,6 +70,29 @@ public class BlockCorium extends BlockStationary implements ILiquid {
 		int l = par1World.getBlockMetadata(par2, par3, par4);
 		par1World.setBlock(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), l, 2);
 		par1World.scheduleBlockUpdate(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), this.tickRate(par1World));
+	}
+
+	private void checkForHarden(World world, int x, int y, int z)
+	{
+		if (world.getBlockId(x, y, z) == blockID) {
+			boolean flag = false;
+
+			if (flag || world.getBlockMaterial(x, y, z - 1) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x, y, z + 1) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x - 1, y, z) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x + 1, y, z) == Material.water)
+				flag = true;
+			if (flag || world.getBlockMaterial(x, y + 1, z) == Material.water)
+				flag = true;
+
+			if (flag) {
+				world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+				this.triggerLavaMixEffects(world, x, y, z);
+			}
+		}
 	}
 
 }

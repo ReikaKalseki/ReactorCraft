@@ -46,7 +46,7 @@ public class RenderRadiation extends Render {
 
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
-		v5.setColorOpaque(0, 0, 128);
+		v5.setColorOpaque(127, 127, 127);
 		v5.addVertex(0.0F - var17, 0.0F - var18, 0.0D);
 		v5.addVertex(var16 - var17, 0.0F - var18, 0.0D);
 		v5.addVertex(var16 - var17, 1.0F - var18, 0.0D);

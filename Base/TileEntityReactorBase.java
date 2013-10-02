@@ -22,7 +22,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 	protected StepTimer thermalTicker = new StepTimer(20);
 
-	protected double temperature;
+	protected int temperature;
 	public float phi;
 
 	@Override
@@ -46,7 +46,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setDouble("temp", temperature);
+		NBT.setInteger("temp", temperature);
 
 		NBT.setFloat("ang", phi);
 
@@ -60,7 +60,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	{
 		super.readFromNBT(NBT);
 
-		temperature = NBT.getDouble("temp");
+		temperature = NBT.getInteger("temp");
 
 		phi = NBT.getFloat("ang");
 

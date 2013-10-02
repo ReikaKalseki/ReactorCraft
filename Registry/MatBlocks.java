@@ -12,8 +12,7 @@ package Reika.ReactorCraft.Registry;
 public enum MatBlocks {
 
 	CONCRETE("Concrete"),
-	SLAG("Corium"),
-	BLADE("Turbine Blade");
+	SLAG("Corium");
 
 	private String name;
 
