@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Registry;
 
 import java.util.Random;
 
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public enum FluoriteTypes {
@@ -64,6 +65,10 @@ public enum FluoriteTypes {
 
 	public String getItemName() {
 		return ReikaStringParser.capFirstChar(this.name())+" Fluorite";
+	}
+
+	public ItemStack getItem() {
+		return ReactorItems.FLUORITE.getStackOfMetadata(this.ordinal());
 	}
 
 }

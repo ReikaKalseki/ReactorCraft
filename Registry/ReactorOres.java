@@ -156,7 +156,7 @@ public enum ReactorOres {
 	public boolean isValidDimension(int id) {
 		if (id == dimensionID)
 			return true;
-		if (id == ReikaTwilightHelper.TWILIGHT_ID && dimensionID == 0)
+		if (id == ReikaTwilightHelper.getDimensionID() && dimensionID == 0)
 			return true;
 		return false;
 	}
@@ -176,6 +176,6 @@ public enum ReactorOres {
 			return false;
 		if (!this.isValidDimension(id))
 			return false;
-		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.TWILIGHT_ID;
+		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.getDimensionID();
 	}
 }

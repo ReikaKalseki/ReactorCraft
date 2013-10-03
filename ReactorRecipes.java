@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -32,6 +33,7 @@ public class ReactorRecipes {
 
 	private static void addRCInterface() {
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 7), ReactorItems.DEPLETED.getStackOf());
+		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
 	}
 
 	public static void addModInterface() {

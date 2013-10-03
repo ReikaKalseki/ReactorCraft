@@ -15,9 +15,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -53,7 +55,7 @@ public class RadiationEffects {
 		if (id == 0)
 			return;
 		Block b = Block.blocksList[id];
-		if (id == Block.leaves.blockID || b.blockMaterial == Material.leaves)
+		if (id == Block.leaves.blockID || b.blockMaterial == Material.leaves || ModWoodList.isModLeaf(new ItemStack(id, 1, meta)))
 			world.setBlock(x, y, z, 0);
 		if (id == Block.reed.blockID) {
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
