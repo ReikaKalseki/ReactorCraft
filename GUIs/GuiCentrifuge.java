@@ -11,6 +11,7 @@ package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
@@ -32,7 +33,7 @@ public class GuiCentrifuge extends ReactorGuiBase {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		mc.renderEngine.bindTexture("/font/glyph_AA.png");
+		ReikaTextureHelper.bindFontTexture();
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;

@@ -18,6 +18,8 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.ReactorCraft;
 
 public abstract class ReactorGuiBase extends GuiContainer {
 
@@ -32,7 +34,7 @@ public abstract class ReactorGuiBase extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		mc.renderEngine.bindTexture("/font/glyph_AA.png");
+		ReikaTextureHelper.bindFontTexture();
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
@@ -49,7 +51,7 @@ public abstract class ReactorGuiBase extends GuiContainer {
 
 		String i = "/Reika/ReactorCraft/Textures/GUI/"+this.getGuiTexture()+".png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		ReikaTextureHelper.bindTexture(ReactorCraft.class, i);
 		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}

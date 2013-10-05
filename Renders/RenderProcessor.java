@@ -18,12 +18,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
-import buildcraft.core.render.LiquidRenderer;
 
 public class RenderProcessor extends ReactorRenderBase
 {
@@ -94,7 +94,7 @@ public class RenderProcessor extends ReactorRenderBase
 		if (amount == 0)
 			return;
 
-		int[] displayList = LiquidRenderer.getLiquidDisplayLists(liquid, tile.worldObj, false);
+		int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
 
 		if (displayList == null) {
 			return;
@@ -107,7 +107,7 @@ public class RenderProcessor extends ReactorRenderBase
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		this.bindTextureByName(LiquidRenderer.getLiquidSheet(liquid));
+		this.bindTextureByName(ReikaLiquidRenderer.getLiquidSheet(liquid));
 
 		GL11.glTranslated(par2, par4, par6);
 
@@ -118,7 +118,7 @@ public class RenderProcessor extends ReactorRenderBase
 		//GL11.glScaled(1, 1/3D, 1);
 		GL11.glScaled(0.99, 0.98, 0.99);
 
-		GL11.glCallList(displayList[(int)(amount / (3000D) * (LiquidRenderer.DISPLAY_STAGES - 1))]);
+		GL11.glCallList(displayList[(int)(amount / (3000D) * (ReikaLiquidRenderer.LEVELS - 1))]);
 
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();

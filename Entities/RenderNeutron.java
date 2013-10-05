@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -75,5 +76,10 @@ public class RenderNeutron extends Render
 	{
 		if (ReactorOptions.VISIBLENEUTRONS.getState())
 			this.renderTheNeutron((EntityNeutron)par1Entity, par2, par4+0*0.5, par6, par8, par9);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
 	}
 }

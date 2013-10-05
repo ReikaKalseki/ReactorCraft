@@ -11,7 +11,8 @@ package Reika.ReactorCraft.Entities;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -52,9 +53,9 @@ public class EntityNuclearWaste extends EntityItem {
 		double y = posY;
 		double z = posZ;
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x, y, z).expand(RANGE, RANGE, RANGE);
-		List<EntityLiving> inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving e = inbox.get(i);
+			EntityLivingBase e = inbox.get(i);
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= RANGE) {
 				RadiationEffects.applyEffects(e);

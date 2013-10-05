@@ -151,7 +151,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return ReikaItemHelper.matchStacks(itemstack, ReactorStacks.fueldust);
 	}
 

@@ -13,7 +13,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -277,9 +278,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private void enviroTest(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB box = this.getBoundingBox(world, x, y, z, meta);
 		int r = 2+this.getStage()/2;
-		List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < li.size(); i++) {
-			EntityLiving e = li.get(i);
+			EntityLivingBase e = li.get(i);
 			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
 				Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
 				e.motionX += 0.4*(e.posX-x-0.5)+par5Random.nextDouble()*0.1;

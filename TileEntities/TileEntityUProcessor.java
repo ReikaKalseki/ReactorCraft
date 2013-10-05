@@ -195,7 +195,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
 			return i == 2;
 		if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("ingotUranium"), is))

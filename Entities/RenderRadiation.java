@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -62,6 +63,11 @@ public class RenderRadiation extends Render {
 	@Override
 	public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par10) {
 		this.renderEntity((EntityRadiation)entity, par2, par4, par6, par8, par10);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
 	}
 
 }

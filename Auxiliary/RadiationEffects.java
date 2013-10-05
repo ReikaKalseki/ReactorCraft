@@ -13,7 +13,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -26,12 +26,12 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 
 public class RadiationEffects {
 
-	public static void applyEffects(EntityLiving e) {
+	public static void applyEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
 			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
 	}
 
-	public static void applyPulseEffects(EntityLiving e) {
+	public static void applyPulseEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
 			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 20, 0));
 	}

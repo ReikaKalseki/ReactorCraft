@@ -13,7 +13,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,8 +57,8 @@ public class ItemNuclearWaste extends ReactorItemBase {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
-		if (e instanceof EntityLiving)
-			RadiationEffects.applyEffects((EntityLiving)e);
+		if (e instanceof EntityLivingBase)
+			RadiationEffects.applyEffects((EntityLivingBase)e);
 	}
 
 	@Override

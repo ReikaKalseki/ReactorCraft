@@ -11,7 +11,7 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.Random;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -25,21 +25,21 @@ public class PotionRadiation extends Potion {
 	}
 
 	@Override
-	public void performEffect(EntityLiving e, int level) {
+	public void performEffect(EntityLivingBase e, int level) {
 		Random r = new Random();
-		int h = e.getHealth();
-		int mh = e.getMaxHealth();
+		float h = e.getHealth();
+		float mh = e.getMaxHealth();
 		float f = h/mh;
 		if (f >= 0.5) {
-			if (r.nextInt(h/4) == 0)
+			if (r.nextInt((int)h/4) == 0)
 				e.attackEntityFrom(DamageSource.wither, 1);
 		}
 		else if  (f > 0.25) {
-			if (r.nextInt(h/2) == 0)
+			if (r.nextInt((int)h/2) == 0)
 				e.attackEntityFrom(DamageSource.wither, 1);
 		}
 		else if (h > 1) {
-			if (r.nextInt(h) == 0)
+			if (r.nextInt((int)h) == 0)
 				e.attackEntityFrom(DamageSource.wither, 1);
 		}
 

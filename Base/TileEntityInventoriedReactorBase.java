@@ -64,7 +64,7 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return this.isStackValidForSlot(i, itemstack);
+		return this.isItemValidForSlot(i, itemstack);
 	}
 
 }

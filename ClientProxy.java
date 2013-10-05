@@ -26,7 +26,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 public class ClientProxy extends CommonProxy {
 
 	public static final ItemSpriteSheetRenderer[] items = {
-		new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png", ""),
+		new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png"),
 	};
 
 	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();

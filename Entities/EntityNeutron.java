@@ -14,7 +14,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -111,8 +111,8 @@ public class EntityNeutron extends InertEntity {
 	public void applyEntityCollision(Entity e)
 	{
 		if (ReikaMathLibrary.doWithChance(12.5))
-			if (e instanceof EntityLiving) {
-				RadiationEffects.applyPulseEffects((EntityLiving)e);
+			if (e instanceof EntityLivingBase) {
+				RadiationEffects.applyPulseEffects((EntityLivingBase)e);
 				this.setDead();
 			}
 	}

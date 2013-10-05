@@ -198,7 +198,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (inv[i] != null)
 			return false;
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
@@ -225,7 +225,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return j == 1 && this.isStackValidForSlot(i, itemstack) && itemstack.itemID != ReactorItems.DEPLETED.getShiftedItemID();
+		return j == 1 && this.isItemValidForSlot(i, itemstack) && itemstack.itemID != ReactorItems.DEPLETED.getShiftedItemID();
 	}
 
 	@Override
@@ -338,7 +338,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public boolean feedIn(ItemStack is) {
 		if (is == null)
 			return true;
-		if (!this.isStackValidForSlot(0, is))
+		if (!this.isItemValidForSlot(0, is))
 			return false;
 		if (inv[0] == null) {
 			inv[0] = is.copy();
