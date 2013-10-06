@@ -17,13 +17,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -33,14 +34,14 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements ITankContainer {
+public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler {
 
 	public static final int ACID_PER_UNIT = 125;
 	public static final int ACID_PER_FLUORITE = 250;
 
-	private LiquidTank output = new LiquidTank(3000);
-	private LiquidTank acid = new LiquidTank(3000);
-	private LiquidTank water = new LiquidTank(3000);
+	private HybridTank output = new HybridTank("uprocout", 3000);
+	private HybridTank acid = new HybridTank("uprochf", 3000);
+	private HybridTank water = new HybridTank("uprocwater", 3000);
 
 	private ItemStack[] inv = new ItemStack[3];
 
@@ -90,7 +91,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public boolean canMakeUF6() {
-		return (this.hasUranium()) && this.getHF() > ACID_PER_UNIT && this.canAcceptMoreUF6(LiquidContainerRegistry.BUCKET_VOLUME);
+		return (this.hasUranium()) && this.getHF() > ACID_PER_UNIT && this.canAcceptMoreUF6(FluidContainerRegistry.BUCKET_VOLUME);
 	}
 
 	private boolean hasUranium() {
@@ -114,7 +115,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	private void makeUF6() {
 		ReikaInventoryHelper.decrStack(2, inv);
-		output.fill(LiquidDictionary.getLiquid("Uranium Hexafluoride", LiquidContainerRegistry.BUCKET_VOLUME), true);
+		output.fill(FluidRegistry.getFluidStack("uranium hexafluoride", FluidContainerRegistry.BUCKET_VOLUME), true);
 		acid.drain(ACID_PER_UNIT, true);
 	}
 
@@ -139,34 +140,34 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public int getWater() {
-		return water.getLiquid() != null ? water.getLiquid().amount : 0;
+		return water.getFluid() != null ? water.getFluid().amount : 0;
 	}
 
 	public int getHF() {
-		return acid.getLiquid() != null ? acid.getLiquid().amount : 0;
+		return acid.getFluid() != null ? acid.getFluid().amount : 0;
 	}
 
 	public int getUF6() {
-		return output.getLiquid() != null ? output.getLiquid().amount : 0;
+		return output.getFluid() != null ? output.getFluid().amount : 0;
 	}
 
 	private void getWaterBuckets() {
-		if (inv[1] != null && inv[1].itemID == Item.bucketWater.itemID && this.canAcceptMoreWater(LiquidContainerRegistry.BUCKET_VOLUME)) {
-			water.fill(LiquidDictionary.getLiquid("Water", LiquidContainerRegistry.BUCKET_VOLUME), true);
+		if (inv[1] != null && inv[1].itemID == Item.bucketWater.itemID && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
+			water.fill(FluidRegistry.getFluidStack("water", FluidContainerRegistry.BUCKET_VOLUME), true);
 			inv[1] = new ItemStack(Item.bucketEmpty);
 		}
 	}
 
 	public boolean canAcceptMoreWater(int amt) {
-		return water.getLiquid() == null || water.getLiquid().amount+amt <= water.getCapacity();
+		return water.getFluid() == null || water.getFluid().amount+amt <= water.getCapacity();
 	}
 
 	public boolean canAcceptMoreHF(int amt) {
-		return acid.getLiquid() == null || acid.getLiquid().amount+amt <= acid.getCapacity();
+		return acid.getFluid() == null || acid.getFluid().amount+amt <= acid.getCapacity();
 	}
 
 	public boolean canAcceptMoreUF6(int amt) {
-		return output.getLiquid() == null || output.getLiquid().amount+amt <= output.getCapacity();
+		return output.getFluid() == null || output.getFluid().amount+amt <= output.getCapacity();
 	}
 
 	@Override
@@ -208,40 +209,39 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		return this.fill(0, resource, doFill);
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
 		return water.fill(resource, doFill);
 	}
 
 	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return this.drain(0, maxDrain, doDrain);
-	}
-
-	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return output.drain(maxDrain, doDrain);
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[]{water, output};
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return output.drain(resource.amount, doDrain);
 	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		if (type.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water"))) {
-			return water;
-		}
-		return null;
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return fluid.equals(FluidRegistry.WATER) || fluid.equals(ReactorCraft.HF);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return fluid.equals(ReactorCraft.UF6);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{water.getInfo(), acid.getInfo(), output.getInfo()};
 	}
 
 	public void addHF(int amt) {
-		acid.fill(LiquidDictionary.getLiquid("Hydrofluoric Acid", amt), true);
+		int a = acid.fill(FluidRegistry.getFluidStack("hydrofluoric acid", amt), true);
 	}
 
 	@Override
@@ -266,24 +266,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 			}
 		}
 
-		if (NBT.hasKey("internalwater")) {
-			water.setLiquid(new LiquidStack(NBT.getInteger("waterId"), NBT.getInteger("internalwater")));
-		}
-		else if (NBT.hasKey("water")) {
-			water.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("water")));
-		}
-		if (NBT.hasKey("internalacid")) {
-			acid.setLiquid(new LiquidStack(NBT.getInteger("acidId"), NBT.getInteger("internalacid")));
-		}
-		else if (NBT.hasKey("acid")) {
-			acid.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("acid")));
-		}
-		if (NBT.hasKey("internaloutput")) {
-			output.setLiquid(new LiquidStack(NBT.getInteger("outputId"), NBT.getInteger("internaloutput")));
-		}
-		else if (NBT.hasKey("output")) {
-			output.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("output")));
-		}
+		water.readFromNBT(NBT);
+		acid.readFromNBT(NBT);
+		output.readFromNBT(NBT);
 	}
 
 	/**
@@ -312,23 +297,17 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 		NBT.setTag("Items", nbttaglist);
 
-		if (water.getLiquid() != null) {
-			NBT.setTag("water", water.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
-		if (acid.getLiquid() != null) {
-			NBT.setTag("acid", acid.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
-		if (output.getLiquid() != null) {
-			NBT.setTag("output", output.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
+		water.writeToNBT(NBT);
+		acid.writeToNBT(NBT);
+		output.writeToNBT(NBT);
 	}
 
-	public int getLiquid(LiquidStack liquid) {
-		if (liquid.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")))
+	public int getFluid(FluidStack liquid) {
+		if (liquid.getFluid().equals(FluidRegistry.WATER))
 			return this.getWater();
-		if (liquid.isLiquidEqual(ReactorCraft.HF))
+		if (liquid.getFluid().equals(ReactorCraft.HF))
 			return this.getHF();
-		if (liquid.isLiquidEqual(ReactorCraft.UF6))
+		if (liquid.getFluid().equals(ReactorCraft.UF6))
 			return this.getUF6();
 		return 0;
 	}

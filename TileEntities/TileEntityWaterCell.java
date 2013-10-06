@@ -13,10 +13,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
@@ -28,8 +28,12 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE {
 
-	private LiquidStack internalLiquid;
+	private LiquidStates internalLiquid;
 	private double storedEnergy;
+
+	public TileEntityWaterCell() {
+		this.setLiquidState(0);
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -52,14 +56,15 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 		if (this.getLiquidState() == LiquidStates.EMPTY.ordinal()) {
 			TileEntity te = world.getBlockTileEntity(x, y+1, z);
-			if (te instanceof ITankContainer) {
-				ITankContainer ic = (ITankContainer)te;
-				LiquidStack liq = ic.drain(ForgeDirection.DOWN, LiquidContainerRegistry.BUCKET_VOLUME, true);
-				if (liq != null && liq.amount >= LiquidContainerRegistry.BUCKET_VOLUME) {
-					if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water"))) {
+			if (te instanceof IFluidHandler) {
+				IFluidHandler ic = (IFluidHandler)te;
+				FluidStack liq = ic.drain(ForgeDirection.DOWN, FluidContainerRegistry.BUCKET_VOLUME, false);
+				if (liq != null && liq.amount >= FluidContainerRegistry.BUCKET_VOLUME) {
+					ic.drain(ForgeDirection.DOWN, FluidContainerRegistry.BUCKET_VOLUME, true);
+					if (liq.getFluid().equals(FluidRegistry.WATER)) {
 						this.setLiquidState(LiquidStates.WATER.ordinal());
 					}
-					else if (liq.isLiquidEqual(ReactorCraft.D2O)) {
+					else if (liq.getFluid().equals(ReactorCraft.D2O)) {
 						this.setLiquidState(LiquidStates.HEAVY.ordinal());
 					}
 				}
@@ -121,44 +126,21 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	public int getChanceToStop() {
 		if (internalLiquid == null)
 			return 0;
-		if (internalLiquid.isLiquidEqual(ReactorCraft.D2O)) {
+		if (internalLiquid == LiquidStates.HEAVY) {
 			return 75;
 		}
-		if (internalLiquid.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water"))) {
+		if (internalLiquid == LiquidStates.WATER) {
 			return 50;
 		}
 		return 0;
 	}
 
 	enum LiquidStates {
-		EMPTY(null),
-		WATER(LiquidDictionary.getCanonicalLiquid("Water")),
-		HEAVY(ReactorCraft.D2O);
-
-		private LiquidStack liquid;
+		EMPTY(),
+		WATER(),
+		HEAVY();
 
 		public static final LiquidStates[] list = values();
-
-		private LiquidStates(LiquidStack liq) {
-			liquid = liq;
-		}
-
-		public static LiquidStates getState(LiquidStack l) {
-			if (l == null)
-				return EMPTY;
-			for (int i = 0; i < list.length; i++) {
-				LiquidStack liq = list[i].liquid;
-				if (liq != null && l.isLiquidEqual(liq)) {
-					return list[i];
-				}
-			}
-
-			return null;
-		}
-
-		public LiquidStack getLiquid() {
-			return liquid;
-		}
 	}
 
 	@Override
@@ -167,11 +149,11 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	public int getLiquidState() {
-		return LiquidStates.getState(internalLiquid).ordinal();
+		return internalLiquid.ordinal();
 	}
 
 	public void setLiquidState(int liq) {
-		internalLiquid = LiquidStates.list[liq].getLiquid();
+		internalLiquid = LiquidStates.list[liq];
 	}
 
 	public void accrueEnergy(World world, int x, int y, int z) {

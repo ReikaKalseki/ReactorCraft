@@ -20,10 +20,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.RetroGenController;
@@ -46,10 +46,8 @@ import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -63,8 +61,6 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-//Addon for RC - adds nuclear power to gen LOTS of shaft power
-//Requires RC (in code) and is useless w/o IC2; uses its uranium
 @Mod( modid = "ReactorCraft", name="ReactorCraft", version="beta", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "ReactorCraftData" }, packetHandler = ClientPackets.class),
@@ -85,9 +81,9 @@ public class ReactorCraft extends DragonAPIMod {
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
-	public static LiquidStack D2O;
-	public static LiquidStack HF;
-	public static LiquidStack UF6;
+	public static final Fluid D2O = new Fluid("heavy water").setDensity(1100).setViscosity(1050);
+	public static final Fluid HF = new Fluid("hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
+	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
@@ -95,7 +91,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static CommonProxy proxy;
 
 	@Override
-	@PreInit
+	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -110,7 +106,7 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	@Override
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		proxy.registerRenderers();
 		ReactorRecipes.addRecipes();
@@ -125,7 +121,7 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	@Override
-	@PostInit
+	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
 		ReactorRecipes.addModInterface();
 	}
@@ -143,16 +139,10 @@ public class ReactorCraft extends DragonAPIMod {
 		Item d2o = items[ReactorItems.HEAVYWATER.ordinal()];
 		Item hf = items[ReactorItems.HF.ordinal()];
 		Item uf6 = items[ReactorItems.UF6.ordinal()];
-		LiquidDictionary.getCanonicalLiquid("Heavy Water").setRenderingIcon(d2o.getIconFromDamage(0));
-		LiquidDictionary.getCanonicalLiquid("Hydrofluoric Acid").setRenderingIcon(hf.getIconFromDamage(0));
-		LiquidDictionary.getCanonicalLiquid("Uranium Hexafluoride").setRenderingIcon(uf6.getIconFromDamage(0));
 
-		D2O.canonical().setRenderingIcon(d2o.getIconFromDamage(0));
-		D2O.canonical().setTextureSheet("/gui/items.png");
-		HF.canonical().setRenderingIcon(hf.getIconFromDamage(0));
-		HF.canonical().setTextureSheet("/gui/items.png");
-		UF6.canonical().setRenderingIcon(uf6.getIconFromDamage(0));
-		UF6.canonical().setTextureSheet("/gui/items.png");
+		D2O.setIcons(d2o.getIconFromDamage(0));
+		HF.setIcons(hf.getIconFromDamage(0));
+		UF6.setIcons(uf6.getIconFromDamage(0));
 	}
 
 	private static void addItems() {
@@ -178,18 +168,15 @@ public class ReactorCraft extends DragonAPIMod {
 		LanguageRegistry.addName(uf6, "Uranium Hexafluoride");
 		LanguageRegistry.addName(hf, "Hydrofluoric Acid");
 
-		D2O = new LiquidStack(d2o, LiquidContainerRegistry.BUCKET_VOLUME);
-		UF6 = new LiquidStack(uf6, LiquidContainerRegistry.BUCKET_VOLUME);
-		HF = new LiquidStack(hf, LiquidContainerRegistry.BUCKET_VOLUME);
+		FluidRegistry.registerFluid(D2O);
+		FluidRegistry.registerFluid(HF);
+		FluidRegistry.registerFluid(UF6);
 
-		LiquidDictionary.getOrCreateLiquid("Heavy Water", D2O);
-		LiquidDictionary.getOrCreateLiquid("Hydrofluoric Acid", HF);
-		LiquidDictionary.getOrCreateLiquid("Uranium Hexafluoride", UF6);
+		//ReikaJavaLibrary.spamConsole(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME)+":"+ReactorItems.BUCKET.getStackOfMetadata(0)+":"+new ItemStack(Item.bucketEmpty));
 
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Heavy Water", LiquidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOf(), new ItemStack(Item.bucketEmpty)));
-
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Uranium Hexafluoride", LiquidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan));
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Hydrofluoric Acid", LiquidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(UF6, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

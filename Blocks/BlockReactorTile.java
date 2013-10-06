@@ -23,7 +23,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Feedable;
@@ -177,29 +177,29 @@ public class BlockReactorTile extends Block {
 		}
 		if (r == ReactorTiles.PROCESSOR && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
 			TileEntityUProcessor te = (TileEntityUProcessor)world.getBlockTileEntity(x, y, z);
-			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= LiquidContainerRegistry.BUCKET_VOLUME) {
+			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
-				te.drain(0, LiquidContainerRegistry.BUCKET_VOLUME, true);
+				te.drain(null, FluidContainerRegistry.BUCKET_VOLUME, true);
 			}
-			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreHF(LiquidContainerRegistry.BUCKET_VOLUME)) {
+			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreHF(FluidContainerRegistry.BUCKET_VOLUME)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan.copy());
-				te.addHF(LiquidContainerRegistry.BUCKET_VOLUME);
+				te.addHF(FluidContainerRegistry.BUCKET_VOLUME);
 			}
 			return true;
 		}
 		if (r == ReactorTiles.CENTRIFUGE && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
 			TileEntityCentrifuge te = (TileEntityCentrifuge)world.getBlockTileEntity(x, y, z);
-			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= LiquidContainerRegistry.BUCKET_VOLUME) {
+			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
-				te.drain(0, LiquidContainerRegistry.BUCKET_VOLUME, true);
+				te.removeFluid(FluidContainerRegistry.BUCKET_VOLUME);
 			}
-			else if (is.getItemDamage() == ReactorStacks.uf6can.getItemDamage() && te.canAcceptMoreUF6(LiquidContainerRegistry.BUCKET_VOLUME)) {
+			else if (is.getItemDamage() == ReactorStacks.uf6can.getItemDamage() && te.canAcceptMoreUF6(FluidContainerRegistry.BUCKET_VOLUME)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan.copy());
-				te.addUF6(LiquidContainerRegistry.BUCKET_VOLUME);
+				te.addUF6(FluidContainerRegistry.BUCKET_VOLUME);
 			}
 			return true;
 		}

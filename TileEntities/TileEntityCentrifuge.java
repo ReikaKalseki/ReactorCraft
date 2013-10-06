@@ -14,20 +14,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements ITankContainer, ShaftPowerReceiver {
+public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ShaftPowerReceiver {
 
 	private int torque;
 	private int omega;
@@ -44,7 +46,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private ItemStack[] inv = new ItemStack[2];
 
-	private LiquidTank tank = new LiquidTank(12000);
+	private HybridTank tank = new HybridTank("centri", 12000);
 
 	private StepTimer timer = new StepTimer(900);
 
@@ -123,7 +125,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public int getUF6() {
-		return tank.getLiquid() != null ? tank.getLiquid().amount : 0;
+		return tank.getFluid() != null ? tank.getFluid().amount : 0;
 	}
 
 	public int getUF6Scaled(int p) {
@@ -227,43 +229,33 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		if (from != ForgeDirection.UP)
-			return 0;
-		return this.fill(0, resource, doFill);
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		if (!resource.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Uranium Hexafluoride")))
-			return 0;
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return tank.fill(resource, doFill);
 	}
 
 	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		if (direction == ForgeDirection.UP)
-			return new ILiquidTank[]{tank};
-		else
-			return new ILiquidTank[0];
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from == ForgeDirection.UP && fluid.equals(ReactorCraft.UF6);
 	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		if (direction == ForgeDirection.UP && type.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Uranium Hexafluoride")))
-			return tank;
-		else
-			return null;
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 	@Override
@@ -290,12 +282,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 			}
 		}
 
-		if (NBT.hasKey("internaltank")) {
-			tank.setLiquid(new LiquidStack(NBT.getInteger("tankId"), NBT.getInteger("internaltank")));
-		}
-		else if (NBT.hasKey("tank")) {
-			tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("tank")));
-		}
+		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -326,16 +313,18 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 		NBT.setTag("Items", nbttaglist);
 
-		if (tank.getLiquid() != null) {
-			NBT.setTag("tank", tank.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
+		tank.writeToNBT(NBT);
 	}
 
 	public boolean canAcceptMoreUF6(int amt) {
-		return tank.getLiquid() == null || tank.getLiquid().amount+amt <= tank.getCapacity();
+		return tank.getFluid() == null || tank.getFluid().amount+amt <= tank.getCapacity();
 	}
 
 	public void addUF6(int amt) {
-		tank.fill(LiquidDictionary.getLiquid("Uranium Hexafluoride", amt), true);
+		tank.fill(FluidRegistry.getFluidStack("uranium hexafluoride", amt), true);
+	}
+
+	public void removeFluid(int volume) {
+		tank.removeLiquid(volume);
 	}
 }

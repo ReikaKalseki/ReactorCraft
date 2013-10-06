@@ -11,8 +11,9 @@ package Reika.ReactorCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -83,14 +84,17 @@ public class RenderProcessor extends ReactorRenderBase
 			this.renderTileEntityUProcessorAt((TileEntityUProcessor)tile, par2, par4, par6, par8);
 		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			//IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderLiquids((TileEntityUProcessor)tile, par2, par4, par6, LiquidDictionary.getCanonicalLiquid("Water"));
+			this.renderLiquids((TileEntityUProcessor)tile, par2, par4, par6, FluidRegistry.WATER);
 			this.renderLiquids((TileEntityUProcessor)tile, par2, par4, par6, ReactorCraft.HF);
 			this.renderLiquids((TileEntityUProcessor)tile, par2, par4, par6, ReactorCraft.UF6);
 		}
 	}
 
-	private void renderLiquids(TileEntityUProcessor tile, double par2, double par4, double par6, LiquidStack liquid) {
-		int amount = tile.getLiquid(liquid);
+	private void renderLiquids(TileEntityUProcessor tile, double par2, double par4, double par6, Fluid liq) {
+
+		FluidStack liquid = new FluidStack(liq, 1);
+
+		int amount = tile.getFluid(liquid);
 		if (amount == 0)
 			return;
 
@@ -107,7 +111,8 @@ public class RenderProcessor extends ReactorRenderBase
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		this.bindTextureByName(ReikaLiquidRenderer.getLiquidSheet(liquid));
+		ReikaLiquidRenderer.bindFluidTexture(liquid);
+		ReikaLiquidRenderer.setFluidColor(liquid);
 
 		GL11.glTranslated(par2, par4, par6);
 
@@ -124,85 +129,85 @@ public class RenderProcessor extends ReactorRenderBase
 		GL11.glPopMatrix();
 	}
 
-	private double getLiquidScaleX(TileEntityUProcessor tile, LiquidStack liq) {
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() >= 2)
+	private double getLiquidScaleX(TileEntityUProcessor tile, FluidStack liq) {
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() >= 2)
 			return 0.5;
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() < 2)
 			return 0.5625;
 
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() >= 2)
 			return 0.5;
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() < 2)
 			return 0.5625;
 
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
 			return 0.875;
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
 			return 0.4375;
 		return 1;
 	}
 
-	private double getLiquidScaleY(TileEntityUProcessor tile, LiquidStack liq) {
-		if (liq.isLiquidEqual(ReactorCraft.UF6))
+	private double getLiquidScaleY(TileEntityUProcessor tile, FluidStack liq) {
+		if (liq.getFluid().equals(ReactorCraft.UF6))
 			return 11/14D;
 
 		return 1;
 	}
 
-	private double getLiquidScaleZ(TileEntityUProcessor tile, LiquidStack liq) {
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() < 2)
+	private double getLiquidScaleZ(TileEntityUProcessor tile, FluidStack liq) {
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() < 2)
 			return 0.5;
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() >= 2)
 			return 0.5625;
 
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() < 2)
 			return 0.5;
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() >= 2)
 			return 0.5625;
 
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
 			return 0.4375;
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
 			return 0.875;
 		return 1;
 	}
 
-	private double getLiquidOffsetX(TileEntityUProcessor tile, LiquidStack liq) {
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() == 0)
+	private double getLiquidOffsetX(TileEntityUProcessor tile, FluidStack liq) {
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() == 0)
 			return 0.775;
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() == 3)
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() == 3)
 			return 1;
 
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() == 0)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() == 0)
 			return 0.775;
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() == 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() == 2)
 			return 1;
 
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() >= 2)
 			return 0.0625;
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() == 1)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() == 1)
 			return 1.25;
 		return 0;
 	}
 
-	private double getLiquidOffsetY(TileEntityUProcessor tile, LiquidStack liq) {
+	private double getLiquidOffsetY(TileEntityUProcessor tile, FluidStack liq) {
 		return 0;
 	}
 
-	private double getLiquidOffsetZ(TileEntityUProcessor tile, LiquidStack liq) {
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() == 2)
+	private double getLiquidOffsetZ(TileEntityUProcessor tile, FluidStack liq) {
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() == 2)
 			return 0.775;
-		if (liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")) && tile.getBlockMetadata() == 0)
+		if (liq.getFluid().equals(FluidRegistry.WATER) && tile.getBlockMetadata() == 0)
 			return 1;
 
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() == 2)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() == 2)
 			return 0.775;
-		if (liq.isLiquidEqual(ReactorCraft.HF) && tile.getBlockMetadata() == 1)
+		if (liq.getFluid().equals(ReactorCraft.HF) && tile.getBlockMetadata() == 1)
 			return 1;
 
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() == 3)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() == 3)
 			return 1.25;
-		if (liq.isLiquidEqual(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
+		if (liq.getFluid().equals(ReactorCraft.UF6) && tile.getBlockMetadata() < 2)
 			return 0.0625;
 		return 0;
 	}

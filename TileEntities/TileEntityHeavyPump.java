@@ -14,18 +14,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftPowerReceiver, ITankContainer {
+public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftPowerReceiver, IFluidHandler {
 
 	public static final int MINPOWER = 65536;
 	private int torque;
@@ -35,7 +36,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	private StepTimer timer = new StepTimer(20);
 
-	private LiquidTank tank = new LiquidTank(4000);
+	private HybridTank tank = new HybridTank("heavypump", 4000);
 
 	@Override
 	public int getIndex() {
@@ -105,7 +106,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	private void harvest() {
-		tank.fill(new LiquidStack(ReactorCraft.D2O.itemID, 200), true);
+		tank.fill(new FluidStack(ReactorCraft.D2O, 200), true);
 	}
 
 	private boolean canHarvest(World world, int x, int y, int z) {
@@ -137,54 +138,48 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
+			return null;
+		else
+			return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return 0;
 	}
 
 	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return 0;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return this.drain(from, resource.amount, doDrain);
 	}
 
 	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
-			return null;
-		else
-			return this.drain(0, maxDrain, doDrain);
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
 	}
 
 	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection from) {
-		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
-			return new ILiquidTank[0];
-		else
-			return new ILiquidTank[]{tank};
-	}
-
-	@Override
-	public ILiquidTank getTank(ForgeDirection from, LiquidStack type) {
-		if (from == ForgeDirection.DOWN || from == ForgeDirection.UP)
-			return null;
-		else
-			return tank;
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 	public boolean hasABucket() {
-		return tank.getLiquid() != null && tank.getLiquid().amount >= LiquidContainerRegistry.BUCKET_VOLUME;
+		return tank.getFluid() != null && tank.getFluid().amount >= FluidContainerRegistry.BUCKET_VOLUME;
 	}
 
 	public void subtractBucket() {
-		tank.drain(LiquidContainerRegistry.BUCKET_VOLUME, true);
+		tank.drain(FluidContainerRegistry.BUCKET_VOLUME, true);
 	}
 
 	public int getTankLevel() {
-		return tank.getLiquid() != null ? tank.getLiquid().amount : 0;
+		return tank.getFluid() != null ? tank.getFluid().amount : 0;
 	}
 
 	@Override
@@ -217,11 +212,11 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	{
 		super.readFromNBT(NBT);
 
-		if (NBT.hasKey("internalLiquid")) {
-			tank.setLiquid(new LiquidStack(NBT.getInteger("liquidId"), NBT.getInteger("internalLiquid")));
+		if (NBT.hasKey("internalFluid")) {
+			tank.setFluid(new FluidStack(NBT.getInteger("liquidId"), NBT.getInteger("internalFluid")));
 		}
 		else if (NBT.hasKey("tank")) {
-			tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("tank")));
+			tank.setFluid(FluidStack.loadFluidStackFromNBT(NBT.getCompoundTag("tank")));
 		}
 	}
 
@@ -233,8 +228,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	{
 		super.writeToNBT(NBT);
 
-		if (tank.getLiquid() != null) {
-			NBT.setTag("tank", tank.getLiquid().writeToNBT(new NBTTagCompound()));
+		if (tank.getFluid() != null) {
+			NBT.setTag("tank", tank.getFluid().writeToNBT(new NBTTagCompound()));
 		}
 	}
 
