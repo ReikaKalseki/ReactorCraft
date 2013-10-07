@@ -84,6 +84,7 @@ build/
 *.txt
 *.tcn
 *.xml
+*.rar
 
 # Visual C++ cache files
 ipch/
