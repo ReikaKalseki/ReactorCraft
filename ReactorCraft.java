@@ -16,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -128,21 +129,21 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@ForgeSubscribe
 	@SideOnly(Side.CLIENT)
-	public void textureHook(TextureStitchEvent.Post event) {
-		setupLiquidIcons();
+	public void textureHook(TextureStitchEvent.Pre event) {
+		setupLiquidIcons(event);
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void setupLiquidIcons() {
+	private static void setupLiquidIcons(TextureStitchEvent.Pre event) {
 		logger.log("Loading Liquid Icons");
 
-		Item d2o = items[ReactorItems.HEAVYWATER.ordinal()];
-		Item hf = items[ReactorItems.HF.ordinal()];
-		Item uf6 = items[ReactorItems.UF6.ordinal()];
+		Icon d2o = event.map.registerIcon("ReactorCraft:heavywater");
+		Icon hf = event.map.registerIcon("ReactorCraft:hf");
+		Icon uf6 = event.map.registerIcon("ReactorCraft:uf6");
 
-		D2O.setIcons(d2o.getIconFromDamage(0));
-		HF.setIcons(hf.getIconFromDamage(0));
-		UF6.setIcons(uf6.getIconFromDamage(0));
+		D2O.setIcons(d2o);
+		HF.setIcons(hf);
+		UF6.setIcons(uf6);
 	}
 
 	private static void addItems() {

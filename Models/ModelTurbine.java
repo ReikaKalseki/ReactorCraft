@@ -76,15 +76,21 @@ public class ModelTurbine extends RotaryModelBase
 		GL11.glTranslated(0, -vo, 0);
 
 		GL11.glTranslated(0, 0, dd);
+
 		this.renderBlades(vo, phi);
+
 		GL11.glTranslated(0, 0, -dd*2);
+
 		GL11.glTranslated(0, vo, 0);
 		GL11.glScaled(sc, sc, 1);
 		GL11.glTranslated(0, -vo, 0);
+
 		this.renderBlades(vo, phi);
+
 		GL11.glTranslated(0, vo, 0);
 		GL11.glScaled(1D/sc, 1D/sc, 1);
 		GL11.glTranslated(0, -vo, 0);
+
 		GL11.glTranslated(0, 0, dd);
 	}
 
