@@ -169,6 +169,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 			}
 		}
 		else {
+			v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
 			switch(dir) {
 			case DOWN:
 				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 0, 1);
