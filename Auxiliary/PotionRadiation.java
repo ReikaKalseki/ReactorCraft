@@ -30,6 +30,8 @@ public class PotionRadiation extends Potion {
 		float h = e.getHealth();
 		float mh = e.getMaxHealth();
 		float f = h/mh;
+		if (h <= 0)
+			return;
 		if (f >= 0.5) {
 			if (r.nextInt((int)h/4) == 0)
 				e.attackEntityFrom(DamageSource.wither, 1);

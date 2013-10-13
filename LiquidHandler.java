@@ -21,7 +21,8 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.ModInteract.BCMachineHandler;
+import Reika.DragonAPI.ModInteract.BCPipeHandler;
+import Reika.DragonAPI.ModInteract.ThermalHandler;
 
 public class LiquidHandler {
 
@@ -48,18 +49,17 @@ public class LiquidHandler {
 					TileEntity te2 = world.getBlockTileEntity(dx, dy, dz);
 					if (te2 instanceof IFluidHandler) {
 						blocks.recursiveAdd(world, dx, dy, dz, id);
-						/*
-						int f = ((IFluidHandler) te).fill(dir.getOpposite(), liq.copy(), true);
-						ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
-						world.setBlock(x, y, z, 0);
-						return;*/
 					}
 				}
 				for (int i = 0; i < blocks.getSize(); i++) {
 					int[] xyz = blocks.getNthBlock(i);
 					if (this.isCorrodable(world, xyz[0], xyz[1], xyz[2])) {
-						ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz");
+						ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
 						ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 6);
+						world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					}
+					else if (this.isExplodable(world, xyz[0], xyz[1], xyz[2])) {
+						world.createExplosion(null, xyz[0]+0.5, xyz[1]+0.5, xyz[2]+0.5, 2F, true);
 						world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 					}
 				}
@@ -81,9 +81,33 @@ public class LiquidHandler {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (!(te instanceof IFluidHandler))
 			return false;
-		if (id == BCMachineHandler.getInstance().tankID)
+		if (id == BCPipeHandler.getInstance().pipeID) {
+			BCPipeHandler.Types type = BCPipeHandler.getInstance().getPipeType(te);
+			if (type == BCPipeHandler.Types.GOLD)
+				return true;
+			if (type == BCPipeHandler.Types.IRON)
+				return true;
+		}
+		if (id == ThermalHandler.getInstance().liquiductID) {
+			return ThermalHandler.getInstance().getConduitType(te) == ThermalHandler.Types.LIQUID;
+		}
+		return false;
+	}
+
+	public boolean isExplodable(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (!(te instanceof IFluidHandler))
 			return false;
-		return true;
+		if (id == BCPipeHandler.getInstance().pipeID) {
+			BCPipeHandler.Types type = BCPipeHandler.getInstance().getPipeType(te);
+			if (type == BCPipeHandler.Types.DIAMOND)
+				return true;
+			if (type == BCPipeHandler.Types.EMERALD)
+				return true;
+		}
+		return false;
 	}
 
 }
