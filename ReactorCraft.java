@@ -95,6 +95,7 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
