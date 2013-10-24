@@ -28,7 +28,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.RetroGenController;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -94,6 +96,11 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
+
+		if (!ModList.ROTARYCRAFT.isLoaded()) {
+			throw new InstallationException(instance, "ReactorCraft requires RotaryCraft!");
+		}
+
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
