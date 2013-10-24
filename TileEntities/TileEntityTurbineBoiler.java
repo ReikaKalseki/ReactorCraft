@@ -1,12 +1,3 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2013
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
@@ -18,30 +9,18 @@ import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCondenser extends TileEntityTankedReactorMachine {
+public class TileEntityTurbineBoiler extends TileEntityTankedReactorMachine {
+
+	private int steam;
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.CONDENSER.ordinal();
+		return ReactorTiles.BOILER.ordinal();
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.getSteam(world, x, y, z);
-	}
 
-	private void getSteam(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
-			if (rt == ReactorTiles.WATERLINE) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(dx, dy, dz);
-
-			}
-		}
 	}
 
 	@Override
@@ -51,25 +30,22 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		int maxDrain = resource.amount;
-		if (resource.getFluid().equals(FluidRegistry.WATER))
-			return tank.drain(maxDrain, doDrain);
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		return null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return false;
+		return m == MachineRegistry.PIPE;
 	}
 
 	@Override
@@ -79,12 +55,12 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return false;
+		return from.offsetY == 0;
 	}
 
 	@Override
 	public Fluid getInputFluid() {
-		return null;
+		return FluidRegistry.WATER;
 	}
 
 }

@@ -14,7 +14,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -34,6 +33,7 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
 	private long storedEnergy;
+	private int steam;
 
 	public static final int GEN_OMEGA = 512; //377 real
 	public static final int TORQUE_CAP = 8388608;
@@ -63,11 +63,16 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
-		this.accumulateEnergy(world, x, y, z, meta);
+		//this.accumulateEnergy(world, x, y, z, meta);
+		this.transferSteam(world, x, y, z);
 		if (this.isAtEndOFLine())
 			this.useEnergy();
 		this.readSurroundings(world, x, y, z, meta);
 		this.enviroTest(world, x, y, z, meta);
+	}
+
+	private void transferSteam(World world, int x, int y, int z) {
+
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -324,7 +329,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		}
 		return 1;
 	}
-
+	/*
 	private void accumulateEnergy(World world, int x, int y, int z, int meta) {
 		int id = world.getBlockId(readx, ready, readz);
 		int bmeta = world.getBlockMetadata(readx, ready, readz);
@@ -345,7 +350,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			}
 		}
 		this.updateSpeed(false);
-	}
+	}*/
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -425,6 +430,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		storedEnergy = NBT.getLong("energy");
 		omega = NBT.getInteger("speed");
 		isFull = NBT.getBoolean("full");
+		steam = NBT.getInteger("steamlevel");
 	}
 
 	/**
@@ -438,6 +444,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		NBT.setLong("energy", storedEnergy);
 		NBT.setInteger("speed", omega);
 		NBT.setBoolean("full", isFull);
+		NBT.setInteger("steamlevel", steam);
 	}
 
 	@Override

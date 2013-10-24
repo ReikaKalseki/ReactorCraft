@@ -25,6 +25,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -46,7 +47,8 @@ public enum ReactorTiles {
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
-	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2);
+	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
+	BOILER("Steam Boiler", TileEntityTurbineBoiler.class, 3);
 
 	private String name;
 	private Class teClass;

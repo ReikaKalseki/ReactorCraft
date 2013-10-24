@@ -18,7 +18,8 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityWaterLine extends TileEntityReactorBase {
 
-	private double storedEnergy;
+	//private double storedEnergy;
+	private int steam;
 
 	@Override
 	public int getIndex() {
@@ -32,32 +33,29 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.getEnergyFromCell(world, x, y, z);
+		this.getSteamFromCell(world, x, y, z);
+		this.drawFromTurbine(world, x, y, z);
 		this.getPipeEnergies(world, x, y, z);
-
-		/*
-		if (storedEnergy > 0) {
-			for (int i = 0; i < 6; i++) {
-				int dx = x+dirs[i].offsetX;
-				int dy = y+dirs[i].offsetY;
-				int dz = z+dirs[i].offsetZ;
-				if (!this.isConnectedOnSideAt(world, x, y, z, dirs[i]) && ReikaWorldHelper.softBlocks(world, dx, dy, dz)) {
-					world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID());
-					storedEnergy -= 1000;
-				}
-			}
-		}*/
 	}
 
-	private void getEnergyFromCell(World world, int x, int y, int z) {
+	private void drawFromTurbine(World world, int x, int y, int z) {
+
+	}
+
+	private void getSteamFromCell(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y+1, z);
 		int meta = world.getBlockMetadata(x, y+1, z);
 		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y+1, z);
 			if (te.getEnergy() > 0 && ReikaMathLibrary.doWithChance(10) && !world.isRemote)
 				te.setLiquidState(0);
-			storedEnergy += te.removeEnergy();
+			double energy = te.removeEnergy();
+			steam += getSteamFromEnergy(energy);
 		}
+	}
+
+	private static int getSteamFromEnergy(double energy) {
+		return (int)(energy/1000);
 	}
 
 	private void getPipeEnergies(World world, int x, int y, int z) {
@@ -76,11 +74,11 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	}
 
 	private void readPipe(TileEntityWaterLine te) {
-		double E = te.storedEnergy;
-		double dE = E-storedEnergy;
+		double E = te.steam;
+		double dE = E-steam;
 		if (dE > 0) {
-			storedEnergy += dE/4D;
-			te.storedEnergy -= dE/4D;
+			steam += dE/4D;
+			te.steam -= dE/4D;
 		}
 	}
 
@@ -99,13 +97,13 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		return false;
 	}
 
-	public double getEnergy() {
-		return storedEnergy;
+	public int getSteam() {
+		return steam;
 	}
 
 	protected double removeEnergy() {
-		double E = storedEnergy;
-		storedEnergy = 0;
+		double E = steam;
+		steam = 0;
 		return E;
 	}
 
@@ -114,7 +112,7 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	{
 		super.readFromNBT(NBT);
 
-		storedEnergy = NBT.getDouble("energy");
+		steam = NBT.getInteger("energy");
 	}
 
 	/**
@@ -125,7 +123,7 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setDouble("energy", storedEnergy);
+		NBT.setInteger("energy", steam);
 	}
 
 }
