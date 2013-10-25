@@ -111,7 +111,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
-		//ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
+		ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		this.feed();
 
 		tempTimer.update();
@@ -120,7 +120,9 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		}
 	}
 
-	private void updateTemperature(World world, int x, int y, int z) {
+	@Override
+	protected void updateTemperature(World world, int x, int y, int z) {
+		super.updateTemperature(world, x, y, z);
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		int dT = temperature-Tamb;
 
@@ -231,7 +233,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (!world.isRemote && this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
-			if (ReikaMathLibrary.doWithChance(10)) {
+			if (false && ReikaMathLibrary.doWithChance(10)) {
 				int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
 				ItemStack is = inv[slot];
 				if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)

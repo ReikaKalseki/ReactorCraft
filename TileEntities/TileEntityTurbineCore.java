@@ -11,8 +11,6 @@ package Reika.ReactorCraft.TileEntities;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -21,9 +19,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -32,7 +28,6 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
-	private long storedEnergy;
 	private int steam;
 
 	public static final int GEN_OMEGA = 512; //377 real
@@ -53,7 +48,6 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private int writez;
 
 	private BlockArray contact = new BlockArray();
-	private boolean isFull;
 
 	@Override
 	public int getIndex() {
@@ -62,17 +56,15 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		thermalTicker.update();
 		this.getIOSides(world, x, y, z, meta);
-		//this.accumulateEnergy(world, x, y, z, meta);
-		this.transferSteam(world, x, y, z);
-		if (this.isAtEndOFLine())
-			this.useEnergy();
+		//this.followHead(world, x, y, z, meta);
 		this.readSurroundings(world, x, y, z, meta);
 		this.enviroTest(world, x, y, z, meta);
-	}
+		this.updateSpeed(steam > 0);
 
-	private void transferSteam(World world, int x, int y, int z) {
-
+		if (thermalTicker.checkCap())
+			steam -= steam/20;
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -116,8 +108,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		accelTicker.update();
 		accelTicker.setCap(this.getAccelDelay());
 		if (up) {
-			if (accelTicker.checkCap())
-				omega = ReikaMathLibrary.extrema(omega+1, isFull ? GEN_OMEGA : 16, "absmin");
+			if (accelTicker.checkCap()) {
+				omega = ReikaMathLibrary.extrema(omega+1, GEN_OMEGA, "absmin");
+			}
 		}
 		else {
 			omega = ReikaMathLibrary.extrema(omega-1, 0, "max");
@@ -140,20 +133,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		return (int)(1+ReikaMathLibrary.logbase(omega+1, 2));
 	}
 
-	private void useEnergy() {
-		storedEnergy -= this.getConsumedEnergy();
-	}
-
-	private double getConsumedEnergy() {
-		return storedEnergy/400D;
-	}
-
 	private int getGenTorque() {
-		return omega > 0 ? (int)(this.getGenPower()/GEN_OMEGA) : 0;
+		return omega > 0 ? steam : 0;
 	}
 
 	private long getGenPower() {
-		return (long) Math.min(MAX_POWER, storedEnergy*this.getEfficiency()*((double)omega/GEN_OMEGA));
+		return (long) Math.min(MAX_POWER, this.getGenTorque()*this.getEfficiency()*((double)omega/GEN_OMEGA));
 	}
 
 	private double getEfficiency() {
@@ -196,61 +181,24 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		if (contact.isEmpty()) {
 			this.fillSurroundings(world, x, y, z, meta);
 		}
+		boolean canAccel = true;
 		for (int i = 0; i < contact.getSize(); i++) {
 			int[] xyz = contact.getNthBlock(i);
 			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= 1+this.getStage()/2) {
 				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2])) {
 					phi = 0;
 					omega = 0;
-					storedEnergy = 0;
+					canAccel = false;
 				}
-				else if (Block.blocksList[id2] instanceof BlockFluid) {
-					omega = 1+(int)(omega/1.25F);
-					phi -= 0.2F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
-				}
-				else if (id2 != ReactorBlocks.STEAM.getBlockID()) {
-					omega = 1+(int)(omega/1.0625F);
-					phi -= 0.1F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
+				else if (id2 == ReactorBlocks.STEAM.getBlockID()) {
+					if ((meta2&2) != 0 || meta2 >= 4) {
+						world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], 1, 3);
+						steam++;
+					}
 				}
 			}
-		}
-		if (this.canCreateSteam(world, x, y, z)) {
-			int[] xyz = contact.getNextAndMoveOn();
-			int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (id3 != ReactorBlocks.STEAM.getBlockID() && (id3 == 0 || Block.blocksList[id3].isAirBlock(world, xyz[0], xyz[1], xyz[2]))) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], ReactorBlocks.STEAM.getBlockID(), 1, 3);
-				storedEnergy -= 1000;
-				isFull = false;
-			}
-			else
-				isFull = true;
-		}
-		else {
-			int[] xyz = contact.getNextAndMoveOn();
-			int id3 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			int meta3 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-			if (id3 == ReactorBlocks.STEAM.getBlockID() && (meta3 == 1 || omega == 0 || storedEnergy == 0)) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
-				isFull = false;
-			}
-		}
-		if (omega <= 0) {
-			phi = 0;
-		}
-	}
-
-	private boolean canCreateSteam(World world, int x, int y, int z) {
-		int id = world.getBlockId(readx, ready, readz);
-		int meta = world.getBlockMetadata(readx, ready, readz);
-		if (id != this.getTileEntityBlockID() && id != ReactorTiles.WATERLINE.getBlockID())
-			return false;
-		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
-			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
-			return te.isFull && storedEnergy > 2000 && omega > 0;
-		}
-		else {
-			return meta == ReactorTiles.WATERLINE.getBlockMetadata() && storedEnergy > 2000 && omega > 0;
 		}
 	}
 
@@ -295,20 +243,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
 			}
 		}
-		if (storedEnergy == 0) {
-			phi = 0;
-			omega = 0;
-		}
 		int id = world.getBlockId(readx, ready, readz);
 		int bmeta = world.getBlockMetadata(readx, ready, readz);
 		if (id == ReactorTiles.TURBINECORE.getBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
-				if (phi != tile.phi && omega > 0) {
-					ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, x, y, z, 5);
-					if (par5Random.nextInt(3) == 0)
-						ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "mob.blaze.hit");
-				}
+				omega = (tile.omega+omega)/2;
 			}
 		}
 	}
@@ -329,28 +269,20 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		}
 		return 1;
 	}
-	/*
-	private void accumulateEnergy(World world, int x, int y, int z, int meta) {
+
+	private void followHead(World world, int x, int y, int z, int meta) {
 		int id = world.getBlockId(readx, ready, readz);
 		int bmeta = world.getBlockMetadata(readx, ready, readz);
-		if (id == ReactorTiles.WATERLINE.getBlockID() && bmeta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-			TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(readx, ready, readz);
-			storedEnergy += te.removeEnergy();
-			this.updateSpeed(storedEnergy > 0);
-			return;
-
-		}
 		if (id == this.getTileEntityBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
-				storedEnergy = tile.storedEnergy;
 				omega = tile.omega;
 				phi = tile.phi;
+				steam = tile.steam;
 				return;
 			}
 		}
-		this.updateSpeed(false);
-	}*/
+	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -360,16 +292,6 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			return;
 		}
 		phi += 0.3F*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
-	}
-
-	public double getEnergy() {
-		return storedEnergy;
-	}
-
-	protected double removeEnergy() {
-		double E = storedEnergy;
-		storedEnergy = 0;
-		return E;
 	}
 
 	@Override
@@ -427,9 +349,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	{
 		super.readFromNBT(NBT);
 
-		storedEnergy = NBT.getLong("energy");
 		omega = NBT.getInteger("speed");
-		isFull = NBT.getBoolean("full");
 		steam = NBT.getInteger("steamlevel");
 	}
 
@@ -441,9 +361,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setLong("energy", storedEnergy);
 		NBT.setInteger("speed", omega);
-		NBT.setBoolean("full", isFull);
 		NBT.setInteger("steamlevel", steam);
 	}
 

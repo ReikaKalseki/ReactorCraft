@@ -10,9 +10,11 @@
 package Reika.ReactorCraft.Base;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftMachine;
 
@@ -78,5 +80,28 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 	public boolean shouldRenderInPass(int pass) {
 		ReactorTiles r = ReactorTiles.TEList[this.getIndex()];
 		return pass == 0 || ((r.renderInPass1() || this instanceof ShaftMachine) && pass == 1);
+	}
+
+	protected void updateTemperature(World world, int x, int y, int z) {
+		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+			if (r != null) {
+				TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(dx, dy, dz);
+				if (te instanceof ReactorCoreTE) {
+					double T = ((ReactorCoreTE) te).getTemperature();
+					double dT = T-temperature;
+					if (dT > 0) {
+						temperature += dT/4D;
+						double newT = T-dT/4D;
+						((ReactorCoreTE) te).setTemperature((int)newT);
+					}
+				}
+			}
+		}
 	}
 }

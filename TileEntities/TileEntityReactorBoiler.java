@@ -1,12 +1,3 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2013
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,56 +6,52 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityCondenser extends TileEntityTankedReactorMachine {
+public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE {
 
 	private int steam;
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.CONDENSER.ordinal();
+		return ReactorTiles.BOILER.ordinal();
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
-		//this.getSteam(world, x, y, z);
-		if (world.getBlockId(x, y-1, z) == ReactorBlocks.STEAM.getBlockID()) {
-			world.setBlock(x, y-1, z, 0);
-			steam++;
-		}
+
+		this.getWater(world, x, y, z);
 
 		if (thermalTicker.checkCap() && !world.isRemote) {
-			if (temperature < 100 && steam > 0 && !tank.isFull()) {
-				steam--;
-				tank.addLiquid(1000, FluidRegistry.WATER);
-			}
+			this.updateTemperature(world, x, y, z);
 		}
+		if (tank.getLevel() >= 1 && temperature > 100) {
+			steam++;
+			tank.removeLiquid(1);
 
-		this.balance(world, x, y, z);
+		}
+		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
 	}
 
-	private void balance(World world, int x, int y, int z) {
+	private void getWater(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
-			if (rt == ReactorTiles.CONDENSER) {
-				TileEntityCondenser te = (TileEntityCondenser)world.getBlockTileEntity(dx, dy, dz);
-				if (te.steam > steam+1) {
-					steam++;
-					te.steam--;
-				}
-				int dL = te.tank.getLevel() - tank.getLevel();
-				if (dL > 0) {
-					tank.addLiquid(dL/4, FluidRegistry.WATER);
-					te.tank.removeLiquid(dL/4);
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == MachineRegistry.PIPE) {
+				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+				if (te != null && te.liquidID == 9 && te.liquidLevel > 0) {
+					int dl = te.liquidLevel/4+1;
+					tank.addLiquid(dl, FluidRegistry.WATER);
+					te.liquidLevel -= dl;
 				}
 			}
 		}
@@ -77,25 +64,22 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		int maxDrain = resource.amount;
-		if (resource.getFluid().equals(FluidRegistry.WATER))
-			return tank.drain(maxDrain, doDrain);
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		return null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return false;
+		return m == MachineRegistry.PIPE;
 	}
 
 	@Override
@@ -105,12 +89,32 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return false;
+		return from == ForgeDirection.DOWN;
 	}
 
 	@Override
 	public Fluid getInputFluid() {
-		return null;
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public double getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 1000;
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 	@Override
@@ -119,6 +123,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 		super.readFromNBT(NBT);
 
 		steam = NBT.getInteger("energy");
+		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -130,6 +135,14 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("energy", steam);
+
+		tank.writeToNBT(NBT);
+	}
+
+	public int removeSteam() {
+		int s = steam;
+		steam = 0;
+		return s;
 	}
 
 }

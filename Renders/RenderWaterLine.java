@@ -20,14 +20,14 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
+import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 
 public class RenderWaterLine extends ReactorRenderBase {
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityWaterLineAt(TileEntityWaterLine tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityWaterLineAt(TileEntitySteamLine tile, double par2, double par4, double par6, float par8)
 	{
 		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/waterline.png");
 
@@ -50,7 +50,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 
 	}
 
-	private void renderFace(TileEntityWaterLine tile, double par2, double par4, double par6, ForgeDirection dir) {
+	private void renderFace(TileEntitySteamLine tile, double par2, double par4, double par6, ForgeDirection dir) {
 		double size = 0.333333;
 		Tessellator v5 = new Tessellator();
 		v5.startDrawingQuads();
@@ -218,7 +218,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityWaterLineAt((TileEntityWaterLine)tile, par2, par4, par6, par8);
+			this.renderTileEntityWaterLineAt((TileEntitySteamLine)tile, par2, par4, par6, par8);
 		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 
 		}

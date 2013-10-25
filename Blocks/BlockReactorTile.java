@@ -214,7 +214,8 @@ public class BlockReactorTile extends Block {
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition vec, World world, int x, int y, int z) {
-		return ReactorTiles.getTE(world, vec.blockX, vec.blockY, vec.blockZ).getCraftedProduct();
+		ReactorTiles r = ReactorTiles.getTE(world, vec.blockX, vec.blockY, vec.blockZ);
+		return r != null ? r.getCraftedProduct() : null;
 	}
 
 	@Override

@@ -50,8 +50,11 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 		if (thermalTicker.checkCap() && !world.isRemote) {
 			//this.accrueEnergy(world, x, y, z);
-			this.transferEnergy(world, x, y, z);
+
+			//this.transferEnergy(world, x, y, z);
+
 			//ReikaJavaLibrary.pConsoleIf(storedEnergy, y == 73);
+			this.updateTemperature(world, x, y, z);
 		}
 
 		if (this.getLiquidState() == LiquidStates.EMPTY.ordinal()) {

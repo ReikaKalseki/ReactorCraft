@@ -12,18 +12,17 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWaterLine extends TileEntityReactorBase {
+public class TileEntitySteamLine extends TileEntityReactorBase {
 
 	//private double storedEnergy;
 	private int steam;
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.WATERLINE.ordinal();
+		return ReactorTiles.STEAMLINE.ordinal();
 	}
 
 	@Override
@@ -33,32 +32,22 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.getSteamFromCell(world, x, y, z);
-		this.drawFromTurbine(world, x, y, z);
-		this.getPipeEnergies(world, x, y, z);
+		this.drawFromBoiler(world, x, y, z);
+		this.getPipeSteam(world, x, y, z);
+
+		//ReikaJavaLibrary.pConsole(steam);
 	}
 
-	private void drawFromTurbine(World world, int x, int y, int z) {
-
-	}
-
-	private void getSteamFromCell(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y+1, z);
-		int meta = world.getBlockMetadata(x, y+1, z);
-		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
-			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y+1, z);
-			if (te.getEnergy() > 0 && ReikaMathLibrary.doWithChance(10) && !world.isRemote)
-				te.setLiquidState(0);
-			double energy = te.removeEnergy();
-			steam += getSteamFromEnergy(energy);
+	private void drawFromBoiler(World world, int x, int y, int z) {
+		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
+		if (r == ReactorTiles.BOILER) {
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y-1, z);
+			int s = te.removeSteam();
+			steam += s;
 		}
 	}
 
-	private static int getSteamFromEnergy(double energy) {
-		return (int)(energy/1000);
-	}
-
-	private void getPipeEnergies(World world, int x, int y, int z) {
+	private void getPipeSteam(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -66,19 +55,18 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 			int dz = z+dir.offsetZ;
 			int id = world.getBlockId(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.WATERLINE.getBlockMetadata()) {
-				TileEntityWaterLine te = (TileEntityWaterLine)world.getBlockTileEntity(dx, dy, dz);
+			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata()) {
+				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
 				this.readPipe(te);
 			}
 		}
 	}
 
-	private void readPipe(TileEntityWaterLine te) {
-		double E = te.steam;
-		double dE = E-steam;
-		if (dE > 0) {
-			steam += dE/4D;
-			te.steam -= dE/4D;
+	private void readPipe(TileEntitySteamLine te) {
+		int dS = te.steam-steam;
+		if (dS > 0) {
+			steam++;
+			te.steam--;
 		}
 	}
 
@@ -88,11 +76,11 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		int dz = z+dir.offsetZ;
 		int id = world.getBlockId(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.WATERLINE.getBlockMetadata())
+		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata())
 			return true;
-		if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata() && dir == ForgeDirection.UP)
+		if (id == ReactorTiles.BOILER.getBlockID() && meta == ReactorTiles.BOILER.getBlockMetadata() && dir == ForgeDirection.DOWN)
 			return true;
-		if (id == ReactorTiles.TURBINECORE.getBlockID() && meta == ReactorTiles.TURBINECORE.getBlockMetadata())
+		if (id == ReactorTiles.GRATE.getBlockID() && meta == ReactorTiles.GRATE.getBlockMetadata())
 			return true;
 		return false;
 	}
@@ -101,8 +89,8 @@ public class TileEntityWaterLine extends TileEntityReactorBase {
 		return steam;
 	}
 
-	protected double removeEnergy() {
-		double E = steam;
+	protected int removeSteam() {
+		int E = steam;
 		steam = 0;
 		return E;
 	}

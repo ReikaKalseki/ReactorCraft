@@ -15,8 +15,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
@@ -30,6 +32,14 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 
 public class BlockSteam extends Block {
+
+	/**
+	 * Metadata Flag Map:
+	 * 1 - do not decay when moving up
+	 * 2 - can provide power to a turbine
+	 * 4
+	 * 
+	 */
 
 	public BlockSteam(int par1, Material mat) {
 		super(par1, mat);
@@ -50,8 +60,57 @@ public class BlockSteam extends Block {
 	}
 
 	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack is) {
+		if (e != null) {
+			world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+		}
+	}
+
+	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
+		if (meta < 4)
+			this.defaultMovement(world, x, y, z, rand, meta);
+		else
+			this.directionalMovement(world, x, y, z, rand, meta);
+		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+	}
+
+	private void directionalMovement(World world, int x, int y, int z, Random rand, int meta) {
+		ForgeDirection dir;
+		switch(meta-4) {
+		case 0:
+			dir = ForgeDirection.EAST;
+			break;
+		case 1:
+			dir = ForgeDirection.WEST;
+			break;
+		case 2:
+			dir = ForgeDirection.SOUTH;
+			break;
+		case 3:
+			dir = ForgeDirection.NORTH;
+			break;
+		default:
+			dir = ForgeDirection.UP;
+			break;
+		}
+
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+
+		if (this.canMoveInto(world, dx, dy, dz)) {
+			world.setBlock(x, y, z, 0);
+			world.setBlock(dx, dy, dz, blockID, meta, 3);
+		}
+		else
+			world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+		world.markBlockForRenderUpdate(x, y, z);
+		world.markBlockForRenderUpdate(dx, dy, dz);
+	}
+
+	private void defaultMovement(World world, int x, int y, int z, Random rand, int meta) {
 		if (meta != 1 && ReikaMathLibrary.doWithChance(0)) {
 			world.setBlock(x, y, z, 0);
 			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
@@ -59,7 +118,7 @@ public class BlockSteam extends Block {
 		}
 		else if (this.canMoveInto(world, x, y+1, z)) {
 			if (meta == 1 || ReikaMathLibrary.doWithChance(80))
-				world.setBlock(x, y+1, z, blockID);
+				world.setBlock(x, y+1, z, blockID, this.getTransmittedMetadata(meta, ForgeDirection.UP), 3);
 			world.setBlock(x, y, z, 0);
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(x, y+1, z);
@@ -75,7 +134,7 @@ public class BlockSteam extends Block {
 				int dy = y+dir[i].offsetY;
 				int dz = z+dir[i].offsetZ;
 				if (this.canMoveInto(world, dx, dy, dz)) {
-					world.setBlock(dx, dy, dz, blockID);
+					world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir[i]), 3);
 					world.setBlock(x, y, z, 0);
 					//ReikaJavaLibrary.pConsole(x+","+y+","+z+"->"+dx+","+dy+","+dz);
 					world.markBlockForRenderUpdate(x, y, z);
@@ -85,7 +144,12 @@ public class BlockSteam extends Block {
 				}
 			}
 		}
-		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+	}
+
+	public int getTransmittedMetadata(int original_meta, ForgeDirection dir) {
+		if (dir == ForgeDirection.UP)
+			return original_meta;
+		return (original_meta&2) != 0 ? 2 : 0;
 	}
 
 	public boolean canMoveInto(World world, int x, int y, int z) {
@@ -142,6 +206,7 @@ public class BlockSteam extends Block {
 
 	@Override
 	public Icon getIcon(int s, int meta) {
+		//return Block.cloth.getIcon(s, meta);
 		return blockIcon;
 	}
 

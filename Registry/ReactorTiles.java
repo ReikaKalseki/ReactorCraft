@@ -25,12 +25,13 @@ import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
+import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterLine;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -43,12 +44,13 @@ public enum ReactorTiles {
 	CPU("Central Control", TileEntityCPU.class, 0),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, "RenderTurbine"),
 	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
-	WATERLINE("Steam Line", TileEntityWaterLine.class, 2, "RenderWaterLine"),
+	STEAMLINE("Steam Line", TileEntitySteamLine.class, 2, "RenderWaterLine"),
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
 	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
-	BOILER("Steam Boiler", TileEntityTurbineBoiler.class, 3);
+	BOILER("Steam Boiler", TileEntityReactorBoiler.class, 3),
+	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, "");
 
 	private String name;
 	private Class teClass;
@@ -148,7 +150,7 @@ public enum ReactorTiles {
 		int meta = iba.getBlockMetadata(x, y, z);
 		int index = getMachineIndexFromIDandMetadata(id, meta);
 		if (index == -1) {
-			ReactorCraft.logger.logError("ID "+id+" and metadata "+meta+" are not a valid machine identification pair!");
+			//ReactorCraft.logger.logError("ID "+id+" and metadata "+meta+" are not a valid machine identification pair!");
 			return null;
 		}
 		return TEList[index];
@@ -190,7 +192,9 @@ public enum ReactorTiles {
 		case FUEL:
 			//case ITEMLINE:
 		case TURBINECORE:
-		case WATERLINE:
+		case STEAMLINE:
+		case BOILER:
+		case GRATE:
 			return true;
 		default:
 			return false;
@@ -211,7 +215,9 @@ public enum ReactorTiles {
 	}
 
 	public Block getBlockVariable() {
-		return ReactorBlocks.blockList[this.getBlockVariableIndex()].getBlockVariable();
+		int idx = this.getBlockVariableIndex();
+		//ReikaJavaLibrary.pConsole(this+"  "+idx+"  "+ReactorBlocks.blockList[idx].getBlockID()+" "+this.getBlockMetadata());
+		return ReactorBlocks.blockList[idx].getBlockVariable();
 	}
 
 	public int getBlockVariableIndex() {
