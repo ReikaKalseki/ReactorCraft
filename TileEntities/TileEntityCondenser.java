@@ -41,7 +41,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 		if (thermalTicker.checkCap() && !world.isRemote) {
 			if (temperature < 100 && steam > 0 && !tank.isFull()) {
 				steam--;
-				tank.addLiquid(1000, FluidRegistry.WATER);
+				tank.addLiquid(TileEntityReactorBoiler.WATER_PER_STEAM, FluidRegistry.WATER);
 			}
 		}
 
@@ -119,6 +119,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 		super.readFromNBT(NBT);
 
 		steam = NBT.getInteger("energy");
+		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -130,6 +131,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("energy", steam);
+		tank.writeToNBT(NBT);
 	}
 
 }

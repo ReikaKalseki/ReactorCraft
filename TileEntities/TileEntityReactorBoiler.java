@@ -17,6 +17,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 
 	private int steam;
 
+	public static final int WATER_PER_STEAM = 1;
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.BOILER.ordinal();
@@ -31,9 +33,9 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		if (thermalTicker.checkCap() && !world.isRemote) {
 			this.updateTemperature(world, x, y, z);
 		}
-		if (tank.getLevel() >= 1 && temperature > 100) {
+		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100) {
 			steam++;
-			tank.removeLiquid(1);
+			tank.removeLiquid(WATER_PER_STEAM);
 
 		}
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);

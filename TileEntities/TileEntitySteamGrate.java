@@ -21,7 +21,6 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getSteam(world, x, y, z);
-		steam++;
 		facingDir = ForgeDirection.DOWN;//this.getFacing(meta);
 
 		int dx = x-facingDir.offsetX;
@@ -50,6 +49,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	}
 
 	private int getSteamMetadataFlags() {
+		facingDir = ForgeDirection.UP;
 		switch(facingDir) {
 		case EAST:
 			return 2;

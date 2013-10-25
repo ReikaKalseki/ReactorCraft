@@ -68,6 +68,11 @@ public class BlockSteam extends Block {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
+		int maxh = 256;
+		if (y > maxh) {
+			world.setBlock(x, y, z, 0);
+			return;
+		}
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta < 4)
 			this.defaultMovement(world, x, y, z, rand, meta);

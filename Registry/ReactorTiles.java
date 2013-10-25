@@ -26,6 +26,8 @@ import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorPipe;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
@@ -50,7 +52,9 @@ public enum ReactorTiles {
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
 	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
 	BOILER("Steam Boiler", TileEntityReactorBoiler.class, 3),
-	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, "");
+	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, ""),
+	PUMP("Pressurizer", TileEntityReactorPump.class, 4, ""),
+	PIPE("Piping", TileEntityReactorPipe.class, 5, "");
 
 	private String name;
 	private Class teClass;
@@ -195,6 +199,8 @@ public enum ReactorTiles {
 		case STEAMLINE:
 		case BOILER:
 		case GRATE:
+		case PIPE:
+		case PUMP:
 			return true;
 		default:
 			return false;

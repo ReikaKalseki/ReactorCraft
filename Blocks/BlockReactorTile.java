@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -223,8 +222,6 @@ public class BlockReactorTile extends Block {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory)
 			ReikaItemHelper.dropInventory(world, x, y, z);
-		if (te instanceof Feedable)
-			((Feedable)te).deleteFromNetwork();
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

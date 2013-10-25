@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
-import Reika.ReactorCraft.Auxiliary.FuelNetwork;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -38,8 +37,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	private ItemStack[] inv = new ItemStack[4];
 
-	private FuelNetwork network;
-
 	public double storedEnergy = 0;
 	private ArrayList<ItemStack> missingWaste = new ArrayList();
 
@@ -50,62 +47,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public static final int CLADDING = 800;
 	public static final int HYDROGEN = 1400;
 	public static final int EXPLOSION = 1800;
-
-	@Override
-	public void getOrCreateNetwork(World world, int x, int y, int z) {
-		FuelNetwork ntw = new FuelNetwork();
-		ntw.addFuelCell(this);
-		boolean flag = false;
-		for (int i = 0; i < 6; i++) {
-			int dx = x+dirs[i].offsetX;
-			int dy = y+dirs[i].offsetY;
-			int dz = z+dirs[i].offsetZ;
-			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-			if (te instanceof Feedable) {
-				FuelNetwork net = ((Feedable)te).getNetwork();
-				//ReikaJavaLibrary.pConsole(te.toString()+" with "+net.toString());
-				if (net != null) {
-					net.merge(ntw);
-					this.setNetwork(net);
-					ntw = net;
-					flag = true;
-				}
-			}
-		}
-		if (!flag)
-			this.setNetwork(ntw);
-	}
-
-	public void deleteFromNetwork() {
-		if (network != null)
-			network.deleteFuelCell(this);
-	}
-
-	@Override
-	public FuelNetwork getNetwork() {
-		return network;
-	}
-
-	@Override
-	public void setNetwork(FuelNetwork fuel) {
-		network = fuel;
-	}
-
-	public boolean hasNetworkAdjacent(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			int dx = x+dirs[i].offsetX;
-			int dy = y+dirs[i].offsetY;
-			int dz = z+dirs[i].offsetZ;
-			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-			if (te instanceof Feedable) {
-				FuelNetwork net = ((Feedable)te).getNetwork();
-				if (net != null) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -162,7 +103,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 		}
-		else if (temperature > 300 && ReikaMathLibrary.doWithChance(20)) {
+		else if (temperature > 500 && ReikaMathLibrary.doWithChance(20)) {
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}

@@ -155,11 +155,11 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	private static void addItems() {
-		ReikaRegistryHelper.instantiateAndRegisterItems(instance, ReactorItems.itemList, items, logger.shouldLog());
+		ReikaRegistryHelper.instantiateAndRegisterItems(instance, ReactorItems.itemList, items);
 	}
 
 	private static void addBlocks() {
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(instance, ReactorBlocks.blockList, blocks, logger.shouldLog());
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(instance, ReactorBlocks.blockList, blocks);
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			GameRegistry.registerTileEntity(ReactorTiles.TEList[i].getTEClass(), "Reactor"+ReactorTiles.TEList[i].getName());
 			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass());
