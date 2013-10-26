@@ -10,6 +10,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
@@ -18,6 +19,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	private int steam;
 
 	public static final int WATER_PER_STEAM = 1;
+
+	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
 	public int getIndex() {
@@ -36,6 +39,7 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100) {
 			steam++;
 			tank.removeLiquid(WATER_PER_STEAM);
+			temperature -= 5;
 
 		}
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
@@ -96,7 +100,12 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public Fluid getInputFluid() {
-		return FluidRegistry.WATER;
+		return null;
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		return WorkingFluid.isWorkingFluid(f);
 	}
 
 	@Override

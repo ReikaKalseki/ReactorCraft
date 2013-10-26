@@ -96,8 +96,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 					double T = ((ReactorCoreTE) te).getTemperature();
 					double dT = T-temperature;
 					if (dT > 0) {
-						temperature += dT/4D;
 						double newT = T-dT/4D;
+						//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
+						temperature += dT/4D;
 						((ReactorCoreTE) te).setTemperature((int)newT);
 					}
 				}

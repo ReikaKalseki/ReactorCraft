@@ -19,15 +19,12 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
@@ -71,7 +68,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				steam -= steam/32+1;
 		}
 
-		ReikaJavaLibrary.pConsole(steam+":"+omega, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getStage() == 4);
+		//ReikaJavaLibrary.pConsole(steam+":"+omega, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getStage() == 4);
+		//ReikaJavaLibrary.pConsole(thermalTicker.getTick()+"/"+thermalTicker.getCap());
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -119,8 +117,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			}
 		}
 		else {
-			if (accelTicker.getTick()%10 == 0)
+			if (thermalTicker.getTick()%10 == 0) {
 				omega = ReikaMathLibrary.extrema(omega-1, 0, "max");
+			}
 		}
 	}
 
@@ -141,7 +140,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getGenTorque() {
-		return omega > 0 ? steam*24 : 0;
+		int torque = steam > 0 ? steam*24 : omega/16+1;
+		return omega > 0 ? torque : 0;
 	}
 
 	private long getGenPower() {
@@ -250,15 +250,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				this.breakTurbine();
 				e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
 			}
-		}/*
-		int id = world.getBlockId(readx, ready, readz);
-		int bmeta = world.getBlockMetadata(readx, ready, readz);
-		if (id == ReactorTiles.TURBINECORE.getBlockID() && bmeta == ReactorTiles.TURBINECORE.getBlockMetadata()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
-			if (tile.writex == x && tile.writey == y && tile.writez == z) {
-				omega = (tile.omega+omega)/2;
-			}
-		}*/
+		}
 	}
 
 	private void breakTurbine() {
@@ -287,7 +279,19 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				omega = (omega+tile.omega)/2;
 				//phi = tile.phi;
 				steam = tile.steam;
-				return;
+				//return;
+			}
+		}
+		int id2 = world.getBlockId(writex, writey, writez);
+		int meta2 = world.getBlockMetadata(writex, writey, writez);
+		if (id2 == this.getTileEntityBlockID() && meta2 == ReactorTiles.TURBINECORE.getBlockMetadata()) {
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(writex, writey, writez);
+			if (tile.readx == x && tile.ready == y && tile.readz == z) {
+				if (tile.omega > omega)
+					omega = (omega+tile.omega)/2;
+				//phi = tile.phi;
+				//steam = tile.steam;
+				//return;
 			}
 		}
 	}

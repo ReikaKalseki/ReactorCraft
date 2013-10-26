@@ -17,9 +17,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -107,12 +104,12 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {/*
 		if (ReikaMathLibrary.doWithChance(this.getChanceToStop())) {
 			temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.WATER_HEAT, 1000, ReikaNuclearHelper.getUraniumFissionNeutronE());
 			storedEnergy += ReikaNuclearHelper.getUraniumFissionNeutronE(); //3.8kJ per neutron (kinetic energy)
 			return true;
-		}
+		}*/
 		return false;
 	}
 

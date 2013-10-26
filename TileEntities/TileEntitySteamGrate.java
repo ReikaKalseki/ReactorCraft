@@ -7,11 +7,14 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.WorkingFluid;
 
 public class TileEntitySteamGrate extends TileEntityReactorBase {
 
 	private int steam;
 	private ForgeDirection facingDir = ForgeDirection.UNKNOWN;
+
+	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -21,16 +24,17 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getSteam(world, x, y, z);
-		facingDir = ForgeDirection.DOWN;//this.getFacing(meta);
 
-		int dx = x-facingDir.offsetX;
-		int dy = y-facingDir.offsetY;
-		int dz = z-facingDir.offsetZ;
+		int dx = x;
+		int dy = y+1;
+		int dz = z;
 
 		if (steam > 0 && ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, dx, dy, dz)) {
 			steam--;
-			world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID(), 3+this.getSteamMetadataFlags(), 3);
+			world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
 		}
+
+		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
 	}
 
 	private ForgeDirection getFacing(int meta) {
@@ -48,20 +52,9 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		}
 	}
 
-	private int getSteamMetadataFlags() {
-		facingDir = ForgeDirection.UP;
-		switch(facingDir) {
-		case EAST:
-			return 2;
-		case NORTH:
-			return 3;
-		case SOUTH:
-			return 4;
-		case WEST:
-			return 1;
-		default:
-			return 0;
-		}
+	private int getSteamMetadata() {
+		return 3;
+		//return 7;
 	}
 
 	private void getSteam(World world, int x, int y, int z) {
@@ -73,7 +66,11 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
 			if (rt == ReactorTiles.STEAMLINE) {
 				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
-				steam += te.removeSteam();
+				int ds = te.getSteam()-steam;
+				if (ds > 0) {
+					steam += ds/4+1;
+					te.removeSteam(ds/2+1);
+				}
 			}
 		}
 	}
@@ -89,6 +86,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		super.readFromNBT(NBT);
 
 		steam = NBT.getInteger("energy");
+
+		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	/**
@@ -100,6 +99,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("energy", steam);
+
+		fluid.saveToNBT(NBT);
 	}
 
 }

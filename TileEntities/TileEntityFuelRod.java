@@ -59,6 +59,17 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z);
 		}
+		//ReikaJavaLibrary.pConsole(temperature);
+		if (temperature > CLADDING) {
+			if (par5Random.nextInt(20) == 0)
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
+		}
+		else if (temperature > 500 && ReikaMathLibrary.doWithChance(20)) {
+			if (par5Random.nextInt(20) == 0)
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
+		}
 	}
 
 	@Override
@@ -67,7 +78,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0)
+		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1)
 			temperature -= (1+dT/32);
 
 		if (dT > 0) {
@@ -80,9 +91,10 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				int meta = world.getBlockMetadata(dx, dy, dz);
 				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 					TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
-					if (te.getLiquidState() != 0 && temperature >= 100 && ReikaMathLibrary.doWithChance(40))
+					if (te.getLiquidState() != 0 && temperature >= 100 && ReikaMathLibrary.doWithChance(40)) {
 						te.setLiquidState(0);
-					temperature -= 20;
+						temperature -= 20;
+					}
 				}
 			}
 		}
@@ -99,14 +111,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				this.onMeltdown(world, x, y, z);
 			}
 		}
-		if (temperature > CLADDING) {
-			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
-			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
-		}
-		else if (temperature > 500 && ReikaMathLibrary.doWithChance(20)) {
-			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
-			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
-		}
+
 		/*
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(3, 3, 3);
 		List<EntityNeutron> inbox = world.getEntitiesWithinAABB(EntityNeutron.class, box);

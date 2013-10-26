@@ -37,8 +37,8 @@ public class BlockSteam extends Block {
 	 * Metadata Flag Map:
 	 * 1 - do not decay when moving up
 	 * 2 - can provide power to a turbine
-	 * 4
-	 * 
+	 * 4 - is ammonia gas
+	 * 8 - unused
 	 */
 
 	public BlockSteam(int par1, Material mat) {
@@ -74,10 +74,7 @@ public class BlockSteam extends Block {
 			return;
 		}
 		int meta = world.getBlockMetadata(x, y, z);
-		if (meta < 4)
-			this.defaultMovement(world, x, y, z, rand, meta);
-		else
-			this.directionalMovement(world, x, y, z, rand, meta);
+		this.defaultMovement(world, x, y, z, rand, meta);
 		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 	}
 

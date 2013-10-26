@@ -20,7 +20,6 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
-import Reika.ReactorCraft.Items.ItemLiquid;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
@@ -32,14 +31,11 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	FUEL(1,			"Uranium Fuel Pellet",	ItemReactorBasic.class),
 	DEPLETED(2, 	"Depleted Uranium",		ItemReactorBasic.class),
 	PLACER(-1,		"Part Placer",			ItemReactorPlacer.class),
-	HEAVYWATER(-1,	"Heavy Water",			ItemLiquid.class),
 	BUCKET(3,		"Heavy Water Bucket", 	ItemHeavyBucket.class),
 	RAW(4,			"Raw Materials",		ItemReactorBasic.class),
 	FLUORITE(16,	"Fluorite",				ItemReactorBasic.class),
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
-	CANISTER(48,	"Gas Canister",			ItemCanister.class),
-	UF6(-1, 		"Uranium Hexafluoride",	ItemLiquid.class),
-	HF(-1,			"Hydrofluoric Acid",	ItemLiquid.class),
+	CANISTER(48,	"Fluid Canister",			ItemCanister.class),
 	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class),
 	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class);
 
@@ -59,15 +55,11 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	@Override
 	public Class[] getConstructorParamTypes() {
-		if (this.isLiquid())
-			return new Class[]{int.class, String.class};
 		return new Class[]{int.class, int.class};
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
-		if (this.isLiquid())
-			return new Object[]{this.getItemID(), this.getLiquidIconName()};
 		return new Object[]{this.getItemID(), this.getSpriteIndex()};
 	}
 
@@ -77,17 +69,6 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	public int getSpriteSheet() {
 		return spritesheet;
-	}
-
-	public boolean isLiquid() {
-		switch(this) {
-		case HF:
-		case UF6:
-		case HEAVYWATER:
-			return true;
-		default:
-			return false;
-		}
 	}
 
 	public String getLiquidIconName() {

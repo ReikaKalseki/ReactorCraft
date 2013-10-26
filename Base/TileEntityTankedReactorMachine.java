@@ -38,8 +38,12 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.canReceiveFrom(from) && fluid.equals(this.getInputFluid());
+	public boolean canFill(ForgeDirection from, Fluid f) {
+		return this.canReceiveFrom(from) && this.isValidFluid(f);
+	}
+
+	public boolean isValidFluid(Fluid f) {
+		return f.equals(this.getInputFluid());
 	}
 
 	@Override

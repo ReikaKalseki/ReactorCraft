@@ -14,11 +14,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.WorkingFluid;
 
 public class TileEntitySteamLine extends TileEntityReactorBase {
 
 	//private double storedEnergy;
 	private int steam;
+
+	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
 	public int getIndex() {
@@ -34,8 +37,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.drawFromBoiler(world, x, y, z);
 		this.getPipeSteam(world, x, y, z);
-
 		//ReikaJavaLibrary.pConsole(steam);
+		//steam = 0;
 	}
 
 	private void drawFromBoiler(World world, int x, int y, int z) {
@@ -43,6 +46,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		if (r == ReactorTiles.BOILER) {
 			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y-1, z);
 			int s = te.removeSteam();
+			//ReikaJavaLibrary.pConsole(steam+"+"+s+"="+(steam+s));
 			steam += s;
 		}
 	}
@@ -65,8 +69,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 	private void readPipe(TileEntitySteamLine te) {
 		int dS = te.steam-steam;
 		if (dS > 0) {
-			steam++;
-			te.steam--;
+			//ReikaJavaLibrary.pConsole(steam+":"+te.steam);
+			steam += dS/4+1;
+			te.steam -= dS/4+1;
 		}
 	}
 
@@ -89,10 +94,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		return steam;
 	}
 
-	protected int removeSteam() {
-		int E = steam;
-		steam = 0;
-		return E;
+	protected void removeSteam(int amt) {
+		steam -= amt;
 	}
 
 	@Override
@@ -101,6 +104,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		super.readFromNBT(NBT);
 
 		steam = NBT.getInteger("energy");
+
+		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	/**
@@ -112,6 +117,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("energy", steam);
+
+		fluid.saveToNBT(NBT);
 	}
 
 }
