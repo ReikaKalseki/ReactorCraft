@@ -12,7 +12,6 @@ import Reika.ReactorCraft.Registry.WorkingFluid;
 public class TileEntitySteamGrate extends TileEntityReactorBase {
 
 	private int steam;
-	private ForgeDirection facingDir = ForgeDirection.UNKNOWN;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
@@ -32,6 +31,11 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		if (steam > 0 && ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, dx, dy, dz)) {
 			steam--;
 			world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
+			//ReikaJavaLibrary.pConsole(fluid+":"+this.getSteamMetadata(), Side.SERVER);
+		}
+
+		if (steam <= 0) {
+			fluid = WorkingFluid.EMPTY;
 		}
 
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
@@ -53,8 +57,19 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	}
 
 	private int getSteamMetadata() {
+		if (fluid == WorkingFluid.AMMONIA)
+			return 7;
 		return 3;
-		//return 7;
+	}
+
+	private boolean canTakeInWorkingFluid(WorkingFluid f) {
+		if (f == WorkingFluid.EMPTY)
+			return false;
+		if (fluid == WorkingFluid.EMPTY)
+			return true;
+		if (fluid == f)
+			return true;
+		return false;
 	}
 
 	private void getSteam(World world, int x, int y, int z) {
@@ -66,10 +81,13 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
 			if (rt == ReactorTiles.STEAMLINE) {
 				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
-				int ds = te.getSteam()-steam;
-				if (ds > 0) {
-					steam += ds/4+1;
-					te.removeSteam(ds/2+1);
+				if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
+					fluid = te.getWorkingFluid();
+					int ds = te.getSteam()-steam;
+					if (ds > 0) {
+						steam += ds/4+1;
+						te.removeSteam(ds/2+1);
+					}
 				}
 			}
 		}

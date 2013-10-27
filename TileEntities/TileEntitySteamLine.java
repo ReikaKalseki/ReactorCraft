@@ -39,16 +39,35 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		this.getPipeSteam(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(steam);
 		//steam = 0;
+
+		if (steam <= 0) {
+			fluid = WorkingFluid.EMPTY;
+		}
+
+		//ReikaJavaLibrary.pConsole(steam+":"+fluid, Side.SERVER);
 	}
 
 	private void drawFromBoiler(World world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		if (r == ReactorTiles.BOILER) {
 			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y-1, z);
-			int s = te.removeSteam();
-			//ReikaJavaLibrary.pConsole(steam+"+"+s+"="+(steam+s));
-			steam += s;
+			if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
+				fluid = te.getWorkingFluid();
+				int s = te.removeSteam();
+				//ReikaJavaLibrary.pConsole(steam+"+"+s+"="+(steam+s));
+				steam += s;
+			}
 		}
+	}
+
+	private boolean canTakeInWorkingFluid(WorkingFluid f) {
+		if (f == WorkingFluid.EMPTY)
+			return false;
+		if (fluid == WorkingFluid.EMPTY)
+			return true;
+		if (fluid == f)
+			return true;
+		return false;
 	}
 
 	private void getPipeSteam(World world, int x, int y, int z) {
@@ -61,7 +80,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 			int meta = world.getBlockMetadata(dx, dy, dz);
 			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata()) {
 				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
-				this.readPipe(te);
+				if (this.canTakeInWorkingFluid(te.fluid))
+					this.readPipe(te);
 			}
 		}
 	}
@@ -72,6 +92,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 			//ReikaJavaLibrary.pConsole(steam+":"+te.steam);
 			steam += dS/4+1;
 			te.steam -= dS/4+1;
+			fluid = te.fluid;
 		}
 	}
 
@@ -119,6 +140,10 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		NBT.setInteger("energy", steam);
 
 		fluid.saveToNBT(NBT);
+	}
+
+	public WorkingFluid getWorkingFluid() {
+		return fluid;
 	}
 
 }

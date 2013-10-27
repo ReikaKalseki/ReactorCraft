@@ -199,9 +199,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 					omega = 0;
 				}
 				else if (id2 == ReactorBlocks.STEAM.getBlockID()) {
-					if ((meta2&2) != 0 || meta2 >= 4) {
+					if ((meta2&2) != 0) {
 						world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], 1, 3);
-						steam++;
+						if ((meta2&4) != 0) {
+							steam += 2;
+							omega = Math.min(omega+8, GEN_OMEGA);
+						}
+						else
+							steam++;
 					}
 					canAccel = true;
 				}
@@ -244,9 +249,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			EntityLivingBase e = li.get(i);
 			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
 				Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
-				e.motionX += 0.4*(e.posX-x-0.5)+par5Random.nextDouble()*0.1;
+				e.motionX += 0.4*(e.posX-x-0.5)+rand.nextDouble()*0.1;
 				e.motionY += 0.4*(e.posY-y-0.5);
-				e.motionZ += 0.4*(e.posZ-z-0.5)+par5Random.nextDouble()*0.1;
+				e.motionZ += 0.4*(e.posZ-z-0.5)+rand.nextDouble()*0.1;
 				this.breakTurbine();
 				e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
 			}

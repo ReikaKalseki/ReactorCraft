@@ -1,16 +1,26 @@
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
@@ -36,13 +46,69 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		if (thermalTicker.checkCap() && !world.isRemote) {
 			this.updateTemperature(world, x, y, z);
 		}
-		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100) {
+		if (temperature >= 650 && fluid == WorkingFluid.AMMONIA)
+			this.detonateAmmonia(world, x, y, z);
+		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100 && this.canBoilTankLiquid()) {
 			steam++;
+			if (tank.getActualFluid().equals(FluidRegistry.WATER))
+				fluid = WorkingFluid.WATER;
+			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
+				fluid = WorkingFluid.AMMONIA;
 			tank.removeLiquid(WATER_PER_STEAM);
 			temperature -= 5;
-
 		}
+
+		temperature = 750;
+
+		if (steam <= 0) {
+			fluid = WorkingFluid.EMPTY;
+		}
+
+		//ReikaJavaLibrary.pConsole(temperature+":"+fluid.name()+":"+tank, Side.SERVER);
+
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
+	}
+
+	private void detonateAmmonia(World world, int x, int y, int z) {
+		BlockArray pipes = new BlockArray();
+		int id = ReactorTiles.STEAMLINE.getBlockID();
+		int meta = ReactorTiles.STEAMLINE.getBlockMetadata();
+		pipes.recursiveAddWithMetadata(world, x, y+1, z, id, meta);
+		for (int i = 0; i < pipes.getSize(); i++) {
+			int[] xyz = pipes.getNthBlock(i);
+			world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+			ReikaParticleHelper.EXPLODE.spawnAt(world, xyz[0], xyz[1], xyz[2]);
+			ReikaItemHelper.dropItem(world, xyz[0], xyz[1], xyz[2], new ItemStack(Item.netherrackBrick));
+		}
+		world.setBlock(x, y, z, 0);
+		ReikaItemHelper.dropItem(world, x, y, z, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(18)));
+		ReikaParticleHelper.EXPLODE.spawnAt(world, x, y, z);
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1.2F, 1);
+		boolean flag = false;
+		int r = 8;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					int id2 = world.getBlockId(x+i, y+j, z+k);
+					int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+					Block b = Block.blocksList[id2];
+					if (id2 != 0 && b.blockMaterial == Material.glass) {
+						b.dropBlockAsItem(world, x+i, y+j, z+k, meta2, 0);
+						world.setBlock(x+i, y+j, z+k, 0);
+						ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, meta2);
+						flag = true;
+					}
+				}
+			}
+		}
+		if (flag)
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.glass");
+	}
+
+	private boolean canBoilTankLiquid() {
+		if (!WorkingFluid.isWorkingFluid(tank.getActualFluid()))
+			return false;
+		return fluid == WorkingFluid.EMPTY || tank.getActualFluid().equals(fluid.getFluid());
 	}
 
 	private void getWater(World world, int x, int y, int z) {
@@ -135,6 +201,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 
 		steam = NBT.getInteger("energy");
 		tank.readFromNBT(NBT);
+
+		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	/**
@@ -148,12 +216,18 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		NBT.setInteger("energy", steam);
 
 		tank.writeToNBT(NBT);
+
+		fluid.saveToNBT(NBT);
 	}
 
 	public int removeSteam() {
 		int s = steam;
 		steam = 0;
 		return s;
+	}
+
+	public WorkingFluid getWorkingFluid() {
+		return fluid;
 	}
 
 }

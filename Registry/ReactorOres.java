@@ -15,17 +15,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 
 
 public enum ReactorOres {
 
-	FLUORITE(		32, 56, 8, 	12, 0, 	0, 0.2F,	"Fluorite"),
-	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2, 1F,		"Pitchblende"),
-	CADMIUM(		12, 32, 9, 	3, 	0,	2, 0.7F,	"Cadmium Ore"),
-	INDIUM(			0, 	16, 7, 	2, 	0,	2, 1F,		"Indium Ore"),
-	SILVER(			16, 40, 9, 	2, 	0,	2, 0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
-	ENDBLENDE(		0, 	64, 16, 6, 	1,	2, 1F,		"Pitchblende");
+	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.2F,	"Fluorite"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2,	1F,		"Pitchblende"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"Cadmium Ore"),
+	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"Indium Ore"),
+	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"Pitchblende"),
+	AMMONIUM(		0,	40,	8,	24,	-1,	1,	0.4F,	"Ammonium Chloride"),
+	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"Calcite");
 
 	public final int minY;
 	public final int maxY;
@@ -177,5 +180,11 @@ public enum ReactorOres {
 		if (!this.isValidDimension(id))
 			return false;
 		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.getDimensionID();
+	}
+
+	public boolean canGenAt(World world, int x, int y, int z) {
+		if (this == AMMONIUM)
+			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaStill.blockID) != -1 || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaMoving.blockID) != -1;
+		return true;
 	}
 }

@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOres;
@@ -41,7 +43,12 @@ public class BlockReactorOre extends Block {
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
 		ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, metadata);
 		li.add(is);
+		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, this.droppedXP(ReactorOres.getOre(world, x, y, z)));
 		return li;
+	}
+
+	private int droppedXP(ReactorOres ore) {
+		return ReikaMathLibrary.doWithChance(ore.xpDropped) ? 1 : 0;
 	}
 
 	@Override

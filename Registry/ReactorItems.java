@@ -35,7 +35,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	RAW(4,			"Raw Materials",		ItemReactorBasic.class),
 	FLUORITE(16,	"Fluorite",				ItemReactorBasic.class),
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
-	CANISTER(48,	"Fluid Canister",			ItemCanister.class),
+	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class),
 	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class);
 

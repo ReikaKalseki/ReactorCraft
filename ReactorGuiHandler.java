@@ -15,14 +15,17 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.Container.ContainerFuelRod;
 import Reika.ReactorCraft.Container.ContainerProcessor;
+import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import Reika.ReactorCraft.GUIs.GuiFuelRod;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
+import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -45,6 +48,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				return new ContainerProcessor(player, (TileEntityUProcessor)te);
 			case CENTRIFUGE:
 				return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
+			case SYNTHESIZER:
+				return new ContainerSynthesizer(player, (TileEntitySynthesizer)te);
 			default:
 				return null;
 			}
@@ -66,6 +71,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				return new GuiProcessor(player, (TileEntityUProcessor)te);
 			case CENTRIFUGE:
 				return new GuiCentrifuge(player, (TileEntityCentrifuge)te);
+			case SYNTHESIZER:
+				return new GuiSynthesizer(player, (TileEntitySynthesizer)te);
 			default:
 				return null;
 			}

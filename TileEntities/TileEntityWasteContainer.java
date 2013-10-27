@@ -77,12 +77,12 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		if (temperature > this.getMaxTemperature()) {
 			this.onMeltdown(world, x, y, z);
 		}
-		else if (temperature > this.getMaxTemperature()/2 && par5Random.nextInt(6) == 0) {
-			world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1, z+par5Random.nextDouble(), 0, 0, 0);
+		else if (temperature > this.getMaxTemperature()/2 && rand.nextInt(6) == 0) {
+			world.spawnParticle("smoke", x+rand.nextDouble(), y+1, z+rand.nextDouble(), 0, 0, 0);
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 		}
-		else if (temperature > this.getMaxTemperature()/4 && par5Random.nextInt(20) == 0) {
-			world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1, z+par5Random.nextDouble(), 0, 0, 0);
+		else if (temperature > this.getMaxTemperature()/4 && rand.nextInt(20) == 0) {
+			world.spawnParticle("smoke", x+rand.nextDouble(), y+1, z+rand.nextDouble(), 0, 0, 0);
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 		}
 	}
@@ -99,7 +99,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	}
 
 	private void leakRadiation(World world, int x, int y, int z) {
-		ForgeDirection dir = dirs[par5Random.nextInt(dirs.length)];
+		ForgeDirection dir = dirs[rand.nextInt(dirs.length)];
 		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir));
 	}
 

@@ -10,7 +10,7 @@ public enum WorkingFluid {
 	WATER(0.5F, 100),
 	AMMONIA(1, -33);
 
-	public final float efficiency;
+	public final float efficiency	;
 	public final int boilingTemp;
 
 	public static final WorkingFluid[] list = values();
@@ -38,7 +38,7 @@ public enum WorkingFluid {
 	public static boolean isWorkingFluid(Fluid f) {
 		for (int i = 0; i < list.length; i++) {
 			Fluid fl = list[i].getFluid();
-			if (fl.equals(f))
+			if (f.equals(fl))
 				return true;
 		}
 		return false;

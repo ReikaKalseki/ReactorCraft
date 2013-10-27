@@ -32,21 +32,31 @@ public class ReactorOreGenerator implements IWorldGenerator {
 
 	public static void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
 		//ReikaJavaLibrary.pConsole("Generating "+ore);
+		//ReikaJavaLibrary.pConsole(chunkX+", "+chunkZ);
 		int id = ore.getBlockID();
 		int meta = ore.getBlockMetadata();
 		if (ore == ReactorOres.FLUORITE) {
 			meta = FluoriteTypes.getRandomColor().ordinal();
 		}
-		for (int i = 0; i < ore.perChunk; i++) {
+		int passes = ore.perChunk;
+		for (int i = 0; i < passes; i++) {
 			int posX = chunkX + random.nextInt(16);
 			int posZ = chunkZ + random.nextInt(16);
 			int posY = ore.minY + random.nextInt(ore.maxY-ore.minY);
-			(new WorldGenMinable(id, meta, ore.veinSize, ore.getReplaceableBlock())).generate(world, random, posX, posY, posZ);
-			int r = 3;
-			for (int k = -r; k <= r; k++) {
-				for (int l = -r; l <= r; l++) {
-					for (int m = -r; m <= r; m++) {
-						world.markBlockForRenderUpdate(posX, posY, posZ);
+
+
+			if (ore.canGenAt(world, posX, posY, posZ)) {
+				if ((new WorldGenMinable(id, meta, ore.veinSize, ore.getReplaceableBlock())).generate(world, random, posX, posY, posZ))
+					;//ReikaJavaLibrary.pConsole(ore+" @ "+posX+", "+posY+", "+posZ);
+			}
+
+			if (ore == ReactorOres.FLUORITE) {
+				int r = 3;
+				for (int k = -r; k <= r; k++) {
+					for (int l = -r; l <= r; l++) {
+						for (int m = -r; m <= r; m++) {
+							world.markBlockForRenderUpdate(posX, posY, posZ);
+						}
 					}
 				}
 			}

@@ -29,6 +29,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -52,7 +53,8 @@ public enum ReactorTiles {
 	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
 	BOILER("Steam Boiler", TileEntityReactorBoiler.class, 3),
 	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, ""),
-	PUMP("Pressurizer", TileEntityReactorPump.class, 4, "");
+	PUMP("Pressurizer", TileEntityReactorPump.class, 4, ""),
+	SYNTHESIZER("Ammonia Synthesizer", TileEntitySynthesizer.class, 3, "");
 
 	private String name;
 	private Class teClass;

@@ -50,7 +50,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && par5Random.nextInt(20) == 0)
+		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
 		ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		this.feed();
@@ -61,12 +61,12 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
 		if (temperature > CLADDING) {
-			if (par5Random.nextInt(20) == 0)
+			if (rand.nextInt(20) == 0)
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 		}
 		else if (temperature > 500 && ReikaMathLibrary.doWithChance(20)) {
-			if (par5Random.nextInt(20) == 0)
+			if (rand.nextInt(20) == 0)
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}
@@ -179,7 +179,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (!world.isRemote && this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
-			if (false && ReikaMathLibrary.doWithChance(10)) {
+			if (ReikaMathLibrary.doWithChance(10)) {
 				int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
 				ItemStack is = inv[slot];
 				if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
@@ -214,7 +214,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	public ForgeDirection getRandomDirection() {
-		int r = 2+par5Random.nextInt(4);
+		int r = 2+rand.nextInt(4);
 		return dirs[r];
 	}
 

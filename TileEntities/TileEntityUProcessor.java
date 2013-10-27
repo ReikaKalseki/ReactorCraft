@@ -27,12 +27,15 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler {
 
@@ -66,6 +69,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getWaterBuckets();
+		this.getRCWater(world, x, y, z);
 		if (this.canMakeAcid()) {
 			timer.updateTicker("acid");
 			if (timer.checkCap("acid"))
@@ -87,6 +91,28 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		if (!world.isRemote) {
 			HF_timer = timer.getTickOf("acid");
 			UF6_timer = timer.getTickOf("uf6");
+		}
+	}
+
+	private void getRCWater(World world, int x, int y, int z) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			if (water.getLevel() < water.getCapacity()) {
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null) {
+						if (tile.liquidID == 9 && tile.liquidLevel > 0) {
+							int oldLevel = tile.liquidLevel;
+							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
+							water.addLiquid(oldLevel/4, FluidRegistry.WATER);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -271,9 +297,6 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		output.readFromNBT(NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
