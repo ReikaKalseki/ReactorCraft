@@ -1,5 +1,7 @@
 package Reika.ReactorCraft.TileEntities;
 
+import java.util.ArrayList;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +14,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -32,11 +35,11 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	private HybridTank tank = new HybridTank("synthout", 24000);
 
-	private HybridTank water = new HybridTank("synthwater", 3000);
+	private HybridTank water = new HybridTank("synthwater", 24000);
 
 	private ItemStack[] inv = new ItemStack[3];
 
-	private StepTimer steptimer = new StepTimer(1000);
+	private StepTimer steptimer = new StepTimer(1800);
 
 	@Override
 	public int getIndex() {
@@ -45,6 +48,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		steptimer.setCap(200);
 		this.getWaterBuckets();
 		this.getRCWater(world, x, y, z);
 		if (this.getWater() > 0 && this.hasAmmonium() && this.hasQuicklime() && this.canMakeAmmonia(AMMONIA_PER_STEP)) {
@@ -53,6 +57,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 				this.makeAmmonia();
 		}
 		timer = steptimer.getTick();
+		//ReikaJavaLibrary.pConsole(tank);
 	}
 
 	private boolean canMakeAmmonia(int amt) {
@@ -62,16 +67,26 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	private void makeAmmonia() {
 		ReikaInventoryHelper.decrStack(1, inv);
 		ReikaInventoryHelper.decrStack(2, inv);
-		tank.removeLiquid(WATER_PER_AMMONIA);
+		water.removeLiquid(WATER_PER_AMMONIA);
 		tank.addLiquid(AMMONIA_PER_STEP, FluidRegistry.getFluid("ammonia"));
 	}
 
 	private boolean hasQuicklime() {
-		return inv[1] != null && ReikaItemHelper.matchStacks(inv[1], ReactorStacks.lime);
+		if (inv[1] == null)
+			return false;
+		if (ReikaItemHelper.matchStacks(inv[1], ReactorStacks.lime))
+			return true;
+		ArrayList<ItemStack> lime = OreDictionary.getOres("dustQuicklime");
+		return ReikaItemHelper.listContainsItemStack(lime, inv[1]);
 	}
 
 	private boolean hasAmmonium() {
-		return inv[2] != null && ReikaItemHelper.matchStacks(inv[2], ReactorStacks.ammonium);
+		if (inv[2] == null)
+			return false;
+		if (ReikaItemHelper.matchStacks(inv[2], ReactorStacks.ammonium))
+			return true;
+		ArrayList<ItemStack> dust = OreDictionary.getOres("dustAmmonium");
+		return ReikaItemHelper.listContainsItemStack(dust, inv[2]);
 	}
 
 	private int getWater() {
@@ -130,37 +145,42 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
+		if (!this.canDrain(from, resource.getFluid()))
+			return null;
+		int maxDrain = resource.amount;
+		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
+		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
+		return fluid.equals(FluidRegistry.getFluid("ammonia"));
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
+		return water.fill(resource, doFill);
 	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
+		return fluid.equals(FluidRegistry.WATER);
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return null;
+		return new FluidTankInfo[]{water.getInfo(), tank.getInfo()};
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return itemstack.itemID == Item.bucketEmpty.itemID;
 	}
 
 	@Override
@@ -240,6 +260,11 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 		water.writeToNBT(NBT);
 		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
 	}
 
 }

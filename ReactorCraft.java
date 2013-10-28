@@ -208,6 +208,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 		Block b = ReactorBlocks.FLUORITEORE.getBlockVariable();
 		MinecraftForge.setBlockHarvestLevel(b, "pickaxe", ReactorOres.FLUORITE.harvestLevel);
+		OreDictionary.registerOre("dustQuicklime", ReactorStacks.lime.copy());
 	}
 
 	@Override

@@ -20,8 +20,10 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityCondenser extends TileEntityTankedReactorMachine {
+public class TileEntityCondenser extends TileEntityTankedReactorMachine implements IPipeConnection {
 
 	@Override
 	public int getIndex() {
@@ -73,19 +75,21 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		int maxDrain = resource.amount;
-		if (this.isValidFluid(resource.getFluid()))
+		if (this.canDrain(from, resource.getFluid()) && this.isValidFluid(resource.getFluid()))
 			return tank.drain(maxDrain, doDrain);
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		if (this.canDrain(from, null))
+			return tank.drain(maxDrain, doDrain);
+		return null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return from == ForgeDirection.UP;
 	}
 
 	@Override
@@ -130,6 +134,11 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	@Override
 	public boolean isValidFluid(Fluid f) {
 		return WorkingFluid.isWorkingFluid(f);
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		return with == ForgeDirection.UP ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
 }

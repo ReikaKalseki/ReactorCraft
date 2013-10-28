@@ -80,6 +80,10 @@ public class ReactorRecipes {
 		}
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ReactorBlocks.MATS.getBlockID(), 2, MatBlocks.CONCRETE.ordinal()), Block.blockClay, Block.sand, Item.bucketWater);
+
+		GameRegistry.addShapelessRecipe(new ItemStack(Item.leather), ReactorStacks.lime, Item.rottenFlesh);
+		GameRegistry.addShapelessRecipe(new ItemStack(Item.paper, 16, 0), ReactorStacks.lime, Item.bucketWater, Block.wood);
+		GameRegistry.addShapelessRecipe(new ItemStack(Item.paper, 4, 0), ReactorStacks.lime, Item.bucketWater, Block.planks);
 	}
 
 	private static void addItems() {

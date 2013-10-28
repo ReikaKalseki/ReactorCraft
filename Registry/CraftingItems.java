@@ -10,21 +10,22 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum CraftingItems {
 
-	CANISTER("Fuel Canister"),
-	ROD("Absorption Rod"),
-	TANK("Obsidian Tank"),
-	ALLOY("Cd-In-Ag Alloy Ingot");
+	CANISTER(),
+	ROD(),
+	TANK(),
+	ALLOY();
 
 	public final String itemName;
 
 	public static final CraftingItems[] partList = values();
 
-	private CraftingItems(String name) {
-		itemName = name;
+	private CraftingItems() {
+		itemName = StatCollector.translateToLocal("crafting."+this.name().toLowerCase());
 	}
 
 	public ItemStack getItem() {

@@ -19,6 +19,7 @@ public class ReactorStacks {
 	public static final ItemStack depdust = ReactorItems.RAW.getStackOfMetadata(2);
 	public static final ItemStack ammonium = ReactorItems.RAW.getStackOfMetadata(3);
 	public static final ItemStack lime = ReactorItems.RAW.getStackOfMetadata(4);
+	public static final ItemStack calcite = ReactorItems.RAW.getStackOfMetadata(5);
 
 	public static final ItemStack emptycan = ReactorItems.CANISTER.getStackOfMetadata(0);
 	public static final ItemStack uf6can = ReactorItems.CANISTER.getStackOfMetadata(1);

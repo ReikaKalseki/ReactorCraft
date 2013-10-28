@@ -23,8 +23,10 @@ import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE {
+public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, IPipeConnection {
 
 	private int steam;
 
@@ -58,15 +60,50 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 			temperature -= 5;
 		}
 
-		temperature = 750;
+		//temperature = 200;
 
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
 
-		//ReikaJavaLibrary.pConsole(temperature+":"+fluid.name()+":"+tank, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(y+":"+steam+":"+temperature+":"+fluid.name()+":"+tank, Side.SERVER);
 
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
+
+		this.balanceFluid(world, x, y, z);
+		this.transferSteam(world, x, y, z);
+	}
+
+	private void transferSteam(World world, int x, int y, int z) {
+		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
+		if (r == ReactorTiles.BOILER) {
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y+1, z);
+			if (steam > 0 && fluid != WorkingFluid.EMPTY) {
+				if (te.fluid == WorkingFluid.EMPTY || te.fluid == fluid) {
+					te.fluid = fluid;
+					te.steam += steam;
+					steam = 0;
+				}
+			}
+		}
+	}
+
+	private void balanceFluid(World world, int x, int y, int z) {
+		for (int i = 0; i < 2; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+			if (r == ReactorTiles.BOILER) {
+				TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
+				if (te.tank.getLevel() < tank.getLevel() && (te.tank.isEmpty() || te.tank.getActualFluid() == tank.getActualFluid())) {
+					int dl = tank.getLevel()-te.tank.getLevel();
+					te.tank.addLiquid(dl/4+1, tank.getActualFluid());
+					tank.removeLiquid(dl/4+1);
+				}
+			}
+		}
 	}
 
 	private void detonateAmmonia(World world, int x, int y, int z) {
@@ -228,6 +265,15 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 
 	public WorkingFluid getWorkingFluid() {
 		return fluid;
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		return with == ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+	}
+
+	public void addLiquid(int amt, Fluid fluid) {
+		tank.addLiquid(amt, fluid);
 	}
 
 }

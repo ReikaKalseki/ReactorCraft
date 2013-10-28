@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Registry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
@@ -27,16 +28,16 @@ import Reika.ReactorCraft.Items.ItemReactorPlacer;
 
 public enum ReactorItems implements RegistrationList, IDRegistry {
 
-	WASTE(0,		"Nuclear Waste", 		ItemNuclearWaste.class),
-	FUEL(1,			"Uranium Fuel Pellet",	ItemReactorBasic.class),
-	DEPLETED(2, 	"Depleted Uranium",		ItemReactorBasic.class),
+	WASTE(0,		"item.waste", 			ItemNuclearWaste.class),
+	FUEL(1,			"item.fuel",			ItemReactorBasic.class),
+	DEPLETED(2, 	"item.depleted",		ItemReactorBasic.class),
 	PLACER(-1,		"Part Placer",			ItemReactorPlacer.class),
-	BUCKET(3,		"Heavy Water Bucket", 	ItemHeavyBucket.class),
+	BUCKET(3,		"item.bucket", 			ItemHeavyBucket.class),
 	RAW(4,			"Raw Materials",		ItemReactorBasic.class),
 	FLUORITE(16,	"Fluorite",				ItemReactorBasic.class),
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
-	GOGGLES(64,		"Radiation Goggles",	ItemRadiationGoggles.class),
+	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
 	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class);
 
 	private String name;
@@ -97,7 +98,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 
 	@Override
 	public String getBasicName() {
-		return name;
+		return StatCollector.translateToLocal(name);
 	}
 
 	@Override
@@ -111,13 +112,13 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
 		case RAW:
-			return ReactorNames.rawNames[meta];
+			return StatCollector.translateToLocal(ReactorNames.rawNames[meta]);
 		case FLUORITE:
 			return FluoriteTypes.colorList[meta].getItemName();
 		case INGOTS:
 			return ReactorOres.oreList[meta+1].getProductName();
 		case CANISTER:
-			return ReactorNames.canNames[meta];
+			return StatCollector.translateToLocal(ReactorNames.canNames[meta]);
 		case CRAFTING:
 			return CraftingItems.partList[meta].itemName;
 		default:
@@ -153,7 +154,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case FLUORITE:
 			return FluoriteTypes.colorList.length;
 		case INGOTS:
-			return ReactorOres.oreList.length-1;
+			return ReactorOres.oreList.length-3;
 		case CANISTER:
 			return ReactorNames.canNames.length;
 		case CRAFTING:

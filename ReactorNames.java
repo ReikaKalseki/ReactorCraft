@@ -12,11 +12,11 @@ package Reika.ReactorCraft;
 public class ReactorNames {
 
 	public static final String[] rawNames = {
-		"Hydrogen Fluoride", "Enriched Uranium Dust", "Depleted Uranium Dust", "Ammonium Nitrate", "Quicklime"
+		"raw.hf", "raw.fueldust", "raw.depdust", "raw.ammonium", "raw.lime", "raw.calcite"
 	};
 
 	public static final String[] canNames = {
-		"Empty Canister", "Uranium Hexafluoride Canister", "Hydrofluoric Acid Canister", "Ammonia Canister"
+		"can.empty", "can.uf6", "can.hf", "can.nh3"
 	};
 
 }

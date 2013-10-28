@@ -11,24 +11,26 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 
 
 public enum ReactorOres {
 
-	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.2F,	"Fluorite"),
-	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2,	1F,		"Pitchblende"),
-	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"Cadmium Ore"),
-	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"Indium Ore"),
-	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"Silver Ore", ReactorOptions.SILVERORE.getState()),
-	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"Pitchblende"),
-	AMMONIUM(		0,	40,	8,	24,	-1,	1,	0.4F,	"Ammonium Chloride"),
-	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"Calcite");
+	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.2F,	"ore.fluorite"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2,	1F,		"ore.pitchblende"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"ore.cadmium"),
+	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"ore.indium"),
+	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"ore.silver", ReactorOptions.SILVERORE.getState()),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"ore.pitchblende"),
+	AMMONIUM(		0,	40,	8,	24,	-1,	1,	0.4F,	"ore.ammonium"),
+	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"ore.calcite");
 
 	public final int minY;
 	public final int maxY;
@@ -53,7 +55,7 @@ public enum ReactorOres {
 		perChunk = count;
 		shouldGen = gen;
 		dimensionID = dim;
-		oreName = name;
+		oreName = StatCollector.translateToLocal(name);
 		xpDropped = xp;
 		harvestLevel = level;
 	}
@@ -90,6 +92,10 @@ public enum ReactorOres {
 		case PITCHBLENDE:
 		case ENDBLENDE:
 			return "ingotUranium";
+		case CALCITE:
+			return "gem"+ReikaStringParser.capFirstChar(this.name());
+		case AMMONIUM:
+			return "dust"+ReikaStringParser.capFirstChar(this.name());
 		default:
 			return "ingot"+ReikaStringParser.capFirstChar(this.name());
 		}
@@ -120,6 +126,10 @@ public enum ReactorOres {
 			return ReactorItems.FLUORITE.getStackOfMetadata(FluoriteTypes.WHITE.ordinal());
 		case ENDBLENDE:
 			return PITCHBLENDE.getProduct();
+		case AMMONIUM:
+			return ReactorStacks.ammonium.copy();
+		case CALCITE:
+			return ReactorStacks.calcite.copy();
 		default:
 			return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
 		}
@@ -131,13 +141,11 @@ public enum ReactorOres {
 
 	public String getProductName() {
 		switch(this) {
-		case FLUORITE:
-			return "Fluorite Crystal";
 		case PITCHBLENDE:
 		case ENDBLENDE:
-			return "Raw Uranium Ingot";
+			return StatCollector.translateToLocal("item.uranium");
 		default:
-			return oreName.substring(0, oreName.length()-4)+" Ingot";
+			return StatCollector.translateToLocal("item."+this.name().toLowerCase());
 		}
 	}
 

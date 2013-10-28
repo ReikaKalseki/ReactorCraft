@@ -24,6 +24,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -32,6 +34,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 
@@ -98,6 +101,7 @@ public class BlockReactorTile extends Block {
 				}
 				else {
 					for (int j = 0; j < 6; j++) {
+						ReikaJavaLibrary.pConsole(r+":"+r.name().toLowerCase());
 						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
 					}
 				}
@@ -172,6 +176,27 @@ public class BlockReactorTile extends Block {
 				te.subtractBucket();
 				ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
 				return true;
+			}
+		}
+		if (r == ReactorTiles.BOILER && is != null) {
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y, z);
+			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
+				if (is.itemID == Item.bucketWater.itemID) {
+					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.WATER)) {
+						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.WATER);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					}
+					return true;
+				}
+				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nh3can)) {
+					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("ammonia"))) {
+						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("ammonia"));
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
+					}
+					return true;
+				}
 			}
 		}
 		if (r == ReactorTiles.PROCESSOR && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {

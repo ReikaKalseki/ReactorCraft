@@ -129,8 +129,17 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		return ReikaItemHelper.listContainsItemStack(ingots, inv[2]);
 	}
 
+	private boolean hasFluorite() {
+		if (inv[0] == null)
+			return false;
+		if (inv[0].itemID == ReactorItems.FLUORITE.getShiftedItemID())
+			return true;
+		ArrayList<ItemStack> shards = OreDictionary.getOres("gemFluorite");
+		return ReikaItemHelper.listContainsItemStack(shards, inv[0]);
+	}
+
 	public boolean canMakeAcid() {
-		return this.getWater() > 0 && inv[0] != null && inv[0].itemID == ReactorItems.FLUORITE.getShiftedItemID() && this.canAcceptMoreHF(ACID_PER_FLUORITE);
+		return this.getWater() > 0 && this.hasFluorite() && this.canAcceptMoreHF(ACID_PER_FLUORITE);
 	}
 
 	private void makeAcid() {

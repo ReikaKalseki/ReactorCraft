@@ -9,10 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.util.StatCollector;
+
 public enum MatBlocks {
 
-	CONCRETE("Concrete"),
-	SLAG("Corium");
+	CONCRETE("block.concrete"),
+	SLAG("block.slag");
 
 	private String name;
 
@@ -23,7 +25,7 @@ public enum MatBlocks {
 	}
 
 	public String getName() {
-		return name;
+		return StatCollector.translateToLocal(name);
 	}
 
 	public boolean isMultiSidedTexture() {

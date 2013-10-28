@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -45,14 +46,14 @@ public enum ReactorTiles {
 	COOLANT("Water Cell", TileEntityWaterCell.class, 2),
 	CPU("Central Control", TileEntityCPU.class, 0),
 	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, "RenderTurbine"),
-	CONDENSER("Condenser", TileEntityCondenser.class, 1, ""),
+	CONDENSER("Condenser", TileEntityCondenser.class, 1, "RenderCondenser"),
 	STEAMLINE("Steam Line", TileEntitySteamLine.class, 2, "RenderWaterLine"),
 	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
 	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
 	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
 	BOILER("Steam Boiler", TileEntityReactorBoiler.class, 3),
-	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, ""),
+	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
 	PUMP("Pressurizer", TileEntityReactorPump.class, 4, ""),
 	SYNTHESIZER("Ammonia Synthesizer", TileEntitySynthesizer.class, 3, "");
 
@@ -75,7 +76,7 @@ public enum ReactorTiles {
 	}
 
 	public String getName() {
-		return name;
+		return StatCollector.translateToLocal(name);
 	}
 
 	public Class getTEClass() {
