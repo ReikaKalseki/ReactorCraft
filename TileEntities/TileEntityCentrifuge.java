@@ -267,6 +267,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 		omega = NBT.getInteger("omg");
 		torque = NBT.getInteger("tq");
+		power = NBT.getLong("pwr");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
@@ -297,6 +298,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 		NBT.setInteger("omg", omega);
 		NBT.setInteger("tq", torque);
+		NBT.setLong("pwr", power);
 
 		NBTTagList nbttaglist = new NBTTagList();
 

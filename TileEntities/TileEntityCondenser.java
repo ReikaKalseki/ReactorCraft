@@ -45,8 +45,8 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 
 	private Fluid getFluidFromSteamMetadata(int smeta) {
 		if ((smeta&4) != 0)
-			return FluidRegistry.getFluid("ammonia");
-		return FluidRegistry.WATER;
+			return FluidRegistry.getFluid("lowpammonia");
+		return FluidRegistry.getFluid("lowpwater");
 	}
 
 	private void balance(World world, int x, int y, int z) {

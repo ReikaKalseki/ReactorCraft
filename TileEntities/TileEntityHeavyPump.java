@@ -218,6 +218,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 		else if (NBT.hasKey("tank")) {
 			tank.setFluid(FluidStack.loadFluidStackFromNBT(NBT.getCompoundTag("tank")));
 		}
+
+		omega = NBT.getInteger("speed");
+		torque = NBT.getInteger("trq");
+		power = NBT.getLong("pwr");
 	}
 
 	/**
@@ -231,6 +235,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 		if (tank.getFluid() != null) {
 			NBT.setTag("tank", tank.getFluid().writeToNBT(new NBTTagCompound()));
 		}
+
+		NBT.setInteger("speed", omega);
+		NBT.setInteger("trq", torque);
+		NBT.setLong("pwr", power);
 	}
 
 }

@@ -41,21 +41,21 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
 
-	FUEL("Fuel Core", TileEntityFuelRod.class, 0),
-	CONTROL("Control Rod", TileEntityControlRod.class, 1),
-	COOLANT("Water Cell", TileEntityWaterCell.class, 2),
-	CPU("Central Control", TileEntityCPU.class, 0),
-	TURBINECORE("Turbine Core", TileEntityTurbineCore.class, 0, "RenderTurbine"),
-	CONDENSER("Condenser", TileEntityCondenser.class, 1, "RenderCondenser"),
-	STEAMLINE("Steam Line", TileEntitySteamLine.class, 2, "RenderWaterLine"),
-	HEAVYPUMP("Heavy Water Extractor", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
-	CENTRIFUGE("Isotope Centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
-	PROCESSOR("Uranium Processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
-	WASTECONTAINER("Spent Fuel Container", TileEntityWasteContainer.class, 2),
-	BOILER("Steam Boiler", TileEntityReactorBoiler.class, 3),
-	GRATE("Steam Grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
-	PUMP("Pressurizer", TileEntityReactorPump.class, 4, ""),
-	SYNTHESIZER("Ammonia Synthesizer", TileEntitySynthesizer.class, 3, "");
+	FUEL("machine.fuel", TileEntityFuelRod.class, 0),
+	CONTROL("machine.control", TileEntityControlRod.class, 1),
+	COOLANT("machine.coolant", TileEntityWaterCell.class, 2),
+	CPU("machine.cpu", TileEntityCPU.class, 0),
+	TURBINECORE("machine.turbine", TileEntityTurbineCore.class, 0, "RenderTurbine"),
+	CONDENSER("machine.condenser", TileEntityCondenser.class, 1, "RenderCondenser"),
+	STEAMLINE("machine.steamline", TileEntitySteamLine.class, 2, "RenderWaterLine"),
+	HEAVYPUMP("machine.heavypump", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
+	CENTRIFUGE("machine.centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
+	PROCESSOR("machine.processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
+	WASTECONTAINER("machine.wastecontainer", TileEntityWasteContainer.class, 2),
+	BOILER("machine.boiler", TileEntityReactorBoiler.class, 3),
+	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
+	PUMP("machine.pump", TileEntityReactorPump.class, 4, ""),
+	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 3, "");
 
 	private String name;
 	private Class teClass;

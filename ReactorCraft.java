@@ -88,6 +88,9 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
 
+	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
+	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
+
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
@@ -175,6 +178,9 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(HF);
 		FluidRegistry.registerFluid(UF6);
 		FluidRegistry.registerFluid(NH3);
+
+		FluidRegistry.registerFluid(NH3_lo);
+		FluidRegistry.registerFluid(H2O_lo);
 
 		//ReikaJavaLibrary.spamConsole(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME)+":"+ReactorItems.BUCKET.getStackOfMetadata(0)+":"+new ItemStack(Item.bucketEmpty));
 

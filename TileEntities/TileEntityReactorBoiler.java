@@ -69,8 +69,6 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 			temperature -= 5;
 		}
 
-		//temperature = 200;
-
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
