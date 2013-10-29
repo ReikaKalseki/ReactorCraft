@@ -200,7 +200,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				}
 				else if (id2 == ReactorBlocks.STEAM.getBlockID()) {
 					if ((meta2&2) != 0) {
-						world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], 1, 3);
+						int newmeta = 1+(meta2&4);
+						//ReikaJavaLibrary.pConsole(meta2+":"+newmeta+":"+((newmeta&4) != 0));
+						world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], newmeta, 3);
 						if ((meta2&4) != 0) {
 							steam += 2;
 							omega = Math.min(omega+8, GEN_OMEGA);

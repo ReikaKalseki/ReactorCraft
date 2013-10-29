@@ -157,6 +157,8 @@ public class ReactorCraft extends DragonAPIMod {
 		HF.setIcons(hf);
 		UF6.setIcons(uf6);
 		NH3.setIcons(nh3);
+		NH3_lo.setIcons(nh3);
+		H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
 	}
 
 	private static void addItems() {

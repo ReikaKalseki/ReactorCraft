@@ -19,6 +19,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
@@ -151,7 +153,7 @@ public class BlockSteam extends Block {
 	public int getTransmittedMetadata(int original_meta, ForgeDirection dir) {
 		if (dir == ForgeDirection.UP)
 			return original_meta;
-		return (original_meta&2) != 0 ? 2 : 0;
+		return (original_meta&2) != 0 ? original_meta-2 : original_meta;
 	}
 
 	public boolean canMoveInto(World world, int x, int y, int z) {
@@ -236,6 +238,11 @@ public class BlockSteam extends Block {
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
 		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
 			e.attackEntityFrom(DamageSource.onFire, 1);
+			int meta = world.getBlockMetadata(x, y, z);
+			if ((meta&4) != 0) {
+				if (e instanceof EntityLivingBase)
+					((EntityLivingBase)e).addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+			}
 		}
 	}
 

@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
@@ -26,8 +25,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ShaftPowerReceiver {
 
-	private static final long MINPOWER = 0;
-	private static final int MINTORQUE = 0;
+	private static final long MINPOWER = 16384;
+	private static final int MINTORQUE = 1024;
 
 	private HybridTank output = new HybridTank("pumpout", this.getCapacity());
 
@@ -48,7 +47,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 			this.convertFluids();
 		if (!output.isEmpty())
 			this.dumpFluids(world, x, y, z);
-		ReikaJavaLibrary.pConsole(tank+":"+output);
+		//ReikaJavaLibrary.pConsole(tank+":"+output);
 	}
 
 	private boolean canConvert() {
@@ -229,7 +228,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public boolean canReadFromBlock(int x, int y, int z) {
-		return false;
+		return x == xCoord && y == yCoord-1 && z == zCoord;
 	}
 
 	@Override

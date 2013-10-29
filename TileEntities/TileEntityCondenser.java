@@ -36,8 +36,12 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 		//this.getSteam(world, x, y, z);
 		if (world.getBlockId(x, y-1, z) == ReactorBlocks.STEAM.getBlockID() && !tank.isFull() && temperature < 100 && !world.isRemote) {
 			int smeta = world.getBlockMetadata(x, y-1, z);
-			world.setBlock(x, y-1, z, 0);
-			tank.addLiquid(TileEntityReactorBoiler.WATER_PER_STEAM, this.getFluidFromSteamMetadata(smeta));
+			Fluid f = this.getFluidFromSteamMetadata(smeta);
+			//ReikaJavaLibrary.pConsole(f.getName());
+			if (tank.isEmpty() || tank.getActualFluid().equals(f)) {
+				world.setBlock(x, y-1, z, 0);
+				tank.addLiquid(TileEntityReactorBoiler.WATER_PER_STEAM, f);
+			}
 		}
 
 		this.balance(world, x, y, z);
@@ -75,15 +79,17 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		int maxDrain = resource.amount;
-		if (this.canDrain(from, resource.getFluid()) && this.isValidFluid(resource.getFluid()))
+		if (this.canDrain(from, resource.getFluid()) && this.isValidFluid(resource.getFluid())) {
 			return tank.drain(maxDrain, doDrain);
+		}
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (this.canDrain(from, null))
+		if (this.canDrain(from, null)) {
 			return tank.drain(maxDrain, doDrain);
+		}
 		return null;
 	}
 

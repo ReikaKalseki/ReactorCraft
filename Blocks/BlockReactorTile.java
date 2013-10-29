@@ -25,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -101,7 +100,6 @@ public class BlockReactorTile extends Block {
 				}
 				else {
 					for (int j = 0; j < 6; j++) {
-						ReikaJavaLibrary.pConsole(r+":"+r.name().toLowerCase());
 						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
 					}
 				}

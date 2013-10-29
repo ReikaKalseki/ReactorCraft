@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Registry.CraftingItems;
@@ -69,6 +70,8 @@ public class ReactorRecipes {
 			ItemStack drop = ore.getProduct();
 			FurnaceRecipes.smelting().addSmelting(block.itemID, block.getItemDamage(), drop, ore.xpDropped);
 		}
+
+		ReikaRecipeHelper.addSmelting(ReactorStacks.calcite, ReactorStacks.lime, 0.2F);
 	}
 
 	private static void addMisc() {
@@ -82,8 +85,10 @@ public class ReactorRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(ReactorBlocks.MATS.getBlockID(), 2, MatBlocks.CONCRETE.ordinal()), Block.blockClay, Block.sand, Item.bucketWater);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.leather), ReactorStacks.lime, Item.rottenFlesh);
-		GameRegistry.addShapelessRecipe(new ItemStack(Item.paper, 16, 0), ReactorStacks.lime, Item.bucketWater, Block.wood);
-		GameRegistry.addShapelessRecipe(new ItemStack(Item.paper, 4, 0), ReactorStacks.lime, Item.bucketWater, Block.planks);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 16, 0), ReactorStacks.lime, Item.bucketWater, "logWood"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 4, 0), ReactorStacks.lime, Item.bucketWater, "plankWood"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 1, 0), ReactorStacks.lime, Item.bucketWater, "stickWood"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 1, 0), ReactorStacks.lime, Item.bucketWater, "dustWood"));
 	}
 
 	private static void addItems() {
