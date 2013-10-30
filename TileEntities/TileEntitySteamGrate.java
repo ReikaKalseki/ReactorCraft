@@ -37,7 +37,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		int dy = y+1;
 		int dz = z;
 
-		if (steam > 0 && ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, dx, dy, dz)) {
+		if (!world.isRemote && steam > 0 && ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, dx, dy, dz)) {
 			steam--;
 			world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
 			//ReikaJavaLibrary.pConsole(fluid+":"+this.getSteamMetadata(), Side.SERVER);

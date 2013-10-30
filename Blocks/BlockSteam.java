@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -32,6 +33,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 
 public class BlockSteam extends Block {
 
@@ -70,7 +73,7 @@ public class BlockSteam extends Block {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		int maxh = 256;
+		int maxh = 72;
 		if (y > maxh) {
 			world.setBlock(x, y, z, 0);
 			return;
@@ -115,13 +118,78 @@ public class BlockSteam extends Block {
 	}
 
 	private void defaultMovement(World world, int x, int y, int z, Random rand, int meta) {
-		if (meta != 1 && ReikaMathLibrary.doWithChance(0)) {
+		if (ReactorTiles.getTE(world, x, y+1, z) == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y+1, z);
+			ForgeDirection dir = te.getSteamMovement();
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(dx, dy, dz);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+			return;
+		}
+		else if (ReactorTiles.getTE(world, x+1, y, z) == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x+1, y, z);
+			ForgeDirection dir = te.getSteamMovement();
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(dx, dy, dz);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+			return;
+		}
+		else if (ReactorTiles.getTE(world, x-1, y, z) == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x-1, y, z);
+			ForgeDirection dir = te.getSteamMovement();
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(dx, dy, dz);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+			return;
+		}
+		else if (ReactorTiles.getTE(world, x, y, z+1) == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z+1);
+			ForgeDirection dir = te.getSteamMovement();
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(dx, dy, dz);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
+			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
+			return;
+		}
+		else if (ReactorTiles.getTE(world, x, y, z-1) == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z-1);
+			ForgeDirection dir = te.getSteamMovement();
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+			world.setBlock(x, y, z, 0);
+			world.markBlockForRenderUpdate(x, y, z);
+			world.markBlockForRenderUpdate(dx, dy, dz);
+			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
 			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 			return;
 		}
 		else if (this.canMoveInto(world, x, y+1, z)) {
-			if (meta == 1 || ReikaMathLibrary.doWithChance(80))
+			if (((meta&1) != 0) || ReikaMathLibrary.doWithChance(80))
 				world.setBlock(x, y+1, z, blockID, this.getTransmittedMetadata(meta, ForgeDirection.UP), 3);
 			world.setBlock(x, y, z, 0);
 			world.markBlockForRenderUpdate(x, y, z);
@@ -158,7 +226,11 @@ public class BlockSteam extends Block {
 
 	public boolean canMoveInto(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
+		if (id == 0)
+			return true;
 		if (id == blockID)
+			return false;
+		if (Block.blocksList[id] instanceof BlockFluid)
 			return false;
 		return ReikaWorldHelper.softBlocks(world, x, y, z);
 	}
