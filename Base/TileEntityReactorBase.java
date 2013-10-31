@@ -39,7 +39,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 	public abstract int getIndex();
 
-	public int getTextureState() {
+	public int getTextureState(ForgeDirection side) {
 		return 0;
 	}
 

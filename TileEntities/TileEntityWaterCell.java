@@ -144,7 +144,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public int getTextureState() {
+	public int getTextureState(ForgeDirection side) {
 		return this.getLiquidState();
 	}
 

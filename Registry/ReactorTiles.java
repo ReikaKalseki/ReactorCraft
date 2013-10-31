@@ -54,8 +54,8 @@ public enum ReactorTiles {
 	WASTECONTAINER("machine.wastecontainer", TileEntityWasteContainer.class, 2),
 	BOILER("machine.boiler", TileEntityReactorBoiler.class, 3),
 	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
-	PUMP("machine.pump", TileEntityReactorPump.class, 4, ""),
-	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 3, "");
+	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
+	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1);
 
 	private String name;
 	private Class teClass;
@@ -135,6 +135,7 @@ public enum ReactorTiles {
 		case FUEL:
 		case CONTROL:
 		case WASTECONTAINER:
+		case SYNTHESIZER:
 			return true;
 		default:
 			return false;
@@ -144,6 +145,7 @@ public enum ReactorTiles {
 	public boolean hasTextureStates() {
 		switch(this) {
 		case COOLANT:
+		case BOILER:
 			return true;
 		default:
 			return false;
@@ -211,6 +213,8 @@ public enum ReactorTiles {
 		switch(this) {
 		case COOLANT:
 			return 3;
+		case BOILER:
+			return 4;
 		default:
 			return 1;
 		}

@@ -283,4 +283,23 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		tank.addLiquid(amt, fluid);
 	}
 
+	@Override
+	public int getTextureState(ForgeDirection side) {
+		if (side.offsetY != 0)
+			return 0;
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
+		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
+		if (r2 == ReactorTiles.BOILER && r == ReactorTiles.BOILER)
+			return 2;
+		else if (r2 == ReactorTiles.BOILER)
+			return 1;
+		else if (r == ReactorTiles.BOILER)
+			return 3;
+		return 0;
+	}
+
 }

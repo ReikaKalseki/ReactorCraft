@@ -42,7 +42,6 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		iotick -= 8;
 		if (this.canConvert())
 			this.convertFluids();
 		if (!output.isEmpty())
@@ -95,7 +94,10 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (power > 0) {
+			phi += 15F;
+		}
+		iotick -= 8;
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return from != ForgeDirection.UP;
+		return from.offsetY == 0;
 	}
 
 	@Override

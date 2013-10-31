@@ -11,6 +11,8 @@ package Reika.ReactorCraft.TileEntities;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,18 +31,23 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler {
+public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine {
 
 	private static final int WATER_PER_AMMONIA = 250;
 	private static final int AMMONIA_PER_STEP = 1000;
+	private static final int MAXTEMP = 1000;
 
 	public int timer;
+
+	private int temperature;
 
 	private HybridTank tank = new HybridTank("synthout", 24000);
 
@@ -49,6 +56,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	private ItemStack[] inv = new ItemStack[3];
 
 	private StepTimer steptimer = new StepTimer(1800);
+	private StepTimer tempTimer = new StepTimer(20);
 
 	@Override
 	public int getIndex() {
@@ -57,7 +65,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		steptimer.setCap(200);
 		this.getWaterBuckets();
 		this.getRCWater(world, x, y, z);
 		if (this.getWater() > 0 && this.hasAmmonium() && this.hasQuicklime() && this.canMakeAmmonia(AMMONIA_PER_STEP)) {
@@ -67,10 +74,55 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		}
 		timer = steptimer.getTick();
 		//ReikaJavaLibrary.pConsole(tank);
+		tempTimer.update();
+		if (tempTimer.checkCap()) {
+			this.updateTemperature(world, x, y, z, meta);
+		}
+	}
+
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+
+		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (waterside != -1) {
+			Tamb /= 2;
+		}
+		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != -1) {
+			if (Tamb > 0)
+				Tamb /= 4;
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+		}
+		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != -1) {
+			Tamb += 200;
+		}
+		int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != -1) {
+			Tamb += 600;
+		}
+		if (temperature > Tamb)
+			temperature--;
+		if (temperature > Tamb*2)
+			temperature--;
+		if (temperature < Tamb)
+			temperature++;
+		if (temperature*2 < Tamb)
+			temperature++;
+		if (temperature > MAXTEMP)
+			temperature = MAXTEMP;
+		if (temperature > 100) {
+			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+		}
 	}
 
 	private boolean canMakeAmmonia(int amt) {
-		return tank.isEmpty() || tank.getLevel()+amt < tank.getCapacity();
+		return temperature > 220 && (tank.isEmpty() || tank.getLevel()+amt < tank.getCapacity());
 	}
 
 	private void makeAmmonia() {
@@ -274,6 +326,36 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public void addTemperature(int T) {
+		temperature += T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
+	@Override
+	public void onOverheat(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public boolean canBeFrictionHeated() {
+		return true;
 	}
 
 }

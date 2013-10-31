@@ -23,6 +23,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -36,6 +37,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends Block {
 
@@ -114,7 +116,7 @@ public class BlockReactorTile extends Block {
 			return null;
 		if (r.hasTextureStates()) {
 			TileEntityReactorBase te = (TileEntityReactorBase)iba.getBlockTileEntity(x, y, z);
-			int k = te.getTextureState();
+			int k = te.getTextureState(ForgeDirection.VALID_DIRECTIONS[s]);
 			return icons[r.ordinal()][s][k];
 		}
 		else {
@@ -133,6 +135,13 @@ public class BlockReactorTile extends Block {
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking())
 			return false;
+		if (is != null) {
+			ItemRegistry i = ItemRegistry.getEntry(is);
+			if (i != null) {
+				if (i.overridesRightClick())
+					return false;
+			}
+		}
 		if (r == ReactorTiles.COOLANT && is != null) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y, z);
 			switch(te.getLiquidState()) {
