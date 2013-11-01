@@ -75,6 +75,14 @@ public enum ReactorOres {
 		return oreList[meta];
 	}
 
+	public static ReactorOres getOre(int id, int meta) {
+		if (id == ReactorBlocks.FLUORITEORE.getBlockID())
+			return FLUORITE;
+		if (id != ReactorBlocks.ORE.getBlockID())
+			return null;
+		return oreList[meta];
+	}
+
 	public String getTextureName() {
 		return "ReactorCraft:"+this.name().toLowerCase();
 	}

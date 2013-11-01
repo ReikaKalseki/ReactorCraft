@@ -280,7 +280,9 @@ public class BlockReactorTile extends Block {
 	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
-		li.add(ReactorTiles.getTE(world, x, y, z).getCraftedProduct());
+		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		if (r != null)
+			li.add(r.getCraftedProduct());
 		return li;
 	}
 

@@ -105,7 +105,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 				if (m == MachineRegistry.PIPE) {
 					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 					if (tile != null) {
-						if (tile.liquidID == 9 && tile.liquidLevel > 0) {
+						if (tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 							int oldLevel = tile.liquidLevel;
 							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
 							water.addLiquid(oldLevel/4, FluidRegistry.WATER);

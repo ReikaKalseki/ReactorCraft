@@ -164,7 +164,7 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 			if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-				if (te != null && te.liquidID == 9 && te.liquidLevel > 0) {
+				if (te != null && te.contains(FluidRegistry.WATER) && te.liquidLevel > 0) {
 					int dl = te.liquidLevel/4+1;
 					tank.addLiquid(dl, FluidRegistry.WATER);
 					te.liquidLevel -= dl;

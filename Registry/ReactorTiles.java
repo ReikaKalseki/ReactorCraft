@@ -52,7 +52,7 @@ public enum ReactorTiles {
 	CENTRIFUGE("machine.centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
 	PROCESSOR("machine.processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
 	WASTECONTAINER("machine.wastecontainer", TileEntityWasteContainer.class, 2),
-	BOILER("machine.boiler", TileEntityReactorBoiler.class, 3),
+	BOILER("machine.reactorboiler", TileEntityReactorBoiler.class, 3),
 	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
 	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1);

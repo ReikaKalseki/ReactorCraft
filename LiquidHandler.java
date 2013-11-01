@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.BCPipeHandler;
 import Reika.DragonAPI.ModInteract.ThermalHandler;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class LiquidHandler {
 
@@ -79,6 +80,9 @@ public class LiquidHandler {
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.PIPE)
+			return true;
 		if (!(te instanceof IFluidHandler))
 			return false;
 		if (id == BCPipeHandler.getInstance().pipeID) {
