@@ -115,6 +115,9 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addItems();
 		this.addLiquids();
 		this.registerOres();
+
+		ReikaRegistryHelper.setupModData(instance, evt);
+		ReikaRegistryHelper.setupVersionChecking(evt);
 	}
 
 	@Override
