@@ -32,7 +32,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	FUEL(1,			"item.fuel",			ItemReactorBasic.class),
 	DEPLETED(2, 	"item.depleted",		ItemReactorBasic.class),
 	PLACER(-1,		"Part Placer",			ItemReactorPlacer.class),
-	BUCKET(3,		"item.bucket", 			ItemHeavyBucket.class),
+	BUCKET(3,		"item.heavybucket", 	ItemHeavyBucket.class),
 	RAW(4,			"Raw Materials",		ItemReactorBasic.class),
 	FLUORITE(16,	"Fluorite",				ItemReactorBasic.class),
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
