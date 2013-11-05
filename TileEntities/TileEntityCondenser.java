@@ -144,7 +144,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 
 	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
-		return with == ForgeDirection.UP ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		return type == PipeType.FLUID ? (with == ForgeDirection.UP ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
 	}
 
 }

@@ -18,8 +18,10 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBase implements IFluidHandler, PipeConnector {
+public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
 	protected HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()), this.getCapacity());
 
@@ -65,6 +67,15 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return this.canReceiveFrom(side) && this.canConnectToPipe(p);
+	}
+
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		return type == PipeType.FLUID ? (this.canReceiveFrom(side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return this.canReceiveFrom(side) ? Flow.INPUT : Flow.NONE;
 	}
 
 }
