@@ -31,7 +31,6 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
@@ -51,8 +50,6 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
-
-		this.getWater(world, x, y, z);
 
 		if (thermalTicker.checkCap() && !world.isRemote) {
 			this.updateTemperature(world, x, y, z);
@@ -153,24 +150,6 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 		if (!WorkingFluid.isWorkingFluid(tank.getActualFluid()))
 			return false;
 		return fluid == WorkingFluid.EMPTY || tank.getActualFluid().equals(fluid.getFluid());
-	}
-
-	private void getWater(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == MachineRegistry.PIPE) {
-				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-				if (te != null && te.contains(FluidRegistry.WATER) && te.liquidLevel > 0) {
-					int dl = te.liquidLevel/4+1;
-					tank.addLiquid(dl, FluidRegistry.WATER);
-					te.liquidLevel -= dl;
-				}
-			}
-		}
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class BlockSteam extends Block {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		int maxh = 72;
+		int maxh = 256;
 		if (y > maxh) {
 			world.setBlock(x, y, z, 0);
 			return;

@@ -23,16 +23,15 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-import Reika.ReactorCraft.GUIs.GuiSynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-public class NH3Handler extends TemplateRecipeHandler {
+public class CentrifugeHandler extends TemplateRecipeHandler {
 
-	public class NH3Recipe extends CachedRecipe {
+	public class CentrifugeRecipe extends CachedRecipe {
 
-		public NH3Recipe() {
+		public CentrifugeRecipe() {
 
 		}
 
@@ -51,20 +50,20 @@ public class NH3Handler extends TemplateRecipeHandler {
 		public List<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			stacks.add(new PositionedStack(ReactorStacks.ammonium, 75, 33));
-			stacks.add(new PositionedStack(ReactorStacks.lime, 75, 15));
+			stacks.add(new PositionedStack(ReactorStacks.depdust, 111, 51));
+			stacks.add(new PositionedStack(ReactorStacks.fueldust, 39, 51));
 			return stacks;
 		}
 	}
 
 	@Override
 	public String getRecipeName() {
-		return "Ammonia Synthesizer";
+		return "Centrifuge";
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "/Reika/ReactorCraft/Textures/GUI/synthesizer.png";
+		return "/Reika/ReactorCraft/Textures/GUI/centrifuge.png";
 	}
 
 	@Override
@@ -85,28 +84,29 @@ public class NH3Handler extends TemplateRecipeHandler {
 	}
 
 	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(75, 7, 224, 20, 16, 60);
+	}
+
+	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (ReikaItemHelper.matchStacks(ReactorStacks.nh3can, result))
-			arecipes.add(new NH3Recipe());
+		if (ReikaItemHelper.matchStacks(ReactorStacks.depdust, result))
+			arecipes.add(new CentrifugeRecipe());
+		if (ReikaItemHelper.matchStacks(ReactorStacks.fueldust, result))
+			arecipes.add(new CentrifugeRecipe());
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (TileEntitySynthesizer.isAmmoniaIngredient(ingredient))
-			arecipes.add(new NH3Recipe());
+		if (ReikaItemHelper.matchStacks(ReactorStacks.uf6can, ingredient))
+			arecipes.add(new CentrifugeRecipe());
 	}
 
 	@Override
 	public Class<? extends GuiContainer> getGuiClass()
 	{
-		return GuiSynthesizer.class;
-	}
-
-	@Override
-	public void drawExtras(int recipe)
-	{
-		drawTexturedModalRect(12, 7, 208, 20, 16, 60);
-		drawTexturedModalRect(129, 7, 224, 20, 16, 60);
+		return GuiCentrifuge.class;
 	}
 
 }

@@ -9,6 +9,117 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
-public class UProcessorHandler {
+import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.GUIs.GuiProcessor;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
+public class UProcessorHandler extends TemplateRecipeHandler {
+
+	public class UProcessorRecipe extends CachedRecipe {
+
+		public UProcessorRecipe() {
+
+		}
+
+		@Override
+		public PositionedStack getResult() {
+			return null;//new PositionedStack(null, 131, 24);
+		}
+
+		@Override
+		public PositionedStack getIngredient()
+		{
+			return null;
+		}
+
+		@Override
+		public List<PositionedStack> getIngredients()
+		{
+			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+			List<ItemStack> li = OreDictionary.getOres("ingotUranium");
+			int meta = (int)((System.nanoTime()/1000000000)%li.size());
+			ItemStack i = li.get(meta);
+			stacks.add(new PositionedStack(i, 39, 47));
+			meta = (int)((System.nanoTime()/1000000000)%FluoriteTypes.colorList.length);
+			ItemStack f = ReactorItems.FLUORITE.getStackOfMetadata(meta);
+			stacks.add(new PositionedStack(f, 39, 11));
+			return stacks;
+		}
+	}
+
+	@Override
+	public String getRecipeName() {
+		return "Uranium Processor";
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "/Reika/ReactorCraft/Textures/GUI/processor.png";
+	}
+
+	@Override
+	public void drawBackground(int recipe)
+	{
+		GL11.glColor4f(1, 1, 1, 1);
+		ReikaTextureHelper.bindTexture(ReactorCraft.class, this.getGuiTexture());
+		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+	}
+
+	@Override
+	public void drawForeground(int recipe)
+	{
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		ReikaTextureHelper.bindTexture(ReactorCraft.class, this.getGuiTexture());
+		this.drawExtras(recipe);
+	}
+
+	@Override
+	public void loadCraftingRecipes(ItemStack result) {
+		if (ReikaItemHelper.matchStacks(ReactorStacks.uf6can, result))
+			arecipes.add(new UProcessorRecipe());
+		if (ReikaItemHelper.matchStacks(ReactorStacks.hfcan, result))
+			arecipes.add(new UProcessorRecipe());
+	}
+
+	@Override
+	public void loadUsageRecipes(ItemStack ingredient) {
+		if (TileEntityUProcessor.isUF6Ingredient(ingredient))
+			arecipes.add(new UProcessorRecipe());
+		if (ReikaItemHelper.matchStacks(ReactorStacks.hfcan, ingredient))
+			arecipes.add(new UProcessorRecipe());
+	}
+
+	@Override
+	public Class<? extends GuiContainer> getGuiClass()
+	{
+		return GuiProcessor.class;
+	}
+
+	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(93, 7, 208, 20, 16, 60);
+		drawTexturedModalRect(93+18, 7, 208-16, 20, 16, 60);
+		drawTexturedModalRect(93+36, 7, 208+16, 20, 16, 60);
+	}
 
 }

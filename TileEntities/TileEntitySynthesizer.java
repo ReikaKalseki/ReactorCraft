@@ -29,15 +29,12 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine {
 
@@ -66,7 +63,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getWaterBuckets();
-		this.getRCWater(world, x, y, z);
 		if (this.getWater() > 0 && this.hasAmmonium() && this.hasQuicklime() && this.canMakeAmmonia(AMMONIA_PER_STEP)) {
 			steptimer.update();
 			if (steptimer.checkCap())
@@ -164,28 +160,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	public int getTimerScaled(int px) {
 		return steptimer.getTick() * px / steptimer.getCap();
-	}
-
-	private void getRCWater(World world, int x, int y, int z) {
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (water.getLevel() < water.getCapacity()) {
-				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (m == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null) {
-						if (tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-							int oldLevel = tile.liquidLevel;
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
-							water.addLiquid(oldLevel/4, FluidRegistry.WATER);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	private void getWaterBuckets() {
@@ -356,6 +330,14 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public boolean canBeFrictionHeated() {
 		return true;
+	}
+
+	public static boolean isAmmoniaIngredient(ItemStack is) {
+		if (ReikaItemHelper.matchStacks(is, ReactorStacks.ammonium))
+			return true;
+		if (ReikaItemHelper.matchStacks(is, ReactorStacks.lime))
+			return true;
+		return false;
 	}
 
 }
