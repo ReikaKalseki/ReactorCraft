@@ -29,6 +29,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -207,14 +208,22 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
-			return i == 2;
-		if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
-			return i == 2;
+		if (i == 2)
+			return this.isValidUranium(is);
 		if (is.itemID == ReactorItems.FLUORITE.getShiftedItemID())
 			return i == 0;
 		if (is.itemID == Item.bucketWater.itemID)
 			return i == 1;
+		return false;
+	}
+
+	public boolean isValidUranium(ItemStack is) {
+		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
+			return true;
+		if (ReikaItemHelper.matchStacks(is, IC2Handler.getInstance().getPurifiedCrushedUranium()))
+			return true;
+		if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
+			return true;
 		return false;
 	}
 

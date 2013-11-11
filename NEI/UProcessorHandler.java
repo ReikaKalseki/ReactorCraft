@@ -20,13 +20,16 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -55,6 +58,10 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			List<ItemStack> li = OreDictionary.getOres("ingotUranium");
+			li.add(0, ReactorOres.PITCHBLENDE.getProduct());
+			if (ModList.INDUSTRIALCRAFT.isLoaded()) {
+				li.add(IC2Handler.getInstance().getPurifiedCrushedUranium());
+			}
 			int meta = (int)((System.nanoTime()/1000000000)%li.size());
 			ItemStack i = li.get(meta);
 			stacks.add(new PositionedStack(i, 39, 47));
