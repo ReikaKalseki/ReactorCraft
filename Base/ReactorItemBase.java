@@ -73,4 +73,13 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 		int d = is.getItemDamage();
 		return super.getUnlocalizedName() + "." + d;
 	}
+
+	public Class getTextureReferenceClass() {
+		return ReactorCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		return "/Reika/ReactorCraft/Textures/Items/items1.png";
+	}
 }
