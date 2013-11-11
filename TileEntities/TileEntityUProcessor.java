@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -217,7 +216,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		return false;
 	}
 
-	public boolean isValidUranium(ItemStack is) {
+	public static boolean isValidUranium(ItemStack is) {
 		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
 			return true;
 		if (ReikaItemHelper.matchStacks(is, IC2Handler.getInstance().getPurifiedCrushedUranium()))
@@ -331,8 +330,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	public static boolean isUF6Ingredient(ItemStack is) {
 		if (is.itemID == ReactorItems.FLUORITE.getShiftedItemID())
 			return true;
-		List<ItemStack> li = OreDictionary.getOres("ingotUranium");
-		if (ReikaItemHelper.listContainsItemStack(li, is))
+		if (isValidUranium(is))
 			return true;
 		return false;
 	}
