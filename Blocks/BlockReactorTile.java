@@ -126,7 +126,9 @@ public class BlockReactorTile extends Block {
 
 	@Override
 	public Icon getIcon(int s, int meta) {
-		return icons[meta][s][0];
+		//for drops, needs to be r.ordinal(), not metadata
+		int index = ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta);
+		return index >= 0 ? icons[index][s][0] : icons[meta][s][0];
 	}
 
 	@Override

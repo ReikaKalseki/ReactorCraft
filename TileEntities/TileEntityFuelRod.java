@@ -52,7 +52,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
-		ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
+		//ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		this.feed();
 
 		tempTimer.update();

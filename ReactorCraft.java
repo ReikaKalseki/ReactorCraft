@@ -35,11 +35,13 @@ import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
@@ -220,6 +222,11 @@ public class ReactorCraft extends DragonAPIMod {
 		Block b = ReactorBlocks.FLUORITEORE.getBlockVariable();
 		MinecraftForge.setBlockHarvestLevel(b, "pickaxe", ReactorOres.FLUORITE.harvestLevel);
 		OreDictionary.registerOre("dustQuicklime", ReactorStacks.lime.copy());
+
+		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+			ItemStack is = new ItemStack(ReactorBlocks.FLUORITEORE.getBlockID(), 1, i);
+			ReikaOreHelper.addOreForReference(is);
+		}
 	}
 
 	@Override

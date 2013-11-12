@@ -14,11 +14,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftMachine;
 
-public abstract class TileEntityReactorBase extends TileEntityBase {
+public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -26,6 +29,13 @@ public abstract class TileEntityReactorBase extends TileEntityBase {
 
 	protected int temperature;
 	public float phi;
+
+	public final TextureFetcher getRenderer() {
+		if (ReactorTiles.TEList[this.getIndex()].hasRender())
+			return ReactorRenderList.getRenderForMachine(ReactorTiles.TEList[this.getIndex()]);
+		else
+			return null;
+	}
 
 	@Override
 	public int getTileEntityBlockID() {
