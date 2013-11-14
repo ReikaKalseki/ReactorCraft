@@ -59,7 +59,7 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			List<ItemStack> li = OreDictionary.getOres("ingotUranium");
 			li.add(0, ReactorOres.PITCHBLENDE.getProduct());
-			if (ModList.INDUSTRIALCRAFT.isLoaded()) {
+			if (ModList.IC2.isLoaded()) {
 				li.add(IC2Handler.getInstance().getPurifiedCrushedUranium());
 			}
 			int meta = (int)((System.nanoTime()/1000000000)%li.size());
