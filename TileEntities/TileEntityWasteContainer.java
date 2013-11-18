@@ -61,8 +61,8 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world.getBiomeGenForCoords(x, z));
 		//ReikaJavaLibrary.pConsole(temperature);
 		if (temperature > Tamb) {
-			int side = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
-			if (side != -1) {
+			ForgeDirection side = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
+			if (side != null) {
 				temperature -= ReikaThermoHelper.getTemperatureIncrease(1, 15000, ReikaThermoHelper.WATER_BLOCK_HEAT);
 				//ReikaJavaLibrary.pConsole(temperature);
 				if (temperature > 100)

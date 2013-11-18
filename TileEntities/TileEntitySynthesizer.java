@@ -79,22 +79,22 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 
-		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (waterside != -1) {
+		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (waterside != null) {
 			Tamb /= 2;
 		}
-		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-		if (iceside != -1) {
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
 			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
-		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-		if (fireside != -1) {
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != null) {
 			Tamb += 200;
 		}
-		int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-		if (lavaside != -1) {
+		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != null) {
 			Tamb += 600;
 		}
 		if (temperature > Tamb)
@@ -108,11 +108,11 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature > 100) {
-			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
-			if (side != -1)
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
 			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-			if (side != -1)
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
 		}
 	}

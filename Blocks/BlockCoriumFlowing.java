@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquid;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -176,15 +177,15 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1);
 		}
 
-		int iceside = ReikaWorldHelper.checkForAdjBlock(world, i, j, k, Block.ice.blockID);
-		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, i, j, k, Material.water);
-		if (iceside != -1 || waterside != -1) {
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, i, j, k, Block.ice.blockID);
+		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, i, j, k, Material.water);
+		if (iceside != null || waterside != null) {
 			if (ReikaMathLibrary.doWithChance(15))
 				world.setBlock(i, j, k, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
-			if (iceside != -1) {
+			if (iceside != null) {
 				ReikaWorldHelper.changeAdjBlock(world, i, j, k, iceside, Block.waterMoving.blockID, 0);
 			}
-			if (waterside != -1) {
+			if (waterside != null) {
 				ReikaWorldHelper.changeAdjBlock(world, i, j, k, waterside, 0, 0);
 				ReikaSoundHelper.playSoundAtBlock(world, i, j, k, "random.fizz");
 				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, i, j, k, 8);

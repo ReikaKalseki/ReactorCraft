@@ -78,7 +78,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1)
+		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null)
 			temperature -= (1+dT/32);
 
 		if (dT > 0) {

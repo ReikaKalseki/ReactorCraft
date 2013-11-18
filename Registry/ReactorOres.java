@@ -29,7 +29,7 @@ public enum ReactorOres {
 	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"ore.indium"),
 	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"ore.silver", ReactorOptions.SILVERORE.getState()),
 	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"ore.pitchblende"),
-	AMMONIUM(		0,	40,	8,	24,	-1,	1,	0.4F,	"ore.ammonium"),
+	AMMONIUM(		32,	32,	8,	6,	-1,	1,	0.4F,	"ore.ammonium"),
 	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"ore.calcite");
 
 	public final int minY;
@@ -200,7 +200,7 @@ public enum ReactorOres {
 
 	public boolean canGenAt(World world, int x, int y, int z) {
 		if (this == AMMONIUM)
-			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaStill.blockID) != -1 || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaMoving.blockID) != -1;
+			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaStill.blockID) != null || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaMoving.blockID) != null;
 		return true;
 	}
 }
