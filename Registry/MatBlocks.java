@@ -14,7 +14,8 @@ import net.minecraft.util.StatCollector;
 public enum MatBlocks {
 
 	CONCRETE("block.concrete"),
-	SLAG("block.slag");
+	SLAG("block.slag"),
+	CALCITE("block.calcite");
 
 	private String name;
 
