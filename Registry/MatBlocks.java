@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 public enum MatBlocks {
@@ -31,6 +32,14 @@ public enum MatBlocks {
 
 	public boolean isMultiSidedTexture() {
 		return false;
+	}
+
+	public ItemStack getStackOf() {
+		return new ItemStack(ReactorBlocks.MATS.getBlockID(), 1, this.ordinal());
+	}
+
+	public ItemStack getStackOf(int size) {
+		return new ItemStack(ReactorBlocks.MATS.getBlockID(), size, this.ordinal());
 	}
 
 }

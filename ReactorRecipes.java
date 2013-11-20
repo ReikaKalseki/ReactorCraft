@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Registry.CraftingItems;
@@ -82,7 +83,10 @@ public class ReactorRecipes {
 			GameRegistry.addRecipe(block, "CCC", "CCC", "CCC", 'C', shard);
 		}
 
-		GameRegistry.addShapelessRecipe(new ItemStack(ReactorBlocks.MATS.getBlockID(), 2, MatBlocks.CONCRETE.ordinal()), Block.blockClay, Block.sand, Item.bucketWater);
+		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.calcite, 9), MatBlocks.CALCITE.getStackOf());
+
+		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(2), Block.blockClay, Block.sand, Item.bucketWater);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.leather), ReactorStacks.lime, Item.rottenFlesh);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 16, 0), ReactorStacks.lime, Item.bucketWater, "logWood"));
