@@ -42,7 +42,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 		for (int i = 0; i < passes; i++) {
 			int posX = chunkX + random.nextInt(16);
 			int posZ = chunkZ + random.nextInt(16);
-			int posY = ore.minY + random.nextInt(ore.maxY-ore.minY);
+			int posY = ore.minY + random.nextInt(ore.maxY-ore.minY+1);
 
 
 			if (ore.canGenAt(world, posX, posY, posZ)) {

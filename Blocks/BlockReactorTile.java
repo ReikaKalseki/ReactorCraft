@@ -282,7 +282,7 @@ public class BlockReactorTile extends Block {
 	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
-		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		ReactorTiles r = ReactorTiles.TEList[ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta)];
 		if (r != null)
 			li.add(r.getCraftedProduct());
 		return li;
