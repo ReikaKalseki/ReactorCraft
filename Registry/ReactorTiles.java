@@ -24,8 +24,10 @@ import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
+import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
@@ -55,7 +57,9 @@ public enum ReactorTiles {
 	BOILER("machine.reactorboiler", TileEntityReactorBoiler.class, 3),
 	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
 	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
-	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1);
+	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
+	MAGNET("machine.magnet", TileEntityMagnet.class, 5, ""),
+	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 2);
 
 	private String name;
 	private Class teClass;
@@ -203,6 +207,7 @@ public enum ReactorTiles {
 		case BOILER:
 		case GRATE:
 		case PUMP:
+		case MAGNET:
 			return true;
 		default:
 			return false;

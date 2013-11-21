@@ -89,9 +89,14 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid HF = new Fluid("hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
+	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700);
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
+
+	public static final Fluid H2 = new Fluid("deuterium").setDensity(180).setViscosity(10).setGaseous(true);
+	public static final Fluid H3 = new Fluid("tritium").setDensity(190).setViscosity(10).setGaseous(true);
+	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true);
 
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
@@ -156,12 +161,25 @@ public class ReactorCraft extends DragonAPIMod {
 		Icon d2o = event.map.registerIcon("ReactorCraft:heavywater");
 		Icon hf = event.map.registerIcon("ReactorCraft:hf");
 		Icon uf6 = event.map.registerIcon("ReactorCraft:uf6");
+
 		Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
+		Icon na = event.map.registerIcon("ReactorCraft:sodium");
+
+		Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
+		Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
+		Icon plasma = event.map.registerIcon("ReactorCraft:plasma"); //red and blue swirling
 
 		D2O.setIcons(d2o);
 		HF.setIcons(hf);
 		UF6.setIcons(uf6);
+
 		NH3.setIcons(nh3);
+		NA.setIcons(na);
+
+		H2.setIcons(h2);
+		H3.setIcons(h3);
+		PLASMA.setIcons(plasma);
+
 		NH3_lo.setIcons(nh3);
 		H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
 	}
@@ -185,16 +203,20 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(HF);
 		FluidRegistry.registerFluid(UF6);
 		FluidRegistry.registerFluid(NH3);
+		FluidRegistry.registerFluid(NA);
 
 		FluidRegistry.registerFluid(NH3_lo);
 		FluidRegistry.registerFluid(H2O_lo);
 
-		//ReikaJavaLibrary.spamConsole(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME)+":"+ReactorItems.BUCKET.getStackOfMetadata(0)+":"+new ItemStack(Item.bucketEmpty));
-
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(UF6, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan);
+
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NH3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nh3can, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(NA, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nacan, ReactorStacks.emptycan);
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(H2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h2can, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(H3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h3can, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

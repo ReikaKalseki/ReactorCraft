@@ -29,7 +29,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -189,7 +189,7 @@ public class BlockSteam extends Block {
 			return;
 		}
 		else if (this.canMoveInto(world, x, y+1, z)) {
-			if (((meta&1) != 0) || ReikaMathLibrary.doWithChance(80))
+			if (((meta&1) != 0) || ReikaRandomHelper.doWithChance(80))
 				world.setBlock(x, y+1, z, blockID, this.getTransmittedMetadata(meta, ForgeDirection.UP), 3);
 			world.setBlock(x, y, z, 0);
 			world.markBlockForRenderUpdate(x, y, z);

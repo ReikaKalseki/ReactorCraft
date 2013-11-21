@@ -20,7 +20,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
@@ -65,7 +65,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 		}
-		else if (temperature > 500 && ReikaMathLibrary.doWithChance(20)) {
+		else if (temperature > 500 && ReikaRandomHelper.doWithChance(20)) {
 			if (rand.nextInt(20) == 0)
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
@@ -91,7 +91,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				int meta = world.getBlockMetadata(dx, dy, dz);
 				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 					TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
-					if (te.getLiquidState() != 0 && temperature >= 100 && ReikaMathLibrary.doWithChance(40)) {
+					if (te.getLiquidState() != 0 && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
 						te.setLiquidState(0);
 						temperature -= 20;
 					}
@@ -178,8 +178,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (!world.isRemote && this.isFissile() && ReikaMathLibrary.doWithChance(25)) {
-			if (ReikaMathLibrary.doWithChance(10)) {
+		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
+			if (ReikaRandomHelper.doWithChance(10)) {
 				int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
 				ItemStack is = inv[slot];
 				if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
@@ -187,7 +187,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				else
 					inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 
-				if (ReikaMathLibrary.doWithChance(10)) {
+				if (ReikaRandomHelper.doWithChance(10)) {
 					ItemStack waste = WasteManager.getRandomWasteItem();
 					if (!ReikaInventoryHelper.addToIInv(waste, this))
 						missingWaste.add(waste);

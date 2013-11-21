@@ -11,7 +11,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -46,7 +46,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		return this.isActive() ? ReikaMathLibrary.doWithChance(50) : false;
+		return this.isActive() ? ReikaRandomHelper.doWithChance(50) : false;
 	}
 
 	@Override

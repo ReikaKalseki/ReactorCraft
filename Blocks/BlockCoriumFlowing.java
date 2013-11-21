@@ -21,7 +21,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquid;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -161,7 +160,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 	}
 
 	private void freezeWithChance(World world, int x, int y, int z) {
-		if (ReikaMathLibrary.doWithChance(5) && !world.provider.isHellWorld) {
+		if (ReikaRandomHelper.doWithChance(5) && !world.provider.isHellWorld) {
 			world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
 		}
 	}
@@ -173,14 +172,14 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				Block.blocksList[blockId].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 			}
 			world.setBlock(i, j, k, blockID, l, 3);
-			if (ReikaMathLibrary.doWithChance(12.5))
+			if (ReikaRandomHelper.doWithChance(12.5))
 				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1);
 		}
 
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, i, j, k, Block.ice.blockID);
 		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, i, j, k, Material.water);
 		if (iceside != null || waterside != null) {
-			if (ReikaMathLibrary.doWithChance(15))
+			if (ReikaRandomHelper.doWithChance(15))
 				world.setBlock(i, j, k, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
 			if (iceside != null) {
 				ReikaWorldHelper.changeAdjBlock(world, i, j, k, iceside, Block.waterMoving.blockID, 0);

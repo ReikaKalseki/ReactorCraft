@@ -22,6 +22,7 @@ import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
+import Reika.ReactorCraft.Items.ItemPlutonium;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
@@ -38,7 +39,10 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
-	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class);
+	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class),
+	PLUTONIUM(5,	"item.plutonium",		ItemPlutonium.class),
+	THORIUM(6,		"item.thorium",			ItemReactorBasic.class),
+	BREEDERFUEL(7,	"item.breeder",			ItemReactorBasic.class); //make 2-tone like $2 coin
 
 	private String name;
 	private Class itemClass;

@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -50,7 +51,8 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private StepTimer timer = new StepTimer(900);
 
-	public static final int UF6_PER_DUST = 250;
+	public static final int UF6_PER_DUST = 50;
+	public static final int URANIUM_PERCENT_235 = 1;
 
 	@Override
 	public int getIndex() {
@@ -104,8 +106,10 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private void make() {
 		tank.drain(UF6_PER_DUST, true);
-		ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
-		ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
+		if (ReikaRandomHelper.doWithChance(URANIUM_PERCENT_235/100D))
+			ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
+		else
+			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
 	}
 
 	public boolean canMake() {

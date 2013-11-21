@@ -25,5 +25,8 @@ public class ReactorStacks {
 	public static final ItemStack uf6can = ReactorItems.CANISTER.getStackOfMetadata(1);
 	public static final ItemStack hfcan = ReactorItems.CANISTER.getStackOfMetadata(2);
 	public static final ItemStack nh3can = ReactorItems.CANISTER.getStackOfMetadata(3);
+	public static final ItemStack nacan = ReactorItems.CANISTER.getStackOfMetadata(4);
+	public static final ItemStack h2can = ReactorItems.CANISTER.getStackOfMetadata(5);
+	public static final ItemStack h3can = ReactorItems.CANISTER.getStackOfMetadata(6);
 
 }

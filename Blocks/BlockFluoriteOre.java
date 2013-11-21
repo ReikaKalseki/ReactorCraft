@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -44,7 +44,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 	}
 
 	private int droppedXP() {
-		return ReikaMathLibrary.doWithChance(ReactorOres.FLUORITE.xpDropped) ? 1 : 0;
+		return ReikaRandomHelper.doWithChance(ReactorOres.FLUORITE.xpDropped) ? 1 : 0;
 	}
 
 	@Override
