@@ -41,7 +41,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends Block {
 
-	private Icon[][][] icons = new Icon[16][6][16];
+	private static final Icon[][][] icons = new Icon[ReactorTiles.TEList.length][6][16];
 
 	public BlockReactorTile(int par1, Material par2Material) {
 		super(par1, par2Material);

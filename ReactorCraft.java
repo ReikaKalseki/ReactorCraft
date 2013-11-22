@@ -202,8 +202,13 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(D2O);
 		FluidRegistry.registerFluid(HF);
 		FluidRegistry.registerFluid(UF6);
+
 		FluidRegistry.registerFluid(NH3);
 		FluidRegistry.registerFluid(NA);
+
+		FluidRegistry.registerFluid(H2);
+		FluidRegistry.registerFluid(H3);
+		FluidRegistry.registerFluid(PLASMA);
 
 		FluidRegistry.registerFluid(NH3_lo);
 		FluidRegistry.registerFluid(H2O_lo);
