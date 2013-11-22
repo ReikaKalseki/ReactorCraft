@@ -40,9 +40,9 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
 	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class),
-	PLUTONIUM(5,	"item.plutonium",		ItemPlutonium.class),
-	THORIUM(6,		"item.thorium",			ItemReactorBasic.class),
-	BREEDERFUEL(7,	"item.breeder",			ItemReactorBasic.class); //make 2-tone like $2 coin
+	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
+	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
+	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class);
 
 	private String name;
 	private Class itemClass;

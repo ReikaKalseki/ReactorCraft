@@ -88,8 +88,10 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid D2O = new Fluid("heavy water").setDensity(1100).setViscosity(1050);
 	public static final Fluid HF = new Fluid("hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
+
 	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
 	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700);
+	public static final Fluid CL = new Fluid("chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
@@ -164,10 +166,11 @@ public class ReactorCraft extends DragonAPIMod {
 
 		Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
 		Icon na = event.map.registerIcon("ReactorCraft:sodium");
+		Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
 
 		Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
 		Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
-		Icon plasma = event.map.registerIcon("ReactorCraft:plasma"); //red and blue swirling
+		Icon plasma = event.map.registerIcon("ReactorCraft:plasma");
 
 		D2O.setIcons(d2o);
 		HF.setIcons(hf);
@@ -175,6 +178,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		NH3.setIcons(nh3);
 		NA.setIcons(na);
+		CL.setIcons(cl);
 
 		H2.setIcons(h2);
 		H3.setIcons(h3);
@@ -205,6 +209,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidRegistry.registerFluid(NH3);
 		FluidRegistry.registerFluid(NA);
+		FluidRegistry.registerFluid(CL);
 
 		FluidRegistry.registerFluid(H2);
 		FluidRegistry.registerFluid(H3);
@@ -219,6 +224,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NH3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nh3can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NA, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nacan, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(CL, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.clcan, ReactorStacks.emptycan);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h2can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h3can, ReactorStacks.emptycan);

@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import java.util.ArrayList;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -35,10 +33,10 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
 
-	private ItemStack[] inv = new ItemStack[4];
+	private ItemStack[] inv = new ItemStack[12]; //two new cols, one on either side
 
 	public double storedEnergy = 0;
-	private ArrayList<ItemStack> missingWaste = new ArrayList();
+	//private ArrayList<ItemStack> missingWaste = new ArrayList();
 
 	private StepTimer tempTimer = new StepTimer(20);
 
@@ -132,7 +130,7 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 
 	@Override
 	public int getSizeInventory() {
-		return 4;
+		return 12;
 	}
 
 	@Override
@@ -150,12 +148,12 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		if (inv[i] != null)
 			return false;
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
-			return true;
+			return i < 4;
 		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
-			return true;
-		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
-			return true;
-		return false;
+			return i >= 4;
+			if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+				return i < 4;
+			return false;
 	}
 
 	@Override
@@ -176,29 +174,57 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		return j == 1 && this.isItemValidForSlot(i, itemstack) && itemstack.itemID != ReactorItems.DEPLETED.getShiftedItemID();
 	}
 
+	private boolean isPoisoned() {
+		int count = 0;
+		for (int i = 4; i < 12; i++) {
+			ItemStack is = inv[i];
+			if (is != null && is.itemID == ReactorItems.WASTE.getShiftedItemID())
+				count++;
+		}
+		return rand.nextInt(9-count) == 0;
+	}
+
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
-			if (ReikaRandomHelper.doWithChance(10)) {
-				int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
-				ItemStack is = inv[slot];
-				if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
-					inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
-				else
-					inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
-
+		if (!world.isRemote) {
+			if (this.isPoisoned())
+				return true;
+			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
 				if (ReikaRandomHelper.doWithChance(10)) {
-					ItemStack waste = WasteManager.getRandomWasteItem();
-					if (!ReikaInventoryHelper.addToIInv(waste, this))
-						missingWaste.add(waste);
+					int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
+					if (slot != -1) {
+						ItemStack is = inv[slot];
+						if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
+							inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
+						else
+							inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
+
+						if (ReikaRandomHelper.doWithChance(10)) {
+							ItemStack waste = WasteManager.getRandomWasteItem();
+							//if (!ReikaInventoryHelper.addToIInv(waste, this))
+							//	missingWaste.add(waste);
+							for (int i = 4; i < 12; i++) {
+								ItemStack inslot = inv[i];
+								if (inslot == null) {
+									inv[i] = waste;
+								}
+								else if (ItemStack.areItemStackTagsEqual(waste, inslot) && waste.isItemEqual(inslot)) {
+									inv[i].stackSize += waste.stackSize;
+								}
+							}
+						}
+					}
+					else {
+						slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
+					}
 				}
+				this.spawnNeutronBurst(world, x, y, z);
+				//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
+				//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
+				//storedEnergy += E;
+				temperature += 10;
+				return true;
 			}
-			this.spawnNeutronBurst(world, x, y, z);
-			//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
-			//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
-			//storedEnergy += E;
-			temperature += 10;
-			return true;
 		}
 		return false;
 	}
@@ -255,14 +281,14 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		for (int i = 0; i < 4; i++) {
 			for (int k = 3; k > 0; k--) {
 				if (inv[k] == null) {
-					if (!missingWaste.isEmpty()) {
-						inv[k] = missingWaste.get(0);
-						missingWaste.remove(0);
-					}
-					else {
-						inv[k] = inv[k-1];
-						inv[k-1] = null;
-					}
+					//if (!missingWaste.isEmpty()) {
+					//		inv[k] = missingWaste.get(0);
+					//	missingWaste.remove(0);
+					//}
+					//else {
+					inv[k] = inv[k-1];
+					inv[k-1] = null;
+					//}
 				}
 			}
 		}
@@ -279,7 +305,9 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	public boolean isFissile() {
-		return ReikaInventoryHelper.checkForItem(ReactorItems.FUEL.getShiftedItemID(), inv);
+		boolean u = ReikaInventoryHelper.checkForItem(ReactorItems.FUEL.getShiftedItemID(), inv);
+		boolean pu = ReikaInventoryHelper.checkForItem(ReactorItems.PLUTONIUM.getShiftedItemID(), inv);
+		return u || pu;
 	}
 
 	@Override
@@ -301,13 +329,13 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			return null;
 		else {
 			ItemStack is = inv[3].copy();
-			if (!missingWaste.isEmpty()) {
-				inv[3] = missingWaste.get(0);
-				missingWaste.remove(0);
-			}
-			else {
-				inv[3] = null;
-			}
+			//if (!missingWaste.isEmpty()) {
+			//	inv[3] = missingWaste.get(0);
+			//	missingWaste.remove(0);
+			//}
+			//else {
+			inv[3] = null;
+			//}
 			return is;
 		}
 	}

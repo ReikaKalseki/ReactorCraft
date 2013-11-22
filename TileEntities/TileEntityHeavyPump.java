@@ -29,6 +29,7 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftPowerReceiver, IFluidHandler {
 
 	public static final int MINPOWER = 65536;
+	public static final int MINTORQUE = 512;
 	private int torque;
 	private int omega;
 	private long power;
@@ -100,7 +101,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		timer.update();
-		if (timer.checkCap() && power >= MINPOWER && this.canHarvest(world, x, y, z)) {
+		if (timer.checkCap() && power >= MINPOWER && torque >= MINTORQUE && this.canHarvest(world, x, y, z)) {
 			this.harvest();
 		}
 	}

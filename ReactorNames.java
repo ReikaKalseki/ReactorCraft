@@ -16,7 +16,7 @@ public class ReactorNames {
 	};
 
 	public static final String[] canNames = {
-		"can.empty", "can.uf6", "can.hf", "can.nh3", "can.na", "can.h2", "can.h3"
+		"can.empty", "can.uf6", "can.hf", "can.nh3", "can.na", "can.h2", "can.h3", "can.cl"
 	};
 
 }
