@@ -149,17 +149,15 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 			return false;
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
 			return i < 4;
+		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+			return i < 4;
 		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
 			return i >= 4;
-			if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
-				return i < 4;
 			return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack is, int j) {
-		if (j != 0)
-			return false;
+	public boolean canRemoveItem(int i, ItemStack is) {
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
 			return true;
 		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
@@ -167,11 +165,6 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
 			return true;
 		return false;
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return j == 1 && this.isItemValidForSlot(i, itemstack) && itemstack.itemID != ReactorItems.DEPLETED.getShiftedItemID();
 	}
 
 	private boolean isPoisoned() {
@@ -413,5 +406,15 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 		HydrogenExplosion ex = new HydrogenExplosion(world, null, x+0.5, y+0.5, z+0.5, 7);
 		ex.doExplosionA();
 		ex.doExplosionB(false);
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return dir == ForgeDirection.UP;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 }

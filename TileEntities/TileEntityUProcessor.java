@@ -181,7 +181,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return false;
 	}
 
@@ -327,6 +327,16 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 			return true;
 		if (isValidUranium(is))
 			return true;
+		return false;
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return true;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
 		return false;
 	}
 }

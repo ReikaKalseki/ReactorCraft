@@ -141,7 +141,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return itemstack.itemID == ReactorItems.DEPLETED.getShiftedItemID();
 	}
 
@@ -231,6 +231,16 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	@Override
 	public int getInventoryStackLimit() {
 		return 1;
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return true;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
+		return true;
 	}
 
 }

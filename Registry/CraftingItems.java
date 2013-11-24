@@ -18,7 +18,8 @@ public enum CraftingItems {
 	CANISTER(),
 	ROD(),
 	TANK(),
-	ALLOY();
+	ALLOY(),
+	MAGNET();
 
 	public final String itemName;
 

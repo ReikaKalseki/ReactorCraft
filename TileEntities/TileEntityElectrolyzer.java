@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -296,7 +297,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return false;
 	}
 
@@ -431,7 +432,26 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		tankL.writeToNBT(NBT);
 		input.writeToNBT(NBT);
 
+		NBT.setInteger("omg", omega);
+		NBT.setInteger("tq", torque);
+		NBT.setLong("pwr", power);
+
 		NBT.setInteger("temp", temperature);
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
@@ -442,7 +462,25 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		tankL.readFromNBT(NBT);
 		input.readFromNBT(NBT);
 
+		omega = NBT.getInteger("omg");
+		torque = NBT.getInteger("tq");
+		power = NBT.getLong("pwr");
+
 		temperature = NBT.getInteger("temp");
+
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
 	}
 
 	public boolean addHeavyWater(int amt) {
@@ -450,6 +488,16 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 			input.addLiquid(amt, FluidRegistry.getFluid("heavy water"));
 			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return true;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
 		return false;
 	}
 

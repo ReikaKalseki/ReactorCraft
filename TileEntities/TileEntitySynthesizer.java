@@ -215,7 +215,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return itemstack.itemID == Item.bucketEmpty.itemID;
 	}
 
@@ -342,6 +342,16 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return true;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
+		return true;
 	}
 
 }

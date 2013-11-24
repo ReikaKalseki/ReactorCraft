@@ -137,7 +137,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return true;
 	}
 
@@ -332,5 +332,15 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	public void removeFluid(int volume) {
 		tank.removeLiquid(volume);
+	}
+
+	@Override
+	public boolean canEnterFromSide(ForgeDirection dir) {
+		return false;
+	}
+
+	@Override
+	public boolean canExitToSide(ForgeDirection dir) {
+		return true;
 	}
 }

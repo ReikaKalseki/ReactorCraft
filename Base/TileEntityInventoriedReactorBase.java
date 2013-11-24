@@ -12,8 +12,10 @@ package Reika.ReactorCraft.Base;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 
 public abstract class TileEntityInventoriedReactorBase extends TileEntityReactorBase implements ISidedInventory {
 
@@ -58,13 +60,28 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	public final boolean canExtractItem(int slot, ItemStack is, int j) {
+		return this.canRemoveItem(slot, is) && this.canExitToSide(dirs[j]);
+	}
+
+	public abstract boolean canEnterFromSide(ForgeDirection dir);
+
+	public abstract boolean canExitToSide(ForgeDirection dir);
+
+	public abstract boolean canRemoveItem(int slot, ItemStack is);
+
+	@Override
+	public final int[] getAccessibleSlotsFromSide(int var1) {
+		if (this instanceof InertIInv)
+			return new int[0];
 		return ReikaInventoryHelper.getWholeInventoryForISided(this);
 	}
 
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return this.isItemValidForSlot(i, itemstack);
+	public final boolean canInsertItem(int i, ItemStack is, int j) {
+		if (this instanceof InertIInv)
+			return false;
+		return this.isItemValidForSlot(i, is) && this.canEnterFromSide(dirs[j]);
 	}
 
 }
