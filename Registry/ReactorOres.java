@@ -9,17 +9,19 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-
 
 public enum ReactorOres {
 
@@ -30,7 +32,8 @@ public enum ReactorOres {
 	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"ore.silver", ReactorOptions.SILVERORE.getState()),
 	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"ore.pitchblende"),
 	AMMONIUM(		32,	32,	8,	6,	-1,	1,	0.4F,	"ore.ammonium"),
-	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"ore.calcite");
+	CALCITE(		32, 60,	4,	12,	0,	0,	0.2F,	"ore.calcite"),
+	MAGNETITE(		12,	32, 16,	2,	0,	2,	0.5F,	"ore.magnetite");
 
 	public final int minY;
 	public final int maxY;
@@ -140,6 +143,21 @@ public enum ReactorOres {
 			return ReactorStacks.calcite.copy();
 		default:
 			return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
+		}
+	}
+
+	public List<ItemStack> getOreDrop(int meta) {
+		switch(this) {
+		case FLUORITE:
+			return ReikaJavaLibrary.makeListFrom(ReactorItems.FLUORITE.getStackOfMetadata(meta));
+		case CALCITE:
+			return ReikaJavaLibrary.makeListFrom(ReactorStacks.calcite.copy());
+		case AMMONIUM:
+			return ReikaJavaLibrary.makeListFrom(ReactorStacks.ammonium.copy(), new ItemStack(Block.netherrack));
+		case MAGNETITE:
+			return ReikaJavaLibrary.makeListFrom(ReactorStacks.lodestone.copy());
+		default:
+			return ReikaJavaLibrary.makeListFrom(new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, meta));
 		}
 	}
 

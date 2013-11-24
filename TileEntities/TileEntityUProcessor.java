@@ -191,11 +191,6 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
 	public ItemStack getStackInSlot(int i) {
 		return inv[i];
 	}

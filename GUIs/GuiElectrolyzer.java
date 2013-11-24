@@ -10,31 +10,32 @@
 package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.Rendering.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
-import Reika.ReactorCraft.Container.ContainerProcessor;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import Reika.ReactorCraft.Container.ContainerElectrolyzer;
+import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 
-public class GuiProcessor extends ReactorGuiBase {
+public class GuiElectrolyzer extends ReactorGuiBase {
 
-	private TileEntityUProcessor tile;
+	private TileEntityElectrolyzer tile;
 
-	private TankDisplay water;
-	private TankDisplay acid;
-	private TankDisplay uf6;
+	private TankDisplay heavy;
+	private TankDisplay light;
 
-	public GuiProcessor(EntityPlayer player, TileEntityUProcessor proc) {
-		super(new ContainerProcessor(player, proc), player, proc);
+	public GuiElectrolyzer(EntityPlayer ep, TileEntityElectrolyzer te) {
+		super(new ContainerElectrolyzer(ep, te), ep, te);
+		tile = te;
 		ySize = 175;
-		tile = proc;
+		xSize = 176;
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "processor";
+		return "Electrolyzer";
 	}
 
 	@Override
@@ -45,9 +46,8 @@ public class GuiProcessor extends ReactorGuiBase {
 		int k = (height - ySize) / 2;
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
-		water = new TankDisplay(info[0], j+98, k+18, 16, 60, this);
-		acid = new TankDisplay(info[1], j+116, k+18, 16, 60, this);
-		uf6 = new TankDisplay(info[2], j+134, k+18, 16, 60, this);
+		heavy = new TankDisplay(info[0], j+98, k+18, 16, 60, this);
+		light = new TankDisplay(info[1], j+134, k+18, 16, 60, this);
 	}
 
 	@Override
@@ -62,14 +62,16 @@ public class GuiProcessor extends ReactorGuiBase {
 		int x = ReikaGuiAPI.instance.getMouseRealX()-j;
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
+		FluidTankInfo[] info = tile.getTankInfo(null);
+		FluidStack h = info[0].fluid;
+		FluidStack l = info[1].fluid;
+		String heavy = h != null ? h.getFluid().getLocalizedName() : "Empty";
+		String light = l != null ? l.getFluid().getLocalizedName() : "Empty";
 		if (ReikaGuiAPI.instance.isMouseInBox(j+97, j+114, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "Water", x, y);
-		}
-		if (ReikaGuiAPI.instance.isMouseInBox(j+115, j+132, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "Hydrofluoric Acid", x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, heavy, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "Uranium Hexafluoride", x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, light, x, y);
 		}
 	}
 
@@ -79,27 +81,19 @@ public class GuiProcessor extends ReactorGuiBase {
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 		/*
-		int i2 = tile.getWaterScaled(60);
-		this.drawTexturedModalRect(j+98, k+78-i2, 208, 80-i2, 16, i2);
+		int i2 = tile.getChlorineScaled(60);
+		this.drawTexturedModalRect(j+17, k+78-i2, 208, 80-i2, 16, i2);
 
-		int i3 = tile.getHFScaled(60);
-		this.drawTexturedModalRect(j+116, k+78-i3, 192, 80-i3, 16, i3);
-
-		int i4 = tile.getUF6Scaled(60);
+		int i4 = tile.getSodiumScaled(60);
 		this.drawTexturedModalRect(j+134, k+78-i4, 224, 80-i4, 16, i4);
 		 */
-
+		int i6 = tile.getTimerScaled(66);
 		FluidTankInfo[] info = tile.getTankInfo(null);
+		int dy = tile.getStackInSlot(0) != null ? 61 : 124;
+		this.drawTexturedModalRect(j+65, k+17, 177, dy, i6, 62);
 
-		int i5 = tile.getHFTimerScaled(24);
-		this.drawTexturedModalRect(j+67, k+21, 176, 92, i5, 17);
-
-		int i6 = tile.getUF6TimerScaled(24);
-		this.drawTexturedModalRect(j+67, k+58, 176, 92, i6, 17);
-
-		water.render(true);
-		acid.render(true);
-		uf6.render(true);
+		heavy.updateTank(info[0]).render(true);
+		light.updateTank(info[1]).render(true);
 	}
 
 }

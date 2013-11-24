@@ -62,6 +62,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		steptimer.setCap(50);
 		this.getWaterBuckets();
 		if (this.getWater() > 0 && this.hasAmmonium() && this.hasQuicklime() && this.canMakeAmmonia(AMMONIA_PER_STEP)) {
 			steptimer.update();
@@ -298,11 +299,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
 	public int getTemperature() {
 		return temperature;
 	}
@@ -337,6 +333,14 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 			return true;
 		if (ReikaItemHelper.matchStacks(is, ReactorStacks.lime))
 			return true;
+		return false;
+	}
+
+	public boolean addWater(int amt) {
+		if (water.canTakeIn(amt)) {
+			water.addLiquid(amt, FluidRegistry.WATER);
+			return true;
+		}
 		return false;
 	}
 

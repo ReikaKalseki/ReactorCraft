@@ -25,15 +25,15 @@ public class ContainerFuelRod extends CoreContainer {
 		this.addSlotToContainer(new Slot(te, 2, 80, 59));
 		this.addSlotToContainer(new Slot(te, 3, 80, 77));
 
-		this.addSlotToContainer(new SlotFurnace(player, te, 4, 50, 23));
-		this.addSlotToContainer(new SlotFurnace(player, te, 5, 50, 41));
-		this.addSlotToContainer(new SlotFurnace(player, te, 6, 50, 59));
-		this.addSlotToContainer(new SlotFurnace(player, te, 7, 50, 77));
+		this.addSlotToContainer(new SlotFurnace(player, te, 4, 53, 23));
+		this.addSlotToContainer(new SlotFurnace(player, te, 5, 53, 41));
+		this.addSlotToContainer(new SlotFurnace(player, te, 6, 53, 59));
+		this.addSlotToContainer(new SlotFurnace(player, te, 7, 53, 77));
 
-		this.addSlotToContainer(new SlotFurnace(player, te, 8, 110, 23));
-		this.addSlotToContainer(new SlotFurnace(player, te, 9, 110, 41));
-		this.addSlotToContainer(new SlotFurnace(player, te, 10, 110, 59));
-		this.addSlotToContainer(new SlotFurnace(player, te, 11, 110, 77));
+		this.addSlotToContainer(new SlotFurnace(player, te, 8, 107, 23));
+		this.addSlotToContainer(new SlotFurnace(player, te, 9, 107, 41));
+		this.addSlotToContainer(new SlotFurnace(player, te, 10, 107, 59));
+		this.addSlotToContainer(new SlotFurnace(player, te, 11, 107, 77));
 
 		this.addPlayerInventoryWithOffset(player, 0, 16);
 	}

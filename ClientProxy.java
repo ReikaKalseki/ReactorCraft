@@ -11,7 +11,7 @@ package Reika.ReactorCraft;
 
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityRadiation;

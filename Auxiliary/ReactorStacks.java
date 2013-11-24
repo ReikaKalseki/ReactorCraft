@@ -20,6 +20,7 @@ public class ReactorStacks {
 	public static final ItemStack ammonium = ReactorItems.RAW.getStackOfMetadata(3);
 	public static final ItemStack lime = ReactorItems.RAW.getStackOfMetadata(4);
 	public static final ItemStack calcite = ReactorItems.RAW.getStackOfMetadata(5);
+	public static final ItemStack lodestone = ReactorItems.RAW.getStackOfMetadata(6);
 
 	public static final ItemStack emptycan = ReactorItems.CANISTER.getStackOfMetadata(0);
 	public static final ItemStack uf6can = ReactorItems.CANISTER.getStackOfMetadata(1);
@@ -29,5 +30,6 @@ public class ReactorStacks {
 	public static final ItemStack h2can = ReactorItems.CANISTER.getStackOfMetadata(5);
 	public static final ItemStack h3can = ReactorItems.CANISTER.getStackOfMetadata(6);
 	public static final ItemStack clcan = ReactorItems.CANISTER.getStackOfMetadata(7);
+	public static final ItemStack ocan = ReactorItems.CANISTER.getStackOfMetadata(8);
 
 }

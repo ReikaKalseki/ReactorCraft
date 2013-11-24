@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -30,13 +31,15 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.Shockable;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ShaftPowerReceiver, IFluidHandler, PipeConnector, TemperatureTE {
+public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ShaftPowerReceiver, IFluidHandler, PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	public static final int SODIUM_MELT = 98;
 
@@ -46,13 +49,17 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	public static final int MAXTEMP = 1200;
 
-	private HybridTank cltank = new HybridTank("chlorine", this.getCapacity());
-	private HybridTank natank = new HybridTank("sodium", this.getCapacity());
+	private HybridTank tankL = new HybridTank("lighttank", this.getCapacity());
+	private HybridTank tankH = new HybridTank("heavytank", this.getCapacity());
+
+	private HybridTank input = new HybridTank("input", this.getCapacity()*2);
 
 	private ItemStack[] inv = new ItemStack[1];
 
-	private StepTimer timer = new StepTimer(400);
+	private StepTimer timer = new StepTimer(50);
 	private StepTimer tempTimer = new StepTimer(20);
+
+	public int time;
 
 	private int temperature;
 
@@ -61,7 +68,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	private long power;
 	private int iotick;
 
-	public static final int MINPOWER = 1048576; //1MW
+	public static final int SALTPOWER = 131072; //1MW
 
 	@Override
 	public int getIndex() {
@@ -72,12 +79,12 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		return CAPACITY;
 	}
 
-	public int getSodium() {
-		return natank.getLevel();
+	public int getHLevel() {
+		return tankH.getLevel();
 	}
 
-	public int getChlorine() {
-		return cltank.getLevel();
+	public int getLLevel() {
+		return tankL.getLevel();
 	}
 
 	public int getTime() {
@@ -88,27 +95,25 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		return d * timer.getTick() / timer.getCap();
 	}
 
-	public int getChlorineScaled(int d) {
-		return d * cltank.getLevel() / cltank.getCapacity();
-	}
-
-	public int getSodium(int d) {
-		return d * natank.getLevel() / natank.getCapacity();
-	}
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tempTimer.update();
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
-		if (this.canMake()) {
-			timer.update();
+		if (this.canMakeSodium()) {
 			if (timer.checkCap())
-				this.make();
+				this.makeSodium();
+		}
+		else if (this.canMakeHydrogen()) {
+			if (timer.checkCap())
+				this.makeHydrogen();
 		}
 		else {
 			timer.reset();
 		}
+
+		time = timer.getTick();
+		//ReikaJavaLibrary.pConsole(timer.getFraction());
 	}
 
 	private boolean hasSalt() {
@@ -120,16 +125,36 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		return false;
 	}
 
-	private boolean canMake() {
-		if (cltank.isFull() || natank.isFull())
+	private boolean canMakeSodium() {
+		if (tankL.isFull() || tankH.isFull())
 			return false;
-		return power >= MINPOWER && temperature >= SALT_MELT && this.hasSalt();
+		return power >= SALTPOWER && temperature >= SALT_MELT && this.hasSalt();
 	}
 
-	private void make() {
+	private boolean canMakeHydrogen() {
+		if (tankL.isFull() || tankH.isFull())
+			return false;
+		return this.hasHeavyWater();
+	}
+
+	private boolean hasHeavyWater() {
+		return !input.isEmpty() && input.getLevel() > 100 && input.getActualFluid().equals(FluidRegistry.getFluid("heavy water"));
+	}
+
+	private void makeSodium() {
 		ReikaInventoryHelper.decrStack(0, inv);
-		natank.addLiquid(100, FluidRegistry.getFluid("sodium"));
-		cltank.addLiquid(100, FluidRegistry.getFluid("chlorine"));
+		tankH.addLiquid(100, FluidRegistry.getFluid("sodium"));
+		tankL.addLiquid(100, FluidRegistry.getFluid("chlorine"));
+	}
+
+	private void makeHydrogen() {
+		input.removeLiquid(100);
+		tankH.addLiquid(50, FluidRegistry.getFluid("oxygen"));
+		tankL.addLiquid(100, this.getHydrogenIsotope());
+	}
+
+	private Fluid getHydrogenIsotope() {
+		return FluidRegistry.getFluid("rc deuterium");
 	}
 
 	@Override
@@ -194,31 +219,33 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
+		return input.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		int maxDrain = resource.amount;
 		if (from == ForgeDirection.DOWN)
-			return natank.drain(maxDrain, doDrain);
+			return tankH.drain(maxDrain, doDrain);
 		if (from == ForgeDirection.UP)
-			return cltank.drain(maxDrain, doDrain);
+			return tankL.drain(maxDrain, doDrain);
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		if (from == ForgeDirection.DOWN)
-			return natank.drain(maxDrain, doDrain);
+			return tankH.drain(maxDrain, doDrain);
 		if (from == ForgeDirection.UP)
-			return cltank.drain(maxDrain, doDrain);
+			return tankL.drain(maxDrain, doDrain);
 		return null;
 	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
+		return fluid.equals(FluidRegistry.getFluid("heavy water"));
 	}
 
 	@Override
@@ -228,7 +255,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{natank.getInfo(), cltank.getInfo()};
+		return new FluidTankInfo[]{tankH.getInfo(), tankL.getInfo(), input.getInfo()};
 	}
 
 	@Override
@@ -250,7 +277,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	public boolean canReadFromBlock(int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			if (x == xCoord+dir.offsetX && x == yCoord+dir.offsetY && x == zCoord+dir.offsetZ)
+			if (x == xCoord+dir.offsetX && y == yCoord+dir.offsetY && z == zCoord+dir.offsetZ)
 				return true;
 		}
 		return false;
@@ -362,6 +389,68 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	public void overheat(World world, int x, int y, int z) {
 		world.setBlock(x, y, z, 0);
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
+	}
+
+	@Override
+	public void onDischarge(int charge, double range) {
+		if (this.canMakeSodium() || this.canMakeHydrogen()) {
+			timer.update();
+		}
+	}
+
+	@Override
+	public int getMinDischarge() {
+		return 4096;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 1200;
+	}
+
+	@Override
+	public void onOverheat(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public boolean canBeFrictionHeated() {
+		return true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		tankH.writeToNBT(NBT);
+		tankL.writeToNBT(NBT);
+		input.writeToNBT(NBT);
+
+		NBT.setInteger("temp", temperature);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		tankH.readFromNBT(NBT);
+		tankL.readFromNBT(NBT);
+		input.readFromNBT(NBT);
+
+		temperature = NBT.getInteger("temp");
+	}
+
+	public boolean addHeavyWater(int amt) {
+		if (input.canTakeIn(amt)) {
+			input.addLiquid(amt, FluidRegistry.getFluid("heavy water"));
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -59,7 +59,7 @@ public enum ReactorTiles {
 	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
 	MAGNET("machine.magnet", TileEntityMagnet.class, 5, ""),
-	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 2);
+	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3);
 
 	private String name;
 	private Class teClass;

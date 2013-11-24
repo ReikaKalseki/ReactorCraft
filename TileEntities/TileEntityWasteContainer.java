@@ -228,4 +228,9 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		RadiationEffects.contaminateArea(world, x, y, z, 9);
 	}
 
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
 }

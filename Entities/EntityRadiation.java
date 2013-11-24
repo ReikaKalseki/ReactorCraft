@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;

@@ -33,8 +33,10 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -177,6 +179,24 @@ public class BlockReactorTile extends Block {
 					return true;
 				}
 				break;
+			}
+		}
+		if (r == ReactorTiles.SYNTHESIZER && is != null) {
+			TileEntitySynthesizer te = (TileEntitySynthesizer)world.getBlockTileEntity(x, y, z);
+			if (is.itemID == Item.bucketWater.itemID) {
+				boolean flag = te.addWater(1000);
+				if (flag && !ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				return true;
+			}
+		}
+		if (r == ReactorTiles.ELECTROLYZER && is != null) {
+			TileEntityElectrolyzer te = (TileEntityElectrolyzer)world.getBlockTileEntity(x, y, z);
+			if (ReikaItemHelper.matchStacks(is, ReactorItems.BUCKET.getStackOf())) {
+				boolean flag = te.addHeavyWater(1000);
+				if (flag && !ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				return true;
 			}
 		}
 		if (r == ReactorTiles.HEAVYPUMP && is != null && is.itemID == Item.bucketEmpty.itemID) {

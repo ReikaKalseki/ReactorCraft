@@ -10,6 +10,8 @@
 package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidTankInfo;
+import Reika.DragonAPI.Instantiable.Rendering.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
@@ -27,9 +29,21 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		xSize = 176;
 	}
 
+	private TankDisplay input;
+	private TankDisplay output;
+
 	@Override
 	public String getGuiTexture() {
 		return "synthesizer";
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+
+		FluidTankInfo[] info = tile.getTankInfo(null);
+		input = new TankDisplay(info[0], 142, 50, 16, 60, this);
+		output = new TankDisplay(info[1], 259, 50, 16, 60, this);
 	}
 
 	@Override
@@ -57,15 +71,19 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-
+		/*
 		int i2 = tile.getWaterScaled(60);
 		this.drawTexturedModalRect(j+17, k+78-i2, 208, 80-i2, 16, i2);
 
 		int i4 = tile.getAmmoniaScaled(60);
 		this.drawTexturedModalRect(j+134, k+78-i4, 224, 80-i4, 16, i4);
-
+		 */
 		int i6 = tile.getTimerScaled(24);
 		this.drawTexturedModalRect(j+103, k+26, 176, 92, i6, 34);
+
+		FluidTankInfo[] info = tile.getTankInfo(null);
+		input.updateTank(info[0]).render(true);
+		output.updateTank(info[1]).render(true);
 	}
 
 }

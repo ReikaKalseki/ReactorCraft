@@ -39,7 +39,7 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 1;
+		return 64;
 	}
 
 	@Override

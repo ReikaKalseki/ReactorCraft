@@ -31,8 +31,8 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
-import Reika.DragonAPI.Instantiable.ControlledConfig;
-import Reika.DragonAPI.Instantiable.ModLogger;
+import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
+import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -92,12 +92,13 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
 	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700);
 	public static final Fluid CL = new Fluid("chlorine").setDensity(320).setViscosity(12).setGaseous(true);
+	public static final Fluid O = new Fluid("oxygen").setDensity(138).setViscosity(20).setGaseous(true);
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
 
-	public static final Fluid H2 = new Fluid("deuterium").setDensity(180).setViscosity(10).setGaseous(true);
-	public static final Fluid H3 = new Fluid("tritium").setDensity(190).setViscosity(10).setGaseous(true);
+	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(180).setViscosity(10).setGaseous(true);
+	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true);
 
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
@@ -167,6 +168,7 @@ public class ReactorCraft extends DragonAPIMod {
 		Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
 		Icon na = event.map.registerIcon("ReactorCraft:sodium");
 		Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
+		Icon o = event.map.registerIcon("ReactorCraft:oxygen");
 
 		Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
 		Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
@@ -179,6 +181,7 @@ public class ReactorCraft extends DragonAPIMod {
 		NH3.setIcons(nh3);
 		NA.setIcons(na);
 		CL.setIcons(cl);
+		O.setIcons(o);
 
 		H2.setIcons(h2);
 		H3.setIcons(h3);
@@ -210,6 +213,7 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(NH3);
 		FluidRegistry.registerFluid(NA);
 		FluidRegistry.registerFluid(CL);
+		FluidRegistry.registerFluid(O);
 
 		FluidRegistry.registerFluid(H2);
 		FluidRegistry.registerFluid(H3);
@@ -225,6 +229,7 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NH3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nh3can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NA, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.nacan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(CL, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.clcan, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(O, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.ocan, ReactorStacks.emptycan);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h2can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h3can, ReactorStacks.emptycan);

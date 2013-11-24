@@ -47,7 +47,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 
 			if (ore.canGenAt(world, posX, posY, posZ)) {
 				if ((new WorldGenMinable(id, meta, ore.veinSize, ore.getReplaceableBlock())).generate(world, random, posX, posY, posZ))
-					;//ReikaJavaLibrary.pConsole(ore+" @ "+posX+", "+posY+", "+posZ);
+					;//ReikaJavaLibrary.pConsole(ore+" @ "+posX+", "+posY+", "+posZ, ore == ReactorOres.MAGNETITE);
 			}
 
 			if (ore == ReactorOres.FLUORITE) {
