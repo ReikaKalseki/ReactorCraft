@@ -126,6 +126,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return StatCollector.translateToLocal(ReactorNames.canNames[meta]);
 		case CRAFTING:
 			return CraftingItems.partList[meta].itemName;
+		case BREEDERFUEL:
+			return this.getBasicName()+" ("+(meta*20)+"% Converted)";
 		default:
 			return this.getBasicName();
 		}
@@ -141,6 +143,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case INGOTS:
 		case CANISTER:
 		case CRAFTING:
+		case BREEDERFUEL:
 			return true;
 		default:
 			return false;
@@ -166,6 +169,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return CraftingItems.partList.length;
 		case WASTE:
 			return WasteManager.getNumberWastes();
+		case BREEDERFUEL:
+			return 5;
 		default:
 			return 1;
 		}

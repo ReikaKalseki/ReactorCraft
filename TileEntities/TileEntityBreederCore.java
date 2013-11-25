@@ -14,26 +14,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
-import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityBreederCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured {
-
-	private ItemStack[] inv = new ItemStack[8];
-
-	@Override
-	public int getSizeInventory() {
-		return inv.length;
-	}
+public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+		super.updateEntity();
+
+
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -52,18 +45,9 @@ public class TileEntityBreederCore extends TileEntityInventoriedReactorBase impl
 		}
 	}
 
-	private boolean isFissile() {
+	@Override
+	public boolean isFissile() {
 		return ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv) != -1;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
 	}
 
 	@Override
@@ -83,36 +67,36 @@ public class TileEntityBreederCore extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public int getMaxTemperature() {
-		return 700;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
+		return 900;
 	}
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (ReikaRandomHelper.doWithChance(5)) {
-			int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
-			if (slot != -1) {
-				inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
-				temperature += 20;
-				this.spawnNeutronBurst(world, x, y, z);
+		if (!world.isRemote) {
+			if (this.isPoisoned())
 				return true;
+			if (ReikaRandomHelper.doWithChance(5)) {
+				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
+				if (slot != -1) {
+					int dmg = inv[slot].getItemDamage();
+					if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
+						inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
+						temperature += 20;
+					}
+					else {
+						inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
+					}
+					this.spawnNeutronBurst(world, x, y, z);
+
+					if (ReikaRandomHelper.doWithChance(10)) {
+						this.addWaste();
+					}
+
+					return true;
+				}
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public boolean canEnterFromSide(ForgeDirection dir) {
-		return dir == ForgeDirection.UP;
-	}
-
-	@Override
-	public boolean canExitToSide(ForgeDirection dir) {
-		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override
@@ -128,6 +112,11 @@ public class TileEntityBreederCore extends TileEntityInventoriedReactorBase impl
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public boolean canDumpHeatInto(LiquidStates liq) {
+		return liq == LiquidStates.SODIUM;
 	}
 
 }

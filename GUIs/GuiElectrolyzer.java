@@ -46,8 +46,8 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 		int k = (height - ySize) / 2;
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
-		heavy = new TankDisplay(info[0], j+98, k+18, 16, 60, this);
-		light = new TankDisplay(info[1], j+134, k+18, 16, 60, this);
+		heavy = new TankDisplay(info[0], j+98, k+18, 16, 60);
+		light = new TankDisplay(info[1], j+134, k+18, 16, 60);
 	}
 
 	@Override

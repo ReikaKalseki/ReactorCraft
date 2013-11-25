@@ -17,6 +17,7 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
@@ -87,6 +88,11 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	private void onMeltdown(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public boolean canDumpHeatInto(LiquidStates liq) {
+		return liq.isWater();
 	}
 
 }

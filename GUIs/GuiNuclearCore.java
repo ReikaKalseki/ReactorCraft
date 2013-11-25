@@ -11,13 +11,13 @@ package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
-import Reika.ReactorCraft.Container.ContainerFuelRod;
-import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
+import Reika.ReactorCraft.Container.ContainerNuclearCore;
 
-public class GuiFuelRod extends ReactorGuiBase {
+public class GuiNuclearCore extends ReactorGuiBase {
 
-	public GuiFuelRod(EntityPlayer player, TileEntityFuelRod fuel) {
-		super(new ContainerFuelRod(player, fuel), player, fuel);
+	public GuiNuclearCore(EntityPlayer player, TileEntityNuclearCore fuel) {
+		super(new ContainerNuclearCore(player, fuel), player, fuel);
 		ySize = 182;
 	}
 

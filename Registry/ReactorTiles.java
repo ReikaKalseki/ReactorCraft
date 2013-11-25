@@ -31,6 +31,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.TileEntitySodiumBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
@@ -63,7 +64,8 @@ public enum ReactorTiles {
 	MAGNET("machine.magnet", TileEntityMagnet.class, 5, ""),
 	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
 	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
-	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5);
+	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
+	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumBoiler.class, 6);
 
 	private String name;
 	private Class teClass;

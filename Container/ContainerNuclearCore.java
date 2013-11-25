@@ -13,11 +13,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 
-public class ContainerFuelRod extends CoreContainer {
+public class ContainerNuclearCore extends CoreContainer {
 
-	public ContainerFuelRod(EntityPlayer player, TileEntityFuelRod te) {
+	public ContainerNuclearCore(EntityPlayer player, TileEntityNuclearCore te) {
 		super(player, te);
 
 		this.addSlotToContainer(new Slot(te, 0, 80, 23));

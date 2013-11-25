@@ -27,7 +27,6 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
 	private LiquidStates internalLiquid;
-	private double storedEnergy;
 
 	public TileEntityWaterCell() {
 		this.setLiquidState(LiquidStates.EMPTY);
@@ -68,30 +67,9 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		}
 	}
 
-	private void transferEnergy(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y-1, z);
-		int meta = world.getBlockMetadata(x, y-1, z);
-		TileEntity te = world.getBlockTileEntity(x, y-1, z);
-		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
-			TileEntityWaterCell wc = (TileEntityWaterCell)te;
-			wc.storedEnergy += storedEnergy;
-			storedEnergy = 0;
-		}
-	}
-
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
-	}
-
-	public double getEnergy() {
-		return storedEnergy;
-	}
-
-	protected double removeEnergy() {
-		double E = storedEnergy;
-		storedEnergy = 0;
-		return E;
 	}
 
 	@Override
@@ -159,7 +137,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public int getMaxTemperature() {
-		return 0;
+		return 1000;
 	}
 
 	private void onMeltdown(World world, int x, int y, int z) {
@@ -170,8 +148,6 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-
-		storedEnergy = NBT.getDouble("energy");
 
 		this.setLiquidState(LiquidStates.list[NBT.getInteger("liq")]);
 	}
@@ -184,8 +160,11 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setDouble("energy", storedEnergy);
-
 		NBT.setInteger("liq", this.getLiquidState().ordinal());
+	}
+
+	@Override
+	public boolean canDumpHeatInto(LiquidStates liq) {
+		return liq != LiquidStates.EMPTY && (this.getLiquidState().isWater() == liq.isWater());
 	}
 }

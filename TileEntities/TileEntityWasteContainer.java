@@ -23,13 +23,13 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 
-public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase implements Temperatured {
+public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase implements TemperatureTE {
 
 	public static final int WIDTH = 9;
 	public static final int HEIGHT = 3;
@@ -48,7 +48,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		if (thermalTicker.checkCap()) {
 			int waste = this.countWaste();
 			temperature += waste*ReikaNuclearHelper.getWasteDecayHeat();
-			this.distributeHeat(world, x, y, z);
+			this.updateTemperature(world, x, y, z, meta);
 		}
 
 		if (!world.isRemote)
@@ -75,7 +75,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 		if (temperature < Tamb)
 			temperature = Tamb;
 		if (temperature > this.getMaxTemperature()) {
-			this.onMeltdown(world, x, y, z);
+			this.overheat(world, x, y, z);
 		}
 		else if (temperature > this.getMaxTemperature()/2 && rand.nextInt(6) == 0) {
 			world.spawnParticle("smoke", x+rand.nextDouble(), y+1, z+rand.nextDouble(), 0, 0, 0);
@@ -214,11 +214,10 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	}
 
 	@Override
-	public void setTemperature(int T) {
-		temperature = T;
+	public void addTemperature(int T) {
+		temperature += T;
 	}
 
-	@Override
 	public int getMaxTemperature() {
 		return 600;
 	}
@@ -241,6 +240,21 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	@Override
 	public boolean canExitToSide(ForgeDirection dir) {
 		return true;
+	}
+
+	@Override
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		this.distributeHeat(world, x, y, z);
+	}
+
+	@Override
+	public int getThermalDamage() {
+		return temperature/100;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+		this.onMeltdown(world, x, y, z);
 	}
 
 }

@@ -45,9 +45,9 @@ public class GuiProcessor extends ReactorGuiBase {
 		int k = (height - ySize) / 2;
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
-		water = new TankDisplay(info[0], j+98, k+18, 16, 60, this);
-		acid = new TankDisplay(info[1], j+116, k+18, 16, 60, this);
-		uf6 = new TankDisplay(info[2], j+134, k+18, 16, 60, this);
+		water = new TankDisplay(info[0], j+98, k+18, 16, 60);
+		acid = new TankDisplay(info[1], j+116, k+18, 16, 60);
+		uf6 = new TankDisplay(info[2], j+134, k+18, 16, 60);
 	}
 
 	@Override

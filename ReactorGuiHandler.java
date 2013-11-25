@@ -12,22 +12,22 @@ package Reika.ReactorCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
-import Reika.ReactorCraft.Container.ContainerFuelRod;
+import Reika.ReactorCraft.Container.ContainerNuclearCore;
 import Reika.ReactorCraft.Container.ContainerProcessor;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
-import Reika.ReactorCraft.GUIs.GuiFuelRod;
+import Reika.ReactorCraft.GUIs.GuiNuclearCore;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
-import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -44,7 +44,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			switch(r) {
 			case FUEL:
-				return new ContainerFuelRod(player, (TileEntityFuelRod)te);
+			case BREEDER:
+				return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
 			case WASTECONTAINER:
 				return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
 			case PROCESSOR:
@@ -69,7 +70,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			switch(r) {
 			case FUEL:
-				return new GuiFuelRod(player, (TileEntityFuelRod)te);
+			case BREEDER:
+				return new GuiNuclearCore(player, (TileEntityNuclearCore)te);
 			case WASTECONTAINER:
 				return new GuiWasteContainer(player, (TileEntityWasteContainer)te);
 			case PROCESSOR:

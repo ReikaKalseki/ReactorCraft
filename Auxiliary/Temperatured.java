@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+
 public interface Temperatured {
 
 	public abstract int getTemperature();
@@ -16,5 +18,7 @@ public interface Temperatured {
 	public void setTemperature(int T);
 
 	public int getMaxTemperature();
+
+	public boolean canDumpHeatInto(LiquidStates liq);
 
 }

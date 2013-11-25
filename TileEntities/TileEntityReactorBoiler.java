@@ -15,29 +15,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
-import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
-import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, IPipeConnection, Temperatured {
-
-	private int steam;
+public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 	public static final int WATER_PER_STEAM = 1;
 
@@ -63,6 +54,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 				fluid = WorkingFluid.WATER;
 			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
 				fluid = WorkingFluid.AMMONIA;
+			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
+				fluid = WorkingFluid.AMMONIA;
 			tank.removeLiquid(WATER_PER_STEAM);
 			temperature -= 5;
 		}
@@ -77,38 +70,6 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 
 		this.balanceFluid(world, x, y, z);
 		this.transferSteam(world, x, y, z);
-	}
-
-	private void transferSteam(World world, int x, int y, int z) {
-		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
-		if (r == ReactorTiles.BOILER) {
-			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y+1, z);
-			if (steam > 0 && fluid != WorkingFluid.EMPTY) {
-				if (te.fluid == WorkingFluid.EMPTY || te.fluid == fluid) {
-					te.fluid = fluid;
-					te.steam += steam;
-					steam = 0;
-				}
-			}
-		}
-	}
-
-	private void balanceFluid(World world, int x, int y, int z) {
-		for (int i = 0; i < 2; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-			if (r == ReactorTiles.BOILER) {
-				TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
-				if (te.tank.getLevel() < tank.getLevel() && (te.tank.isEmpty() || te.tank.getActualFluid() == tank.getActualFluid())) {
-					int dl = tank.getLevel()-te.tank.getLevel();
-					te.tank.addLiquid(dl/4+1, tank.getActualFluid());
-					tank.removeLiquid(dl/4+1);
-				}
-			}
-		}
 	}
 
 	private void detonateAmmonia(World world, int x, int y, int z) {
@@ -159,21 +120,6 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE;
 	}
@@ -184,28 +130,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public boolean canReceiveFrom(ForgeDirection from) {
-		return from == ForgeDirection.DOWN;
-	}
-
-	@Override
-	public Fluid getInputFluid() {
-		return null;
-	}
-
-	@Override
 	public boolean isValidFluid(Fluid f) {
 		return WorkingFluid.isWorkingFluid(f);
-	}
-
-	@Override
-	public int getTemperature() {
-		return temperature;
-	}
-
-	@Override
-	public void setTemperature(int T) {
-		temperature = T;
 	}
 
 	@Override
@@ -214,40 +140,19 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		return false;
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 
-		steam = NBT.getInteger("energy");
-		tank.readFromNBT(NBT);
-
 		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setInteger("energy", steam);
-
-		tank.writeToNBT(NBT);
-
 		fluid.saveToNBT(NBT);
-	}
-
-	public int removeSteam() {
-		int s = steam;
-		steam = 0;
-		return s;
 	}
 
 	public WorkingFluid getWorkingFluid() {
@@ -255,31 +160,8 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
-		return type == PipeType.FLUID && with == ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
-	}
-
-	public void addLiquid(int amt, Fluid fluid) {
-		tank.addLiquid(amt, fluid);
-	}
-
-	@Override
-	public int getTextureState(ForgeDirection side) {
-		if (side.offsetY != 0)
-			return 0;
-		World world = worldObj;
-		int x = xCoord;
-		int y = yCoord;
-		int z = zCoord;
-		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
-		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
-		if (r2 == ReactorTiles.BOILER && r == ReactorTiles.BOILER)
-			return 2;
-		else if (r2 == ReactorTiles.BOILER)
-			return 1;
-		else if (r == ReactorTiles.BOILER)
-			return 3;
-		return 0;
+	public Fluid getInputFluid() {
+		return null;
 	}
 
 }

@@ -19,7 +19,7 @@ public enum WorkingFluid {
 	WATER(0.5F, 100),
 	AMMONIA(1, -33);
 
-	public final float efficiency	;
+	public final float efficiency;
 	public final int boilingTemp;
 
 	public static final WorkingFluid[] list = values();
