@@ -18,20 +18,23 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable {
+public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable, Temperatured {
 
 	private ItemStack[] inv = new ItemStack[12]; //two new cols, one on either side
 
@@ -89,8 +92,8 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				int meta = world.getBlockMetadata(dx, dy, dz);
 				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 					TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
-					if (te.getLiquidState() != 0 && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
-						te.setLiquidState(0);
+					if (te.getLiquidState().isWater() && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
+						te.setLiquidState(LiquidStates.EMPTY);
 						temperature -= 20;
 					}
 				}
@@ -184,7 +187,14 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 				return true;
 			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
 				if (ReikaRandomHelper.doWithChance(10)) {
-					int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
+					int slot = -1;
+					for (int i = 3; i >= 0; i--) {
+						ItemStack is = inv[i];
+						if (is != null && is.itemID == ReactorItems.FUEL.getShiftedItemID()) {
+							slot = i;
+							i = -1;
+						}
+					}
 					if (slot != -1) {
 						ItemStack is = inv[slot];
 						if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
@@ -193,16 +203,18 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 							inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
 
 						if (ReikaRandomHelper.doWithChance(10)) {
+							boolean flag = false;
 							ItemStack waste = WasteManager.getRandomWasteItem();
-							//if (!ReikaInventoryHelper.addToIInv(waste, this))
-							//	missingWaste.add(waste);
-							for (int i = 4; i < 12; i++) {
+							ReikaJavaLibrary.pConsole(waste.getDisplayName());
+							for (int i = 4; i < 12 && !flag; i++) {
 								ItemStack inslot = inv[i];
 								if (inslot == null) {
 									inv[i] = waste;
+									flag = true;
 								}
-								else if (ItemStack.areItemStackTagsEqual(waste, inslot) && waste.isItemEqual(inslot)) {
+								else if (ItemStack.areItemStackTagsEqual(waste, inslot) && waste.isItemEqual(inslot) && inv[i].stackSize+waste.stackSize <= waste.getMaxStackSize()) {
 									inv[i].stackSize += waste.stackSize;
+									flag = true;
 								}
 							}
 						}
@@ -223,23 +235,13 @@ public class TileEntityFuelRod extends TileEntityInventoriedReactorBase implemen
 	}
 
 	@Override
-	public double getTemperature() {
+	public int getTemperature() {
 		return temperature;
 	}
 
 	@Override
 	public void setTemperature(int T) {
 		temperature = T;
-	}
-
-	public ForgeDirection getRandomDirection() {
-		int r = 2+rand.nextInt(4);
-		return dirs[r];
-	}
-
-	private void spawnNeutronBurst(World world, int x, int y, int z) {
-		for (int i = 0; i < 3; i++)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
 	}
 
 	public boolean feed() {

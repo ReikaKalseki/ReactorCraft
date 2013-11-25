@@ -11,7 +11,7 @@ package Reika.ReactorCraft.Auxiliary;
 
 public interface Temperatured {
 
-	public abstract double getTemperature();
+	public abstract int getTemperature();
 
 	public void setTemperature(int T);
 

@@ -16,13 +16,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -63,12 +63,10 @@ public class ItemNuclearWaste extends ReactorItemBase {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean adv) {
-		NBTTagCompound nbt = is.stackTagCompound;
-		if (nbt != null) {
-			Isotopes atom = Isotopes.getIsotope(nbt.getInteger("iso"));
-			li.add(atom.getDisplayName());
-			li.add("Half Life: "+atom.getHalfLifeAsDisplay());
-		}
+		List<Isotopes> iso = WasteManager.getWasteList();
+		Isotopes atom = iso.get(is.getItemDamage());
+		li.add(atom.getDisplayName());
+		li.add("Half Life: "+atom.getHalfLifeAsDisplay());
 	}
 
 	@Override
@@ -77,11 +75,14 @@ public class ItemNuclearWaste extends ReactorItemBase {
 	{
 		List<Isotopes> waste = WasteManager.getWasteList();
 		for (int i = 0; i < waste.size(); i++) {
-			ItemStack item = new ItemStack(ID, 1, 0);
-			item.stackTagCompound = new NBTTagCompound();
-			item.stackTagCompound.setInteger("iso", waste.get(i).ordinal());
+			ItemStack item = new ItemStack(ID, 1, i);
 			li.add(item);
 		}
+	}
+
+	@Override
+	public String getItemDisplayName(ItemStack is) {
+		return ReactorItems.WASTE.getBasicName();
 	}
 
 }

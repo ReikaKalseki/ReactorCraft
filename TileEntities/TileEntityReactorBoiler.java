@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -34,7 +35,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, IPipeConnection {
+public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, IPipeConnection, Temperatured {
 
 	private int steam;
 
@@ -198,7 +199,7 @@ public class TileEntityReactorBoiler extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public double getTemperature() {
+	public int getTemperature() {
 		return temperature;
 	}
 

@@ -19,17 +19,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE {
+public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
 	private LiquidStates internalLiquid;
 	private double storedEnergy;
 
 	public TileEntityWaterCell() {
-		this.setLiquidState(0);
+		this.setLiquidState(LiquidStates.EMPTY);
 	}
 
 	@Override
@@ -39,22 +40,17 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		int metadata = world.getBlockMetadata(x, y-1, z);
 		if (id == this.getTileEntityBlockID() && metadata == ReactorTiles.COOLANT.getBlockMetadata()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y-1, z);
-			if (te.getLiquidState() == 0 && this.getLiquidState() != 0) {
+			if (te.getLiquidState() == LiquidStates.EMPTY && this.getLiquidState() != LiquidStates.EMPTY) {
 				te.setLiquidState(this.getLiquidState());
-				this.setLiquidState(0);
+				this.setLiquidState(LiquidStates.EMPTY);
 			}
 		}
 
 		if (thermalTicker.checkCap() && !world.isRemote) {
-			//this.accrueEnergy(world, x, y, z);
-
-			//this.transferEnergy(world, x, y, z);
-
-			//ReikaJavaLibrary.pConsoleIf(storedEnergy, y == 73);
 			this.updateTemperature(world, x, y, z);
 		}
 
-		if (this.getLiquidState() == LiquidStates.EMPTY.ordinal()) {
+		if (this.getLiquidState() == LiquidStates.EMPTY) {
 			TileEntity te = world.getBlockTileEntity(x, y+1, z);
 			if (te instanceof IFluidHandler) {
 				IFluidHandler ic = (IFluidHandler)te;
@@ -62,10 +58,10 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 				if (liq != null && liq.amount >= FluidContainerRegistry.BUCKET_VOLUME) {
 					ic.drain(ForgeDirection.DOWN, FluidContainerRegistry.BUCKET_VOLUME, true);
 					if (liq.getFluid().equals(FluidRegistry.WATER)) {
-						this.setLiquidState(LiquidStates.WATER.ordinal());
+						this.setLiquidState(LiquidStates.WATER);
 					}
 					else if (liq.getFluid().equals(ReactorCraft.D2O)) {
-						this.setLiquidState(LiquidStates.HEAVY.ordinal());
+						this.setLiquidState(LiquidStates.HEAVY);
 					}
 				}
 			}
@@ -114,7 +110,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public double getTemperature() {
+	public int getTemperature() {
 		return temperature;
 	}
 
@@ -135,38 +131,30 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		return 0;
 	}
 
-	enum LiquidStates {
+	public enum LiquidStates {
 		EMPTY(),
 		WATER(),
-		HEAVY();
+		HEAVY(),
+		SODIUM();
 
 		public static final LiquidStates[] list = values();
+
+		public boolean isWater() {
+			return this == WATER || this == HEAVY;
+		}
 	}
 
 	@Override
 	public int getTextureState(ForgeDirection side) {
-		return this.getLiquidState();
+		return this.getLiquidState().ordinal();
 	}
 
-	public int getLiquidState() {
-		return internalLiquid.ordinal();
+	public LiquidStates getLiquidState() {
+		return internalLiquid;
 	}
 
-	public void setLiquidState(int liq) {
-		internalLiquid = LiquidStates.list[liq];
-	}
-
-	public void accrueEnergy(World world, int x, int y, int z) {
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = ForgeDirection.values()[i];
-			int id = world.getBlockId(x+dir.offsetX, y, z+dir.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX, y, z+dir.offsetZ);
-			if (id == ReactorTiles.FUEL.getBlockID() && meta == ReactorTiles.FUEL.getBlockMetadata()) {
-				TileEntityFuelRod te = (TileEntityFuelRod)world.getBlockTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
-				storedEnergy += te.storedEnergy;
-				te.storedEnergy = 0;
-			}
-		}
+	public void setLiquidState(LiquidStates liq) {
+		internalLiquid = liq;
 	}
 
 	@Override
@@ -185,7 +173,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 		storedEnergy = NBT.getDouble("energy");
 
-		this.setLiquidState(NBT.getInteger("liq"));
+		this.setLiquidState(LiquidStates.list[NBT.getInteger("liq")]);
 	}
 
 	/**
@@ -198,6 +186,6 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 
 		NBT.setDouble("energy", storedEnergy);
 
-		NBT.setInteger("liq", this.getLiquidState());
+		NBT.setInteger("liq", this.getLiquidState().ordinal());
 	}
 }

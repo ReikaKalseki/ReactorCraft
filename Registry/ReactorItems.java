@@ -19,6 +19,7 @@ import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
+import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
@@ -126,7 +127,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case CRAFTING:
 			return CraftingItems.partList[meta].itemName;
 		default:
-			return "";
+			return this.getBasicName();
 		}
 	}
 
@@ -163,6 +164,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return ReactorNames.canNames.length;
 		case CRAFTING:
 			return CraftingItems.partList.length;
+		case WASTE:
+			return WasteManager.getNumberWastes();
 		default:
 			return 1;
 		}

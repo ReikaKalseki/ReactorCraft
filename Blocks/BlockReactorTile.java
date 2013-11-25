@@ -39,6 +39,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends Block {
@@ -149,36 +150,46 @@ public class BlockReactorTile extends Block {
 		if (r == ReactorTiles.COOLANT && is != null) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y, z);
 			switch(te.getLiquidState()) {
-			case 0:
+			case EMPTY:
 				if (is.itemID == Item.bucketWater.itemID) {
-					te.setLiquidState(1);
+					te.setLiquidState(LiquidStates.WATER);
 					if (!ep.capabilities.isCreativeMode)
 						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 					return true;
 				}
-				if (is.itemID == ReactorItems.BUCKET.getShiftedItemID()) {
-					te.setLiquidState(2);
+				else if (is.itemID == ReactorItems.BUCKET.getShiftedItemID()) {
+					te.setLiquidState(LiquidStates.HEAVY);
 					if (!ep.capabilities.isCreativeMode)
 						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 					return true;
 				}
-				break;
-			case 1:
-				if (is.itemID == Item.bucketEmpty.itemID) {
-					te.setLiquidState(0);
+				else if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
+					te.setLiquidState(LiquidStates.SODIUM);
 					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketWater));
+						ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
 					return true;
 				}
 				break;
-			case 2:
+			case WATER:
 				if (is.itemID == Item.bucketEmpty.itemID) {
-					te.setLiquidState(0);
-					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+					te.setLiquidState(LiquidStates.EMPTY);
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketWater));
 					return true;
 				}
 				break;
+			case HEAVY:
+				if (is.itemID == Item.bucketEmpty.itemID) {
+					te.setLiquidState(LiquidStates.EMPTY);
+					ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+					return true;
+				}
+				break;
+			case SODIUM:
+				if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan)) {
+					te.setLiquidState(LiquidStates.EMPTY);
+					ep.setCurrentItemOrArmor(0, ReactorStacks.nacan);
+					return true;
+				}
 			}
 		}
 		if (r == ReactorTiles.SYNTHESIZER && is != null) {

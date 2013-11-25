@@ -20,6 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.TileEntities.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
@@ -33,6 +34,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -59,7 +61,9 @@ public enum ReactorTiles {
 	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
 	MAGNET("machine.magnet", TileEntityMagnet.class, 5, ""),
-	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3);
+	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
+	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
+	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5);
 
 	private String name;
 	private Class teClass;
@@ -208,6 +212,8 @@ public enum ReactorTiles {
 		case GRATE:
 		case PUMP:
 		case MAGNET:
+		case TRITIZER:
+		case BREEDER:
 			return true;
 		default:
 			return false;
@@ -217,7 +223,7 @@ public enum ReactorTiles {
 	public int getTextureStates() {
 		switch(this) {
 		case COOLANT:
-			return 3;
+			return TileEntityWaterCell.LiquidStates.list.length;
 		case BOILER:
 			return 4;
 		default:

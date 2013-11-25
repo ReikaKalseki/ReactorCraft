@@ -16,8 +16,9 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftMachine;
 
@@ -102,17 +103,27 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r != null) {
 				TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof ReactorCoreTE) {
-					double T = ((ReactorCoreTE) te).getTemperature();
+				if (te instanceof Temperatured) {
+					double T = ((Temperatured) te).getTemperature();
 					double dT = T-temperature;
 					if (dT > 0) {
 						double newT = T-dT/4D;
 						//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
 						temperature += dT/4D;
-						((ReactorCoreTE) te).setTemperature((int)newT);
+						((Temperatured) te).setTemperature((int)newT);
 					}
 				}
 			}
 		}
+	}
+
+	protected void spawnNeutronBurst(World world, int x, int y, int z) {
+		for (int i = 0; i < 3; i++)
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+	}
+
+	public ForgeDirection getRandomDirection() {
+		int r = 2+rand.nextInt(4);
+		return dirs[r];
 	}
 }

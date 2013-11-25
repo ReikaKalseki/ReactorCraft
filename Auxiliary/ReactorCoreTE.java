@@ -12,7 +12,7 @@ package Reika.ReactorCraft.Auxiliary;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 
-public interface ReactorCoreTE extends Temperatured {
+public interface ReactorCoreTE {
 
 	public abstract boolean onNeutron(EntityNeutron e, World world, int x, int y, int z);
 

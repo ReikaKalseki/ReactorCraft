@@ -209,7 +209,7 @@ public class TileEntityWasteContainer extends TileEntityInventoriedReactorBase i
 	}
 
 	@Override
-	public double getTemperature() {
+	public int getTemperature() {
 		return temperature;
 	}
 

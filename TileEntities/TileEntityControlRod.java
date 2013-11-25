@@ -13,11 +13,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE {
+public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
 	private boolean lowered;
 
@@ -50,7 +51,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	}
 
 	@Override
-	public double getTemperature() {
+	public int getTemperature() {
 		return temperature;
 	}
 
