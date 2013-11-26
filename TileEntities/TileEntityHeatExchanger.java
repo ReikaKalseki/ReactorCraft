@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
@@ -36,6 +37,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	private HybridTank output = new HybridTank("exchangerout", this.getCapacity());
 
+	private StepTimer temp = new StepTimer(20);
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.EXCHANGER.ordinal();
@@ -45,6 +48,29 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.canCool())
 			this.cool();
+		temp.update();
+		if (temp.checkCap()) {
+			this.distributeHeat(world, x, y, z);
+			this.updateTemperature(world, x, y, z, meta);
+		}
+	}
+
+	private void distributeHeat(World world, int x, int y, int z) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+			if (r == ReactorTiles.BOILER) {
+				TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
+				int dT = temperature - te.getTemperature();
+				if (dT > 0) {
+					temperature -= dT/4;
+					te.setTemperature(te.getTemperature()+dT/4);
+				}
+			}
+		}
 	}
 
 	private void cool() {
