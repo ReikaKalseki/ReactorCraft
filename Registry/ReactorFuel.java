@@ -18,6 +18,8 @@ public enum ReactorFuel {
 
 	private final ItemStack fuel;
 
+	public static final ReactorFuel[] fuelList = values();
+
 	private ReactorFuel(ItemStack item) {
 		fuel = item;
 	}
@@ -28,5 +30,22 @@ public enum ReactorFuel {
 
 	public ItemStack getFuelItem() {
 		return fuel.copy();
+	}
+
+	public ItemStack getFissionProduct(ItemStack input) {
+		if (input == null)
+			return null;
+		switch(this) {
+		case PLUTONIUM:
+			return null;
+		case THORIUM:
+			return null;
+		case URANIUM:
+			if (input.getItemDamage() == ReactorItems.FUEL.getNumberMetadatas()-1)
+				return ReactorItems.DEPLETED.getStackOf();
+			else
+				return ReactorItems.FUEL.getStackOfMetadata(input.getItemDamage()+1);
+		}
+		return null;
 	}
 }

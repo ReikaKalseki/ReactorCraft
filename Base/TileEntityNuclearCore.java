@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -220,7 +219,6 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	protected void addWaste() {
 		boolean flag = false;
 		ItemStack waste = WasteManager.getRandomWasteItem();
-		ReikaJavaLibrary.pConsole(waste.getDisplayName());
 		for (int i = 4; i < 12 && !flag; i++) {
 			ItemStack inslot = inv[i];
 			if (inslot == null) {
@@ -276,9 +274,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		if (dT > 0) {
 			for (int i = 2; i < 6; i++) {
 				ForgeDirection dir = dirs[i];
-				int dx = dir.offsetX;
-				int dy = dir.offsetY;
-				int dz = dir.offsetZ;
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
 				int id = world.getBlockId(dx, dy, dz);
 				int meta = world.getBlockMetadata(dx, dy, dz);
 				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
@@ -286,6 +284,14 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 					if (te.getLiquidState().isWater() && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
 						te.setLiquidState(LiquidStates.EMPTY);
 						temperature -= 20;
+					}
+				}
+				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
+					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getBlockTileEntity(dx, dy, dz);
+					int dTemp = temperature-te.temperature;
+					if (dTemp > 0) {
+						temperature -= dTemp/16;
+						te.temperature += dTemp/16;
 					}
 				}
 			}

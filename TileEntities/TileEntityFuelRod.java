@@ -16,6 +16,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorFuel;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
@@ -73,10 +74,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					}
 					if (slot != -1) {
 						ItemStack is = inv[slot];
-						if (is.getItemDamage() < ReactorItems.FUEL.getNumberMetadatas()-1)
-							inv[slot] = new ItemStack(is.itemID, is.stackSize, 1+is.getItemDamage());
-						else
-							inv[slot] = ReactorItems.DEPLETED.getCraftedProduct(is.stackSize);
+						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
 
 						if (ReikaRandomHelper.doWithChance(10)) {
 							this.addWaste();
@@ -92,6 +90,9 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					else {
 						slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
 						if (slot != -1) {
+
+							inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
+
 							if (ReikaRandomHelper.doWithChance(10)) {
 								this.addWaste();
 							}
@@ -117,9 +118,12 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 
 	@Override
 	public boolean isFissile() {
-		boolean u = ReikaInventoryHelper.checkForItem(ReactorItems.FUEL.getShiftedItemID(), inv);
-		boolean pu = ReikaInventoryHelper.checkForItem(ReactorItems.PLUTONIUM.getShiftedItemID(), inv);
-		return u || pu;
+		for (int i = 0; i < ReactorFuel.fuelList.length; i++) {
+			int id = ReactorFuel.fuelList[i].getFuelItem().itemID;
+			if (ReikaInventoryHelper.checkForItem(id, inv))
+				return true;
+		}
+		return false;
 	}
 
 	@Override

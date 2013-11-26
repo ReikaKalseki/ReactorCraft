@@ -41,13 +41,11 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		thermalTicker.update();
+		super.updateEntity(world, x, y, z, meta);
 
-		if (thermalTicker.checkCap() && !world.isRemote) {
-			this.updateTemperature(world, x, y, z);
-		}
 		if (temperature >= 650 && fluid == WorkingFluid.AMMONIA)
 			this.detonateAmmonia(world, x, y, z);
+
 		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100 && this.canBoilTankLiquid()) {
 			steam++;
 			if (tank.getActualFluid().equals(FluidRegistry.WATER))
@@ -68,7 +66,6 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
 
-		this.balanceFluid(world, x, y, z);
 		this.transferSteam(world, x, y, z);
 	}
 
@@ -106,6 +103,20 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		}
 		if (flag)
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.glass");
+	}
+
+	protected void transferSteam(World world, int x, int y, int z) {
+		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
+		if (r == ReactorTiles.BOILER) {
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y+1, z);
+			if (steam > 0 && fluid != WorkingFluid.EMPTY) {
+				if (te.fluid == WorkingFluid.EMPTY || te.fluid == fluid) {
+					te.fluid = fluid;
+					te.steam += steam;
+					steam = 0;
+				}
+			}
+		}
 	}
 
 	private boolean canBoilTankLiquid() {

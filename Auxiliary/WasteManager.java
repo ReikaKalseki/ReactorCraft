@@ -84,9 +84,7 @@ public class WasteManager {
 
 	public static ItemStack getRandomWasteItem() {
 		Isotopes atom = getRandomWaste();
-		ItemStack is = ReactorItems.WASTE.getStackOf();
-		is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("iso", atom.ordinal());
+		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(atom.ordinal());
 		return is;
 	}
 

@@ -96,6 +96,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
+	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(750);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(180).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
@@ -167,6 +168,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
 		Icon na = event.map.registerIcon("ReactorCraft:sodium");
+		Icon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
 		Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
 		Icon o = event.map.registerIcon("ReactorCraft:oxygen");
 
@@ -189,6 +191,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		NH3_lo.setIcons(nh3);
 		H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
+		NA_hot.setIcons(nahot);
 	}
 
 	private static void addItems() {
@@ -221,6 +224,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidRegistry.registerFluid(NH3_lo);
 		FluidRegistry.registerFluid(H2O_lo);
+		FluidRegistry.registerFluid(NA_hot);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);

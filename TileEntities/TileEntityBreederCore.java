@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
@@ -22,27 +23,43 @@ import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityBreederCore extends TileEntityNuclearCore {
 
+	private StepTimer timer2 = new StepTimer(10);
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		super.updateEntity();
+		super.updateEntity(world, x, y, z, meta);
 
+		timer2.update();
 
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-			if (r == ReactorTiles.COOLANT) {
-				TileEntityWaterCell w = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
-				int T = w.getTemperature();
-				int dT = temperature-T;
-				if (dT > 0) {
-					w.setTemperature(T+dT/4);
-					temperature -= dT/4;
+		if (timer2.checkCap()) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+				if (r == ReactorTiles.COOLANT) {
+					TileEntityWaterCell w = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
+					int T = w.getTemperature();
+					int dT = temperature-T;
+					if (dT > 0) {
+						w.setTemperature(T+dT/4);
+						temperature -= dT/4;
+					}
+				}
+				if (r == ReactorTiles.SODIUMBOILER) {
+					TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getBlockTileEntity(dx, dy, dz);
+					int dTemp = temperature-te.getTemperature();
+					if (dTemp > 0) {
+						temperature -= dTemp/16;
+						te.setTemperature(te.getTemperature()+dTemp/16);
+					}
 				}
 			}
 		}
+		//ReikaJavaLibrary.pConsole(temperature);
+
+		//ReikaInventoryHelper.addToIInv(ReactorItems.BREEDERFUEL.getStackOf(), this);
 	}
 
 	@Override
@@ -75,17 +92,17 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 		if (!world.isRemote) {
 			if (this.isPoisoned())
 				return true;
-			if (ReikaRandomHelper.doWithChance(5)) {
+			if (ReikaRandomHelper.doWithChance(0.0125)) {
 				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
 				if (slot != -1) {
 					int dmg = inv[slot].getItemDamage();
 					if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
 						inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
-						temperature += 20;
 					}
 					else {
 						inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
 					}
+					temperature += 50;
 					this.spawnNeutronBurst(world, x, y, z);
 
 					if (ReikaRandomHelper.doWithChance(10)) {
@@ -95,6 +112,8 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 					return true;
 				}
 			}
+			else
+				temperature += 20;
 		}
 		return false;
 	}

@@ -27,11 +27,12 @@ import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
-import Reika.ReactorCraft.TileEntities.TileEntitySodiumBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
@@ -65,7 +66,8 @@ public enum ReactorTiles {
 	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
 	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
 	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
-	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumBoiler.class, 6);
+	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
+	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger");
 
 	private String name;
 	private Class teClass;
@@ -146,6 +148,8 @@ public enum ReactorTiles {
 		case CONTROL:
 		case WASTECONTAINER:
 		case SYNTHESIZER:
+		case BREEDER:
+		case TRITIZER:
 			return true;
 		default:
 			return false;
@@ -156,6 +160,7 @@ public enum ReactorTiles {
 		switch(this) {
 		case COOLANT:
 		case BOILER:
+		case SODIUMBOILER:
 			return true;
 		default:
 			return false;
@@ -227,6 +232,7 @@ public enum ReactorTiles {
 		case COOLANT:
 			return TileEntityWaterCell.LiquidStates.list.length;
 		case BOILER:
+		case SODIUMBOILER:
 			return 4;
 		default:
 			return 1;

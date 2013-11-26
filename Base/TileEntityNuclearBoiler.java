@@ -8,7 +8,6 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
@@ -16,6 +15,17 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, IPipeConnection, Temperatured {
 
 	protected int steam;
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		thermalTicker.update();
+
+		if (thermalTicker.checkCap() && !world.isRemote) {
+			this.updateTemperature(world, x, y, z);
+		}
+
+		this.balanceFluid(world, x, y, z);
+	}
 
 	@Override
 	public final int getTemperature() {
@@ -33,17 +43,17 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 	}
 
 	@Override
-	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public final FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public final boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
 	}
 
@@ -76,7 +86,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 	}
 
 	@Override
-	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
 		return type == PipeType.FLUID && with == ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
@@ -92,13 +102,14 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
+		ReactorTiles src = ReactorTiles.TEList[this.getIndex()];
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
-		if (r2 == ReactorTiles.BOILER && r == ReactorTiles.BOILER)
+		if (r2 == src && r == src)
 			return 2;
-		else if (r2 == ReactorTiles.BOILER)
+		else if (r2 == src)
 			return 1;
-		else if (r == ReactorTiles.BOILER)
+		else if (r == src)
 			return 3;
 		return 0;
 	}
@@ -107,19 +118,5 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 		int s = steam;
 		steam = 0;
 		return s;
-	}
-
-	protected void transferSteam(World world, int x, int y, int z) {
-		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
-		if (r == ReactorTiles.TEList[this.getIndex()]) {
-			TileEntityNuclearBoiler te = (TileEntityNuclearBoiler)world.getBlockTileEntity(x, y+1, z);
-			if (steam > 0 && fluid != WorkingFluid.EMPTY) {
-				if (te.fluid == WorkingFluid.EMPTY || te.fluid == fluid) {
-					te.fluid = fluid;
-					te.steam += steam;
-					steam = 0;
-				}
-			}
-		}
 	}
 }

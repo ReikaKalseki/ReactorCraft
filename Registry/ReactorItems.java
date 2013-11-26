@@ -85,6 +85,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		switch(this) {
 		case FUEL:
 		case WASTE:
+		case BREEDERFUEL:
 			return false;
 		default:
 			return true;

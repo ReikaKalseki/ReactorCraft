@@ -111,6 +111,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						TileEntityWaterCell wc = (TileEntityWaterCell)this;
 						flag = tr.canDumpHeatInto(wc.getLiquidState());
 					}
+					if (tr instanceof TileEntityNuclearCore)
+						flag = true;
 					if (flag) {
 						int T = tr.getTemperature();
 						int dT = T-temperature;
