@@ -2,6 +2,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -324,6 +325,24 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
 		return type == PipeType.FLUID && side != ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		tank.readFromNBT(NBT);
+		output.readFromNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		tank.writeToNBT(NBT);
+		output.writeToNBT(NBT);
 	}
 
 }

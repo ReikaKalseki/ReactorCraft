@@ -40,6 +40,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
+import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -68,7 +69,7 @@ public enum ReactorTiles {
 	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
 	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
 	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger"),
-	STORAGE("machine.storage");
+	STORAGE("machine.storage", TileEntityWasteStorage.class, 4);
 
 	private String name;
 	private Class teClass;

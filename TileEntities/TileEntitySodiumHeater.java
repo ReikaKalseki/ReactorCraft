@@ -81,6 +81,7 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 
 		steam = NBT.getInteger("energy");
 		tank.readFromNBT(NBT);
+		output.readFromNBT(NBT);
 	}
 
 	@Override
@@ -91,6 +92,7 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 		NBT.setInteger("energy", steam);
 
 		tank.writeToNBT(NBT);
+		output.writeToNBT(NBT);
 	}
 
 	@Override

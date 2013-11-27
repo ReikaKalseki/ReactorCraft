@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -53,7 +52,7 @@ public class WasteManager {
 		addWaste(Isotopes.Sn126, 0.02);
 	}
 
-	public static Isotopes getRandomWaste() {
+	public static int getRandomWaste() {
 		Random r = new Random();
 		double d = r.nextDouble()*maxchance;
 		double p = 0;
@@ -62,37 +61,37 @@ public class WasteManager {
 			p += yields.get(iso);
 			//ReikaJavaLibrary.pConsole(String.format("%.2f", d)+" "+iso.getDisplayName()+": "+p);
 			if (d <= p) {
-				return iso;
+				return i;
 			}
 		}
-		return wastes.get(wastes.size()-1);
+		return wastes.size()-1;
 	}
 
-	public static Isotopes getFullyRandomWaste() {
+	public static int getFullyRandomWaste() {
 		Random r = new Random();
 		int i = r.nextInt(wastes.size());
-		return wastes.get(i);
+		return i;
 	}
 
 	public static int getNumberWastes() {
 		return wastes.size();
 	}
 
-	public static List getWasteList() {
+	public static List<Isotopes> getWasteList() {
 		return ReikaJavaLibrary.copyList(wastes);
 	}
 
 	public static ItemStack getRandomWasteItem() {
-		Isotopes atom = getRandomWaste();
-		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(atom.ordinal());
+		int i = getRandomWaste();
+		Isotopes atom = wastes.get(i);
+		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(i);
 		return is;
 	}
 
 	public static ItemStack getFullyRandomWasteItem() {
-		Isotopes atom = getFullyRandomWaste();
-		ItemStack is = ReactorItems.WASTE.getStackOf();
-		is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("iso", atom.ordinal());
+		int i = getFullyRandomWaste();
+		Isotopes atom = wastes.get(i);
+		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(i);
 		return is;
 	}
 
