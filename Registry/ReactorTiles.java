@@ -67,7 +67,8 @@ public enum ReactorTiles {
 	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
 	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
 	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
-	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger");
+	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger"),
+	STORAGE("machine.storage");
 
 	private String name;
 	private Class teClass;
