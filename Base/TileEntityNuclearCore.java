@@ -300,7 +300,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		if (hydrogen > 0)
 			hydrogen--;
 
-		if (temperature > EXPLOSION) {
+		if (temperature > this.getMaxTemperature()) {
 			this.onMeltdown(world, x, y, z);
 		}
 		if (temperature > HYDROGEN) {

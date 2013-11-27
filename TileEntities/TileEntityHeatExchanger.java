@@ -17,6 +17,7 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine implements TemperatureTE, ShaftPowerReceiver {
 
@@ -82,6 +83,12 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	}
 
 	private Exchange getExchange() {
+		for (int i = 0; i < Exchange.list.length; i++) {
+			Exchange e = Exchange.list[i];
+			Fluid in = e.hotFluid;
+			if (in.equals(tank.getActualFluid()))
+				return e;
+		}
 		return null;
 	}
 
@@ -98,6 +105,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		if (power < MINPOWER || omega < MINSPEED)
 			return false;
 		Exchange e = this.getExchange();
+		if (e == null)
+			return false;
 		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
 	}
 
@@ -310,6 +319,11 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	public void noInputMachine() {
 		torque = omega = 0;
 		power = 0;
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		return type == PipeType.FLUID && side != ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
 }

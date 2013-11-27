@@ -113,7 +113,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 				}
 			}
 			else
-				temperature += 20;
+				temperature += temperature >= 700 ? 30 : 20;
 		}
 		return false;
 	}

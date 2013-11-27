@@ -36,6 +36,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
@@ -216,6 +217,19 @@ public class BlockReactorTile extends Block {
 				te.subtractBucket();
 				ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
 				return true;
+			}
+		}
+		if (r == ReactorTiles.SODIUMBOILER && is != null) {
+			TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getBlockTileEntity(x, y, z);
+			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
+				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
+					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("sodium"))) {
+						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("sodium"));
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					}
+					return true;
+				}
 			}
 		}
 		if (r == ReactorTiles.BOILER && is != null) {

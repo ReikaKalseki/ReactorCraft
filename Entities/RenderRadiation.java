@@ -9,55 +9,74 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RenderRadiation extends Render {
 
 	public void renderEntity(EntityRadiation er, double par2, double par4, double par6, float par8, float par9)
 	{
-		if (!er.isRendered())
-			return;
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		Tessellator v5 = new Tessellator();
-		float var16 = 1.0F;
-		float var17 = 0.5F;
-		float var18 = 0.25F;
-		int var19 = er.getBrightnessForRender(par9);
-		int var20 = var19 % 65536;
-		int var21 = var19 / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		float var26 = 255.0F;
-		int var22 = (int)var26;
-		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		float var25 = 0.3F;
-		GL11.glScalef(var25, var25, var25);
-		ReikaRenderHelper.prepareGeoDraw(false);
+		EntityClientPlayerMP cam = Minecraft.getMinecraft().thePlayer;
+		ItemStack helmet = cam.inventory.armorInventory[3];
+		if (helmet != null && helmet.itemID == ReactorItems.GOGGLES.getShiftedItemID()) {
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+			Tessellator v5 = new Tessellator();
+			float var16 = 1.0F;
+			float var17 = 0.5F;
+			float var18 = 0.25F;
+			int var19 = er.getBrightnessForRender(par9);
+			int var20 = var19 % 65536;
+			int var21 = var19 / 65536;
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			float var26 = 255.0F;
+			int var22 = (int)var26;
+			GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+			int size = 20;
+			ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/radiation2.png");
+			GL11.glScaled(size, size, 1);
+			GL11.glTranslated(-0.5, -0.5, 0);
+			ReikaRenderHelper.disableLighting();
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+			GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+			v5.startDrawingQuads();
+			v5.setNormal(0.0F, 1.0F, 0.0F);
+			v5.setColorOpaque(127, 127, 127);
+			v5.addVertexWithUV(0, 0, 0, 0, 0);
+			v5.addVertexWithUV(1, 0, 0, 1, 0);
+			v5.addVertexWithUV(1, 1, 0, 1, 1);
+			v5.addVertexWithUV(0, 1, 0, 0, 1);
+			v5.draw();
 
-		v5.startDrawingQuads();
-		v5.setNormal(0.0F, 1.0F, 0.0F);
-		v5.setColorOpaque(127, 127, 127);
-		v5.addVertex(0.0F - var17, 0.0F - var18, 0.0D);
-		v5.addVertex(var16 - var17, 0.0F - var18, 0.0D);
-		v5.addVertex(var16 - var17, 1.0F - var18, 0.0D);
-		v5.addVertex(0.0F - var17, 1.0F - var18, 0.0D);
-		v5.draw();
-
-		ReikaRenderHelper.exitGeoDraw();
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glPopMatrix();
+			GL11.glTranslated(0.5, 0.5, 0);
+			GL11.glScaled(1D/size, 1D/size, 1);
+			ReikaRenderHelper.enableLighting();
+			//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopMatrix();
+		}
 	}
 
 	@Override

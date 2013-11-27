@@ -34,6 +34,7 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 				this.cool();
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
+		tank.empty();
 	}
 
 	private void cool() {

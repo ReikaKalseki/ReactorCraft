@@ -78,7 +78,8 @@ public class EntityRadiation extends InertEntity {
 			}
 		}
 
-		if (r.nextInt(20) == 0) {
+		int c = 1;//20
+		if (r.nextInt(c) == 0) {
 			int dx = (int)x-effectRange+r.nextInt(effectRange*2+1);
 			int dy = (int)y-effectRange+r.nextInt(effectRange*2+1);
 			int dz = (int)z-effectRange+r.nextInt(effectRange*2+1);

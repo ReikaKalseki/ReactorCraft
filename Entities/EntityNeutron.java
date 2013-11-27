@@ -144,7 +144,7 @@ public class EntityNeutron extends InertEntity {
 
 		Random r = new Random();
 		if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {
-			return ReikaRandomHelper.doWithChance(80);
+			return ReikaRandomHelper.doWithChance(90);
 		}
 		if (id == ReactorBlocks.MATS.getBlockID() && meta == MatBlocks.CONCRETE.ordinal()) {
 			return ReikaRandomHelper.doWithChance(60);
