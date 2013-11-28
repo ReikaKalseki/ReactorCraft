@@ -258,9 +258,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		for (int i = x-r; i <= x+r; i++) {
 			for (int j = y-r; j <= y+r; j++) {
 				for (int k = z-r; k <= z+r; k++) {
-					int id = world.getBlockId(i, j, k);
-					int meta = world.getBlockMetadata(i, j, k);
-					if (id == this.getTileEntityBlockID() && meta == ReactorTiles.FUEL.getBlockMetadata())
+					ReactorTiles src = ReactorTiles.TEList[this.getIndex()];
+					ReactorTiles other = ReactorTiles.getTE(world, i, j, k);
+					if (src == other)
 						world.setBlock(i, j, k, ReactorBlocks.CORIUMFLOWING.getBlockID());
 				}
 			}

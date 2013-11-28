@@ -40,8 +40,14 @@ public class EntityNuclearWaste extends EntityItem {
 		super.onUpdate();
 		age = 0;
 		this.applyRadiation();
-		if (posY < 0)
-			posY = 0;
+		if (posY < 0) {
+			//motionY = 0;
+			//posY = 0;
+			if (!worldObj.isRemote)
+				velocityChanged = true;
+			motionY = Math.abs(motionY);
+			posY = Math.max(posY, 0);
+		}
 		timer++;
 	}
 

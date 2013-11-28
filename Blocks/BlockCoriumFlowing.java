@@ -25,7 +25,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -161,7 +160,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 
 	private void freezeWithChance(World world, int x, int y, int z) {
 		if (ReikaRandomHelper.doWithChance(5) && !world.provider.isHellWorld) {
-			world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+			;//world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
 		}
 	}
 
@@ -172,7 +171,9 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				Block.blocksList[blockId].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 			}
 			world.setBlock(i, j, k, blockID, l, 3);
-			if (ReikaRandomHelper.doWithChance(12.5))
+			if (ReikaRandomHelper.doWithChance(0.01))
+				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 8);
+			if (ReikaRandomHelper.doWithChance(0.05))
 				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1);
 		}
 
@@ -180,7 +181,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, i, j, k, Material.water);
 		if (iceside != null || waterside != null) {
 			if (ReikaRandomHelper.doWithChance(15))
-				world.setBlock(i, j, k, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+				;//world.setBlock(i, j, k, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
 			if (iceside != null) {
 				ReikaWorldHelper.changeAdjBlock(world, i, j, k, iceside, Block.waterMoving.blockID, 0);
 			}
@@ -363,7 +364,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				flag = true;
 
 			if (flag) {
-				world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+				;//world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
 				this.triggerLavaMixEffects(world, x, y, z);
 			}
 		}

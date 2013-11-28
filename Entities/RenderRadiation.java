@@ -48,7 +48,7 @@ public class RenderRadiation extends Render {
 			int var22 = (int)var26;
 			GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-			int size = 20;
+			int size = Math.min(20, er.getRange());
 			ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/radiation2.png");
 			GL11.glScaled(size, size, 1);
 			GL11.glTranslated(-0.5, -0.5, 0);
@@ -66,6 +66,7 @@ public class RenderRadiation extends Render {
 			v5.addVertexWithUV(1, 1, 0, 1, 1);
 			v5.addVertexWithUV(0, 1, 0, 0, 1);
 			v5.draw();
+			//ReikaJavaLibrary.pConsole(er.getRange());
 
 			GL11.glTranslated(0.5, 0.5, 0);
 			GL11.glScaled(1D/size, 1D/size, 1);

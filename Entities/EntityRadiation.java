@@ -20,15 +20,17 @@ import Reika.DragonAPI.Base.InertEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
-public class EntityRadiation extends InertEntity {
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
-	public final int effectRange;
-	private boolean isRendering;
-	private int renderTimer;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class EntityRadiation extends InertEntity implements IEntityAdditionalSpawnData {
+
+	private int effectRange;
 
 	public EntityRadiation(World par1World) {
 		super(par1World);
-		effectRange = 16;
 	}
 
 	public EntityRadiation(World world, int range) {
@@ -43,12 +45,12 @@ public class EntityRadiation extends InertEntity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound NBT) {
-
+		effectRange = NBT.getInteger("effrange");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound NBT) {
-
+		NBT.setInteger("effrange", effectRange);
 	}
 
 	@Override
@@ -56,10 +58,9 @@ public class EntityRadiation extends InertEntity {
 	{
 		this.onEntityUpdate();
 		this.applyRadiation();
-		if (renderTimer > 0)
-			renderTimer--;
-		if (renderTimer <= 0)
-			isRendering = false;
+
+		if (effectRange <= 0)
+			this.setDead();
 	}
 
 	private void applyRadiation() {
@@ -87,13 +88,25 @@ public class EntityRadiation extends InertEntity {
 		}
 	}
 
-	public boolean isRendered() {
-		return isRendering;
+	public void clean() {
+		if (effectRange > 0)
+			effectRange--;
+		else
+			this.setDead();
 	}
 
-	public void setRendered() {
-		isRendering = true;
-		renderTimer = 3;
+	public int getRange() {
+		return effectRange;
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		data.writeInt(effectRange);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		effectRange = data.readInt();
 	}
 
 }
