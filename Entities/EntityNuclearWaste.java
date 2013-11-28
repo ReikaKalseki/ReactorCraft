@@ -15,13 +15,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
 public class EntityNuclearWaste extends EntityItem {
 
-	public static final double RANGE = 6;
+	public static final int RANGE = 6;
+	private int timer = 0;
 
 	public EntityNuclearWaste(World par1World) {
 		super(par1World);
@@ -38,6 +40,9 @@ public class EntityNuclearWaste extends EntityItem {
 		super.onUpdate();
 		age = 0;
 		this.applyRadiation();
+		if (posY < 0)
+			posY = 0;
+		timer++;
 	}
 
 	@Override
@@ -59,6 +64,15 @@ public class EntityNuclearWaste extends EntityItem {
 			if (dd <= RANGE) {
 				RadiationEffects.applyEffects(e);
 			}
+		}
+
+		int ix = MathHelper.floor_double(x);
+		int iy = MathHelper.floor_double(y);
+		int iz = MathHelper.floor_double(z);
+
+		//Contaminate the area slightly every 15 min left in the world
+		if (timer%18000 == 0 && timer >= 18000) {
+			RadiationEffects.contaminateArea(world, ix, iy, iz, RANGE*10);
 		}
 	}
 

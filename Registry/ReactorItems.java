@@ -24,6 +24,7 @@ import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
 import Reika.ReactorCraft.Items.ItemPlutonium;
+import Reika.ReactorCraft.Items.ItemRadiationCleaner;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
@@ -43,7 +44,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
 	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
-	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class);
+	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
+	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class);
 
 	private String name;
 	private Class itemClass;

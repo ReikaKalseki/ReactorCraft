@@ -56,6 +56,8 @@ public class RadiationEffects {
 			return;
 		if (world.isRemote)
 			return;
+		if (id == Block.deadBush.blockID)
+			return;
 		Block b = Block.blocksList[id];
 		if (id == Block.leaves.blockID || b.blockMaterial == Material.leaves || ModWoodList.isModLeaf(new ItemStack(id, 1, meta)))
 			world.setBlock(x, y, z, 0);

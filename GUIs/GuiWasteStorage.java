@@ -18,7 +18,7 @@ public class GuiWasteStorage extends ReactorGuiBase {
 
 	public GuiWasteStorage(EntityPlayer player, TileEntityWasteStorage fuel) {
 		super(new ContainerWasteStorage(player, fuel), player, fuel);
-		ySize = 175;
+		ySize = 186;
 	}
 
 	@Override

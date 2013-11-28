@@ -78,12 +78,8 @@ build/
 *.log
 *.scc
 *.pdn
-*.png
-*.jpg
-*.ogg
 *.txt
 *.tcn
-*.xml
 *.rar
 
 # Visual C++ cache files

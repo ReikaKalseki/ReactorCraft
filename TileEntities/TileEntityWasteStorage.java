@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
 import java.util.List;
@@ -7,9 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
@@ -20,7 +31,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 
 	@Override
 	public int getSizeInventory() {
-		return 16;
+		return 12;
 	}
 
 	@Override
@@ -29,7 +40,15 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		this.decayWaste();
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getBiomeTemp(world, x, z) > 100) {
-
+			if (this.hasWaste()) {
+				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 3);
+				if (rand.nextInt(4) == 0)
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+				if (rand.nextInt(200) == 0) {
+					world.setBlock(x, y, z, 0);
+					world.newExplosion(null, x+0.5, y+0.5, y+0.5, 4F, true, true);
+				}
+			}
 		}
 	}
 
@@ -64,6 +83,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	@Override
 	public boolean leaksRadiation() {
 		return false;
+
 	}
 
 	@Override
@@ -90,6 +110,11 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 
 	public int getRangeFromWasteCount(int amt) {
 		return amt;
+	}
+
+	@Override
+	public final int getInventoryStackLimit() {
+		return 16;
 	}
 
 }

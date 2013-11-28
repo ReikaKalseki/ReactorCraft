@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Container;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 
@@ -17,24 +18,24 @@ public class ContainerWasteStorage extends CoreContainer {
 
 	public ContainerWasteStorage(EntityPlayer player, TileEntityWasteStorage te) {
 		super(player, te);
-		/*
-		int w = te.WIDTH;
-		int h = te.HEIGHT;
 
-		int dx = 0;
-		if (w > 5) {
-			dx = -(w-5)*9;
-		}
-		if (w < 5) {
-			dx = (w-5)*9;
-		}
-		for (int i = 0; i < h; i++) {
-			for (int k = 0; k < w; k++) {
-				this.addSlotToContainer(new Slot(te, i*w+k, 44+k*18+dx, 22+i*18));
-			}
-		}*/
+		this.addSlotToContainer(new Slot(te, 0, 70, 20));
+		this.addSlotToContainer(new Slot(te, 1, 90, 20));
 
-		this.addPlayerInventoryWithOffset(player, 0, 9);
+		this.addSlotToContainer(new Slot(te, 2, 50, 40));
+		this.addSlotToContainer(new Slot(te, 3, 70, 40));
+		this.addSlotToContainer(new Slot(te, 4, 90, 40));
+		this.addSlotToContainer(new Slot(te, 5, 110, 40));
+
+		this.addSlotToContainer(new Slot(te, 6, 50, 60));
+		this.addSlotToContainer(new Slot(te, 7, 70, 60));
+		this.addSlotToContainer(new Slot(te, 8, 90, 60));
+		this.addSlotToContainer(new Slot(te, 9, 110, 60));
+
+		this.addSlotToContainer(new Slot(te, 10, 70, 80));
+		this.addSlotToContainer(new Slot(te, 11, 90, 80));
+
+		this.addPlayerInventoryWithOffset(player, 0, 20);
 	}
 
 }

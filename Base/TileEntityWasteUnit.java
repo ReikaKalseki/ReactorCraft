@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
 import net.minecraft.item.ItemStack;
@@ -5,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
@@ -41,7 +51,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 				}
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
 				if (ReikaNuclearHelper.shouldDecay(atom)) {
-					inv[i] = null;
+					ReikaInventoryHelper.decrStack(i, inv);
 				}
 			}
 		}
@@ -111,7 +121,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	}
 
 	@Override
-	public final int getInventoryStackLimit() {
+	public int getInventoryStackLimit() {
 		return 1;
 	}
 
