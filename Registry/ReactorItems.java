@@ -28,6 +28,7 @@ import Reika.ReactorCraft.Items.ItemRadiationCleaner;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public enum ReactorItems implements RegistrationList, IDRegistry {
 
@@ -88,6 +89,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case FUEL:
 		case WASTE:
 		case BREEDERFUEL:
+		case CLEANUP:
 			return false;
 		default:
 			return true;
@@ -131,6 +133,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return CraftingItems.partList[meta].itemName;
 		case BREEDERFUEL:
 			return this.getBasicName()+" ("+(meta*20)+"% Converted)";
+		case CLEANUP:
+			return this.getBasicName()+" ("+meta+" kJ)";
 		default:
 			return this.getBasicName();
 		}
@@ -147,6 +151,7 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 		case CANISTER:
 		case CRAFTING:
 		case BREEDERFUEL:
+		case CLEANUP:
 			return true;
 		default:
 			return false;
@@ -174,6 +179,8 @@ public enum ReactorItems implements RegistrationList, IDRegistry {
 			return WasteManager.getNumberWastes();
 		case BREEDERFUEL:
 			return 5;
+		case CLEANUP:
+			return ItemRegistry.STRONGCOIL.getNumberMetadatas();
 		default:
 			return 1;
 		}

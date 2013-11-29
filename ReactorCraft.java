@@ -40,6 +40,7 @@ import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -138,6 +139,7 @@ public class ReactorCraft extends DragonAPIMod {
 		ReactorRecipes.addRecipes();
 		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityPlasma.class, "Plasma", EntityRegistry.findGlobalUniqueEntityId()+2, instance, 64, 20, true);
 		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
 		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
 		if (ReactorOptions.RETROGEN.getState()) {

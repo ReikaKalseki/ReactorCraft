@@ -9,27 +9,22 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.item.ItemStack;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
-import Reika.ReactorCraft.Registry.CraftingItems;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
-import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.API.Screwdriverable;
 
-public class TileEntityMagnet extends TileEntityInventoriedReactorBase implements ShaftPowerReceiver, InertIInv {
+public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriverable {
 
-	private int omega;
-	private int torque;
-	private long power;
-
-	private int iotick;
-
-	private ItemStack[] inv = new ItemStack[1];
+	private float angle = 0; //0 is +x(E), rotates to -z(N)
+	private int alpha = 512;
 
 	@Override
 	public int getIndex() {
@@ -38,50 +33,47 @@ public class TileEntityMagnet extends TileEntityInventoriedReactorBase implement
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(2, 2, 2);
+		double v = 2.5;
+		double r = 10;
+		double a = v*v/r;
+		//int tx = 1091;
+		//int tz = -463;
+		//angle = (float)ReikaPhysicsHelper.cartesianToPolar(tx-x, 0, tz-z)[2]+90;
+		a *= 0.49;
+		double[] vec = ReikaPhysicsHelper.polarToCartesian(a, 0, -angle);
+		double ax = vec[0];
+		double az = vec[2];
+		vec = ReikaPhysicsHelper.polarToCartesian(v, 0, -angle+82);
+		double vx = vec[0];
+		double vz = vec[2];
+		List<EntityPlasma> li = world.getEntitiesWithinAABB(EntityPlasma.class, box);
+		for (int i = 0; i < li.size(); i++) {
+			EntityPlasma e = li.get(i);
+			if (e.canAffect(this)) {
+				e.setLocationAndAngles(x, y, z, 0, 0);
+				//e.motionX = vx;
+				//e.motionZ = vz;
+				e.motionY = 0;
+				e.addVelocity(ax, 0, az);
+				e.velocityChanged = true;
+			}
+		}
+		if (x == 1081 && z == -463) {
+			EntityPlasma e = new EntityPlasma(world);
+			e.setLocationAndAngles(x, y, z, 0, 0);
+			e.addVelocity(0, 0, v);
+			e.addVelocity(ax, 0, az);
+			if (!world.isRemote)
+				world.spawnEntityInWorld(e);
 
+		}
 	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRemoveItem(int i, ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 1;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return this.isMagnet(itemstack);
-	}
-
-	private boolean hasMagnet() {
-		return inv[0] != null && this.isMagnet(inv[0]);
-	}
-
-	private boolean isMagnet(ItemStack is) {
-		return ReikaItemHelper.matchStacks(CraftingItems.MAGNET.getItem(), is);
+		if (alpha > 0)
+			alpha -= 8;
 	}
 
 	@Override
@@ -89,23 +81,8 @@ public class TileEntityMagnet extends TileEntityInventoriedReactorBase implement
 	{
 		super.readFromNBT(NBT);
 
-		omega = NBT.getInteger("omg");
-		torque = NBT.getInteger("tq");
-		power = NBT.getLong("pwr");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
+		angle = NBT.getFloat("ang");
+		alpha = NBT.getInteger("al");
 	}
 
 	/**
@@ -116,105 +93,33 @@ public class TileEntityMagnet extends TileEntityInventoriedReactorBase implement
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setInteger("omg", omega);
-		NBT.setInteger("tq", torque);
-		NBT.setLong("pwr", power);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
+		NBT.setFloat("ang", angle);
+		NBT.setInteger("al", alpha);
 	}
 
 	@Override
-	public int getOmega() {
-		return omega;
+	public boolean onShiftRightClick(World world, int x, int y, int z) {
+		alpha = 512;
+		angle -= 11.25F;
+		if (angle < 0)
+			angle += 360;
+		return true;
 	}
 
 	@Override
-	public int getTorque() {
-		return torque;
+	public boolean onRightClick(World world, int x, int y, int z) {
+		alpha = 512;
+		angle += 11.25F;
+		if (angle > 360)
+			angle -= 360;
+		return true;
 	}
 
-	@Override
-	public long getPower() {
-		return power;
+	public float getAngle() {
+		return angle;
 	}
 
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
+	public int getAlpha() {
+		return alpha;
 	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return y == yCoord+1 && x == xCoord && z == zCoord;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return this.hasMagnet();
-	}
-
-	@Override
-	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
-	}
-
-	@Override
-	public boolean canEnterFromSide(ForgeDirection dir) {
-		return false;
-	}
-
-	@Override
-	public boolean canExitToSide(ForgeDirection dir) {
-		return false;
-	}
-
 }

@@ -63,7 +63,7 @@ public enum ReactorTiles {
 	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
 	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
-	MAGNET("machine.magnet", TileEntityMagnet.class, 5, ""),
+	MAGNET("machine.magnet", TileEntityMagnet.class, 5, "RenderMagnet"),
 	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
 	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
 	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
@@ -277,6 +277,7 @@ public enum ReactorTiles {
 	public boolean renderInPass1() {
 		switch(this) {
 		case PROCESSOR:
+		case MAGNET:
 			return true;
 		default:
 			return false;
