@@ -15,7 +15,7 @@
 
 package Reika.ReactorCraft.Models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -371,7 +371,7 @@ public class ModelReactorPump extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape1.render(f5);
 		Shape1a.render(f5);

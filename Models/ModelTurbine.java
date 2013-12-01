@@ -15,7 +15,7 @@
 
 package Reika.ReactorCraft.Models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -59,7 +59,7 @@ public class ModelTurbine extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		double vo = 0.9375;
 		double sep = 10;

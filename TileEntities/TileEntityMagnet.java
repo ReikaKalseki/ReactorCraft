@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -23,7 +22,10 @@ import Reika.RotaryCraft.API.Screwdriverable;
 
 public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriverable {
 
-	private float angle = 0; //0 is +x(E), rotates to -z(N)
+	//0 is +x(E), rotates to -z(N)
+	private Aim aim = Aim.N;
+
+
 	private int alpha = 512;
 
 	@Override
@@ -33,41 +35,27 @@ public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriv
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(2, 2, 2);
-		double v = 2.5;
-		double r = 10;
-		double a = v*v/r;
-		//int tx = 1091;
-		//int tz = -463;
-		//angle = (float)ReikaPhysicsHelper.cartesianToPolar(tx-x, 0, tz-z)[2]+90;
-		a *= 0.49;
-		double[] vec = ReikaPhysicsHelper.polarToCartesian(a, 0, -angle);
-		double ax = vec[0];
-		double az = vec[2];
-		vec = ReikaPhysicsHelper.polarToCartesian(v, 0, -angle+82);
-		double vx = vec[0];
-		double vz = vec[2];
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
 		List<EntityPlasma> li = world.getEntitiesWithinAABB(EntityPlasma.class, box);
+		int[] tg = this.getTarget();
 		for (int i = 0; i < li.size(); i++) {
 			EntityPlasma e = li.get(i);
-			if (e.canAffect(this)) {
-				e.setLocationAndAngles(x, y, z, 0, 0);
-				//e.motionX = vx;
-				//e.motionZ = vz;
-				e.motionY = 0;
-				e.addVelocity(ax, 0, az);
-				e.velocityChanged = true;
-			}
+			e.setTarget(tg[0], tg[2]);
 		}
-		if (x == 1081 && z == -463) {
+		if (rand.nextInt(1) == 0) {
 			EntityPlasma e = new EntityPlasma(world);
-			e.setLocationAndAngles(x, y, z, 0, 0);
-			e.addVelocity(0, 0, v);
-			e.addVelocity(ax, 0, az);
+			e.setLocationAndAngles(x+0.5, y+0.5, z+0.5, 0, 0);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(e);
-
 		}
+	}
+
+	public int[] getTarget() {
+		int[] tg = new int[3];
+		tg[0] = xCoord+this.getAim().xOffset;
+		tg[2] = zCoord+this.getAim().zOffset;
+		tg[1] = yCoord;
+		return tg;
 	}
 
 	@Override
@@ -81,7 +69,7 @@ public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriv
 	{
 		super.readFromNBT(NBT);
 
-		angle = NBT.getFloat("ang");
+		aim = this.getAim(NBT.getInteger("aim"));
 		alpha = NBT.getInteger("al");
 	}
 
@@ -93,33 +81,104 @@ public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriv
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setFloat("ang", angle);
+		NBT.setInteger("aim", this.getAim().ordinal());
 		NBT.setInteger("al", alpha);
+	}
+
+	private Aim getAim() {
+		return aim != null ? aim : Aim.N;
+	}
+
+	private Aim getAim(int o) {
+		return (o > 0 && o < Aim.list.length) ? Aim.list[o] : Aim.N;
 	}
 
 	@Override
 	public boolean onShiftRightClick(World world, int x, int y, int z) {
 		alpha = 512;
-		angle -= 11.25F;
-		if (angle < 0)
-			angle += 360;
+		this.decrementAim();
 		return true;
 	}
 
 	@Override
 	public boolean onRightClick(World world, int x, int y, int z) {
 		alpha = 512;
-		angle += 11.25F;
-		if (angle > 360)
-			angle -= 360;
+		this.incrementAim();
 		return true;
 	}
 
 	public float getAngle() {
-		return angle;
+		return this.getAim().angle;
 	}
 
 	public int getAlpha() {
 		return alpha;
+	}
+
+	private void incrementAim() {
+		int o = this.getAim().ordinal();
+		if (o == Aim.list.length-1) {
+			aim = Aim.list[0];
+		}
+		else {
+			aim = Aim.list[o+1];
+		}
+	}
+
+	private void decrementAim() {
+		int o = this.getAim().ordinal();
+		if (o == 0) {
+			aim = Aim.list[Aim.list.length-1];
+		}
+		else {
+			aim = Aim.list[o-1];
+		}
+	}
+
+	private static enum Aim {
+		N(0,			2, 0),
+		NNW1(11.3F,		2, -1),
+		NNW2(24,		2, -1),
+		NNW3(36.9F,		1, -1),
+		NW(45,			1, -1),
+		WNW1(53.1F,		1, -2),
+		WNW2(66,		1, -2),
+		WNW3(78.7F,		0, -2),
+		W(90,			0, -2),
+		WSW1(101.3F,	-1, -2),
+		WSW2(114,		-1, -2),
+		WSW3(126.9F,	-1, -1),
+		SW(135,			-1, -1),
+		SSW1(143.1F,	-2, -1),
+		SSW2(156,		-2, -1),
+		SSW3(168.7F,	-2, 0),
+		S(180,			-2, 0),
+		SSE1(191.3F,	-2, 1),
+		SSE2(204,		-2, 1),
+		SSE3(216.9F,	-1, 1),
+		SE(225,			-1, 1),
+		ESE1(233.1F,	-1, 2),
+		ESE2(246,		-1, 2),
+		ESE3(258.7F,	0, 2),
+		E(270,			0, 2),
+		ENE1(281.3F,	1, 2),
+		ENE2(294,		1, 2),
+		ENE3(306.9F,	1, 1),
+		NE(315,			1, 1),
+		NNE1(323.1F,	2, 1),
+		NNE2(336,		2, 1),
+		NNE3(348.7F,	2, 0);
+
+		public final float angle;
+		public final int xOffset;
+		public final int zOffset;
+
+		public static final Aim[] list = values();
+
+		private Aim(float a, int x, int z) {
+			angle = a;
+			xOffset = x;
+			zOffset = z;
+		}
 	}
 }

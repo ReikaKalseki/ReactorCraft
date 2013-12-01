@@ -67,15 +67,17 @@ public class RenderMagnet extends ReactorRenderBase
 	}
 
 	private void renderAngleLine(TileEntityMagnet tile, double par2, double par4, double par6) {
-		ReikaRenderHelper.prepareGeoDraw(true);
-		GL11.glTranslated(par2+0.5, par4, par6+0.5);
 		if (tile == null)
 			return;
 		if (!tile.isInWorld())
 			return;
-		float ang = tile.getAngle();
 		int a = tile.getAlpha();
-		a = 255;
+		//a = 255;
+		if (a <= 0)
+			return;
+		ReikaRenderHelper.prepareGeoDraw(true);
+		GL11.glTranslated(par2+0.5, par4, par6+0.5);
+		float ang = tile.getAngle()+90;
 		Tessellator v5 = new Tessellator();
 		GL11.glRotated(ang, 0, 1, 0);
 		v5.startDrawing(GL11.GL_LINES);

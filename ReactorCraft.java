@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
+import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Entities.EntityRadiation;
@@ -137,9 +138,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public void load(FMLInitializationEvent event) {
 		proxy.registerRenderers();
 		ReactorRecipes.addRecipes();
-		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityPlasma.class, "Plasma", EntityRegistry.findGlobalUniqueEntityId()+2, instance, 64, 20, true);
+		this.addEntities();
 		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
 		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
 		if (ReactorOptions.RETROGEN.getState()) {
@@ -198,6 +197,13 @@ public class ReactorCraft extends DragonAPIMod {
 
 	private static void addItems() {
 		ReikaRegistryHelper.instantiateAndRegisterItems(instance, ReactorItems.itemList, items);
+	}
+
+	private static void addEntities() {
+		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityPlasma.class, "Plasma", EntityRegistry.findGlobalUniqueEntityId()+2, instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityFusion.class, "Fusion", EntityRegistry.findGlobalUniqueEntityId()+3, instance, 64, 20, true);
 	}
 
 	private static void addBlocks() {

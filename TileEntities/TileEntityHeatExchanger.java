@@ -57,8 +57,9 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (this.canCool())
-			this.cool();
+		Exchange e = this.getExchange();
+		if (this.canCool(e))
+			this.cool(e);
 		temp.update();
 		if (temp.checkCap()) {
 			this.distributeHeat(world, x, y, z);
@@ -84,9 +85,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		}
 	}
 
-	private void cool() {
+	private void cool(Exchange e) {
 		tank.removeLiquid(COOL_AMOUNT);
-		Exchange e = this.getExchange();
 		output.addLiquid(COOL_AMOUNT, e.coldFluid);
 		double c = e.heatCapacity;
 		temperature += c*COOL_AMOUNT;
@@ -111,11 +111,10 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		return false;
 	}
 
-	private boolean canCool() {
-		if (power < MINPOWER || omega < MINSPEED)
-			return false;
-		Exchange e = this.getExchange();
+	private boolean canCool(Exchange e) {
 		if (e == null)
+			return false;
+		if (power < MINPOWER || omega < MINSPEED)
 			return false;
 		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
 	}

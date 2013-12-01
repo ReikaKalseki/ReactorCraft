@@ -49,7 +49,7 @@ public class HydrogenExplosion extends Explosion {
 							li.add(e);
 							e.fallTime = -10000;
 							e.shouldDropItem = false;
-							world.setBlock(x, y, z, 0);
+							world.setBlock(i, j, k, 0);
 							world.spawnEntityInWorld(e);
 						}
 					}
@@ -89,6 +89,8 @@ public class HydrogenExplosion extends Explosion {
 
 	private boolean canEntitize(World world, int x, int y, int z, int id, int meta) {
 		if (id == 0)
+			return false;
+		if (id == Block.bedrock.blockID)
 			return false;
 		Block b = Block.blocksList[id];
 		if (b.hasTileEntity(meta))

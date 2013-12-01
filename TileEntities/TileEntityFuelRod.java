@@ -84,7 +84,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 						//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 						//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
 						//storedEnergy += E;
-						temperature += 10;
+						temperature += 20;
 						return true;
 					}
 					else {
@@ -101,7 +101,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 							//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 							//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
 							//storedEnergy += E;
-							temperature += 10;
+							temperature += 30;
 							return true;
 						}
 					}

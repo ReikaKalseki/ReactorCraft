@@ -1,18 +1,28 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ParticleEntity;
-import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 
 public class EntityPlasma extends ParticleEntity {
 
-	private int lastMagnetX;
-	private int lastMagnetY;
-	private int lastMagnetZ;
-
-	private float lastPhi;
+	private int targetX;
+	private int targetZ;
 
 	public EntityPlasma(World par1World) {
 		super(par1World);
@@ -20,12 +30,45 @@ public class EntityPlasma extends ParticleEntity {
 
 	@Override
 	public double getSpeed() {
-		return 0.1;
+		return 0.5;
 	}
 
 	@Override
 	public boolean onEnterBlock(World world, int x, int y, int z) {
+		if (!world.isRemote) {
+			if (ReikaWorldHelper.flammable(world, x, y, z))
+				ReikaWorldHelper.ignite(world, x, y, z);
+		}
 		return false;
+	}
+
+	public void setTarget(int x, int z) {
+		targetX = x;
+		targetZ = z;
+		double dx = targetX+0.5-posX;
+		double dz = targetZ+0.5-posZ;
+		double dd = ReikaMathLibrary.py3d(dx, 0, dz);
+		double v = this.getSpeed();
+		motionX = dx*v/dd;
+		motionZ = dz*v/dd;
+		//ReikaJavaLibrary.pConsole(motionX+":"+motionZ);
+		velocityChanged = true;
+	}
+
+	private void checkFusion() {
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
+		List<EntityPlasma> li = worldObj.getEntitiesWithinAABB(EntityPlasma.class, box);
+		if (li.size() >= this.getFusionThreshold()) {
+			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ);
+			worldObj.spawnEntityInWorld(fus);
+			for (int i = 0; i < li.size(); i++)
+				li.get(0).setDead();
+			this.setDead();
+		}
+	}
+
+	public int getFusionThreshold() {
+		return 15+rand.nextInt(6);
 	}
 
 	@Override
@@ -35,36 +78,15 @@ public class EntityPlasma extends ParticleEntity {
 
 	@Override
 	protected void onTick() {
-		if (ticksExisted > 200)
+		if (ticksExisted > 1200)
 			this.setDead();
-
-		//double v = ReikaMathLibrary.py3d(motionX, 0, motionZ);
-		//motionX *= 2/v;
-		//motionZ *= 2/v;
+		if (rand.nextInt(5) == 0)
+			this.checkFusion();
 	}
 
 	@Override
 	public double getHitboxSize() {
-		return 1;
-	}
-
-	public boolean canAffect(TileEntityMagnet te) {
-		float phi = te.getAngle();
-		if (phi >= 360)
-			phi -= 360;
-		if (phi < 0)
-			phi += 360;
-		float target = lastPhi+11.25F;
-		if (target >= 360)
-			target = 0;
-		if (target == phi) {
-			lastPhi = phi;
-			lastMagnetX = te.xCoord;
-			lastMagnetY = te.yCoord;
-			lastMagnetZ = te.zCoord;
-			return true;
-		}
-		return false;
+		return 0.5;
 	}
 
 }

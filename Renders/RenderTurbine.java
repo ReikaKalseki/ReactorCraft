@@ -67,12 +67,12 @@ public class RenderTurbine extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld())
-			models[tile.getStage()].renderAll(null, -tile.phi);
+			models[tile.getStage()].renderAll(null, -tile.phi, 0);
 		else {
 			double sc = 0.6;
 			GL11.glScaled(sc, sc, sc);
 			GL11.glTranslated(-0.1, 0.8, 0);
-			models[0].renderAll(null, -tile.phi);
+			models[0].renderAll(null, -tile.phi, 0);
 			GL11.glTranslated(0.1, -0.8, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
 		}
