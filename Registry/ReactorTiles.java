@@ -27,6 +27,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
@@ -69,7 +70,8 @@ public enum ReactorTiles {
 	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
 	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
 	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger"),
-	STORAGE("machine.storage", TileEntityWasteStorage.class, 3, "RenderWasteStorage");
+	STORAGE("machine.storage", TileEntityWasteStorage.class, 3, "RenderWasteStorage"),
+	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, "");
 
 	private String name;
 	private Class teClass;
@@ -223,6 +225,7 @@ public enum ReactorTiles {
 		case MAGNET:
 		case TRITIZER:
 		case BREEDER:
+		case INJECTOR:
 			return true;
 		default:
 			return false;

@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Auxiliary;
 
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 
+/** Reactor core blocks only. */
 public interface Temperatured {
 
 	public abstract int getTemperature();
