@@ -100,7 +100,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return false;
+		return m == MachineRegistry.PIPE;
 	}
 
 	@Override

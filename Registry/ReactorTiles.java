@@ -20,6 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
@@ -28,8 +29,10 @@ import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.TileEntityIonizer;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
@@ -71,7 +74,10 @@ public enum ReactorTiles {
 	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
 	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger"),
 	STORAGE("machine.storage", TileEntityWasteStorage.class, 3, "RenderWasteStorage"),
-	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, "");
+	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, ""),
+	HEATER("machine.fusionheater", TileEntityFusionHeater.class, 7, ""),
+	GASPIPE("machine.gasduct", TileEntityGasDuct.class, 4, ""),
+	IONIZER("machine.ionizer", TileEntityIonizer.class, 8, "");
 
 	private String name;
 	private Class teClass;
@@ -226,6 +232,8 @@ public enum ReactorTiles {
 		case TRITIZER:
 		case BREEDER:
 		case INJECTOR:
+		case HEATER:
+		case IONIZER:
 			return true;
 		default:
 			return false;

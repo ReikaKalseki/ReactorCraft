@@ -42,12 +42,6 @@ public class TileEntityMagnet extends TileEntityReactorBase implements Screwdriv
 			EntityPlasma e = li.get(i);
 			e.setTarget(tg[0], tg[2]);
 		}
-		if (rand.nextInt(1) == 0) {
-			EntityPlasma e = new EntityPlasma(world);
-			e.setLocationAndAngles(x+0.5, y+0.5, z+0.5, 0, 0);
-			if (!world.isRemote)
-				world.spawnEntityInWorld(e);
-		}
 	}
 
 	public int[] getTarget() {

@@ -132,7 +132,13 @@ public class BlockReactorTile extends Block {
 	public Icon getIcon(int s, int meta) {
 		//for drops, needs to be r.ordinal(), not metadata
 		int index = ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta);
-		return index >= 0 ? icons[index][s][0] : icons[meta][s][0];
+		try {
+			return index >= 0 ? icons[index][s][0] : icons[meta][s][0];
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return Block.glowStone.getIcon(0, 0); //very clearly incorrect
+		}
 	}
 
 	@Override
