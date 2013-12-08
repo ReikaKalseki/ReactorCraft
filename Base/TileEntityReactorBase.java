@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.ArrayList;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -21,8 +23,10 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.RotaryCraft.API.ShaftMachine;
+import Reika.RotaryCraft.API.Transducerable;
+import Reika.RotaryCraft.Auxiliary.Variables;
 
-public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher {
+public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -41,6 +45,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	@Override
 	public int getTileEntityBlockID() {
 		return ReactorTiles.TEList[this.getIndex()].getBlockID();
+	}
+
+	public ReactorTiles getMachine() {
+		return ReactorTiles.TEList[this.getIndex()];
 	}
 
 	@Override
@@ -131,5 +139,13 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	public ForgeDirection getRandomDirection() {
 		int r = 2+rand.nextInt(4);
 		return dirs[r];
+	}
+
+	public ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
+		ArrayList<String> li = new ArrayList();
+		if (this instanceof Temperatured) {
+			String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((Temperatured)this).getTemperature());
+		}
+		return li;
 	}
 }

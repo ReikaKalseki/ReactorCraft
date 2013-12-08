@@ -63,18 +63,34 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 			if (this.isPoisoned())
 				return true;
 			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
-				if (ReikaRandomHelper.doWithChance(10)) {
-					int slot = -1;
-					for (int i = 3; i >= 0; i--) {
-						ItemStack is = inv[i];
-						if (is != null && is.itemID == ReactorItems.FUEL.getShiftedItemID()) {
-							slot = i;
-							i = -1;
-						}
+				int slot = -1;
+				for (int i = 3; i >= 0; i--) {
+					ItemStack is = inv[i];
+					if (is != null && is.itemID == ReactorItems.FUEL.getShiftedItemID()) {
+						slot = i;
+						i = -1;
 					}
+				}
+				if (slot != -1) {
+					ItemStack is = inv[slot];
+					inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
+
+					if (ReikaRandomHelper.doWithChance(10)) {
+						this.addWaste();
+					}
+
+					this.spawnNeutronBurst(world, x, y, z);
+					//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
+					//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
+					//storedEnergy += E;
+					temperature += 20;
+					return true;
+				}
+				else {
+					slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
 					if (slot != -1) {
-						ItemStack is = inv[slot];
-						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
+
+						inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
 
 						if (ReikaRandomHelper.doWithChance(10)) {
 							this.addWaste();
@@ -84,26 +100,8 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 						//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
 						//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
 						//storedEnergy += E;
-						temperature += 20;
+						temperature += 30;
 						return true;
-					}
-					else {
-						slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
-						if (slot != -1) {
-
-							inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
-
-							if (ReikaRandomHelper.doWithChance(10)) {
-								this.addWaste();
-							}
-
-							this.spawnNeutronBurst(world, x, y, z);
-							//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
-							//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
-							//storedEnergy += E;
-							temperature += 30;
-							return true;
-						}
 					}
 				}
 			}

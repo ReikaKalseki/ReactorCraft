@@ -9,17 +9,17 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 
 public class RenderWaterLine extends ReactorRenderBase {
@@ -40,7 +40,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 		float var13;
 
 		for (int i = 0; i < 6; i++) {
-			this.renderFace(tile, par2, par4, par6, dirs[i]);
+			//this.renderFace(tile, par2, par4, par6, dirs[i]);
 		}
 
 		if (tile.isInWorld())
@@ -50,178 +50,109 @@ public class RenderWaterLine extends ReactorRenderBase {
 
 	}
 
-	private void renderFace(TileEntitySteamLine tile, double par2, double par4, double par6, ForgeDirection dir) {
-		double size = 0.333333;
-		Tessellator v5 = new Tessellator();
-		v5.startDrawingQuads();
-		if (tile.isInWorld() && tile.isConnectedOnSideAt(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, dir)) {
-			switch(dir) {
-			case DOWN:
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2+size, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2+size, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2+size, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2+size, 0.5-size/2, 0, 0);
-				break;
-			case EAST:
-				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5+size/2, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5+size/2, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2+size, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2+size, 0.5-size/2, 0.5-size/2, 0, 0);
-				break;
-			case NORTH:
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2+size, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2+size, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2+size, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2+size, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2+size, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2+size, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2+size, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2+size, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2+size, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2+size, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2+size, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2+size, 1, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2+size, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2+size, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2+size, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2+size, 1, 1);
-				break;
-			case SOUTH:
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2-size, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2-size, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2-size, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2-size, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2-size, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2-size, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2-size, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2-size, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2-size, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2-size, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2-size, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2-size, 1, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2-size, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2-size, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2-size, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2-size, 1, 1);
-				break;
-			case UP:
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2-size, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2-size, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2-size, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2-size, 0.5-size/2, 0, 0);
-				break;
-			case WEST:
-				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5+size/2, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5+size/2, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2-size, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2-size, 0.5-size/2, 0.5-size/2, 0, 0);
-				break;
-			default:
-				break;
-			}
-		}
-		else {
-			v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
-			switch(dir) {
-			case DOWN:
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 0, 0);
-				break;
-			case NORTH:
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 1, 1);
-				break;
-			case EAST:
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5+size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 0, 0);
-				break;
-			case WEST:
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 0, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 1, 1);
-				break;
-			case UP:
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 0, 0);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5+size/2, 0, 1);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5+size/2, 1, 1);
-				break;
-			case SOUTH:
-				v5.addVertexWithUV(0.5-size/2, 0.5+size/2, 0.5-size/2, 0, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5+size/2, 0.5-size/2, 1, 1);
-				v5.addVertexWithUV(0.5+size/2, 0.5-size/2, 0.5-size/2, 1, 0);
-				v5.addVertexWithUV(0.5-size/2, 0.5-size/2, 0.5-size/2, 0, 0);
-				break;
-			default:
-				break;
-			}
-		}
-		v5.draw();
-	}
-
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityWaterLineAt((TileEntitySteamLine)tile, par2, par4, par6, par8);
-		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-
+		//if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
+		//	this.renderTileEntityWaterLineAt((TileEntitySteamLine)tile, par2, par4, par6, par8);
+		TileEntitySteamLine te = (TileEntitySteamLine)tile;
+		if (!tile.hasWorldObj()) {
+			ReikaTextureHelper.bindTerrainTexture();
+			this.renderBlock(te, par2, par4, par6);
 		}
+	}
+
+	private void renderBlock(TileEntitySteamLine te, double par2, double par4, double par6) {
+		Icon ico = Block.stone.getIcon(0, 0);
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float du = ico.getMaxU();
+		float dv = ico.getMaxV();
+		GL11.glTranslated(par2, par4, par6);
+		Tessellator v5 = Tessellator.instance;
+
+		float f = 0.15F;
+		double s = 0.375;
+		GL11.glColor4f(f, f, f, 1);
+		GL11.glScaled(s, s, s);
+		for (int i = 0; i < 7; i++) {
+			double d1 = 0;
+			double d2 = 0;
+			double d3 = 0;
+			if (i == 1)
+				d1 = 1;
+			else if (i == 2) {
+				d2 = 1;
+			}
+			else if (i == 3) {
+				d3 = 1;
+			}
+			else if (i == 4) {
+				d1 = -1;
+			}
+			else if (i == 5) {
+				d2 = -1;
+			}
+			else if (i == 6) {
+				d3 = -1;
+			}
+			GL11.glTranslated(d1, d2, d3);
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0, 0, 1, u, v);
+			v5.addVertexWithUV(1, 0, 1, du, v);
+			v5.addVertexWithUV(1, 1, 1, du, dv);
+			v5.addVertexWithUV(0, 1, 1, u, dv);
+			v5.draw();
+
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0, 1, 0, u, dv);
+			v5.addVertexWithUV(1, 1, 0, du, dv);
+			v5.addVertexWithUV(1, 0, 0, du, v);
+			v5.addVertexWithUV(0, 0, 0, u, v);
+			v5.draw();
+
+			f = 0.1F;
+			GL11.glColor4f(f, f, f, 1);
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(1, 1, 0, u, dv);
+			v5.addVertexWithUV(1, 1, 1, du, dv);
+			v5.addVertexWithUV(1, 0, 1, du, v);
+			v5.addVertexWithUV(1, 0, 0, u, v);
+			v5.draw();
+
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0, 0, 0, u, v);
+			v5.addVertexWithUV(0, 0, 1, du, v);
+			v5.addVertexWithUV(0, 1, 1, du, dv);
+			v5.addVertexWithUV(0, 1, 0, u, dv);
+			v5.draw();
+
+			f = 0.25F;
+			GL11.glColor4f(f, f, f, 1);
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0, 1, 1, u, dv);
+			v5.addVertexWithUV(1, 1, 1, du, dv);
+			v5.addVertexWithUV(1, 1, 0, du, v);
+			v5.addVertexWithUV(0, 1, 0, u, v);
+			v5.draw();
+
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0, 0, 0, u, v);
+			v5.addVertexWithUV(1, 0, 0, du, v);
+			v5.addVertexWithUV(1, 0, 1, du, dv);
+			v5.addVertexWithUV(0, 0, 1, u, dv);
+			v5.draw();
+			GL11.glTranslated(-d1, -d2, -d3);
+		}
+		GL11.glScaled(1/s, 1/s, 1/s);
+		GL11.glTranslated(-par2, -par4, -par6);
+		v5.setColorOpaque(255, 255, 255);
 	}
 
 	@Override

@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 
 public class CommonProxy {
 
+	public static int lineRender;
+
 	public void registerRenderers()
 	{
 

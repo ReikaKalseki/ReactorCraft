@@ -48,6 +48,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+		//ReikaInventoryHelper.clearInventory(this);
 		//ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		this.feed();
 

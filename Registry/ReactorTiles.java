@@ -76,7 +76,7 @@ public enum ReactorTiles {
 	STORAGE("machine.storage", TileEntityWasteStorage.class, 3, "RenderWasteStorage"),
 	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, ""),
 	HEATER("machine.fusionheater", TileEntityFusionHeater.class, 7, ""),
-	GASPIPE("machine.gasduct", TileEntityGasDuct.class, 4, ""),
+	GASPIPE("machine.gasduct", TileEntityGasDuct.class, 4, "DuctRenderer"),
 	IONIZER("machine.ionizer", TileEntityIonizer.class, 8, "");
 
 	private String name;
@@ -263,6 +263,10 @@ public enum ReactorTiles {
 	}
 
 	public int getBlockVariableIndex() {
+		if (this == GASPIPE)
+			return ReactorBlocks.DUCT.ordinal();
+		if (this == STEAMLINE)
+			return ReactorBlocks.LINE.ordinal();
 		if (this.hasRender()) {
 			if (this.isReactorBlock()) {
 				return ReactorBlocks.MODELREACTOR.ordinal();

@@ -34,6 +34,7 @@ public class ClientProxy extends CommonProxy {
 	};
 
 	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();
+	public static SteamLineRenderer line;
 
 	@Override
 	public void registerSounds() {
@@ -43,6 +44,10 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerRenderers() {
 		this.loadModels();
+
+		lineRender = RenderingRegistry.getNextAvailableRenderId();
+		line = new SteamLineRenderer(lineRender);
+		RenderingRegistry.registerBlockHandler(lineRender, line);
 
 		this.registerSpriteSheets();
 
