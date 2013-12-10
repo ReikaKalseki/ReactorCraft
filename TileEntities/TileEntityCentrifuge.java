@@ -29,8 +29,11 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ShaftPowerReceiver {
+public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ShaftPowerReceiver, PipeConnector {
 
 	private int torque;
 	private int omega;
@@ -52,7 +55,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	private StepTimer timer = new StepTimer(900);
 
 	public static final int UF6_PER_DUST = 50;
-	public static final int URANIUM_PERCENT_235 = 1;
+	public static final int FUEL_CHANCE = 9;
 
 	@Override
 	public int getIndex() {
@@ -106,7 +109,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private void make() {
 		tank.drain(UF6_PER_DUST, true);
-		if (ReikaRandomHelper.doWithChance(URANIUM_PERCENT_235/100D))
+		if (ReikaRandomHelper.doWithChance(FUEL_CHANCE/100D))
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
 		else
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
@@ -341,6 +344,21 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean canExitToSide(ForgeDirection dir) {
-		return true;
+		return dir.offsetY == 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p) && side == ForgeDirection.UP;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
 	}
 }

@@ -147,4 +147,9 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 		return type == PipeType.FLUID ? (with == ForgeDirection.UP ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
 	}
 
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side == ForgeDirection.UP && this.canConnectToPipe(p);
+	}
+
 }

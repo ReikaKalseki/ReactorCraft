@@ -34,8 +34,11 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler {
+public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
 
 	public static final int ACID_PER_UNIT = 125;
 	public static final int ACID_PER_FLUORITE = 250;
@@ -52,6 +55,8 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	public static final int ACID_TIME = 80;
 	public static final int UF6_TIME = 400;
 
+	private ForgeDirection facing;
+
 	private ParallelTicker timer = new ParallelTicker().addTicker("acid", ACID_TIME).addTicker("uf6", UF6_TIME);
 
 	@Override
@@ -66,6 +71,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getFacing(meta);
 		this.getWaterBuckets();
 		if (this.canMakeAcid()) {
 			timer.updateTicker("acid");
@@ -338,5 +344,37 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	@Override
 	public boolean canExitToSide(ForgeDirection dir) {
 		return false;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p);
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == facing ? Flow.OUTPUT : Flow.INPUT;
+	}
+
+	private void getFacing(int meta) {
+		switch(meta) {
+		case 0:
+			facing = ForgeDirection.WEST;
+			break;
+		case 1:
+			facing = ForgeDirection.EAST;
+			break;
+		case 2:
+			facing = ForgeDirection.NORTH;
+			break;
+		case 3:
+			facing = ForgeDirection.SOUTH;
+			break;
+		}
 	}
 }

@@ -24,7 +24,9 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RenderableDuct;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGasDuct extends TileEntityReactorBase implements RenderableDuct {
 
@@ -159,8 +161,8 @@ public class TileEntityGasDuct extends TileEntityReactorBase implements Renderab
 			return true;
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-		if (tile instanceof IFluidHandler)
-			return true;
+		if (tile instanceof PipeConnector)
+			return ((PipeConnector)tile).canConnectToPipeOnSide(MachineRegistry.PIPE, dir.getOpposite());
 		return false;
 	}
 
@@ -326,6 +328,11 @@ public class TileEntityGasDuct extends TileEntityReactorBase implements Renderab
 
 	private void onIntake(TileEntity te) {
 
+	}
+
+	@Override
+	public Block getPipeBlockType() {
+		return Block.hardenedClay;
 	}
 
 }
