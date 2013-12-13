@@ -92,17 +92,17 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
 	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
-	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700);
+	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700).setTemperature(1100);
 	public static final Fluid CL = new Fluid("chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 	public static final Fluid O = new Fluid("oxygen").setDensity(138).setViscosity(20).setGaseous(true);
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
-	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(750);
+	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(750).setTemperature(2000);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(180).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
-	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true);
+	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(150000000);
 
 	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
 
