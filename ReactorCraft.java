@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
@@ -36,6 +37,7 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
@@ -145,6 +147,20 @@ public class ReactorCraft extends DragonAPIMod {
 			RetroGenController.getInstance().addRetroGenerator(new ReactorRetroGen());
 			//Set state back
 		}
+
+		ReikaMystcraftHelper.disableFluidPage("fusion plasma");
+		ReikaMystcraftHelper.disableFluidPage("rc deuterium");
+		ReikaMystcraftHelper.disableFluidPage("rc tritium");
+		ReikaMystcraftHelper.disableFluidPage("hydrofluoric acid");
+		ReikaMystcraftHelper.disableFluidPage("uranium hexafluoride");
+		ReikaMystcraftHelper.disableFluidPage("sodium");
+		ReikaMystcraftHelper.disableFluidPage("chlorine");
+		ReikaMystcraftHelper.disableFluidPage("oxygen");
+		ReikaMystcraftHelper.disableFluidPage("lowpammonia");
+		ReikaMystcraftHelper.disableFluidPage("lowpwater");
+		ReikaMystcraftHelper.disableFluidPage("hotsodium");
+
+		IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
 	}
 
 	@Override

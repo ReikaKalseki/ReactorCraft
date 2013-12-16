@@ -14,8 +14,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.DragonAPI.Interfaces.RegistrationList;
+import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
@@ -30,7 +29,7 @@ import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public enum ReactorItems implements RegistrationList, IDRegistry {
+public enum ReactorItems implements RegistryEnum {
 
 	WASTE(0,		"item.waste", 			ItemNuclearWaste.class),
 	FUEL(1,			"item.fuel",			ItemReactorBasic.class),

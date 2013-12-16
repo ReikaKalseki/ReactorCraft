@@ -12,8 +12,7 @@ package Reika.ReactorCraft.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
-import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.DragonAPI.Interfaces.RegistrationList;
+import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Blocks.BlockCorium;
@@ -31,7 +30,7 @@ import Reika.ReactorCraft.Items.ItemBlockFluorite;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
 
-public enum ReactorBlocks implements RegistrationList, IDRegistry {
+public enum ReactorBlocks implements RegistryEnum {
 
 	REACTOR(		BlockReactorTile.class, 							"Reactor", 					false),
 	MATS(			BlockReactorMat.class, ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
