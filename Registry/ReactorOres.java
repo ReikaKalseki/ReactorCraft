@@ -141,6 +141,8 @@ public enum ReactorOres {
 			return ReactorStacks.ammonium.copy();
 		case CALCITE:
 			return ReactorStacks.calcite.copy();
+		case MAGNETITE:
+			return ReactorStacks.lodestone.copy();
 		default:
 			return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
 		}
