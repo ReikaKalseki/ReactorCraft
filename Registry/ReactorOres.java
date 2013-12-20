@@ -223,4 +223,9 @@ public enum ReactorOres {
 			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaStill.blockID) != null || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaMoving.blockID) != null;
 		return true;
 	}
+
+	public boolean dropsSelf(int meta) {
+		List<ItemStack> li = this.getOreDrop(meta);
+		return li.size() == 1 && li.get(0).itemID == ReactorBlocks.ORE.getBlockID() && li.get(0).getItemDamage() == meta;
+	}
 }

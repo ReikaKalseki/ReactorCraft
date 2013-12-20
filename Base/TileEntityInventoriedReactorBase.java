@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 
 public abstract class TileEntityInventoriedReactorBase extends TileEntityReactorBase implements ISidedInventory {
 

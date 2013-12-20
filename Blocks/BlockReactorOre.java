@@ -44,7 +44,8 @@ public class BlockReactorOre extends Block {
 		//ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, metadata);
 		ReactorOres ore = ReactorOres.getOre(blockID, metadata);
 		li.addAll(ore.getOreDrop(metadata));
-		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, this.droppedXP(ore));
+		if (!ore.dropsSelf(metadata))
+			ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, this.droppedXP(ore));
 		return li;
 	}
 

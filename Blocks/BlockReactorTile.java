@@ -150,7 +150,7 @@ public class BlockReactorTile extends Block {
 		if (is != null) {
 			ItemRegistry i = ItemRegistry.getEntry(is);
 			if (i != null) {
-				if (i.overridesRightClick())
+				if (i.overridesRightClick(is))
 					return false;
 			}
 		}

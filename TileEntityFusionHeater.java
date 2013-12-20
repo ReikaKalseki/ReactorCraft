@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
-import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
 public class TileEntityFusionHeater extends TileEntityReactorBase implements ShaftPowerReceiver, TemperatureTE {
 

@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RenderableDuct;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
