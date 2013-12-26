@@ -29,10 +29,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
-import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -78,7 +78,7 @@ public class ReactorCraft extends DragonAPIMod {
 	@Instance("ReactorCraft")
 	public static ReactorCraft instance = new ReactorCraft();
 
-	public static final ControlledConfig config = new ControlledConfig(instance, ReactorOptions.optionList, ReactorBlocks.blockList, ReactorItems.itemList, null, 1);
+	public static final ReactorConfig config = new ReactorConfig(instance, ReactorOptions.optionList, ReactorBlocks.blockList, ReactorItems.itemList, null, 1);
 
 	public static final String packetChannel = "ReactorCraftData";
 
@@ -106,7 +106,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(150000000);
 
-	public static PotionRadiation radiation = (PotionRadiation)new PotionRadiation(30, true).setPotionName("Radiation Sickness");
+	public static PotionRadiation radiation;
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -130,6 +130,9 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addItems();
 		this.addLiquids();
 		this.registerOres();
+
+		PotionCollisionTracker.instance.addPotionID(ModList.REACTORCRAFT, config.getRadiationPotionID(), PotionRadiation.class);
+		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);

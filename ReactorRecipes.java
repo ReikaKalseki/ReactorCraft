@@ -93,6 +93,10 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 4, 0), ReactorStacks.lime, Item.bucketWater, "plankWood"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 1, 0), ReactorStacks.lime, Item.bucketWater, "stickWood"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 1, 0), ReactorStacks.lime, Item.bucketWater, "dustWood"));
+
+		GameRegistry.addShapelessRecipe(ReactorStacks.calcite, ItemStacks.getModOreIngot(ModOreList.CALCITE));
+		GameRegistry.addShapelessRecipe(ReactorStacks.ammonium, ItemStacks.getModOreIngot(ModOreList.AMMONIUM));
+		GameRegistry.addShapelessRecipe(ReactorStacks.lodestone, ItemStacks.getModOreIngot(ModOreList.MAGNETITE));
 	}
 
 	private static void addItems() {
