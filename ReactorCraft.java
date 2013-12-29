@@ -35,6 +35,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
@@ -53,6 +54,7 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
+import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -170,6 +172,15 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
 		ReactorRecipes.addModInterface();
+
+		//for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+		//	FluoriteTypes fl = FluoriteTypes.colorList[i];
+		//	BlockColorMapper.instance.addModBlockColor(ReactorBlocks.FLUORITEORE.getBlockID(), i, fl.red, fl.green, fl.blue);
+		//}
+		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
+			ReactorTiles r = ReactorTiles.TEList[i];
+			BlockColorMapper.instance.addModBlockColor(r.getBlockID(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
+		}
 	}
 
 	@ForgeSubscribe
@@ -283,18 +294,22 @@ public class ReactorCraft extends DragonAPIMod {
 	private static void registerOres() {
 		for (int i = 0; i < ReactorOres.oreList.length; i++) {
 			ReactorOres ore = ReactorOres.oreList[i];
-			OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock()); //only white fluorite gets registered
-			OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
-			if (ore != ReactorOres.FLUORITE)
+			if (ore != ReactorOres.FLUORITE) {
+				OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock());
+				OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
 				MinecraftForge.setBlockHarvestLevel(ReactorBlocks.ORE.getBlockVariable(), ore.getBlockMetadata(), "pickaxe", ore.harvestLevel);
+			}
 		}
 		Block b = ReactorBlocks.FLUORITEORE.getBlockVariable();
 		MinecraftForge.setBlockHarvestLevel(b, "pickaxe", ReactorOres.FLUORITE.harvestLevel);
 		OreDictionary.registerOre("dustQuicklime", ReactorStacks.lime.copy());
 
 		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+			FluoriteTypes fl = FluoriteTypes.colorList[i];
 			ItemStack is = new ItemStack(ReactorBlocks.FLUORITEORE.getBlockID(), 1, i);
 			ReikaOreHelper.addOreForReference(is);
+			OreDictionary.registerOre(ReactorOres.FLUORITE.getDictionaryName(), is);
+			OreDictionary.registerOre(ReactorOres.FLUORITE.getProductDictionaryName(), fl.getItem());
 		}
 	}
 

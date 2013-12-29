@@ -72,11 +72,13 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					}
 				}
 				if (slot != -1) {
-					ItemStack is = inv[slot];
-					inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
+					if (ReikaRandomHelper.doWithChance(12.5)) {
+						ItemStack is = inv[slot];
+						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
 
-					if (ReikaRandomHelper.doWithChance(10)) {
-						this.addWaste();
+						if (ReikaRandomHelper.doWithChance(10)) {
+							this.addWaste();
+						}
 					}
 
 					this.spawnNeutronBurst(world, x, y, z);
