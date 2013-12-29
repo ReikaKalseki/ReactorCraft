@@ -35,7 +35,6 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
@@ -54,7 +53,7 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
-import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
+import Reika.RotaryCraft.API.BlockColorInterface;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -179,7 +178,8 @@ public class ReactorCraft extends DragonAPIMod {
 		//}
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			BlockColorMapper.instance.addModBlockColor(r.getBlockID(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
+			//BlockColorMapper.instance.addModBlockColor(r.getBlockID(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
+			BlockColorInterface.addGPRBlockColor(r.getBlockID(), r.getBlockMetadata(), 200, 200, 200);
 		}
 	}
 
