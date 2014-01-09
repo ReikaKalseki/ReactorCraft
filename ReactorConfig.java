@@ -24,7 +24,7 @@ public class ReactorConfig extends ControlledConfig {
 
 	@Override
 	protected void loadAdditionalData() {
-		potionID = config.get("Other", "Radiation Effect ID", 30).getInt();
+		potionID = config.get("Other", "Radiation Effect ID", 31).getInt();
 	}
 
 	public int getRadiationPotionID() {
