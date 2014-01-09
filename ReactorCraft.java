@@ -36,7 +36,6 @@ import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -307,7 +306,7 @@ public class ReactorCraft extends DragonAPIMod {
 		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 			FluoriteTypes fl = FluoriteTypes.colorList[i];
 			ItemStack is = new ItemStack(ReactorBlocks.FLUORITEORE.getBlockID(), 1, i);
-			ReikaOreHelper.addOreForReference(is);
+			//ReikaOreHelper.addOreForReference(is);
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getDictionaryName(), is);
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getProductDictionaryName(), fl.getItem());
 		}
