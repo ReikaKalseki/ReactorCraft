@@ -65,7 +65,7 @@ public enum ReactorTiles {
 	WASTECONTAINER("machine.wastecontainer", TileEntityWasteContainer.class, 2),
 	BOILER("machine.reactorboiler", TileEntityReactorBoiler.class, 3),
 	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
-	PUMP("machine.pump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
+	PUMP("machine.reactorpump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
 	MAGNET("machine.magnet", TileEntityMagnet.class, 5, "RenderMagnet"),
 	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
