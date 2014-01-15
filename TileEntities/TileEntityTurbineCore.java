@@ -33,8 +33,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int steam;
 
-	public static final int GEN_OMEGA = 512; //377 real
-	public static final int TORQUE_CAP = 8388608;
+	public static final int GEN_OMEGA = 65536; //377 real
+	public static final int TORQUE_CAP = 16384;
 
 	public static final long MAX_POWER = 8589934592L; //8.5 GW, biggest in world (Kashiwazaki)
 
@@ -162,7 +162,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getAccelDelay() {
-		return (int)(1+ReikaMathLibrary.logbase(omega+1, 2));
+		return (int)(1+ReikaMathLibrary.logbase(omega+1, 2)/2);
 	}
 
 	private int getGenTorque() {
