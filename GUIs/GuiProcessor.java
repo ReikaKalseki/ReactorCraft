@@ -97,6 +97,10 @@ public class GuiProcessor extends ReactorGuiBase {
 		int i6 = tile.getUF6TimerScaled(24);
 		this.drawTexturedModalRect(j+67, k+58, 176, 92, i6, 17);
 
+		water.updateTank(tile.getTankInfo(null)[0]);
+		acid.updateTank(tile.getTankInfo(null)[1]);
+		uf6.updateTank(tile.getTankInfo(null)[2]);
+
 		water.render(true);
 		acid.render(true);
 		uf6.render(true);

@@ -123,7 +123,7 @@ public class ReactorRecipes {
 		ReactorTiles.GRATE.addCrafting("SIS", "p p", "SPS", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot, 'I', Block.fenceIron);
 		ReactorTiles.PUMP.addCrafting("PpP", "gCg", "PsP", 'P', ItemStacks.basepanel, 'g', Block.thinGlass, 'p', ItemStacks.pipe, 'C', ItemStacks.compressor, 's', ItemStacks.shaftitem);
 		ReactorTiles.SYNTHESIZER.addCrafting("SpS", "pMp", "ShS", 'S', ItemStacks.steelingot, 'M', ItemStacks.mixer, 'p', ItemStacks.basepanel, 'h', ItemStacks.igniter);
-		ReactorTiles.BOILER.addCrafting(" i ", "ibi", " i ", 'b', ReactorTiles.BOILER.getCraftedProduct(), 'i', Item.ingotIron);
+		ReactorTiles.SODIUMBOILER.addCrafting(" i ", "ibi", " i ", 'b', ReactorTiles.BOILER.getCraftedProduct(), 'i', Item.ingotIron);
 
 	}
 

@@ -156,15 +156,15 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public int getWater() {
-		return water.getFluid() != null ? water.getFluid().amount : 0;
+		return water.getLevel();
 	}
 
 	public int getHF() {
-		return acid.getFluid() != null ? acid.getFluid().amount : 0;
+		return acid.getLevel();
 	}
 
 	public int getUF6() {
-		return output.getFluid() != null ? output.getFluid().amount : 0;
+		return output.getLevel();
 	}
 
 	private void getWaterBuckets() {
@@ -376,5 +376,17 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 			facing = ForgeDirection.SOUTH;
 			break;
 		}
+	}
+
+	public void setWater(int level) {
+		water.setContents(level, FluidRegistry.WATER);
+	}
+
+	public void setHF(int level) {
+		acid.setContents(level, FluidRegistry.getFluid("hydrofluoric acid"));
+	}
+
+	public void setUF6(int level) {
+		output.setContents(level, FluidRegistry.getFluid("uranium hexafluoride"));
 	}
 }

@@ -45,6 +45,9 @@ public class ContainerProcessor extends CoreContainer {
 
 			icrafting.sendProgressBarUpdate(this, 0, proc.HF_timer);
 			icrafting.sendProgressBarUpdate(this, 1, proc.UF6_timer);
+			icrafting.sendProgressBarUpdate(this, 2, proc.getWater());
+			icrafting.sendProgressBarUpdate(this, 3, proc.getHF());
+			icrafting.sendProgressBarUpdate(this, 4, proc.getUF6());
 		}
 	}
 
@@ -54,6 +57,9 @@ public class ContainerProcessor extends CoreContainer {
 		switch(par1) {
 		case 0: proc.HF_timer = par2; break;
 		case 1: proc.UF6_timer = par2; break;
+		case 2: proc.setWater(par2); break;
+		case 3: proc.setHF(par2); break;
+		case 4: proc.setUF6(par2); break;
 		}
 	}
 }

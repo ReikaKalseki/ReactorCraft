@@ -48,8 +48,8 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 
 	@Override
 	public boolean canRemoveItem(int i, ItemStack is) {
-		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
-			return true;
+		//if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
+		//return true;
 		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
 			return true;
 		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())

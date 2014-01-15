@@ -166,7 +166,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getGenTorque() {
-		int torque = steam > 0 ? steam*24 : omega/16+1;
+		int torque = steam > 0 ? steam*240 : omega/16+1;
 		return omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
 	}
 
