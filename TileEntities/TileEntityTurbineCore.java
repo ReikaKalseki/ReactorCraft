@@ -20,7 +20,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -41,8 +40,6 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private int omega;
 	private int iotick;
 
-	private StepTimer accelTicker = new StepTimer(1);
-
 	private int readx;
 	private int ready;
 	private int readz;
@@ -54,6 +51,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private BlockArray contact = new BlockArray();
 
+	private int damage;
+
+	public int getDamage() {
+		return damage;
+	}
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.TURBINECORE.ordinal();
@@ -61,7 +64,6 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		accelTicker.update();
 		thermalTicker.update();
 		this.getIOSides(world, x, y, z, meta);
 		this.readSurroundings(world, x, y, z, meta);
@@ -77,6 +79,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			phi = 0;
 			steam = 0;
 		}
+
+		//ReikaJavaLibrary.pConsole(String.format("Steam: %d; Omega: %d", steam, omega), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+":"+steam+":"+omega+":"+String.format("%.3f", ReikaMathLibrary.getThousandBase(this.getGenPower()))+ReikaEngLibrary.getSIPrefix(this.getGenPower()), this.getStage() == 0);
 		//ReikaJavaLibrary.pConsole(thermalTicker.getTick()+"/"+thermalTicker.getCap());
@@ -136,15 +140,21 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private void updateSpeed(boolean up) {
-		accelTicker.setCap(this.getAccelDelay());
+		//accelTicker.setCap(this.getAccelDelay());
+		//ReikaJavaLibrary.pConsole(accelTicker.getCap(), this.getSide() == Side.SERVER && this.getStage() == 0);
 		if (up) {
-			if (accelTicker.checkCap()) {
-				omega = ReikaMathLibrary.extrema(omega+1, GEN_OMEGA, "absmin");
+			if (omega < GEN_OMEGA) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
+				omega += 4*(int)ReikaMathLibrary.logbase(GEN_OMEGA+1, 2);
+				if (omega > GEN_OMEGA)
+					omega = GEN_OMEGA;
 			}
 		}
 		else {
-			if (thermalTicker.getTick()%10 == 0) {
-				omega = ReikaMathLibrary.extrema(omega-1, 0, "max");
+			if (omega > 0) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Side.SERVER);
+				omega -= omega/256+1;
+				//soundtick = 2000;
 			}
 		}
 	}
@@ -162,12 +172,16 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getAccelDelay() {
-		return (int)(1+ReikaMathLibrary.logbase(omega+1, 2)/2);
+		return (int)(1+ReikaMathLibrary.logbase(omega+1, 2)/20);
 	}
 
 	private int getGenTorque() {
-		int torque = steam > 0 ? steam*240 : omega/16+1;
+		int torque = steam > 0 ? (int)(steam*48*this.getDamageEfficiency()) : omega/16+1;
 		return omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
+	}
+
+	private float getDamageEfficiency() {
+		return damage > 0 ? 1F/(damage+1) : 1;
 	}
 
 	private long getGenPower() {
@@ -237,7 +251,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= 1+this.getStage()/2) {
 				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2])) {
+				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z)) {
+					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz)+":"+this, this.getStage() == 4 && this.getSide() == Side.SERVER);
 					phi = 0;
 					omega = 0;
 					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
@@ -318,7 +333,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private void breakTurbine() {
-
+		damage++;
 	}
 
 	public int getNumberStagesTotal() {
@@ -427,6 +442,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		steam = NBT.getInteger("steamlevel");
 
 		inter = Interference.get(NBT.getInteger("blocked"));
+
+		damage = NBT.getInteger("dmg");
 	}
 
 	/**
@@ -439,6 +456,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		NBT.setInteger("speed", omega);
 		NBT.setInteger("steamlevel", steam);
+
+		NBT.setInteger("dmg", damage);
 
 		if (inter != null)
 			NBT.setInteger("blocked", inter.ordinal());
@@ -453,8 +472,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	enum Interference {
 		JAM(0),
-		FLUID(8),
-		MOB(64);
+		FLUID(512),
+		MOB(4096);
 
 		public final int maxSpeed;
 

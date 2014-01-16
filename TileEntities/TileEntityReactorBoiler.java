@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
-	public static final int WATER_PER_STEAM = 1;
+	public static final int WATER_PER_STEAM = 200;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
@@ -55,6 +55,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
 				fluid = WorkingFluid.AMMONIA;
 			tank.removeLiquid(WATER_PER_STEAM);
+			//ReikaJavaLibrary.pConsole(WATER_PER_STEAM);
 			temperature -= 5;
 		}
 
@@ -67,6 +68,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
 
 		this.transferSteam(world, x, y, z);
+		//steam = 0;
 	}
 
 	private void detonateAmmonia(World world, int x, int y, int z) {

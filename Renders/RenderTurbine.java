@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelTurbine;
@@ -67,7 +68,7 @@ public class RenderTurbine extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld())
-			models[tile.getStage()].renderAll(null, -tile.phi, 0);
+			models[tile.getStage()].renderAll(ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
 		else {
 			double sc = 0.6;
 			GL11.glScaled(sc, sc, sc);

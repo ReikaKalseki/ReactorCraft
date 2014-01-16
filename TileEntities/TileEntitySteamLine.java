@@ -59,6 +59,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
 				//ReikaJavaLibrary.pConsole(steam+"+"+s+"="+(steam+s));
+				//ReikaJavaLibrary.pConsole(steam+"+="+s, Side.SERVER);
 				steam += s;
 			}
 		}

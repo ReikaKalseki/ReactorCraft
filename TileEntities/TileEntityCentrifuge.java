@@ -90,6 +90,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		timer.setCap(this.setTimer());
 		if (omega >= MINSPEED) {
 			if (this.canMake()) {
 				timer.update();
@@ -105,6 +106,35 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 		if (!world.isRemote) {
 			split = timer.getTick();
 		}
+	}
+
+	private int setTimer() {
+		if (omega >= 67108864) {
+			return 8;
+		}
+		else if (omega >= 33554432) {
+			return 20;
+		}
+		else if (omega >= 16777216) {
+			return 50;
+		}
+		else if (omega >= 8388608) {
+			return 100;
+		}
+		else if (omega >= 4194304) {
+			return 240;
+		}
+		else if (omega >= 2097152) {
+			return 400;
+		}
+		else if (omega >= 1048576) {
+			return 600;
+		}
+		else if (omega >= 524288) {
+			return 800;
+		}
+		else
+			return 900;
 	}
 
 	private void make() {

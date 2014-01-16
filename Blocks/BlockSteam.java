@@ -124,8 +124,10 @@ public class BlockSteam extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
-			world.setBlock(x, y, z, 0);
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -138,8 +140,10 @@ public class BlockSteam extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
-			world.setBlock(x, y, z, 0);
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -152,8 +156,10 @@ public class BlockSteam extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
-			world.setBlock(x, y, z, 0);
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -166,8 +172,10 @@ public class BlockSteam extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
-			world.setBlock(x, y, z, 0);
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -180,8 +188,10 @@ public class BlockSteam extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
-			world.setBlock(x, y, z, 0);
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);

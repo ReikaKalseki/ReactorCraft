@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -38,9 +39,11 @@ import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends Block {
@@ -334,8 +337,21 @@ public class BlockReactorTile extends Block {
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
 		ReactorTiles r = ReactorTiles.TEList[ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta)];
-		if (r != null)
-			li.add(r.getCraftedProduct());
+		if (r != null) {
+			if (r == ReactorTiles.TURBINECORE) {
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
+				if (te.getDamage() > 0) {
+					li.add(ItemStacks.shaftcore.copy());
+					for (int i = 0; i < ReikaRandomHelper.getSafeRandomInt(24-te.getDamage()); i++) {
+						li.add(ItemStacks.prop.copy());
+					}
+				}
+				else
+					li.add(r.getCraftedProduct());
+			}
+			else
+				li.add(r.getCraftedProduct());
+		}
 		return li;
 	}
 

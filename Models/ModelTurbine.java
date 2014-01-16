@@ -66,6 +66,8 @@ public class ModelTurbine extends RotaryModelBase
 		double dd = 0.25;
 		double sc = this.getScaleFactor();
 
+		int damage = li != null ? (Integer)li.get(0) : 0;
+
 		GL11.glTranslated(0, vo, 0);
 		GL11.glRotatef(phi, 0, 0, 1);
 		GL11.glTranslated(0, -vo, 0);
@@ -77,7 +79,7 @@ public class ModelTurbine extends RotaryModelBase
 
 		GL11.glTranslated(0, 0, dd);
 
-		this.renderBlades(vo, phi);
+		this.renderBlades(damage, vo, phi);
 
 		GL11.glTranslated(0, 0, -dd*2);
 
@@ -85,7 +87,7 @@ public class ModelTurbine extends RotaryModelBase
 		GL11.glScaled(sc, sc, 1);
 		GL11.glTranslated(0, -vo, 0);
 
-		this.renderBlades(vo, phi);
+		this.renderBlades(damage, vo, phi);
 
 		GL11.glTranslated(0, vo, 0);
 		GL11.glScaled(1D/sc, 1D/sc, 1);
@@ -94,8 +96,8 @@ public class ModelTurbine extends RotaryModelBase
 		GL11.glTranslated(0, 0, dd);
 	}
 
-	private void renderBlades(double vo, float phi) {
-		for (int i = 0; i < 360; i += this.getAngularSeparation()) {
+	private void renderBlades(int damage, double vo, float phi) {
+		for (int i = 0; i < 360; i += this.getAngularSeparation()*(damage+1)) {
 			GL11.glTranslated(0, vo, 0);
 			GL11.glRotatef(i+phi, 0, 0, 1);
 			GL11.glTranslated(0, -vo, 0);
