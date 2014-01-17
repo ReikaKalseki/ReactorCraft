@@ -13,7 +13,9 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
 
@@ -82,5 +84,17 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 		TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(x, y, z);
 		te.addToAdjacentConnections(world, x, y, z);
 		te.recomputeConnections(world, x, y, z);
+	}
+
+	@Override
+	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		double d = 0.25;
+		return ReikaAABBHelper.getBlockAABB(x, y, z).contract(d, d, d);
+	}
+
+	@Override
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 }
