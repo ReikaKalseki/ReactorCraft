@@ -10,11 +10,11 @@
 package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -23,9 +23,12 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 
 public class BlockFluoriteOre extends BlockFluorite {
+
+	private Icon rainbowIcon;
 
 	public BlockFluoriteOre(int par1, Material par2Material) {
 		super(par1, par2Material);
@@ -35,16 +38,32 @@ public class BlockFluoriteOre extends BlockFluorite {
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
-		Random r = new Random();
-		int count = 1+fortune+r.nextInt(5+2*fortune);
+		int count = this.getNumberDrops(fortune);
 		for (int i = 0; i < count; i++)
-			li.add(ReactorItems.FLUORITE.getStackOfMetadata(metadata));
+			li.add(ReactorItems.FLUORITE.getStackOfMetadata(this.getMetaDropped(metadata)));
 		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, this.droppedXP());
 		return li;
 	}
 
+	private int getMetaDropped(int metadata) {
+		return ReactorOptions.RAINBOW.getState() ? rand.nextInt(FluoriteTypes.colorList.length) : metadata;
+	}
+
+	private int getNumberDrops(int fortune) {
+		if (ReactorOptions.RAINBOW.getState()) {
+			return FluoriteTypes.colorList.length+fortune*4+rand.nextInt(11+fortune*6);
+		}
+		return 1+fortune+rand.nextInt(5+2*fortune);
+	}
+
 	private int droppedXP() {
-		return ReikaRandomHelper.doWithChance(ReactorOres.FLUORITE.xpDropped) ? 1 : 0;
+		int factor = ReactorOptions.RAINBOW.getState() ? 6 : 1;
+		return ReikaRandomHelper.doWithChance(ReactorOres.FLUORITE.xpDropped*factor) ? 1 : 0;
+	}
+
+	@Override
+	public Icon getIcon(int s, int meta) {
+		return ReactorOptions.RAINBOW.getState() ? rainbowIcon : super.getIcon(s, meta);
 	}
 
 	@Override
@@ -59,6 +78,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 		for (int k = 0; k < FluoriteTypes.colorList.length; k++) {
 			icons[k] = ico.registerIcon(FluoriteTypes.colorList[k].getOreTextureName());
 		}
+		rainbowIcon = ico.registerIcon("ReactorCraft:fluorite_rainbow");
 	}
 
 	@Override

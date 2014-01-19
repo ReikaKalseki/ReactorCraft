@@ -72,11 +72,11 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					}
 				}
 				if (slot != -1) {
-					if (ReikaRandomHelper.doWithChance(12.5)) {
+					if (ReikaRandomHelper.doWithChance(3)) {
 						ItemStack is = inv[slot];
 						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
 
-						if (ReikaRandomHelper.doWithChance(10)) {
+						if (ReikaRandomHelper.doWithChance(20)) {
 							this.addWaste();
 						}
 					}
@@ -92,10 +92,12 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
 					if (slot != -1) {
 
-						inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
+						if (ReikaRandomHelper.doWithChance(4)) {
+							inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
 
-						if (ReikaRandomHelper.doWithChance(10)) {
-							this.addWaste();
+							if (ReikaRandomHelper.doWithChance(40)) {
+								this.addWaste();
+							}
 						}
 
 						this.spawnNeutronBurst(world, x, y, z);

@@ -25,6 +25,8 @@ public class BlockFluorite extends Block {
 
 	protected Icon[] icons = new Icon[FluoriteTypes.colorList.length];
 
+	protected static final Random rand = new Random();
+
 	public BlockFluorite(int par1, Material par2Material) {
 		super(par1, par2Material);
 		this.setHardness(1.2F);

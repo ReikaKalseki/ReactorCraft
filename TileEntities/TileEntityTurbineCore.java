@@ -80,6 +80,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			steam = 0;
 		}
 
+		steam *= this.getDamageEfficiency();
+
 		//ReikaJavaLibrary.pConsole(String.format("Steam: %d; Omega: %d", steam, omega), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+":"+steam+":"+omega+":"+String.format("%.3f", ReikaMathLibrary.getThousandBase(this.getGenPower()))+ReikaEngLibrary.getSIPrefix(this.getGenPower()), this.getStage() == 0);
@@ -176,7 +178,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getGenTorque() {
-		int torque = steam > 0 ? (int)(steam*48*this.getDamageEfficiency()) : omega/16+1;
+		int torque = steam > 0 ? (int)(steam*48) : omega/16+1;
 		return omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
 	}
 

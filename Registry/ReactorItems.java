@@ -86,6 +86,7 @@ public enum ReactorItems implements RegistryEnum {
 	public boolean hasMetadataSprites() {
 		switch(this) {
 		case FUEL:
+		case PLUTONIUM:
 		case WASTE:
 		case BREEDERFUEL:
 		case CLEANUP:
@@ -114,10 +115,11 @@ public enum ReactorItems implements RegistryEnum {
 	public String getMultiValuedName(int meta) {
 		switch(this) {
 		case FUEL:
+		case PLUTONIUM:
 			if (meta == 0)
 				return this.getBasicName()+" (Fresh)";
 			else
-				return this.getBasicName()+" ("+(meta*10)+"% Depleted)";
+				return this.getBasicName()+" ("+(meta)+"% Depleted)";
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
 		case RAW:
@@ -143,6 +145,7 @@ public enum ReactorItems implements RegistryEnum {
 	public boolean hasMultiValuedName() {
 		switch(this) {
 		case FUEL:
+		case PLUTONIUM:
 		case PLACER:
 		case RAW:
 		case FLUORITE:
@@ -161,7 +164,8 @@ public enum ReactorItems implements RegistryEnum {
 	public int getNumberMetadatas() {
 		switch(this) {
 		case FUEL:
-			return 10;
+		case PLUTONIUM:
+			return 100;
 		case PLACER:
 			return ReactorTiles.TEList.length;
 		case RAW:
@@ -270,6 +274,9 @@ public enum ReactorItems implements RegistryEnum {
 		switch(this) {
 		case INGOTS:
 			return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
+		case FUEL:
+		case PLUTONIUM:
+			return item.getItemDamage() == 0;
 		default:
 			return true;
 		}

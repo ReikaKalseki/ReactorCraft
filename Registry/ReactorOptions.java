@@ -20,7 +20,8 @@ public enum ReactorOptions implements ConfigList {
 	DEBUGMODE("Debug Mode", false),
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore", true),
-	RETROGEN("Retrogen Ores", false);
+	RETROGEN("Retrogen Ores", false),
+	RAINBOW("Rainbow Fluorite", false);
 
 	private String label;
 	private boolean defaultState;

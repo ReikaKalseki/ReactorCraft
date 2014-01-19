@@ -57,6 +57,8 @@ public enum FluoriteTypes {
 	}
 
 	public String getBlockName() {
+		if (ReactorOptions.RAINBOW.getState())
+			return StatCollector.translateToLocal("block.fluorite");
 		return ReikaStringParser.capFirstChar(this.name())+" "+StatCollector.translateToLocal("block.fluorite");
 	}
 

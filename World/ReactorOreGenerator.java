@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import cpw.mods.fml.common.IWorldGenerator;
 
@@ -35,10 +36,14 @@ public class ReactorOreGenerator implements IWorldGenerator {
 		//ReikaJavaLibrary.pConsole(chunkX+", "+chunkZ);
 		int id = ore.getBlockID();
 		int meta = ore.getBlockMetadata();
+		int passes = ore.perChunk;
 		if (ore == ReactorOres.FLUORITE) {
 			meta = FluoriteTypes.getRandomColor().ordinal();
+			if (ReactorOptions.RAINBOW.getState()) {
+				passes /= 4F;
+				meta = 0;
+			}
 		}
-		int passes = ore.perChunk;
 		for (int i = 0; i < passes; i++) {
 			int posX = chunkX + random.nextInt(16);
 			int posZ = chunkZ + random.nextInt(16);
