@@ -45,7 +45,6 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 		}
 
 		this.balance(world, x, y, z);
-		tank.empty();
 	}
 
 	private Fluid getFluidFromSteamMetadata(int smeta) {
