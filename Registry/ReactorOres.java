@@ -197,6 +197,8 @@ public enum ReactorOres {
 			return true;
 		if (id == ReikaTwilightHelper.getDimensionID() && dimensionID == 0)
 			return true;
+		if (dimensionID == 0 && id != -1 && id != 1)
+			return true;
 		return false;
 	}
 
