@@ -34,6 +34,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityIonizer;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
+import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
@@ -77,7 +78,8 @@ public enum ReactorTiles {
 	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, ""),
 	HEATER("machine.fusionheater", TileEntityFusionHeater.class, 7, ""),
 	GASPIPE("machine.gasduct", TileEntityGasDuct.class, 4, "DuctRenderer"),
-	IONIZER("machine.ionizer", TileEntityIonizer.class, 8, "");
+	IONIZER("machine.ionizer", TileEntityIonizer.class, 8, ""),
+	MAGNETPIPE("machine.magnetpipe", TileEntityMagneticPipe.class, 5, "DuctRenderer");
 
 	private String name;
 	private Class teClass;

@@ -12,29 +12,25 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.API.Shockable;
-import Reika.RotaryCraft.API.ThermalMachine;
-import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityIonizer extends TileEntityReactorBase implements Shockable, Laserable, ThermalMachine {
+public class TileEntityIonizer extends TileEntityReactorBase implements Shockable, IFluidHandler {
 
 	public static final int PLASMACHARGE = 600000;
-	public static final int PLASMA_TEMP = 150000000;
 
 	private int charge;
 
 	private ForgeDirection facing;
 
-	private int temperature;
-
-	private StepTimer tempTimer = new StepTimer(20);
+	private HybridTank tank = new HybridTank("ionizer", 8000);
 
 	@Override
 	public int getIndex() {
@@ -43,17 +39,7 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		//tempTimer.update();
-		this.updateTemperature(world, x, y, z, meta);
 
-		ReikaJavaLibrary.pConsole(temperature+": "+((float)temperature/PLASMA_TEMP), Side.SERVER);
-	}
-
-	private void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
-		int dT = temperature-Tamb;
-		if (dT != 0)
-			temperature -= (1+dT/16384D);
 	}
 
 	@Override
@@ -69,7 +55,7 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 
 		NBT.setInteger("face", this.getFacing().ordinal());
 
-		NBT.setInteger("temp", temperature);
+		tank.writeToNBT(NBT);
 	}
 
 	@Override
@@ -80,7 +66,7 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 
 		facing = ForgeDirection.VALID_DIRECTIONS[NBT.getInteger("face")];
 
-		temperature = NBT.getInteger("temp");
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -98,38 +84,43 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 	}
 
 	@Override
-	public void whenInBeam(long power, int range) {
-		temperature += 640*ReikaMathLibrary.logbase(power, 2);
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
-	public int getTemperature() {
-		return temperature;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
 	}
 
 	@Override
-	public void setTemperature(int T) {
-		temperature = T;
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
 	}
 
 	@Override
-	public void addTemperature(int T) {
-		temperature += T;
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return this.isValidFluid(fluid);
 	}
 
-	@Override
-	public int getMaxTemperature() {
-		return 200000000;
-	}
-
-	@Override
-	public void onOverheat(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public boolean canBeFrictionHeated() {
+	private boolean isValidFluid(Fluid fluid) {
+		if (fluid.equals(FluidRegistry.getFluid("rc deuterium")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("rc tritium")))
+			return true;
 		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 }

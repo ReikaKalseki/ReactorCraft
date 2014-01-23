@@ -28,16 +28,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, TemperatureTE {
 
-	public static final int CAPACITY = 2000;
+	public static final int PLASMA_PER_FUSION = 25;
 
-	public static final int HYDROGEN_PER_FUSION = 25;
-
-	public static final int PLASMATEMP = 150000000;
-
-	private HybridTank deuterium = new HybridTank("inject2h", CAPACITY);
-	private HybridTank tritium = new HybridTank("inject3h", CAPACITY);
-
-	private int temperature;
+	private HybridTank tank = new HybridTank("injector", 8000);
 
 	private ForgeDirection facing;
 
@@ -47,17 +40,14 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	}
 
 	private boolean canMake() {
-		if (tritium.getLevel() < HYDROGEN_PER_FUSION || deuterium.getLevel() < HYDROGEN_PER_FUSION)
-			return false;
-		if (temperature < PLASMATEMP)
+		if (tank.getLevel() < PLASMA_PER_FUSION)
 			return false;
 		return true;
 	}
 
 	private void make(World world, int x, int y, int z) {
 		this.createPlasma(world, x, y, z);
-		tritium.removeLiquid(HYDROGEN_PER_FUSION);
-		deuterium.removeLiquid(HYDROGEN_PER_FUSION);
+		tank.removeLiquid(PLASMA_PER_FUSION);
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {
@@ -93,20 +83,10 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		return Flow.INPUT;
 	}
 
-	private boolean isHydrogen(Fluid f) {
-		if (f.equals(FluidRegistry.getFluid("rc deuterium")))
-			return true;
-		if (f.equals(FluidRegistry.getFluid("rc tritium")))
-			return true;
-		return false;
-	}
-
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource.getFluid().equals(FluidRegistry.getFluid("rc deuterium")))
-			return deuterium.fill(resource, doFill);
-		if (resource.getFluid().equals(FluidRegistry.getFluid("rc tritium")))
-			return tritium.fill(resource, doFill);
+		if (resource.getFluid().equals(FluidRegistry.getFluid("fusion plasma")))
+			return tank.fill(resource, doFill);
 		return 0;
 	}
 
@@ -122,7 +102,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.isHydrogen(fluid);
+		return fluid.equals(FluidRegistry.getFluid("fusion plasma"));
 	}
 
 	@Override
@@ -132,7 +112,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{deuterium.getInfo(), tritium.getInfo()};
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 	@Override
@@ -176,8 +156,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 		NBT.setInteger("temp", temperature);
 
-		deuterium.writeToNBT(NBT);
-		tritium.writeToNBT(NBT);
+		tank.writeToNBT(NBT);
 
 		NBT.setInteger("face", this.getFacing().ordinal());
 	}
@@ -188,8 +167,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 		temperature = NBT.getInteger("temp");
 
-		deuterium.readFromNBT(NBT);
-		tritium.readFromNBT(NBT);
+		tank.readFromNBT(NBT);
 
 		facing = ForgeDirection.VALID_DIRECTIONS[NBT.getInteger("face")];
 	}

@@ -11,104 +11,41 @@ package Reika.ReactorCraft;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityFusionHeater extends TileEntityReactorBase implements ShaftPowerReceiver, TemperatureTE {
+public class TileEntityFusionHeater extends TileEntityReactorBase implements TemperatureTE, Laserable {
 
-	public static final int MINPOWER = 524288;
-	public static final int MINSPEED = 2048;
-
-	private int omega;
-	private int torque;
-	private long power;
-	private int iotick;
+	public static final int PLASMA_TEMP = 150000000;
 
 	private int temperature;
 
+	private HybridTank tank = new HybridTank("fusionheater", 8000);
+
+	@Override
+	public void whenInBeam(long power, int range) {
+		temperature += 640*ReikaMathLibrary.logbase(power, 2);
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.updateTemperature(world, x, y, z, meta);
 
+		ReikaJavaLibrary.pConsole(temperature+": "+((float)temperature/PLASMA_TEMP), Side.SERVER);
 	}
 
-	@Override
-	public int getOmega() {
-		return omega;
-	}
-
-	@Override
-	public int getTorque() {
-		return torque;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
-	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			int dx = xCoord+dirs[i].offsetX;
-			int dy = yCoord+dirs[i].offsetY;
-			int dz = zCoord+dirs[i].offsetZ;
-			if (x == dx && y == yCoord && z == dz)
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return true;
-	}
-
-	@Override
-	public void noInputMachine() {
-		omega = torque = 0;
-		power = 0;
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int dT = temperature-Tamb;
+		if (dT != 0)
+			temperature -= (1+dT/16384D);
 	}
 
 	@Override
@@ -118,11 +55,6 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Sha
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public void updateTemperature(World world, int x, int y, int z, int meta) {
 
 	}
 
@@ -151,19 +83,17 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Sha
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
-		NBT.setInteger("om", omega);
-		NBT.setInteger("tq", torque);
-		NBT.setInteger("io", iotick);
+
+		tank.writeToNBT(NBT);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		omega = NBT.getInteger("om");
-		torque = NBT.getInteger("tq");
 		temperature = NBT.getInteger("temp");
-		iotick = NBT.getInteger("io");
+
+		tank.readFromNBT(NBT);
 	}
 
 }
