@@ -132,7 +132,7 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addLiquids();
 		this.registerOres();
 
-		PotionCollisionTracker.instance.addPotionID(ModList.REACTORCRAFT, config.getRadiationPotionID(), PotionRadiation.class);
+		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
 		ReikaRegistryHelper.setupModData(instance, evt);
