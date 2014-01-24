@@ -50,7 +50,6 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityIonizer;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.API.BlockColorInterface;
@@ -105,7 +104,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(180).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
-	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityIonizer.PLASMA_TEMP);
+	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
 	public static PotionRadiation radiation;
 

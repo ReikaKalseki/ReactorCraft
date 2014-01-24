@@ -25,6 +25,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
@@ -144,7 +145,23 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	public ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
 		ArrayList<String> li = new ArrayList();
 		if (this instanceof Temperatured) {
-			String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((Temperatured)this).getTemperature());
+			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((Temperatured)this).getTemperature());
+			li.add(s);
+		}
+		else if (this instanceof TemperatureTE) {
+			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((TemperatureTE)this).getTemperature());
+			li.add(s);
+		}
+		if (this instanceof TileEntityReactorPiping) {
+			TileEntityReactorPiping rp = (TileEntityReactorPiping)this;
+			if (rp.getLevel() <= 0) {
+				String s = String.format("%s is empty.", this.getTEName());
+				li.add(s);
+			}
+			else {
+				String s = String.format("%s contains %d mB of %s", this.getTEName(), rp.getLevel(), rp.getLiquidType().getLocalizedName());
+				li.add(s);
+			}
 		}
 		return li;
 	}

@@ -267,6 +267,8 @@ public enum ReactorTiles {
 	public int getBlockVariableIndex() {
 		if (this == GASPIPE)
 			return ReactorBlocks.DUCT.ordinal();
+		if (this == MAGNETPIPE)
+			return ReactorBlocks.DUCT.ordinal();
 		if (this == STEAMLINE)
 			return ReactorBlocks.LINE.ordinal();
 		if (this.hasRender()) {
@@ -295,6 +297,8 @@ public enum ReactorTiles {
 		switch(this) {
 		case PROCESSOR:
 		case MAGNET:
+		case GASPIPE:
+		case MAGNETPIPE:
 			return true;
 		default:
 			return false;

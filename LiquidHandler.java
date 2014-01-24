@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -21,8 +22,10 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.BCPipeHandler;
 import Reika.DragonAPI.ModInteract.ThermalHandler;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class LiquidHandler {
@@ -34,34 +37,72 @@ public class LiquidHandler {
 		int y = evt.y;
 		int z = evt.z;
 		FluidStack liq = evt.fluid;
-		if (liq != null && this.isCorrosive(liq.getFluid())) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
-			if (te instanceof IFluidHandler) {
-				IFluidHandler ifl = (IFluidHandler)te;
-				ForgeDirection[] dirs = ForgeDirection.values();
-				BlockArray blocks = new BlockArray();
-				for (int i = 0; i < 6; i++) {
-					ForgeDirection dir = dirs[i];
-					int dx = x+dir.offsetX;
-					int dy = y+dir.offsetY;
-					int dz = z+dir.offsetZ;
-					int id = world.getBlockId(dx, dy, dz);
-					int meta = world.getBlockMetadata(dx, dy, dz);
-					TileEntity te2 = world.getBlockTileEntity(dx, dy, dz);
-					if (te2 instanceof IFluidHandler) {
-						blocks.recursiveAdd(world, dx, dy, dz, id);
+		if (liq != null) {
+			if (liq.getFluid().equals(FluidRegistry.getFluid("fusion plasma"))) {
+				TileEntity te = world.getBlockTileEntity(x, y, z);
+				if (!(te instanceof TileEntityReactorBase)) {
+					ForgeDirection[] dirs = ForgeDirection.values();
+					BlockArray blocks = new BlockArray();
+					for (int i = 0; i < 6; i++) {
+						ForgeDirection dir = dirs[i];
+						int dx = x+dir.offsetX;
+						int dy = y+dir.offsetY;
+						int dz = z+dir.offsetZ;
+						int id = world.getBlockId(dx, dy, dz);
+						int meta = world.getBlockMetadata(dx, dy, dz);
+						TileEntity te2 = world.getBlockTileEntity(dx, dy, dz);
+						if (!(te2 instanceof TileEntityReactorBase)) {
+							blocks.recursiveAdd(world, dx, dy, dz, id);
+						}
+					}
+					for (int i = 0; i < blocks.getSize(); i++) {
+						int[] xyz = blocks.getNthBlock(i);
+						TileEntity te2 = world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+						if (!(te2 instanceof TileEntityReactorBase)) {
+							ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
+							ReikaParticleHelper.LAVA.spawnAroundBlock(world, xyz[0], xyz[1], xyz[2], 36);
+							world.setBlock(xyz[0], xyz[1], xyz[2], Block.lavaMoving.blockID);
+							int r = 4;
+							for (int dx = xyz[0]-r; dx <= xyz[0]+r; dx++) {
+								for (int dy = xyz[1]-r; dy <= xyz[1]+r; dy++) {
+									for (int dz = xyz[2]-r; dz <= xyz[2]+r; dz++) {
+										ReikaWorldHelper.temperatureEnvironment(world, xyz[0], xyz[1], xyz[2], TileEntityFusionHeater.PLASMA_TEMP);
+									}
+								}
+							}
+						}
 					}
 				}
-				for (int i = 0; i < blocks.getSize(); i++) {
-					int[] xyz = blocks.getNthBlock(i);
-					if (this.isCorrodable(world, xyz[0], xyz[1], xyz[2])) {
-						ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
-						ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 6);
-						world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+			}
+			else if (this.isCorrosive(liq.getFluid())) {
+				TileEntity te = world.getBlockTileEntity(x, y, z);
+				if (te instanceof IFluidHandler) {
+					IFluidHandler ifl = (IFluidHandler)te;
+					ForgeDirection[] dirs = ForgeDirection.values();
+					BlockArray blocks = new BlockArray();
+					for (int i = 0; i < 6; i++) {
+						ForgeDirection dir = dirs[i];
+						int dx = x+dir.offsetX;
+						int dy = y+dir.offsetY;
+						int dz = z+dir.offsetZ;
+						int id = world.getBlockId(dx, dy, dz);
+						int meta = world.getBlockMetadata(dx, dy, dz);
+						TileEntity te2 = world.getBlockTileEntity(dx, dy, dz);
+						if (te2 instanceof IFluidHandler) {
+							blocks.recursiveAdd(world, dx, dy, dz, id);
+						}
 					}
-					else if (this.isExplodable(world, xyz[0], xyz[1], xyz[2])) {
-						world.createExplosion(null, xyz[0]+0.5, xyz[1]+0.5, xyz[2]+0.5, 2F, true);
-						world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					for (int i = 0; i < blocks.getSize(); i++) {
+						int[] xyz = blocks.getNthBlock(i);
+						if (this.isCorrodable(world, xyz[0], xyz[1], xyz[2])) {
+							ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
+							ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 6);
+							world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+						}
+						else if (this.isExplodable(world, xyz[0], xyz[1], xyz[2])) {
+							world.createExplosion(null, xyz[0]+0.5, xyz[1]+0.5, xyz[2]+0.5, 2F, true);
+							world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+						}
 					}
 				}
 			}

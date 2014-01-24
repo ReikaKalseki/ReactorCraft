@@ -1,27 +1,52 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.world.World;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.RenderableDuct;
 
-public class TileEntityMagneticPipe extends TileEntityReactorBase implements RenderableDuct {
+public class TileEntityMagneticPipe extends TileEntityReactorPiping {
 
-
-	//make share parent class with gas duct
-	//make fusion plasma destroy every pipe but this one
 	@Override
 	public int getIndex() {
 		return ReactorTiles.MAGNETPIPE.ordinal();
 	}
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+	public Icon getBlockIcon() {
+		return Block.bedrock.getIcon(0, 0);
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	public Block getPipeBlockType() {
+		return Block.bedrock;
+	}
+
+	@Override
+	public boolean isConnectedToNonSelf(ForgeDirection dir) {
+		return false;
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		return f != null && f.equals(FluidRegistry.getFluid("fusion plasma"));
+	}
+
+	@Override
+	protected void onIntake(TileEntity te) {
 
 	}
 
