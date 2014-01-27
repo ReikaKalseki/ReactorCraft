@@ -69,7 +69,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	private long power;
 	private int iotick;
 
-	public static final int SALTPOWER = 131072; //1MW
+	public static final int SALTPOWER = 131072;
 
 	@Override
 	public int getIndex() {
@@ -98,6 +98,8 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (iotick > 0)
+			iotick -= 8;
 		tempTimer.update();
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
@@ -144,13 +146,13 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	private void makeSodium() {
 		ReikaInventoryHelper.decrStack(0, inv);
-		tankH.addLiquid(100, FluidRegistry.getFluid("sodium"));
-		tankL.addLiquid(100, FluidRegistry.getFluid("chlorine"));
+		tankH.addLiquid(100, FluidRegistry.getFluid("rc sodium"));
+		tankL.addLiquid(100, FluidRegistry.getFluid("rc chlorine"));
 	}
 
 	private void makeHydrogen() {
 		input.removeLiquid(100);
-		tankH.addLiquid(50, FluidRegistry.getFluid("oxygen"));
+		tankH.addLiquid(50, FluidRegistry.getFluid("rc oxygen"));
 		tankL.addLiquid(100, this.getHydrogenIsotope());
 	}
 
@@ -215,7 +217,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side.offsetY != 0 ? Flow.OUTPUT : Flow.NONE;
+		return side.offsetY != 0 ? Flow.OUTPUT : Flow.INPUT;
 	}
 
 	@Override
@@ -246,7 +248,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("heavy water"));
+		return from.offsetY == 0 && fluid.equals(FluidRegistry.getFluid("heavy water"));
 	}
 
 	@Override
@@ -499,6 +501,25 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	@Override
 	public boolean canExitToSide(ForgeDirection dir) {
 		return false;
+	}
+
+	@Override
+	public float getAimX() {
+		return 0.5F;
+	}
+
+	@Override
+	public float getAimY() {
+		return 0.9375F;
+	}
+
+	@Override
+	public float getAimZ() {
+		return 0.5F;
+	}
+
+	public int getInputLevel() {
+		return input.getLevel();
 	}
 
 }

@@ -52,7 +52,7 @@ public enum ReactorItems implements RegistryEnum {
 	private int spriteIndex;
 	private int spritesheet;
 
-	public static final ReactorItems[] itemList = ReactorItems.values();
+	public static final ReactorItems[] itemList = values();
 
 	private ReactorItems(int index, String n, Class<? extends Item> cl) {
 		name = n;

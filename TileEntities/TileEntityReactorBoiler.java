@@ -50,9 +50,9 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 			steam++;
 			if (tank.getActualFluid().equals(FluidRegistry.WATER))
 				fluid = WorkingFluid.WATER;
-			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
+			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia")))
 				fluid = WorkingFluid.AMMONIA;
-			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("ammonia")))
+			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia")))
 				fluid = WorkingFluid.AMMONIA;
 			tank.removeLiquid(WATER_PER_STEAM);
 			//ReikaJavaLibrary.pConsole(WATER_PER_STEAM);

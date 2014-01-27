@@ -30,7 +30,7 @@ public enum WorkingFluid {
 	}
 
 	public Fluid getFluid() {
-		return FluidRegistry.getFluid(this.name().toLowerCase());
+		return FluidRegistry.getFluid("rc "+this.name().toLowerCase());
 	}
 
 	public Fluid getLowPressureFluid() {

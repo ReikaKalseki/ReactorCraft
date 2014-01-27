@@ -23,6 +23,7 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
 import Reika.RotaryCraft.API.ShaftMachine;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -147,6 +148,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		if (this instanceof Temperatured) {
 			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((Temperatured)this).getTemperature());
 			li.add(s);
+		}
+		else if (this instanceof ThermalMachine) {
+			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((TemperatureTE)this).getTemperature());
+			//li.add(s);
 		}
 		else if (this instanceof TemperatureTE) {
 			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((TemperatureTE)this).getTemperature());

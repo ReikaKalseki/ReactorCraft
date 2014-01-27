@@ -61,7 +61,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 		if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpwater")))
 			return output.getActualFluid().equals(FluidRegistry.WATER);
 		if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpammonia")))
-			return output.getActualFluid().equals(FluidRegistry.getFluid("ammonia"));
+			return output.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia"));
 		return false;
 	}
 
@@ -87,7 +87,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 			output.addLiquid(amt, FluidRegistry.WATER);
 		}
 		else if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpammonia"))) {
-			output.addLiquid(amt, FluidRegistry.getFluid("ammonia"));
+			output.addLiquid(amt, FluidRegistry.getFluid("rc ammonia"));
 		}
 		tank.removeLiquid(amt);
 	}

@@ -13,11 +13,11 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 
 public class EntityPlasma extends ParticleEntity {
 
@@ -30,7 +30,7 @@ public class EntityPlasma extends ParticleEntity {
 
 	@Override
 	public double getSpeed() {
-		return 0.5;
+		return 0.75;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class EntityPlasma extends ParticleEntity {
 
 	@Override
 	public void applyEntityCollision(Entity e) {
-		e.attackEntityFrom(DamageSource.lava, Integer.MAX_VALUE);
+		e.attackEntityFrom(ReactorCraft.fusionDamage, Integer.MAX_VALUE);
 	}
 
 	@Override

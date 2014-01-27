@@ -20,11 +20,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -78,6 +80,9 @@ public class ItemReactorPlacer extends Item {
 		TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(x, y, z);
 		te.placer = ep.getEntityName();
 		te.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+		if (m == ReactorTiles.INJECTOR) {
+			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
+		}
 		if (te instanceof Temperatured) {
 			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 			((Temperatured)te).setTemperature(Tb);

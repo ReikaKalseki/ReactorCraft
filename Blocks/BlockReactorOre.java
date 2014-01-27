@@ -38,6 +38,11 @@ public class BlockReactorOre extends Block {
 	}
 
 	@Override
+	public int damageDropped(int meta) {
+		return meta;
+	}
+
+	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();

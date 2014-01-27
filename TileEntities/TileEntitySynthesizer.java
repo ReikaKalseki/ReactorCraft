@@ -126,7 +126,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		ReikaInventoryHelper.decrStack(1, inv);
 		ReikaInventoryHelper.decrStack(2, inv);
 		water.removeLiquid(WATER_PER_AMMONIA);
-		tank.addLiquid(AMMONIA_PER_STEP, FluidRegistry.getFluid("ammonia"));
+		tank.addLiquid(AMMONIA_PER_STEP, FluidRegistry.getFluid("rc ammonia"));
 	}
 
 	private boolean hasQuicklime() {
@@ -194,7 +194,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("ammonia"));
+		return fluid.equals(FluidRegistry.getFluid("rc ammonia"));
 	}
 
 	@Override

@@ -15,6 +15,7 @@ public class ItemCanister extends ReactorItemBase {
 
 	public ItemCanister(int ID, int tex) {
 		super(ID, tex);
+		this.setMaxStackSize(1);
 	}
 
 }

@@ -43,7 +43,7 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 				this.cool();
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
-		tank.empty();
+		//ReikaJavaLibrary.pConsole(output, !output.isEmpty());
 	}
 
 	private void cool() {
@@ -55,7 +55,7 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 	}
 
 	private boolean canCool() {
-		return temperature > 300 && tank.getLevel() >= COOL_USAGE && !output.isFull() && tank.getActualFluid().equals(FluidRegistry.getFluid("sodium"));
+		return temperature > 300 && tank.getLevel() >= COOL_USAGE && !output.isFull() && tank.getActualFluid().equals(FluidRegistry.getFluid("rc sodium"));
 	}
 
 	@Override
@@ -106,11 +106,13 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 
 	@Override
 	public Fluid getInputFluid() {
-		return FluidRegistry.getFluid("sodium");
+		return FluidRegistry.getFluid("rc sodium");
 	}
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (!this.canDrain(from, null))
+			return null;
 		return this.drain(from, resource.amount, doDrain);
 	}
 
@@ -138,6 +140,11 @@ public class TileEntitySodiumHeater extends TileEntityNuclearBoiler {
 		if (side == ForgeDirection.UP)
 			return Flow.OUTPUT;
 		return super.getFlowForSide(side);
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side.offsetY != 0 && this.canConnectToPipe(p);
 	}
 
 }

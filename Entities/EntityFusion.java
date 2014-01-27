@@ -23,6 +23,7 @@ public class EntityFusion extends InertEntity {
 		super(world);
 		this.setPosition(x, y, z);
 		//world.setBlock(MathHelper.floor_double(x), MathHelper.floor_double(y)+1, MathHelper.floor_double(z), 51);
+		worldObj.playSoundEffect(posX, posY, posZ, "random.explode", 0.2F, 0.1F);
 	}
 
 	@Override

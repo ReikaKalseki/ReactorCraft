@@ -33,6 +33,7 @@ import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
+import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -50,6 +51,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.API.BlockColorInterface;
@@ -93,20 +95,24 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid HF = new Fluid("hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
-	public static final Fluid NH3 = new Fluid("ammonia").setDensity(682).setViscosity(600);
-	public static final Fluid NA = new Fluid("sodium").setDensity(927).setViscosity(700).setTemperature(1100);
-	public static final Fluid CL = new Fluid("chlorine").setDensity(320).setViscosity(12).setGaseous(true);
-	public static final Fluid O = new Fluid("oxygen").setDensity(138).setViscosity(20).setGaseous(true);
+	public static final Fluid NH3 = new Fluid("rc ammonia").setDensity(682).setViscosity(600);
+	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(1100);
+	public static final Fluid CL = new Fluid("rc chlorine").setDensity(320).setViscosity(12).setGaseous(true);
+	public static final Fluid O = new Fluid("rc oxygen").setDensity(138).setViscosity(20).setGaseous(true);
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
 	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(750).setTemperature(2000);
 
-	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(180).setViscosity(10).setGaseous(true);
-	public static final Fluid H3 = new Fluid("rc tritium").setDensity(190).setViscosity(10).setGaseous(true);
+	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
+	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
+
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
 	public static PotionRadiation radiation;
+
+	public static final CustomStringDamageSource radiationDamage = (CustomStringDamageSource)new CustomStringDamageSource("died of Radiation Poisoning").setDamageBypassesArmor();
+	public static final CustomStringDamageSource fusionDamage = new CustomStringDamageSource("jumped in a Fusion Reactor");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -156,9 +162,9 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("rc tritium");
 		ReikaMystcraftHelper.disableFluidPage("hydrofluoric acid");
 		ReikaMystcraftHelper.disableFluidPage("uranium hexafluoride");
-		ReikaMystcraftHelper.disableFluidPage("sodium");
-		ReikaMystcraftHelper.disableFluidPage("chlorine");
-		ReikaMystcraftHelper.disableFluidPage("oxygen");
+		ReikaMystcraftHelper.disableFluidPage("rc sodium");
+		ReikaMystcraftHelper.disableFluidPage("rc chlorine");
+		ReikaMystcraftHelper.disableFluidPage("rc oxygen");
 		ReikaMystcraftHelper.disableFluidPage("lowpammonia");
 		ReikaMystcraftHelper.disableFluidPage("lowpwater");
 		ReikaMystcraftHelper.disableFluidPage("hotsodium");

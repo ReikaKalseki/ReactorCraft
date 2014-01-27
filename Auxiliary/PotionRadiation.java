@@ -15,8 +15,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import Reika.ReactorCraft.ReactorCraft;
 
 public class PotionRadiation extends Potion {
 
@@ -34,15 +34,15 @@ public class PotionRadiation extends Potion {
 			return;
 		if (f >= 0.5) {
 			if (r.nextInt((int)h/4) == 0)
-				e.attackEntityFrom(DamageSource.wither, 1);
+				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
 		}
 		else if  (f > 0.25) {
 			if (r.nextInt((int)h/2) == 0)
-				e.attackEntityFrom(DamageSource.wither, 1);
+				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
 		}
 		else if (h > 1) {
 			if (r.nextInt((int)h) == 0)
-				e.attackEntityFrom(DamageSource.wither, 1);
+				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
 		}
 
 		if (e instanceof EntityPlayer) {

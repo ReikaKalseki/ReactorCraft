@@ -123,4 +123,19 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
+	@Override
+	public float getAimX() {
+		return 0.5F;
+	}
+
+	@Override
+	public float getAimY() {
+		return 0.5F;
+	}
+
+	@Override
+	public float getAimZ() {
+		return 0.5F;
+	}
+
 }

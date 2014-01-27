@@ -20,7 +20,6 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
@@ -28,6 +27,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
@@ -53,33 +53,33 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
 
-	FUEL("machine.fuel", TileEntityFuelRod.class, 0),
-	CONTROL("machine.control", TileEntityControlRod.class, 1),
-	COOLANT("machine.coolant", TileEntityWaterCell.class, 2),
-	CPU("machine.cpu", TileEntityCPU.class, 0),
-	TURBINECORE("machine.turbine", TileEntityTurbineCore.class, 0, "RenderTurbine"),
-	CONDENSER("machine.condenser", TileEntityCondenser.class, 1, "RenderCondenser"),
-	STEAMLINE("machine.steamline", TileEntitySteamLine.class, 2, "RenderWaterLine"),
-	HEAVYPUMP("machine.heavypump", TileEntityHeavyPump.class, 0, "RenderHeavyPump"),
-	CENTRIFUGE("machine.centrifuge", TileEntityCentrifuge.class, 1, "RenderCentrifuge"),
-	PROCESSOR("machine.processor", TileEntityUProcessor.class, 2, "RenderProcessor"),
-	WASTECONTAINER("machine.wastecontainer", TileEntityWasteContainer.class, 2),
-	BOILER("machine.reactorboiler", TileEntityReactorBoiler.class, 3),
-	GRATE("machine.grate", TileEntitySteamGrate.class, 3, "RenderSteamGrate"),
-	PUMP("machine.reactorpump", TileEntityReactorPump.class, 4, "RenderReactorPump"),
-	SYNTHESIZER("machine.synthesizer", TileEntitySynthesizer.class, 1),
-	MAGNET("machine.magnet", TileEntityMagnet.class, 5, "RenderMagnet"),
-	ELECTROLYZER("machine.electrolyzer", TileEntityElectrolyzer.class, 3),
-	TRITIZER("machine.tritizer", TileEntityTritizer.class, 4),
-	BREEDER("machine.breedercore", TileEntityBreederCore.class, 5),
-	SODIUMBOILER("machine.sodiumboiler", TileEntitySodiumHeater.class, 6),
-	EXCHANGER("machine.exchanger", TileEntityHeatExchanger.class, 4, "RenderExchanger"),
-	STORAGE("machine.storage", TileEntityWasteStorage.class, 3, "RenderWasteStorage"),
-	INJECTOR("machine.injector", TileEntityFusionInjector.class, 6, ""),
-	HEATER("machine.fusionheater", TileEntityFusionHeater.class, 7, ""),
-	GASPIPE("machine.gasduct", TileEntityGasDuct.class, 4, "DuctRenderer"),
-	IONIZER("machine.ionizer", TileEntityIonizer.class, 8, ""),
-	MAGNETPIPE("machine.magnetpipe", TileEntityMagneticPipe.class, 5, "DuctRenderer");
+	FUEL("machine.fuel", 						TileEntityFuelRod.class, 		0),
+	CONTROL("machine.control", 					TileEntityControlRod.class, 	1),
+	COOLANT("machine.coolant", 					TileEntityWaterCell.class, 		2),
+	CPU("machine.cpu", 							TileEntityCPU.class, 			0),
+	TURBINECORE("machine.turbine", 				TileEntityTurbineCore.class, 	0, "RenderTurbine"),
+	CONDENSER("machine.condenser", 				TileEntityCondenser.class, 		1, "RenderCondenser"),
+	STEAMLINE("machine.steamline", 				TileEntitySteamLine.class, 		2, "RenderWaterLine"),
+	HEAVYPUMP("machine.heavypump", 				TileEntityHeavyPump.class, 		0, "RenderHeavyPump"),
+	CENTRIFUGE("machine.centrifuge", 			TileEntityCentrifuge.class, 	1, "RenderCentrifuge"),
+	PROCESSOR("machine.processor", 				TileEntityUProcessor.class, 	2, "RenderProcessor"),
+	WASTECONTAINER("machine.wastecontainer", 	TileEntityWasteContainer.class, 2),
+	BOILER("machine.reactorboiler", 			TileEntityReactorBoiler.class, 	3),
+	GRATE("machine.grate", 						TileEntitySteamGrate.class, 	3, "RenderSteamGrate"),
+	PUMP("machine.reactorpump", 				TileEntityReactorPump.class, 	4, "RenderReactorPump"),
+	SYNTHESIZER("machine.synthesizer", 			TileEntitySynthesizer.class, 	1),
+	MAGNET("machine.magnet", 					TileEntityMagnet.class, 		5, "RenderMagnet"),
+	ELECTROLYZER("machine.electrolyzer", 		TileEntityElectrolyzer.class, 	5, "RenderElectrolyzer"),
+	TRITIZER("machine.tritizer", 				TileEntityTritizer.class, 		4),
+	BREEDER("machine.breedercore", 				TileEntityBreederCore.class, 	5),
+	SODIUMBOILER("machine.sodiumboiler", 		TileEntitySodiumHeater.class, 	6),
+	EXCHANGER("machine.exchanger", 				TileEntityHeatExchanger.class, 	4, "RenderExchanger"),
+	STORAGE("machine.storage", 					TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
+	INJECTOR("machine.injector", 				TileEntityFusionInjector.class, 6, ""),
+	HEATER("machine.fusionheater", 				TileEntityFusionHeater.class, 	7, ""),
+	GASPIPE("machine.gasduct", 					TileEntityGasDuct.class, 		4, "DuctRenderer"),
+	IONIZER("machine.ionizer", 					TileEntityIonizer.class, 		8, ""),
+	MAGNETPIPE("machine.magnetpipe", 			TileEntityMagneticPipe.class, 	5, "DuctRenderer");
 
 	private String name;
 	private Class teClass;

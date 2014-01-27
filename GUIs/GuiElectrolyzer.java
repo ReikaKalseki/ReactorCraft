@@ -25,6 +25,7 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 
 	private TankDisplay heavy;
 	private TankDisplay light;
+	private TankDisplay input;
 
 	public GuiElectrolyzer(EntityPlayer ep, TileEntityElectrolyzer te) {
 		super(new ContainerElectrolyzer(ep, te), ep, te);
@@ -35,7 +36,7 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 
 	@Override
 	public String getGuiTexture() {
-		return "Electrolyzer";
+		return "electrolyzer";
 	}
 
 	@Override
@@ -48,6 +49,7 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 		FluidTankInfo[] info = tile.getTankInfo(null);
 		heavy = new TankDisplay(info[0], j+98, k+18, 16, 60);
 		light = new TankDisplay(info[1], j+134, k+18, 16, 60);
+		input = new TankDisplay(info[2], j+17, k+18, 16, 60);
 	}
 
 	@Override
@@ -65,13 +67,18 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 		FluidTankInfo[] info = tile.getTankInfo(null);
 		FluidStack h = info[0].fluid;
 		FluidStack l = info[1].fluid;
+		FluidStack i = info[2].fluid;
 		String heavy = h != null ? h.getFluid().getLocalizedName() : "Empty";
 		String light = l != null ? l.getFluid().getLocalizedName() : "Empty";
+		String in = i != null ? i.getFluid().getLocalizedName() : "Empty";
 		if (ReikaGuiAPI.instance.isMouseInBox(j+97, j+114, k+17, k+78)) {
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, heavy, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, light, x, y);
+		}
+		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, in, x, y);
 		}
 	}
 
@@ -94,6 +101,7 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 
 		heavy.updateTank(info[0]).render(true);
 		light.updateTank(info[1]).render(true);
+		input.updateTank(info[2]).render(true);
 	}
 
 }

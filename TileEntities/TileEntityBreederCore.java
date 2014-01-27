@@ -29,6 +29,8 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 
+		//ReikaJavaLibrary.pConsole(temperature+":"+this, temperature > 700);
+
 		timer2.update();
 
 		if (timer2.checkCap()) {
@@ -69,7 +71,11 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack.itemID == ReactorItems.BREEDERFUEL.getShiftedItemID();
+		if (inv[i] != null)
+			return false;
+		if (itemstack.itemID == ReactorItems.BREEDERFUEL.getShiftedItemID())
+			return i < 4;
+		return false;
 	}
 
 	@Override
@@ -120,7 +126,11 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public boolean canRemoveItem(int slot, ItemStack is) {
-		return is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID();
+		if (is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID())
+			return true;
+		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
+			return true;
+		return false;
 	}
 
 	@Override

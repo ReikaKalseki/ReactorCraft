@@ -128,7 +128,9 @@ public class ReactorRecipes {
 		ReactorTiles.BREEDER.addCrafting("SPS", "PCP", "SPS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 		ReactorTiles.TRITIZER.addCrafting("SPS", "GPG", "SPS", 'G', Block.glass, 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot);
 		ReactorTiles.GASPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Block.hardenedClay, 'G', Block.glass);
-
+		ReactorTiles.ELECTROLYZER.addCrafting("SPS", "PRP", "BPB", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+		ReactorTiles.EXCHANGER.addCrafting("FPF", "GIG", "FPF", 'P', ItemStacks.pipe, 'I', ItemStacks.impeller, 'G', Item.ingotGold, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct());
+		ReactorTiles.STORAGE.addCrafting("SPS", "PCP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', Block.chest);
 	}
 
 }

@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -17,21 +18,23 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
+import Reika.ReactorCraft.Models.ModelElectrolyzer;
+import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
+import Reika.RotaryCraft.Auxiliary.IORenderer;
 
-public class RenderFusionHeater extends ReactorRenderBase
+public class RenderElectrolyzer extends ReactorRenderBase
 {
-	//private ModelFusionHeater FusionHeaterModel = new ModelFusionHeater();
+	private ModelElectrolyzer ElectrolyzerModel = new ModelElectrolyzer();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityFusionHeaterAt(TileEntityFusionHeater tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityElectrolyzerAt(TileEntityElectrolyzer tile, double par2, double par4, double par6, float par8)
 	{
-		//ModelFusionHeater var14;
-		//var14 = FusionHeaterModel;
+		ModelElectrolyzer var14;
+		var14 = ElectrolyzerModel;
 
-		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/heater.png");
+		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/electrolyzer.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -42,7 +45,7 @@ public class RenderFusionHeater extends ReactorRenderBase
 		int var11 = 0;
 		float var13;
 
-		//var14.renderAll(null, 0, 0);
+		var14.renderAll(null, 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -55,11 +58,15 @@ public class RenderFusionHeater extends ReactorRenderBase
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityFusionHeaterAt((TileEntityFusionHeater)tile, par2, par4, par6, par8);
+			this.renderTileEntityElectrolyzerAt((TileEntityElectrolyzer)tile, par2, par4, par6, par8);
+		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			IORenderer.renderIO(tile, par2, par4, par6);
+			//IOAPI.renderIO((ShaftMachine)tile, par2, par4, par6);
+		}
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "heater.png";
+		return "electrolyzer.png";
 	}
 }

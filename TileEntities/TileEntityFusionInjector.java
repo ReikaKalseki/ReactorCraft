@@ -36,7 +36,12 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (this.canMake())
+			this.make(world, x, y, z);
+	}
 
+	public void setFacing(ForgeDirection dir) {
+		facing = dir;
 	}
 
 	private boolean canMake() {
@@ -169,7 +174,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 		tank.readFromNBT(NBT);
 
-		facing = ForgeDirection.VALID_DIRECTIONS[NBT.getInteger("face")];
+		facing = dirs[NBT.getInteger("face")];
 	}
 
 }
