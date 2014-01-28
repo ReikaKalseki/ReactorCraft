@@ -117,6 +117,8 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 		time = timer.getTick();
 		//ReikaJavaLibrary.pConsole(timer.getFraction());
+
+		//ReikaJavaLibrary.pConsole(this.getSide()+":"+input+":"+tankH+":"+tankL);
 	}
 
 	private boolean hasSalt() {

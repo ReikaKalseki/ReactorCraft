@@ -300,4 +300,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 
 	protected abstract void onIntake(TileEntity te);
 
+	@Override
+	public boolean needsToCauseBlockUpdates() {
+		return true;
+	}
+
 }

@@ -15,22 +15,24 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public enum WorkingFluid {
 
-	EMPTY(0, 0),
-	WATER(0.5F, 100),
-	AMMONIA(1, -33);
+	EMPTY(0, 0, ""),
+	WATER(0.5F, 100, "water"),
+	AMMONIA(1, -33, "rc ammonia");
 
 	public final float efficiency;
 	public final int boilingTemp;
+	private final String fluidName;
 
 	public static final WorkingFluid[] list = values();
 
-	private WorkingFluid(float e, int boil) {
+	private WorkingFluid(float e, int boil, String f) {
 		efficiency = e;
 		boilingTemp = boil;
+		fluidName = f;
 	}
 
 	public Fluid getFluid() {
-		return FluidRegistry.getFluid("rc "+this.name().toLowerCase());
+		return FluidRegistry.getFluid(fluidName);
 	}
 
 	public Fluid getLowPressureFluid() {

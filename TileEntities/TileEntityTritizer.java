@@ -41,7 +41,8 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		//ReikaJavaLibrary.pConsole(output, Side.SERVER);
+		//input.addLiquid(100, ReactorCraft.H2);
+		//this.onNeutron(null, world, x, y, z);
 	}
 
 	@Override

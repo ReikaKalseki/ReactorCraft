@@ -17,6 +17,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class ReactorItemRenderer implements IItemRenderer {
@@ -40,6 +41,7 @@ public class ReactorItemRenderer implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		float a = 0; float b = 0;
 
+		RenderBlocks rb = (RenderBlocks)data[0];
 		if (type == type.ENTITY) {
 			a = -0.5F;
 			b = -0.5F;
@@ -48,10 +50,13 @@ public class ReactorItemRenderer implements IItemRenderer {
 		if (item.getItemDamage() >= ReactorTiles.TEList.length)
 			return;
 		ReactorTiles machine = ReactorTiles.TEList[item.getItemDamage()];
-		if (machine.hasRender())
+		if (machine.isPipe()) {
+			ReikaTextureHelper.bindTerrainTexture();
+			rb.renderBlockAsItem(ReactorBlocks.DUCT.getBlockVariable(), machine.getBlockMetadata(), 1);
+		}
+		else if (machine.hasRender())
 			TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
 		else {
-			RenderBlocks rb = new RenderBlocks();
 			ReikaTextureHelper.bindTerrainTexture();
 			rb.renderBlockAsItem(machine.getBlockVariable(), item.getItemDamage(), 1);
 		}

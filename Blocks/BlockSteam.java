@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -253,6 +254,26 @@ public class BlockSteam extends Block {
 	@Override
 	public boolean isAirBlock(World world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public int idDropped(int id, Random r, int fortune) {
+		return 0;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
+		return new ArrayList();
+	}
+
+	@Override
+	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack is) {
+
+	}
+
+	@Override
+	public boolean canSilkHarvest() {
+		return false;
 	}
 
 	@Override

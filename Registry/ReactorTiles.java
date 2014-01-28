@@ -10,6 +10,9 @@
 package Reika.ReactorCraft.Registry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -77,14 +80,16 @@ public enum ReactorTiles {
 	STORAGE("machine.storage", 					TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
 	INJECTOR("machine.injector", 				TileEntityFusionInjector.class, 6, ""),
 	HEATER("machine.fusionheater", 				TileEntityFusionHeater.class, 	7, ""),
-	GASPIPE("machine.gasduct", 					TileEntityGasDuct.class, 		4, "DuctRenderer"),
+	GASPIPE("machine.gasduct", 					TileEntityGasDuct.class, 		0, "DuctRenderer"),
 	IONIZER("machine.ionizer", 					TileEntityIonizer.class, 		8, ""),
-	MAGNETPIPE("machine.magnetpipe", 			TileEntityMagneticPipe.class, 	5, "DuctRenderer");
+	MAGNETPIPE("machine.magnetpipe", 			TileEntityMagneticPipe.class, 	1, "DuctRenderer");
 
 	private String name;
 	private Class teClass;
 	private int meta;
 	private String render;
+
+	private static final HashMap<List<Integer>, ReactorTiles> reactorMappings = new HashMap();
 
 	public static final ReactorTiles[] TEList = values();
 
@@ -117,12 +122,12 @@ public enum ReactorTiles {
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int meta) {
-		int index = getMachineIndexFromIDandMetadata(id, meta);
-		if (index == -1) {
+		ReactorTiles index = getMachineFromIDandMetadata(id, meta);
+		if (index == null) {
 			ReactorCraft.logger.logError("ID "+id+" and metadata "+meta+" are not a valid machine identification pair!");
 			return null;
 		}
-		Class TEClass = TEList[index].teClass;
+		Class TEClass = index.teClass;
 		try {
 			return (TileEntity)TEClass.newInstance();
 		}
@@ -136,14 +141,8 @@ public enum ReactorTiles {
 		}
 	}
 
-	public static int getMachineIndexFromIDandMetadata(int id, int meta) {
-		for (int i = 0; i < TEList.length; i++) {
-			ReactorTiles m = TEList[i];
-			if (m.getBlockID() == id && meta == m.getBlockMetadata())
-				return i;
-		}
-		//throw new RegistrationException(ReactorCraft.instance, "ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
-		return -1;
+	public static ReactorTiles getMachineFromIDandMetadata(int id, int meta) {
+		return reactorMappings.get(Arrays.asList(id, meta));
 	}
 
 	public boolean isAvailableInCreativeInventory() {
@@ -182,12 +181,7 @@ public enum ReactorTiles {
 	public static ReactorTiles getTE(IBlockAccess iba, int x, int y, int z) {
 		int id = iba.getBlockId(x, y, z);
 		int meta = iba.getBlockMetadata(x, y, z);
-		int index = getMachineIndexFromIDandMetadata(id, meta);
-		if (index == -1) {
-			//ReactorCraft.logger.logError("ID "+id+" and metadata "+meta+" are not a valid machine identification pair!");
-			return null;
-		}
-		return TEList[index];
+		return getMachineFromIDandMetadata(id, meta);
 	}
 
 	public ItemStack getCraftedProduct() {
@@ -265,9 +259,7 @@ public enum ReactorTiles {
 	}
 
 	public int getBlockVariableIndex() {
-		if (this == GASPIPE)
-			return ReactorBlocks.DUCT.ordinal();
-		if (this == MAGNETPIPE)
+		if (this.isPipe())
 			return ReactorBlocks.DUCT.ordinal();
 		if (this == STEAMLINE)
 			return ReactorBlocks.LINE.ordinal();
@@ -354,6 +346,20 @@ public enum ReactorTiles {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			}
 		}
+	}
+
+	public static void loadMappings() {
+		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
+			ReactorTiles r = ReactorTiles.TEList[i];
+			int id = r.getBlockID();
+			int meta = r.getBlockMetadata();
+			List<Integer> li = Arrays.asList(id, meta);
+			reactorMappings.put(li, r);
+		}
+	}
+
+	public boolean isPipe() {
+		return this == GASPIPE || this == MAGNETPIPE;
 	}
 
 

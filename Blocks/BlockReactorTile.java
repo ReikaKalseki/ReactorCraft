@@ -134,8 +134,8 @@ public class BlockReactorTile extends Block {
 	@Override
 	public Icon getIcon(int s, int meta) {
 		//for drops, needs to be r.ordinal(), not metadata
-		int index = ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta);
-		return index >= 0 ? icons[index][s][0] : icons[meta][s][0];
+		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
+		return r != null ? icons[r.ordinal()][s][0] : icons[meta][s][0];
 	}
 
 	@Override
@@ -330,7 +330,7 @@ public class BlockReactorTile extends Block {
 	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
-		ReactorTiles r = ReactorTiles.TEList[ReactorTiles.getMachineIndexFromIDandMetadata(blockID, meta)];
+		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
 		if (r != null) {
 			if (r == ReactorTiles.TURBINECORE) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);

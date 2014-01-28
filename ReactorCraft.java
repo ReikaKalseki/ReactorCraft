@@ -136,6 +136,7 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addItems();
 		this.addLiquids();
 		this.registerOres();
+		ReactorTiles.loadMappings();
 
 		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
