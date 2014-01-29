@@ -68,7 +68,7 @@ public class BlockSteam extends Block {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack is) {
 		if (e != null) {
-			world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+			world.setBlockMetadataWithNotify(x, y, z, 3, 3);
 		}
 	}
 

@@ -334,6 +334,8 @@ public class BlockReactorTile extends Block {
 		if (r != null) {
 			if (r == ReactorTiles.TURBINECORE) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
+				if (te == null)
+					return li;
 				if (te.getDamage() > 0) {
 					li.add(ItemStacks.shaftcore.copy());
 					for (int i = 0; i < ReikaRandomHelper.getSafeRandomInt(24-te.getDamage()); i++) {

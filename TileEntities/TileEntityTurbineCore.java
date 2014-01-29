@@ -275,8 +275,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 						}
 						else
 							steam++;
+						canAccel = true;
 					}
-					canAccel = true;
 				}
 			}
 		}
