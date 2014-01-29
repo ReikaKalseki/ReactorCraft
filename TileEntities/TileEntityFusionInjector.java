@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -38,6 +39,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.canMake())
 			this.make(world, x, y, z);
+		tank.addLiquid(111, ReactorCraft.PLASMA);
 	}
 
 	public void setFacing(ForgeDirection dir) {

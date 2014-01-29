@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Shockable;
 
 public class TileEntityIonizer extends TileEntityReactorBase implements Shockable, IFluidHandler {
@@ -34,7 +33,7 @@ public class TileEntityIonizer extends TileEntityReactorBase implements Shockabl
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.IONIZER.ordinal();
+		return 0;//ReactorTiles.IONIZER.ordinal();
 	}
 
 	@Override

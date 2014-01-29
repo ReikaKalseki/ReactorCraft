@@ -20,6 +20,7 @@ import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Blocks.BlockFluorite;
 import Reika.ReactorCraft.Blocks.BlockFluoriteOre;
+import Reika.ReactorCraft.Blocks.BlockInjectorMulti;
 import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
@@ -27,24 +28,26 @@ import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Blocks.BlockSteamLine;
 import Reika.ReactorCraft.Items.ItemBlockFluorite;
+import Reika.ReactorCraft.Items.ItemBlockMultiBlock;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
 
 public enum ReactorBlocks implements RegistryEnum {
 
-	REACTOR(		BlockReactorTile.class, 							"Reactor", 					false),
-	MATS(			BlockReactorMat.class, ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
-	CORIUMFLOWING(	BlockCoriumFlowing.class, 							"Molten Corium (Flowing)", 	false),
-	CORIUMSTILL(	BlockCorium.class, 									"Molten Corium", 			false),
-	MODELREACTOR(	BlockReactorTileModelled.class, 					"ReactorModelled", 			true),
-	MACHINE(		BlockReactorTile.class, 							"Machine", 					false),
-	MODELMACHINE(	BlockReactorTileModelled.class, 					"MachineModelled", 			true),
-	ORE(			BlockReactorOre.class, ItemBlockReactorOre.class,	"Ore", 						false),
-	FLUORITE(		BlockFluorite.class, ItemBlockFluorite.class,		"Fluorite",					false),
-	FLUORITEORE(	BlockFluoriteOre.class, ItemBlockFluorite.class,	"Fluorite Ore",				false),
-	STEAM(			BlockSteam.class,									"Steam",					false),
-	DUCT(			BlockDuct.class,									"Duct",						false),
-	LINE(			BlockSteamLine.class,								"Line",						false);
+	REACTOR(		BlockReactorTile.class, 									"Reactor", 					false),
+	MATS(			BlockReactorMat.class, 			ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
+	CORIUMFLOWING(	BlockCoriumFlowing.class, 									"Molten Corium (Flowing)", 	false),
+	CORIUMSTILL(	BlockCorium.class, 											"Molten Corium", 			false),
+	MODELREACTOR(	BlockReactorTileModelled.class, 							"ReactorModelled", 			true),
+	MACHINE(		BlockReactorTile.class, 									"Machine", 					false),
+	MODELMACHINE(	BlockReactorTileModelled.class, 							"MachineModelled", 			true),
+	ORE(			BlockReactorOre.class, 			ItemBlockReactorOre.class,	"Ore", 						false),
+	FLUORITE(		BlockFluorite.class, 			ItemBlockFluorite.class,	"Fluorite",					false),
+	FLUORITEORE(	BlockFluoriteOre.class, 		ItemBlockFluorite.class,	"Fluorite Ore",				false),
+	STEAM(			BlockSteam.class,											"Steam",					false),
+	DUCT(			BlockDuct.class,											"Duct",						false),
+	LINE(			BlockSteamLine.class,										"Line",						false),
+	INJECTORMULTI(	BlockInjectorMulti.class, 		ItemBlockMultiBlock.class,	"Injector Multiblock",		false);
 
 	private Class blockClass;
 	private String blockName;

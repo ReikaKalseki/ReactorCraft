@@ -16,6 +16,8 @@ import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -45,7 +47,8 @@ public enum ReactorItems implements RegistryEnum {
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
 	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
-	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class);
+	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
+	MAGNET(100,		"item.magnet",			ItemReactorBasic.class);
 
 	private String name;
 	private Class itemClass;
@@ -90,6 +93,7 @@ public enum ReactorItems implements RegistryEnum {
 		case WASTE:
 		case BREEDERFUEL:
 		case CLEANUP:
+		case MAGNET:
 			return false;
 		default:
 			return true;
@@ -133,9 +137,12 @@ public enum ReactorItems implements RegistryEnum {
 		case CRAFTING:
 			return CraftingItems.partList[meta].itemName;
 		case BREEDERFUEL:
-			return this.getBasicName()+" ("+(meta*20)+"% Converted)";
+			return this.getBasicName()+" ("+(meta*5)+"% Converted)";
 		case CLEANUP:
 			return this.getBasicName()+" ("+meta+" kJ)";
+		case MAGNET:
+			double num = ReikaMathLibrary.intpow2(4, meta)/1000D;
+			return this.getBasicName()+String.format(" (%.3f %sT)", ReikaMathLibrary.getThousandBase(num), ReikaEngLibrary.getSIPrefix(num));
 		default:
 			return this.getBasicName();
 		}
@@ -154,6 +161,7 @@ public enum ReactorItems implements RegistryEnum {
 		case CRAFTING:
 		case BREEDERFUEL:
 		case CLEANUP:
+		case MAGNET:
 			return true;
 		default:
 			return false;
@@ -181,9 +189,11 @@ public enum ReactorItems implements RegistryEnum {
 		case WASTE:
 			return WasteManager.getNumberWastes();
 		case BREEDERFUEL:
-			return 5;
+			return 20;
 		case CLEANUP:
 			return ItemRegistry.STRONGCOIL.getNumberMetadatas();
+		case MAGNET:
+			return 8;
 		default:
 			return 1;
 		}
@@ -276,6 +286,7 @@ public enum ReactorItems implements RegistryEnum {
 			return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
 		case FUEL:
 		case PLUTONIUM:
+		case BREEDERFUEL:
 			return item.getItemDamage() == 0;
 		default:
 			return true;

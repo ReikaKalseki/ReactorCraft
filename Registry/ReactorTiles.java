@@ -35,7 +35,6 @@ import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityIonizer;
 import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
@@ -56,52 +55,54 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
 
-	FUEL("machine.fuel", 						TileEntityFuelRod.class, 		0),
-	CONTROL("machine.control", 					TileEntityControlRod.class, 	1),
-	COOLANT("machine.coolant", 					TileEntityWaterCell.class, 		2),
-	CPU("machine.cpu", 							TileEntityCPU.class, 			0),
-	TURBINECORE("machine.turbine", 				TileEntityTurbineCore.class, 	0, "RenderTurbine"),
-	CONDENSER("machine.condenser", 				TileEntityCondenser.class, 		1, "RenderCondenser"),
-	STEAMLINE("machine.steamline", 				TileEntitySteamLine.class, 		2, "RenderWaterLine"),
-	HEAVYPUMP("machine.heavypump", 				TileEntityHeavyPump.class, 		0, "RenderHeavyPump"),
-	CENTRIFUGE("machine.centrifuge", 			TileEntityCentrifuge.class, 	1, "RenderCentrifuge"),
-	PROCESSOR("machine.processor", 				TileEntityUProcessor.class, 	2, "RenderProcessor"),
-	WASTECONTAINER("machine.wastecontainer", 	TileEntityWasteContainer.class, 2),
-	BOILER("machine.reactorboiler", 			TileEntityReactorBoiler.class, 	3),
-	GRATE("machine.grate", 						TileEntitySteamGrate.class, 	3, "RenderSteamGrate"),
-	PUMP("machine.reactorpump", 				TileEntityReactorPump.class, 	4, "RenderReactorPump"),
-	SYNTHESIZER("machine.synthesizer", 			TileEntitySynthesizer.class, 	1),
-	MAGNET("machine.magnet", 					TileEntityMagnet.class, 		5, "RenderMagnet"),
-	ELECTROLYZER("machine.electrolyzer", 		TileEntityElectrolyzer.class, 	5, "RenderElectrolyzer"),
-	TRITIZER("machine.tritizer", 				TileEntityTritizer.class, 		4),
-	BREEDER("machine.breedercore", 				TileEntityBreederCore.class, 	5),
-	SODIUMBOILER("machine.sodiumboiler", 		TileEntitySodiumHeater.class, 	6),
-	EXCHANGER("machine.exchanger", 				TileEntityHeatExchanger.class, 	4, "RenderExchanger"),
-	STORAGE("machine.storage", 					TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
-	INJECTOR("machine.injector", 				TileEntityFusionInjector.class, 6, ""),
-	HEATER("machine.fusionheater", 				TileEntityFusionHeater.class, 	7, ""),
-	GASPIPE("machine.gasduct", 					TileEntityGasDuct.class, 		0, "DuctRenderer"),
-	IONIZER("machine.ionizer", 					TileEntityIonizer.class, 		8, ""),
-	MAGNETPIPE("machine.magnetpipe", 			TileEntityMagneticPipe.class, 	1, "DuctRenderer");
+	FUEL("machine.fuel", 						ReactorBlocks.REACTOR,			TileEntityFuelRod.class, 		0),
+	CONTROL("machine.control", 					ReactorBlocks.REACTOR,			TileEntityControlRod.class, 	1),
+	COOLANT("machine.coolant", 					ReactorBlocks.REACTOR,			TileEntityWaterCell.class, 		2),
+	CPU("machine.cpu", 							ReactorBlocks.MACHINE,			TileEntityCPU.class, 			0),
+	TURBINECORE("machine.turbine", 				ReactorBlocks.MODELREACTOR,		TileEntityTurbineCore.class, 	0, "RenderTurbine"),
+	CONDENSER("machine.condenser", 				ReactorBlocks.MODELREACTOR,		TileEntityCondenser.class, 		1, "RenderCondenser"),
+	STEAMLINE("machine.steamline", 				ReactorBlocks.LINE,				TileEntitySteamLine.class, 		2, "RenderWaterLine"),
+	HEAVYPUMP("machine.heavypump", 				ReactorBlocks.MODELMACHINE,		TileEntityHeavyPump.class, 		0, "RenderHeavyPump"),
+	CENTRIFUGE("machine.centrifuge", 			ReactorBlocks.MODELMACHINE,		TileEntityCentrifuge.class, 	1, "RenderCentrifuge"),
+	PROCESSOR("machine.processor", 				ReactorBlocks.MODELMACHINE,		TileEntityUProcessor.class, 	2, "RenderProcessor"),
+	WASTECONTAINER("machine.wastecontainer", 	ReactorBlocks.MACHINE,			TileEntityWasteContainer.class, 2),
+	BOILER("machine.reactorboiler", 			ReactorBlocks.REACTOR,			TileEntityReactorBoiler.class, 	3),
+	GRATE("machine.grate", 						ReactorBlocks.MODELREACTOR,		TileEntitySteamGrate.class, 	3, "RenderSteamGrate"),
+	PUMP("machine.reactorpump", 				ReactorBlocks.MODELREACTOR,		TileEntityReactorPump.class, 	4, "RenderReactorPump"),
+	SYNTHESIZER("machine.synthesizer", 			ReactorBlocks.MACHINE,			TileEntitySynthesizer.class, 	1),
+	MAGNET("machine.magnet", 					ReactorBlocks.MODELREACTOR,		TileEntityMagnet.class, 		5, "RenderMagnet"),
+	ELECTROLYZER("machine.electrolyzer", 		ReactorBlocks.MODELMACHINE,		TileEntityElectrolyzer.class, 	5, "RenderElectrolyzer"),
+	TRITIZER("machine.tritizer", 				ReactorBlocks.REACTOR,			TileEntityTritizer.class, 		4),
+	BREEDER("machine.breedercore", 				ReactorBlocks.REACTOR,			TileEntityBreederCore.class, 	5),
+	SODIUMBOILER("machine.sodiumboiler", 		ReactorBlocks.REACTOR,			TileEntitySodiumHeater.class, 	6),
+	EXCHANGER("machine.exchanger", 				ReactorBlocks.MODELMACHINE,		TileEntityHeatExchanger.class, 	4, "RenderExchanger"),
+	STORAGE("machine.storage", 					ReactorBlocks.MODELMACHINE,		TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
+	INJECTOR("machine.injector", 				ReactorBlocks.REACTOR,			TileEntityFusionInjector.class, 7, ""),
+	HEATER("machine.fusionheater", 				ReactorBlocks.REACTOR,			TileEntityFusionHeater.class, 	8, ""),
+	GASPIPE("machine.gasduct", 					ReactorBlocks.DUCT,				TileEntityGasDuct.class, 		0, "DuctRenderer"),
+	//IONIZER("machine.ionizer", 				ReactorBlocks.IONIZER,			TileEntityIonizer.class, 		8, ""),
+	MAGNETPIPE("machine.magnetpipe", 			ReactorBlocks.DUCT,				TileEntityMagneticPipe.class, 	1, "DuctRenderer");
 
 	private String name;
-	private Class teClass;
+	private final Class teClass;
 	private int meta;
 	private String render;
+	private final ReactorBlocks blockInstance;
 
 	private static final HashMap<List<Integer>, ReactorTiles> reactorMappings = new HashMap();
 
 	public static final ReactorTiles[] TEList = values();
 
-	private ReactorTiles(String n, Class<? extends TileEntity> tile, int m) {
-		this(n, tile, m, null);
+	private ReactorTiles(String n, ReactorBlocks block, Class<? extends TileEntity> tile, int m) {
+		this(n, block, tile, m, null);
 	}
 
-	private ReactorTiles(String n, Class<? extends TileEntity> tile, int m, String r) {
+	private ReactorTiles(String n, ReactorBlocks block, Class<? extends TileEntity> tile, int m, String r) {
 		teClass = tile;
 		name = n;
 		render = r;
 		meta = m;
+		blockInstance = block;
 	}
 
 	public String getName() {
@@ -115,7 +116,7 @@ public enum ReactorTiles {
 	public static ArrayList<ReactorTiles> getTilesOfBlock(ReactorBlocks b) {
 		ArrayList li = new ArrayList();
 		for (int i = 0; i < TEList.length; i++) {
-			if (TEList[i].getBlockVariableIndex() == b.ordinal())
+			if (TEList[i].blockInstance == b)
 				li.add(TEList[i]);
 		}
 		return li;
@@ -212,30 +213,6 @@ public enum ReactorTiles {
 		return "Reika.ReactorCraft.Renders."+render;
 	}
 
-	public boolean isReactorBlock() {
-		switch(this) {
-		case COOLANT:
-		case CONDENSER:
-		case CONTROL:
-		case FUEL:
-			//case ITEMLINE:
-		case TURBINECORE:
-		case STEAMLINE:
-		case BOILER:
-		case GRATE:
-		case PUMP:
-		case MAGNET:
-		case TRITIZER:
-		case BREEDER:
-		case INJECTOR:
-		case HEATER:
-		case IONIZER:
-			return true;
-		default:
-			return false;
-		}
-	}
-
 	public int getTextureStates() {
 		switch(this) {
 		case COOLANT:
@@ -253,32 +230,7 @@ public enum ReactorTiles {
 	}
 
 	public Block getBlockVariable() {
-		int idx = this.getBlockVariableIndex();
-		//ReikaJavaLibrary.pConsole(this+"  "+idx+"  "+ReactorBlocks.blockList[idx].getBlockID()+" "+this.getBlockMetadata());
-		return ReactorBlocks.blockList[idx].getBlockVariable();
-	}
-
-	public int getBlockVariableIndex() {
-		if (this.isPipe())
-			return ReactorBlocks.DUCT.ordinal();
-		if (this == STEAMLINE)
-			return ReactorBlocks.LINE.ordinal();
-		if (this.hasRender()) {
-			if (this.isReactorBlock()) {
-				return ReactorBlocks.MODELREACTOR.ordinal();
-			}
-			else {
-				return ReactorBlocks.MODELMACHINE.ordinal();
-			}
-		}
-		else {
-			if (this.isReactorBlock()) {
-				return ReactorBlocks.REACTOR.ordinal();
-			}
-			else {
-				return ReactorBlocks.MACHINE.ordinal();
-			}
-		}
+		return blockInstance.getBlockVariable();
 	}
 
 	public int getBlockMetadata() {

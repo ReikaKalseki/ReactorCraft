@@ -27,6 +27,7 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -37,6 +38,10 @@ public class ReactorRecipes {
 	private static void addRCInterface() {
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 7), ReactorItems.DEPLETED.getStackOf());
 		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
+
+		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getStackOf(), 0, 5000, 100);
+		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
+			RecipesCompactor.getRecipes().addCompacting(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getStackOfMetadata(i+1), 0, 10000*(1+i), 100);
 	}
 
 	public static void addModInterface() {
