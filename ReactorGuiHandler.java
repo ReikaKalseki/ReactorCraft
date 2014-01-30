@@ -12,6 +12,7 @@ package Reika.ReactorCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.CoreContainer;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
@@ -20,6 +21,7 @@ import Reika.ReactorCraft.Container.ContainerProcessor;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
 import Reika.ReactorCraft.Container.ContainerWasteStorage;
+import Reika.ReactorCraft.GUIs.GuiCPU;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
 import Reika.ReactorCraft.GUIs.GuiNuclearCore;
@@ -28,6 +30,7 @@ import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
@@ -61,6 +64,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
 			case STORAGE:
 				return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
+			case CPU:
+				return new CoreContainer(player, te);
 			default:
 				return null;
 			}
@@ -89,6 +94,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				return new GuiElectrolyzer(player, (TileEntityElectrolyzer)te);
 			case STORAGE:
 				return new GuiWasteStorage(player, (TileEntityWasteStorage)te);
+			case CPU:
+				return new GuiCPU(player, (TileEntityCPU)te);
 			default:
 				return null;
 			}

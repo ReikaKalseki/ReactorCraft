@@ -173,6 +173,7 @@ public enum ReactorTiles {
 		case COOLANT:
 		case BOILER:
 		case SODIUMBOILER:
+		case CONTROL:
 			return true;
 		default:
 			return false;

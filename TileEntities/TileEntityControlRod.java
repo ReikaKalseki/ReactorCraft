@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -93,6 +94,11 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq.isWater();
+	}
+
+	@Override
+	public int getTextureState(ForgeDirection side) {
+		return side.offsetY != 0 && this.isActive() ? 1 : 0;
 	}
 
 }

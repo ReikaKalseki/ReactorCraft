@@ -46,7 +46,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
-
+		//steam = 1;
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
 	}
 

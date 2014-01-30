@@ -328,6 +328,14 @@ public class BlockReactorTile extends Block {
 	}
 
 	@Override
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	{
+		if (!player.capabilities.isCreativeMode)
+			this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
+		return world.setBlock(x, y, z, 0);
+	}
+
+	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
 		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
