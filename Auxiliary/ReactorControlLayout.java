@@ -101,4 +101,11 @@ public class ReactorControlLayout {
 		return sb.toString();
 	}
 
+	public void SCRAM() {
+		for (List li : controls.keySet()) {
+			TileEntityControlRod rod = controls.get(li);
+			rod.drop();
+		}
+	}
+
 }

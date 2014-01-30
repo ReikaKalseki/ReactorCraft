@@ -15,11 +15,19 @@ import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityCPU extends TileEntityReactorBase {
+public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerReceiver {
 
 	private final ReactorControlLayout layout = new ReactorControlLayout(this);
 	private final BlockArray reactor = new BlockArray();
+
+	private int omega;
+	private int torque;
+	private long power;
+
+	public static final int MINPOWER = 16384;
+	public static final int SCRAMPOWER = 65536;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -44,6 +52,14 @@ public class TileEntityCPU extends TileEntityReactorBase {
 		}
 	}
 
+	public boolean canSCRAM() {
+		return power >= SCRAMPOWER;
+	}
+
+	public void SCRAM() {
+		layout.SCRAM();
+	}
+
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
@@ -56,6 +72,75 @@ public class TileEntityCPU extends TileEntityReactorBase {
 
 	public ReactorControlLayout getLayout() {
 		return layout;
+	}
+
+	@Override
+	public int getOmega() {
+		return omega;
+	}
+
+	@Override
+	public int getTorque() {
+		return torque;
+	}
+
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public int getIORenderAlpha() {
+		return 0;
+	}
+
+	@Override
+	public void setIORenderAlpha(int io) {}
+
+	@Override
+	public int getMachineX() {
+		return xCoord;
+	}
+
+	@Override
+	public int getMachineY() {
+		return yCoord;
+	}
+
+	@Override
+	public int getMachineZ() {
+		return zCoord;
+	}
+
+	@Override
+	public void setOmega(int omega) {
+		this.omega = omega;
+	}
+
+	@Override
+	public void setTorque(int torque) {
+		this.torque = torque;
+	}
+
+	@Override
+	public void setPower(long power) {
+		this.power = power;
+	}
+
+	@Override
+	public boolean canReadFromBlock(int x, int y, int z) {
+		return Math.abs(x-xCoord+y-yCoord+z-zCoord) == 1; //one block away
+	}
+
+	@Override
+	public boolean isReceiving() {
+		return true;
+	}
+
+	@Override
+	public void noInputMachine() {
+		torque = omega = 0;
+		power = 0;
 	}
 
 }

@@ -23,10 +23,26 @@ import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
 public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
 	private boolean lowered;
+	private int rodOffset;
+	private Motions motion;
+
+	private static final int MINOFFSET = 0;
+	private static final int MAXOFFSET = 20;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.moveRods();
+	}
 
+	private void moveRods() {
+		if (motion != null) {
+			rodOffset += motion.stepHeight;
+		}
+		if (rodOffset <= MINOFFSET || rodOffset >= MAXOFFSET) {
+			motion = null;
+			rodOffset = Math.max(MINOFFSET, rodOffset);
+			rodOffset = Math.min(MAXOFFSET, rodOffset);
+		}
 	}
 
 	@Override
@@ -40,11 +56,21 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	}
 
 	public void toggle() {
+		if (lowered) {
+			motion = Motions.RAISING;
+		}
+		else {
+			motion = Motions.LOWERING;
+		}
 		lowered = !lowered;
 	}
 
+	public void drop() {
+		motion = Motions.SCRAM;
+	}
+
 	public boolean isActive() {
-		return lowered;
+		return lowered && rodOffset == MINOFFSET;
 	}
 
 	@Override
@@ -99,6 +125,22 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	@Override
 	public int getTextureState(ForgeDirection side) {
 		return side.offsetY != 0 && this.isActive() ? 1 : 0;
+	}
+
+	public int getRodPosition() {
+		return rodOffset;
+	}
+
+	private static enum Motions {
+		RAISING(1),
+		LOWERING(-1),
+		SCRAM(-7);
+
+		public final int stepHeight;
+
+		private Motions(int dh) {
+			stepHeight = dh;
+		}
 	}
 
 }
