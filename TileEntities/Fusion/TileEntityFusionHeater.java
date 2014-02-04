@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -23,9 +23,12 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Laserable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFusionHeater extends TileEntityReactorBase implements TemperatureTE, Laserable, IFluidHandler {
+public class TileEntityFusionHeater extends TileEntityReactorBase implements TemperatureTE, Laserable, IFluidHandler, PipeConnector {
 
 	public static final int PLASMA_TEMP = 150000000;
 
@@ -45,6 +48,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		this.updateTemperature(world, x, y, z, meta);
 
 		//ReikaJavaLibrary.pConsole(temperature+": "+((float)temperature/PLASMA_TEMP), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(h2, Side.SERVER);
 
 		if (this.canMake())
 			this.make();
@@ -55,9 +59,10 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private void make() {
-		h2.removeLiquid(1);
-		h3.removeLiquid(1);
-		tank.addLiquid(2, FluidRegistry.getFluid("fusion plasma"));
+		int a = 50;
+		h2.removeLiquid(a);
+		h3.removeLiquid(a);
+		tank.addLiquid(2*a, FluidRegistry.getFluid("fusion plasma"));
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -69,7 +74,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.INJECTOR.ordinal();
+		return ReactorTiles.HEATER.ordinal();
 	}
 
 	@Override
@@ -112,6 +117,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		NBT.setInteger("temp", temperature);
 
 		tank.writeToNBT(NBT);
+		h2.writeToNBT(NBT);
+		h3.writeToNBT(NBT);
 	}
 
 	@Override
@@ -121,11 +128,13 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		temperature = NBT.getInteger("temp");
 
 		tank.readFromNBT(NBT);
+		h2.readFromNBT(NBT);
+		h3.readFromNBT(NBT);
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (this.canFill(from, resource.getFluid()))
+		if (!this.canFill(from, resource.getFluid()))
 			return 0;
 		if (resource.getFluid().equals(FluidRegistry.getFluid("rc deuterium")))
 			return h2.fill(resource, doFill);
@@ -135,13 +144,13 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, 	boolean doDrain) {
-		return null;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return from == ForgeDirection.UP ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
+		return from == ForgeDirection.UP ? tank.drain(maxDrain, doDrain) : null;
 	}
 
 	@Override
@@ -151,12 +160,27 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
+		return from == ForgeDirection.UP;
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{h2.getInfo(), h3.getInfo(), tank.getInfo()};
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return p == MachineRegistry.PIPE && side != ForgeDirection.UP;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.INPUT;
 	}
 
 }

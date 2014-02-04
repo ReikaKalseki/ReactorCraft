@@ -20,7 +20,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelTurbine;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderTurbine extends ReactorRenderBase

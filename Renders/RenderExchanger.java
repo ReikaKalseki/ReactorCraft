@@ -19,7 +19,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelExchanger;
-import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityHeatExchanger;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderExchanger extends ReactorRenderBase

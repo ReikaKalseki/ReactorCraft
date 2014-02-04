@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import java.util.List;
 
@@ -178,7 +178,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getGenTorque() {
-		int torque = steam > 0 ? (int)(steam*48) : omega/16+1;
+		int torque = steam > 0 ? (int)(steam*24) : omega/16+1;
 		return omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
 	}
 
@@ -187,7 +187,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private long getGenPower() {
-		return Math.min(MAX_POWER, this.getGenTorque()*omega);
+		return Math.min(MAX_POWER, (long)this.getGenTorque()*(long)omega);
 	}
 
 	private double getEfficiency() {
@@ -265,10 +265,11 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 						inter = Interference.FLUID;
 				}
 				else if (this.getStage() == 0 && id2 == ReactorBlocks.STEAM.getBlockID()) {
+					//ReikaJavaLibrary.pConsole(meta2);
 					if ((meta2&2) != 0) {
 						int newmeta = 1+(meta2&4);
 						//ReikaJavaLibrary.pConsole(meta2+":"+newmeta+":"+((newmeta&4) != 0));
-						world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], newmeta, 3);
+						//world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], newmeta, 3);
 						if ((meta2&4) != 0) {
 							steam += 2;
 							//omega = Math.min(omega+8, GEN_OMEGA);

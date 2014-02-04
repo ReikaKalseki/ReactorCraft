@@ -14,7 +14,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
-import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 
 public class GuiCentrifuge extends ReactorGuiBase {
 

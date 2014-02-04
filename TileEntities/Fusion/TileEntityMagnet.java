@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fusion;
 
 import java.util.List;
 

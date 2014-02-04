@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission.Breeder;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -19,7 +19,8 @@ import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityBreederCore extends TileEntityNuclearCore {
 

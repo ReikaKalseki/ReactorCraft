@@ -17,7 +17,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 
 public class GuiElectrolyzer extends ReactorGuiBase {
 

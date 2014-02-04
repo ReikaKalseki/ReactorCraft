@@ -16,7 +16,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 
 public class GuiSynthesizer extends ReactorGuiBase {
 

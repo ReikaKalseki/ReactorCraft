@@ -17,7 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
 
 public class BlockSteamLine extends BlockReactorTileModelled {
 
@@ -70,6 +70,10 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	@Override
 	public boolean canHarvestBlock(EntityPlayer player, int meta)
 	{
+		return true;
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
 		return true;
 	}
 

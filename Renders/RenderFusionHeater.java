@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 
 public class RenderFusionHeater extends ReactorRenderBase
 {

@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorPackets;
-import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -118,7 +118,15 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 			switch (pack) {
 			case CPU:
 				rod = (TileEntityControlRod)te;
-				rod.toggle();
+				if (control == ReactorPackets.CPU.getMinValue()) {
+					rod.toggle();
+				}
+				if (control == ReactorPackets.CPU.getMinValue()+1) {
+					rod.setActive(false);
+				}
+				if (control == ReactorPackets.CPU.getMinValue()+2) {
+					rod.setActive(true);
+				}
 				break;
 			}
 		}

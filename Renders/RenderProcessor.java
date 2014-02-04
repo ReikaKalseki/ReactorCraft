@@ -24,7 +24,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelProcessor;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 
 public class RenderProcessor extends ReactorRenderBase
 {

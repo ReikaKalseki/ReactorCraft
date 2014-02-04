@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.liquids.ILiquid;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
@@ -59,17 +60,21 @@ public class BlockCorium extends BlockStationary implements ILiquid {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
+		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:mat_slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
 	}
 
 	/**
 	 * Changes the block ID to that of an updating fluid.
 	 */
-	protected void setNotStationary(World par1World, int par2, int par3, int par4)
+	protected void setNotStationary(World world, int x, int y, int z)
 	{
-		int l = par1World.getBlockMetadata(par2, par3, par4);
-		par1World.setBlock(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), l, 2);
-		par1World.scheduleBlockUpdate(par2, par3, par4, ReactorBlocks.CORIUMFLOWING.getBlockID(), this.tickRate(par1World));
+		if (world.isRaining() && ReikaRandomHelper.doWithChance(0.1)) {
+			world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+			return;
+		}
+		int l = world.getBlockMetadata(x, y, z);
+		world.setBlock(x, y, z, ReactorBlocks.CORIUMFLOWING.getBlockID(), l, 2);
+		world.scheduleBlockUpdate(x, y, z, ReactorBlocks.CORIUMFLOWING.getBlockID(), this.tickRate(world));
 	}
 
 	private void checkForHarden(World world, int x, int y, int z)

@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 
 public class ContainerSynthesizer extends CoreContainer {
 

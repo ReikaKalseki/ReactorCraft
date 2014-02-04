@@ -14,7 +14,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 
 public enum ReactorPackets {
 
-	CPU(0);
+	CPU(0, 2);
 
 	private int min;
 	private int max;

@@ -87,6 +87,7 @@ public class RenderPlasma extends Render {
 
 	@Override
 	public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par10) {
+		//if (ReactorOptions.VISIBLENEUTRONS.getState() && false)
 		this.renderEntity((EntityPlasma)entity, par2, par4, par6, par8, par10);
 	}
 

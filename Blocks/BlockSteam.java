@@ -35,7 +35,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityTurbineCore;
 
 public class BlockSteam extends Block {
 
@@ -129,6 +129,9 @@ public class BlockSteam extends Block {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
 			}
+			else {
+				world.setBlock(x, y, z, 0);
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -200,6 +203,7 @@ public class BlockSteam extends Block {
 			return;
 		}
 		else if (this.canMoveInto(world, x, y+1, z)) {
+			//ReikaJavaLibrary.pConsole(meta+":"+this.getTransmittedMetadata(meta, ForgeDirection.UP), Side.SERVER);
 			if (((meta&1) != 0) || ReikaRandomHelper.doWithChance(80))
 				world.setBlock(x, y+1, z, blockID, this.getTransmittedMetadata(meta, ForgeDirection.UP), 3);
 			world.setBlock(x, y, z, 0);
@@ -231,8 +235,8 @@ public class BlockSteam extends Block {
 
 	public int getTransmittedMetadata(int original_meta, ForgeDirection dir) {
 		if (dir == ForgeDirection.UP)
-			return original_meta;
-		return (original_meta&2) != 0 ? original_meta-2 : original_meta;
+			return (original_meta & 8) == 0 ? original_meta : 1;
+		return original_meta | 8;
 	}
 
 	public boolean canMoveInto(World world, int x, int y, int z) {

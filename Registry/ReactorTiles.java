@@ -23,32 +23,33 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntities.TileEntityBreederCore;
-import Reika.ReactorCraft.TileEntities.TileEntityCPU;
-import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
-import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
-import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
-import Reika.ReactorCraft.TileEntities.TileEntityFuelRod;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
-import Reika.ReactorCraft.TileEntities.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
-import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
-import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
-import Reika.ReactorCraft.TileEntities.TileEntitySteamLine;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntityTritizer;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCondenser;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamGrate;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityHeatExchanger;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityNeutronAbsorber;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -56,7 +57,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public enum ReactorTiles {
 
 	FUEL("machine.fuel", 						ReactorBlocks.REACTOR,			TileEntityFuelRod.class, 		0),
-	CONTROL("machine.control", 					ReactorBlocks.REACTOR,			TileEntityControlRod.class, 	1),
+	CONTROL("machine.control", 					ReactorBlocks.MODELREACTOR,		TileEntityControlRod.class, 	6, "RenderControl"),
 	COOLANT("machine.coolant", 					ReactorBlocks.REACTOR,			TileEntityWaterCell.class, 		2),
 	CPU("machine.cpu", 							ReactorBlocks.MACHINE,			TileEntityCPU.class, 			0),
 	TURBINECORE("machine.turbine", 				ReactorBlocks.MODELREACTOR,		TileEntityTurbineCore.class, 	0, "RenderTurbine"),
@@ -74,14 +75,15 @@ public enum ReactorTiles {
 	ELECTROLYZER("machine.electrolyzer", 		ReactorBlocks.MODELMACHINE,		TileEntityElectrolyzer.class, 	5, "RenderElectrolyzer"),
 	TRITIZER("machine.tritizer", 				ReactorBlocks.REACTOR,			TileEntityTritizer.class, 		4),
 	BREEDER("machine.breedercore", 				ReactorBlocks.REACTOR,			TileEntityBreederCore.class, 	5),
-	SODIUMBOILER("machine.sodiumboiler", 		ReactorBlocks.REACTOR,			TileEntitySodiumHeater.class, 	6),
+	SODIUMBOILER("machine.sodiumboiler", 		ReactorBlocks.MACHINE,			TileEntitySodiumHeater.class, 	6),
 	EXCHANGER("machine.exchanger", 				ReactorBlocks.MODELMACHINE,		TileEntityHeatExchanger.class, 	4, "RenderExchanger"),
 	STORAGE("machine.storage", 					ReactorBlocks.MODELMACHINE,		TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
 	INJECTOR("machine.injector", 				ReactorBlocks.REACTOR,			TileEntityFusionInjector.class, 7, ""),
 	HEATER("machine.fusionheater", 				ReactorBlocks.REACTOR,			TileEntityFusionHeater.class, 	8, ""),
 	GASPIPE("machine.gasduct", 					ReactorBlocks.DUCT,				TileEntityGasDuct.class, 		0, "DuctRenderer"),
 	//IONIZER("machine.ionizer", 				ReactorBlocks.IONIZER,			TileEntityIonizer.class, 		8, ""),
-	MAGNETPIPE("machine.magnetpipe", 			ReactorBlocks.DUCT,				TileEntityMagneticPipe.class, 	1, "DuctRenderer");
+	MAGNETPIPE("machine.magnetpipe", 			ReactorBlocks.DUCT,				TileEntityMagneticPipe.class, 	1, "DuctRenderer"),
+	ABSORBER("machine.absorber",				ReactorBlocks.REACTOR,			TileEntityNeutronAbsorber.class,1);
 
 	private String name;
 	private final Class teClass;
@@ -150,36 +152,6 @@ public enum ReactorTiles {
 		return true;
 	}
 
-	public boolean hasSidedTextures() {
-		return false;
-	}
-
-	public boolean isEndTextured() {
-		switch(this) {
-		case FUEL:
-		case CONTROL:
-		case WASTECONTAINER:
-		case SYNTHESIZER:
-		case BREEDER:
-		case TRITIZER:
-			return true;
-		default:
-			return false;
-		}
-	}
-
-	public boolean hasTextureStates() {
-		switch(this) {
-		case COOLANT:
-		case BOILER:
-		case SODIUMBOILER:
-		case CONTROL:
-			return true;
-		default:
-			return false;
-		}
-	}
-
 	public static ReactorTiles getTE(IBlockAccess iba, int x, int y, int z) {
 		int id = iba.getBlockId(x, y, z);
 		int meta = iba.getBlockMetadata(x, y, z);
@@ -223,6 +195,36 @@ public enum ReactorTiles {
 			return 4;
 		default:
 			return 1;
+		}
+	}
+
+	public boolean hasSidedTextures() {
+		return false;
+	}
+
+	public boolean isEndTextured() {
+		switch(this) {
+		case FUEL:
+		case CONTROL:
+		case WASTECONTAINER:
+		case SYNTHESIZER:
+		case BREEDER:
+		case TRITIZER:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean hasTextureStates() {
+		switch(this) {
+		case COOLANT:
+		case BOILER:
+		case SODIUMBOILER:
+		case CONTROL:
+			return true;
+		default:
+			return false;
 		}
 	}
 

@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -67,6 +68,11 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		int oldDecay = this.getFlowDecay(world, x, y, z);
 		byte viscosity = 1;
 		int flowDecay;
+
+		if (world.isRaining() && random.nextInt(20) == 0) {
+			world.setBlock(x, y, z, ReactorBlocks.MATS.getBlockID(), MatBlocks.SLAG.ordinal(), 3);
+			return;
+		}
 
 		if (oldDecay > 0) {
 			numAdjacentSources = 0;
@@ -171,10 +177,10 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 				Block.blocksList[blockId].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 			}
 			world.setBlock(i, j, k, blockID, l, 3);
-			if (ReikaRandomHelper.doWithChance(0.01))
-				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 8);
-			if (ReikaRandomHelper.doWithChance(0.05))
-				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1);
+			if (ReikaRandomHelper.doWithChance(0.02))
+				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 8, 1);
+			if (ReikaRandomHelper.doWithChance(0.1))
+				RadiationEffects.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 1, 1);
 		}
 
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, i, j, k, Block.ice.blockID);
@@ -344,7 +350,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
+		theIcon = new Icon[]{iconRegister.registerIcon("ReactorCraft:mat_slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
 	}
 
 	private void checkForHarden(World world, int x, int y, int z)

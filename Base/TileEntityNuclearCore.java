@@ -29,8 +29,8 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable {
 

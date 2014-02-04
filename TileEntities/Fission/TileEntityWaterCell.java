@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -97,6 +97,11 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		temperature = T;
 	}
 
+	@Override
+	public int getTextureState(ForgeDirection side) {
+		return this.getLiquidState().ordinal();
+	}
+
 	public int getChanceToStop() {
 		if (internalLiquid == null)
 			return 0;
@@ -120,11 +125,6 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		public boolean isWater() {
 			return this == WATER || this == HEAVY;
 		}
-	}
-
-	@Override
-	public int getTextureState(ForgeDirection side) {
-		return this.getLiquidState().ordinal();
 	}
 
 	public LiquidStates getLiquidState() {

@@ -19,7 +19,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelReactorPump;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorPump;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderReactorPump extends ReactorRenderBase

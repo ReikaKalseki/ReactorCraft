@@ -33,17 +33,18 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorBoiler;
-import Reika.ReactorCraft.TileEntities.TileEntitySodiumHeater;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends Block {
@@ -150,6 +151,8 @@ public class BlockReactorTile extends Block {
 				if (i.overridesRightClick(is))
 					return false;
 			}
+			if (is.itemID == ReactorItems.REMOTE.getShiftedItemID())
+				return false;
 		}
 		if (r == ReactorTiles.COOLANT && is != null) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y, z);
@@ -330,9 +333,21 @@ public class BlockReactorTile extends Block {
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
-		if (!player.capabilities.isCreativeMode)
+		if (!player.capabilities.isCreativeMode && this.canHarvest(world, player, x, y, z))
 			this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
 		return world.setBlock(x, y, z, 0);
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
+		if (!this.canHarvest(world, ep, x, y, z))
+			return;
+		if (world.getBlockId(x, y, z) == blockID)
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, this.getBlockDropped(world, x, y, z, meta, 0));
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		return RotaryAux.canHarvestSteelMachine(ep);
 	}
 
 	@Override

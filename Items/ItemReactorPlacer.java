@@ -26,7 +26,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;

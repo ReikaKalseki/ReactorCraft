@@ -84,7 +84,7 @@ public class HydrogenExplosion extends Explosion {
 		int x = (int)Math.floor(explosionX);
 		int y = (int)Math.floor(explosionY);
 		int z = (int)Math.floor(explosionZ);
-		RadiationEffects.contaminateArea(world, x, y, z, (int)(explosionSize*4));
+		RadiationEffects.contaminateArea(world, x, y, z, (int)(explosionSize*4), 8);
 	}
 
 	private boolean canEntitize(World world, int x, int y, int z, int id, int meta) {

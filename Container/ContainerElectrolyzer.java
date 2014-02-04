@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 
 public class ContainerElectrolyzer extends CoreContainer {
 

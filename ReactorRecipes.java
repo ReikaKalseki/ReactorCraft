@@ -59,7 +59,7 @@ public class ReactorRecipes {
 
 	private static void addCrafting() {
 		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', RotaryCraft.obsidianglass);
-		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', ItemStacks.steelingot, 'C', Block.chest);
+		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', CraftingItems.ALLOY.getItem(), 'C', Block.chest);
 		CraftingItems.ROD.addRecipe("SAS", "SAS", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem());
 		GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 	}
@@ -112,11 +112,13 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.BREEDERFUEL.getCraftedProduct(4), " D ", "DED", " D ", 'D', ReactorItems.DEPLETED.getStackOf(), 'E', ReactorItems.FUEL.getStackOf());
 
 		GameRegistry.addRecipe(ReactorItems.CANISTER.getCraftedProduct(16), " i ", "igi", " i ", 'g', Block.glass, 'i', Item.ingotIron);
+
+		GameRegistry.addRecipe(ReactorItems.REMOTE.getStackOf(), "SES", "BCB", "BPB", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'B', Block.stoneButton, 'E', Item.enderPearl, 'C', ItemStacks.pcb);
 	}
 
 	private static void addMachines() {
 		ReactorTiles.FUEL.addCrafting("SHS", "PCP", "SCS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', CraftingItems.CANISTER.getItem(), 'H', Block.hopperBlock);
-		ReactorTiles.CONTROL.addCrafting("SGS", " R ", "PPP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'R', CraftingItems.ROD.getItem(), 'G', ItemStacks.gearunit);
+		ReactorTiles.CONTROL.addCrafting("SGS", "RRR", "PPP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'R', CraftingItems.ROD.getItem(), 'G', ItemStacks.gearunit);
 		ReactorTiles.COOLANT.addCrafting("SPS", "GRG", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'G', Block.glass, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ItemStacks.compoundturb);
 		ReactorTiles.STEAMLINE.addSizedCrafting(3, "NPN", "NPN", "NPN", 'N', Block.cloth, 'P', ItemStacks.pipe);
@@ -136,6 +138,7 @@ public class ReactorRecipes {
 		ReactorTiles.ELECTROLYZER.addCrafting("SPS", "PRP", "BPB", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 		ReactorTiles.EXCHANGER.addCrafting("FPF", "GIG", "FPF", 'P', ItemStacks.pipe, 'I', ItemStacks.impeller, 'G', Item.ingotGold, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct());
 		ReactorTiles.STORAGE.addCrafting("SPS", "PCP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', Block.chest);
+		ReactorTiles.CPU.addCrafting("SCS", "CGC", "SCS", 'S', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', ItemStacks.gearunit);
 	}
 
 }

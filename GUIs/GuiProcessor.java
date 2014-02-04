@@ -16,7 +16,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerProcessor;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 
 public class GuiProcessor extends ReactorGuiBase {
 

@@ -51,7 +51,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.API.BlockColorInterface;
@@ -106,6 +106,9 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
+
+	public static final Fluid He = new Fluid("rc helium").setDensity(-1).setViscosity(6).setGaseous(true);
+	public static final Fluid He_hot = new Fluid("rc hot helium").setDensity(-1).setViscosity(6).setGaseous(true);
 
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
@@ -170,6 +173,8 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("lowpwater");
 		ReikaMystcraftHelper.disableFluidPage("hotsodium");
 
+		//TickRegistry.registerTickHandler(new VolcanicGasController(), Side.SERVER);
+
 		IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
 	}
 
@@ -199,36 +204,38 @@ public class ReactorCraft extends DragonAPIMod {
 	private static void setupLiquidIcons(TextureStitchEvent.Pre event) {
 		logger.log("Loading Liquid Icons");
 
-		Icon d2o = event.map.registerIcon("ReactorCraft:heavywater");
-		Icon hf = event.map.registerIcon("ReactorCraft:hf");
-		Icon uf6 = event.map.registerIcon("ReactorCraft:uf6");
+		if (event.map.textureType == 0) {
+			Icon d2o = event.map.registerIcon("ReactorCraft:heavywater");
+			Icon hf = event.map.registerIcon("ReactorCraft:hf");
+			Icon uf6 = event.map.registerIcon("ReactorCraft:uf6");
 
-		Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
-		Icon na = event.map.registerIcon("ReactorCraft:sodium");
-		Icon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
-		Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
-		Icon o = event.map.registerIcon("ReactorCraft:oxygen");
+			Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
+			Icon na = event.map.registerIcon("ReactorCraft:sodium");
+			Icon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
+			Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
+			Icon o = event.map.registerIcon("ReactorCraft:oxygen");
 
-		Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
-		Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
-		Icon plasma = event.map.registerIcon("ReactorCraft:plasma");
+			Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
+			Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
+			Icon plasma = event.map.registerIcon("ReactorCraft:plasma");
 
-		D2O.setIcons(d2o);
-		HF.setIcons(hf);
-		UF6.setIcons(uf6);
+			D2O.setIcons(d2o);
+			HF.setIcons(hf);
+			UF6.setIcons(uf6);
 
-		NH3.setIcons(nh3);
-		NA.setIcons(na);
-		CL.setIcons(cl);
-		O.setIcons(o);
+			NH3.setIcons(nh3);
+			NA.setIcons(na);
+			CL.setIcons(cl);
+			O.setIcons(o);
 
-		H2.setIcons(h2);
-		H3.setIcons(h3);
-		PLASMA.setIcons(plasma);
+			H2.setIcons(h2);
+			H3.setIcons(h3);
+			PLASMA.setIcons(plasma);
 
-		NH3_lo.setIcons(nh3);
-		H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
-		NA_hot.setIcons(nahot);
+			NH3_lo.setIcons(nh3);
+			H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
+			NA_hot.setIcons(nahot);
+		}
 	}
 
 	private static void addItems() {

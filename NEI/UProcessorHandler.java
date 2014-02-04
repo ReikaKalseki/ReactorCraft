@@ -30,7 +30,7 @@ import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 

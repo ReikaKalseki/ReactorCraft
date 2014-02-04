@@ -47,6 +47,6 @@ public class ItemRadiationCleaner extends ReactorItemBase implements ChargeableT
 
 	@Override
 	public void getSubItems(int id, CreativeTabs tab, List li) {
-		li.add(ReactorItems.CLEANUP.getStackOfMetadata(24000));
+		li.add(ReactorItems.CLEANUP.getStackOfMetadata(32000));
 	}
 }

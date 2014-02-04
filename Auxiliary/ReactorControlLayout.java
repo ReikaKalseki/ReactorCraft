@@ -1,12 +1,22 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import Reika.ReactorCraft.TileEntities.TileEntityCPU;
-import Reika.ReactorCraft.TileEntities.TileEntityControlRod;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -89,7 +99,21 @@ public class ReactorControlLayout {
 	@SideOnly(Side.CLIENT)
 	public Color getDisplayColorAtRelativePosition(int x, int z) {
 		TileEntityControlRod rod = this.getControlRodAtRelativePosition(x, z);
-		return rod != null ? rod.isActive() ? Color.GREEN : Color.RED : Color.DARK_GRAY;
+		if (rod != null) {
+			if (controller.getPower() >= this.getMinPower())
+				return rod.isActive() ? Color.GREEN : Color.RED;
+			else
+				return Color.GRAY;
+		}
+		return Color.DARK_GRAY;
+	}
+
+	public long getMinPower() {
+		return this.getPowerPerRod()*controls.size();
+	}
+
+	private long getPowerPerRod() {
+		return 1024;
 	}
 
 	@Override
@@ -106,6 +130,21 @@ public class ReactorControlLayout {
 			TileEntityControlRod rod = controls.get(li);
 			rod.drop();
 		}
+	}
+
+	public void clear() {
+		controls.clear();
+		maxX = minX = maxZ = minZ = 0;
+	}
+
+	public int getNumberRods() {
+		return controls.size();
+	}
+
+	public ArrayList<TileEntityControlRod> getAllRods() {
+		ArrayList<TileEntityControlRod> li = new ArrayList();
+		li.addAll(controls.values());
+		return li;
 	}
 
 }

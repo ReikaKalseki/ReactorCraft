@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 

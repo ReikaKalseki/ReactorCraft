@@ -22,9 +22,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RenderableDuct;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
 
@@ -151,8 +149,8 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			return true;
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-		if (tile instanceof PipeConnector)
-			return ((PipeConnector)tile).canConnectToPipeOnSide(MachineRegistry.PIPE, dir.getOpposite());
+		if (tile instanceof IFluidHandler)
+			return true;
 		return false;
 	}
 
@@ -214,7 +212,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						this.onIntake(te);
 					}
 				}
-				else if (te instanceof IFluidHandler && dir.offsetY != 0) {
+				else if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {

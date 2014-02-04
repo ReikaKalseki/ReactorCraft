@@ -15,15 +15,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 
-public class BlockInjectorMulti extends BlockMultiBlock {
+public class BlockHeaterMulti extends BlockMultiBlock {
 
-	public BlockInjectorMulti(int par1, Material par2Material) {
+	public BlockHeaterMulti(int par1, Material par2Material) {
 		super(par1, par2Material);
 	}
 
 	@Override
 	public int getNumberVariants() {
-		return 2;
+		return 4;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	@Override
 	protected String getIconBaseName() {
-		return "injector";
+		return "heater";
 	}
 
 	@Override

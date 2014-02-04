@@ -26,7 +26,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.BCPipeHandler;
 import Reika.DragonAPI.ModInteract.ThermalHandler;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class LiquidHandler {

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -46,7 +46,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
-		//steam = 1;
+		//steam = 3;
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
 	}
 

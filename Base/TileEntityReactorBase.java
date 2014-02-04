@@ -21,12 +21,13 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
@@ -169,5 +170,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			}
 		}
 		return li;
+	}
+
+	@Override
+	public final int getPacketDelay() {
+		return Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 }

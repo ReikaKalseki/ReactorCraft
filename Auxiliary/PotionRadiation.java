@@ -26,6 +26,17 @@ public class PotionRadiation extends Potion {
 
 	@Override
 	public void performEffect(EntityLivingBase e, int level) {
+		e.removePotionEffect(Potion.regeneration.id);
+		e.removePotionEffect(Potion.field_76443_y.id);
+		e.removePotionEffect(Potion.moveSpeed.id);
+		e.removePotionEffect(Potion.digSpeed.id);
+		e.removePotionEffect(Potion.damageBoost.id);
+		e.removePotionEffect(Potion.heal.id);
+		e.removePotionEffect(Potion.jump.id);
+		e.removePotionEffect(Potion.regeneration.id);
+		e.removePotionEffect(Potion.fireResistance.id);
+		e.removePotionEffect(Potion.resistance.id);
+		e.removePotionEffect(Potion.nightVision.id);
 		Random r = new Random();
 		float h = e.getHealth();
 		float mh = e.getMaxHealth();

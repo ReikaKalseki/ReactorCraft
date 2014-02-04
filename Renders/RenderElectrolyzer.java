@@ -19,7 +19,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelElectrolyzer;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 
 public class RenderElectrolyzer extends ReactorRenderBase

@@ -18,7 +18,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelCondenser;
-import Reika.ReactorCraft.TileEntities.TileEntityCondenser;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCondenser;
 
 public class RenderCondenser extends ReactorRenderBase
 {

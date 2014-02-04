@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 /** Reactor core blocks only. */
 public interface Temperatured {

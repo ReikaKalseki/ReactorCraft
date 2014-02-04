@@ -30,13 +30,13 @@ import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityCPU;
-import Reika.ReactorCraft.TileEntities.TileEntityCentrifuge;
-import Reika.ReactorCraft.TileEntities.TileEntityElectrolyzer;
-import Reika.ReactorCraft.TileEntities.TileEntitySynthesizer;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ReactorGuiHandler implements IGuiHandler {
@@ -65,7 +65,7 @@ public class ReactorGuiHandler implements IGuiHandler {
 			case STORAGE:
 				return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
 			case CPU:
-				return new CoreContainer(player, te);
+				return new CoreContainer(player, te).setAlwaysInteractable();
 			default:
 				return null;
 			}

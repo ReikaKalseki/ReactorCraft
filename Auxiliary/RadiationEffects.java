@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -28,17 +29,18 @@ public class RadiationEffects {
 
 	public static void applyEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
-			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 12000, 0));
+			e.addPotionEffect(RadiationEffects.getRadiationEffect(36000));
 	}
 
 	public static void applyPulseEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
-			e.addPotionEffect(new PotionEffect(ReactorCraft.radiation.id, 20, 0));
+			e.addPotionEffect(RadiationEffects.getRadiationEffect(20));
 	}
 
-	public static void contaminateArea(World world, int x, int y, int z, int range) {
+	public static void contaminateArea(World world, int x, int y, int z, int range, float density) {
 		Random r = new Random();
-		for (int i = 0; i < Math.sqrt(range); i++) {
+		int num = (int)(Math.sqrt(range)*density);
+		for (int i = 0; i < num; i++) {
 			int dx = x-range+r.nextInt(range*2+1);
 			int dy = y-range+r.nextInt(range*2+1);
 			int dz = z-range+r.nextInt(range*2+1);
@@ -131,6 +133,12 @@ public class RadiationEffects {
 			world.setBlock(x, y, z, id, meta+8, 3);
 			world.markBlockForRenderUpdate(x, y, z);
 		}
+	}
+
+	public static PotionEffect getRadiationEffect(int duration) {
+		PotionEffect pot = new PotionEffect(ReactorCraft.radiation.id, duration, 0);
+		pot.setCurativeItems(new ArrayList());
+		return pot;
 	}
 
 }

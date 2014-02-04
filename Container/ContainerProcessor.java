@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.ReactorCraft.TileEntities.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 
 public class ContainerProcessor extends CoreContainer {
 

@@ -7,17 +7,19 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerReceiver {
+public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerReceiver, Temperatured {
 
 	private final ReactorControlLayout layout = new ReactorControlLayout(this);
 	private final BlockArray reactor = new BlockArray();
@@ -26,34 +28,39 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 	private int torque;
 	private long power;
 
-	public static final int MINPOWER = 16384;
-	public static final int SCRAMPOWER = 65536;
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.updateTemperature(world, x, y, z);
 		if (reactor.isEmpty()) {
-			int r = 8;
-			reactor.recursiveAddWithBounds(world, x+1, y, z, ReactorBlocks.REACTOR.getBlockID(), x-r, y, z-r, x+r, y, z+r);
-			reactor.recursiveAddWithBounds(world, x-1, y, z, ReactorBlocks.REACTOR.getBlockID(), x-r, y, z-r, x+r, y, z+r);
-			reactor.recursiveAddWithBounds(world, x, y, z+1, ReactorBlocks.REACTOR.getBlockID(), x-r, y, z-r, x+r, y, z+r);
-			reactor.recursiveAddWithBounds(world, x, y, z-1, ReactorBlocks.REACTOR.getBlockID(), x-r, y, z-r, x+r, y, z+r);
+			layout.clear();
+			int r = 6;
+			int id = ReactorBlocks.REACTOR.getBlockID();
+			int id2 = ReactorBlocks.MODELREACTOR.getBlockID();
+			for (int i = 2; i < 6; i++)
+				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y, z-r, x+r, y, z+r, id, id2);
 			for (int i = 0; i < reactor.getSize(); i++) {
 				int[] xyz = reactor.getNthBlock(i);
 				int dx = xyz[0];
 				int dy = xyz[1];
 				int dz = xyz[2];
-				int id2 = world.getBlockId(dx, dy, dz);
-				int meta2 = world.getBlockMetadata(dx, dy, dz);
-				if (id2 == ReactorTiles.CONTROL.getBlockID() && meta2 == ReactorTiles.CONTROL.getBlockMetadata()) {
+				int idx = world.getBlockId(dx, dy, dz);
+				int metax = world.getBlockMetadata(dx, dy, dz);
+				if (idx == ReactorTiles.CONTROL.getBlockID() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {
 					TileEntityControlRod rod = (TileEntityControlRod)world.getBlockTileEntity(dx, dy, dz);
 					layout.addControlRod(rod);
 				}
 			}
 		}
-	}
 
-	public boolean canSCRAM() {
-		return power >= SCRAMPOWER;
+		if ((world.getTotalWorldTime()&16) == 16)
+			reactor.clear();
+
+		if (power < layout.getMinPower())
+			this.SCRAM();
+
+		if (temperature > this.getMaxTemperature() && power >= layout.getMinPower()*4) {
+			this.SCRAM();
+		}
 	}
 
 	public void SCRAM() {
@@ -141,6 +148,26 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 	public void noInputMachine() {
 		torque = omega = 0;
 		power = 0;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 800;
+	}
+
+	@Override
+	public boolean canDumpHeatInto(LiquidStates liq) {
+		return liq != LiquidStates.EMPTY;
 	}
 
 }

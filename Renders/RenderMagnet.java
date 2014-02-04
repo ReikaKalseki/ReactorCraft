@@ -20,7 +20,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityMagnet;
 
 public class RenderMagnet extends ReactorRenderBase
 {

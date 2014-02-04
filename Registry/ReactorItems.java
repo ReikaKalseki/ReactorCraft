@@ -29,6 +29,7 @@ import Reika.ReactorCraft.Items.ItemRadiationCleaner;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
+import Reika.ReactorCraft.Items.ItemRemoteControl;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public enum ReactorItems implements RegistryEnum {
@@ -48,7 +49,8 @@ public enum ReactorItems implements RegistryEnum {
 	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
 	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
-	MAGNET(100,		"item.magnet",			ItemReactorBasic.class);
+	MAGNET(100,		"item.magnet",			ItemReactorBasic.class),
+	REMOTE(101,		"item.remotecpu",		ItemRemoteControl.class);
 
 	private String name;
 	private Class itemClass;

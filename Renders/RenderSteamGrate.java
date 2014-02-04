@@ -18,7 +18,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelSteamGrate;
-import Reika.ReactorCraft.TileEntities.TileEntitySteamGrate;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamGrate;
 
 public class RenderSteamGrate extends ReactorRenderBase
 {

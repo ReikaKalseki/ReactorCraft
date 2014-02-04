@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -18,20 +18,22 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
-	private boolean lowered;
-	private int rodOffset;
+	private boolean lowered = true;
 	private Motions motion;
 
 	private static final int MINOFFSET = 0;
 	private static final int MAXOFFSET = 20;
 
+	private int rodOffset = MINOFFSET;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.moveRods();
+		this.updateTemperature(world, x, y, z);
 	}
 
 	private void moveRods() {
@@ -42,6 +44,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 			motion = null;
 			rodOffset = Math.max(MINOFFSET, rodOffset);
 			rodOffset = Math.min(MAXOFFSET, rodOffset);
+			lowered = rodOffset == MINOFFSET;
 		}
 	}
 
@@ -62,7 +65,10 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 		else {
 			motion = Motions.LOWERING;
 		}
-		lowered = !lowered;
+	}
+
+	public void setActive(boolean active) {
+		motion = active ? Motions.LOWERING : Motions.RAISING;
 	}
 
 	public void drop() {
@@ -75,7 +81,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		return this.isActive() ? ReikaRandomHelper.doWithChance(50) : false;
+		return this.isActive() ? ReikaRandomHelper.doWithChance(60) : false;
 	}
 
 	@Override
@@ -124,7 +130,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	@Override
 	public int getTextureState(ForgeDirection side) {
-		return side.offsetY != 0 && this.isActive() ? 1 : 0;
+		return this.isActive() ? 1 : 0;
 	}
 
 	public int getRodPosition() {
