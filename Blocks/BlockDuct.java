@@ -20,9 +20,9 @@ import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 
-public class BlockDuct extends BlockReactorTileModelled {
+public class BlockDuct extends BlockReactorTile {
 
-	private static final Icon[] pipeIcons = new Icon[2];
+	private static final Icon[][] pipeIcons = new Icon[2][2];
 
 	public BlockDuct(int ID, Material mat) {
 		super(ID, mat);
@@ -63,13 +63,17 @@ public class BlockDuct extends BlockReactorTileModelled {
 
 	@Override
 	public Icon getIcon(int s, int meta) {
-		return pipeIcons[meta];
+		s = Math.min(s, 1);
+		return pipeIcons[meta][s];
 	}
 
 	@Override
 	public void registerIcons(IconRegister ico) {
-		pipeIcons[0] = Block.hardenedClay.getIcon(1, 0);
-		pipeIcons[1] = Block.bedrock.getIcon(0, 0);
+		pipeIcons[0][0] = Block.hardenedClay.getIcon(1, 0);
+		pipeIcons[1][0] = Block.blockGold.getIcon(0, 0);
+
+		pipeIcons[0][1] = Block.glass.getIcon(0, 0);
+		pipeIcons[1][1] = RotaryCraft.blastglass.getIcon(0, 0);
 	}
 
 	@Override
@@ -81,5 +85,20 @@ public class BlockDuct extends BlockReactorTileModelled {
 	@Override
 	public int getRenderBlockPass() {
 		return 1;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public int getLightOpacity(World world, int x, int y, int z) {
+		return 0;
 	}
 }

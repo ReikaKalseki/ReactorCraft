@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class TileEntityMagneticPipe extends TileEntityReactorPiping {
 
@@ -27,12 +28,12 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping {
 
 	@Override
 	public Icon getBlockIcon() {
-		return Block.bedrock.getIcon(0, 0);
+		return Block.blockGold.getIcon(0, 0);
 	}
 
 	@Override
 	public Block getPipeBlockType() {
-		return Block.bedrock;
+		return Block.blockGold;
 	}
 
 	@Override
@@ -48,6 +49,11 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping {
 	@Override
 	protected void onIntake(TileEntity te) {
 
+	}
+
+	@Override
+	public Icon getGlassIcon() {
+		return RotaryCraft.blastglass.getIcon(0, 0);
 	}
 
 }

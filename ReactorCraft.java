@@ -31,6 +31,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
+import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
@@ -176,6 +177,10 @@ public class ReactorCraft extends DragonAPIMod {
 		//TickRegistry.registerTickHandler(new VolcanicGasController(), Side.SERVER);
 
 		IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
+
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockGold);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
 	}
 
 	@Override

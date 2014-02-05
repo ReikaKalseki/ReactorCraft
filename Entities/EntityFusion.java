@@ -35,7 +35,9 @@ public class EntityFusion extends InertEntity {
 	}
 
 	private void spawnNeutrons(World world, int x, int y, int z) {
-		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+		EntityFusionNeutron e = new EntityFusionNeutron(world, x, y, z, this.getRandomDirection());
+		if (!world.isRemote)
+			world.spawnEntityInWorld(e);
 	}
 
 	public ForgeDirection getRandomDirection() {
@@ -44,12 +46,12 @@ public class EntityFusion extends InertEntity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
 
 	}
 

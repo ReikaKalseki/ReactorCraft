@@ -45,10 +45,12 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 		return id != this.getMachine().getBlockID() || meta != this.getMachine().getBlockMetadata();
 	}
 
+	@Override
 	public boolean isValidFluid(Fluid f) {
 		return f.isGaseous();
 	}
 
+	@Override
 	protected void onIntake(TileEntity te) {
 
 	}
@@ -56,6 +58,11 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 	@Override
 	public Block getPipeBlockType() {
 		return Block.hardenedClay;
+	}
+
+	@Override
+	public Icon getGlassIcon() {
+		return Block.glass.getIcon(0, 0);
 	}
 
 }

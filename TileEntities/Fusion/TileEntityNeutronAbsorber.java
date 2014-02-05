@@ -15,6 +15,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Entities.EntityFusionNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
@@ -42,8 +43,11 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		temperature += 5;
-		return true;
+		if (e instanceof EntityFusionNeutron) {
+			temperature += 5;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

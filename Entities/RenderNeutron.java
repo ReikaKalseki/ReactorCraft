@@ -33,7 +33,7 @@ public class RenderNeutron extends Render
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		float var16 = 0.25F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
@@ -72,10 +72,11 @@ public class RenderNeutron extends Render
 	 * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
 	 */
 	@Override
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity e, double par2, double par4, double par6, float par8, float par9)
 	{
+		EntityNeutron n = (EntityNeutron)e;
 		if (ReactorOptions.VISIBLENEUTRONS.getState())
-			this.renderTheNeutron((EntityNeutron)par1Entity, par2, par4+0*0.5, par6, par8, par9);
+			this.renderTheNeutron(n, par2, par4+0*0.5, par6, par8, par9);
 	}
 
 	@Override

@@ -79,7 +79,7 @@ public class EntityPlasma extends ParticleEntity {
 	@Override
 	protected void onTick() {
 		if (ticksExisted > 1200)
-			this.setDead();
+			;//this.setDead();
 		if (rand.nextInt(5) == 0)
 			this.checkFusion();
 	}

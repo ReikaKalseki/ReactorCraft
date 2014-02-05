@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -174,6 +175,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	@Override
 	public final int getPacketDelay() {
-		return Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
+		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 }

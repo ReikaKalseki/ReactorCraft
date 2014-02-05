@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.RenderableDuct;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {

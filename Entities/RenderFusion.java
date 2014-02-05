@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -28,14 +27,10 @@ public class RenderFusion extends Render {
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		int var19 = er.getBrightnessForRender(par9);
-		int var20 = var19 % 65536;
-		int var21 = var19 / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		float var26 = 255.0F;
 		int var22 = (int)var26;
