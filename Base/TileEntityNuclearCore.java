@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -26,6 +27,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Event.ReactorMeltdownEvent;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -253,6 +255,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	}
 
 	protected void onMeltdown(World world, int x, int y, int z) {
+		MinecraftForge.EVENT_BUS.post(new ReactorMeltdownEvent(world, x, y, z));
 		if (world.isRemote)
 			return;
 		int r = 2;

@@ -10,10 +10,12 @@
 package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Event.ScramEvent;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
@@ -64,6 +66,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 	}
 
 	public void SCRAM() {
+		MinecraftForge.EVENT_BUS.post(new ScramEvent(this, temperature));
 		layout.SCRAM();
 	}
 

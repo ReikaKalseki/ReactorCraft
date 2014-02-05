@@ -67,7 +67,7 @@ public class RenderPlasma extends Render {
 		GL11.glPopMatrix();
 	}
 
-	private double getSize(EntityPlasma er) {
+	private double getSize(EntityPlasma er) {/*
 		int base = 2;
 		double time = (er.ticksExisted/2D)%50/5D;
 		double amt = 0;
@@ -78,7 +78,8 @@ public class RenderPlasma extends Render {
 			double add = time-5;
 			amt = base+1-add/4D-0.25-1;
 		}
-		return amt/2+1;
+		return amt/2+1;*/
+		return 2;
 	}
 
 	@Override
