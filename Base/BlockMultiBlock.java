@@ -28,7 +28,7 @@ public abstract class BlockMultiBlock extends Block {
 		this.setCreativeTab(ReactorCraft.tabRctr);
 	}
 
-	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z);
+	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection look);
 
 	public abstract int getNumberVariants();
 

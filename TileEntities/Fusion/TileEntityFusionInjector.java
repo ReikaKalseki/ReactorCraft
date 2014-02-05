@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -29,7 +28,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, TemperatureTE {
 
-	public static final int PLASMA_PER_FUSION = 250;
+	public static final int PLASMA_PER_FUSION = 25;
 
 	private HybridTank tank = new HybridTank("injector", 8000);
 
@@ -39,7 +38,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.canMake())
 			this.make(world, x, y, z);
-		tank.addLiquid(1101, ReactorCraft.PLASMA);
+		//tank.addLiquid(1101, ReactorCraft.PLASMA);
 	}
 
 	public void setFacing(ForgeDirection dir) {

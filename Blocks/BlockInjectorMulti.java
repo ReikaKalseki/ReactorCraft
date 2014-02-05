@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 
 public class BlockInjectorMulti extends BlockMultiBlock {
@@ -27,7 +28,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z) {
+	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		return false;
 	}
 

@@ -59,7 +59,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private void make() {
-		int a = 50;
+		int a = 250;
 		h2.removeLiquid(a);
 		h3.removeLiquid(a);
 		tank.addLiquid(2*a, FluidRegistry.getFluid("fusion plasma"));

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,7 +34,7 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int ID, CreativeTabs cr, List li)
 	{
-		for (int i = 1; i < this.getDataValues(); i++) {
+		for (int i = 0; i < this.getDataValues(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
 			li.add(item);
 		}
@@ -63,7 +64,7 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 	{
 		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 		if (flag) {
-			boolean full = this.getMultiBlockInstance().checkForFullMultiBlock(world, x, y, z);
+			boolean full = this.getMultiBlockInstance().checkForFullMultiBlock(world, x, y, z, ReikaPlayerAPI.getDirectionFromPlayerLook(player, false));
 			if (full) {
 
 			}
