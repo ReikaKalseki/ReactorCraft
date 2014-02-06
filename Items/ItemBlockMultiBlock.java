@@ -49,9 +49,8 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack is) {
-		int d = is.getItemDamage();
-		return super.getUnlocalizedName() + "." + d;
+	public String getItemDisplayName(ItemStack is) {
+		return this.getMultiBlockInstance().getName(is.getItemDamage());
 	}
 
 	@Override

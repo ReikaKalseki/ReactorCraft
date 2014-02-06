@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.Blocks;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -38,8 +37,13 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
-		return icons[0];
+	public int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta) {
+		return 0;
+	}
+
+	@Override
+	public int getItemTextureIndex(int meta) {
+		return meta;
 	}
 
 }

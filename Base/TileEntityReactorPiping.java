@@ -26,15 +26,15 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
 
-	private Fluid fluid;
-	private int level;
+	protected Fluid fluid;
+	protected int level;
 
 	private boolean[] connections = new boolean[6];
 
 	public abstract boolean isValidFluid(Fluid f);
 
 	@Override
-	public final void updateEntity(World world, int x, int y, int z, int meta) {
+	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.intakeFluid(world, x, y, z);
 		this.dumpContents(world, x, y, z);
 		if (this.getLevel() <= 0) {

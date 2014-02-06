@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.Fission;
+package Reika.ReactorCraft.TileEntities;
 
 import java.util.List;
 
@@ -26,9 +26,10 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 
-public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
+public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, PowerGenerator {
 
 	private int steam;
 
@@ -491,6 +492,16 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				return null;
 			return list[o];
 		}
+	}
+
+	@Override
+	public long getMaxPower() {
+		return this.getGenPower();
+	}
+
+	@Override
+	public long getCurrentPower() {
+		return this.getGenPower();
 	}
 
 }

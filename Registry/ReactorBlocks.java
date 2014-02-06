@@ -48,8 +48,8 @@ public enum ReactorBlocks implements RegistryEnum {
 	STEAM(			BlockSteam.class,											"Steam",					false),
 	DUCT(			BlockDuct.class,											"Duct",						false),
 	LINE(			BlockSteamLine.class,										"Line",						false),
-	INJECTORMULTI(	BlockInjectorMulti.class, 		ItemBlockMultiBlock.class,	"Injector Multiblock",		false),
-	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"Heaterr Multiblock",		false);
+	INJECTORMULTI(	BlockInjectorMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.injector",		false),
+	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.heater",		false);
 
 	private Class blockClass;
 	private String blockName;

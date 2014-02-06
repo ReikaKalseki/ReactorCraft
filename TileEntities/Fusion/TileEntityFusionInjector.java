@@ -22,11 +22,10 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, TemperatureTE {
+public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector {
 
 	public static final int PLASMA_PER_FUSION = 25;
 
@@ -128,31 +127,6 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public void updateTemperature(World world, int x, int y, int z, int meta) {
-
-	}
-
-	@Override
-	public void addTemperature(int temp) {
-		temperature += temp;
-	}
-
-	@Override
-	public int getTemperature() {
-		return temperature;
-	}
-
-	@Override
-	public int getThermalDamage() {
-		return temperature/1000;
-	}
-
-	@Override
-	public void overheat(World world, int x, int y, int z) {
 
 	}
 

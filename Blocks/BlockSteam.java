@@ -35,7 +35,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 
 public class BlockSteam extends Block {
 
