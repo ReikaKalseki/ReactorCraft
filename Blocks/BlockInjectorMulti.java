@@ -74,59 +74,14 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta) {
-		switch(meta) {
-		case 0:
+		if (meta == 0)
 			return 0;
-		case 1:
-			if (side == 5 || side == 4)
-				return 3;
-			return side == 1 ? 9 : 0;
-		case 2:
-			if (side == 5 || side == 4)
-				return 1;
-			return side == 2 ? 9 : 0;
-		case 3:
-			if (side == 5 || side == 4)
-				return 2;
-			return side == 3 ? 9 : 0;
-		case 4:
-			if (side == 5 || side == 4)
-				return 4;
-			return side == 3 ? 9 : 0;
-		case 5:
-			if (world.getBlockId(x, y-1, z) == blockID) {
-				if (side == 4)
-					return 7;
-				if (side == 5)
-					return 8;
-				return side == 3 || side == 1 ? 9 : 0;
-			}
-			else {
-				if (side == 4)
-					return 6;
-				if (side == 5)
-					return 5;
-				return side == 3 || side == 1 ? 9 : 0;
-			}
-		case 6:
-			if (world.getBlockId(x, y-1, z) == blockID) {
-				if (side == 5)
-					return 7;
-				if (side == 4)
-					return 8;
-				return side == 2 || side == 1 ? 9 : 0;
-			}
-			else {
-				if (side == 5)
-					return 6;
-				if (side == 4)
-					return 5;
-				return side == 2 || side == 1 ? 9 : 0;
-			}
-		case 7:
-			break;
-		}
-		return meta;
+		ForgeDirection dir = dirs[side];
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		int id = world.getBlockId(dx, dy, dz);
+		return id == blockID ? 0 : 9;
 	}
 
 	@Override
