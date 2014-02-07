@@ -34,6 +34,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	private int temperature;
 
+	public boolean hasMultiBlock = false;
+
 	private HybridTank tank = new HybridTank("fusionheater", 8000);
 	private HybridTank h2 = new HybridTank("fusionheaterh2", 4000);
 	private HybridTank h3 = new HybridTank("fusionheaterh3", 4000);
@@ -55,7 +57,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private boolean canMake() {
-		return temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty();
+		return hasMultiBlock && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty();
 	}
 
 	private void make() {
@@ -119,6 +121,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		tank.writeToNBT(NBT);
 		h2.writeToNBT(NBT);
 		h3.writeToNBT(NBT);
+
+		NBT.setBoolean("multi", hasMultiBlock);
 	}
 
 	@Override
@@ -130,6 +134,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		tank.readFromNBT(NBT);
 		h2.readFromNBT(NBT);
 		h3.readFromNBT(NBT);
+
+		hasMultiBlock = NBT.getBoolean("multi");
 	}
 
 	@Override

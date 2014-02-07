@@ -12,7 +12,6 @@ package Reika.ReactorCraft.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 
 public class BlockInjectorMulti extends BlockMultiBlock {
@@ -27,8 +26,18 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public boolean checkForFullMultiBlock(World world, int x, int y, int z) {
 		return false;
+	}
+
+	@Override
+	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	protected void breakMultiBlock(World world, int x, int y, int z) {
+
 	}
 
 	@Override
@@ -44,6 +53,11 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	public int getItemTextureIndex(int meta) {
 		return meta;
+	}
+
+	@Override
+	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
+		return true;
 	}
 
 }

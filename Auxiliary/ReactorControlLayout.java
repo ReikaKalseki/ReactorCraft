@@ -25,10 +25,10 @@ public class ReactorControlLayout {
 	private final TileEntityCPU controller;
 
 	private final HashMap<List<Integer>, TileEntityControlRod> controls = new HashMap();
-	private int minX;
-	private int maxX;
-	private int minZ;
-	private int maxZ;
+	private int minX = Integer.MAX_VALUE;
+	private int minZ = Integer.MAX_VALUE;
+	private int maxX = Integer.MIN_VALUE;
+	private int maxZ = Integer.MIN_VALUE;
 
 	public ReactorControlLayout(TileEntityCPU cpu) {
 		controller = cpu;
