@@ -12,6 +12,8 @@ package Reika.ReactorCraft.Base;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
@@ -19,6 +21,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
 
 public abstract class BlockMultiBlock extends Block {
@@ -28,10 +31,12 @@ public abstract class BlockMultiBlock extends Block {
 
 	public BlockMultiBlock(int par1, Material par2Material) {
 		super(par1, par2Material);
+		this.setResistance(10);
+		this.setHardness(2);
 		this.setCreativeTab(ReactorCraft.tabRctr);
 	}
 
-	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z);
+	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir);
 
 	@Override
 	public final void onNeighborBlockChange(World world, int x, int y, int z, int idn) {
@@ -41,10 +46,11 @@ public abstract class BlockMultiBlock extends Block {
 	protected abstract void breakMultiBlock(World world, int x, int y, int z);
 
 	@Override
-	public final void onBlockAdded(World world, int x, int y, int z) {
+	public final void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack is) {
 		if (!world.isRemote && this.canTriggerMultiBlockCheck(world, x, y, z, world.getBlockMetadata(x, y, z))) {
-			if (this.checkForFullMultiBlock(world, x, y, z))
-				this.onCreateFullMultiBlock(world, x, y, z);
+			if (e instanceof EntityPlayer)
+				if (this.checkForFullMultiBlock(world, x, y, z, ReikaPlayerAPI.getDirectionFromPlayerLook((EntityPlayer)e, false)))
+					this.onCreateFullMultiBlock(world, x, y, z);
 		}
 	}
 
@@ -55,7 +61,7 @@ public abstract class BlockMultiBlock extends Block {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			if (!world.isRemote && !this.checkForFullMultiBlock(world, dx, dy, dz)) {
+			if (!world.isRemote) {
 				this.breakMultiBlock(world, dx, dy, dz);
 			}
 		}
@@ -93,7 +99,7 @@ public abstract class BlockMultiBlock extends Block {
 
 	@Override
 	public final int damageDropped(int meta) {
-		return 0;
+		return meta&7;
 	}
 
 	public final String getName(int meta) {

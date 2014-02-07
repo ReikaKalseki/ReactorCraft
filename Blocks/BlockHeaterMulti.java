@@ -36,7 +36,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z) {
+	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID(), ReactorTiles.MAGNETPIPE.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
 		//ReikaJavaLibrary.pConsole(0);
@@ -123,7 +123,13 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, 4, k);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					if (block == null || block.get(0) != blockID || block.get(1) != 1) {
+						return false;
+					}
+
+					block = blocks.getBlockRelativeToMinXYZ(i, 5, k);
+					int meta2 = (i == 2 || k == 2) ? 3 : 2;
+					if (block == null || block.get(0) != blockID || block.get(1) != meta2) {
 						return false;
 					}
 
@@ -319,14 +325,27 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 4;
 				break;
 			case 1:
-				if (world.getBlockId(x+1, y, z+1) == blockID && world.getBlockMetadata(x+1, y, z+1) == 12)
+				if (world.getBlockId(x+1, y, z+1) == blockID && world.getBlockMetadata(x+1, y, z+1) == 9)
 					return 2;
-				if (world.getBlockId(x-1, y, z+1) == blockID && world.getBlockMetadata(x-1, y, z+1) == 12)
+				if (world.getBlockId(x-1, y, z+1) == blockID && world.getBlockMetadata(x-1, y, z+1) == 9)
 					return 3;
-				if (world.getBlockId(x+1, y, z-1) == blockID && world.getBlockMetadata(x+1, y, z-1) == 12)
+				if (world.getBlockId(x+1, y, z-1) == blockID && world.getBlockMetadata(x+1, y, z-1) == 9)
 					return 5;
-				if (world.getBlockId(x-1, y, z-1) == blockID && world.getBlockMetadata(x-1, y, z-1) == 12)
+				if (world.getBlockId(x-1, y, z-1) == blockID && world.getBlockMetadata(x-1, y, z-1) == 9)
 					return 4;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+						return 2;
+					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+						return 3;
+					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+						return 5;
+					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+						return 4;
+				}
 				break;
 			case 2:
 				if (world.getBlockId(x+1, y+1, z) == blockID && world.getBlockMetadata(x+1, y+1, z) == 12)
@@ -337,6 +356,15 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 3;
 				if (world.getBlockId(x-1, y-1, z) == blockID && world.getBlockMetadata(x-1, y-1, z) == 12)
 					return 2;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+						return 3;
+					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+						return 2;
+				}
 				break;
 			case 3:
 				if (world.getBlockId(x+1, y+1, z) == blockID && world.getBlockMetadata(x+1, y+1, z) == 12)
@@ -347,6 +375,15 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 2;
 				if (world.getBlockId(x-1, y-1, z) == blockID && world.getBlockMetadata(x-1, y-1, z) == 12)
 					return 3;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+						return 2;
+					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+						return 3;
+				}
 				break;
 			case 4:
 				if (world.getBlockId(x, y+1, z+1) == blockID && world.getBlockMetadata(x, y+1, z+1) == 12)
@@ -357,6 +394,15 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 2;
 				if (world.getBlockId(x, y-1, z-1) == blockID && world.getBlockMetadata(x, y-1, z-1) == 12)
 					return 3;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+						return 2;
+					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+						return 3;
+				}
 				break;
 			case 5:
 				if (world.getBlockId(x, y+1, z+1) == blockID && world.getBlockMetadata(x, y+1, z+1) == 12)
@@ -367,13 +413,21 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 3;
 				if (world.getBlockId(x, y-1, z-1) == blockID && world.getBlockMetadata(x, y-1, z-1) == 12)
 					return 2;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+						return 3;
+					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+						return 2;
+				}
 				break;
 			}
 		}
 		if (meta == 11) {
 			switch(side) {
 			case 0:
-			case 1:
 				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
 					return 8;
 				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 12)
@@ -382,6 +436,29 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 9;
 				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 12)
 					return 6;
+				break;
+			case 1:
+				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 9)
+					return 8;
+				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 9)
+					return 7;
+				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 9)
+					return 9;
+				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 9)
+					return 6;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+						return 8;
+					if (world.getBlockId(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+						return 7;
+					if (world.getBlockId(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+						return 9;
+					if (world.getBlockId(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+						return 6;
+				}
 				break;
 			case 2:
 				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
@@ -392,6 +469,13 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 6;
 				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+						return 9;
+				}
 				break;
 			case 3:
 				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
@@ -402,6 +486,13 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 6;
 				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+						return 9;
+				}
 				break;
 			case 4:
 				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 12)
@@ -412,6 +503,13 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 6;
 				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+						return 9;
+				}
 				break;
 			case 5:
 				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 12)
@@ -422,6 +520,13 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					return 6;
 				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
+
+				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
+					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+					if (world.getBlockId(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+						return 9;
+				}
 				break;
 			}
 		}

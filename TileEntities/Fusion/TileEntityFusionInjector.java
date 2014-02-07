@@ -33,11 +33,12 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	private ForgeDirection facing;
 
+	public boolean hasMultiBlock;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.canMake())
 			this.make(world, x, y, z);
-		//tank.addLiquid(1101, ReactorCraft.PLASMA);
 	}
 
 	public void setFacing(ForgeDirection dir) {
@@ -45,7 +46,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	}
 
 	private boolean canMake() {
-		if (tank.getLevel() < PLASMA_PER_FUSION)
+		if (!hasMultiBlock || tank.getLevel() < PLASMA_PER_FUSION)
 			return false;
 		return true;
 	}
@@ -139,6 +140,8 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("face", this.getFacing().ordinal());
+
+		NBT.setBoolean("multi", hasMultiBlock);
 	}
 
 	@Override
@@ -150,6 +153,8 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		tank.readFromNBT(NBT);
 
 		facing = dirs[NBT.getInteger("face")];
+
+		hasMultiBlock = NBT.getBoolean("multi");
 	}
 
 }
