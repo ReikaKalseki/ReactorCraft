@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.Fission;
+package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -57,6 +57,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 			tank.removeLiquid(WATER_PER_STEAM);
 			//ReikaJavaLibrary.pConsole(WATER_PER_STEAM);
 			temperature -= 5;
+			//ReikaJavaLibrary.pConsole(System.currentTimeMillis(), Side.SERVER);
 		}
 
 		if (steam <= 0) {

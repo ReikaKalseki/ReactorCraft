@@ -20,19 +20,20 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityMagnet;
+import Reika.ReactorCraft.Models.ModelMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
 
 public class RenderMagnet extends ReactorRenderBase
 {
-	//private ModelMagnet MagnetModel = new ModelMagnet();
+	private ModelMagnet MagnetModel = new ModelMagnet();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityMagnetAt(TileEntityMagnet tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityMagnetAt(TileEntityToroidMagnet tile, double par2, double par4, double par6, float par8)
 	{
-		//ModelMagnet var14;
-		//var14 = MagnetModel;
+		ModelMagnet var14;
+		var14 = MagnetModel;
 
 		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/magnet.png");
 
@@ -44,8 +45,20 @@ public class RenderMagnet extends ReactorRenderBase
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;
 		float var13;
-
-		//var14.renderAll(null, 0);
+		float ang = 90-tile.getAngle();
+		double s = 0.4;
+		double d = 0.6;
+		if (!tile.isInWorld()) {
+			GL11.glTranslated(0, d, 0);
+			GL11.glScaled(s, s, s);
+		}
+		GL11.glRotated(ang, 0, 1, 0);
+		var14.renderAll(null, 0, 0);
+		GL11.glRotated(-ang, 0, 1, 0);
+		if (!tile.isInWorld()) {
+			GL11.glScaled(1/s, 1/s, 1/s);
+			GL11.glTranslated(0, -d, 0);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -58,15 +71,15 @@ public class RenderMagnet extends ReactorRenderBase
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntityMagnetAt((TileEntityMagnet)tile, par2, par4, par6, par8);
+			this.renderTileEntityMagnetAt((TileEntityToroidMagnet)tile, par2, par4, par6, par8);
 		if (((TileEntityReactorBase) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			//IORenderer.renderIO(tile, par2, par4, par6);
 			//IOAPI.renderIO((ShaftMachine)tile, par2, par4, par6);
-			this.renderAngleLine((TileEntityMagnet)tile, par2, par4, par6);
+			this.renderAngleLine((TileEntityToroidMagnet)tile, par2, par4, par6);
 		}
 	}
 
-	private void renderAngleLine(TileEntityMagnet tile, double par2, double par4, double par6) {
+	private void renderAngleLine(TileEntityToroidMagnet tile, double par2, double par4, double par6) {
 		if (tile == null)
 			return;
 		if (!tile.isInWorld())

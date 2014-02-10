@@ -15,24 +15,25 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Models.ModelSteamGrate;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
+import Reika.ReactorCraft.Models.ModelSolenoid;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 
-public class RenderSteamGrate extends ReactorRenderBase
+public class RenderSolenoid extends ReactorRenderBase
 {
-	private ModelSteamGrate SteamGrateModel = new ModelSteamGrate();
+	private ModelSolenoid SolenoidModel = new ModelSolenoid();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntitySteamGrateAt(TileEntitySteamGrate tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntitySolenoidMagnetAt(TileEntitySolenoidMagnet tile, double par2, double par4, double par6, float par8)
 	{
-		ModelSteamGrate var14;
-		var14 = SteamGrateModel;
+		ModelSolenoid var14;
+		var14 = SolenoidModel;
 
-		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/steamgrate.png");
+		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/solenoid.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -43,7 +44,19 @@ public class RenderSteamGrate extends ReactorRenderBase
 		int var11 = 0;
 		float var13;
 
-		var14.renderAll(null, 0, 0);
+		double s = 0.4;
+		double d = 0.6;
+		if (!tile.isInWorld()) {
+			GL11.glTranslated(0, d, 0);
+			GL11.glScaled(s, s, s);
+		}
+
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.canRenderCoil() && tile.hasWorldObj()), -tile.phi, 0);
+
+		if (!tile.isInWorld()) {
+			GL11.glScaled(1/s, 1/s, 1/s);
+			GL11.glTranslated(-0, -d, -0);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -56,11 +69,11 @@ public class RenderSteamGrate extends ReactorRenderBase
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
-			this.renderTileEntitySteamGrateAt((TileEntitySteamGrate)tile, par2, par4, par6, par8);
+			this.renderTileEntitySolenoidMagnetAt((TileEntitySolenoidMagnet)tile, par2, par4, par6, par8);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "steamgrate.png";
+		return "storage.png";
 	}
 }

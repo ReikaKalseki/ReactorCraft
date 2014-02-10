@@ -46,19 +46,18 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	}
 
 	private boolean canMake() {
-		if (!hasMultiBlock || tank.getLevel() < PLASMA_PER_FUSION)
+		if (!hasMultiBlock || tank.isEmpty())
 			return false;
 		return true;
 	}
 
 	private void make(World world, int x, int y, int z) {
 		this.createPlasma(world, x, y, z);
-		tank.removeLiquid(PLASMA_PER_FUSION);
+		tank.removeLiquid(1);
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {
-		EntityPlasma e = new EntityPlasma(world);
-		e.setPosition(x+0.5, y+0.5, z+0.5);
+		EntityPlasma e = new EntityPlasma(world, x+0.5, y+0.5, z+0.5);
 		e.setTarget(x+this.getFacing().offsetX, z+this.getFacing().offsetZ);
 		if (!world.isRemote)
 			world.spawnEntityInWorld(e);
@@ -135,8 +134,6 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		NBT.setInteger("temp", temperature);
-
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("face", this.getFacing().ordinal());
@@ -147,8 +144,6 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-
-		temperature = NBT.getInteger("temp");
 
 		tank.readFromNBT(NBT);
 

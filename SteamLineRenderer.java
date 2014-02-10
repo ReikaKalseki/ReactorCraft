@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class SteamLineRenderer implements ISimpleBlockRenderingHandler {

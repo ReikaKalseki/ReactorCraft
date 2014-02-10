@@ -135,6 +135,7 @@ public class ReactorCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
+		proxy.registerSounds();
 
 		this.addBlocks();
 		this.addItems();

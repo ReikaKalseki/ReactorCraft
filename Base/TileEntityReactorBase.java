@@ -19,18 +19,25 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.RotaryCraft.API.ShaftMachine;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.ILuaContext;
+import dan200.computer.api.IPeripheral;
 
-public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
+public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable, IPeripheral {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -170,11 +177,47 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 				li.add(s);
 			}
 		}
+		if (this instanceof TileEntitySolenoidMagnet) {
+			ShaftPowerReceiver sp = (ShaftPowerReceiver)this;
+			String pre = ReikaEngLibrary.getSIPrefix(sp.getPower());
+			double base = ReikaMathLibrary.getThousandBase(sp.getPower());
+			li.add(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+		}
 		return li;
 	}
 
 	@Override
 	public final int getPacketDelay() {
 		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
+	}
+
+	@Override
+	public String[] getMethodNames() {
+		return null;
+	}
+
+	@Override
+	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+		return null;
+	}
+
+	@Override
+	public boolean canAttachToSide(int side) {
+		return false;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer) {
+
+	}
+
+	@Override
+	public void detach(IComputerAccess computer) {
+
+	}
+
+	@Override
+	public String getType() {
+		return this.getName().replaceAll(" ", "");
 	}
 }

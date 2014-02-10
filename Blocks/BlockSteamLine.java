@@ -17,7 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class BlockSteamLine extends BlockReactorTileModelled {
 

@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.InertEntity;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 
 public class EntityFusion extends InertEntity {
 
@@ -25,8 +26,10 @@ public class EntityFusion extends InertEntity {
 		super(world);
 		this.setPosition(x, y, z);
 		//world.setBlock(MathHelper.floor_double(x), MathHelper.floor_double(y)+1, MathHelper.floor_double(z), 51);
-		worldObj.playSoundEffect(posX, posY, posZ, "random.explode", 0.2F, 0.1F);
-		this.spawnNeutrons(worldObj, MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+		//worldObj.playSoundEffect(posX, posY, posZ, "random.explode", 0.2F, 0.1F);
+		for (int i = 0; i < 3; i++)
+			this.spawnNeutrons(worldObj, MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+		ReactorSounds.FUSION.playSound(worldObj, posX, posY, posZ, 1, 1);
 	}
 
 	@Override

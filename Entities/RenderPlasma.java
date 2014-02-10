@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -18,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
@@ -31,21 +31,22 @@ public class RenderPlasma extends Render {
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
 		float var26 = 255.0F;
-		Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+		ReikaRenderHelper.disableEntityLighting();
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		double size = this.getSize(er);
-		ReikaTextureHelper.bindTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/plasma.png");
+		ReikaTextureHelper.bindTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/plasma7.png");
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		//GL11.glDisable(GL11.GL_CULL_FACE);
+		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+		//GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
 		v5.addVertexWithUV(0, 0, 0, 0, 0);
@@ -58,10 +59,10 @@ public class RenderPlasma extends Render {
 		GL11.glTranslated(0.5, 0.5, 0);
 		GL11.glScaled(1D/size, 1D/size, 1);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
+		ReikaRenderHelper.enableEntityLighting();
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		//GL11.glEnable(GL11.GL_CULL_FACE);
+		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
@@ -79,7 +80,7 @@ public class RenderPlasma extends Render {
 			amt = base+1-add/4D-0.25-1;
 		}
 		return amt/2+1;*/
-		return 2;
+		return 1.5;
 	}
 
 	@Override

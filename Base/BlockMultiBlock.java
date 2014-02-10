@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.List;
+
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -24,9 +29,9 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
 
-public abstract class BlockMultiBlock extends Block {
+public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 
-	private final Icon[] icons = new Icon[16];
+	private final Icon[] icons = new Icon[this.getNumberTextures()];
 	protected static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public BlockMultiBlock(int par1, Material par2Material) {
@@ -35,6 +40,8 @@ public abstract class BlockMultiBlock extends Block {
 		this.setHardness(2);
 		this.setCreativeTab(ReactorCraft.tabRctr);
 	}
+
+	public abstract int getNumberTextures();
 
 	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir);
 
@@ -82,7 +89,7 @@ public abstract class BlockMultiBlock extends Block {
 
 	@Override
 	public final void registerIcons(IconRegister ico) {
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < this.getNumberTextures(); i++) {
 			String name = this.getIconBaseName()+"_"+i;
 			icons[i] = ico.registerIcon("reactorcraft:multi/"+name);
 		}
@@ -91,7 +98,7 @@ public abstract class BlockMultiBlock extends Block {
 	@Override
 	public final Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
 		int index = this.getTextureIndex(world, x, y, z, side, world.getBlockMetadata(x, y, z));
-		index = Math.min(16, index); //safety net
+		index = Math.max(0, Math.min(this.getNumberTextures(), index)); //safety net
 		return icons[index];
 	}
 
@@ -115,5 +122,25 @@ public abstract class BlockMultiBlock extends Block {
 	}
 
 	public abstract boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta);
+
+	@Override
+	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		return null;
+	}
+
+	@Override
+	public final List<String> getWailaHead(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		return tip;
+	}
+
+	@Override
+	public final List<String> getWailaBody(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		return tip;
+	}
+
+	@Override
+	public final List<String> getWailaTail(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		return tip;
+	}
 
 }

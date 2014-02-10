@@ -11,6 +11,8 @@ package Reika.ReactorCraft;
 
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Entities.EntityFusion;
@@ -22,6 +24,7 @@ import Reika.ReactorCraft.Entities.RenderNeutron;
 import Reika.ReactorCraft.Entities.RenderPlasma;
 import Reika.ReactorCraft.Entities.RenderRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -38,7 +41,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerSounds() {
-		//MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, SoundRegistry.soundList));
+		MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, ReactorSounds.soundList, ReactorSounds.SOUND_FOLDER));
 	}
 
 	@Override

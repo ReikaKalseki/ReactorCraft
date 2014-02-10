@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -84,11 +85,11 @@ public class ItemReactorPlacer extends Item {
 			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
 		}
 		if (te instanceof Temperatured) {
-			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 			((Temperatured)te).setTemperature(Tb);
 		}
 		else if (te instanceof ThermalMachine) {
-			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 			((ThermalMachine)te).setTemperature(Tb);
 		}
 		if (te instanceof ShaftMachine) {

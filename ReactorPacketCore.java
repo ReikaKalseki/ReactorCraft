@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorPackets;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
@@ -59,7 +60,7 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 			packetType = PacketTypes.getPacketType(inputStream.readInt());
 			switch(packetType) {
 			case SOUND:
-				//SoundRegistry.playSoundPacket(inputStream);
+				ReactorSounds.playSoundPacket(inputStream);
 				return;
 			case STRING:
 				control = inputStream.readInt();

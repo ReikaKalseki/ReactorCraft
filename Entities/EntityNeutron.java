@@ -19,6 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -70,6 +71,9 @@ public class EntityNeutron extends ParticleEntity {
 				if (te instanceof ReactorCoreTE) {
 					return ((ReactorCoreTE)te).onNeutron(this, world, x, y, z);
 				}
+			}
+			else if (b instanceof NeutronBlock) {
+				return ((NeutronBlock) b).onNeutron(this, world, x, y, z);
 			}
 
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {

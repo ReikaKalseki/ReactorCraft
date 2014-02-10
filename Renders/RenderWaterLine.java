@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class RenderWaterLine extends ReactorRenderBase {
 

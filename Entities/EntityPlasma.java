@@ -19,13 +19,32 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
-public class EntityPlasma extends ParticleEntity {
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData {
 
 	private int targetX;
 	private int targetZ;
 
-	public EntityPlasma(World par1World) {
-		super(par1World);
+	private double originX;
+	private double originY;
+	private double originZ;
+
+	public int magnetOrdinal = -1;
+
+	public EntityPlasma(World world) {
+		super(world);
+	}
+
+	public EntityPlasma(World world, double x, double y, double z) {
+		super(world);
+		originX = x;
+		originY = y;
+		originZ = z;
+		this.setPosition(x, y, z);
 	}
 
 	@Override
@@ -80,13 +99,32 @@ public class EntityPlasma extends ParticleEntity {
 	protected void onTick() {
 		if (ticksExisted > 1200)
 			;//this.setDead();
-		if (rand.nextInt(5) == 0)
+		if (!worldObj.isRemote && rand.nextInt(12) == 0)
 			this.checkFusion();
+		motionY = 0;
+		posY = originY;
+
+		if (Math.abs(originX-posX)+Math.abs(originY-posY)+Math.abs(originZ-posZ) > 100)
+			this.setDead();
 	}
 
 	@Override
 	public double getHitboxSize() {
 		return 0.5;
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		data.writeDouble(originX);
+		data.writeDouble(originY);
+		data.writeDouble(originZ);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		originX = data.readDouble();
+		originY = data.readDouble();
+		originZ = data.readDouble();
 	}
 
 }

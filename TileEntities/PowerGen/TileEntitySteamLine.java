@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.Fission;
+package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -95,8 +95,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		int dS = te.steam-steam;
 		if (dS > 0) {
 			//ReikaJavaLibrary.pConsole(steam+":"+te.steam);
-			steam += dS/4+1;
-			te.steam -= dS/4+1;
+			steam += dS/2+1;
+			te.steam -= dS/2+1;
 			fluid = te.fluid;
 		}
 	}

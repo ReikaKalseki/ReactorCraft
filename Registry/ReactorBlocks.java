@@ -26,6 +26,7 @@ import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
+import Reika.ReactorCraft.Blocks.BlockSolenoidMulti;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Blocks.BlockSteamLine;
 import Reika.ReactorCraft.Items.ItemBlockFluorite;
@@ -49,7 +50,8 @@ public enum ReactorBlocks implements RegistryEnum {
 	DUCT(			BlockDuct.class,											"Duct",						false),
 	LINE(			BlockSteamLine.class,										"Line",						false),
 	INJECTORMULTI(	BlockInjectorMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.injector",		false),
-	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.heater",		false);
+	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.heater",		false),
+	SOLENOIDMULTI(	BlockSolenoidMulti.class,		ItemBlockMultiBlock.class,	"multiblock.solenoid",		false);
 
 	private Class blockClass;
 	private String blockName;

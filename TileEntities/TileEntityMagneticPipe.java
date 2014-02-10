@@ -73,11 +73,8 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 
-		chargeTimer.update();
-		if (chargeTimer.checkCap()) {
-			this.distributeCharge(world, x, y, z);
-			this.updateCharge(world, x, y, z);
-		}
+		this.distributeCharge(world, x, y, z);
+		this.updateCharge(world, x, y, z);
 
 		if (charge <= 0) {
 			charge = 0;

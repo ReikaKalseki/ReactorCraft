@@ -38,63 +38,83 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID(), ReactorTiles.MAGNETPIPE.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
 		//ReikaJavaLibrary.pConsole(0);
-		if (!this.checkCorners(blocks))
+		if (!this.checkCorners(world, x, y, z, blocks))
 			return false;
 		//ReikaJavaLibrary.pConsole(1);
-		if (!this.checkEdges(blocks))
+		if (!this.checkEdges(world, x, y, z, blocks))
 			return false;
 		//ReikaJavaLibrary.pConsole(2);
-		if (!this.checkCore(blocks))
+		if (!this.checkCore(world, x, y, z, blocks))
 			return false;
 		//ReikaJavaLibrary.pConsole(3);
-		if (!this.checkFaces(blocks))
+		if (!this.checkFaces(world, x, y, z, blocks))
 			return false;
 		//ReikaJavaLibrary.pConsole(4);
+		if (!this.checkPipe(world, x, y, z, blocks))
+			return false;
+		//ReikaJavaLibrary.pConsole(5);
 		return true;
 	}
 
-	private boolean checkCore(StructuredBlockArray blocks) {
+	private boolean checkPipe(World world, int x, int y, int z, StructuredBlockArray blocks) {
+		int mx = blocks.getMinX();
+		int my = blocks.getMinY();
+		int mz = blocks.getMinZ();
+		for (int i = 3; i <= 6; i++) {
+			if (ReactorTiles.getTE(world, mx+2, my+i, mz+2) != ReactorTiles.MAGNETPIPE)
+				return false;
+		}
+		return true;
+	}
+
+	private boolean checkCore(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		int total = 0;
 		int lens = 0;
 		for (int i = 1; i < 4; i++) {
 			for (int j = 1; j < 4; j++) {
 				for (int k = 1; k < 4; k++) {
-					List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, j, k);
-					int x = blocks.getMinX()+i;
-					int y = blocks.getMinY()+j;
-					int z = blocks.getMinZ()+k;
-					if (block == null) {
-						if (MachineRegistry.getMachine(blocks.world, x, y, z) != MachineRegistry.PIPE)
+					//ReikaJavaLibrary.pConsole(i+":"+j+":"+k);
+					if (i == 2 && k == 2 && j == 3) {
+						int dx = blocks.getMinX()+i;
+						int dy = blocks.getMinY()+j;
+						int dz = blocks.getMinZ()+k;
+						if (ReactorTiles.getTE(blocks.world, dx, dy, dz) != ReactorTiles.MAGNETPIPE)
 							return false;
 					}
 					else {
-						int id = block.get(0);
-						int meta = block.get(1);
-						if (i == 2 && j == 2 && k == 2) {
-							if (id != ReactorTiles.HEATER.getBlockID() || meta != ReactorTiles.HEATER.getBlockMetadata())
-								return false;
-						}
-						else if (i == 2 && k == 2 && j == 3) {
-							if (id != ReactorTiles.MAGNETPIPE.getBlockID() || meta != ReactorTiles.MAGNETPIPE.getBlockMetadata())
+						List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, j, k);
+						int dx = blocks.getMinX()+i;
+						int dy = blocks.getMinY()+j;
+						int dz = blocks.getMinZ()+k;
+						if (block == null) {
+							if (MachineRegistry.getMachine(blocks.world, dx, dy, dz) != MachineRegistry.PIPE)
 								return false;
 						}
 						else {
-							if (id == blockID) {
-								if (meta > 1)
-									return false;
-								else
-									total++;
-								if (meta == 0)
-									lens++;
-							}
-							else if (MachineRegistry.getMachineFromIDandMetadata(id, meta) == MachineRegistry.PIPE) {
-								if (j != 2)
+							int id = block.get(0);
+							int meta = block.get(1);
+							if (i == 2 && j == 2 && k == 2) {
+								if (id != ReactorTiles.HEATER.getBlockID() || meta != ReactorTiles.HEATER.getBlockMetadata())
 									return false;
 							}
 							else {
-								return false;
+								if (id == blockID) {
+									if (meta > 1)
+										return false;
+									else
+										total++;
+									if (meta == 0)
+										lens++;
+								}
+								else if (MachineRegistry.getMachineFromIDandMetadata(id, meta) == MachineRegistry.PIPE) {
+									if (j != 2)
+										return false;
+								}
+								else {
+									return false;
+								}
 							}
 						}
 					}
@@ -104,15 +124,15 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		return total >= 22 && lens == 1;
 	}
 
-	private boolean checkFaces(StructuredBlockArray blocks) {
+	private boolean checkFaces(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		for (int i = 1; i < 4; i++) {
 			for (int k = 1; k < 4; k++) {
 
 				if (i == 2 && k == 2) {
-					int x = blocks.getMinX()+i;
-					int y = blocks.getMinY()+4;
-					int z = blocks.getMinZ()+k;
-					if (ReactorTiles.getTE(blocks.world, x, y, z) != ReactorTiles.MAGNETPIPE) {
+					int dx = blocks.getMinX()+i;
+					int dy = blocks.getMinY()+4;
+					int dz = blocks.getMinZ()+k;
+					if (ReactorTiles.getTE(blocks.world, dx, dy, dz) != ReactorTiles.MAGNETPIPE) {
 						return false;
 					}
 				}
@@ -158,7 +178,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		return true;
 	}
 
-	private boolean checkEdges(StructuredBlockArray blocks) {
+	private boolean checkEdges(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		for (int i = 1; i < 4; i++) {
 			List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
 			if (block == null || block.get(0) != blockID || block.get(1) != 3)
@@ -211,8 +231,9 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		return true;
 	}
 
-	private boolean checkCorners(StructuredBlockArray blocks) {
+	private boolean checkCorners(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		List<Integer> block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
+		//ReikaJavaLibrary.pConsole(blocks.getMinX()+", "+blocks.getMinY()+", "+blocks.getMinZ());
 		if (block == null || block.get(0) != blockID || block.get(1) != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 0, 0);
@@ -297,7 +318,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 
 	@Override
 	public boolean isOpaque(int meta) {
-		return meta != 0;
+		return meta != 0 && meta != 8;
 	}
 
 	@Override
@@ -547,6 +568,11 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
 		return true;
+	}
+
+	@Override
+	public int getNumberTextures() {
+		return 13;
 	}
 
 }

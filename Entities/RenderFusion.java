@@ -37,15 +37,17 @@ public class RenderFusion extends Render {
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float size = 2-er.ticksExisted/10F;
-		ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/fusion.png");
+		ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/fusion2.png");
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
-		ReikaRenderHelper.disableLighting();
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		ReikaRenderHelper.disableEntityLighting();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		//GL11.glDisable(GL11.GL_CULL_FACE);
+		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+		//GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
 		v5.setColorOpaque(127, 127, 127);
@@ -58,10 +60,11 @@ public class RenderFusion extends Render {
 
 		GL11.glTranslated(0.5, 0.5, 0);
 		GL11.glScaled(1D/size, 1D/size, 1);
-		ReikaRenderHelper.enableLighting();
+		ReikaRenderHelper.enableEntityLighting();
+		GL11.glEnable(GL11.GL_LIGHTING);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		//GL11.glEnable(GL11.GL_CULL_FACE);
+		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

@@ -7,24 +7,27 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -54,6 +57,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int damage;
 
+	private StepTimer soundTimer = new StepTimer(41);
+
 	public int getDamage() {
 		return damage;
 	}
@@ -66,6 +71,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
+		soundTimer.update();
+
 		this.getIOSides(world, x, y, z, meta);
 		this.readSurroundings(world, x, y, z, meta);
 		this.followHead(world, x, y, z, meta);
@@ -79,6 +86,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		if (omega == 0) {
 			phi = 0;
 			steam = 0;
+		}
+		else {
+			if (soundTimer.checkCap() && this.getStage() == 0)
+				ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
 		}
 
 		steam *= this.getDamageEfficiency();
@@ -318,16 +329,18 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		for (int i = 0; i < li.size(); i++) {
 			EntityLivingBase e = li.get(i);
 			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
-				if (!world.isRemote) {
-					Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
-					e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
-					this.breakTurbine();
+				if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)) {
+					if (!world.isRemote) {
+						Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
+						e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);
+						this.breakTurbine();
+					}
+					e.motionX += 0.4*(e.posX-x-0.5+0.1)+rand.nextDouble()*0.1;
+					e.motionY += 0.4*(e.posY-y-0.5+0.1);
+					e.motionZ += 0.4*(e.posZ-z-0.5+0.1)+rand.nextDouble()*0.1;
+					if (inter == null || inter.maxSpeed > Interference.MOB.maxSpeed)
+						inter = Interference.MOB;
 				}
-				e.motionX += 0.4*(e.posX-x-0.5+0.1)+rand.nextDouble()*0.1;
-				e.motionY += 0.4*(e.posY-y-0.5+0.1);
-				e.motionZ += 0.4*(e.posZ-z-0.5+0.1)+rand.nextDouble()*0.1;
-				if (inter == null || inter.maxSpeed > Interference.MOB.maxSpeed)
-					inter = Interference.MOB;
 			}
 		}
 

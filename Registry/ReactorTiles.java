@@ -26,25 +26,26 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorPump;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamGrate;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityMagnet;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityNeutronAbsorber;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
@@ -71,19 +72,19 @@ public enum ReactorTiles {
 	GRATE("machine.grate", 						ReactorBlocks.MODELREACTOR,		TileEntitySteamGrate.class, 	3, "RenderSteamGrate"),
 	PUMP("machine.reactorpump", 				ReactorBlocks.MODELREACTOR,		TileEntityReactorPump.class, 	4, "RenderReactorPump"),
 	SYNTHESIZER("machine.synthesizer", 			ReactorBlocks.MACHINE,			TileEntitySynthesizer.class, 	1),
-	MAGNET("machine.magnet", 					ReactorBlocks.MODELREACTOR,		TileEntityMagnet.class, 		5, "RenderMagnet"),
+	MAGNET("machine.magnet", 					ReactorBlocks.MODELREACTOR,		TileEntityToroidMagnet.class, 	5, "RenderMagnet"),
 	ELECTROLYZER("machine.electrolyzer", 		ReactorBlocks.MODELMACHINE,		TileEntityElectrolyzer.class, 	5, "RenderElectrolyzer"),
 	TRITIZER("machine.tritizer", 				ReactorBlocks.REACTOR,			TileEntityTritizer.class, 		4),
 	BREEDER("machine.breedercore", 				ReactorBlocks.REACTOR,			TileEntityBreederCore.class, 	5),
 	SODIUMBOILER("machine.sodiumboiler", 		ReactorBlocks.MACHINE,			TileEntitySodiumHeater.class, 	6),
 	EXCHANGER("machine.exchanger", 				ReactorBlocks.MODELMACHINE,		TileEntityHeatExchanger.class, 	4, "RenderExchanger"),
 	STORAGE("machine.storage", 					ReactorBlocks.MODELMACHINE,		TileEntityWasteStorage.class,	3, "RenderWasteStorage"),
-	INJECTOR("machine.injector", 				ReactorBlocks.REACTOR,			TileEntityFusionInjector.class, 7, ""),
-	HEATER("machine.fusionheater", 				ReactorBlocks.REACTOR,			TileEntityFusionHeater.class, 	8, ""),
+	INJECTOR("machine.injector", 				ReactorBlocks.REACTOR,			TileEntityFusionInjector.class, 7),
+	HEATER("machine.fusionheater", 				ReactorBlocks.REACTOR,			TileEntityFusionHeater.class, 	8),
 	GASPIPE("machine.gasduct", 					ReactorBlocks.DUCT,				TileEntityGasDuct.class, 		0, "DuctRenderer"),
-	//IONIZER("machine.ionizer", 				ReactorBlocks.IONIZER,			TileEntityIonizer.class, 		8, ""),
 	MAGNETPIPE("machine.magnetpipe", 			ReactorBlocks.DUCT,				TileEntityMagneticPipe.class, 	1, "DuctRenderer"),
-	ABSORBER("machine.absorber",				ReactorBlocks.REACTOR,			TileEntityNeutronAbsorber.class,1);
+	ABSORBER("machine.absorber",				ReactorBlocks.REACTOR,			TileEntityNeutronAbsorber.class,1),
+	SOLENOID("machine.solenoid",				ReactorBlocks.MODELREACTOR,		TileEntitySolenoidMagnet.class,	9, "RenderSolenoid");
 
 	private String name;
 	private final Class teClass;

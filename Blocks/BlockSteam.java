@@ -35,7 +35,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 
 public class BlockSteam extends Block {
 
@@ -44,7 +44,7 @@ public class BlockSteam extends Block {
 	 * 1 - do not decay when moving up
 	 * 2 - can provide power to a turbine
 	 * 4 - is ammonia gas
-	 * 8 - unused
+	 * 8 - "has moved horizontally"
 	 */
 
 	public BlockSteam(int par1, Material mat) {

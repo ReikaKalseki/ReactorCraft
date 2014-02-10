@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
@@ -39,7 +40,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		this.sickenMobs(world, x, y, z);
 		this.decayWaste();
 
-		if (world.provider.isHellWorld || ReikaWorldHelper.getBiomeTemp(world, x, z) > 100) {
+		if (world.provider.isHellWorld || ReikaBiomeHelper.getBiomeTemp(world, x, z) > 100) {
 			if (this.hasWaste()) {
 				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 3);
 				if (rand.nextInt(4) == 0)

@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Laserable;
@@ -61,14 +61,15 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private void make() {
-		int a = 250;
+		int b = 5;
+		int a = 250/b;
 		h2.removeLiquid(a);
 		h3.removeLiquid(a);
-		tank.addLiquid(2*a, FluidRegistry.getFluid("fusion plasma"));
+		tank.addLiquid(b*2*a, FluidRegistry.getFluid("fusion plasma"));
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		int dT = temperature-Tamb;
 		if (dT != 0)
 			temperature -= (1+dT/16384D);
