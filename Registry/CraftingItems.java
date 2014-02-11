@@ -18,7 +18,16 @@ public enum CraftingItems {
 	CANISTER(),
 	ROD(),
 	TANK(),
-	ALLOY();
+	ALLOY(),
+	BACKING(),
+	MAGNETIC(),
+	MAGNETCORE(),
+	COOLANT(),
+	WIRE(),
+	SHIELD(),
+	FERROINGOT(),
+	HYSTERESIS(),
+	HYSTERESISRING();
 
 	public final String itemName;
 

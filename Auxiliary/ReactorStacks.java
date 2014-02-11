@@ -32,4 +32,6 @@ public class ReactorStacks {
 	public static final ItemStack clcan = ReactorItems.CANISTER.getStackOfMetadata(7);
 	public static final ItemStack ocan = ReactorItems.CANISTER.getStackOfMetadata(8);
 
+	public static final ItemStack maxMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-1);
+
 }

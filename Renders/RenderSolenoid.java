@@ -9,16 +9,20 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelSolenoid;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 
 public class RenderSolenoid extends ReactorRenderBase
@@ -50,8 +54,54 @@ public class RenderSolenoid extends ReactorRenderBase
 			GL11.glTranslated(0, d, 0);
 			GL11.glScaled(s, s, s);
 		}
+		if (tile.canRenderCoil() || !tile.isInWorld())
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.canRenderCoil() && tile.hasWorldObj()), -tile.phi, 0);
+		else {
+			GL11.glTranslated(-0.5, -0.5, -0.5);
+			Tessellator v5 = Tessellator.instance;
+			Icon ico = ReactorBlocks.SOLENOIDMULTI.getBlockVariable().getIcon(0, 0);
+			ReikaTextureHelper.bindTerrainTexture();
+			float u = ico.getMinU();
+			float v = ico.getMinV();
+			float du = ico.getMaxU();
+			float dv = ico.getMaxV();
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(0, 1, 0, u, v);
+			v5.addVertexWithUV(1, 1, 0, du, v);
+			v5.addVertexWithUV(1, 1, 1, du, dv);
+			v5.addVertexWithUV(0, 1, 1, u, dv);
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.canRenderCoil() && tile.hasWorldObj()), -tile.phi, 0);
+			v5.addVertexWithUV(0, 2, 1, u, dv);
+			v5.addVertexWithUV(1, 2, 1, du, dv);
+			v5.addVertexWithUV(1, 2, 0, du, v);
+			v5.addVertexWithUV(0, 2, 0, u, v);
+
+			ico = ReactorBlocks.SOLENOIDMULTI.getBlockVariable().getIcon(2, 5);
+			u = ico.getMinU();
+			v = ico.getMinV();
+			du = ico.getMaxU();
+			dv = ico.getMaxV();
+			v5.addVertexWithUV(1, 2, 1, du, dv);
+			v5.addVertexWithUV(1, 1, 1, du, v);
+			v5.addVertexWithUV(1, 1, 0, u, v);
+			v5.addVertexWithUV(1, 2, 0, u, dv);
+
+			v5.addVertexWithUV(0, 2, 1, u, dv);
+			v5.addVertexWithUV(0, 1, 1, u, v);
+			v5.addVertexWithUV(1, 1, 1, du, v);
+			v5.addVertexWithUV(1, 2, 1, du, dv);
+
+			v5.addVertexWithUV(1, 2, 0, du, dv);
+			v5.addVertexWithUV(1, 1, 0, du, v);
+			v5.addVertexWithUV(0, 1, 0, u, v);
+			v5.addVertexWithUV(0, 2, 0, u, dv);
+
+			v5.addVertexWithUV(0, 2, 0, u, dv);
+			v5.addVertexWithUV(0, 1, 0, u, v);
+			v5.addVertexWithUV(0, 1, 1, du, v);
+			v5.addVertexWithUV(0, 2, 1, du, dv);
+			v5.draw();
+		}
 
 		if (!tile.isInWorld()) {
 			GL11.glScaled(1/s, 1/s, 1/s);
