@@ -205,7 +205,9 @@ public enum ReactorOres {
 	public boolean isValidBiome(BiomeGenBase biome) {
 		switch(this) {
 		case PITCHBLENDE:
-			return biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
+			if ("Rainbow Forest".equals(biome.biomeName))
+				return true;
+			return biome == BiomeGenBase.river || biome == BiomeGenBase.ocean || biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
 		default:
 			return true;
 		}
