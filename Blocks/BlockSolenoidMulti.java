@@ -339,7 +339,14 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 	}
 
 	@Override
-	public int getItemTextureIndex(int meta) {
+	public int getItemTextureIndex(int meta, int side) {
+		meta = meta&7;
+		if (side < 2) {
+			if (meta < 4 || meta == 5)
+				return 3;
+			else
+				return 9;
+		}
 		if (meta == 2 || meta == 3)
 			return 2;
 		if (meta == 5)

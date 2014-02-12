@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum CraftingItems {
@@ -43,6 +44,14 @@ public enum CraftingItems {
 
 	public void addRecipe(Object... o) {
 		GameRegistry.addRecipe(this.getItem(), o);
+	}
+
+	public void addSizedRecipe(int size, Object... o) {
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getItem(), size), o);
+	}
+
+	public void addShapelessRecipe(Object... o) {
+		GameRegistry.addShapelessRecipe(this.getItem(), o);
 	}
 
 }

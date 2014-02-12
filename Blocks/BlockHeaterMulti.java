@@ -551,11 +551,12 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 				break;
 			}
 		}
-		return this.getItemTextureIndex(meta);
+		return this.getItemTextureIndex(meta, side);
 	}
 
 	@Override
-	public int getItemTextureIndex(int meta) {
+	public int getItemTextureIndex(int meta, int side) {
+		meta = meta&7;
 		if (meta == 2)
 			return 11;
 		if (meta == 3)

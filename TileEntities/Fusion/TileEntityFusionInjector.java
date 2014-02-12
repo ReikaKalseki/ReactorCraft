@@ -152,4 +152,9 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		hasMultiBlock = NBT.getBoolean("multi");
 	}
 
+	@Override
+	public int getTextureState(ForgeDirection side) {
+		return side == this.getFacing() ? 0 : side.offsetY != 0 ? 2 : 2;
+	}
+
 }

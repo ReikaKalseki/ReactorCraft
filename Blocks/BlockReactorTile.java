@@ -327,16 +327,19 @@ public class BlockReactorTile extends Block {
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
+		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		if (r == ReactorTiles.HEATER)
+			return 0;
 		return 255;
 	}
 

@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.FoodStats;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
 
 public class PotionRadiation extends Potion {
@@ -61,7 +62,7 @@ public class PotionRadiation extends Potion {
 			FoodStats st = ep.getFoodStats();
 			st.addExhaustion(0.25F);
 
-			ep.capabilities.setPlayerWalkSpeed(0.075F);
+			ReikaPlayerAPI.setPlayerWalkSpeed(ep, 0.075F);
 		}
 
 		if (!e.isPotionActive(Potion.confusion))

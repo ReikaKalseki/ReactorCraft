@@ -190,4 +190,9 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.INPUT;
 	}
 
+	@Override
+	public int getTextureState(ForgeDirection side) {
+		return 0;
+	}
+
 }

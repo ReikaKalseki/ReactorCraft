@@ -194,6 +194,8 @@ public enum ReactorTiles {
 		case BOILER:
 		case SODIUMBOILER:
 			return 4;
+		case INJECTOR:
+			return 3;
 		default:
 			return 1;
 		}
@@ -223,6 +225,7 @@ public enum ReactorTiles {
 		case BOILER:
 		case SODIUMBOILER:
 		case CONTROL:
+		case INJECTOR:
 			return true;
 		default:
 			return false;

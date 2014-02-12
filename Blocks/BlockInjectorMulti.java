@@ -264,6 +264,8 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	public int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta) {
 		if (meta >= 8) {
+			if (meta == 13)
+				return 0;
 			int index = 10+this.getTextureIndex(world, x, y, z, side, meta-8);
 			if (side > 1 && (index == 19 || index == 23 || index == 24 || index == 25))
 				index = 9;
@@ -292,15 +294,15 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (side == 1)
 				return 9;
 			if (side == 3 || side == 2) {
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 8)
+				if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 0)
 					return side == 3 ? 5 : 6;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 8)
+				if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 0)
 					return side == 3 ? 6 : 5;
 			}
 			if (side == 4 || side == 5) {
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 8)
+				if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 0)
 					return side == 4 ? 5 : 6;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 8)
+				if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 0)
 					return side == 4 ? 6 : 5;
 			}
 			return 9;
@@ -321,40 +323,40 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (side == 1)
 				return 9;
 			if (side == 3 || side == 2) {
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 11)
+				if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 3)
 					return side == 3 ? 8 : 7;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 11)
+				if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 3)
 					return side == 3 ? 7 : 8;
 			}
 			if (side == 4 || side == 5) {
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 11)
+				if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 3)
 					return side == 4 ? 8 : 7;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 11)
+				if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 3)
 					return side == 4 ? 7 : 8;
 			}
 			return 9;
 		case 5:
-			return 0;
+			return 22;
 		case 6:
-			if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 13) {
+			if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 5) {
 				if (side == 3)
 					return 2;
 				if (side == 2)
 					return 1;
 			}
-			if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 13) {
+			if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 5) {
 				if (side == 3)
 					return 1;
 				if (side == 2)
 					return 2;
 			}
-			if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 13) {
+			if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 5) {
 				if (side == 5)
 					return 1;
 				if (side == 4)
 					return 2;
 			}
-			if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 13) {
+			if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 5) {
 				if (side == 4)
 					return 1;
 				if (side == 5)
@@ -406,7 +408,29 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	public int getItemTextureIndex(int meta) {
+	public int getItemTextureIndex(int meta, int side) {
+		meta = meta&7;
+		if (meta == 0) {
+			return side == 0 ? 9 : side == 1 ? 0 : 4;
+		}
+		if (meta == 1) {
+			return side == 1 ? 0 : side == 0 ? 9 : 28;
+		}
+		if (meta == 4) {
+			return side == 0 ? 0 : side == 1 ? 9 : 27;
+		}
+		if (meta == 3) {
+			return side == 1 ? 9 : side == 0 ? 0 : 3;
+		}
+		if (meta == 6) {
+			return side < 2 ? 21 : 26;
+		}
+		if (meta == 2)
+			return 9;
+		if (meta == 7)
+			return 0;
+		if (meta == 5)
+			return 22;
 		if (meta == 5 || meta == 7 || meta == 3 || meta == 0 || meta == 2)
 			return 22;
 		return 21;
@@ -419,7 +443,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getNumberTextures() {
-		return 26;
+		return 29;
 	}
 
 }

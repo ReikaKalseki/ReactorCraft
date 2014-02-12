@@ -82,7 +82,7 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 
 	@Override
 	public final Icon getIcon(int s, int meta) {
-		return icons[this.getItemTextureIndex(meta)];
+		return icons[this.getItemTextureIndex(meta, s)];
 	}
 
 	protected abstract String getIconBaseName();
@@ -98,7 +98,7 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 	@Override
 	public final Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
 		int index = this.getTextureIndex(world, x, y, z, side, world.getBlockMetadata(x, y, z));
-		index = Math.max(0, Math.min(this.getNumberTextures(), index)); //safety net
+		index = Math.max(0, Math.min(this.getNumberTextures()-1, index)); //safety net
 		return icons[index];
 	}
 
@@ -113,7 +113,7 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 		return StatCollector.translateToLocal("multiblock."+this.getIconBaseName().toLowerCase()+"."+(meta&7));
 	}
 
-	public abstract int getItemTextureIndex(int meta);
+	public abstract int getItemTextureIndex(int meta, int side);
 
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition mov, World world, int x, int y, int z) {
