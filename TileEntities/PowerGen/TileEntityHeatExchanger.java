@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.Fission.Breeder;
+package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;

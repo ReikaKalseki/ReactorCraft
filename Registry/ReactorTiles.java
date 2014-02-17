@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
@@ -33,14 +34,16 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
-import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityNeutronAbsorber;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
+import Reika.ReactorCraft.TileEntities.HTGR.TileEntityCO2Heater;
+import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
@@ -84,7 +87,10 @@ public enum ReactorTiles {
 	GASPIPE("machine.gasduct", 					ReactorBlocks.DUCT,				TileEntityGasDuct.class, 		0, "DuctRenderer"),
 	MAGNETPIPE("machine.magnetpipe", 			ReactorBlocks.DUCT,				TileEntityMagneticPipe.class, 	1, "DuctRenderer"),
 	ABSORBER("machine.absorber",				ReactorBlocks.REACTOR,			TileEntityNeutronAbsorber.class,1),
-	SOLENOID("machine.solenoid",				ReactorBlocks.MODELREACTOR,		TileEntitySolenoidMagnet.class,	9, "RenderSolenoid");
+	SOLENOID("machine.solenoid",				ReactorBlocks.MODELREACTOR,		TileEntitySolenoidMagnet.class,	9, "RenderSolenoid"),
+	COLLECTOR("machine.collector",				ReactorBlocks.MODELMACHINE,		TileEntityGasCollector.class,	6),
+	PEBBLEBED("machine.pebblebed",				ReactorBlocks.REACTOR,			TileEntityPebbleBed.class,		9),
+	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10);
 
 	private String name;
 	private final Class teClass;

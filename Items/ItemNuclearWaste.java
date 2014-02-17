@@ -58,7 +58,8 @@ public class ItemNuclearWaste extends ReactorItemBase {
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
 		if (e instanceof EntityLivingBase)
-			RadiationEffects.applyEffects((EntityLivingBase)e);
+			if (!RadiationEffects.hasHazmatSuit((EntityLivingBase)e))
+				RadiationEffects.applyEffects((EntityLivingBase)e);
 	}
 
 	@Override

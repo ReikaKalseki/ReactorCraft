@@ -63,7 +63,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 			if (rt == ReactorTiles.CONDENSER) {
 				TileEntityCondenser te = (TileEntityCondenser)world.getBlockTileEntity(dx, dy, dz);
 				int dL = te.tank.getLevel() - tank.getLevel();
-				if (dL > 0) {
+				if (dL/4 > 0) {
 					tank.addLiquid(dL/4, FluidRegistry.WATER);
 					te.tank.removeLiquid(dL/4);
 				}

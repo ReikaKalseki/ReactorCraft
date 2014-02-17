@@ -26,6 +26,7 @@ import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
 import Reika.ReactorCraft.GUIs.GuiNuclearCore;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
+import Reika.ReactorCraft.GUIs.GuiReactorBook;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
@@ -45,29 +46,31 @@ public class ReactorGuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
-		if (r != null) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
-			switch(r) {
-			case FUEL:
-			case BREEDER:
-				return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
-			case WASTECONTAINER:
-				return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
-			case PROCESSOR:
-				return new ContainerProcessor(player, (TileEntityUProcessor)te);
-			case CENTRIFUGE:
-				return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
-			case SYNTHESIZER:
-				return new ContainerSynthesizer(player, (TileEntitySynthesizer)te);
-			case ELECTROLYZER:
-				return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
-			case STORAGE:
-				return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
-			case CPU:
-				return new CoreContainer(player, te).setAlwaysInteractable();
-			default:
-				return null;
+		if (ID == 0) {
+			ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+			if (r != null) {
+				TileEntity te = world.getBlockTileEntity(x, y, z);
+				switch(r) {
+				case FUEL:
+				case BREEDER:
+					return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
+				case WASTECONTAINER:
+					return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
+				case PROCESSOR:
+					return new ContainerProcessor(player, (TileEntityUProcessor)te);
+				case CENTRIFUGE:
+					return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
+				case SYNTHESIZER:
+					return new ContainerSynthesizer(player, (TileEntitySynthesizer)te);
+				case ELECTROLYZER:
+					return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
+				case STORAGE:
+					return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
+				case CPU:
+					return new CoreContainer(player, te).setAlwaysInteractable();
+				default:
+					return null;
+				}
 			}
 		}
 		return null;
@@ -75,6 +78,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == 10)
+			return new GuiReactorBook(player, world, 0, 0);
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		if (r != null) {
 			TileEntity te = world.getBlockTileEntity(x, y, z);

@@ -22,12 +22,15 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Items.ItemCanister;
+import Reika.ReactorCraft.Items.ItemGeigerCounter;
+import Reika.ReactorCraft.Items.ItemHazmatSuit;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
 import Reika.ReactorCraft.Items.ItemPlutonium;
 import Reika.ReactorCraft.Items.ItemRadiationCleaner;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
+import Reika.ReactorCraft.Items.ItemReactorBook;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
 import Reika.ReactorCraft.Items.ItemRemoteControl;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -50,7 +53,15 @@ public enum ReactorItems implements RegistryEnum {
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
 	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
 	MAGNET(100,		"item.magnet",			ItemReactorBasic.class),
-	REMOTE(101,		"item.remotecpu",		ItemRemoteControl.class);
+	REMOTE(101,		"item.remotecpu",		ItemRemoteControl.class),
+	PELLET(102,		"item.pellet",			ItemReactorBasic.class),
+	OLDPELLET(103,	"item.depletedpellet",	ItemReactorBasic.class),
+	BOOK(104,		"item.reactorbook",		ItemReactorBook.class),
+	HAZHELMET(128,	"item.hazhelmet",		ItemHazmatSuit.class),
+	HAZCHEST(129,	"item.hazchest",		ItemHazmatSuit.class),
+	HAZLEGS(130,	"item.hazlegs",			ItemHazmatSuit.class),
+	HAZBOOTS(131,	"item.hazboots",		ItemHazmatSuit.class),
+	GEIGER(132, 	"item.geiger",			ItemGeigerCounter.class);
 
 	private String name;
 	private Class itemClass;
@@ -68,11 +79,15 @@ public enum ReactorItems implements RegistryEnum {
 
 	@Override
 	public Class[] getConstructorParamTypes() {
+		if (this.isHazmat())
+			return new Class[]{int.class, int.class, int.class, int.class};
 		return new Class[]{int.class, int.class};
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
+		if (this.isHazmat())
+			return new Object[]{this.getItemID(), this.getSpriteIndex(), 0, this.ordinal()-HAZHELMET.ordinal()};
 		return new Object[]{this.getItemID(), this.getSpriteIndex()};
 	}
 
@@ -86,6 +101,18 @@ public enum ReactorItems implements RegistryEnum {
 
 	public String getLiquidIconName() {
 		return this.name().toLowerCase();
+	}
+
+	public boolean isHazmat() {
+		switch(this) {
+		case HAZHELMET:
+		case HAZCHEST:
+		case HAZLEGS:
+		case HAZBOOTS:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public boolean hasMetadataSprites() {

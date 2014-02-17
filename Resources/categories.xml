@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<intro>
+		An introduction to nuclear reactions, nuclear reactors and their design.
+	</intro>
+	<procdesc>
+		These machines are used to process existing materials into ones needed for making functional reactors.
+	</procdesc>
+	<gendesc>
+		These machines harness the power of a nuclear reactor, and work together to convert it into usable shaft power.
+	</gendesc>
+	<htgrdesc>
+		These are the components to a High-Temperature Gas Reactor (HTGR).
+	</htgrdesc>
+	<fissiondesc>
+		These are the components to a standard boiling-water fission reactor.
+	</fissiondesc>
+	<breederdesc>
+		These are the components to a sodium-cooled breeder reactor, or "liquid-metal fast breeder reactor" (LMFBR).
+	</breederdesc>
+	<fusiondesc>
+		These are the components to a Tokamak fusion reactor.
+	</fusiondesc>
+	<accdesc>
+		These machines are often required alongside the actual reactor, to produce or transport materials or to otherwise aid the reactors.
+	</accdesc>
+	<tooldesc>
+		These tools are useful to those working with nuclear reactors.
+	</tooldesc>
+	<resourcedesc>
+		These items are crucial in the operation of nuclear reactors.
+	</resourcedesc>
+</categories>

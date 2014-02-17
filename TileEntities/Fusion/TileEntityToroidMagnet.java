@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Fusion;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -46,6 +47,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (!hasSolenoid && this.getTicksExisted() == 0) {
+			this.checkSurroundingMagnetsAndCopySolenoidState();
+		}
+
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
 		List<EntityPlasma> li = world.getEntitiesWithinAABB(EntityPlasma.class, box);
 		int[] tg = this.getTarget();
@@ -55,8 +60,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
 			}
-		}
+			else {
 
+			}
+		}
 		this.collectCharge(world, x, y, z);
 
 		chargeTimer.update();
@@ -66,8 +73,28 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			this.updateCharge(world, x, y, z);
 		}
 
-		//this.clearArea(world, x, y, z);
+		//if (this.getTicksExisted() == 0)
+		//	this.clearArea(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(aim, !hasSolenoid && this.getSide() == Side.SERVER);
+	}
+
+	private void checkSurroundingMagnetsAndCopySolenoidState() {
+		Aim a = this.getAim();
+		int dx = xCoord+a.xOffset;
+		int dz = zCoord+a.zOffset;
+		ReactorTiles r = ReactorTiles.getTE(worldObj, dx, yCoord, dz);
+		if (r == ReactorTiles.MAGNET) {
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getBlockTileEntity(dx, yCoord, dz);
+			hasSolenoid = te.hasSolenoid;
+		}
+		else if (r == ReactorTiles.INJECTOR) {
+			dx += a.xOffset;
+			dz += a.zOffset;
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getBlockTileEntity(dx, yCoord, dz);
+			if (te != null) {
+				hasSolenoid = te.hasSolenoid;
+			}
+		}
 	}
 
 	private void collectCharge(World world, int x, int y, int z) {
@@ -113,15 +140,17 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			dx += a.xOffset;
 			dz += a.zOffset;
 			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(dx, y, dz);
-			int dC = charge-te.charge;
-			if (dC > 0) {
-				te.charge += dC/4;
-				charge -= dC/4;
-				EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2, z+0.5, dC/4, te.xCoord+0.5, te.yCoord+2, te.zCoord+0.5);
-				EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1, z+0.5, dC/4, te.xCoord+0.5, te.yCoord-1, te.zCoord+0.5);
-				if (!world.isRemote) {
-					world.spawnEntityInWorld(e1);
-					world.spawnEntityInWorld(e2);
+			if (te != null) {
+				int dC = charge-te.charge;
+				if (dC > 0) {
+					te.charge += dC/4;
+					charge -= dC/4;
+					EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2, z+0.5, dC/4, te.xCoord+0.5, te.yCoord+2, te.zCoord+0.5);
+					EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1, z+0.5, dC/4, te.xCoord+0.5, te.yCoord-1, te.zCoord+0.5);
+					if (!world.isRemote) {
+						world.spawnEntityInWorld(e1);
+						world.spawnEntityInWorld(e2);
+					}
 				}
 			}
 		}
@@ -138,8 +167,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			for (int j = -r; j <= r; j++) {
 				for (int k = -r; k <= r; k++) {
 					int id = world.getBlockId(x+i, y+j, z+k);
-					if (id == 2 || id == 3)
+					if (id == Block.grass.blockID || id == Block.dirt.blockID) {
 						world.setBlock(x+i, y+j, z+k, 0);
+					}
 				}
 			}
 		}
@@ -251,6 +281,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		else {
 			aim = Aim.list[o+1];
 		}
+
+		if (!hasSolenoid) {
+			this.checkSurroundingMagnetsAndCopySolenoidState();
+		}
 	}
 
 	private void decrementAim() {
@@ -260,6 +294,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		}
 		else {
 			aim = Aim.list[o-1];
+		}
+
+		if (!hasSolenoid) {
+			this.checkSurroundingMagnetsAndCopySolenoidState();
 		}
 	}
 

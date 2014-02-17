@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<resource>
+	<fluorite>
+		Fluorite is a crystal that occurs naturally in rock. Fluorite comes in various colors, but all will fluoresce (give off light) in the presence of neutrons or radation, allowing them to be used as a crude geiger counter. Fluorite has a large concentration of fluorine, which is useful for making hydrofluoric acid during the uranium enrichment process.
+	</fluorite>
+	<fuel>
+		Uranium fuel pellets are the fuel source for a standard fission reactor. They are gradually consumed, and will eventually turn into depleted uranium when the U235 component in them is depleted.
+	</fuel>
+	<depleted>
+		Depleted uranium is not useful as nuclear fuel on its own, but it can be converted into plutonium, which is.
+	</depleted>
+	<waste>
+		Nuclear waste is an extremely dangerous by-product of nuclear fission. It will accumulate in fuel cores and pollute the reactor, and therefore must be removed and properly disposed of. Held in hand or left in the world, its radioactivity will gradually poison the surroundings.
+	</waste>
+	<plutonium>
+		Plutonium is an alternate, artificial fuel for nuclear fission reactors. Plutonium is extremely dangerous and more volatile than uranium, and must be used and handled with extreme care.
+	</plutonium>
+	<thorium>
+		Thorium is another alternate reactor fuel.
+	</thorium>
+	<breederfuel>
+		Breeder reactors require a special kind of fuel - standard enriched uranium wrapped in a layer of depleted uranium. Over time, the reactor's neutrons will convert this into plutonium.
+	</breederfuel>
+	<magnet>
+		Magnets are used to manipulate the path of electrically charged things like plasma, and are used in great quantities in fusion reactors.
+	</magnet>
+	<pellet>
+		Raw uranium can be powered and mixed with graphite to create fuel pellets. These pellets are the fuel for a High-Temperature Gas Reactor.
+	</pellet>
+	<oldpellet>
+		Like normal uranium fuel, fuel pellets eventually are depleted and no longer useful.
+	</oldpellet>
+</resource>

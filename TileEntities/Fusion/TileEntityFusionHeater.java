@@ -42,7 +42,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public void whenInBeam(long power, int range) {
-		temperature += 640*ReikaMathLibrary.logbase(power, 2);
+		temperature += 64000*ReikaMathLibrary.logbase(power, 2);
 	}
 
 	@Override

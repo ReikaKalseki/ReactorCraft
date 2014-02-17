@@ -68,7 +68,8 @@ public class EntityNuclearWaste extends EntityItem {
 			EntityLivingBase e = inbox.get(i);
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= RANGE) {
-				RadiationEffects.applyEffects(e);
+				if (!RadiationEffects.hasHazmatSuit(e))
+					RadiationEffects.applyEffects(e);
 			}
 		}
 
@@ -76,8 +77,8 @@ public class EntityNuclearWaste extends EntityItem {
 		int iy = MathHelper.floor_double(y);
 		int iz = MathHelper.floor_double(z);
 
-		//Contaminate the area slightly every 15 min left in the world
-		if (timer%18000 == 0 && timer >= 18000) {
+		//Contaminate the area slightly every 10 min left in the world
+		if (timer == 0 || (timer%12000 == 0 && timer >= 18000)) {
 			RadiationEffects.contaminateArea(world, ix, iy, iz, RANGE*4, 2);
 		}
 	}

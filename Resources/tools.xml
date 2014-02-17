@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<tools>
+	<goggles>
+		Radiation Goggles allows radiation to become visible, allowing for easier avoidance and potential cleanup.
+	</goggles>
+	<remote>
+		The CPU remote is a way to control the CPU of a fission reactor at a distance, without having to enter the reactor itself.
+	</remote>
+</tools>

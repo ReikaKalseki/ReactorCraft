@@ -7,14 +7,16 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Items;
+package Reika.ReactorCraft.Base;
 
-import Reika.ReactorCraft.Base.ItemReactorTool;
+public abstract class ItemReactorTool extends ReactorItemBase {
 
-public class ItemCanister extends ItemReactorTool {
-
-	public ItemCanister(int ID, int tex) {
+	public ItemReactorTool(int ID, int tex) {
 		super(ID, tex);
+
+		this.setMaxStackSize(1);
+		this.setMaxDamage(0);
+		canRepair = false;
 	}
 
 }

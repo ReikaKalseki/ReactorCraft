@@ -24,17 +24,36 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RadiationEffects {
 
 	public static void applyEffects(EntityLivingBase e) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
+		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e))
 			e.addPotionEffect(RadiationEffects.getRadiationEffect(36000));
 	}
 
 	public static void applyPulseEffects(EntityLivingBase e) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode))
+		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e) && !hasHazmatSuit(e))
 			e.addPotionEffect(RadiationEffects.getRadiationEffect(20));
+	}
+
+	public static boolean isEntityImmuneToAll(EntityLivingBase e) {
+		return e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode;
+	}
+
+	public static boolean hasHazmatSuit(EntityLivingBase e) {
+		for (int i = 1; i < 5; i++) {
+			ItemStack is = e.getCurrentItemOrArmor(i);
+			if (is == null)
+				return true;
+			ReactorItems ri = ReactorItems.getEntry(is);
+			if (ri == null)
+				return true;
+			if (!ri.isHazmat())
+				return true;
+		}
+		return true;
 	}
 
 	public static void contaminateArea(World world, int x, int y, int z, int range, float density) {

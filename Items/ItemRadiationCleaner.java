@@ -16,17 +16,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.ReactorCraft.Base.ReactorItemBase;
+import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.RotaryCraft.API.ChargeableTool;
 
-public class ItemRadiationCleaner extends ReactorItemBase implements ChargeableTool {
+public class ItemRadiationCleaner extends ItemReactorTool implements ChargeableTool {
 
 	public ItemRadiationCleaner(int ID, int tex) {
 		super(ID, tex);
-		maxStackSize = 1;
-		canRepair = false;
 		hasSubtypes = false;
 	}
 

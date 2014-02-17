@@ -101,6 +101,8 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 		NBT.setBoolean("down", lowered);
 
+		if (motion != null)
+			NBT.setInteger("motion", motion.ordinal());
 	}
 
 	/**
@@ -112,6 +114,9 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 		super.readFromNBT(NBT);
 
 		lowered = NBT.getBoolean("down");
+
+		if (NBT.hasKey("motion"))
+			motion = Motions.values()[NBT.getInteger("motion")];
 	}
 
 	@Override

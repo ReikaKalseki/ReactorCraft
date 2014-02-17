@@ -84,6 +84,9 @@ public class ItemReactorPlacer extends Item {
 		if (m == ReactorTiles.INJECTOR) {
 			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
 		}
+		if (m == ReactorTiles.COLLECTOR) {
+			te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
+		}
 		if (te instanceof Temperatured) {
 			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 			((Temperatured)te).setTemperature(Tb);
@@ -115,6 +118,24 @@ public class ItemReactorPlacer extends Item {
 	}
 
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
+		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.MAGNET) {
+			int r = 1;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						if (!(i == 0 && Math.abs(j) <= 1 && k == 0)) {
+							if (!ReikaWorldHelper.softBlocks(world, x+i, y+j, z+k)) {
+								return false;
+							}
+							else {
+								ReikaWorldHelper.dropBlockAt(world, x+i, y+j, z+k);
+								world.setBlock(x+i, y+j, z+k, 0);
+							}
+						}
+					}
+				}
+			}
+		}
 		return true;
 	}
 

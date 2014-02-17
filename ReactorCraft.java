@@ -40,6 +40,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
+import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Entities.EntityFusion;
@@ -103,13 +104,13 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
-	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(750).setTemperature(2000);
+	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(650).setTemperature(2000);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
 
-	public static final Fluid He = new Fluid("rc helium").setDensity(-1).setViscosity(6).setGaseous(true);
-	public static final Fluid He_hot = new Fluid("rc hot helium").setDensity(-1).setViscosity(6).setGaseous(true);
+	public static final Fluid CO2 = new Fluid("rc co2").setDensity(2).setViscosity(7).setGaseous(true);
+	public static final Fluid CO2_hot = new Fluid("rc hot co2").setDensity(1).setViscosity(5).setGaseous(true);
 
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
@@ -162,6 +163,8 @@ public class ReactorCraft extends DragonAPIMod {
 			RetroGenController.getInstance().addRetroGenerator(new ReactorRetroGen());
 			//Set state back
 		}
+
+		ReactorDescriptions.loadData();
 
 		ReikaMystcraftHelper.disableFluidPage("fusion plasma");
 		ReikaMystcraftHelper.disableFluidPage("rc deuterium");
@@ -225,6 +228,8 @@ public class ReactorCraft extends DragonAPIMod {
 			Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
 			Icon plasma = event.map.registerIcon("ReactorCraft:plasma");
 
+			Icon co2 = event.map.registerIcon("ReactorCraft:co2");
+
 			D2O.setIcons(d2o);
 			HF.setIcons(hf);
 			UF6.setIcons(uf6);
@@ -241,6 +246,9 @@ public class ReactorCraft extends DragonAPIMod {
 			NH3_lo.setIcons(nh3);
 			H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
 			NA_hot.setIcons(nahot);
+
+			CO2.setIcons(co2);
+			CO2_hot.setIcons(co2);
 		}
 	}
 
@@ -283,6 +291,9 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(H2O_lo);
 		FluidRegistry.registerFluid(NA_hot);
 
+		FluidRegistry.registerFluid(CO2);
+		FluidRegistry.registerFluid(CO2_hot);
+
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(UF6, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan);
@@ -294,6 +305,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h2can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h3can, ReactorStacks.emptycan);
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(CO2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.co2can, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

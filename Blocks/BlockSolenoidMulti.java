@@ -31,7 +31,7 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 
 	@Override
 	public int getNumberTextures() {
-		return 11;
+		return 12;
 	}
 
 	@Override
@@ -321,7 +321,9 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 			return side > 1 ? 6 : 3;
 		}
 		if (meta == 3 || meta == 2) {
-			return 2;
+			if (side < 2)
+				return this.getTextureIndex(world, x, y, z, side, 0);
+			return meta == 2 ? 11 : 2;
 		}
 		if (meta == 0 || meta == 1) {
 			boolean f = world.getBlockId(x+1, y, z) == blockID || world.getBlockId(x-1, y, z) == blockID;
@@ -347,7 +349,9 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 			else
 				return 9;
 		}
-		if (meta == 2 || meta == 3)
+		if (meta == 2)
+			return 11;
+		if (meta == 3)
 			return 2;
 		if (meta == 5)
 			return 6;

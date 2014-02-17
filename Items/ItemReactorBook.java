@@ -9,19 +9,23 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import Reika.ReactorCraft.Base.ItemReactorTool;
+import net.minecraft.world.World;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
-public class ItemRadiationGoggles extends ItemReactorTool {
+public class ItemReactorBook extends ReactorItemBase {
 
-	public ItemRadiationGoggles(int ID, int tex) {
+	public ItemReactorBook(int ID, int tex) {
 		super(ID, tex);
 	}
 
 	@Override
-	public boolean isValidArmor(ItemStack stack, int type, Entity e) {
-		return type == 0;
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer ep)
+	{
+		ep.openGui(ReactorCraft.instance, 10, world, 0, 0, 0);
+		return itemstack;
 	}
 
 }

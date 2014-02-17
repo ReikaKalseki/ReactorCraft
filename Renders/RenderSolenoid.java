@@ -49,7 +49,7 @@ public class RenderSolenoid extends ReactorRenderBase
 		float var13;
 
 		double s = 0.4;
-		double d = 0.6;
+		double d = 0.8;
 		if (!tile.isInWorld()) {
 			GL11.glTranslated(0, d, 0);
 			GL11.glScaled(s, s, s);

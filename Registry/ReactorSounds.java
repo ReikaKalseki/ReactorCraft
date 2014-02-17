@@ -19,6 +19,7 @@ import Reika.DragonAPI.Interfaces.SoundList;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -52,7 +53,7 @@ public enum ReactorSounds implements SoundList {
 	}
 
 	public float getSoundVolume() {
-		float vol = 1; //config float
+		float vol = ConfigRegistry.MACHINEVOLUME.getFloat(); //config float
 		if (vol < 0)
 			vol = 0;
 		if (vol > 1)

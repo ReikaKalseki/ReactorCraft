@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<info>
+	<physics>
+		Nuclear reactions fall into two main types, fission and fusion. Each of these works off of Einstein's theory of relativity to generate energy from mass - E = mc^2. This energy is released as heat or as a speeding neutron. Because the value of c (the speed of light) is extremely large - 300 million meters per second - the amount of energy released is often very large, even though the mass consumption is tiny.
+	</physics>
+	<fissioninfo>
+		In nuclear fission, a heavy atom, such as that of uranium or plutonium, is impacted with an extra neutron. This destabilizes it, and the atom soon splits into two others, releasing a large amount of energy in the process. This reaction also releases three more neutrons, which can impact three more atoms and trigger a chain reaction. The two resultant atoms are usually unwanted and hazardous waste products.
+	</fissioninfo>
+	<fusioninfo>
+		In nuclear fusion, two light atoms, usually hydrogen, are forced together under extreme heat and pressure until they join together. Some mass is lost in this process, releasing heat and a speeding neutron. This neutron carries a large amount of the energy from this reaction and must be captured to regain that energy. Unlike fission, fusion cannot create a chain reaction, and produces no waste, but it is much more difficult to accomplish. Most artificial fusion reactors use two hydrogen isotopes, deuterium and tritium.
+	</fusioninfo>
+	<basics>
+		Nuclear power plants work in fundamentally the same way as most others; the nuclear reaction generates heat, which is eventually used to boil water into steam. This steam drives a turbine and generates shaft power. Nuclear fuel is consumed rather slowly compared to most others, but it is often difficult to produce and its after-effects are often difficult to dispose of.
+	</basics>
+	<enrichment>
+		Uranium comes in two main varieties, U235 and U238. Only U235 is immediately useful for nuclear power, but it makes up less than 1% of all uranium, with the rest being U238. For this reason, uranium is 'enriched', where the concentration of U235 is increased to usable levels. The U238 left over, sometimes termed 'depleted uranium', can be bombarded with neutrons to convert it into Pu239, a form of plutonium also usable in fission reactors, though with more risk and worse waste products. Depleted uranium can also be used to make high-density objects.
+	</enrichment>
+	<radiation>
+		Radioactivity is a dangerous property of many nuclear materials, as it will severely poison living things. Low-level radioactivity is not immediately lethal, but it can bring about unpleasant effects such as dizziness and nausea. Higher levels of radioactivity, such as those left behind after a nuclear meltdown, will kill in fairly short order. Radioactivity leaves a distinctive mark on the land, killing plants, grass, and and animals alike.
+	</radiation>
+</info>

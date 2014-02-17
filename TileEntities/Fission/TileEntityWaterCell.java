@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -64,6 +65,16 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 					}
 				}
 			}
+		}
+	}
+
+	@Override
+	protected void updateTemperature(World world, int x, int y, int z) {
+		super.updateTemperature(world, x, y, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int dT = temperature-Tamb;
+		if (dT > 0) {
+			temperature -= dT/32;
 		}
 	}
 

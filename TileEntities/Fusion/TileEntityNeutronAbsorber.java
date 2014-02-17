@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -32,8 +34,14 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tempTimer.update();
-		if (tempTimer.checkCap())
+		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z);
+
+			if (temperature >= this.getMaxTemperature()) {
+				world.setBlock(x, y, z, Block.lavaMoving.blockID);
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+			}
+		}
 	}
 
 	@Override
@@ -62,7 +70,7 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 
 	@Override
 	public int getMaxTemperature() {
-		return 2000;
+		return 1500;
 	}
 
 	@Override
