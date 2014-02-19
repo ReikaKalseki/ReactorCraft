@@ -16,6 +16,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Event.ScramEvent;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
@@ -25,6 +26,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 
 	private final ReactorControlLayout layout = new ReactorControlLayout(this);
 	private final BlockArray reactor = new BlockArray();
+
+	public static final int POWERPERROD = 1024;
 
 	private int omega;
 	private int torque;
@@ -60,8 +63,11 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 		if (power < layout.getMinPower())
 			this.SCRAM();
 
-		if (temperature > this.getMaxTemperature() && power >= layout.getMinPower()*4) {
-			this.SCRAM();
+		if (layout.getNumberRods() > 0) {
+			if (temperature > this.getMaxTemperature() && power >= layout.getMinPower()*4) {
+				ReactorAchievements.SCRAM.triggerAchievement(this.getPlacer());
+				this.SCRAM();
+			}
 		}
 	}
 

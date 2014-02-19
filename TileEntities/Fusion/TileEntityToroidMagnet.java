@@ -19,6 +19,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.Shockable;
@@ -61,7 +62,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				e.magnetOrdinal = this.getOrdinal();
 			}
 			else {
-
+				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
 			}
 		}
 		this.collectCharge(world, x, y, z);

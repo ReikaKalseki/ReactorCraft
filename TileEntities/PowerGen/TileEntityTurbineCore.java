@@ -26,6 +26,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -37,9 +38,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private int steam;
 
 	public static final int GEN_OMEGA = 65536; //377 real
-	public static final int TORQUE_CAP = 16384;
-
-	public static final long MAX_POWER = 8589934592L; //8.5 GW, biggest in world (Kashiwazaki)
+	public static final int TORQUE_CAP = 32768;
 
 	private int omega;
 	private int iotick;
@@ -57,6 +56,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int damage;
 
+	public boolean hasMultiBlock = true;
+
 	private StepTimer soundTimer = new StepTimer(41);
 
 	public int getDamage() {
@@ -70,6 +71,12 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (!hasMultiBlock) {
+			omega = 0;
+			phi = 0;
+			return;
+		}
+
 		thermalTicker.update();
 		soundTimer.update();
 
@@ -99,6 +106,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+":"+steam+":"+omega+":"+String.format("%.3f", ReikaMathLibrary.getThousandBase(this.getGenPower()))+ReikaEngLibrary.getSIPrefix(this.getGenPower()), this.getStage() == 0);
 		//ReikaJavaLibrary.pConsole(thermalTicker.getTick()+"/"+thermalTicker.getCap());
 		//ReikaJavaLibrary.pConsole(this.getStage()+":"+inter, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER);
+
+		if (this.getGenPower() >= 1000000000L) {
+			ReactorAchievements.GIGATURBINE.triggerAchievement(this.getPlacer());
+		}
 	}
 
 	public ForgeDirection getSteamMovement() {
@@ -191,7 +202,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int getGenTorque() {
 		int torque = steam > 0 ? (int)(steam*24) : omega/16+1;
-		return omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
+		int ret = omega > 0 ? (int)(torque*this.getEfficiency()) : 0;
+		return Math.min(ret, TORQUE_CAP);
 	}
 
 	private float getDamageEfficiency() {
@@ -199,7 +211,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private long getGenPower() {
-		return Math.min(MAX_POWER, (long)this.getGenTorque()*(long)omega);
+		return (long)this.getGenTorque()*(long)omega;
 	}
 
 	private double getEfficiency() {
@@ -461,6 +473,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		inter = Interference.get(NBT.getInteger("blocked"));
 
 		damage = NBT.getInteger("dmg");
+
+		hasMultiBlock = NBT.getBoolean("multi");
 	}
 
 	/**
@@ -480,6 +494,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			NBT.setInteger("blocked", inter.ordinal());
 		else
 			NBT.setInteger("blocked", -1);
+
+		NBT.setBoolean("multi", hasMultiBlock);
 	}
 
 	@Override

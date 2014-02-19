@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Shockable;
@@ -82,6 +83,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 				world.setBlock(x, y, z, Block.lavaMoving.blockID);
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 				ReikaParticleHelper.LAVA.spawnAroundBlock(world, x, y, z, 5);
+				ReactorAchievements.MELTPIPE.triggerAchievement(this.getPlacer());
 			}
 		}
 	}

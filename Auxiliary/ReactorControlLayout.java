@@ -113,7 +113,7 @@ public class ReactorControlLayout {
 	}
 
 	private long getPowerPerRod() {
-		return 1024;
+		return TileEntityCPU.POWERPERROD;
 	}
 
 	@Override

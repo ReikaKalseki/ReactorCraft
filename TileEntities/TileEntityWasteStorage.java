@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -25,6 +26,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 
@@ -51,6 +53,13 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void decayWaste() {
+		super.decayWaste();
+		if (ReikaInventoryHelper.isEmpty(this))
+			ReactorAchievements.DECAY.triggerAchievement(this.getPlacer());
 	}
 
 	private void sickenMobs(World world, int x, int y, int z) {

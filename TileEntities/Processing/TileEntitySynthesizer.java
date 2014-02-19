@@ -41,6 +41,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	private static final int WATER_PER_AMMONIA = 250;
 	private static final int AMMONIA_PER_STEP = 1000;
+	public static final int AMMONIATEMP = 220;
 	private static final int MAXTEMP = 1000;
 
 	public int timer;
@@ -120,7 +121,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	private boolean canMakeAmmonia(int amt) {
-		return temperature > 220 && (tank.isEmpty() || tank.getLevel()+amt < tank.getCapacity());
+		return temperature >= AMMONIATEMP && (tank.isEmpty() || tank.getLevel()+amt < tank.getCapacity());
 	}
 
 	private void makeAmmonia() {

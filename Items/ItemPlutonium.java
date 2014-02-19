@@ -10,11 +10,12 @@
 package Reika.ReactorCraft.Items;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.ReactorItemBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 
 public class ItemPlutonium extends ReactorItemBase {
 
@@ -23,9 +24,15 @@ public class ItemPlutonium extends ReactorItemBase {
 	}
 
 	@Override
-	public void onUpdate(ItemStack is, World world, Entity ep, int slot, boolean flag) {
-		if (ep instanceof EntityLivingBase) {
-			((EntityLivingBase) ep).addPotionEffect(RadiationEffects.getRadiationEffect(1200));
+	public void onUpdate(ItemStack is, World world, Entity e, int slot, boolean flag) {
+		if (e instanceof EntityPlayer) {
+			EntityPlayer ep = (EntityPlayer)e;
+			if (!ep.capabilities.isCreativeMode) {
+				if (!RadiationEffects.hasHazmatSuit(ep)) {
+					ep.addPotionEffect(RadiationEffects.getRadiationEffect(1200));
+					ReactorAchievements.PUPOISON.triggerAchievement(ep);
+				}
+			}
 		}
 	}
 }

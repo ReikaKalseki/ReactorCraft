@@ -29,6 +29,7 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Event.ReactorMeltdownEvent;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -314,8 +315,13 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		if (hydrogen > 0)
 			hydrogen--;
 
+		if (temperature >= 500) {
+			ReactorAchievements.HOTCORE.triggerAchievement(this.getPlacer());
+		}
+
 		if (temperature > this.getMaxTemperature()) {
 			this.onMeltdown(world, x, y, z);
+			ReactorAchievements.MELTDOWN.triggerAchievement(this.getPlacer());
 		}
 		if (temperature > HYDROGEN) {
 			hydrogen += 1;

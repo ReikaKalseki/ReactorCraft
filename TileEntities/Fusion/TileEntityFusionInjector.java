@@ -27,8 +27,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector {
 
-	public static final int PLASMA_PER_FUSION = 25;
-
 	private HybridTank tank = new HybridTank("injector", 8000);
 
 	private ForgeDirection facing;
@@ -53,11 +51,11 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	private void make(World world, int x, int y, int z) {
 		this.createPlasma(world, x, y, z);
-		tank.removeLiquid(1);
+		tank.removeLiquid(2);
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {
-		EntityPlasma e = new EntityPlasma(world, x+0.5, y+0.5, z+0.5);
+		EntityPlasma e = new EntityPlasma(world, x+0.5, y+0.5, z+0.5, placer);
 		e.setTarget(x+this.getFacing().offsetX, z+this.getFacing().offsetZ);
 		if (!world.isRemote)
 			world.spawnEntityInWorld(e);

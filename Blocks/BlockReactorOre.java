@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOres;
 
@@ -56,6 +58,18 @@ public class BlockReactorOre extends Block {
 
 	private int droppedXP(ReactorOres ore) {
 		return ReikaRandomHelper.doWithChance(ore.xpDropped) ? 1 : 0;
+	}
+
+	@Override
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	{
+		ReactorOres ore = ReactorOres.getOre(world, x, y, z);
+		boolean pitch = ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE;
+		boolean flag = super.removeBlockByPlayer(world, player, x, y, z);
+		if (pitch && flag && !player.capabilities.isCreativeMode) {
+			ReactorAchievements.MINEURANIUM.triggerAchievement(player);
+		}
+		return flag;
 	}
 
 	@Override

@@ -18,6 +18,18 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 
 public final class ReactorDescriptions {
 
@@ -165,6 +177,18 @@ public final class ReactorDescriptions {
 	}
 
 	private static void loadNumericalData() {
-
+		addNotes(ReactorTiles.CENTRIFUGE, TileEntityCentrifuge.MINSPEED);
+		addNotes(ReactorTiles.ELECTROLYZER, TileEntityElectrolyzer.SALTPOWER, TileEntityElectrolyzer.SALT_MELT);
+		addNotes(ReactorTiles.SYNTHESIZER, TileEntitySynthesizer.AMMONIATEMP);
+		addNotes(ReactorTiles.TURBINECORE, TileEntityTurbineCore.GEN_OMEGA, TileEntityTurbineCore.TORQUE_CAP);
+		addNotes(ReactorTiles.PUMP, TileEntityReactorPump.MINPOWER, TileEntityReactorPump.MINTORQUE);
+		addNotes(ReactorTiles.EXCHANGER, TileEntityHeatExchanger.MINPOWER, TileEntityHeatExchanger.MINSPEED);
+		addNotes(ReactorTiles.FUEL, TileEntityFuelRod.EXPLOSION);
+		addNotes(ReactorTiles.CPU, TileEntityCPU.POWERPERROD);
+		addNotes(ReactorTiles.BREEDER, TileEntityBreederCore.EXPLOSION);
+		addNotes(ReactorTiles.HEATER, TileEntityFusionHeater.PLASMA_TEMP);
+		addNotes(ReactorTiles.SOLENOID, TileEntitySolenoidMagnet.MINOMEGA, TileEntitySolenoidMagnet.MINTORQUE);
+		addData(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINDEPTH, TileEntityHeavyPump.MAXY);
+		addNotes(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
 	}
 }

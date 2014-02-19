@@ -35,6 +35,7 @@ public class ReactorStacks {
 	public static final ItemStack co2can = ReactorItems.CANISTER.getStackOfMetadata(9);
 
 	public static final ItemStack maxMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-1);
+	public static final ItemStack weakerMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-2);
 
 	public static final ItemStack insulCore = new ItemStack(ReactorBlocks.HEATERMULTI.getBlockID(), 1, 1);
 

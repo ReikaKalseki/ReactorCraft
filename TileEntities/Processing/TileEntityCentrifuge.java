@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -91,7 +92,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		timer.setCap(this.setTimer());
-		if (omega >= MINSPEED) {
+		if (power > 0 && omega >= MINSPEED) {
 			if (this.canMake()) {
 				timer.update();
 				if (timer.checkCap()) {
@@ -143,6 +144,8 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
 		else
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
+
+		ReactorAchievements.UF6.triggerAchievement(this.getPlacer());
 	}
 
 	public boolean canMake() {

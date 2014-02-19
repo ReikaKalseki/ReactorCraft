@@ -16,6 +16,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorFuel;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -57,6 +58,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 			if (this.isPoisoned())
 				return true;
 			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
+				ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
 				int slot = -1;
 				for (int i = 3; i >= 0; i--) {
 					ItemStack is = inv[i];

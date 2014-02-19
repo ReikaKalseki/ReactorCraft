@@ -44,6 +44,7 @@ public enum ReactorBook implements HandbookEntry {
 	FUSIONINFO("Nuclear Fusion", ReactorStacks.h2can),
 	BASICS("Nuclear Power Basics", ReactorBlocks.STEAM.getBlockVariable()),
 	ENRICHMENT("Uranium Enrichment", ReactorTiles.CENTRIFUGE),
+	MELTDOWN("Meltdowns", MatBlocks.SLAG.getStackOf()),
 	RADIATION("Radiation", ReactorItems.WASTE),
 
 	//--------------------PROCESSING---------------//
@@ -283,12 +284,12 @@ public enum ReactorBook implements HandbookEntry {
 
 	@Override
 	public boolean hasMachineRender() {
-		return false;
+		return this.isMachine();
 	}
 
 	@Override
 	public boolean hasSubpages() {
-		return false;
+		return this.isMachine();
 	}
 
 	public String getTabImageFile() {
@@ -312,6 +313,10 @@ public enum ReactorBook implements HandbookEntry {
 		}
 		//ReikaJavaLibrary.pConsole("Setting parent for "+this+" to "+parent);
 		return parent;
+	}
+
+	public boolean isParent() {
+		return isParent;
 	}
 
 	public int getBaseScreen() {

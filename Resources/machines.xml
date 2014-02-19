@@ -2,10 +2,273 @@
 <machines>
 	<processor>
 		<desc>
+			The uranium processor dissolves fluorite in water to make hydrofluoric acid, and then dissolves raw uranium in the acid to make uranium hexafluoride gas. This gas is used in the uranium enrichment process.
+		</desc>
+		<note>
+			Does not require power
+			Requires a water supply
+		</note>
+	</processor>
+	<centrifuge>
+		<desc>
+			The isotope centrifuge uses a very high rotational speed to separate the different isotopes of uranium, and will produce a mixture of depleted uranium dust and enriched uranium dust. The latter is far less common due to the rarity of U238.
+		</desc>
+		<note>
+			Minimum Speed: %d rad/s
+			Power Input: Bottom
+			UF6 Input: Top
+		</note>
+	</centrifuge>
+	<electrolyzer>
+		<desc>
+			The electrolyzer uses electrical discharges to decompose materials into their constituents, such as salt into sodium and chlorine and water into hydrogen and oxygen. The heavier of the products is drawn out the bottom, while the lighter is drawn out the top. Note that solids must be melted down before they are able to be processed.
+		</desc>
+		<note>
+			Power to electrolyze salt: %dW
+			Power Input: Any horizontal side
+			Required temperature to melt salt: %dC
+		</note>
+	</electrolyzer>
+	<synthesizer>
+		<desc>
+			The synthesizer is used to make ammonia, which is a more effective working fluid in reactors than water. To do this, it requires water, ammonium chloride, and quicklime.
+		</desc>
+		<note>
+			Ammonia Synthesis Temperature: %dC
+		</note>
+	</synthesizer>
+	<tritizer>
+		<desc>
+			The neutron irradiation chamber converts deuterium to tritium by bombarding it with neutrons. This machine is placed in the core of a reactor, where it will absorb some neutrons that hit it and convert the stored tritium.
+		</desc>
+		<note>
+			Deuterium Input: Top
+			Tritium Output: Bottom
+		</note>
+	</tritizer>
+	<condenser>
+		<desc>
+			The condenser will recollect steam blocks and convert it back into liquid for reuse in the nuclear reactor. Because the pressure is extremely low, this liquid must be repressurized before it can be used. While it may not be terribly economical to reclaim water-based steam, ammonia is sufficiently expensive that reclamation is well worth the cost.
+		</desc>
+		<note>
+			Liquid Output: Top
+		</note>
+	</condenser>
+	<exchanger>
+		<desc>
+			The heat exchanger takes hot fluid in the top and cools it down, transferring the fluid's heat into any adjacent machinery, including standard boilers. This machine requires power to force the fluid through, and the fluid can be drawn out the sides.
+		</desc>
+		<note>
+			Power Input: Bottom:
+			Required Power: %dW
+			Required Speed: %d rad/s
+		</note>
+	</exchanger>
+	<boiler>
+		<desc>
+			The boiler absorbs heat from the surrounding machines and uses it to boil the internal liquid into steam. Note that if the steam is not drawn away and allowed to accumulate, the boiler will eventually lose the ability to boil more liquid and fail to draw away heat from the reactor. This usually results in a meltdown. Also, if the temperature rises above %dC when the boiler is full of ammonia, the ammonia will ignite and detonate.
+		</desc>
+		<note>
+			Liquid Input: Bottom:
+			Steam Output: Top
+		</note>
+	</boiler>
+	<pump>
+		<desc>
+			The pressurizer repressurizes the low-pressure water or ammonia so that it can be reused in the reactor, thus completing the thermodynamic cycle. Note that this is a centrifugal compressor.
+		</desc>
+		<note>
+		Minimum Power: %dW
+		Minimum Torque: %d Nm
+			Liquid Input: Top
+			Liquid Output: Side
+			Power Input: Bottom
+		</note>
+	</pump>
+	<grate>
+		<desc>
+			The steam grate takes in steam from steam lines and releases it into the world. The steam will then rise until it hits a blockage, where it will spread out. Ideally, the steam should rise directly into a turbine so that its energy can be extracted.
+		</desc>
+		<note>
+			Steam Output: Top
+			Max Ouput: 1 block per tick (20 blocks/s)
+		</note>
+	</grate>
+	<steamline>
+		<desc>
+			Steam lines transport the steam away from the reactor to a turbine. Note that the steam line has an infinite capacity and thus breaking it may result in a loss of a large amount of stored energy.
+		</desc>
+		<note>
+			Infinite capacity
+		</note>
+	</steamline>
+	<turbinecore>
+		<desc>
+			The turbine extracts the energy from steam, which moves along its length. The turbine will gradually accelerate as it receives steam, and its torque will be proportional to the amount of steam flowing through. Note that turbines, especially if rotating rapidly, are extremely fragile. The turbine will not run if its blades are obstructed.
+		</desc>
+		<note>
+			Max Speed: %d rad/s
+			Max Torque: %d Nm
+			Risks: Blade breakage due to collisions with objects
+		</note>
+	</turbinecore>
+	<pebblebed>
+		<desc>
 			
 		</desc>
 		<note>
-		
+			
 		</note>
-	</processor>
+	</pebblebed>
+	<co2heater>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</co2heater>
+	<fuel>
+		<desc>
+			The fuel core stores the nuclear fuel and is the source of all nuclear reactions and heat generation. When loaded, the core will periodically emit neutrons, which can impact other fuel cores. If those cores are also loaded, there is a chance that they will undergo fission, releasing three more neutrons and some heat, and consume some fuel. They will also gradually accumulate waste, which will hamper their ability to undergo fission. If the fuel core gets too hot, it will begin smoking, releasing hydrogen gas, and will eventually melt and release large amounts of radiation.
+		</desc>
+		<note>
+			Neutron Emission: Any horizontal direction
+			Max Temperature: %dC
+		</note>
+	</fuel>
+	<control>
+		<desc>
+			The control rod allows you to manipulate the rate of a nuclear reaction by intercepting neutrons that could otherwise trigger more fission events. Control rods can be retracted or inserted - they are inserted by default - when commanded by a reactor CPU. They also can be dropped into place in the case of an emergency, a so-called "SCRAM" event.
+		</desc>
+		<note>
+			
+		</note>
+	</control>
+	<coolant>
+		<desc>
+			Coolant cells draw away heat from the reactor. Note that this heat is essentially wasted, as it does not create any steam or useful energy. However, coolant cells are vital for distributing heat and stabilizing the temperature of larger reactors.
+		</desc>
+		<note>
+			
+		</note>
+	</coolant>
+	<cpu>
+		<desc>
+			The reactor CPU can be used to manage the operation of a nuclear reactor. It allows you to manipulate each control rod individually, or all at once. It also will sense the temperature of the surroundings and will trigger a SCRAM if the temperature gets too high, preventing a meltdown. Note that much as in a real reactor, if the CPU loses power for any reason, the control rods will all fall into place, likely stopping the nuclear reaction.
+		</desc>
+		<note>
+			Power Per Control Rod: %dW
+		</note>
+	</cpu>
+	<breeder>
+		<desc>
+			The breeder reactor core behaves much like the normal fuel core, but can only accept breeder reactor fuel, and is the only type of reactor core that can be used in a breeder reactor. They heat up somewhat faster than normal uranium-fueled cores.
+		</desc>
+		<note>
+			Neutron Emission: Any horizontal direction
+			Max Temperature: %dC
+		</note>
+	</breeder>
+	<sodiumboiler>
+		<desc>
+			The sodium heater will, much like a steam boiler, accumulate heat from the surroundings and heat up liquid pumped through it. However, it only accepts molten sodium and will output hot molten sodium once its temperature reaches 300 degrees. This hot molten sodium is usable in a heat exchanger.
+		</desc>
+		<note>
+			Sodium Input: Bottom
+			Hot Sodium Output: Top
+		</note>
+	</sodiumboiler>
+	<heater>
+		<desc>
+			The hydrogen preheater uses the beam from the heat ray to heat a mixture of deuterium and tritium into a plasma usable in the fusion reactor. Note that it must be contained in a proper heater unit multiblock structure, and must be in the path of a heat ray beam.
+		</desc>
+		<note>
+			Plasma Temperature: %dC
+			Hydrogen Input: Any horizontal side
+			Plasma Output: Top
+		</note>
+	</heater>
+	<injector>
+		<desc>
+			The plasma injector actually injects the fusion plasma into the tokamak reactor. Note that it must be contained in a proper multiblock structure.
+		</desc>
+		<note>
+			
+		</note>
+	</injector>
+	<magnet>
+		<desc>
+			The toroidal magnets are the main component of the tokamak reactor, and contain the plasma into a narrow beam in their center. In order to function properly, they must be placed and rotated correctly.
+		</desc>
+		<note>
+			Can not be placed on flat ground due to large size
+		</note>
+	</magnet>
+	<solenoid>
+		<desc>
+			The solenoid magnet is the other main component of the tokamak reactor. It bends the plasma beam into a circle, allowing it to be contained and to reach the critical density for fusion to take place. If this magnet is not functional, the plasma beam will shoot off in a random direction. The solenoid is another large multiblock, and requires power to rotate.
+		</desc>
+		<note>
+			Minimum Speed: %d rad/s
+			Minimum Torque: %d Nm
+		</note>
+	</solenoid>
+	<absorber>
+		<desc>
+			Neutron absorbers intercept neutrons and turn their kinetic energy into heat. Much like a heat exchanger, this heat can be transferred into adjacent machines.
+		</desc>
+		<note>
+			
+		</note>
+	</absorber>
+	<collector>
+		<desc>
+			The gas collector collects carbon dioxide from a furnace burning coal or wood. This carbon dioxide is used as the working fluid in high-temperature gas reactors.
+		</desc>
+		<note>
+			
+		</note>
+	</collector>
+	<gaspipe>
+		<desc>
+			Gas Ducts are used to transport gas, and are made of clay so as not to react with corrosive gases like hydrofluoric acid and uranium hexafluoride.
+		</desc>
+		<note>
+			
+		</note>
+	</gaspipe>
+	<magnetpipe>
+		<desc>
+			Magnetic containment pipes are used to transport extremely hot gases. They use a magnetic field to keep the contents away from the walls, as the pipe would otherwise melt. Note that an electrical charge must be applied to the pipe for it to work.
+		</desc>
+		<note>
+			Requires charge from a Van De Graaff
+		</note>
+	</magnetpipe>
+	<heavypump>
+		<desc>
+			Because heavy water is denser than normal water, it can be found in small concentrations at the bottom of oceans. The heavy water pump, if placed at the bottom of the ocean (at least %d blocks deep and below y=%d), and surrounded on at least 3 sides by water, will extract the heavy water from the ocean.
+		</desc>
+		<note>
+			Minimum Power: %dW
+			Minimum Torque: %d Nm
+		</note>
+	</heavypump>
+	<wastecontainer>
+		<desc>
+			The spent fuel container is the first disposal unit for nuclear waste. When placed in this container, the more radioactive nuclear waste with shorter half-lives will decay and generate heat and neutrons in the process. To keep the container cool, and to provide radiation shielding, it must be submerged underwater.
+		</desc>
+		<note>
+			
+		</note>
+	</wastecontainer>
+	<storage>
+		<desc>
+			Longer-lived nuclear waste which will not decay in the spent fuel container must be placed in a waste disposal drum, where it may be safely stored underground indefinitely without risk of overheating or a radiation leak. Note that being in close proximity to a loaded container is still extremely dangerous.
+		</desc>
+		<note>
+			
+		</note>
+	</storage>
 </machines>

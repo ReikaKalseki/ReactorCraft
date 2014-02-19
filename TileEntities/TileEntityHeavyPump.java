@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -38,6 +39,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	private int omega;
 	private long power;
 	private int iotick;
+
+	public static final int MAXY = 45;
+	public static final int MINDEPTH = 16;
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -112,12 +116,13 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	private void harvest() {
+		ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
 		tank.fill(new FluidStack(FluidRegistry.getFluid("heavy water"), 200), true);
 	}
 
 	private boolean canHarvest(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		return (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean) && y < 45 && this.isOceanFloor(world, x, y, z);
+		return (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean) && y < MAXY && this.isOceanFloor(world, x, y, z);
 	}
 
 	private boolean isOceanFloor(World world, int x, int y, int z) {
@@ -135,7 +140,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 		}
 		if (water < 3)
 			return false;
-		for (int i = 1; i < 16; i++) {
+		for (int i = 1; i < MINDEPTH; i++) {
 			int dy = y+i;
 			int id = world.getBlockId(x, dy, z);
 			int meta = world.getBlockMetadata(x, dy, z);

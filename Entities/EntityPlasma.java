@@ -35,16 +35,20 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 
 	public int magnetOrdinal = -1;
 
+	private String placerOfInjector;
+
 	public EntityPlasma(World world) {
 		super(world);
 	}
 
-	public EntityPlasma(World world, double x, double y, double z) {
+	public EntityPlasma(World world, double x, double y, double z, String placer) {
 		super(world);
 		originX = x;
 		originY = y;
 		originZ = z;
 		this.setPosition(x, y, z);
+
+		placerOfInjector = placer;
 	}
 
 	@Override
@@ -78,10 +82,8 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
 		List<EntityPlasma> li = worldObj.getEntitiesWithinAABB(EntityPlasma.class, box);
 		if (li.size() >= this.getFusionThreshold()) {
-			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ);
+			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ, placerOfInjector);
 			worldObj.spawnEntityInWorld(fus);
-			for (int i = 0; i < li.size(); i++)
-				li.get(0).setDead();
 			this.setDead();
 		}
 	}
@@ -104,8 +106,12 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 		motionY = 0;
 		posY = originY;
 
-		if (Math.abs(originX-posX)+Math.abs(originY-posY)+Math.abs(originZ-posZ) > 100)
+		if (this.getDistanceFromSpawn() > 100)
 			this.setDead();
+	}
+
+	private double getDistanceFromSpawn() {
+		return Math.abs(originX-posX)+Math.abs(originY-posY)+Math.abs(originZ-posZ);
 	}
 
 	@Override

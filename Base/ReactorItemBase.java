@@ -13,10 +13,13 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -81,5 +84,21 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	@Override
 	public String getTexture(ItemStack is) {
 		return "/Reika/ReactorCraft/Textures/Items/items1.png";
+	}
+
+
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		this.checkAchievements(ep, is);
+	}
+
+	private void checkAchievements(EntityPlayer player, ItemStack item) {
+		if (item.itemID == ReactorItems.DEPLETED.getShiftedItemID()) {
+			ReactorAchievements.DEPLETED.triggerAchievement(player);
+		}
+		if (item.itemID == ReactorItems.PELLET.getShiftedItemID()) {
+			ReactorAchievements.PEBBLE.triggerAchievement(player);
+		}
 	}
 }

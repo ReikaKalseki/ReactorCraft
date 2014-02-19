@@ -78,7 +78,7 @@ public class EntityNuclearWaste extends EntityItem {
 		int iz = MathHelper.floor_double(z);
 
 		//Contaminate the area slightly every 10 min left in the world
-		if (timer == 0 || (timer%12000 == 0 && timer >= 18000)) {
+		if (timer%12000 == 0 && timer >= 18000) {
 			RadiationEffects.contaminateArea(world, ix, iy, iz, RANGE*4, 2);
 		}
 	}

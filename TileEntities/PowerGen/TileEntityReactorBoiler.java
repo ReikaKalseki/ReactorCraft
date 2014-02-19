@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -31,6 +32,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 	public static final int WATER_PER_STEAM = 200;
+	public static final int DETTEMP = 650;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
@@ -43,17 +45,17 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 
-		if (temperature >= 650 && fluid == WorkingFluid.AMMONIA)
+		if (temperature >= DETTEMP && fluid == WorkingFluid.AMMONIA)
 			this.detonateAmmonia(world, x, y, z);
 
 		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100 && this.canBoilTankLiquid()) {
 			steam++;
 			if (tank.getActualFluid().equals(FluidRegistry.WATER))
 				fluid = WorkingFluid.WATER;
-			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia")))
+			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia"))) {
 				fluid = WorkingFluid.AMMONIA;
-			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia")))
-				fluid = WorkingFluid.AMMONIA;
+				ReactorAchievements.AMMONIA.triggerAchievement(this.getPlacer());
+			}
 			tank.removeLiquid(WATER_PER_STEAM);
 			//ReikaJavaLibrary.pConsole(WATER_PER_STEAM);
 			temperature -= 5;
@@ -73,6 +75,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	}
 
 	private void detonateAmmonia(World world, int x, int y, int z) {
+		ReactorAchievements.NH3EXPLODE.triggerAchievement(this.getPlacer());
 		BlockArray pipes = new BlockArray();
 		int id = ReactorTiles.STEAMLINE.getBlockID();
 		int meta = ReactorTiles.STEAMLINE.getBlockMetadata();

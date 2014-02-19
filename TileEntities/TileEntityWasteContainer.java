@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
@@ -112,7 +113,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 	public void onMeltdown(World world, int x, int y, int z) {
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 9, true);
-		RadiationEffects.contaminateArea(world, x, y, z, 9, 2);
+		RadiationEffects.contaminateArea(world, x, y, z, 9, 4);
+		ReactorAchievements.WASTELEAK.triggerAchievement(this.getPlacer());
 	}
 
 	@Override

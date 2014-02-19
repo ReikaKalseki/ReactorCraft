@@ -21,6 +21,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -61,6 +62,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private void make() {
+		ReactorAchievements.PLASMA.triggerAchievement(this.getPlacer());
 		int b = 5;
 		int a = 250/b;
 		h2.removeLiquid(a);

@@ -22,6 +22,7 @@ import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,9 +58,15 @@ public class ItemNuclearWaste extends ReactorItemBase {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
-		if (e instanceof EntityLivingBase)
-			if (!RadiationEffects.hasHazmatSuit((EntityLivingBase)e))
+		if (e instanceof EntityLivingBase) {
+			if (!RadiationEffects.hasHazmatSuit((EntityLivingBase)e)) {
 				RadiationEffects.applyEffects((EntityLivingBase)e);
+				if (e instanceof EntityPlayer) {
+					if (!((EntityPlayer)e).capabilities.isCreativeMode)
+						ReactorAchievements.HOLDWASTE.triggerAchievement((EntityPlayer)e);
+				}
+			}
+		}
 	}
 
 	@Override

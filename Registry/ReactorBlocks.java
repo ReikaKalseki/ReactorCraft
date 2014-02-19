@@ -52,6 +52,7 @@ public enum ReactorBlocks implements RegistryEnum {
 	INJECTORMULTI(	BlockInjectorMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.injector",		false),
 	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.heater",		false),
 	SOLENOIDMULTI(	BlockSolenoidMulti.class,		ItemBlockMultiBlock.class,	"multiblock.solenoid",		false);
+	//TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false);
 
 	private Class blockClass;
 	private String blockName;
@@ -65,6 +66,10 @@ public enum ReactorBlocks implements RegistryEnum {
 		blockName = n;
 		itemBlock = ib;
 		model = m;
+	}
+
+	private ReactorBlocks(Class <? extends Block> cl, String n) {
+		this(cl, null, n, false);
 	}
 
 	private ReactorBlocks(Class <? extends Block> cl, String n, boolean m) {

@@ -39,9 +39,9 @@ public class ReactorRecipes {
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 7), ReactorItems.DEPLETED.getStackOf());
 		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
 
-		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getStackOf(), 0, 5000, 100);
+		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 0, 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
-			RecipesCompactor.getRecipes().addCompacting(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getStackOfMetadata(i+1), 0, 10000*(1+i), 100);
+			RecipesCompactor.getRecipes().addCompacting(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 0, 10000*(1+i), 100);
 	}
 
 	public static void addModInterface() {
@@ -80,7 +80,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SSS", "SSS", "SSS", 'S', CraftingItems.FERROINGOT.getItem());
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.FERROINGOT.getItem(), 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', ReactorStacks.maxMagnet, 'S', CraftingItems.MAGNETIC.getItem());
-		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "SSS", "MMM", "SSS", 'M', ReactorStacks.maxMagnet, 'S', CraftingItems.FERROINGOT.getItem());
+		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "SSS", "MMM", "SSS", 'M', ReactorStacks.weakerMagnet, 'S', CraftingItems.MAGNETIC.getItem());
 		GameRegistry.addRecipe(new ItemStack(id, 1, 4), "SSS", "MMM", "SSS", 'M', CraftingItems.FERROINGOT.getItem(), 'S', CraftingItems.HYSTERESIS.getItem());
 		GameRegistry.addRecipe(new ItemStack(id, 1, 5), "SSS", "WPW", "SSS", 'W', CraftingItems.WIRE.getItem(), 'P', CraftingItems.MAGNETIC.getItem(), 'S', CraftingItems.FERROINGOT.getItem());
 	}
@@ -149,6 +149,8 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.CANISTER.getCraftedProduct(16), " i ", "igi", " i ", 'g', Block.glass, 'i', Item.ingotIron);
 
 		GameRegistry.addRecipe(ReactorItems.REMOTE.getStackOf(), "SES", "BCB", "BPB", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'B', Block.stoneButton, 'E', Item.enderPearl, 'C', ItemStacks.pcb);
+
+		GameRegistry.addRecipe(ReactorItems.BOOK.getStackOf(), "RSR", "PPP", "PPP", 'R', ReactorItems.FLUORITE.getItemInstance(), 'S', ItemStacks.steelingot, 'P', Item.paper);
 	}
 
 	private static void addMachines() {

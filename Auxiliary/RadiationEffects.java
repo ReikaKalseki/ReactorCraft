@@ -46,12 +46,12 @@ public class RadiationEffects {
 		for (int i = 1; i < 5; i++) {
 			ItemStack is = e.getCurrentItemOrArmor(i);
 			if (is == null)
-				return true;
+				return false;
 			ReactorItems ri = ReactorItems.getEntry(is);
 			if (ri == null)
-				return true;
+				return false;
 			if (!ri.isHazmat())
-				return true;
+				return false;
 		}
 		return true;
 	}

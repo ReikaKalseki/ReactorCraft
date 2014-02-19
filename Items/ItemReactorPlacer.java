@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -118,6 +119,40 @@ public class ItemReactorPlacer extends Item {
 	}
 
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
+		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.TURBINECORE) {
+			int meta = RotaryAux.get4SidedMetadataFromPlayerLook(ep);
+			BlockArray contact = new BlockArray();
+			AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+			int r = 3;
+			switch(meta) {
+			case 2:
+			case 3:
+				for (int i = x-r; i <= x+r; i++) {
+					for (int j = y-r; j <= y+r; j++) {
+						if (x != i || y != j)
+							contact.addBlockCoordinate(i, j, z);
+					}
+				}
+				break;
+			case 0:
+			case 1:
+				for (int i = z-r; i <= z+r; i++) {
+					for (int j = y-r; j <= y+r; j++) {
+						if (z != i || y != j)
+							contact.addBlockCoordinate(x, j, i);
+					}
+				}
+				break;
+			}
+			for (int i = 0; i < contact.getSize(); i++) {
+				int[] xyz = contact.getNthBlock(i);
+				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z)) {
+					return false;
+				}
+			}
+		}
 		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.MAGNET) {
 			int r = 1;
 			for (int i = -r; i <= r; i++) {

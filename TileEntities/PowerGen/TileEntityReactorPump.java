@@ -25,8 +25,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ShaftPowerReceiver {
 
-	private static final long MINPOWER = 16384;
-	private static final int MINTORQUE = 1024;
+	public static final long MINPOWER = 16384;
+	public static final int MINTORQUE = 1024;
 
 	private HybridTank output = new HybridTank("pumpout", this.getCapacity());
 

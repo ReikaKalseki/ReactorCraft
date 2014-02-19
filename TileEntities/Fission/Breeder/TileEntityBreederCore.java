@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
@@ -105,6 +106,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 					int dmg = inv[slot].getItemDamage();
 					if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
 						inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
+						ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
 					}
 					else {
 						inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);

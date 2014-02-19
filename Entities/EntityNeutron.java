@@ -38,6 +38,7 @@ public class EntityNeutron extends ParticleEntity {
 		oldBlockX = x;
 		oldBlockY = y;
 		oldBlockZ = z;
+		height = 1;
 	}
 
 	public EntityNeutron(World par1World) {

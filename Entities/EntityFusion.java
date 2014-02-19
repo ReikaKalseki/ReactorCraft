@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.InertEntity;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 
 public class EntityFusion extends InertEntity {
@@ -22,7 +23,7 @@ public class EntityFusion extends InertEntity {
 		super(world);
 	}
 
-	public EntityFusion(World world, double x, double y, double z) {
+	public EntityFusion(World world, double x, double y, double z, String creator) {
 		super(world);
 		this.setPosition(x, y, z);
 		//world.setBlock(MathHelper.floor_double(x), MathHelper.floor_double(y)+1, MathHelper.floor_double(z), 51);
@@ -30,6 +31,9 @@ public class EntityFusion extends InertEntity {
 		for (int i = 0; i < 3; i++)
 			this.spawnNeutrons(worldObj, MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
 		ReactorSounds.FUSION.playSound(worldObj, posX, posY, posZ, 1, 1);
+
+		if (creator != null && !creator.isEmpty())
+			ReactorAchievements.FUSION.triggerAchievement(world.getPlayerEntityByName(creator));
 	}
 
 	@Override

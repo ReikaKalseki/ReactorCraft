@@ -23,6 +23,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
@@ -66,6 +67,9 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 				}
 			}
 		}
+
+		if (this.getLiquidState() == LiquidStates.HEAVY)
+			ReactorAchievements.CANDU.triggerAchievement(this.getPlacer());
 	}
 
 	@Override
