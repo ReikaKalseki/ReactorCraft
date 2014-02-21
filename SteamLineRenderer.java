@@ -18,7 +18,6 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
@@ -39,12 +38,12 @@ public class SteamLineRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		TileEntitySteamLine tile = (TileEntitySteamLine)world.getBlockTileEntity(x, y, z);
-		ReikaTextureHelper.bindTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/TileEntity/waterline.png");
+		//ReikaTextureHelper.bindTexture(ReactorCraft.class, "/Reika/ReactorCraft/Textures/TileEntity/waterline.png");
 		GL11.glColor4f(1, 1, 1, 1);
 		for (int i = 0; i < 6; i++) {
 			this.renderFace(tile, x, y, z, dirs[i]);
 		}
-		ReikaTextureHelper.bindTerrainTexture();
+		//ReikaTextureHelper.bindTerrainTexture();
 		return true;
 	}
 

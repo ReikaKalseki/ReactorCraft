@@ -303,4 +303,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		return true;
 	}
 
+	@Override
+	public final boolean isFluidPipe() {
+		return true;
+	}
+
 }

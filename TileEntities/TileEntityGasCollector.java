@@ -10,7 +10,10 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -18,7 +21,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
@@ -35,7 +40,12 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		this.getIOSides(world, x, y, z, meta);
 		int id = world.getBlockId(readx, ready, readz);
 		if (id == Block.furnaceBurning.blockID) {
-			tank.addLiquid(10, FluidRegistry.getFluid("rc co2"));
+			TileEntityFurnace te = (TileEntityFurnace)world.getBlockTileEntity(readx, ready, readz);
+			ItemStack fuel = te.getStackInSlot(1);
+			if (fuel != null) {
+				if (fuel.itemID == Item.coal.itemID || ItemMaterialController.instance.getMaterial(fuel) == ItemMaterial.WOOD)
+					tank.addLiquid(10, FluidRegistry.getFluid("rc co2"));
+			}
 		}
 		//ReikaJavaLibrary.pConsole(id+":"+tank, Side.SERVER);
 	}

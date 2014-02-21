@@ -21,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -284,7 +285,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
 						inter = Interference.JAM;
 				}
-				else if (Block.blocksList[id2] instanceof BlockFluid) {
+				else if (Block.blocksList[id2] instanceof BlockFluid || Block.blocksList[id2] instanceof BlockFluidBase) {
 					if (inter == null || inter.maxSpeed > Interference.FLUID.maxSpeed)
 						inter = Interference.FLUID;
 				}

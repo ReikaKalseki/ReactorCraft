@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -33,14 +34,9 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getSteam(world, x, y, z);
 
-		int dx = x;
-		int dy = y+1;
-		int dz = z;
-
-		if (!world.isRemote && steam > 0 && ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, dx, dy, dz)) {
+		if (!world.isRemote && this.canMakeSteam(world, x, y, z)) {
 			steam--;
-			world.setBlock(dx, dy, dz, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
-			//ReikaJavaLibrary.pConsole(fluid+":"+this.getSteamMetadata(), Side.SERVER);
+			world.setBlock(x, y+1, z, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
 		}
 
 		if (steam <= 0) {
@@ -48,6 +44,17 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		}
 		//steam = 3;
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
+	}
+
+	private boolean canMakeSteam(World world, int x, int y, int z) {
+		if (steam <= 0)
+			return false;
+		if (world.provider instanceof IGalacticraftWorldProvider) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			if (ig.getSoundVolReductionAmount() > 1)
+				return false;
+		}
+		return ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, x, y+1, z);
 	}
 
 	private ForgeDirection getFacing(int meta) {

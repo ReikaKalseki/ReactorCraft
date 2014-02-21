@@ -107,7 +107,7 @@ public class RenderMagnet extends ReactorRenderBase
 
 		v5.draw();
 		for (int i = 1; i < 4; i++)
-			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, new int[]{255, 255, 255, a}, Math.toRadians(90));
+			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, new int[]{255, 255, 255, a}, Math.toRadians(90), 10);
 		GL11.glRotated(-ang, 0, 1, 0);
 		GL11.glTranslated(-par2-0.5, -par4, -par6-0.5);
 		ReikaRenderHelper.exitGeoDraw();
