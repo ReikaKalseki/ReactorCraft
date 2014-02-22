@@ -15,6 +15,7 @@ import java.util.Random;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.InertEntity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -132,6 +133,17 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		effectRange = data.readInt();
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource src, float par2)
+	{
+		if (src.isExplosion()) {
+			RadiationEffects.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F);
+			this.setDead();
+			return true;
+		}
+		return super.attackEntityFrom(src, par2);
 	}
 
 }

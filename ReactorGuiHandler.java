@@ -17,6 +17,7 @@ import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
 import Reika.ReactorCraft.Container.ContainerNuclearCore;
+import Reika.ReactorCraft.Container.ContainerPebbleBed;
 import Reika.ReactorCraft.Container.ContainerProcessor;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
@@ -25,6 +26,7 @@ import Reika.ReactorCraft.GUIs.GuiCPU;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
 import Reika.ReactorCraft.GUIs.GuiNuclearCore;
+import Reika.ReactorCraft.GUIs.GuiPebbleBed;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.GUIs.GuiReactorBook;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
@@ -34,6 +36,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
@@ -66,6 +69,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 					return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
 				case STORAGE:
 					return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
+				case PEBBLEBED:
+					return new ContainerPebbleBed(player, (TileEntityPebbleBed)te);
 				case CPU:
 					return new CoreContainer(player, te).setAlwaysInteractable();
 				default:
@@ -99,6 +104,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				return new GuiElectrolyzer(player, (TileEntityElectrolyzer)te);
 			case STORAGE:
 				return new GuiWasteStorage(player, (TileEntityWasteStorage)te);
+			case PEBBLEBED:
+				return new GuiPebbleBed(player, (TileEntityPebbleBed)te);
 			case CPU:
 				return new GuiCPU(player, (TileEntityCPU)te);
 			default:

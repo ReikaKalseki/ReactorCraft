@@ -199,7 +199,10 @@ public enum ReactorTiles {
 			return TileEntityWaterCell.LiquidStates.list.length;
 		case BOILER:
 		case SODIUMBOILER:
+		case CO2HEATER:
 			return 4;
+		case PEBBLEBED:
+			return 5;
 		case INJECTOR:
 			return 3;
 		default:
@@ -226,16 +229,7 @@ public enum ReactorTiles {
 	}
 
 	public boolean hasTextureStates() {
-		switch(this) {
-		case COOLANT:
-		case BOILER:
-		case SODIUMBOILER:
-		case CONTROL:
-		case INJECTOR:
-			return true;
-		default:
-			return false;
-		}
+		return this.getTextureStates() > 1;
 	}
 
 	public int getBlockID() {
@@ -258,17 +252,6 @@ public enum ReactorTiles {
 		case MAGNETPIPE:
 			return true;
 		default:
-			return false;
-		}
-	}
-
-	// A development feature, really
-	public boolean renderWorks() {
-		try {
-			Class.forName(this.getRenderer());
-			return true;
-		}
-		catch (ClassNotFoundException e) {
 			return false;
 		}
 	}

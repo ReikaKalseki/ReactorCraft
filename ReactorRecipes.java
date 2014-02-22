@@ -28,6 +28,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -38,6 +39,8 @@ public class ReactorRecipes {
 	private static void addRCInterface() {
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 7), ReactorItems.DEPLETED.getStackOf());
 		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
+
+		RecipesGrinder.getRecipes().addRecipe(ReactorOres.PITCHBLENDE.getProduct(), CraftingItems.UDUST.getItem(), 0);
 
 		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 0, 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
@@ -114,6 +117,7 @@ public class ReactorRecipes {
 		}
 
 		ReikaRecipeHelper.addSmelting(ReactorStacks.calcite, ReactorStacks.lime, 0.2F);
+		ReikaRecipeHelper.addSmelting(ItemStacks.coaldust, CraftingItems.GRAPHITE.getItem(), 0);
 	}
 
 	private static void addMisc() {
@@ -143,6 +147,8 @@ public class ReactorRecipes {
 	private static void addItems() {
 		GameRegistry.addRecipe(ReactorItems.DEPLETED.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.depdust.copy());
 		GameRegistry.addRecipe(ReactorItems.FUEL.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.fueldust.copy());
+
+		GameRegistry.addRecipe(ReactorItems.PELLET.getStackOf(), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
 
 		GameRegistry.addRecipe(ReactorItems.BREEDERFUEL.getCraftedProduct(4), " D ", "DED", " D ", 'D', ReactorItems.DEPLETED.getStackOf(), 'E', ReactorItems.FUEL.getStackOf());
 
@@ -182,6 +188,8 @@ public class ReactorRecipes {
 		ReactorTiles.HEATER.addCrafting("MPM", "P P", "MPM", 'M', CraftingItems.FERROINGOT.getItem(), 'P', RotaryCraft.obsidianglass);
 		ReactorTiles.INJECTOR.addCrafting("PMP", "M M", "PMP", 'P', ReactorTiles.MAGNETPIPE.getCraftedProduct(), 'M', CraftingItems.MAGNETIC.getItem());
 		ReactorTiles.ABSORBER.addCrafting("SPS", "PCP", "SPS", 'C', MatBlocks.CONCRETE.getStackOf(), 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel);
+		ReactorTiles.CO2HEATER.addCrafting(" i ", "ibi", " i ", 'b', ReactorTiles.BOILER.getCraftedProduct(), 'i', ItemStacks.basepanel);
+		ReactorTiles.PEBBLEBED.addCrafting("SHS", "PCP", "SHS", 'H', Block.hopperBlock, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 	}
 
 }

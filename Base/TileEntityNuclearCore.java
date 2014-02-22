@@ -329,13 +329,6 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				this.onMeltdown(world, x, y, z);
 			}
 		}
-
-		/*
-		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(3, 3, 3);
-		List<EntityNeutron> inbox = world.getEntitiesWithinAABB(EntityNeutron.class, box);
-		if (inbox.size() > 175) {
-			this.onMeltdown(world, x, y, z);
-		}*/
 	}
 
 }

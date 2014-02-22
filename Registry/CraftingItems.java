@@ -29,7 +29,8 @@ public enum CraftingItems {
 	FERROINGOT(),
 	HYSTERESIS(),
 	HYSTERESISRING(),
-	GRAPHITE();
+	GRAPHITE(),
+	UDUST();
 
 	public final String itemName;
 

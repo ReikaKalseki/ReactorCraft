@@ -119,6 +119,7 @@ public enum ReactorItems implements RegistryEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case PELLET:
 		case WASTE:
 		case BREEDERFUEL:
 		case CLEANUP:
@@ -149,10 +150,11 @@ public enum ReactorItems implements RegistryEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case PELLET:
 			if (meta == 0)
 				return this.getBasicName()+" (Fresh)";
 			else
-				return this.getBasicName()+" ("+(meta)+"% Depleted)";
+				return this.getBasicName()+" ("+(meta*100/this.getNumberMetadatas())+"% Depleted)";
 		case PLACER:
 			return ReactorTiles.TEList[meta].getName();
 		case RAW:
@@ -182,6 +184,7 @@ public enum ReactorItems implements RegistryEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case PELLET:
 		case PLACER:
 		case RAW:
 		case FLUORITE:
@@ -203,6 +206,8 @@ public enum ReactorItems implements RegistryEnum {
 		case FUEL:
 		case PLUTONIUM:
 			return 100;
+		case PELLET:
+			return 25;
 		case PLACER:
 			return ReactorTiles.TEList.length;
 		case RAW:
@@ -316,6 +321,7 @@ public enum ReactorItems implements RegistryEnum {
 		case FUEL:
 		case PLUTONIUM:
 		case BREEDERFUEL:
+		case PELLET:
 			return item.getItemDamage() == 0;
 		default:
 			return true;

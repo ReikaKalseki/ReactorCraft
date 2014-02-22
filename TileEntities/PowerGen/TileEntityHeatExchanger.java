@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -59,6 +60,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		Exchange e = this.getExchange();
+
 		if (this.canCool(e))
 			this.cool(e);
 		temp.update();
@@ -117,6 +119,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 			return false;
 		if (power < MINPOWER || omega < MINSPEED)
 			return false;
+
 		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
 	}
 
@@ -176,8 +179,9 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	}
 
 	//Add API to allow others to add fluids
-	enum Exchange {
-		SODIUM(FluidRegistry.getFluid("hotsodium"), FluidRegistry.getFluid("rc sodium"), ReikaThermoHelper.SODIUM_HEAT, 600);
+	protected static enum Exchange {
+		SODIUM(FluidRegistry.getFluid("hotsodium"), FluidRegistry.getFluid("rc sodium"), ReikaThermoHelper.SODIUM_HEAT, 600),
+		CO2(FluidRegistry.getFluid("rc hot co2"), FluidRegistry.getFluid("rc co2"), ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;

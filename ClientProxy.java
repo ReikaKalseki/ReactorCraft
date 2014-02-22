@@ -71,7 +71,7 @@ public class ClientProxy extends CommonProxy {
 	public void loadModels() {
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles m = ReactorTiles.TEList[i];
-			if (m.hasRender() && m.renderWorks() && !m.isPipe()) {
+			if (m.hasRender() && !m.isPipe()) {
 				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), ReactorRenderList.instantiateRenderer(m));
 			}
 		}
