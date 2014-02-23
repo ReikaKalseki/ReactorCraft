@@ -91,7 +91,7 @@ public class RenderMagnet extends ReactorRenderBase
 		ReikaRenderHelper.prepareGeoDraw(true);
 		GL11.glTranslated(par2+0.5, par4, par6+0.5);
 		float ang = tile.getAngle()+90;
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		GL11.glRotated(ang, 0, 1, 0);
 		v5.startDrawing(GL11.GL_LINES);
 		v5.setColorRGBA(100, 192, 255, a);

@@ -131,22 +131,27 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
+		return this.canDrain(from, resource.getFluid()) ? output.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
+		return this.canDrain(from, null) ? output.drain(maxDrain, doDrain) : null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
+		return from.offsetY == 0;
 	}
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return false;
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side != ForgeDirection.DOWN && this.canConnectToPipe(p);
 	}
 
 	@Override
@@ -156,7 +161,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return from.offsetY == 0;
+		return from == ForgeDirection.UP;
 	}
 
 	@Override
