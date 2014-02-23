@@ -275,7 +275,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		inter = null;
 		for (int i = 0; i < contact.getSize(); i++) {
 			int[] xyz = contact.getNthBlock(i);
-			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= 1+this.getStage()/2) {
+			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= this.getRadius()) {
 				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z)) {
@@ -291,7 +291,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				}
 				else if (this.getStage() == 0 && id2 == ReactorBlocks.STEAM.getBlockID()) {
 					//ReikaJavaLibrary.pConsole(meta2);
-					if ((meta2&2) != 0) {
+					if ((meta2&2) != 0 && (meta2&8) == 0) {
 						int newmeta = 1+(meta2&4);
 						//ReikaJavaLibrary.pConsole(meta2+":"+newmeta+":"+((newmeta&4) != 0));
 						//world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], newmeta, 3);
@@ -307,6 +307,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			}
 		}
 		this.updateSpeed(canAccel);
+	}
+
+	private double getRadius() {
+		return 1.5+this.getStage()/2;
 	}
 
 	private void fillSurroundings(World world, int x, int y, int z, int meta) {

@@ -35,8 +35,13 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	private int ready;
 	private int readz;
 
+	public int ticks = 512;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (ticks > 0)
+			ticks -= 8;
+
 		this.getIOSides(world, x, y, z, meta);
 		int id = world.getBlockId(readx, ready, readz);
 		if (id == Block.furnaceBurning.blockID) {
@@ -50,14 +55,23 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		//ReikaJavaLibrary.pConsole(id+":"+tank, Side.SERVER);
 	}
 
+	public int[] getTarget() {
+		return new int[]{readx, ready, readz};
+	}
+
+	public boolean hasFurnace() {
+		int id = worldObj.getBlockId(readx, ready, readz);
+		return id == Block.furnaceIdle.blockID || id == Block.furnaceBurning.blockID;
+	}
+
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
+		case 5:
 			readx = x+1;
 			readz = z;
 			ready = y;
 			break;
-		case 1:
+		case 3:
 			readx = x-1;
 			readz = z;
 			ready = y;
@@ -67,17 +81,17 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 			readx = x;
 			ready = y;
 			break;
-		case 3:
+		case 4:
 			readz = z+1;
 			readx = x;
 			ready = y;
 			break;
-		case 4:
+		case 0:
 			readx = x;
 			readz = z;
 			ready = y-1;
 			break;
-		case 5:
+		case 1:
 			readx = x;
 			readz = z;
 			ready = y+1;

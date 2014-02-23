@@ -190,6 +190,7 @@ public class ReactorRecipes {
 		ReactorTiles.ABSORBER.addCrafting("SPS", "PCP", "SPS", 'C', MatBlocks.CONCRETE.getStackOf(), 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel);
 		ReactorTiles.CO2HEATER.addCrafting(" i ", "ibi", " i ", 'b', ReactorTiles.BOILER.getCraftedProduct(), 'i', ItemStacks.basepanel);
 		ReactorTiles.PEBBLEBED.addCrafting("SHS", "PCP", "SHS", 'H', Block.hopperBlock, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
+		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
 
 }

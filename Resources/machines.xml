@@ -114,7 +114,7 @@
 	</turbinecore>
 	<pebblebed>
 		<desc>
-			
+			The pebble bed reactor core is the fuel unit for a pebble bed reactor. Load it up with fuel pellets, and it will undergo spontaneous fission and generate heat. This heat is best transferred to a carbon dioxide heat exchanger.
 		</desc>
 		<note>
 			
@@ -122,10 +122,10 @@
 	</pebblebed>
 	<co2heater>
 		<desc>
-			
+			The CO2 Heat Exchanger absorbs heat from a pebble bed reactor and transfers it into the carbon dioxide pumped in. The hot carbon dioxide can be drawn out the top and fed into a heat exchanger.
 		</desc>
 		<note>
-			
+			Must reach 800C to emit hot carbon dioxide
 		</note>
 	</co2heater>
 	<fuel>
