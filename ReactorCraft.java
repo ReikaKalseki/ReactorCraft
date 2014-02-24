@@ -30,6 +30,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
@@ -195,6 +196,9 @@ public class ReactorCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockGold);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
+
+		if (ConfigRegistry.HANDBOOK.getState())
+			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker("ReactorCraft_Handbook"));
 	}
 
 	@Override
