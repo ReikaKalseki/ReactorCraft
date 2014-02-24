@@ -11,7 +11,7 @@
 	</processor>
 	<centrifuge>
 		<desc>
-			The isotope centrifuge uses a very high rotational speed to separate the different isotopes of uranium, and will produce a mixture of depleted uranium dust and enriched uranium dust. The latter is far less common due to the rarity of U238.
+			The isotope centrifuge uses a very high rotational speed to separate the different isotopes of uranium, and will produce a mixture of depleted uranium dust and enriched uranium dust. The latter is far less common due to the rarity of U235.
 		</desc>
 		<note>
 			Minimum Speed: %d rad/s
