@@ -19,11 +19,11 @@ import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityCondenser extends TileEntityTankedReactorMachine implements IPipeConnection {
+public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public int getIndex() {
@@ -45,6 +45,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 		}
 
 		this.balance(world, x, y, z);
+		//tank.addLiquid(100, ReactorCraft.H2O_lo);
 	}
 
 	private Fluid getFluidFromSteamMetadata(int smeta) {
@@ -87,6 +88,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		//ReikaJavaLibrary.pConsole(from, Side.SERVER);
 		if (this.canDrain(from, null)) {
 			return tank.drain(maxDrain, doDrain);
 		}
@@ -150,6 +152,11 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine implemen
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return side == ForgeDirection.UP && this.canConnectToPipe(p);
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
 	}
 
 }

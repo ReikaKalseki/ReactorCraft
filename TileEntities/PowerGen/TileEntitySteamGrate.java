@@ -43,6 +43,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 			fluid = WorkingFluid.EMPTY;
 		}
 		//steam = 3;
+		//fluid = WorkingFluid.AMMONIA;
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
 	}
 

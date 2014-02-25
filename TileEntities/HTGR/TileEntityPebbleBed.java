@@ -26,6 +26,7 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 
 public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable {
 
@@ -53,6 +54,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			this.runDecayCycle();
 		//ReikaInventoryHelper.clearInventory(this);
 		//ReikaInventoryHelper.addToIInv(ReactorItems.PELLET.getStackOf(), this);
+		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		this.feed();
 
 		tempTimer.update();
@@ -102,15 +104,25 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				int id = world.getBlockId(dx, dy, dz);
-				int meta = world.getBlockMetadata(dx, dy, dz);
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 
-				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
+				if (r == this.getMachine()) {
 					TileEntityPebbleBed te = (TileEntityPebbleBed)world.getBlockTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
 						temperature -= dTemp/16;
 						te.temperature += dTemp/16;
+					}
+				}
+				else if (r == ReactorTiles.BOILER) {
+					TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
+					dT = te.getTemperature()-temperature;
+					int t = Math.max(te.getTemperature(), temperature);
+					int tr = te.getTemperature() >= 100 ? Math.max(t, 20) : 20;
+					//ReikaJavaLibrary.pConsole(tr, Side.SERVER);
+					int maxr = Math.min(tr, temperature-Tamb);
+					if (maxr > 0) {
+						temperature -= maxr;
 					}
 				}
 			}

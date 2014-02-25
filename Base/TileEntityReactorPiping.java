@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -21,7 +20,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
@@ -56,7 +57,8 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 		if (m == this.getMachine())
 			return true;
-		return Block.blocksList[id].hasTileEntity(meta);
+		TileEntity te = this.getTileEntity(dx, dy, dz);
+		return te instanceof PipeConnector || te instanceof IFluidHandler;
 	}
 
 	@Override
@@ -212,6 +214,25 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						this.onIntake(te);
 					}
 				}
+				else if (te instanceof PipeConnector) {
+					PipeConnector pc = (PipeConnector)te;
+					Flow flow = pc.getFlowForSide(dir.getOpposite());
+					if (flow.canOutput) {
+						FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
+						if (fs != null) {
+							int level = this.getLevel();
+							int todrain = this.getPipeIntake(fs.amount-level);
+							if (todrain > 0) {
+								if (this.canIntakeFluid(fs.getFluid())) {
+									this.addFluid(todrain);
+									this.setFluid(fs.getFluid());
+									pc.drain(dir.getOpposite(), todrain, true);
+									this.onIntake(te);
+								}
+							}
+						}
+					}
+				}
 				else if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
@@ -257,6 +278,23 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						if (toadd > 0) {
 							this.addFluid(toadd);
 							tp.removeLiquid(toadd);
+						}
+					}
+				}
+				else if (te instanceof PipeConnector) {
+					PipeConnector pc = (PipeConnector)te;
+					Flow flow = pc.getFlowForSide(dir.getOpposite());
+					if (flow.canIntake) {
+						int toadd = this.getPipeOutput(this.getLevel());
+						//int toadd = pc.getFluidRemoval().getTransferred(this.getLiquidLevel());
+						if (toadd > 0) {
+							FluidStack fs = new FluidStack(f, toadd);
+							int added = pc.fill(dir.getOpposite(), fs, true);
+							//ReikaJavaLibrary.pConsole(added, Side.SERVER);
+							if (added > 0) {
+								//ReikaJavaLibrary.pConsole(toadd+":"+added+":"+this.getLiquidLevel(), Side.SERVER);
+								this.removeLiquid(added);
+							}
 						}
 					}
 				}

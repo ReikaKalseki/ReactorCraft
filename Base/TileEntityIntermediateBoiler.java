@@ -43,6 +43,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
 		//ReikaJavaLibrary.pConsole(output, !output.isEmpty());
+		//ReikaJavaLibrary.pConsole(tank, Side.SERVER);
 
 		this.transferFluid(world, x, y, z);
 	}

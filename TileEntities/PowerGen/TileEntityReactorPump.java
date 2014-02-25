@@ -22,6 +22,8 @@ import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ShaftPowerReceiver {
 
@@ -66,14 +68,27 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	}
 
 	private void dumpFluids(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y+1, z);
-		if (id > 0) {
-			TileEntity te = world.getBlockTileEntity(x, y+1, z);
-			if (te instanceof IFluidHandler) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof TileEntityPipe) {
+				TileEntityPipe p = (TileEntityPipe)te;
+				if (p.canIntakeFluid(output.getActualFluid())) {
+					int dL = output.getLevel()-p.getLiquidLevel();
+					//ReikaJavaLibrary.pConsole(dL);
+					if (dL/4 > 0) {
+						p.addFluid(dL/4);
+						p.setFluid(output.getActualFluid());
+						output.removeLiquid(dL/4);
+					}
+				}
+			}
+			else if (te instanceof IFluidHandler) {
 				IFluidHandler fl = (IFluidHandler)te;
-				if (fl.canFill(ForgeDirection.DOWN, output.getActualFluid())) {
-					int amt = fl.fill(ForgeDirection.DOWN, output.getFluid(), true);
-					output.removeLiquid(amt);
+				if (fl.canFill(dir.getOpposite(), output.getActualFluid())) {
+					int amt = fl.fill(dir.getOpposite(), output.getFluid(), true);
+					if (amt > 0)
+						output.removeLiquid(amt);
 				}
 			}
 		}
@@ -249,4 +264,8 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 		power = 0;
 	}
 
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		return type == PipeType.FLUID ? (side != ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
+	}
 }
