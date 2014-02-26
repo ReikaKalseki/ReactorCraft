@@ -202,21 +202,6 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
 	public void setIORenderAlpha(int io) {
 		iotick = io;
 	}

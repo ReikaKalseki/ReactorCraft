@@ -443,21 +443,6 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
 	public boolean canWriteToBlock(int x, int y, int z) {
 		return x == writex && y == writey && z == writez;
 	}

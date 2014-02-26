@@ -114,21 +114,6 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 	public void setIORenderAlpha(int io) {}
 
 	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
 	public void setOmega(int omega) {
 		this.omega = omega;
 	}

@@ -194,21 +194,6 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	}
 
 	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE;
 	}

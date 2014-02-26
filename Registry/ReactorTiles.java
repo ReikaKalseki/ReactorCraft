@@ -27,6 +27,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
@@ -90,7 +91,8 @@ public enum ReactorTiles {
 	SOLENOID("machine.solenoid",				ReactorBlocks.MODELREACTOR,		TileEntitySolenoidMagnet.class,	9, "RenderSolenoid"),
 	COLLECTOR("machine.collector",				ReactorBlocks.MODELMACHINE,		TileEntityGasCollector.class,	6, "RenderGasCollector"),
 	PEBBLEBED("machine.pebblebed",				ReactorBlocks.REACTOR,			TileEntityPebbleBed.class,		9),
-	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10);
+	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10),
+	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7);
 
 	private String name;
 	private final Class teClass;
