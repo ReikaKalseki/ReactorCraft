@@ -11,13 +11,11 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityReactorFlywheel extends TileEntityReactorBase implements ShaftPowerEmitter, PowerGenerator {
 
@@ -57,7 +55,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 				omega--;
 			}
 			torque = te.getTorque();
-			ReikaJavaLibrary.pConsole(torque+"/"+te.getTorque()+":"+omega+"/"+te.getOmega(), Side.SERVER);
+			//ReikaJavaLibrary.pConsole(torque+"/"+te.getTorque()+":"+omega+"/"+te.getOmega(), Side.SERVER);
 		}
 	}
 
