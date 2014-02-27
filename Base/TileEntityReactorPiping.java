@@ -37,10 +37,12 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.intakeFluid(world, x, y, z);
-		this.dumpContents(world, x, y, z);
 		if (this.getLevel() <= 0) {
 			this.setLevel(0);
 			this.setFluid(null);
+		}
+		else {
+			this.dumpContents(world, x, y, z);
 		}
 	}
 
