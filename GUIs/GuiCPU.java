@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.GUIs;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -55,9 +54,7 @@ public class GuiCPU extends ReactorGuiBase {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		ArrayList<TileEntityControlRod> li = layout.getAllRods();
-		for (int i = 0; i < li.size(); i++)
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, li.get(i));
+		ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile);
 		this.updateScreen();
 	}
 

@@ -45,6 +45,7 @@ import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
+import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
@@ -215,6 +216,8 @@ public class ReactorCraft extends DragonAPIMod {
 			//BlockColorMapper.instance.addModBlockColor(r.getBlockID(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
 			BlockColorInterface.addGPRBlockColor(r.getBlockID(), r.getBlockMetadata(), 200, 200, 200);
 		}
+
+		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
 	}
 
 	@ForgeSubscribe

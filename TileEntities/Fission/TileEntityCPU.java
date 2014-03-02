@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
+import java.util.ArrayList;
+
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
@@ -162,6 +164,22 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq != LiquidStates.EMPTY;
+	}
+
+	public void lowerAllRods() {
+		ArrayList<TileEntityControlRod> li = layout.getAllRods();
+		for (int i = 0; i < li.size(); i++) {
+			TileEntityControlRod te = li.get(i);
+			te.setActive(true);
+		}
+	}
+
+	public void raiseAllRods() {
+		ArrayList<TileEntityControlRod> li = layout.getAllRods();
+		for (int i = 0; i < li.size(); i++) {
+			TileEntityControlRod te = li.get(i);
+			te.setActive(false);
+		}
 	}
 
 }

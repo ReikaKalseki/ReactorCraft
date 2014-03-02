@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorPackets;
 import Reika.ReactorCraft.Registry.ReactorSounds;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
@@ -118,20 +119,22 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 		try {
 			switch (pack) {
 			case CPU:
-				rod = (TileEntityControlRod)te;
 				if (control == ReactorPackets.CPU.getMinValue()) {
+					rod = (TileEntityControlRod)te;
 					rod.toggle();
 				}
-				if (control == ReactorPackets.CPU.getMinValue()+1) {
-					rod.setActive(false);
+				else if (control == ReactorPackets.CPU.getMinValue()+1) {
+					TileEntityCPU cpu = (TileEntityCPU)te;
+					cpu.raiseAllRods();
 				}
-				if (control == ReactorPackets.CPU.getMinValue()+2) {
-					rod.setActive(true);
+				else if (control == ReactorPackets.CPU.getMinValue()+2) {
+					TileEntityCPU cpu = (TileEntityCPU)te;
+					cpu.lowerAllRods();
 				}
 				break;
 			}
 		}
-		catch (NullPointerException e) {
+		catch (Exception e) {
 			ReikaJavaLibrary.pConsole("Machine/item was deleted before its packet could be received!");
 			ReikaChatHelper.writeString("Machine/item was deleted before its packet could be received!");
 			e.printStackTrace();
