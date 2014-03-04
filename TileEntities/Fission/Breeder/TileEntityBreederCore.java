@@ -100,29 +100,33 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 		if (!world.isRemote) {
 			if (this.isPoisoned())
 				return true;
-			if (ReikaRandomHelper.doWithChance(0.0125)) {
-				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
-				if (slot != -1) {
-					int dmg = inv[slot].getItemDamage();
-					if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
-						inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
-						ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
-					}
-					else {
-						inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
-					}
-					temperature += 50;
-					this.spawnNeutronBurst(world, x, y, z);
+			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
+				if (ReikaRandomHelper.doWithChance(5)) {
+					// Note: this will happen 1.25% of the time
+					int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
+					if (slot != -1) {
+						int dmg = inv[slot].getItemDamage();
+						if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
+							inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
+							ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
+						}
+						else {
+							inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
+						}
+						temperature += 50;
+						this.spawnNeutronBurst(world, x, y, z);
 
-					if (ReikaRandomHelper.doWithChance(10)) {
-						this.addWaste();
+						if (ReikaRandomHelper.doWithChance(10)) {
+							this.addWaste();
+						}
 					}
-
-					return true;
 				}
+				else
+					// Note: this will happen 23.75% of the time
+					temperature += temperature >= 700 ? 30 : 20;
+				return true;
 			}
-			else
-				temperature += temperature >= 700 ? 30 : 20;
+			// Note: 75% of the time, we let the neutron pass unhindered
 		}
 		return false;
 	}
