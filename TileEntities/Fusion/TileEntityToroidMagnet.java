@@ -209,9 +209,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		aim = this.getAim(NBT.getInteger("aim"));
 		alpha = NBT.getInteger("al");
@@ -224,9 +224,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("aim", this.getAim().ordinal());
 		NBT.setInteger("al", alpha);

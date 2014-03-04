@@ -158,9 +158,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	public abstract boolean isFissile();
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
 
@@ -180,9 +180,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
 

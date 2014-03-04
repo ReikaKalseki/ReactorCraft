@@ -116,8 +116,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("temp", temperature);
 
@@ -129,8 +129,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		temperature = NBT.getInteger("temp");
 

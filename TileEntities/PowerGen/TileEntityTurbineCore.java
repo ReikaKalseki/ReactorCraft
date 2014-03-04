@@ -453,9 +453,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		omega = NBT.getInteger("speed");
 		steam = NBT.getInteger("steamlevel");
@@ -471,9 +471,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("speed", omega);
 		NBT.setInteger("steamlevel", steam);

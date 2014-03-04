@@ -19,6 +19,7 @@ public class ItemReactorBook extends ReactorItemBase {
 
 	public ItemReactorBook(int ID, int tex) {
 		super(ID, tex);
+		maxStackSize = 1;
 	}
 
 	@Override

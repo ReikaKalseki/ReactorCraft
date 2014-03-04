@@ -121,9 +121,9 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 	}
@@ -132,9 +132,9 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
 	}

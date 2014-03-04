@@ -84,9 +84,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("temp", temperature);
 
@@ -98,9 +98,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		temperature = NBT.getInteger("temp");
 

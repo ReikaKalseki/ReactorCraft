@@ -157,17 +157,17 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		fluid.saveToNBT(NBT);
 	}
