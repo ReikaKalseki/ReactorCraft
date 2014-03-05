@@ -128,6 +128,7 @@ public class ReactorRecipes {
 			ItemStack block = new ItemStack(ReactorBlocks.FLUORITE.getBlockID(), 1, fl.ordinal());
 			ItemStack shard = ReactorItems.FLUORITE.getStackOfMetadata(fl.ordinal());
 			GameRegistry.addRecipe(block, "CCC", "CCC", "CCC", 'C', shard);
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(shard, 9), block);
 		}
 
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);

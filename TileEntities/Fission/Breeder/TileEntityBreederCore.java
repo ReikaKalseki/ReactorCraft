@@ -100,18 +100,23 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 		if (!world.isRemote) {
 			if (this.isPoisoned())
 				return true;
-			if (ReikaRandomHelper.doWithChance(0.0125)) {
+			if (ReikaRandomHelper.doWithChance(25) && this.isFissile()) {
 				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
 				if (slot != -1) {
-					int dmg = inv[slot].getItemDamage();
-					if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
-						inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
-						ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
+					if (ReikaRandomHelper.doWithChance(5)) {
+						int dmg = inv[slot].getItemDamage();
+						if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
+							inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
+							ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
+						}
+						else {
+							inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
+						}
+						temperature += 50;
 					}
 					else {
-						inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
+						temperature += temperature >= 700 ? 30 : 20;
 					}
-					temperature += 50;
 					this.spawnNeutronBurst(world, x, y, z);
 
 					if (ReikaRandomHelper.doWithChance(10)) {
@@ -121,8 +126,6 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 					return true;
 				}
 			}
-			else
-				temperature += temperature >= 700 ? 30 : 20;
 		}
 		return false;
 	}
