@@ -464,12 +464,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		damage = NBT.getInteger("dmg");
 
-		hasMultiBlock = NBT.getBoolean("multi");
+		//hasMultiBlock = NBT.getBoolean("multi");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -485,7 +482,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else
 			NBT.setInteger("blocked", -1);
 
-		NBT.setBoolean("multi", hasMultiBlock);
+		//NBT.setBoolean("multi", hasMultiBlock);
 	}
 
 	@Override

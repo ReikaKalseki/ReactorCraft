@@ -16,7 +16,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -51,8 +50,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	private HybridTank tank = new HybridTank("synthout", 24000);
 
 	private HybridTank water = new HybridTank("synthwater", 24000);
-
-	private ItemStack[] inv = new ItemStack[3];
 
 	private StepTimer steptimer = new StepTimer(1800);
 	private StepTimer tempTimer = new StepTimer(20);
@@ -227,16 +224,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
 			return is.itemID == Item.bucketWater.itemID;
@@ -256,20 +243,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 		timer = NBT.getInteger("time");
 
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-
 		water.readFromNBT(NBT);
 		tank.readFromNBT(NBT);
 	}
@@ -280,21 +253,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("time", timer);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 
 		water.writeToNBT(NBT);
 		tank.writeToNBT(NBT);

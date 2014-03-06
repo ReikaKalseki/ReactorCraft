@@ -94,9 +94,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

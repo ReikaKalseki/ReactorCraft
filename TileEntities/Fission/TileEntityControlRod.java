@@ -105,9 +105,6 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 			NBT.setInteger("motion", motion.ordinal());
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

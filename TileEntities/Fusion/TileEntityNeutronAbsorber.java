@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -76,16 +75,6 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq != LiquidStates.EMPTY;
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT) {
-		super.readSyncTag(NBT);
-	}
-
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT) {
-		super.writeSyncTag(NBT);
 	}
 
 }

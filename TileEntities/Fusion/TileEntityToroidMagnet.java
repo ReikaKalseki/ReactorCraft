@@ -220,9 +220,6 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		charge = NBT.getInteger("chg");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

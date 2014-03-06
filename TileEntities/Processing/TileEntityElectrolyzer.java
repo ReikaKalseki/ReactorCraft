@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -55,8 +54,6 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	private HybridTank tankH = new HybridTank("heavytank", this.getCapacity());
 
 	private HybridTank input = new HybridTank("input", this.getCapacity()*2);
-
-	private ItemStack[] inv = new ItemStack[1];
 
 	private StepTimer timer = new StepTimer(50);
 	private StepTimer tempTimer = new StepTimer(20);
@@ -293,17 +290,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public int getSizeInventory() {
-		return inv.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
+		return 1;
 	}
 
 	@Override
@@ -427,21 +414,6 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		NBT.setLong("pwr", power);
 
 		NBT.setInteger("temp", temperature);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
@@ -457,20 +429,6 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		power = NBT.getLong("pwr");
 
 		temperature = NBT.getInteger("temp");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	public boolean addHeavyWater(int amt) {

@@ -211,29 +211,19 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	{
 		super.readSyncTag(NBT);
 
-		if (NBT.hasKey("internalFluid")) {
-			tank.setFluid(new FluidStack(NBT.getInteger("liquidId"), NBT.getInteger("internalFluid")));
-		}
-		else if (NBT.hasKey("tank")) {
-			tank.setFluid(FluidStack.loadFluidStackFromNBT(NBT.getCompoundTag("tank")));
-		}
+		tank.readFromNBT(NBT);
 
 		omega = NBT.getInteger("speed");
 		torque = NBT.getInteger("trq");
 		power = NBT.getLong("pwr");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 
-		if (tank.getFluid() != null) {
-			NBT.setTag("tank", tank.getFluid().writeToNBT(new NBTTagCompound()));
-		}
+		tank.writeToNBT(NBT);
 
 		NBT.setInteger("speed", omega);
 		NBT.setInteger("trq", torque);

@@ -128,9 +128,6 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 		power = NBT.getLong("pwr");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

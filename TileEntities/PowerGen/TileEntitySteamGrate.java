@@ -125,9 +125,6 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

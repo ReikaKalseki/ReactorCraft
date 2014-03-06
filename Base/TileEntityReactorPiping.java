@@ -171,9 +171,6 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		NBT.setInteger("level", this.getLevel());
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

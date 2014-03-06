@@ -144,25 +144,15 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	{
 		super.readSyncTag(NBT);
 
-		if (NBT.hasKey("internalFluid")) {
-			tank.setFluid(new FluidStack(NBT.getInteger("liquidId"), NBT.getInteger("internalFluid")));
-		}
-		else if (NBT.hasKey("tank")) {
-			tank.setFluid(FluidStack.loadFluidStackFromNBT(NBT.getCompoundTag("tank")));
-		}
+		tank.readFromNBT(NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 
-		if (tank.getFluid() != null) {
-			NBT.setTag("tank", tank.getFluid().writeToNBT(new NBTTagCompound()));
-		}
+		tank.writeToNBT(NBT);
 	}
 
 }

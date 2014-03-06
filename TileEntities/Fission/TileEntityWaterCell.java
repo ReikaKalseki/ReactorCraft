@@ -167,9 +167,6 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		this.setLiquidState(LiquidStates.list[NBT.getInteger("liq")]);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
