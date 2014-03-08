@@ -25,7 +25,7 @@
 		Magnets are used to manipulate the path of electrically charged things like plasma, and are used in great quantities in fusion reactors.
 	</magnet>
 	<pellet>
-		Raw uranium can be powered and mixed with graphite to create fuel pellets. These pellets are the fuel for a High-Temperature Gas Reactor.
+		Raw uranium can be powdered and mixed with graphite to create fuel pellets. These pellets are the fuel for a High-Temperature Gas Reactor.
 	</pellet>
 	<oldpellet>
 		Like normal uranium fuel, fuel pellets eventually are depleted and no longer useful.
