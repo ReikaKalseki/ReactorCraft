@@ -16,14 +16,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
@@ -37,7 +35,7 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		ReikaJavaLibrary.pConsole(tank, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(tank, Side.SERVER);
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
