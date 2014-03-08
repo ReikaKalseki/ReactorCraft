@@ -9,18 +9,21 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
+import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
@@ -34,6 +37,7 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		ReikaJavaLibrary.pConsole(tank, Side.SERVER);
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
@@ -77,6 +81,22 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return this.canReceiveFrom(side) ? Flow.INPUT : Flow.NONE;
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		tank.writeToNBT(NBT);
 	}
 
 }
