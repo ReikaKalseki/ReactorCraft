@@ -31,6 +31,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 	private int omega;
 	private long power;
 	private int iotick;
+	private float speed = 0;
 
 	public static final int MINOMEGA = 256;
 	public static final int MINTORQUE = 32768;
@@ -73,17 +74,33 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
+		float v = 0.1F;
 		if (this.canTurn()) {
-			phi += 8;
-			if (omega >= 2048)
-				phi += 8;
-			if (omega >= 16384)
-				phi += 8;
-			if (omega >= 65536)
-				phi += 8;
+			if (speed < this.getMaxRenderSpeed())
+				speed += v;
+		}
+		else {
+			if (speed >= v)
+				speed -= v;
+			else
+				speed = 0;
+		}
+		if (hasMultiBlock) {
+			phi += speed;
 		}
 		else
 			phi = 0;
+	}
+
+	private float getMaxRenderSpeed() {
+		if (omega >= 65536)
+			return 32;
+		else if (omega >= 16384)
+			return 24;
+		else if (omega >= 2048)
+			return 16;
+		else
+			return 8;
 	}
 
 	public boolean canTurn() {
@@ -103,6 +120,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		NBT.setInteger("omg", omega);
 		NBT.setInteger("tq", torque);
 		NBT.setLong("pwr", power);
+		NBT.setFloat("spd", speed);
 	}
 
 	@Override
@@ -114,6 +132,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		omega = NBT.getInteger("omg");
 		torque = NBT.getInteger("tq");
 		power = NBT.getLong("pwr");
+		speed = NBT.getFloat("spd");
 	}
 
 	public void addToToroids() {

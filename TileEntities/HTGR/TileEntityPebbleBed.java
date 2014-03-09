@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.HTGR;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -122,6 +123,10 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 					}
 				}
 			}
+		}
+
+		if (temperature > this.getMaxTemperature()) {
+			world.setBlock(x, y, z, Block.lavaMoving.blockID);
 		}
 	}
 

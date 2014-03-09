@@ -48,6 +48,8 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 			return false;
 		if (!this.checkLower(world, x, y, z, midX, midY, midZ, dir, blocks))
 			return false;
+		if (!this.checkMiddle(world, x, y, z, midX, midY, midZ, dir, blocks))
+			return false;
 		if (!this.checkCorners(world, x, y, z, midX, midY, midZ, dir, blocks))
 			return false;
 		if (!this.checkSpokes(world, x, y, z, midX, midY, midZ, dir, blocks))
@@ -154,6 +156,49 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 			if (id != blockID)
 				return false;
 			if (meta != 1)
+				return false;
+		}
+		return true;
+	}
+
+	private boolean checkMiddle(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+		for (int i = -5; i <= 5; i++) {
+			int d = Math.abs(i) >= 4 ? 7 : 8;
+			int dx = midX-d;
+			int dy = midY;
+			int dz = midZ+i;
+			int m = Math.abs(i) >= 3 ? 3 : 2;
+
+			int id = world.getBlockId(dx, dy, dz);
+			int meta = world.getBlockMetadata(dx, dy, dz);
+			if (id != blockID)
+				return false;
+			if (m != meta)
+				return false;
+
+			dx = midX+d;
+			id = world.getBlockId(dx, dy, dz);
+			meta = world.getBlockMetadata(dx, dy, dz);
+			if (id != blockID)
+				return false;
+			if (m != meta)
+				return false;
+
+			dx = midX+i;
+			dz = midZ+d;
+			id = world.getBlockId(dx, dy, dz);
+			meta = world.getBlockMetadata(dx, dy, dz);
+			if (id != blockID)
+				return false;
+			if (m != meta)
+				return false;
+
+			dz = midZ-d;
+			id = world.getBlockId(dx, dy, dz);
+			meta = world.getBlockMetadata(dx, dy, dz);
+			if (id != blockID)
+				return false;
+			if (m != meta)
 				return false;
 		}
 		return true;
