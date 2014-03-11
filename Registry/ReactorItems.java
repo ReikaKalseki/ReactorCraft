@@ -56,11 +56,11 @@ public enum ReactorItems implements RegistryEnum {
 	PELLET(102,		"item.pellet",			ItemReactorBasic.class),
 	OLDPELLET(103,	"item.depletedpellet",	ItemReactorBasic.class),
 	BOOK(104,		"item.reactorbook",		ItemReactorBook.class),
-	HAZHELMET(128,	"item.hazhelmet",		ItemHazmatSuit.class),
-	HAZCHEST(129,	"item.hazchest",		ItemHazmatSuit.class),
-	HAZLEGS(130,	"item.hazlegs",			ItemHazmatSuit.class),
-	HAZBOOTS(131,	"item.hazboots",		ItemHazmatSuit.class),
-	GEIGER(132, 	"item.geiger",			ItemGeigerCounter.class);
+	HAZHELMET(112,	"item.hazhelmet",		ItemHazmatSuit.class),
+	HAZCHEST(113,	"item.hazchest",		ItemHazmatSuit.class),
+	HAZLEGS(114,	"item.hazlegs",			ItemHazmatSuit.class),
+	HAZBOOTS(115,	"item.hazboots",		ItemHazmatSuit.class),
+	GEIGER(116, 	"item.geiger",			ItemGeigerCounter.class);
 
 	private String name;
 	private Class itemClass;
