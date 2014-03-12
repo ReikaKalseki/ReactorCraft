@@ -9,18 +9,20 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.ReactorCraft.ClientProxy;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 
 	private int sprite;
 
 	public ItemHazmatSuit(int ID, int ind, int render, int type) {
-		super(ID, EnumArmorMaterial.CLOTH, render, type);
+		super(ID, ReactorCraft.HAZ, ReactorCraft.proxy.hazmat, type);
 
 		maxStackSize = 1;
 		sprite = ind;
@@ -40,6 +42,13 @@ public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 	@Override
 	public Class getTextureReferenceClass() {
 		return ReactorCraft.class;
+	}
+
+	@Override
+	public final String getArmorTexture(ItemStack is, Entity entity, int slot, String type) {
+		ReactorItems item = ReactorItems.getEntry(is);
+		String sg = ClientProxy.getArmorTextureAsset(item);
+		return sg;
 	}
 
 }

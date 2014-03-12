@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.HashMap;
+
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +41,30 @@ public class ClientProxy extends CommonProxy {
 	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();
 	public static SteamLineRenderer line;
 
+	private static final HashMap<ReactorItems, String> armorAssets = new HashMap();
+
+	@Override
+	public void addArmorRenders() {
+		hazmat = RenderingRegistry.addNewArmourRendererPrefix("hazmat");
+
+		addArmorTexture(ReactorItems.HAZBOOTS, "/Reika/ReactorCraft/Textures/Misc/haz_1.png");
+		addArmorTexture(ReactorItems.HAZHELMET, "/Reika/ReactorCraft/Textures/Misc/haz_1.png");
+		addArmorTexture(ReactorItems.HAZCHEST, "/Reika/ReactorCraft/Textures/Misc/haz_1.png");
+		addArmorTexture(ReactorItems.HAZLEGS, "/Reika/ReactorCraft/Textures/Misc/haz_2.png");
+	}
+
+	private static void addArmorTexture(ReactorItems item, String tex) {
+		ReactorCraft.logger.log("Adding armor texture for "+item+": "+tex);
+		String[] s = tex.split("/");
+		String file = s[s.length-1];
+		String defaultTex = "reactorcraft:textures/models/armor/"+file;
+		armorAssets.put(item, defaultTex);
+	}
+
+	public static String getArmorTextureAsset(ReactorItems item) {
+		return armorAssets.get(item);
+	}
+
 	@Override
 	public void registerSounds() {
 		MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, ReactorSounds.soundList, ReactorSounds.SOUND_FOLDER));
@@ -47,6 +73,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerRenderers() {
 		this.loadModels();
+		this.addArmorRenders();
 
 		lineRender = RenderingRegistry.getNextAvailableRenderId();
 		line = new SteamLineRenderer(lineRender);

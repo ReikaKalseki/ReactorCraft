@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -30,7 +31,8 @@ public enum CraftingItems {
 	HYSTERESIS(),
 	HYSTERESISRING(),
 	GRAPHITE(),
-	UDUST();
+	UDUST(),
+	FABRIC();
 
 	public final String itemName;
 
@@ -50,6 +52,11 @@ public enum CraftingItems {
 
 	public void addSizedRecipe(int size, Object... o) {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getItem(), size), o);
+	}
+
+	public void addSizedOreRecipe(int size, Object... o) {
+		ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getItem(), size), o);
+		GameRegistry.addRecipe(ir);
 	}
 
 	public void addShapelessRecipe(Object... o) {

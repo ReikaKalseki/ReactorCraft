@@ -102,6 +102,9 @@ public class ReactorRecipes {
 		CraftingItems.WIRE.addSizedRecipe(2, "  G", " G ", "G  ", 'G', Item.ingotGold);
 		CraftingItems.HYSTERESIS.addSizedRecipe(DifficultyEffects.PARTCRAFT.getInt(), "ISI", 'I', Item.ingotIron, 'S', ItemStacks.steelingot);
 		CraftingItems.COOLANT.addRecipe("SPS", "S S", "SpS", 'S', ItemStacks.steelingot, 'P', Block.thinGlass, 'p', ItemStacks.pipe);
+		CraftingItems.FABRIC.addSizedRecipe(3, "LDL", "LDL", "LDL", 'D', ReactorItems.DEPLETED.getStackOf(), 'L', Item.leather);
+		CraftingItems.FABRIC.addSizedRecipe(1, "LDL", "LDL", "LDL", 'D', ReactorItems.OLDPELLET.getStackOf(), 'L', Item.leather);
+		CraftingItems.FABRIC.addSizedOreRecipe(2, "LDL", "LDL", "LDL", 'D', "ingotLead", 'L', Item.leather);
 	}
 
 	private static void addSmelting() {
@@ -160,6 +163,13 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.REMOTE.getStackOf(), "SES", "BCB", "BPB", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'B', Block.stoneButton, 'E', Item.enderPearl, 'C', ItemStacks.pcb);
 
 		GameRegistry.addRecipe(ReactorItems.BOOK.getStackOf(), "RSR", "PPP", "PPP", 'R', ReactorItems.FLUORITE.getItemInstance(), 'S', ItemStacks.steelingot, 'P', Item.paper);
+
+		GameRegistry.addRecipe(ReactorItems.HAZHELMET.getStackOf(), "FFF", "F F", 'F', CraftingItems.FABRIC.getItem());
+		GameRegistry.addRecipe(ReactorItems.HAZCHEST.getStackOf(), "F F", "FFF", "FFF", 'F', CraftingItems.FABRIC.getItem());
+		GameRegistry.addRecipe(ReactorItems.HAZLEGS.getStackOf(), "FFF", "F F", "F F", 'F', CraftingItems.FABRIC.getItem());
+		GameRegistry.addRecipe(ReactorItems.HAZBOOTS.getStackOf(), "F F", "F F", 'F', CraftingItems.FABRIC.getItem());
+
+		GameRegistry.addRecipe(ReactorItems.GEIGER.getStackOf(), " r ", "sSs", "sgs", 'g', ItemStacks.steelgear, 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'r', ItemStacks.radar);
 	}
 
 	private static void addMachines() {
