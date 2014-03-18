@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -241,14 +242,14 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	@Override
-	public boolean onShiftRightClick(World world, int x, int y, int z) {
+	public boolean onShiftRightClick(World world, int x, int y, int z, ForgeDirection side) {
 		alpha = 512;
 		this.decrementAim();
 		return true;
 	}
 
 	@Override
-	public boolean onRightClick(World world, int x, int y, int z) {
+	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
 		alpha = 512;
 		this.incrementAim();
 		return true;

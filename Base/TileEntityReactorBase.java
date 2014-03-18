@@ -165,14 +165,14 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		return dirs[r];
 	}
 
-	public ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
+	public final ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
 		ArrayList<String> li = new ArrayList();
 		if (this instanceof Temperatured) {
 			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((Temperatured)this).getTemperature());
 			li.add(s);
 		}
 		else if (this instanceof ThermalMachine) {
-			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((TemperatureTE)this).getTemperature());
+			String s = String.format("%s %s: %dC", this.getTEName(), Variables.TEMPERATURE, ((ThermalMachine)this).getTemperature());
 			//li.add(s);
 		}
 		else if (this instanceof TemperatureTE) {
