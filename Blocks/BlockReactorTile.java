@@ -10,7 +10,11 @@
 package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -26,10 +30,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -45,11 +53,13 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class BlockReactorTile extends Block {
+public class BlockReactorTile extends Block implements IWailaBlock {
 
 	protected static final Icon[][][] icons = new Icon[ReactorTiles.TEList.length][6][16];
 
@@ -385,6 +395,41 @@ public class BlockReactorTile extends Block {
 				li.add(r.getCraftedProduct());
 		}
 		return li;
+	}
+
+	@Override
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return null;
+	}
+
+	public List<String> getWailaHead(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		return tip;
+	}
+
+	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		TileEntity te = acc.getTileEntity();
+		if (te instanceof Temperatured)
+			tip.add(String.format("Temperature: %dC", ((Temperatured) te).getTemperature()));
+		else if (te instanceof TemperatureTE)
+			tip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+		else if (te instanceof ThermalMachine)
+			tip.add(String.format("Temperature: %dC", ((ThermalMachine) te).getTemperature()));
+		if (te instanceof IFluidHandler) {
+			FluidTankInfo[] tanks = ((IFluidHandler)te).getTankInfo(ForgeDirection.UP);
+			if (tanks != null) {
+				for (int i = 0; i < tanks.length; i++) {
+					FluidTankInfo info = tanks[i];
+					FluidStack fs = info.fluid;
+					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName()) : "Empty";
+					tip.add("Tank "+i+": "+input);
+				}
+			}
+		}
+		return tip;
+	}
+
+	public List<String> getWailaTail(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		return tip;
 	}
 
 }

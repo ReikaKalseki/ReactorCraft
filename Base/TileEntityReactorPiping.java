@@ -203,14 +203,16 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					Fluid f = tp.getLiquidType();
-					int amt = tp.getLevel();
-					int dL = amt-this.getLevel();
-					int todrain = this.getPipeIntake(dL);
-					if (todrain > 0 && this.canIntakeFluid(f)) {
-						this.setFluid(f);
-						this.addFluid(todrain);
-						tp.removeLiquid(todrain);
-						this.onIntake(te);
+					if (f != null) {
+						int amt = tp.getLevel();
+						int dL = amt-this.getLevel();
+						int todrain = this.getPipeIntake(dL);
+						if (todrain > 0 && this.canIntakeFluid(f)) {
+							this.setFluid(f);
+							this.addFluid(todrain);
+							tp.removeLiquid(todrain);
+							this.onIntake(te);
+						}
 					}
 				}
 				else if (te instanceof PipeConnector) {

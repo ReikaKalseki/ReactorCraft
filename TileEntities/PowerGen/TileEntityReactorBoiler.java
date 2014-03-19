@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -44,7 +45,6 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
-
 		if (temperature >= DETTEMP && fluid == WorkingFluid.AMMONIA)
 			this.detonateAmmonia(world, x, y, z);
 
@@ -127,6 +127,9 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 	private boolean canBoilTankLiquid() {
 		if (!WorkingFluid.isWorkingFluid(tank.getActualFluid()))
+			return false;
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+		if (temperature < Tamb)
 			return false;
 		return fluid == WorkingFluid.EMPTY || tank.getActualFluid().equals(fluid.getFluid());
 	}

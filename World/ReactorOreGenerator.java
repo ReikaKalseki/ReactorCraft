@@ -31,7 +31,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 		}
 	}
 
-	public static void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
+	public void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
 		//ReikaJavaLibrary.pConsole("Generating "+ore);
 		//ReikaJavaLibrary.pConsole(chunkX+", "+chunkZ);
 		int id = ore.getBlockID();

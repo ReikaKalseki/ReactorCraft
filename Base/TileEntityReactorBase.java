@@ -27,12 +27,15 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.ThermalMachine;
@@ -121,6 +124,21 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	protected void updateTemperature(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int dT = Tamb-temperature;
+		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null) {
+			int diff = (1+dT/32);
+			if (diff == 0)
+				diff = dT/Math.abs(dT);
+			temperature += diff;
+		}
+		if (this instanceof TileEntityReactorBoiler && temperature >= 300 && Tamb > 100) {
+			if (!((TileEntityReactorBoiler)this).tank.isEmpty()) {
+				world.setBlock(x, y, z, 0);
+				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
+			}
+		}
+
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -141,7 +159,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						flag = true;
 					if (flag) {
 						int T = tr.getTemperature();
-						int dT = T-temperature;
+						dT = T-temperature;
 						if (dT > 0) {
 							int newT = T-dT/4;
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
@@ -151,7 +169,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					}
 				}
 				if ((r == ReactorTiles.BREEDER || r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) && src == ReactorTiles.BOILER) {
-					if (temperature > 300) {
+					if (temperature >= 300) {
 						world.setBlock(x, y, z, 0);
 						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 					}

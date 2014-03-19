@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -26,6 +27,12 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 	protected StepTimer timer = new StepTimer(20);
 
 	protected HybridTank output = new HybridTank(this.getName().toLowerCase()+"out", this.getCapacity());
+
+	@Override
+	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		//ReikaJavaLibrary.pConsole(tank, Side.SERVER);
+		return new FluidTankInfo[]{tank.getInfo(), output.getInfo()};
+	}
 
 	public abstract int getLiquidUsage();
 

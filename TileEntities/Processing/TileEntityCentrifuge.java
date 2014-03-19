@@ -332,6 +332,6 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
+		return side == ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
 	}
 }

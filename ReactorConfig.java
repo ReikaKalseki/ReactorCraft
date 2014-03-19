@@ -23,7 +23,7 @@ public class ReactorConfig extends ControlledConfig {
 	private int potionID;
 
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ReactorAchievements.class);
-	public int[] achievementIDs = new int[entries.size()]; //
+	public int[] achievementIDs = new int[entries.size()];
 
 	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
 		super(mod, option, blocks, items, id, cfg);

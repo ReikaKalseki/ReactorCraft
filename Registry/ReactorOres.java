@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -17,8 +19,10 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -46,6 +50,8 @@ public enum ReactorOres {
 	public final int harvestLevel;
 
 	public static final ReactorOres[] oreList = values();
+
+	private static final EnumMap<ReactorOres, Boolean> equivalents = new EnumMap(ReactorOres.class);
 
 	private ReactorOres(int min, int max, int size, int count, int dim, int level, float xp, String name) {
 		this(min, max, size, count, dim, level, xp, name, true);
@@ -215,11 +221,33 @@ public enum ReactorOres {
 
 	public boolean canGenerateInChunk(World world, int chunkX, int chunkZ) {
 		int id = world.provider.dimensionId;
-		if (!shouldGen)
+		if (!this.shouldGen())
 			return false;
 		if (!this.isValidDimension(id))
 			return false;
 		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.getDimensionID();
+	}
+
+	private boolean shouldGen() {
+		return shouldGen || !this.hasEquivalents();
+	}
+
+	public boolean hasEquivalents() {
+		Boolean b = equivalents.get(this);
+		if (b == null) {
+			ArrayList<ItemStack> li = OreDictionary.getOres(this.getDictionaryName());
+			boolean flag = false;
+			for (int i = 0; i < li.size() && !flag; i++) {
+				ItemStack is = li.get(i);
+				if (!ReikaItemHelper.matchStacks(is, this.getOreBlock())) {
+					b = true;
+					flag = true;
+				}
+			}
+			b = flag;
+			equivalents.put(this, b);
+		}
+		return b.booleanValue();
 	}
 
 	public boolean canGenAt(World world, int x, int y, int z) {

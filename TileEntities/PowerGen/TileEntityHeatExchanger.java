@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
@@ -51,6 +52,11 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	private HybridTank output = new HybridTank("exchangerout", this.getCapacity());
 
 	private StepTimer temp = new StepTimer(20);
+
+	@Override
+	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo(), output.getInfo()};
+	}
 
 	@Override
 	public int getIndex() {

@@ -37,7 +37,7 @@ public class ReactorRetroGen implements RetroactiveGenerator {
 		for (int i = 0; i < ReactorOres.oreList.length; i++) {
 			ReactorOres ore = ReactorOres.oreList[i];
 			if (ore.canGenerateInChunk(world, chunkX, chunkZ)) {
-				ReactorOreGenerator.generate(ore, world, random, chunkX, chunkZ);
+				//ReactorOreGenerator.generate(ore, world, random, chunkX, chunkZ);
 			}
 		}
 	}
