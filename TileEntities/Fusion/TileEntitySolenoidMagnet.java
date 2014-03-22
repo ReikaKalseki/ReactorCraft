@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -20,6 +21,7 @@ import Reika.ReactorCraft.Blocks.BlockSolenoidMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
 public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ShaftPowerReceiver {
@@ -43,6 +45,11 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+			this.noInputMachine();
+		}
+
 		if (!hasMultiBlock && this.getTicksExisted() == 0) {
 			this.checkForMultiBlock(world, x, y, z);
 		}

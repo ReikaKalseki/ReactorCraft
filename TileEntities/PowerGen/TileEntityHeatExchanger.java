@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities.PowerGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -26,6 +27,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -65,6 +67,11 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+			this.noInputMachine();
+		}
+
 		Exchange e = this.getExchange();
 
 		if (this.canCool(e))

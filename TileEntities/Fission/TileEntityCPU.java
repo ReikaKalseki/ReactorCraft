@@ -22,6 +22,7 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
 public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerReceiver, Temperatured {
@@ -61,6 +62,10 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 
 		if ((world.getTotalWorldTime()&16) == 16)
 			reactor.clear();
+
+		if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
+			this.noInputMachine();
+		}
 
 		if (power < layout.getMinPower())
 			this.SCRAM();
@@ -132,7 +137,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 
 	@Override
 	public boolean canReadFromBlock(int x, int y, int z) {
-		return Math.abs(x-xCoord+y-yCoord+z-zCoord) == 1; //one block away
+		return Math.abs(x-xCoord)+Math.abs(y-yCoord)+Math.abs(z-zCoord) == 1; //one block away
 	}
 
 	@Override

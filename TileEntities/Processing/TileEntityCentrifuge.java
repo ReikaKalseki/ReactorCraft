@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Processing;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -28,6 +29,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -89,6 +91,12 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		timer.setCap(this.setTimer());
+
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+			this.noInputMachine();
+		}
+
 		if (power > 0 && omega >= MINSPEED) {
 			if (this.canMake()) {
 				timer.update();

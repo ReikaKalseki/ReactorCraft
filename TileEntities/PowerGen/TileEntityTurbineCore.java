@@ -31,10 +31,9 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 
-public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, PowerGenerator {
+public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
 	private int steam;
 
@@ -518,6 +517,21 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public long getCurrentPower() {
 		return this.getGenPower();
+	}
+
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
 	}
 
 }

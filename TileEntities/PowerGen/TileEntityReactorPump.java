@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
@@ -44,6 +45,11 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+			this.noInputMachine();
+		}
+
 		if (this.canConvert())
 			this.convertFluids();
 		if (!output.isEmpty())

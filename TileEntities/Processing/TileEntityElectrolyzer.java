@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.API.ThermalMachine;
@@ -98,6 +99,11 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (iotick > 0)
 			iotick -= 8;
+
+		if (!PowerTransferHelper.checkPowerFromAllSides(this, false)) {
+			this.noInputMachine();
+		}
+
 		tempTimer.update();
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);

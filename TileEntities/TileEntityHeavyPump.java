@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -26,6 +27,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -108,6 +110,11 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+			this.noInputMachine();
+		}
+
 		timer.setCap(Math.max(1, 20-2*(int)ReikaMathLibrary.logbase(omega, 2)));
 		timer.update();
 		if (timer.checkCap() && power >= MINPOWER && torque >= MINTORQUE && this.canHarvest(world, x, y, z)) {

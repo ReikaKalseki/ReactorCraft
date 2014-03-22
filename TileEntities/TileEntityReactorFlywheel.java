@@ -14,10 +14,9 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 
-public class TileEntityReactorFlywheel extends TileEntityReactorBase implements ShaftPowerEmitter, PowerGenerator {
+public class TileEntityReactorFlywheel extends TileEntityReactorBase implements ShaftPowerEmitter {
 
 	private int iotick;
 	private long power;
@@ -108,6 +107,21 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 	@Override
 	public boolean isEmitting() {
 		return hasMultiBlock;
+	}
+
+	@Override
+	public int getEmittingX() {
+		return xCoord+this.getFacing().getOpposite().offsetX;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return yCoord+this.getFacing().getOpposite().offsetY;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return zCoord+this.getFacing().getOpposite().offsetZ;
 	}
 
 }
