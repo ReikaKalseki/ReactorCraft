@@ -192,5 +192,6 @@ public final class ReactorDescriptions {
 		addData(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINDEPTH, TileEntityHeavyPump.MAXY);
 		addData(ReactorTiles.BOILER, TileEntityReactorBoiler.DETTEMP);
 		addNotes(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
+		addNotes(ReactorTiles.BOILER, TileEntityReactorBoiler.DETTEMP);
 	}
 }
