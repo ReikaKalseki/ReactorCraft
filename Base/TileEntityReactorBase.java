@@ -169,7 +169,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					}
 				}
 				if ((r == ReactorTiles.BREEDER || r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) && src == ReactorTiles.BOILER) {
-					if (temperature >= 300) {
+					if (temperature >= 100) {
 						world.setBlock(x, y, z, 0);
 						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 					}
