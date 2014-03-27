@@ -16,6 +16,7 @@ import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
@@ -32,6 +33,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter {
 
@@ -109,6 +111,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		if (this.getGenPower() >= 1000000000L) {
 			ReactorAchievements.GIGATURBINE.triggerAchievement(this.getPlacer());
+		}
+
+		TileEntity tg = this.getTileEntity(writex, writey, writez);
+		if (tg instanceof ShaftPowerReceiver) {
+			ShaftPowerReceiver rec = (ShaftPowerReceiver)tg;
+			rec.setOmega(this.getOmega());
+			rec.setTorque(this.getTorque());
+			rec.setPower(this.getPower());
 		}
 	}
 
