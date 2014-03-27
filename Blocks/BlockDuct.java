@@ -73,7 +73,7 @@ public class BlockDuct extends BlockReactorTile {
 		pipeIcons[1][0] = Block.blockGold.getIcon(0, 0);
 
 		pipeIcons[0][1] = Block.glass.getIcon(0, 0);
-		pipeIcons[1][1] = RotaryCraft.blastglass.getIcon(0, 0);
+		pipeIcons[1][1] = ico.registerIcon("rotarycraft:obsidiglass");
 	}
 
 	@Override

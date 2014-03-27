@@ -84,6 +84,7 @@ public class BlockReactorOre extends Block {
 		for (int i = 1; i < ReactorOres.oreList.length; i++) {
 			icons[i] = ico.registerIcon(ReactorOres.oreList[i].getTextureName());
 		}
+		icons[0] = Block.stone.getIcon(0, 0);
 	}
 
 	@Override
