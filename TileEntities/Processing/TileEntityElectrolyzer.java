@@ -27,7 +27,6 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -314,7 +313,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
 		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
 		if (waterside != null) {

@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -154,6 +155,10 @@ public class BlockReactorTile extends Block implements IWailaBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		if (tile instanceof TileEntityBase)
+			((TileEntityBase)tile).syncAllData();
+
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking())
 			return false;

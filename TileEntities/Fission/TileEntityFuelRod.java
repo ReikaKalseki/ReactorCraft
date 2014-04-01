@@ -40,6 +40,8 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 			return false;
 		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
 			return i < 4;
+		if (is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID())
+			return i < 4;
 		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
 			return i < 4;
 		return false;

@@ -118,8 +118,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			if (dC > 0) {
 				te.charge += dC/4;
 				charge -= dC/4;
-				EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2.25, z+0.5, dC/4, te.xCoord+0.5, te.yCoord+2.25, te.zCoord+0.5);
-				EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1.25, z+0.5, dC/4, te.xCoord+0.5, te.yCoord-1.25, te.zCoord+0.5);
+				EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2.25, z+0.5, charge, te.xCoord+0.5, te.yCoord+2.25, te.zCoord+0.5);
+				EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1.25, z+0.5, charge, te.xCoord+0.5, te.yCoord-1.25, te.zCoord+0.5);
 
 				float ang = this.getAngle();
 				float ang2 = te.getAngle();
@@ -128,8 +128,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				double fx2 = 1.75*Math.cos(Math.toRadians(ang2));
 				double fz2 = 1.75*Math.sin(Math.toRadians(ang2));
 
-				EntityDischarge e3 = new EntityDischarge(world, x+0.5+fx, y+0.5, z+0.5+fz, dC/4, te.xCoord+0.5+fx2, te.yCoord+0.5, te.zCoord+0.5+fz2);
-				EntityDischarge e4 = new EntityDischarge(world, x+0.5-fx, y+0.5, z+0.5-fz, dC/4, te.xCoord+0.5-fx2, te.yCoord+0.5, te.zCoord+0.5-fz2);
+				EntityDischarge e3 = new EntityDischarge(world, x+0.5+fx, y+0.5, z+0.5+fz, charge, te.xCoord+0.5+fx2, te.yCoord+0.5, te.zCoord+0.5+fz2);
+				EntityDischarge e4 = new EntityDischarge(world, x+0.5-fx, y+0.5, z+0.5-fz, charge, te.xCoord+0.5-fx2, te.yCoord+0.5, te.zCoord+0.5-fz2);
 				if (!world.isRemote) {
 					world.spawnEntityInWorld(e1);
 					world.spawnEntityInWorld(e2);
@@ -147,8 +147,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				if (dC > 0) {
 					te.charge += dC/4;
 					charge -= dC/4;
-					EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2, z+0.5, dC/4, te.xCoord+0.5, te.yCoord+2, te.zCoord+0.5);
-					EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1, z+0.5, dC/4, te.xCoord+0.5, te.yCoord-1, te.zCoord+0.5);
+					EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2, z+0.5, charge, te.xCoord+0.5, te.yCoord+2, te.zCoord+0.5);
+					EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1, z+0.5, charge, te.xCoord+0.5, te.yCoord-1, te.zCoord+0.5);
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e1);
 						world.spawnEntityInWorld(e2);
@@ -160,7 +160,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	private void updateCharge(World world, int x, int y, int z) {
-		charge *= 0.8;
+		if (charge <= 1)
+			charge = 0;
+		else
+			charge *= 0.8;
 	}
 
 	private void clearArea(World world, int x, int y, int z) {

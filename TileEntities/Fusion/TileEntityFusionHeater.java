@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -43,7 +43,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public void whenInBeam(long power, int range) {
-		temperature += 64000*ReikaMathLibrary.logbase(power, 2);
+		temperature += 640*ReikaMathLibrary.logbase(power, 2);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 		if (dT != 0)
 			temperature -= (1+dT/16384D);

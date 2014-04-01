@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -89,7 +88,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	@Override
 	protected void updateTemperature(World world, int x, int y, int z) {
 		super.updateTemperature(world, x, y, z);
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 
 		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null)

@@ -68,7 +68,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (this.canMake() && ReikaRandomHelper.doWithChance(60)) {
+		if (this.canMake() && ReikaRandomHelper.doWithChance(75)) {
 			this.make();
 			return true;
 		}
@@ -76,7 +76,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 	}
 
 	private void make() {
-		int amt = 10;
+		int amt = 25;
 		input.removeLiquid(amt);
 		output.addLiquid(amt, FluidRegistry.getFluid("rc tritium"));
 	}

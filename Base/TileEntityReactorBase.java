@@ -27,7 +27,6 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
@@ -124,7 +123,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	protected void updateTemperature(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = Tamb-temperature;
 		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null) {
 			int diff = (1+dT/32);

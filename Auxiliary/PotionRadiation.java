@@ -9,14 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import java.util.Random;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.FoodStats;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
 public class PotionRadiation extends Potion {
@@ -38,29 +36,14 @@ public class PotionRadiation extends Potion {
 		e.removePotionEffect(Potion.fireResistance.id);
 		e.removePotionEffect(Potion.resistance.id);
 		e.removePotionEffect(Potion.nightVision.id);
-		Random r = new Random();
-		float h = e.getHealth();
-		float mh = e.getMaxHealth();
-		float f = h/mh;
-		if ((int)(h/4) <= 0)
-			return;
-		if (f >= 0.5) {
-			if (r.nextInt((int)h/4) == 0)
-				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
-		}
-		else if  (f > 0.25) {
-			if (r.nextInt((int)h/2) == 0)
-				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
-		}
-		else if (h > 1) {
-			if (r.nextInt((int)h) == 0)
-				e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
-		}
+
+		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getHealth()*50))
+			e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
 
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
-			FoodStats st = ep.getFoodStats();
-			st.addExhaustion(0.25F);
+			ep.getFoodStats().setFoodSaturationLevel(0);
+			ep.getFoodStats().setFoodLevel(0);
 
 			ReikaPlayerAPI.setPlayerWalkSpeed(ep, 0.075F);
 		}

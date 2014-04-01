@@ -129,7 +129,11 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 
 	private boolean canHarvest(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		return (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean) && y < MAXY && this.isOceanFloor(world, x, y, z);
+		return this.isOcean(biome) && y < MAXY && this.isOceanFloor(world, x, y, z);
+	}
+
+	private boolean isOcean(BiomeGenBase biome) {
+		return biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean || biome.biomeName.toLowerCase().contains("ocean");
 	}
 
 	private boolean isOceanFloor(World world, int x, int y, int z) {

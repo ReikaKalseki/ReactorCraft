@@ -50,6 +50,11 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 
 	}
 
+	@Override
+	public final boolean canSilkHarvest() {
+		return false;
+	}
+
 	protected abstract void breakMultiBlock(World world, int x, int y, int z);
 
 	@Override

@@ -499,7 +499,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(6, 6, 6);
 	}
 
-	enum Interference {
+	private static enum Interference {
 		JAM(0),
 		FLUID(512),
 		MOB(4096);

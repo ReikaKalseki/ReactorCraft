@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Base;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
@@ -345,6 +346,11 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	@Override
 	public final boolean isFluidPipe() {
 		return true;
+	}
+
+	@Override
+	public Icon getOverlayIcon() {
+		return null;
 	}
 
 }

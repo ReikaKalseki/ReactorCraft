@@ -22,7 +22,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -109,11 +108,11 @@ public class ItemReactorPlacer extends Item {
 			return true;
 		}
 		if (te instanceof Temperatured) {
-			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((Temperatured)te).setTemperature(Tb);
 		}
 		else if (te instanceof ThermalMachine) {
-			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((ThermalMachine)te).setTemperature(Tb);
 		}
 		if (te instanceof ShaftMachine) {

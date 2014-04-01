@@ -58,7 +58,7 @@ public class ReactorItemRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
 		else {
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(machine.getBlockVariable(), item.getItemDamage(), 1);
+			rb.renderBlockAsItem(machine.getBlockVariable(), machine.getBlockMetadata(), 1);
 		}
 	}
 }

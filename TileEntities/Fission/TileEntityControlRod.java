@@ -33,7 +33,9 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.moveRods();
-		this.updateTemperature(world, x, y, z);
+		thermalTicker.update();
+		if (thermalTicker.checkCap())
+			this.updateTemperature(world, x, y, z);
 	}
 
 	private void moveRods() {

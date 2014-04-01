@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
+import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RotaryCraft;
@@ -42,7 +43,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	public Icon getBlockIcon() {
-		return Block.blockGold.getIcon(0, 0);
+		return charge > 0 ? BlockDuct.getGlow() : Block.blockGold.getIcon(0, 0);
 	}
 
 	@Override
@@ -115,7 +116,10 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 			charge = 0;
 		}
 		else {
-			//charge *= 0.99;
+			if (charge > 1)
+				charge *= 0.99;
+			else
+				charge = 0;
 		}
 	}
 
@@ -127,9 +131,6 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 		NBT.setInteger("chg", charge);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -161,6 +162,15 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	@Override
 	public float getAimZ() {
 		return 0.5F;
+	}
+
+	@Override
+	public Icon getOverlayIcon() {
+		return null;
+	}
+
+	public int getCharge() {
+		return charge;
 	}
 
 }

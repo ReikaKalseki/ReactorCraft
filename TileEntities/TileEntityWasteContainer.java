@@ -18,7 +18,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
@@ -53,7 +52,7 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 	}
 
 	private void distributeHeat(World world, int x, int y, int z) {
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world.getBiomeGenForCoords(x, z));
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(temperature);
 		if (temperature > Tamb) {
 			ForgeDirection side = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);

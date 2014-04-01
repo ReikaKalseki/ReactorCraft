@@ -155,6 +155,9 @@ public class ReactorCraft extends DragonAPIMod {
 		this.registerOres();
 		ReactorTiles.loadMappings();
 
+		if (ReactorBlocks.CORIUMSTILL.getBlockID() != ReactorBlocks.CORIUMFLOWING.getBlockID()+1)
+			throw new InstallationException(instance, "The still corium block ID needs to be exactly one more than the flowing ID!");
+
 		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
 			achievements = new Achievement[ReactorAchievements.list.length];
 			ReactorAchievements.registerAchievements();
