@@ -38,7 +38,9 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.updateTemperature(world, x, y, z);
+		thermalTicker.update();
+		if (thermalTicker.checkCap())
+			this.updateTemperature(world, x, y, z);
 		if (reactor.isEmpty()) {
 			layout.clear();
 			int r = 6;
