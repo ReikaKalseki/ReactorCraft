@@ -31,6 +31,7 @@ import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -114,6 +115,10 @@ public class ItemReactorPlacer extends Item {
 		else if (te instanceof ThermalMachine) {
 			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((ThermalMachine)te).setTemperature(Tb);
+		}
+		else if (te instanceof TemperatureTE) {
+			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+			((TemperatureTE)te).addTemperature(Tb);
 		}
 		if (te instanceof ShaftMachine) {
 			ShaftMachine sm = (ShaftMachine)te;

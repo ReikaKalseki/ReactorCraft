@@ -43,7 +43,7 @@ public class PotionRadiation extends Potion {
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 			ep.getFoodStats().setFoodSaturationLevel(0);
-			ep.getFoodStats().setFoodLevel(0);
+			ep.getFoodStats().setFoodLevel(1);
 
 			ReikaPlayerAPI.setPlayerWalkSpeed(ep, 0.075F);
 		}

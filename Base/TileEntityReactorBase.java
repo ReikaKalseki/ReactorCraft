@@ -127,7 +127,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		int dT = Tamb-temperature;
 		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null) {
 			int diff = (1+dT/32);
-			if (diff == 0)
+			if (diff <= 1)
 				diff = dT/Math.abs(dT);
 			temperature += diff;
 		}

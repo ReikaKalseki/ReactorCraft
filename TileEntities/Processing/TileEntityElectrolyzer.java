@@ -202,7 +202,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p) && side.offsetY != 0;
+		return this.canConnectToPipe(p);
 	}
 
 	@Override
@@ -377,7 +377,10 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	@Override
 	public void onDischarge(int charge, double range) {
 		if (this.canMakeSodium() || this.canMakeHydrogen()) {
-			timer.update();
+			int extra = charge-this.getMinDischarge();
+			int n = extra > 0 ? (int)Math.sqrt(extra)/16 : 1;
+			for (int i = 0; i < n; i++)
+				timer.update();
 		}
 	}
 

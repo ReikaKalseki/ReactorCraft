@@ -141,7 +141,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	public void onDischarge(int charge, double range) {
-		this.charge += charge;
+		this.charge += Math.pow(charge, 1.1);
 	}
 
 	@Override
