@@ -24,7 +24,7 @@ public class ReactorTab extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
-		return ReactorTiles.HEAVYPUMP.getCraftedProduct();
+		return ReactorTiles.MAGNET.getCraftedProduct();
 	}
 
 	@Override

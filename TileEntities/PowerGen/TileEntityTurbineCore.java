@@ -298,7 +298,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 					if (inter == null || inter.maxSpeed > Interference.FLUID.maxSpeed)
 						inter = Interference.FLUID;
 				}
-				else if (this.getStage() == 0 && id2 == ReactorBlocks.STEAM.getBlockID()) {
+				else if (this.getStage() == 0 && id2 == ReactorBlocks.STEAM.getBlockID() && xyz[0] == x && xyz[1] == y-1 && xyz[2] == z) {
 					//ReikaJavaLibrary.pConsole(meta2);
 					if ((meta2&2) != 0 && (meta2&8) == 0) {
 						int newmeta = 1+(meta2&4);

@@ -46,9 +46,7 @@ public class ItemBlockFluorite extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack is) {
-		if (this.getDataValues(is.itemID) <= 1)
-			return super.getUnlocalizedName(is);
-		int d = is.getItemDamage();
+		int d = is.getItemDamage()%8;
 		return super.getUnlocalizedName() + "." + d;
 	}
 

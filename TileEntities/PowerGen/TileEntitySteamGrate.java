@@ -50,6 +50,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	private boolean canMakeSteam(World world, int x, int y, int z) {
 		if (steam <= 0)
 			return false;
+		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			return false;
 		if (world.provider instanceof IGalacticraftWorldProvider) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 			if (ig.getSoundVolReductionAmount() > 1)

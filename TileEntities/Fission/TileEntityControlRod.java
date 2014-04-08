@@ -25,7 +25,7 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	private boolean lowered = true;
 	private Motions motion;
 
-	private static final int MINOFFSET = 0;
+	private static final int MINOFFSET = -5;
 	private static final int MAXOFFSET = 20;
 
 	private int rodOffset = MINOFFSET;
@@ -105,6 +105,8 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 		if (motion != null)
 			NBT.setInteger("motion", motion.ordinal());
+
+		NBT.setInteger("rodoffset", rodOffset);
 	}
 
 	@Override
@@ -116,6 +118,8 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 		if (NBT.hasKey("motion"))
 			motion = Motions.values()[NBT.getInteger("motion")];
+
+		rodOffset = NBT.getInteger("rodoffset");
 	}
 
 	@Override

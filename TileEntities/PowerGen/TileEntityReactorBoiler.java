@@ -129,7 +129,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		if (!WorkingFluid.isWorkingFluid(tank.getActualFluid()))
 			return false;
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
-		if (temperature < Tamb)
+		if (temperature < Tamb+50)
 			return false;
 		return fluid == WorkingFluid.EMPTY || tank.getActualFluid().equals(fluid.getFluid());
 	}
