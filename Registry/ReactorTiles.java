@@ -29,6 +29,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityNeutronReflector;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
@@ -94,7 +95,8 @@ public enum ReactorTiles {
 	PEBBLEBED("machine.pebblebed",				ReactorBlocks.REACTOR,			TileEntityPebbleBed.class,		9),
 	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10),
 	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7),
-	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11);
+	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
+	GENERATOR("machine.generator",				ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8);
 
 	private String name;
 	private final Class teClass;
