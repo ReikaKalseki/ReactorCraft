@@ -417,7 +417,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		iotick -= 8;
 		if (!this.isInWorld()) {
 			phi = 0;

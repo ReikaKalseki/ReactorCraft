@@ -5,42 +5,46 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import cofh.api.energy.IEnergyHandler;
+import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityReactorGenerator extends TileEntityReactorBase implements ShaftPowerReceiver, IEnergyHandler {
+public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler {
 
 	private ForgeDirection facingDir;
 
-	private int omega;
-	private int torque;
 	private long power;
-	private int iotick;
+	private int torquein;
+	private int omegain;
 
 	public boolean hasMultiblock;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (iotick > 0)
-			iotick -= 8;
-
+		this.setFacing(ForgeDirection.EAST);
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
-		TileEntity te = this.getAdjacentTileEntity(this.getFacing());
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
-			this.noInputMachine();
-		}
+		this.getPower(world, x, y, z, meta);
+		power = (long)omegain*(long)torquein;
 
-		int writex = x+this.getFacing().getOpposite().offsetX;
-		int writey = y+this.getFacing().getOpposite().offsetY;
-		int writez = z+this.getFacing().getOpposite().offsetZ;
+		ReikaJavaLibrary.pConsole(power, Side.SERVER);
+
 		if (power > 0) {
+			int writex = x+this.getFacing().getOpposite().offsetX;
+			int writey = y+this.getFacing().getOpposite().offsetY;
+			int writez = z+this.getFacing().getOpposite().offsetZ;
 			int id = world.getBlockId(writex, writey, writez);
 			if (id != 0) {
 				Block b = Block.blocksList[id];
@@ -56,6 +60,120 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 					}
 				}
 			}
+		}
+	}
+
+	private int getGeneratorLength() {
+		return 12;
+	}
+
+	private void getPower(World world, int x, int y, int z, int meta) {
+		int len = this.getGeneratorLength();
+		int dx = x+this.getFacing().offsetX*len;
+		int dy = y+this.getFacing().offsetY*len;
+		int dz = z+this.getFacing().offsetZ*len;
+		int ex = x+this.getFacing().offsetX*(len-1);
+		int ey = y+this.getFacing().offsetY*(len-1);
+		int ez = z+this.getFacing().offsetZ*(len-1);
+
+		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = this.getTileEntity(dx, dy, dz);
+
+		if (m == MachineRegistry.SHAFT) {
+			TileEntityShaft devicein = (TileEntityShaft)te;
+			if (devicein.isCross()) {
+				this.readFromCross(devicein, ex, ey, ez);
+				return;
+			}
+			if (devicein.isWritingToCoordinate(ex, ey, ez)) {
+				torquein = devicein.torque;
+				omegain = devicein.omega;
+			}
+		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getFacing().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
+		}
+		if (te instanceof SimpleProvider) {
+			TileEntityIOMachine io = (TileEntityIOMachine)te;
+			torquein = io.torque;
+			omegain = io.omega;
+		}
+		if (te instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+			if (sp.isEmitting() && sp.canWriteToBlock(ex, ey, ez)) {
+				torquein = sp.getTorque();
+				omegain = sp.getOmega();
+			}
+		}
+		if (m == MachineRegistry.SPLITTER) {
+			TileEntitySplitter devicein = (TileEntitySplitter)te;
+			if (devicein.isSplitting()) {
+				this.readFromSplitter(devicein, ex, ey, ez);
+				return;
+			}
+			else if (devicein.isWritingToCoordinate(ex, ey, ez)) {
+				torquein = devicein.torque;
+				omegain = devicein.omega;
+			}
+		}
+	}
+
+	protected void readFromCross(TileEntityShaft cross, int ex, int ey, int ez) {
+		if (cross.isWritingToCoordinate(ex, ey, ez)) {
+			omegain = cross.readomega[0];
+			torquein = cross.readtorque[0];
+		}
+		else if (cross.isWritingToCoordinate2(ex, ey, ez)) {
+			omegain = cross.readomega[1];
+			torquein = cross.readtorque[1];
+		}
+		else
+			return; //not its output
+	}
+
+	private void readFromSplitter(TileEntitySplitter spl, int ex, int ey, int ez) {
+		int sratio = spl.getRatioFromMode();
+		if (sratio == 0)
+			return;
+		boolean favorbent = false;
+		if (sratio < 0) {
+			favorbent = true;
+			sratio = -sratio;
+		}
+		if (ex == spl.writeinline[0] && ez == spl.writeinline[1]) { //We are the inline
+			omegain = spl.omega; //omega always constant
+			if (sratio == 1) { //Even split, favorbent irrelevant
+				torquein = spl.torque/2;
+				return;
+			}
+			if (favorbent) {
+				torquein = spl.torque/sratio;
+			}
+			else {
+				torquein = (int)(spl.torque*((sratio-1D))/sratio);
+			}
+		}
+		else if (ex == spl.writebend[0] && ez == spl.writebend[1]) { //We are the bend
+			omegain = spl.omega; //omega always constant
+			if (sratio == 1) { //Even split, favorbent irrelevant
+				torquein = spl.torque/2;
+				return;
+			}
+			if (favorbent) {
+				torquein = (int)(spl.torque*((sratio-1D)/(sratio)));
+			}
+			else {
+				torquein = spl.torque/sratio;
+			}
+		}
+		else { //We are not one of its write-to blocks
+			torquein = 0;
+			omegain = 0;
+			power = 0;
+			return;
 		}
 	}
 
@@ -77,7 +195,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 
@@ -88,8 +206,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		facingDir = dirs[NBT.getInteger("face")];
 		hasMultiblock = NBT.getBoolean("multi");
 
-		omega = NBT.getInteger("omg");
-		torque = NBT.getInteger("tq");
 		power = NBT.getLong("pwr");
 	}
 
@@ -100,66 +216,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		NBT.setInteger("face", this.getFacing().ordinal());
 		NBT.setBoolean("multi", hasMultiblock);
 
-		NBT.setInteger("omg", omega);
-		NBT.setInteger("tq", torque);
 		NBT.setLong("pwr", power);
-	}
-
-	@Override
-	public int getOmega() {
-		return omega;
-	}
-
-	@Override
-	public int getTorque() {
-		return torque;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
-	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		ForgeDirection dir = this.getFacing();
-		return x == xCoord+dir.offsetX && y == yCoord && z == zCoord+dir.offsetZ;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return hasMultiblock;
-	}
-
-	@Override
-	public void noInputMachine() {
-		omega = torque = 0;
-		power = 0;
 	}
 
 	@Override

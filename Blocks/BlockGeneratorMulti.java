@@ -14,53 +14,46 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getNumberTextures() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public int getNumberVariants() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 5;
 	}
 
 	@Override
 	protected String getIconBaseName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "generator";
 	}
 
 	@Override
 	public int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getItemTextureIndex(int meta, int side) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

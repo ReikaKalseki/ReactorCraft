@@ -207,7 +207,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (alpha > 0)
 			alpha -= 8;
 	}

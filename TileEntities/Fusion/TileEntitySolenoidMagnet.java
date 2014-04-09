@@ -80,7 +80,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		float v = 0.1F;
 		if (this.canTurn()) {
 			if (speed < this.getMaxRenderSpeed())

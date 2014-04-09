@@ -26,7 +26,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

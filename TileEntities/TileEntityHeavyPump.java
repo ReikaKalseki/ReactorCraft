@@ -55,7 +55,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (power > 0) {
 			phi += 10F;
 		}
