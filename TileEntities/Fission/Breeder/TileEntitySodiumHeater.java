@@ -24,7 +24,7 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 
 	@Override
 	public int getMinimumTemperature() {
-		return 300;
+		return 301;
 	}
 
 	@Override

@@ -5,7 +5,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -18,7 +19,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import cofh.api.energy.IEnergyHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler {
 
@@ -36,10 +36,17 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
-		this.getPower(world, x, y, z, meta);
+		if (hasMultiblock)
+			this.getPower(world, x, y, z, meta);
+		else {
+			omegain = torquein = 0;
+		}
 		power = (long)omegain*(long)torquein;
 
-		ReikaJavaLibrary.pConsole(power, Side.SERVER);
+		if (omegain > 0)
+			this.testFailure(world, x, y, z);
+
+		//ReikaJavaLibrary.pConsole(power, Side.SERVER);
 
 		if (power > 0) {
 			int writex = x+this.getFacing().getOpposite().offsetX;
@@ -61,6 +68,18 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 				}
 			}
 		}
+	}
+
+	private void testFailure(World world, int x, int y, int z) {
+		if (ReikaEngLibrary.mat_rotfailure(ReikaEngLibrary.rhoiron, 7, omegain, 100*ReikaEngLibrary.Tsteel))
+			this.fail(world, x, y, z);
+	}
+
+	private void fail(World world, int x, int y, int z) {
+		world.setBlock(x, y, z, 0);
+		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, this.getGeneratorLength());
+		ex.doExplosionA();
+		ex.doExplosionB(true);
 	}
 
 	private int getGeneratorLength() {
