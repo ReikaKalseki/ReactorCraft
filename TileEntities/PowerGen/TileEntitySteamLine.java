@@ -218,4 +218,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		//certain TEs
 		return false;
 	}
+
+	@Override
+	public int getPacketDelay() {
+		return 4*super.getPacketDelay();
+	}
 }

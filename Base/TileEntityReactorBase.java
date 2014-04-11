@@ -217,7 +217,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public final int getPacketDelay() {
+	public int getPacketDelay() {
 		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 
