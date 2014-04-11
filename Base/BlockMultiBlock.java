@@ -104,8 +104,8 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 	public final Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
 		int index = this.getTextureIndex(world, x, y, z, side, world.getBlockMetadata(x, y, z));
 		index = Math.max(0, Math.min(this.getNumberTextures()-1, index)); //safety net
-		//return icons[index];
-		return Block.blocksList[1+world.getBlockMetadata(x, y, z)*2].getIcon(0, 0);
+		return icons[index];
+		//return Block.blocksList[1+world.getBlockMetadata(x, y, z)*2].getIcon(0, 0);
 	}
 
 	public abstract int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta);
