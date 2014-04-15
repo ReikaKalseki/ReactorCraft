@@ -234,8 +234,9 @@ public class BlockSteam extends Block {
 	}
 
 	public int getTransmittedMetadata(int original_meta, ForgeDirection dir) {
-		if (dir == ForgeDirection.UP)
-			return (original_meta & 8) == 0 ? original_meta : 1;
+		if (dir == ForgeDirection.UP) {
+			return (original_meta & 8) == 0 ? original_meta : 1+(original_meta&4);
+		}
 		return original_meta | 8;
 	}
 

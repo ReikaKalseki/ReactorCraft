@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.WorldPipingRenderer;
+import Reika.DragonAPI.Instantiable.Rendering.WorldPipingRenderer;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class SteamLineRenderer extends WorldPipingRenderer {
