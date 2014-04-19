@@ -110,6 +110,7 @@ public enum ReactorOres {
 		case ENDBLENDE:
 			return "ingotUranium";
 		case CALCITE:
+		case MAGNETITE:
 			return "gem"+ReikaStringParser.capFirstChar(this.name());
 		case AMMONIUM:
 			return "dust"+ReikaStringParser.capFirstChar(this.name());

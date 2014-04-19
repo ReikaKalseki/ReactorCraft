@@ -129,6 +129,12 @@ public class BlockSteam extends Block {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
 			}
+			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
+				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
+					world.setBlock(x, y, z, 0);
+				}
+			}
 			else {
 				world.setBlock(x, y, z, 0);
 			}
@@ -148,6 +154,12 @@ public class BlockSteam extends Block {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
 			}
+			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
+				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
+					world.setBlock(x, y, z, 0);
+				}
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -163,6 +175,12 @@ public class BlockSteam extends Block {
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
+			}
+			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
+				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
+					world.setBlock(x, y, z, 0);
+				}
 			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
@@ -180,6 +198,12 @@ public class BlockSteam extends Block {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
 			}
+			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
+				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
+					world.setBlock(x, y, z, 0);
+				}
+			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -195,6 +219,12 @@ public class BlockSteam extends Block {
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, blockID, this.getTransmittedMetadata(meta, dir), 3);
 				world.setBlock(x, y, z, 0);
+			}
+			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 3) {
+				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
+					world.setBlock(x, y, z, 0);
+				}
 			}
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(dx, dy, dz);

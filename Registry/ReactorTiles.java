@@ -96,7 +96,7 @@ public enum ReactorTiles {
 	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10),
 	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7),
 	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
-	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8);
+	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator");
 
 	private String name;
 	private final Class teClass;

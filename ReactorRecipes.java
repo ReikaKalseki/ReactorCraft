@@ -88,6 +88,12 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "SSS", "MMM", "SSS", 'M', ReactorStacks.weakerMagnet, 'S', CraftingItems.MAGNETIC.getItem());
 		GameRegistry.addRecipe(new ItemStack(id, 1, 4), "SSS", "MMM", "SSS", 'M', CraftingItems.FERROINGOT.getItem(), 'S', CraftingItems.HYSTERESIS.getItem());
 		GameRegistry.addRecipe(new ItemStack(id, 1, 5), "SSS", "WPW", "SSS", 'W', CraftingItems.WIRE.getItem(), 'P', CraftingItems.MAGNETIC.getItem(), 'S', CraftingItems.FERROINGOT.getItem());
+
+		id = ReactorBlocks.GENERATORMULTI.getBlockID();
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "sss", "SsS", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.WIRE.getItem(), 'B', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', CraftingItems.WIRE.getItem(), 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
 	}
 
 	private static void addCrafting() {
@@ -154,7 +160,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.DEPLETED.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.depdust.copy());
 		GameRegistry.addRecipe(ReactorItems.FUEL.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.fueldust.copy());
 
-		GameRegistry.addRecipe(ReactorItems.PELLET.getStackOf(), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
+		GameRegistry.addRecipe(ReactorItems.PELLET.getCraftedProduct(3), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
 
 		GameRegistry.addRecipe(ReactorItems.BREEDERFUEL.getCraftedProduct(4), " D ", "DED", " D ", 'D', ReactorItems.DEPLETED.getStackOf(), 'E', ReactorItems.FUEL.getStackOf());
 
@@ -206,6 +212,7 @@ public class ReactorRecipes {
 		ReactorTiles.PEBBLEBED.addCrafting("SHS", "PCP", "SHS", 'H', Block.hopperBlock, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
+		ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Item.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
 	}
 
 }

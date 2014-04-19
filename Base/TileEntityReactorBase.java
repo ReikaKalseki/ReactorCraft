@@ -32,6 +32,7 @@ import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
@@ -212,6 +213,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			String pre = ReikaEngLibrary.getSIPrefix(sp.getPower());
 			double base = ReikaMathLibrary.getThousandBase(sp.getPower());
 			li.add(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+		}
+		if (this instanceof TileEntityReactorGenerator) {
+			TileEntityReactorGenerator sp = (TileEntityReactorGenerator)this;
+			li.add(String.format("%s generating %d RF/t.", sp.getName(), sp.getGenRF()));
 		}
 		return li;
 	}

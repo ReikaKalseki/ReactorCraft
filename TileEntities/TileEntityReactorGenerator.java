@@ -12,22 +12,22 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import cofh.api.energy.IEnergyHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler {
 
@@ -41,7 +41,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.setFacing(ForgeDirection.EAST);
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
@@ -53,7 +52,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		power = (long)omegain*(long)torquein;
 
 		if (omegain > 0)
-			this.testFailure(world, x, y, z);
+			;//this.testFailure(world, x, y, z);
 
 		//ReikaJavaLibrary.pConsole(power, Side.SERVER);
 
@@ -85,14 +84,17 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	private void fail(World world, int x, int y, int z) {
+		int l = this.getGeneratorLength()/2;
 		world.setBlock(x, y, z, 0);
-		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, this.getGeneratorLength());
+		double dx = x+0.5+this.getFacing().offsetX*l;
+		double dz = z+0.5+this.getFacing().offsetZ*l;
+		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, dx, y+0.5, dz, 12);
 		ex.doExplosionA();
 		ex.doExplosionB(true);
 	}
 
-	private int getGeneratorLength() {
-		return 12;
+	public static int getGeneratorLength() {
+		return 10;
 	}
 
 	private void getPower(World world, int x, int y, int z, int meta) {
@@ -100,52 +102,14 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		int dx = x+this.getFacing().offsetX*len;
 		int dy = y+this.getFacing().offsetY*len;
 		int dz = z+this.getFacing().offsetZ*len;
-		int ex = x+this.getFacing().offsetX*(len-1);
-		int ey = y+this.getFacing().offsetY*(len-1);
-		int ez = z+this.getFacing().offsetZ*(len-1);
 
-		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-		TileEntity te = this.getTileEntity(dx, dy, dz);
+		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.isCross()) {
-				this.readFromCross(devicein, ex, ey, ez);
-				return;
-			}
-			if (devicein.isWritingToCoordinate(ex, ey, ez)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.POWERBUS) {
-			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-			ForgeDirection dir = this.getFacing().getOpposite();
-			omegain = pwr.getSpeedToSide(dir);
-			torquein = pwr.getTorqueToSide(dir);
-		}
-		if (te instanceof SimpleProvider) {
-			TileEntityIOMachine io = (TileEntityIOMachine)te;
-			torquein = io.torque;
-			omegain = io.omega;
-		}
-		if (te instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-			if (sp.isEmitting() && sp.canWriteToBlock(ex, ey, ez)) {
-				torquein = sp.getTorque();
-				omegain = sp.getOmega();
-			}
-		}
-		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.isSplitting()) {
-				this.readFromSplitter(devicein, ex, ey, ez);
-				return;
-			}
-			else if (devicein.isWritingToCoordinate(ex, ey, ez)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
+		if (r == ReactorTiles.TURBINECORE) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getTileEntity(dx, dy, dz);
+			power = te.getPower();
+			omegain = te.getOmega();
+			torquein = te.getTorque();
 		}
 	}
 
@@ -213,7 +177,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		return facingDir != null ? facingDir : ForgeDirection.EAST;
 	}
 
-	protected void setFacing(ForgeDirection dir) {
+	public void setFacing(ForgeDirection dir) {
 		facingDir = dir;
 	}
 
@@ -224,7 +188,11 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += 0.5*ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omegain+1, 2), 1.05);
 	}
 
 	@Override
@@ -259,7 +227,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public boolean canInterface(ForgeDirection from) {
-		return from == facingDir.getOpposite();
+		return from == this.getFacing().getOpposite();
 	}
 
 	@Override
@@ -270,6 +238,20 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
 		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox()
+	{
+		int l = this.getGeneratorLength();
+		int x1 = xCoord+1+this.getFacing().offsetX*l;
+		int z1 = zCoord+1+this.getFacing().offsetZ*l;
+		int mx = Math.min(x1, xCoord);
+		int mz = Math.min(z1, zCoord);
+		int mx2 = Math.max(x1, xCoord);
+		int mz2 = Math.max(z1, zCoord);
+		return AxisAlignedBB.getAABBPool().getAABB(mx, yCoord-2, mz, mx2, yCoord+3, mz2);
 	}
 
 }

@@ -30,6 +30,7 @@ import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
@@ -230,6 +231,12 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
 		if (lavaside != null) {
 			Tamb += 600;
+			if (temperature < 100)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, lavaside, Block.stone.blockID, 0);
+			else {
+				world.setBlock(x, y, z, 0);
+				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 6, ConfigRegistry.BLOCKDAMAGE.getState());
+			}
 		}
 		if (temperature > Tamb)
 			temperature--;

@@ -27,6 +27,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
@@ -84,6 +85,9 @@ public class ItemReactorPlacer extends Item {
 		te.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		if (m == ReactorTiles.INJECTOR) {
 			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
+		}
+		if (m == ReactorTiles.GENERATOR) {
+			((TileEntityReactorGenerator)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false));
 		}
 		if (m == ReactorTiles.COLLECTOR) {
 			switch(side) {
