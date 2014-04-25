@@ -213,6 +213,7 @@ public class ReactorRecipes {
 		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
 		ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Item.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
+		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Block.torchRedstoneActive);
 	}
 
 }

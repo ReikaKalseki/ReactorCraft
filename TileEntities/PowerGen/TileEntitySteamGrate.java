@@ -13,6 +13,7 @@ import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -42,7 +43,9 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
-		//steam = 3;
+
+		if (DragonAPICore.debugtest)
+			steam = 3;
 		//fluid = WorkingFluid.AMMONIA;
 		//ReikaJavaLibrary.pConsole(steam, Side.SERVER);
 	}

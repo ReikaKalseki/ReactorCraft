@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
 import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
@@ -96,7 +97,8 @@ public enum ReactorTiles {
 	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10),
 	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7),
 	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
-	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator");
+	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator"),
+	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker");
 
 	private String name;
 	private final Class teClass;

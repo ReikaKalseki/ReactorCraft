@@ -32,7 +32,6 @@ public class PotionRadiation extends Potion {
 		e.removePotionEffect(Potion.damageBoost.id);
 		e.removePotionEffect(Potion.heal.id);
 		e.removePotionEffect(Potion.jump.id);
-		e.removePotionEffect(Potion.regeneration.id);
 		e.removePotionEffect(Potion.fireResistance.id);
 		e.removePotionEffect(Potion.resistance.id);
 		e.removePotionEffect(Potion.nightVision.id);
@@ -42,10 +41,10 @@ public class PotionRadiation extends Potion {
 
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
-			ep.getFoodStats().setFoodSaturationLevel(0);
-			ep.getFoodStats().setFoodLevel(1);
 
 			ReikaPlayerAPI.setPlayerWalkSpeed(ep, 0.075F);
+			ReikaPlayerAPI.setFoodLevel(ep, 1);
+			ReikaPlayerAPI.setSaturationLevel(ep, 0);
 		}
 
 		if (!e.isPotionActive(Potion.confusion))

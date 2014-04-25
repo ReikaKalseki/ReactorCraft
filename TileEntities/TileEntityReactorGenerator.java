@@ -251,7 +251,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		int mz = Math.min(z1, zCoord);
 		int mx2 = Math.max(x1, xCoord);
 		int mz2 = Math.max(z1, zCoord);
-		return AxisAlignedBB.getAABBPool().getAABB(mx, yCoord-2, mz, mx2, yCoord+3, mz2);
+		return AxisAlignedBB.getAABBPool().getAABB(mx, yCoord-2, mz, mx2, yCoord+3, mz2).expand(6, 6, 6);
 	}
 
 }

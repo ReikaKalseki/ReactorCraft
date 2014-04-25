@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -43,7 +44,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public void whenInBeam(long power, int range) {
-		temperature += 640*ReikaMathLibrary.logbase(power, 2);
+		int a = DragonAPICore.debugtest ? 64000 : 640;
+		temperature += a*ReikaMathLibrary.logbase(power, 2);
 	}
 
 	@Override

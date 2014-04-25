@@ -34,6 +34,7 @@ import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.RotaryCraft.API.ShaftMachine;
@@ -168,10 +169,14 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						}
 					}
 				}
-				if ((r == ReactorTiles.BREEDER || r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) && src == ReactorTiles.BOILER) {
-					if (temperature >= 100) {
+				if (r == ReactorTiles.BREEDER || r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
+					if (src == ReactorTiles.BOILER && temperature >= 100 && !((TileEntityReactorBoiler)this).tank.isEmpty()) {
 						world.setBlock(x, y, z, 0);
 						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
+					}
+					else if (src == ReactorTiles.SODIUMBOILER && temperature >= 300 && !((TileEntitySodiumHeater)this).tank.isEmpty()) {
+						world.setBlock(x, y, z, 0);
+						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 5F, true);
 					}
 				}
 			}

@@ -227,6 +227,12 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
 		if (fireside != null) {
 			Tamb += 200;
+			if (temperature < 100)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, fireside, 0, 0);
+			else {
+				world.setBlock(x, y, z, 0);
+				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 6, ConfigRegistry.BLOCKDAMAGE.getState());
+			}
 		}
 		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
 		if (lavaside != null) {

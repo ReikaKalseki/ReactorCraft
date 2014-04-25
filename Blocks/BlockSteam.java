@@ -130,7 +130,7 @@ public class BlockSteam extends Block {
 				world.setBlock(x, y, z, 0);
 			}
 			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
-				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
 					world.setBlock(x, y, z, 0);
 				}
@@ -155,7 +155,7 @@ public class BlockSteam extends Block {
 				world.setBlock(x, y, z, 0);
 			}
 			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
-				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
 					world.setBlock(x, y, z, 0);
 				}
@@ -177,7 +177,7 @@ public class BlockSteam extends Block {
 				world.setBlock(x, y, z, 0);
 			}
 			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
-				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
 					world.setBlock(x, y, z, 0);
 				}
@@ -199,7 +199,7 @@ public class BlockSteam extends Block {
 				world.setBlock(x, y, z, 0);
 			}
 			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 11) {
-				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
 					world.setBlock(x, y, z, 0);
 				}
@@ -221,7 +221,7 @@ public class BlockSteam extends Block {
 				world.setBlock(x, y, z, 0);
 			}
 			else if (world.getBlockId(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockID() && world.getBlockMetadata(dx, dy, dz) == 3) {
-				if (this.canMoveInto(world, dx+dir.offsetX, te.yCoord+3, dz+dir.offsetZ)) {
+				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, blockID, this.getTransmittedMetadata(meta, dir), 3);
 					world.setBlock(x, y, z, 0);
 				}
@@ -272,6 +272,7 @@ public class BlockSteam extends Block {
 
 	public boolean canMoveInto(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
+		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+" >> "+id+":"+world.getBlockMetadata(x, y, z));
 		if (id == 0)
 			return true;
 		if (id == blockID)

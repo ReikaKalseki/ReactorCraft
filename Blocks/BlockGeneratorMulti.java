@@ -45,6 +45,16 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		return ReactorTiles.getTE(world, x+dir.offsetX*l, y, z+dir.offsetZ*l) == ReactorTiles.GENERATOR;
 	}
 
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
 	private boolean checkCore(World world, int x, int y, int z, ForgeDirection dir) {
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		for (int i = 0; i < l; i++) {

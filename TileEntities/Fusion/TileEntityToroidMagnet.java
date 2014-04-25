@@ -236,7 +236,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		NBT.setInteger("chg", charge);
 	}
 
-	protected Aim getAim() {
+	public Aim getAim() {
 		return aim != null ? aim : Aim.N;
 	}
 
@@ -308,7 +308,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(3, 3, 3);
 	}
 
-	protected static enum Aim {
+	public static enum Aim {
 		N(0,			2, 0),
 		NNW1(11.3F,		2, -1),
 		NNW2(24,		2, -1),
@@ -352,6 +352,14 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			angle = a;
 			xOffset = x;
 			zOffset = z;
+		}
+
+		public Aim getNext() {
+			return this.ordinal() < list.length-1 ? list[this.ordinal()+1] : list[0];
+		}
+
+		public boolean isCardinal() {
+			return this.ordinal()%8 == 0;
 		}
 	}
 
