@@ -61,6 +61,7 @@ public enum ReactorItems implements RegistryEnum {
 	HAZLEGS(114,	"item.hazlegs",			ItemHazmatSuit.class),
 	HAZBOOTS(115,	"item.hazboots",		ItemHazmatSuit.class),
 	GEIGER(116, 	"item.geiger",			ItemGeigerCounter.class);
+	//IRONFINDER(117, "item.ironfinder",		ItemIronFinder.class);
 
 	private String name;
 	private Class itemClass;

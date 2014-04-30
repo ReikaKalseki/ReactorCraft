@@ -476,4 +476,9 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		return input.getLevel();
 	}
 
+	@Override
+	public int getMinTorque(int available) {
+		return 8;
+	}
+
 }

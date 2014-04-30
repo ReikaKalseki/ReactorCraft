@@ -19,10 +19,12 @@ import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.RotaryCraft.API.Screwdriverable;
 
-public class TileEntitySteamGrate extends TileEntityReactorBase {
+public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable {
 
 	private int steam;
+	private boolean requireRedstone;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
@@ -53,7 +55,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 	private boolean canMakeSteam(World world, int x, int y, int z) {
 		if (steam <= 0)
 			return false;
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+		if (world.isBlockIndirectlyGettingPowered(x, y, z) != requireRedstone)
 			return false;
 		if (world.provider instanceof IGalacticraftWorldProvider) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
@@ -128,6 +130,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		steam = NBT.getInteger("energy");
 
 		fluid = WorkingFluid.getFromNBT(NBT);
+
+		requireRedstone = NBT.getBoolean("red");
 	}
 
 	@Override
@@ -138,6 +142,18 @@ public class TileEntitySteamGrate extends TileEntityReactorBase {
 		NBT.setInteger("energy", steam);
 
 		fluid.saveToNBT(NBT);
+
+		NBT.setBoolean("red", requireRedstone);
+	}
+
+	@Override
+	public boolean onShiftRightClick(World world, int x, int y, int z, ForgeDirection side) {
+		return requireRedstone = !requireRedstone;
+	}
+
+	@Override
+	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
+		return false;
 	}
 
 }

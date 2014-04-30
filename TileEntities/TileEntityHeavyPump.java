@@ -256,4 +256,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements ShaftP
 		return side.offsetY == 0 ? Flow.OUTPUT : Flow.NONE;
 	}
 
+	@Override
+	public int getMinTorque(int available) {
+		return MINTORQUE;
+	}
+
 }

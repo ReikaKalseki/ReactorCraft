@@ -263,4 +263,9 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		power = 0;
 	}
 
+	@Override
+	public int getMinTorque(int available) {
+		return MINTORQUE;
+	}
+
 }

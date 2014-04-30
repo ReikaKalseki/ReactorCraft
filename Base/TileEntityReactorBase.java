@@ -174,7 +174,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						world.setBlock(x, y, z, 0);
 						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 					}
-					else if (src == ReactorTiles.SODIUMBOILER && temperature >= 300 && !((TileEntitySodiumHeater)this).tank.isEmpty()) {
+				}
+				if (r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
+					if (src == ReactorTiles.SODIUMBOILER && temperature >= 300 && !((TileEntitySodiumHeater)this).tank.isEmpty()) {
 						world.setBlock(x, y, z, 0);
 						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 5F, true);
 					}
@@ -280,7 +282,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	/** OpenComputers */
 	@Override
 	public final String getComponentName() {
-		return this.getName().replaceAll(" ", "");
+		return this.getType();
 	}
 
 	@Override
@@ -295,5 +297,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			objs[i] = args.checkAny(i);
 		}
 		return methodNames.containsKey(method) ? methodNames.get(method).invoke(this, objs) : null;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

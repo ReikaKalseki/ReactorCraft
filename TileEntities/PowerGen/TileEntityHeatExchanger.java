@@ -167,6 +167,11 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side != ForgeDirection.DOWN && this.canConnectToPipe(p);
+	}
+
+	@Override
 	public int getCapacity() {
 		return CAPACITY;
 	}
@@ -286,6 +291,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
+		if (side == ForgeDirection.DOWN)
+			return Flow.NONE;
 		return this.canReceiveFrom(side) ? Flow.INPUT : Flow.OUTPUT;
 	}
 
@@ -366,6 +373,11 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 		tank.writeToNBT(NBT);
 		output.writeToNBT(NBT);
+	}
+
+	@Override
+	public int getMinTorque(int available) {
+		return 16;
 	}
 
 }

@@ -256,4 +256,9 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
 		return type == PipeType.FLUID ? (side != ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
 	}
+
+	@Override
+	public int getMinTorque(int available) {
+		return MINTORQUE;
+	}
 }

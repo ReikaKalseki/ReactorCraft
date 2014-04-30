@@ -189,4 +189,9 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 		}
 	}
 
+	@Override
+	public int getMinTorque(int available) {
+		return 1;
+	}
+
 }

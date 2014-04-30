@@ -144,6 +144,9 @@ public class ReactorCraft extends DragonAPIMod {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			;//MinecraftForge.EVENT_BUS.register(IronFinderOverlay.instance);
+
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);

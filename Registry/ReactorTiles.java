@@ -31,6 +31,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityNeutronReflector;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
@@ -98,7 +99,8 @@ public enum ReactorTiles {
 	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7),
 	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
 	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator"),
-	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker");
+	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker"),
+	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3);
 
 	private String name;
 	private final Class teClass;
@@ -212,6 +214,8 @@ public enum ReactorTiles {
 		case PEBBLEBED:
 			return 5;
 		case INJECTOR:
+			return 3;
+		case TURBINEMETER:
 			return 3;
 		default:
 			return 1;

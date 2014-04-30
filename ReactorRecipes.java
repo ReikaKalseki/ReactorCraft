@@ -176,6 +176,8 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.HAZBOOTS.getStackOf(), "F F", "F F", 'F', CraftingItems.FABRIC.getItem());
 
 		GameRegistry.addRecipe(ReactorItems.GEIGER.getStackOf(), " r ", "sSs", "sgs", 'g', ItemStacks.steelgear, 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'r', ItemStacks.radar);
+
+		//GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
 	}
 
 	private static void addMachines() {
@@ -214,6 +216,7 @@ public class ReactorRecipes {
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
 		ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Item.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Block.torchRedstoneActive);
+		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Block.glowStone, 'r', Item.redstone, 'S', ItemStacks.steelingot);
 	}
 
 }
