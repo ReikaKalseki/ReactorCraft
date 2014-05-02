@@ -15,13 +15,14 @@ import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 
 public class ReactorBookTracker extends HandbookTracker {
 
-	public ReactorBookTracker(String name) {
-		super(name);
-	}
-
 	@Override
 	public ItemStack getItem() {
 		return ReactorItems.BOOK.getStackOf();
+	}
+
+	@Override
+	public String getID() {
+		return "ReactorCraft_Handbook";
 	}
 
 }

@@ -209,7 +209,7 @@ public class ReactorCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
 
 		if (ConfigRegistry.HANDBOOK.getState())
-			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker("ReactorCraft_Handbook"));
+			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker());
 	}
 
 	@Override

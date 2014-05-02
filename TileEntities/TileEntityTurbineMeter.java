@@ -12,7 +12,6 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -35,8 +34,6 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 		if (this.getTicksExisted() < 1 || (world.getTotalWorldTime()&7) == 0) {
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
-
-		ReikaJavaLibrary.pConsole(turbineY);
 	}
 
 	private void remapTurbine(World world, int x, int y, int z) {

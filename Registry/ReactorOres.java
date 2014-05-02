@@ -30,14 +30,14 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 public enum ReactorOres {
 
 	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.4F,	"ore.fluorite"),
-	PITCHBLENDE(	8, 	24, 16, 3, 	0,	2,	1F,		"ore.pitchblende"),
+	PITCHBLENDE(	8, 	24, 16, 3, 	0,	1,	1F,		"ore.pitchblende"),
 	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"ore.cadmium"),
 	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"ore.indium"),
 	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"ore.silver", ReactorOptions.SILVERORE.getState()),
-	ENDBLENDE(		0, 	64, 16, 6, 	1,	2,	1F,		"ore.pitchblende"),
+	ENDBLENDE(		0, 	64, 16, 6, 	1,	1,	1F,		"ore.pitchblende"),
 	AMMONIUM(		32,	32,	8,	6,	-1,	1,	0.8F,	"ore.ammonium"),
 	CALCITE(		32, 60,	4,	12,	0,	0,	0.4F,	"ore.calcite"),
-	MAGNETITE(		60,	128,16,	5,	0,	1,	0.8F,	"ore.magnetite");
+	MAGNETITE(		60,	128,16,	7,	0,	1,	0.8F,	"ore.magnetite");
 
 	public final int minY;
 	public final int maxY;
