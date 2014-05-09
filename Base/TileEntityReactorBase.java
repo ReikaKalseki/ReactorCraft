@@ -94,6 +94,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 		NBT.setInteger("temp", temperature);
 
+		if (phi >= 360)
+			phi = phi%360;
 		NBT.setFloat("ang", phi);
 
 	}
@@ -106,6 +108,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		temperature = NBT.getInteger("temp");
 
 		phi = NBT.getFloat("ang");
+		if (phi >= 360)
+			phi = phi%360;
 
 	}
 

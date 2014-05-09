@@ -60,16 +60,14 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private boolean canMake() {
-		return hasMultiBlock && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty();
+		return hasMultiBlock && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty() && tank.canTakeIn(100);
 	}
 
 	private void make() {
 		ReactorAchievements.PLASMA.triggerAchievement(this.getPlacer());
-		int b = 5;
-		int a = 250/b;
-		h2.removeLiquid(a);
-		h3.removeLiquid(a);
-		tank.addLiquid(b*2*a, FluidRegistry.getFluid("fusion plasma"));
+		h2.removeLiquid(50);
+		h3.removeLiquid(50);
+		tank.addLiquid(100, FluidRegistry.getFluid("fusion plasma"));
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {

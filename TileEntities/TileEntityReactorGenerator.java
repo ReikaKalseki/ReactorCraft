@@ -111,6 +111,10 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			omegain = te.getOmega();
 			torquein = te.getTorque();
 		}
+		else {
+			omegain = torquein = 0;
+			power = 0;
+		}
 	}
 
 	protected void readFromCross(TileEntityShaft cross, int ex, int ey, int ez) {

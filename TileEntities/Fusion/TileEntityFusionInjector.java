@@ -51,7 +51,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	private void make(World world, int x, int y, int z) {
 		this.createPlasma(world, x, y, z);
-		tank.removeLiquid(2);
+		tank.removeLiquid(5);
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {

@@ -130,7 +130,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 				EntityDischarge e3 = new EntityDischarge(world, x+0.5+fx, y+0.5, z+0.5+fz, charge, te.xCoord+0.5+fx2, te.yCoord+0.5, te.zCoord+0.5+fz2);
 				EntityDischarge e4 = new EntityDischarge(world, x+0.5-fx, y+0.5, z+0.5-fz, charge, te.xCoord+0.5-fx2, te.yCoord+0.5, te.zCoord+0.5-fz2);
-				if (!world.isRemote) {
+				if (!world.isRemote && this.shouldSpawnSparks(world)) {
 					world.spawnEntityInWorld(e1);
 					world.spawnEntityInWorld(e2);
 					world.spawnEntityInWorld(e3);
@@ -149,7 +149,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 					charge -= dC/4;
 					EntityDischarge e1 = new EntityDischarge(world, x+0.5, y+2, z+0.5, charge, te.xCoord+0.5, te.yCoord+2, te.zCoord+0.5);
 					EntityDischarge e2 = new EntityDischarge(world, x+0.5, y-1, z+0.5, charge, te.xCoord+0.5, te.yCoord-1, te.zCoord+0.5);
-					if (!world.isRemote) {
+					if (!world.isRemote && this.shouldSpawnSparks(world)) {
 						world.spawnEntityInWorld(e1);
 						world.spawnEntityInWorld(e2);
 					}
@@ -157,6 +157,16 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			}
 		}
 		return false;
+	}
+
+	private boolean shouldSpawnSparks(World world) {
+		int rate = this.getPacketDelay();
+		if (rate < 5)
+			return true;
+		else if (rate < 10)
+			return world.getTotalWorldTime()%2 == 0;
+		else
+			return (world.getTotalWorldTime()&3) == 0;
 	}
 
 	private void updateCharge(World world, int x, int y, int z) {

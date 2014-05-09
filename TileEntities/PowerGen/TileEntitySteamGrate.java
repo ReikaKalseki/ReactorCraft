@@ -110,7 +110,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 					int ds = te.getSteam()-steam;
 					if (ds > 0) {
 						steam += ds/4+1;
-						te.removeSteam(ds/2+1);
+						te.removeSteam(ds/4+1);
 					}
 				}
 			}
