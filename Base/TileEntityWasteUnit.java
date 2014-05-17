@@ -94,7 +94,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		return this.countWaste() > 0;
 	}
 
-	protected final double getHalfLife(ItemStack is) {
+	public final double getHalfLife(ItemStack is) {
 		if (is.itemID != ReactorItems.WASTE.getShiftedItemID())
 			return 0;
 		return WasteManager.getWasteList().get(is.getItemDamage()).getMCHalfLife();

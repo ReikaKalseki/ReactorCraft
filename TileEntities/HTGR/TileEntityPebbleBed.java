@@ -10,10 +10,12 @@
 package Reika.ReactorCraft.TileEntities.HTGR;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -24,7 +26,6 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 
 public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable {
 
@@ -48,8 +49,12 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(7))
 			this.runDecayCycle();
-		//ReikaInventoryHelper.clearInventory(this);
-		//ReikaInventoryHelper.addToIInv(ReactorItems.PELLET.getStackOf(), this);
+
+		if (DragonAPICore.debugtest) {
+			ReikaInventoryHelper.clearInventory(this);
+			ReikaInventoryHelper.addToIInv(ReactorItems.PELLET.getStackOf(), this);
+		}
+
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		this.feed();
 
@@ -91,7 +96,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null)
+		if (dT != 0 && this.isExposedToAir(world, x, y, z))
 			temperature -= (1+dT/32);
 
 		if (dT > 0) {
@@ -110,23 +115,35 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 						te.temperature += dTemp/16;
 					}
 				}
-				else if (r == ReactorTiles.BOILER) {
-					TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
-					dT = te.getTemperature()-temperature;
-					int t = Math.max(te.getTemperature(), temperature);
-					int tr = te.getTemperature() >= 100 ? Math.max(t, 20) : 20;
-					//ReikaJavaLibrary.pConsole(tr, Side.SERVER);
-					int maxr = Math.min(tr, temperature-Tamb);
-					if (maxr > 0) {
-						temperature -= maxr;
-					}
-				}
 			}
 		}
 
 		if (temperature > this.getMaxTemperature()) {
 			world.setBlock(x, y, z, Block.lavaMoving.blockID);
 		}
+	}
+
+	private boolean isExposedToAir(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetZ;
+			int dz = z+dir.offsetY;
+			int id = world.getBlockId(dx, dy, dz);
+			if (id == 0)
+				return true;
+			Block b = Block.blocksList[id];
+			if (b == null)
+				return true;
+			if (b.getCollisionBoundingBoxFromPool(world, dx, dy, dz) == null)
+				return true;
+			Material mat = b.blockMaterial;
+			if (mat == Material.circuits || mat == Material.air || mat == Material.cactus || mat == Material.fire)
+				return true;
+			if (mat == Material.plants || mat == Material.portal || mat == Material.vine || mat == Material.web)
+				return true;
+		}
+		return false;
 	}
 
 	@Override

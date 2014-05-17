@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -26,6 +27,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTritizer extends TileEntityReactorBase implements ReactorCoreTE, PipeConnector, IFluidHandler {
 
@@ -68,21 +70,54 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (this.canMake() && ReikaRandomHelper.doWithChance(75)) {
-			this.make();
+		if (input.isEmpty())
+			return false;
+		Reactions r = Reactions.getReactionFrom(input.getActualFluid());
+		ReikaJavaLibrary.pConsole(r, Side.SERVER);
+		if (this.canMake(r) && ReikaRandomHelper.doWithChance(r.chance)) {
+			this.make(r);
 			return true;
 		}
 		return false;
 	}
 
-	private void make() {
-		int amt = 25;
+	private void make(Reactions r) {
+		int amt = r.amount;
 		input.removeLiquid(amt);
-		output.addLiquid(amt, FluidRegistry.getFluid("rc tritium"));
+		output.addLiquid(amt, r.output);
 	}
 
-	private boolean canMake() {
-		return !input.isEmpty() && input.getLevel() >= 5 && !output.isFull() && input.getActualFluid().equals(FluidRegistry.getFluid("rc deuterium"));
+	private boolean canMake(Reactions r) {
+		int amt = r.amount;
+		return input.getLevel() >= amt && output.canTakeIn(amt) && input.getActualFluid().equals(r.input);
+	}
+
+	private static enum Reactions {
+		TRITIUM("rc deuterium", "rc tritium", 75, 25),
+		D20("water", "heavy water", 25, 100);
+
+		public final Fluid input;
+		public final Fluid output;
+		public final int chance;
+		public final int amount;
+
+		private static final Reactions[] reactionList = values();
+
+		private Reactions(String in, String out, int chance, int amt) {
+			this.chance = chance;
+			amount = amt;
+			input = FluidRegistry.getFluid(in);
+			output = FluidRegistry.getFluid(out);
+		}
+
+		public static Reactions getReactionFrom(Fluid in) {
+			for (int i = 0; i < reactionList.length; i++) {
+				Reactions r = reactionList[i];
+				if (r.input.equals(in))
+					return r;
+			}
+			return null;
+		}
 	}
 
 	@Override
@@ -101,7 +136,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("rc deuterium"));
+		return from == ForgeDirection.UP && Reactions.getReactionFrom(fluid) != null;
 	}
 
 	@Override

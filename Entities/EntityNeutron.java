@@ -122,4 +122,9 @@ public class EntityNeutron extends ParticleEntity {
 		return 0.1;
 	}
 
+	@Override
+	public boolean despawnOverTime() {
+		return true;
+	}
+
 }

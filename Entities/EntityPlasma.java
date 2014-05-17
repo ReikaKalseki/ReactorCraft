@@ -133,4 +133,9 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 		originZ = data.readDouble();
 	}
 
+	@Override
+	public boolean despawnOverTime() {
+		return false;
+	}
+
 }

@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
@@ -35,6 +36,11 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (DragonAPICore.debugtest) {
+			tank.addLiquid(1000, FluidRegistry.getFluid("fusion plasma"));
+			hasMultiBlock = true;
+		}
+
 		if (this.canMake())
 			this.make(world, x, y, z);
 	}
@@ -44,14 +50,18 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	}
 
 	private boolean canMake() {
-		if (!hasMultiBlock || tank.isEmpty())
+		if (!hasMultiBlock)
+			return false;
+		if (tank.isEmpty())
+			return false;
+		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
 			return false;
 		return true;
 	}
 
 	private void make(World world, int x, int y, int z) {
 		this.createPlasma(world, x, y, z);
-		tank.removeLiquid(5);
+		tank.removeLiquid(2);
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {

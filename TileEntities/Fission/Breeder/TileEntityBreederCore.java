@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities.Fission.Breeder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -32,6 +33,11 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 		super.updateEntity(world, x, y, z, meta);
 
 		//ReikaJavaLibrary.pConsole(temperature+":"+this, temperature > 700);
+
+		if (DragonAPICore.debugtest) {
+			ReikaInventoryHelper.clearInventory(this);
+			ReikaInventoryHelper.addToIInv(ReactorItems.BREEDERFUEL.getStackOf(), this);
+		}
 
 		timer2.update();
 

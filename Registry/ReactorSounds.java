@@ -27,7 +27,9 @@ import cpw.mods.fml.relauncher.Side;
 public enum ReactorSounds implements SoundList {
 
 	TURBINE("#turbine"),
-	FUSION("fusion");
+	FUSION("fusion"),
+	CONTROL("control"),
+	SCRAM("scram");
 
 	public static final ReactorSounds[] soundList = values();
 

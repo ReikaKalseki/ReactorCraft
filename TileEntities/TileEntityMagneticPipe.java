@@ -78,7 +78,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 		this.distributeCharge(world, x, y, z);
 		this.updateCharge(world, x, y, z);
 
-		if (charge <= 0) {
+		if (charge <= 0 && !world.isRemote) {
 			charge = 0;
 			if (fluid != null && fluid.getTemperature(world, x, y, z) > 5000) {
 				world.setBlock(x, y, z, Block.lavaMoving.blockID);

@@ -14,7 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -47,8 +49,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
-		//ReikaInventoryHelper.clearInventory(this);
-		//ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
+		if (DragonAPICore.debugtest) {
+			ReikaInventoryHelper.clearInventory(this);
+			ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
+		}
 		this.feed();
 
 		tempTimer.update();

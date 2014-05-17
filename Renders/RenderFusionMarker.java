@@ -74,7 +74,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 		Tessellator v5 = Tessellator.instance;
 		GL11.glColor4d(0, 0.2, 1, 1);
 		if (tile.isInWorld()) {
-			GL11.glTranslated(0, -3.5, 0);
+			GL11.glTranslated(0, 0.5, 0);
 			v5.startDrawingQuads();
 			v5.addVertexWithUV(-0.5, 0, 0, u, v);
 			v5.addVertexWithUV(0.5, 0, 0, du, v);
@@ -97,7 +97,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 			v5.addVertexWithUV(0, 0, -0.5, u, v);
 			v5.draw();
 
-			GL11.glTranslated(0, 3.5, 0);
+			GL11.glTranslated(0, -0.5, 0);
 		}
 		else {
 			double d = 2.4;
@@ -117,7 +117,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 
 	private void renderSolenoid(TileEntityFusionMarker tile, double par2, double par4, double par6) {
 		Tessellator v5 = Tessellator.instance;
-		GL11.glTranslated(0, 1.499, 0);
+		GL11.glTranslated(0, 0.499, 0);
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorOpaque(255, 0, 0);
 		v5.addVertex(8, 1, 3);
@@ -232,7 +232,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 		v5.addVertex(-6, -2, 6);
 		v5.addVertex(6, -2, -6);
 		v5.draw();
-		GL11.glTranslated(0, 2.499, 0);
+		GL11.glTranslated(0, -0.499, 0);
 	}
 
 	private void renderPositions(TileEntityFusionMarker tile, double par2, double par4, double par6) {
@@ -266,30 +266,30 @@ public class RenderFusionMarker extends ReactorRenderBase
 		GL11.glRotated(a.angle, 0, 1, 0);
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorOpaque(0, 200, 255);
-		v5.addVertex(-1.5, 1, -2.5);
-		v5.addVertex(1.5, 1, -2.5);
-		v5.addVertex(1.5, 1, 6.5);
-		v5.addVertex(-1.5, 1, 6.5);
+		v5.addVertex(-1.5, 0, -2.5);
+		v5.addVertex(1.5, 0, -2.5);
+		v5.addVertex(1.5, 0, 6.5);
+		v5.addVertex(-1.5, 0, 6.5);
 		v5.draw();
 
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorOpaque(0, 200, 255);
 		v5.addVertex(-1.5, -5, -2.5);
 		v5.addVertex(1.5, -5, -2.5);
-		v5.addVertex(1.5, -2, 6.5);
-		v5.addVertex(-1.5, -2, 6.5);
+		v5.addVertex(1.5, -3, 6.5);
+		v5.addVertex(-1.5, -3, 6.5);
 		v5.draw();
 
 		v5.startDrawing(GL11.GL_LINES);
 		v5.setColorOpaque(0, 200, 255);
 		v5.addVertex(-1.5, -5, -2.5);
-		v5.addVertex(-1.5, 1, -2.5);
+		v5.addVertex(-1.5, 0, -2.5);
 		v5.addVertex(1.5, -5, -2.5);
-		v5.addVertex(1.5, 1, -2.5);
-		v5.addVertex(1.5, -2, 6.5);
-		v5.addVertex(1.5, 1, 6.5);
-		v5.addVertex(-1.5, -2, 6.5);
-		v5.addVertex(-1.5, 1, 6.5);
+		v5.addVertex(1.5, 0, -2.5);
+		v5.addVertex(1.5, -3, 6.5);
+		v5.addVertex(1.5, 0, 6.5);
+		v5.addVertex(-1.5, -3, 6.5);
+		v5.addVertex(-1.5, 0, 6.5);
 		v5.draw();
 		GL11.glRotated(-a.angle, 0, 1, 0);
 		GL11.glTranslated(tile.xCoord-x, tile.yCoord-y-1.499, tile.zCoord-z);

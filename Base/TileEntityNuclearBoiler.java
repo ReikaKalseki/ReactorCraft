@@ -36,6 +36,16 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 	}
 
 	@Override
+	protected final void updateTemperature(World world, int x, int y, int z) {
+		super.updateTemperature(world, x, y, z);
+
+		if (temperature > this.getMaxTemperature())
+			this.overheat(world, x, y, z);
+	}
+
+	protected abstract void overheat(World world, int x, int y, int z);
+
+	@Override
 	public final int getTemperature() {
 		return temperature;
 	}

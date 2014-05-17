@@ -248,7 +248,7 @@
 	</magnetpipe>
 	<heavypump>
 		<desc>
-			Because heavy water is denser than normal water, it can be found in small concentrations at the bottom of oceans. The heavy water pump, if placed at the bottom of the ocean (at least %d blocks deep and below y=%d), and surrounded on at least 3 sides by water, will extract the heavy water from the ocean.
+			Heavy water is a special type of water that contains deuterium in place of hydrogen. Deuterium is more dense than hydrogen and thus heavy water exists in small quantities at the bottom of large bodies of water. The heavy water extractor's purpose is to separate the heavy water from the normal water near the ocean floor. Due to heavy water's natural density, this can only occur in an ocean biome below y = 45, and the extractor will only function if it has at least 16 source blocks of water above it and it is surrounded on three other sides by water.
 		</desc>
 		<note>
 			Minimum Power: %dW

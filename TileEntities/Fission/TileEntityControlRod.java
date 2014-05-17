@@ -17,6 +17,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
@@ -67,13 +68,17 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 		else {
 			motion = Motions.LOWERING;
 		}
+		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
 	public void setActive(boolean active) {
 		motion = active ? Motions.LOWERING : Motions.RAISING;
+		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
 	public void drop() {
+		if (rodOffset > MINOFFSET && motion != Motions.SCRAM)
+			ReactorSounds.SCRAM.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1F);
 		motion = Motions.SCRAM;
 	}
 
