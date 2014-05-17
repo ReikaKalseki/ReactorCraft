@@ -37,7 +37,10 @@ public enum ReactorFuel {
 			return null;
 		switch(this) {
 		case PLUTONIUM:
-			return null;
+			if (input.getItemDamage() == ReactorItems.PLUTONIUM.getNumberMetadatas()-1)
+				return null;
+			else
+				return ReactorItems.PLUTONIUM.getStackOfMetadata(input.getItemDamage()+1);
 		case THORIUM:
 			return null;
 		case URANIUM:

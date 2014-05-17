@@ -143,7 +143,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.calcite, 9), MatBlocks.CALCITE.getStackOf());
 
-		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(2), Block.blockClay, Block.sand, Item.bucketWater);
+		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(4), Block.blockClay, Block.sand, Block.gravel, Item.bucketWater);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.leather), ReactorStacks.lime, Item.rottenFlesh);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.paper, 16, 0), ReactorStacks.lime, Item.bucketWater, "logWood"));
