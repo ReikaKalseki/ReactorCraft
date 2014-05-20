@@ -22,6 +22,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -402,13 +403,20 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		return li;
 	}
 
-	@Override
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return null;
+		return ReactorTiles.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
 	}
 
-	public List<String> getWailaHead(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		return tip;
+	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		World world = acc.getWorld();
+		MovingObjectPosition mov = acc.getPosition();
+		if (mov != null) {
+			int x = mov.blockX;
+			int y = mov.blockY;
+			int z = mov.blockZ;
+			currenttip.add(EnumChatFormatting.WHITE+this.getPickBlock(mov, world, x, y, z).getDisplayName());
+		}
+		return currenttip;
 	}
 
 	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
@@ -433,8 +441,11 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		return tip;
 	}
 
-	public List<String> getWailaTail(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		return tip;
+	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		String s1 = EnumChatFormatting.ITALIC.toString();
+		String s2 = EnumChatFormatting.BLUE.toString();
+		currenttip.add(s2+s1+"ReactorCraft");
+		return currenttip;
 	}
 
 }

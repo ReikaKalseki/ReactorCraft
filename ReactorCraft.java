@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
+import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
