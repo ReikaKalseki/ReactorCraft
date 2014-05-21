@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -27,7 +26,6 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTritizer extends TileEntityReactorBase implements ReactorCoreTE, PipeConnector, IFluidHandler {
 
@@ -73,7 +71,6 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		if (input.isEmpty())
 			return false;
 		Reactions r = Reactions.getReactionFrom(input.getActualFluid());
-		ReikaJavaLibrary.pConsole(r, Side.SERVER);
 		if (this.canMake(r) && ReikaRandomHelper.doWithChance(r.chance)) {
 			this.make(r);
 			return true;

@@ -138,10 +138,14 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			if (b.getCollisionBoundingBoxFromPool(world, dx, dy, dz) == null)
 				return true;
 			Material mat = b.blockMaterial;
-			if (mat == Material.circuits || mat == Material.air || mat == Material.cactus || mat == Material.fire)
-				return true;
-			if (mat == Material.plants || mat == Material.portal || mat == Material.vine || mat == Material.web)
-				return true;
+			if (mat != null) {
+				if (mat == Material.circuits || mat == Material.air || mat == Material.cactus || mat == Material.fire)
+					return true;
+				if (mat == Material.plants || mat == Material.portal || mat == Material.vine || mat == Material.web)
+					return true;
+				if (!mat.isSolid())
+					return true;
+			}
 		}
 		return false;
 	}
