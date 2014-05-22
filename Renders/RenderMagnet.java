@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -107,7 +108,7 @@ public class RenderMagnet extends ReactorRenderBase
 
 		v5.draw();
 		for (int i = 1; i < 4; i++)
-			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, new int[]{255, 255, 255, a}, Math.toRadians(90), 10);
+			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, ReikaColorAPI.RGBtoHex(255, 255, 255, a), Math.toRadians(90), 10);
 		GL11.glRotated(-ang, 0, 1, 0);
 		GL11.glTranslated(-par2-0.5, -par4, -par6-0.5);
 		ReikaRenderHelper.exitGeoDraw();

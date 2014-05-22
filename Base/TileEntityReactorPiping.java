@@ -47,6 +47,16 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		}
 	}
 
+	private boolean isInteractableTile(TileEntity te) {
+		if (te == null)
+			return false;
+		if (te instanceof IFluidHandler) {
+			String name = te.getClass().getSimpleName().toLowerCase();
+			return !name.contains("conduit") && !name.contains("pipe");
+		}
+		return false;
+	}
+
 	protected final boolean canInteractWith(World world, int x, int y, int z, ForgeDirection side) {
 		if (!connections[side.ordinal()])
 			return false;
@@ -61,7 +71,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		if (m == this.getMachine())
 			return true;
 		TileEntity te = this.getTileEntity(dx, dy, dz);
-		return te instanceof PipeConnector || te instanceof IFluidHandler;
+		return (te instanceof PipeConnector || te instanceof IFluidHandler) && this.isInteractableTile(te);
 	}
 
 	@Override
@@ -154,7 +164,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			return true;
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-		if (tile instanceof IFluidHandler)
+		if (tile instanceof IFluidHandler && this.isInteractableTile(tile))
 			return true;
 		return false;
 	}
