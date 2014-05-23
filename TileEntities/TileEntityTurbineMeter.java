@@ -65,13 +65,13 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 	}
 
 	private int getRedstoneFrom(TileEntityTurbineCore te) {
-		int max = te.GEN_OMEGA;
+		int max = te.getMaxSpeed();
 		return 15*te.getOmega()/max;
 	}
 
 	public float getAnalogValue() {
 		TileEntityTurbineCore te = this.getTurbine();
-		return te != null ? (float)te.GEN_OMEGA/te.getOmega() : 0;
+		return te != null ? (float)te.getOmega()/te.getMaxSpeed() : 0;
 	}
 
 	private TileEntityTurbineCore getTurbine() {

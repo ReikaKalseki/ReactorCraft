@@ -49,6 +49,7 @@ import Reika.ReactorCraft.TileEntities.HTGR.TileEntityCO2Heater;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
@@ -100,7 +101,8 @@ public enum ReactorTiles {
 	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
 	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator"),
 	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker"),
-	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3);
+	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3),
+	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7);
 
 	private String name;
 	private final Class teClass;

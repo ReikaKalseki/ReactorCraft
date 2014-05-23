@@ -109,8 +109,9 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 					fluid = te.getWorkingFluid();
 					int ds = te.getSteam()-steam;
 					if (ds > 0) {
-						steam += ds/4+1;
-						te.removeSteam(ds/4+1);
+						int rm = ds/4+1;
+						steam += rm;
+						te.removeSteam(rm);
 					}
 				}
 			}

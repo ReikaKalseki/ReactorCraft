@@ -41,13 +41,12 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.drawFromBoiler(world, x, y, z);
 		this.getPipeSteam(world, x, y, z);
-		//ReikaJavaLibrary.pConsole(steam);
-		//steam = 0;
 
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
 
+		//steam = 0;
 		//ReikaJavaLibrary.pConsole(steam+":"+fluid, Side.SERVER);
 	}
 
@@ -58,8 +57,6 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 			if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
-				//ReikaJavaLibrary.pConsole(steam+"+"+s+"="+(steam+s));
-				//ReikaJavaLibrary.pConsole(steam+"+="+s, Side.SERVER);
 				steam += s;
 			}
 		}
@@ -113,6 +110,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 		if (id == ReactorTiles.BOILER.getBlockID() && meta == ReactorTiles.BOILER.getBlockMetadata() && dir == ForgeDirection.DOWN)
 			return true;
 		if (id == ReactorTiles.GRATE.getBlockID() && meta == ReactorTiles.GRATE.getBlockMetadata())
+			return true;
+		if (id == ReactorTiles.BIGTURBINE.getBlockID() && meta == ReactorTiles.BIGTURBINE.getBlockMetadata())
 			return true;
 		return false;
 	}

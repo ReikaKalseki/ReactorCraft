@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -48,7 +47,8 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 			TileEntityFurnace te = (TileEntityFurnace)world.getBlockTileEntity(readx, ready, readz);
 			ItemStack fuel = te.getStackInSlot(1);
 			if (fuel != null) {
-				if (fuel.itemID == Item.coal.itemID || ItemMaterialController.instance.getMaterial(fuel) == ItemMaterial.WOOD)
+				ItemMaterial mat = ItemMaterialController.instance.getMaterial(fuel);
+				if (mat == ItemMaterial.COAL || mat == ItemMaterial.WOOD)
 					tank.addLiquid(10, FluidRegistry.getFluid("rc co2"));
 			}
 		}

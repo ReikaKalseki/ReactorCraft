@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -57,9 +58,14 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 				ReactorAchievements.AMMONIA.triggerAchievement(this.getPlacer());
 			}
 			tank.removeLiquid(WATER_PER_STEAM);
-			//ReikaJavaLibrary.pConsole(WATER_PER_STEAM);
 			temperature -= 5;
-			//ReikaJavaLibrary.pConsole(System.currentTimeMillis(), Side.SERVER);
+		}
+
+		if (DragonAPICore.debugtest) {
+			tank.addLiquid(500, FluidRegistry.WATER);
+			if (temperature < 100) {
+				temperature = 120;
+			}
 		}
 
 		if (steam <= 0) {
@@ -71,7 +77,6 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		//ReikaJavaLibrary.pConsole("T: "+temperature+"    W: "+tank.getLevel()+"    S: "+steam, Side.SERVER);
 
 		this.transferSteam(world, x, y, z);
-		//steam = 0;
 	}
 
 	private void detonateAmmonia(World world, int x, int y, int z) {
