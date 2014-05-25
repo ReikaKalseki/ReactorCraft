@@ -29,7 +29,7 @@ public class ModelTurbine extends RotaryModelBase
 	private final ModelRenderer shaft1a;
 	private final ModelRenderer blade;
 
-	private final int stage;
+	protected final int stage;
 
 	public ModelTurbine(int stage)
 	{
@@ -37,25 +37,40 @@ public class ModelTurbine extends RotaryModelBase
 		textureHeight = 128;
 		this.stage = stage;
 
-		shaft1 = new ModelRenderer(this, 0, 80);
+		shaft1 = new ModelRenderer(this, 0, 106);
+		shaft1a = new ModelRenderer(this, 0, 106);
+		blade = new ModelRenderer(this, 0, 0);
+		this.init();
+	}
+
+	private void init() {
 		shaft1.addBox(-2F, -2F, 0F, 4, 4, 16);
 		shaft1.setRotationPoint(0F, 15F, -8F);
 		shaft1.setTextureSize(128, 128);
 		shaft1.mirror = true;
 		this.setRotation(shaft1, 0F, 0F, 0.7853982F);
-		shaft1a = new ModelRenderer(this, 0, 80);
 		shaft1a.addBox(-2F, -2F, 0F, 4, 4, 16);
 		shaft1a.setRotationPoint(0F, 15F, -8F);
 		shaft1a.setTextureSize(128, 128);
 		shaft1a.mirror = true;
 		this.setRotation(shaft1a, 0F, 0F, 0F);
 
-		blade = new ModelRenderer(this, 0, 0);
 		blade.addBox(-0.5F, -this.getBladeLength(), -this.getBladeWidth()/2F, 1, this.getBladeLength(), this.getBladeWidth());
 		blade.setRotationPoint(0F, 15F, 0F);
 		blade.setTextureSize(128, 128);
 		blade.mirror = true;
 		this.setRotation(blade, 0F, 0F, 0F);
+	}
+
+	private void clear() {
+		shaft1.cubeList.clear();
+		shaft1a.cubeList.clear();
+		blade.cubeList.clear();
+	}
+
+	protected final void reset() {
+		this.clear();
+		this.init();
 	}
 
 	@Override
@@ -138,6 +153,10 @@ public class ModelTurbine extends RotaryModelBase
 			return 8;
 		case 4:
 			return 8;
+		case 5:
+			return 9;
+		case 6:
+			return 10;
 		}
 		return 10;
 	}
@@ -154,6 +173,10 @@ public class ModelTurbine extends RotaryModelBase
 			return 30;
 		case 4:
 			return 45;
+		case 5:
+			return 45;
+		case 6:
+			return 50;
 		}
 		return 10;
 	}
@@ -170,6 +193,10 @@ public class ModelTurbine extends RotaryModelBase
 			return 3;
 		case 4:
 			return 4;
+		case 5:
+			return 6;
+		case 6:
+			return 8;
 		}
 		return 2;
 	}
