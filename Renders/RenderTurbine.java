@@ -11,7 +11,9 @@ package Reika.ReactorCraft.Renders;
 
 import java.lang.reflect.Constructor;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
@@ -19,11 +21,13 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelTurbine;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -86,10 +90,48 @@ public class RenderTurbine extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.hasMultiBlock || true)
+			if (tile.hasMultiBlock)
 				models[tile.getStage()].renderAll(ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
 			else {
+				GL11.glTranslated(-0.5, -0.5, -0.5);
+				Tessellator v5 = Tessellator.instance;
+				Icon ico = ReactorBlocks.TURBINEMULTI.getBlockVariable().getIcon(0, 3);
+				ReikaTextureHelper.bindTerrainTexture();
+				float u = ico.getMinU();
+				float v = ico.getMinV();
+				float du = ico.getMaxU();
+				float dv = ico.getMaxV();
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(0, 1, 0, u, v);
+				v5.addVertexWithUV(1, 1, 0, du, v);
+				v5.addVertexWithUV(1, 1, 1, du, dv);
+				v5.addVertexWithUV(0, 1, 1, u, dv);
 
+				v5.addVertexWithUV(0, 2, 1, u, dv);
+				v5.addVertexWithUV(1, 2, 1, du, dv);
+				v5.addVertexWithUV(1, 2, 0, du, v);
+				v5.addVertexWithUV(0, 2, 0, u, v);
+
+				v5.addVertexWithUV(1, 2, 1, du, dv);
+				v5.addVertexWithUV(1, 1, 1, du, v);
+				v5.addVertexWithUV(1, 1, 0, u, v);
+				v5.addVertexWithUV(1, 2, 0, u, dv);
+
+				v5.addVertexWithUV(0, 2, 1, u, dv);
+				v5.addVertexWithUV(0, 1, 1, u, v);
+				v5.addVertexWithUV(1, 1, 1, du, v);
+				v5.addVertexWithUV(1, 2, 1, du, dv);
+
+				v5.addVertexWithUV(1, 2, 0, du, dv);
+				v5.addVertexWithUV(1, 1, 0, du, v);
+				v5.addVertexWithUV(0, 1, 0, u, v);
+				v5.addVertexWithUV(0, 2, 0, u, dv);
+
+				v5.addVertexWithUV(0, 2, 0, u, dv);
+				v5.addVertexWithUV(0, 1, 0, u, v);
+				v5.addVertexWithUV(0, 1, 1, du, v);
+				v5.addVertexWithUV(0, 2, 1, du, dv);
+				v5.draw();
 			}
 		}
 		else {

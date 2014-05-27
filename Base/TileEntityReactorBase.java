@@ -13,18 +13,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import li.cil.oc.api.Network;
 import li.cil.oc.api.network.Arguments;
+import li.cil.oc.api.network.Component;
 import li.cil.oc.api.network.Context;
+import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.ManagedPeripheral;
-import li.cil.oc.api.network.SimpleComponent;
+import li.cil.oc.api.network.Message;
+import li.cil.oc.api.network.Node;
+import li.cil.oc.api.network.Visibility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -37,6 +44,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.ThermalMachine;
@@ -48,7 +56,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable, IPeripheral, SimpleComponent, ManagedPeripheral {
+public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable, IPeripheral, Environment, ManagedPeripheral {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -111,6 +119,22 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		if (phi >= 360)
 			phi = phi%360;
 
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		if (node != null)
+			node.save(NBT);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		if (node != null)
+			node.load(NBT);
 	}
 
 	public boolean isThisTE(int id, int meta) {
@@ -229,6 +253,14 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			TileEntityReactorGenerator sp = (TileEntityReactorGenerator)this;
 			li.add(String.format("%s generating %d RF/t.", sp.getName(), sp.getGenRF()));
 		}
+		if (this instanceof TileEntityTurbineCore) {
+			TileEntityTurbineCore sp = (TileEntityTurbineCore)this;
+			long power = sp.getPower();
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			ReikaJavaLibrary.pConsole(this);
+			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+		}
 		return li;
 	}
 
@@ -284,7 +316,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	/** OpenComputers */
-	@Override
 	public final String getComponentName() {
 		return this.getType();
 	}
@@ -307,4 +338,43 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public final void onChunkUnload() {
+		super.onChunkUnload();
+		if (node != null)
+			node.remove();
+	}
+
+	@Override
+	public final void invalidate() {
+		super.invalidate();
+		if (node != null)
+			node.remove();
+	}
+
+	private final Component node = this.createNode();
+
+	private Component createNode() {
+		if (ModList.OPENCOMPUTERS.isLoaded())
+			return Network.newNode(this, Visibility.Network).withComponent(this.getType(), this.getOCNetworkVisibility()).create();
+		else
+			return null;
+	}
+
+	protected final Visibility getOCNetworkVisibility() {
+		return this.getMachine().isPipe() ? Visibility.Neighbors : Visibility.Network;
+	}
+
+	@Override
+	public final Node node() {
+		return node;
+	}
+
+	@Override
+	public final void onConnect(Node node) {}
+	@Override
+	public final void onDisconnect(Node node) {}
+	@Override
+	public final void onMessage(Message message) {}
 }

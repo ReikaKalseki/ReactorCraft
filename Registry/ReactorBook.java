@@ -63,6 +63,8 @@ public enum ReactorBook implements HandbookEntry {
 	CONDENSER(ReactorTiles.CONDENSER),
 	HEATEXCHANGER(ReactorTiles.EXCHANGER),
 	PUMP(ReactorTiles.PUMP),
+	GENERATOR(ReactorTiles.GENERATOR),
+	BIGTURBINE(ReactorTiles.BIGTURBINE),
 
 	HTGRDESC("HTGR Components", ""),
 	PEBBLEBED(ReactorTiles.PEBBLEBED),

@@ -9,9 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -426,18 +425,15 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 	}
 
 	@Override
-	public ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
-		ArrayList<String> li = new ArrayList();
+	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, blockID, x-20, y-3, z-20, x+20, y+3, z+20, 1);
 		int midX = blocks.getMinX()+blocks.getSizeX()/2;
 		int midY = blocks.getMinY()+blocks.getSizeY()/2;
 		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
 		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.SOLENOID)
-			return li;
-		TileEntitySolenoidMagnet te = (TileEntitySolenoidMagnet)world.getBlockTileEntity(midX, midY, midZ);
-		li.addAll(te.getMessages(world, midX, midY, midZ, side));
-		return li;
+			return null;
+		return world.getBlockTileEntity(midX, midY, midZ);
 	}
 
 }

@@ -9,17 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import mcp.mobius.waila.api.IWailaBlock;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
@@ -28,8 +26,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.RotaryCraft.API.Transducerable;
 
-public abstract class BlockMultiBlock extends Block implements IWailaBlock {
+public abstract class BlockMultiBlock extends Block implements Transducerable {
 
 	private final Icon[] icons = new Icon[this.getNumberTextures()];
 	protected static final ForgeDirection[] dirs = ForgeDirection.values();
@@ -129,24 +128,12 @@ public abstract class BlockMultiBlock extends Block implements IWailaBlock {
 
 	public abstract boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta);
 
-	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return null;
-	}
+	protected abstract TileEntity getTileEntityForPosition(World world, int x, int y, int z);
 
 	@Override
-	public final List<String> getWailaHead(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return tip;
-	}
-
-	@Override
-	public final List<String> getWailaBody(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return tip;
-	}
-
-	@Override
-	public final List<String> getWailaTail(ItemStack is, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return tip;
+	public final ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
+		TileEntity te = this.getTileEntityForPosition(world, x, y, z);
+		return te instanceof TileEntityReactorBase ? ((TileEntityReactorBase)te).getMessages(world, x, y, z, side) : new ArrayList();
 	}
 
 }

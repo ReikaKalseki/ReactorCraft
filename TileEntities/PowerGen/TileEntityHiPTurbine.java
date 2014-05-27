@@ -16,14 +16,16 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.ModInteract.BCMachineHandler;
 import Reika.ReactorCraft.Blocks.BlockTurbineMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
@@ -59,28 +61,31 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	protected void dumpSteam(World world, int x, int y, int z, int meta) {
 		int stage = this.getStage();
 		if (stage == this.getNumberStagesTotal()) {
-			int tx = x;
-			int tz = z;
+			ForgeDirection s = this.getSteamMovement();
+			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = ((BlockTurbineMulti)ReactorBlocks.TURBINEMULTI.getBlockVariable()).getThickness(stage);
 			int ty = -1+y-th;
-			TileEntity te = this.getTileEntity(tx, ty, tz);
-			FluidStack fs = new FluidStack(FluidRegistry.getFluid("lowpwater"), TileEntityReactorBoiler.WATER_PER_STEAM);
-			if (te instanceof IFluidHandler) {
-				((IFluidHandler)te).fill(ForgeDirection.DOWN, fs, true);
+			for (int i = -th; i <= th; i++) {
+				int tx = x+dir.offsetX*i+s.offsetX;
+				int tz = z+dir.offsetZ*i+s.offsetZ;
+				MachineRegistry m = MachineRegistry.getMachine(world, tx, ty, tz);
+				FluidStack fs = new FluidStack(FluidRegistry.getFluid("lowpwater"), TileEntityReactorBoiler.WATER_PER_STEAM);
+				if (m == MachineRegistry.RESERVOIR) {
+					TileEntity te = this.getTileEntity(tx, ty, tz);
+					((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
+				}
+				else if (world.getBlockId(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
+					TileEntity te = this.getTileEntity(tx, ty, tz);
+					((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
+				}
+				int py = ty+1+rand.nextInt(th*2);
+				if (ReikaMathLibrary.py3d(dir.offsetX*i, py-y, dir.offsetZ*i) < th)
+					ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, x+dir.offsetX*i, py, z+dir.offsetZ*i, 5);
 			}
-			else if (te instanceof PipeConnector) {
-				((PipeConnector)te).fill(ForgeDirection.DOWN, fs, true);
-			}
-			else if (te instanceof TileEntityPipe) {
-				((TileEntityPipe)te).setFluid(fs.getFluid());
-				((TileEntityPipe)te).addFluid(fs.amount);
-			}
-			ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, tx, ty+1+rand.nextInt(th), tz, 5);
-			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(this.getSteamMovement());
 			int n = ConfigRegistry.SPRINKLER.getValue()*12;
 			for (int i = 0; i < n; i++) {
-				double px = tx+(-4+rand.nextDouble()*8)*dir.offsetX;
-				double pz = tz+(-4+rand.nextDouble()*8)*dir.offsetZ;
+				double px = x+(-4+rand.nextDouble()*8)*dir.offsetX;
+				double pz = z+(-4+rand.nextDouble()*8)*dir.offsetZ;
 				ReikaParticleHelper.RAIN.spawnAt(world, px, ty+1+rand.nextInt(th*2), pz);
 			}
 		}
@@ -115,7 +120,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected double getAnimationSpeed() {
-		return 0.55F;
+		return 0.5F;
 	}
 
 	@Override

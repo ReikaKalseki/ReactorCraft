@@ -94,6 +94,11 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.WIRE.getItem(), 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', CraftingItems.WIRE.getItem(), 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
+
+		id = ReactorBlocks.TURBINEMULTI.getBlockID();
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sss", "sss", 's', ItemStacks.prop);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "BBB", "SSS", "ppp", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', ItemStacks.prop);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bPb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel);
 	}
 
 	private static void addCrafting() {
@@ -217,6 +222,7 @@ public class ReactorRecipes {
 		ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Item.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Block.torchRedstoneActive);
 		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Block.glowStone, 'r', Item.redstone, 'S', ItemStacks.steelingot);
+		ReactorTiles.BIGTURBINE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ReactorTiles.TURBINECORE.getCraftedProduct());
 	}
 
 }

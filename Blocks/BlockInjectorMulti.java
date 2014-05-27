@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Blocks;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -444,6 +445,20 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	public int getNumberTextures() {
 		return 29;
+	}
+
+	@Override
+	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
+		BlockArray blocks = new BlockArray();
+		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-8, y-5, z-8, x+8, y+5, z+8);
+		for (int i = 0; i < blocks.getSize(); i++) {
+			int[] xyz = blocks.getNthBlock(i);
+			if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
+				TileEntityFusionInjector te = (TileEntityFusionInjector)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				return te;
+			}
+		}
+		return null;
 	}
 
 }

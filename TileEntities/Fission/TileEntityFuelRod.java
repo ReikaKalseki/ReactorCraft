@@ -76,7 +76,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 						ItemStack is = inv[slot];
 						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
 
-						if (ReikaRandomHelper.doWithChance(20)) {
+						if (ReikaRandomHelper.doWithChance(5)) {
 							this.addWaste();
 						}
 					}
@@ -95,7 +95,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 						if (ReikaRandomHelper.doWithChance(4)) {
 							inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
 
-							if (ReikaRandomHelper.doWithChance(40)) {
+							if (ReikaRandomHelper.doWithChance(10)) {
 								this.addWaste();
 							}
 						}

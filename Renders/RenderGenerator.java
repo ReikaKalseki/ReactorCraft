@@ -116,11 +116,14 @@ public class RenderGenerator extends ReactorRenderBase
 		else {
 			GL11.glRotatef(180, 0, 1, 0);
 			double sc = 0.125;
-			GL11.glTranslated(-0.625, 1.25, 0);
+			double a = 0;
+			double b = 0.875;
+			double c = 0.5;
+			GL11.glTranslated(a, b, c);
 			GL11.glScaled(sc, sc, sc);
 			model.renderAll(null, -tile.phi, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
-			GL11.glTranslated(0.625, -1.25, 0);
+			GL11.glTranslated(-a, -b, -c);
 			GL11.glRotatef(-180, 0, 1, 0);
 		}
 

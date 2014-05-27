@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Blocks;
 import java.util.Arrays;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -20,8 +21,9 @@ import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.RotaryCraft.API.Transducerable;
 
-public class BlockTurbineMulti extends BlockMultiBlock {
+public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable {
 
 	private final SlicedBlockBlueprint setup;
 
@@ -43,11 +45,10 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	private void initMap() {
 		setup.addMapping('t', blockID, 0);
 		setup.addMapping('h', blockID, 1);
-		setup.addMapping('e', blockID, 3);
-		setup.addMapping('o', blockID, 4);
+		setup.addMapping('e', blockID, 2);
 
 		setup.addSlice(
-				"---hhohh---",
+				"---hhhhh---",
 				"--hhhthhh--",
 				"-hhttttthh-",
 				"hhttttttthh",
@@ -62,7 +63,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 
 		setup.addSlice(
 				"-----------",
-				"---hhohh---",
+				"---hhhhh---",
 				"--hhttthh--",
 				"-hhttttthh-",
 				"-httttttth-",
@@ -76,7 +77,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 
 		setup.addSlice(
 				"-----------",
-				"----hoh----",
+				"----hhh----",
 				"--hhhhhhh--",
 				"--hhttthh--",
 				"-hhttttthh-",
@@ -91,7 +92,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		setup.addSlice(
 				"-----------",
 				"-----------",
-				"---hhohh---",
+				"---hhhhh---",
 				"--hhttthh--",
 				"--httttth--",
 				"--httxtth--",
@@ -105,7 +106,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		setup.addSlice(
 				"-----------",
 				"-----------",
-				"----hoh----",
+				"----hhh----",
 				"---hhhhh---",
 				"--hhttthh--",
 				"--hhtxthh--",
@@ -120,7 +121,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 				"-----------",
 				"-----------",
 				"-----------",
-				"---hhohh---",
+				"---hhhhh---",
 				"---hhthh---",
 				"---htxth---",
 				"---hhthh---",
@@ -134,7 +135,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 				"-----------",
 				"-----------",
 				"-----------",
-				"----hoh----",
+				"----hhh----",
 				"---hhhhh---",
 				"---hhxhh---",
 				"---hhhhh---",
@@ -199,7 +200,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
 		int sx = dir.offsetX == 0 ? mx : dir.offsetX < 0 ? blocks.getMaxX() : blocks.getMinX();
 		int sz = dir.offsetZ == 0 ? mz : dir.offsetZ < 0 ? blocks.getMaxZ() : blocks.getMinZ();
-		for (int i = start; i < turbines; i++) {
+		for (int i = start; i <= turbines; i++) {
 			int dx = sx+i*dir.offsetX;
 			int dz = sz+i*dir.offsetZ;
 			boolean match = setup.checkAgainst(world, dx, my, dz, 5, 5, dir, i);
@@ -253,7 +254,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 
 	@Override
 	public int getNumberVariants() {
-		return 5;
+		return 3;
 	}
 
 	@Override
@@ -274,6 +275,16 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
 		return meta == 0;
+	}
+
+	@Override
+	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
+		StructuredBlockArray blocks = new StructuredBlockArray(world);
+		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-12, z-12, x+12, y+12, z+12);
+		int mx = blocks.getMinX()+blocks.getSizeX()/2;
+		int my = blocks.getMinY()+blocks.getSizeY()/2;
+		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
+		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.BIGTURBINE ? world.getBlockTileEntity(mx, my, mz) : null;
 	}
 
 }

@@ -228,7 +228,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private int getAccelDelay() {
-		return 1+ReikaMathLibrary.logbase(omega+1, 2)/20;
+		return 1+(int)ReikaMathLibrary.logbase(omega+1, 2)/20;
 	}
 
 	protected final int getGenTorque() {
@@ -438,7 +438,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	protected double getAnimationSpeed() {
-		return 0.3F;
+		return 0.2F;
 	}
 
 	@Override
@@ -488,7 +488,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		damage = NBT.getInteger("dmg");
 
-		hasMultiBlock = NBT.getBoolean("multi");
+		if (this.needsMultiblock())
+			hasMultiBlock = NBT.getBoolean("multi");
 	}
 
 	@Override
@@ -506,7 +507,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else
 			NBT.setInteger("blocked", -1);
 
-		NBT.setBoolean("multi", hasMultiBlock);
+		if (this.needsMultiblock())
+			NBT.setBoolean("multi", hasMultiBlock);
 	}
 
 	@Override

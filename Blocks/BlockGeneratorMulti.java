@@ -9,13 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
+import java.util.Arrays;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
@@ -215,7 +217,8 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-4, z-12, x+12, y+4, z+12);
+		int gid = ReactorTiles.GENERATOR.getBlockID();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -225,7 +228,6 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			if (meta == 10) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
 					TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					ReikaJavaLibrary.pConsole(te);
 					te.hasMultiblock = false;
 				}
 			}
@@ -235,7 +237,8 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-4, z-12, x+12, y+4, z+12);
+		int gid = ReactorTiles.GENERATOR.getBlockID();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -245,7 +248,6 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			if (meta == 2) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
 					TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					ReikaJavaLibrary.pConsole(te);
 					te.hasMultiblock = true;
 				}
 			}
@@ -287,6 +289,20 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
 		return meta == 0;
+	}
+
+	@Override
+	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
+		BlockArray blocks = new BlockArray();
+		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-4, z-12, x+12, y+4, z+12);
+		for (int i = 0; i < blocks.getSize(); i++) {
+			int[] xyz = blocks.getNthBlock(i);
+			if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				return te;
+			}
+		}
+		return null;
 	}
 
 }

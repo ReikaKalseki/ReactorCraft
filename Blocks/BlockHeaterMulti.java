@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -39,22 +40,16 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
-		//ReikaJavaLibrary.pConsole(0);
 		if (!this.checkCorners(world, x, y, z, blocks))
 			return false;
-		//ReikaJavaLibrary.pConsole(1);
 		if (!this.checkEdges(world, x, y, z, blocks))
 			return false;
-		//ReikaJavaLibrary.pConsole(2);
 		if (!this.checkCore(world, x, y, z, blocks))
 			return false;
-		//ReikaJavaLibrary.pConsole(3);
 		if (!this.checkFaces(world, x, y, z, blocks))
 			return false;
-		//ReikaJavaLibrary.pConsole(4);
 		if (!this.checkPipe(world, x, y, z, blocks))
 			return false;
-		//ReikaJavaLibrary.pConsole(5);
 		return true;
 	}
 
@@ -574,6 +569,16 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public int getNumberTextures() {
 		return 13;
+	}
+
+	@Override
+	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
+		StructuredBlockArray blocks = new StructuredBlockArray(world);
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
+		int mx = blocks.getMinX()+blocks.getSizeX()/2;
+		int my = blocks.getMinY()+blocks.getSizeY()/2-1;
+		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
+		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.HEATER ? world.getBlockTileEntity(mx, my, mz) : null;
 	}
 
 }
