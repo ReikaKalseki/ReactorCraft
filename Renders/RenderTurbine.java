@@ -90,7 +90,7 @@ public class RenderTurbine extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.hasMultiBlock)
+			if (tile.hasMultiBlock())
 				models[tile.getStage()].renderAll(ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);

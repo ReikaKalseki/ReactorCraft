@@ -59,7 +59,21 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int damage;
 
-	public boolean hasMultiBlock = !this.needsMultiblock();
+	protected boolean hasMultiBlock = !this.needsMultiblock();
+	private boolean readyForMultiBlock = false;
+
+	public void markForMulti() {
+		readyForMultiBlock = true;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		hasMultiBlock = has ? readyForMultiBlock : has;
+		readyForMultiBlock = false;
+	}
+
+	public boolean hasMultiBlock() {
+		return hasMultiBlock;
+	}
 
 	private StepTimer soundTimer = new StepTimer(41);
 
@@ -96,6 +110,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		this.readSurroundings(world, x, y, z, meta);
 		this.followHead(world, x, y, z, meta);
 		this.enviroTest(world, x, y, z, meta);
+
+		readyForMultiBlock = false;
 
 		//ReikaJavaLibrary.pConsole(steam, stage == 6 && this.getSide() == Side.SERVER);
 		if (steam > 0) {
@@ -571,6 +587,11 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		int meta = this.getBlockMetadata();
 		this.setBlockMetadata(meta < 3 ? meta+1 : 0);
 		return true;
+	}
+
+	@Override
+	public double getMaxRenderDistanceSquared() {
+		return 16384D;
 	}
 
 }

@@ -167,7 +167,7 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 		int sx;
 		int sz;
 		int n = this.checkForTurbines(world, x, y, z, dir, blocks); //only accept steam emitter at last turb stage
-		if (n == 0)
+		if (n <= 0 || n > 7)
 			return false;
 		if (!this.checkForShape(world, x, y, z, dir, blocks, n))
 			return false;
@@ -185,8 +185,10 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 			int dx = sx+i*dir.offsetX;
 			int dz = sz+i*dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, my, dz);
-			if (r == ReactorTiles.BIGTURBINE)
+			if (r == ReactorTiles.BIGTURBINE) {
 				c++;
+				((TileEntityTurbineCore)world.getBlockTileEntity(dx, my, dz)).markForMulti();
+			}
 			else
 				return c;
 		}
@@ -200,9 +202,10 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
 		int sx = dir.offsetX == 0 ? mx : dir.offsetX < 0 ? blocks.getMaxX() : blocks.getMinX();
 		int sz = dir.offsetZ == 0 ? mz : dir.offsetZ < 0 ? blocks.getMaxZ() : blocks.getMinZ();
-		for (int i = start; i <= turbines; i++) {
-			int dx = sx+i*dir.offsetX;
-			int dz = sz+i*dir.offsetZ;
+		for (int i = start; i < setup.getLength(); i++) {
+			int d = i-start;
+			int dx = sx+d*dir.offsetX;
+			int dz = sz+d*dir.offsetZ;
 			boolean match = setup.checkAgainst(world, dx, my, dz, 5, 5, dir, i);
 			if (!match)
 				return false;
@@ -226,7 +229,7 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 			}
 			else if (id == tid) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
-				te.hasMultiBlock = false;
+				te.setHasMultiBlock(false);
 			}
 		}
 	}
@@ -247,7 +250,7 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 			}
 			else if (id == tid) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
-				te.hasMultiBlock = true;
+				te.setHasMultiBlock(true);
 			}
 		}
 	}
@@ -274,7 +277,7 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
-		return meta == 0;
+		return meta <= 1;
 	}
 
 	@Override
