@@ -96,8 +96,10 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0 && this.isExposedToAir(world, x, y, z))
-			temperature -= (1+dT/32);
+		if (dT != 0) {
+			int f = this.isExposedToAir(world, x, y, z) ? 32 : 96;
+			temperature -= (1+dT/f);
+		}
 
 		if (dT > 0) {
 			for (int i = 2; i < 6; i++) {

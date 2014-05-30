@@ -46,7 +46,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 			fluid = WorkingFluid.EMPTY;
 		}
 
-		//	steam = 0;
+		//steam = 0;
 		//ReikaJavaLibrary.pConsole(steam+":"+fluid, Side.SERVER);
 	}
 

@@ -42,7 +42,8 @@ public class ReactorRecipes {
 
 		RecipesGrinder.getRecipes().addRecipe(ReactorOres.PITCHBLENDE.getProduct(), CraftingItems.UDUST.getItem(), 0);
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.PITCHBLENDE), CraftingItems.UDUST.getItem(), 0);
-		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.URANIUM), CraftingItems.UDUST.getItem(), 0);
+		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.PITCHBLENDE.getProductLabel(), CraftingItems.UDUST.getItem(), 0);
+		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.URANIUM.getProductLabel(), CraftingItems.UDUST.getItem(), 0);
 
 		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 0, 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)

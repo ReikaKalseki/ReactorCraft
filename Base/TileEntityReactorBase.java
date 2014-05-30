@@ -44,6 +44,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
@@ -260,6 +261,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			double base = ReikaMathLibrary.getThousandBase(power);
 			ReikaJavaLibrary.pConsole(this);
 			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+		}
+		if (this instanceof TileEntitySteamLine) {
+			TileEntitySteamLine sl = (TileEntitySteamLine)this;
+			String s = String.format("%s contains %d m^3 of steam.", this.getTEName(), sl.getSteam());
+			li.add(s);
 		}
 		return li;
 	}

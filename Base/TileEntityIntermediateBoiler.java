@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -51,6 +52,9 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 		//ReikaJavaLibrary.pConsole(temperature);
 		//ReikaJavaLibrary.pConsole(output, !output.isEmpty());
 		//ReikaJavaLibrary.pConsole(tank, Side.SERVER);
+
+		if (DragonAPICore.debugtest)
+			this.addLiquid(1000);
 
 		this.transferFluid(world, x, y, z);
 	}

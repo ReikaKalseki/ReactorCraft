@@ -68,7 +68,13 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 				return false;
 			}
 		}
-		return true;
+		int dx = x+dir.offsetX*l;
+		int dz = z+dir.offsetZ*l;
+		TileEntity te = world.getBlockTileEntity(dx, y, dz);
+		if (te instanceof TileEntityReactorGenerator) {
+			return dir == ((TileEntityReactorGenerator)te).getFacing().getOpposite();
+		}
+		return false;
 	}
 
 	private boolean checkWindings(World world, int x, int y, int z, ForgeDirection dir) {
@@ -222,14 +228,12 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-			if (meta >= 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
+			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+				te.hasMultiblock = false;
 			}
-			if (meta == 10) {
-				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
-					TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					te.hasMultiblock = false;
-				}
+			else if (meta >= 8) {
+				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
 			}
 		}
 	}
@@ -242,14 +246,12 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-			if (meta < 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
+			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+				te.hasMultiblock = true;
 			}
-			if (meta == 2) {
-				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
-					TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					te.hasMultiblock = true;
-				}
+			else if (meta < 8) {
+				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
 			}
 		}
 	}

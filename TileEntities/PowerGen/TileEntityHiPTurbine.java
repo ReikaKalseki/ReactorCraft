@@ -139,7 +139,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 				int rm = s/8+1;
 				steam += rm;
 				te.removeSteam(rm);
-				flag = true;
+				flag = s > rm+32;
 			}
 		}
 
