@@ -94,7 +94,7 @@ public class RenderGasCollector extends ReactorRenderBase
 		boolean flag = tile.isInWorld();
 		if (flag)
 			flag = tile.hasFurnace();
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(flag), 0, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(flag), 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

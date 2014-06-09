@@ -43,6 +43,8 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
+import Reika.GeoStrata.API.AcceleratorBlacklist;
+import Reika.GeoStrata.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -229,6 +231,13 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
+
+		if (ModList.GEOSTRATA.isLoaded()) {
+			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
+				ReactorTiles m = ReactorTiles.TEList[i];
+				AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+			}
+		}
 	}
 
 	@ForgeSubscribe

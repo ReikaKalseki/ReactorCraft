@@ -10,11 +10,11 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -22,13 +22,12 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 public class WasteManager {
 
 	private static final ArrayList<Isotopes> wastes = new ArrayList<Isotopes>();
-	private static final HashMap<Isotopes, Double> yields = new HashMap<Isotopes, Double>();
-	private static int maxchance = 0;
+	private static final WeightedRandom<Isotopes> yields = new WeightedRandom();
+	private static final Random r = new Random();
 
 	private static void addWaste(Isotopes iso, double percent) {
 		wastes.add(iso);
-		yields.put(iso, percent);
-		maxchance += percent;
+		yields.addEntry(iso, percent);
 	}
 
 	static {
@@ -52,23 +51,11 @@ public class WasteManager {
 		addWaste(Isotopes.Sn126, 0.02);
 	}
 
-	public static int getRandomWaste() {
-		Random r = new Random();
-		double d = r.nextDouble()*maxchance;
-		double p = 0;
-		for (int i = 0; i < wastes.size(); i++) {
-			Isotopes iso = wastes.get(i);
-			p += yields.get(iso);
-			//ReikaJavaLibrary.pConsole(String.format("%.2f", d)+" "+iso.getDisplayName()+": "+p);
-			if (d <= p) {
-				return i;
-			}
-		}
-		return wastes.size()-1;
+	public static Isotopes getRandomWaste() {
+		return yields.getRandomEntry();
 	}
 
 	public static int getFullyRandomWaste() {
-		Random r = new Random();
 		int i = r.nextInt(wastes.size());
 		return i;
 	}
@@ -82,9 +69,8 @@ public class WasteManager {
 	}
 
 	public static ItemStack getRandomWasteItem() {
-		int i = getRandomWaste();
-		Isotopes atom = wastes.get(i);
-		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(i);
+		Isotopes atom = getRandomWaste();
+		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(wastes.indexOf(atom));
 		return is;
 	}
 

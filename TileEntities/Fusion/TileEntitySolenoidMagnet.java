@@ -148,7 +148,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		int y = yCoord;
 		int z = zCoord;
 
-		x += 14;
+		x += 14; //radius of tokamak
 		z -= 2;
 
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);

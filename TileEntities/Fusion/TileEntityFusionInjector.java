@@ -22,6 +22,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -98,9 +99,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource.getFluid().equals(FluidRegistry.getFluid("fusion plasma")))
-			return tank.fill(resource, doFill);
-		return 0;
+		return this.canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
 	}
 
 	@Override
@@ -115,7 +114,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("fusion plasma"));
+		return fluid.equals(FluidRegistry.getFluid("fusion plasma")) && this.getAdjacentTileEntity(from) instanceof TileEntityMagneticPipe;
 	}
 
 	@Override

@@ -417,10 +417,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	public final int getNumberStagesTotal() {
 		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(writex, writey, writez);
-			return tile.getNumberStagesTotal();
+			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord)
+				return tile.getNumberStagesTotal();
 		}
-		else
-			return this.getStage();
+		return this.getStage();
 	}
 
 	private void followHead(World world, int x, int y, int z, int meta) {

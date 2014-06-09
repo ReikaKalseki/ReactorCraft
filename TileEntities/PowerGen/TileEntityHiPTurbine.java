@@ -84,8 +84,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			}
 			int n = ConfigRegistry.SPRINKLER.getValue()*12;
 			for (int i = 0; i < n; i++) {
-				double px = x+(-4+rand.nextDouble()*8)*dir.offsetX;
-				double pz = z+(-4+rand.nextDouble()*8)*dir.offsetZ;
+				double px = x+(-th+rand.nextDouble()*th*2)*dir.offsetX;
+				double pz = z+(-th+rand.nextDouble()*th*2)*dir.offsetZ;
 				ReikaParticleHelper.RAIN.spawnAt(world, px, ty+1+rand.nextInt(th*2), pz);
 			}
 		}

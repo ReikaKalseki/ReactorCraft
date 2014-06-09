@@ -55,7 +55,7 @@ public class RenderSolenoid extends ReactorRenderBase
 			GL11.glScaled(s, s, s);
 		}
 		if (tile.canRenderCoil() || !tile.isInWorld())
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.canRenderCoil() && tile.hasWorldObj()), -tile.phi, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.canRenderCoil() && tile.hasWorldObj()), -tile.phi, 0);
 		else {
 			GL11.glTranslated(-0.5, -0.5, -0.5);
 			Tessellator v5 = Tessellator.instance;

@@ -54,7 +54,7 @@ public class RenderMagnet extends ReactorRenderBase
 			GL11.glScaled(s, s, s);
 		}
 		GL11.glRotated(ang, 0, 1, 0);
-		var14.renderAll(null, 0, 0);
+		var14.renderAll(tile, null, 0, 0);
 		GL11.glRotated(-ang, 0, 1, 0);
 		if (!tile.isInWorld()) {
 			GL11.glScaled(1/s, 1/s, 1/s);

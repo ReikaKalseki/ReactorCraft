@@ -26,6 +26,8 @@ import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.Entities.EntityDischarge;
@@ -171,6 +173,15 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	public int getCharge() {
 		return charge;
+	}
+
+	private boolean isPlasmaAcceptingBlock(TileEntity te) {
+		return te instanceof TileEntityMagneticPipe || te instanceof TileEntityFusionHeater || te instanceof TileEntityFusionInjector;
+	}
+
+	@Override
+	protected boolean isInteractableTile(TileEntity te) {
+		return this.isPlasmaAcceptingBlock(te);
 	}
 
 }

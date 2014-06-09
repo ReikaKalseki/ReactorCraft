@@ -39,7 +39,7 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 	private void remapTurbine(World world, int x, int y, int z) {
 		for (int i = y+1; i < world.provider.getHeight(); i++) {
 			ReactorTiles r = ReactorTiles.getTE(world, x, i, z);
-			if (r == ReactorTiles.TURBINECORE) {
+			if (r == ReactorTiles.TURBINECORE || r == ReactorTiles.BIGTURBINE) {
 				turbineY = i;
 				return;
 			}
@@ -76,7 +76,7 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 
 	private TileEntityTurbineCore getTurbine() {
 		ReactorTiles r = ReactorTiles.getTE(worldObj, xCoord, turbineY, zCoord);
-		if (r != ReactorTiles.TURBINECORE)
+		if (r != ReactorTiles.TURBINECORE && r != ReactorTiles.BIGTURBINE)
 			return null;
 		return (TileEntityTurbineCore)this.getTileEntity(xCoord, turbineY, zCoord);
 	}

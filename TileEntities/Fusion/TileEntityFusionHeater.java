@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -154,12 +155,12 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return from == ForgeDirection.UP ? tank.drain(resource.amount, doDrain) : null;
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return from == ForgeDirection.UP ? tank.drain(maxDrain, doDrain) : null;
+		return this.canDrain(from, null) ? tank.drain(maxDrain, doDrain) : null;
 	}
 
 	@Override
@@ -169,7 +170,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP;
+		return from == ForgeDirection.UP && this.getAdjacentTileEntity(from) instanceof TileEntityMagneticPipe;
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class RenderGenerator extends ReactorRenderBase
 
 		if (tile.isInWorld()) {
 			if (tile.hasMultiblock)
-				model.renderAll(null, tile.phi, 0);
+				model.renderAll(tile, null, tile.phi, 0);
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;
@@ -121,7 +121,7 @@ public class RenderGenerator extends ReactorRenderBase
 			double c = 0.5;
 			GL11.glTranslated(a, b, c);
 			GL11.glScaled(sc, sc, sc);
-			model.renderAll(null, -tile.phi, 0);
+			model.renderAll(tile, null, -tile.phi, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
 			GL11.glTranslated(-a, -b, -c);
 			GL11.glRotatef(-180, 0, 1, 0);

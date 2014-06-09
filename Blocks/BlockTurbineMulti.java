@@ -46,117 +46,118 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 		setup.addMapping('t', blockID, 0);
 		setup.addMapping('h', blockID, 1);
 		setup.addMapping('e', blockID, 2);
+		setup.addAntiMapping('b', blockID);
 
 		setup.addSlice(
-				"---hhhhh---",
-				"--hhhthhh--",
-				"-hhttttthh-",
+				"xbbhhhhhbbx",
+				"bbhhhthhhbb",
+				"bhhttttthhb",
 				"hhttttttthh",
 				"hhttttttthh",
 				"httttxtttth",
 				"hhttttttthh",
 				"hhttttttthh",
-				"-hhttttthh-",
-				"--hhhthhh--",
-				"---hhhhh---"
+				"bhhttttthhb",
+				"bbhhhthhhbb",
+				"xbbhhhhhbbx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"---hhhhh---",
-				"--hhttthh--",
-				"-hhttttthh-",
-				"-httttttth-",
-				"-htttxttth-",
-				"-httttttth-",
-				"-hhttttthh-",
-				"--hhttthh--",
-				"---hhhhh---",
-				"-----------"
+				"xxbbbbbbbxx",
+				"xbbhhhhhbbx",
+				"bbhhttthhbb",
+				"bhhttttthhb",
+				"bhttttttthb",
+				"bhtttxttthb",
+				"bhttttttthb",
+				"bhhttttthhb",
+				"bbhhttthhbb",
+				"xbbhhhhhbbx",
+				"xxbbbbbbbxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"----hhh----",
-				"--hhhhhhh--",
-				"--hhttthh--",
-				"-hhttttthh-",
-				"-hhttxtthh-",
-				"-hhttttthh-",
-				"--hhttthh--",
-				"--hhhhhhh--",
-				"----hhh----",
-				"-----------"
+				"xxxbbbbbxxx",
+				"xbbbhhhbbbx",
+				"xbhhhhhhhbx",
+				"bbhhttthhbb",
+				"bhhttttthhb",
+				"bhhttxtthhb",
+				"bhhttttthhb",
+				"bbhhttthhbb",
+				"xbhhhhhhhbx",
+				"xbbbhhhbbbx",
+				"xxxbbbbbxxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"-----------",
-				"---hhhhh---",
-				"--hhttthh--",
-				"--httttth--",
-				"--httxtth--",
-				"--httttth--",
-				"--hhttthh--",
-				"---hhhhh---",
-				"-----------",
-				"-----------"
+				"xxxxxxxxxxx",
+				"xxbbbbbbbxx",
+				"xbbhhhhhbbx",
+				"xbhhttthhbx",
+				"xbhttttthbx",
+				"xbhttxtthbx",
+				"xbhttttthbx",
+				"xbhhttthhbx",
+				"xbbhhhhhbbx",
+				"xxbbbbbbbxx",
+				"xxxxxxxxxxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"-----------",
-				"----hhh----",
-				"---hhhhh---",
-				"--hhttthh--",
-				"--hhtxthh--",
-				"--hhttthh--",
-				"---hhhhh---",
-				"----hhh----",
-				"-----------",
-				"-----------"
+				"xxxxxxxxxxx",
+				"xxxbbbbbxxx",
+				"xxbbhhhbbxx",
+				"xbbhhhhhbbx",
+				"xbhhttthhbx",
+				"xbhhtxthhbx",
+				"xbhhttthhbx",
+				"xbbhhhhhbbx",
+				"xxbbhhhbbxx",
+				"xxxbbbbbxxx",
+				"xxxxxxxxxxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"-----------",
-				"-----------",
-				"---hhhhh---",
-				"---hhthh---",
-				"---htxth---",
-				"---hhthh---",
-				"---hhhhh---",
-				"-----------",
-				"-----------",
-				"-----------"
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx",
+				"xxbbbbbbbxx",
+				"xxbhhhhhbxx",
+				"xxbhhthhbxx",
+				"xxbhtxthbxx",
+				"xxbhhthhbxx",
+				"xxbhhhhhbxx",
+				"xxbbbbbbbxx",
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"-----------",
-				"-----------",
-				"----hhh----",
-				"---hhhhh---",
-				"---hhxhh---",
-				"---hhhhh---",
-				"----hhh----",
-				"-----------",
-				"-----------",
-				"-----------"
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx",
+				"xxxbbbbbxxx",
+				"xxbbhhhbbxx",
+				"xxbhhhhhbxx",
+				"xxbhhxhhbxx",
+				"xxbhhhhhbxx",
+				"xxbbhhhbbxx",
+				"xxxbbbbbxxx",
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx"
 				);
 
 		setup.addSlice(
-				"-----------",
-				"-----------",
-				"-----------",
-				"-----------",
-				"----eee----",
-				"----exe----",
-				"----eee----",
-				"-----------",
-				"-----------",
-				"-----------",
-				"-----------"
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx",
+				"xxxbbbbbxxx",
+				"xxxbeeebxxx",
+				"xxxbexebxxx",
+				"xxxbeeebxxx",
+				"xxxbbbbbxxx",
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx",
+				"xxxxxxxxxxx"
 				);
 	}
 
@@ -288,6 +289,16 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 		int my = blocks.getMinY()+blocks.getSizeY()/2;
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
 		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.BIGTURBINE ? world.getBlockTileEntity(mx, my, mz) : null;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
 	}
 
 }

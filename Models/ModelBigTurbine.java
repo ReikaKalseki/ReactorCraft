@@ -17,26 +17,28 @@ package Reika.ReactorCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 
 public class ModelBigTurbine extends ModelTurbine
 {
 
-	private ModelRenderer housing;
-	private ModelRenderer housing2;
+	private LODModelPart housing;
+	private LODModelPart housing2;
 
-	private ModelRenderer Shape4;
-	private ModelRenderer Shape4a;
-	private ModelRenderer Shape4b;
+	private LODModelPart Shape4;
+	private LODModelPart Shape4a;
+	private LODModelPart Shape4b;
 
-	private ModelRenderer Shape220b;
+	private LODModelPart Shape220b;
 
 	public ModelBigTurbine(int stage)
 	{
 		super(stage);
-		housing = new ModelRenderer(this, 58, 11);
+		housing = new LODModelPart(this, 58, 11);
 		int w1 = this.getHousingLength();
 		int w2 = stage == 0 ? 12 : this.getHousingLength()+1;
 		int l1 = this.getBladeLength()+2;
@@ -48,33 +50,33 @@ public class ModelBigTurbine extends ModelTurbine
 		housing.mirror = true;
 		this.setRotation(housing, 0, 0, 0);
 
-		housing2 = new ModelRenderer(this, 58, 11);
+		housing2 = new LODModelPart(this, 58, 11);
 		housing2.addBox(-w2, l2, -8, w2*2, 1, d);
 		housing2.setRotationPoint(0F, 15F, 0);
 		housing2.setTextureSize(128, 128);
 		housing2.mirror = true;
 		this.setRotation(housing2, 0, 0, 0);
 
-		Shape4 = new ModelRenderer(this, 39, 10);
+		Shape4 = new LODModelPart(this, 39, 10);
 		Shape4.addBox(-4F, 12F, 0F, 8, 16, 1);
 		Shape4.setRotationPoint(0F, 6F, 6F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0F, 0F, 0F);
-		Shape4a = new ModelRenderer(this, 19, 0);
+		Shape4a = new LODModelPart(this, 19, 0);
 		Shape4a.addBox(-22F, -4F, 0F, 44, 8, 1);
 		Shape4a.setRotationPoint(0F, 14F, 6F);
 		Shape4a.setTextureSize(128, 128);
 		Shape4a.mirror = true;
 		this.setRotation(Shape4a, 0F, 0F, 0F);
-		Shape4b = new ModelRenderer(this, 19, 10);
+		Shape4b = new LODModelPart(this, 19, 10);
 		Shape4b.addBox(-4F, -8F, 0F, 8, 16, 1);
 		Shape4b.setRotationPoint(0F, 2F, 6F);
 		Shape4b.setTextureSize(128, 128);
 		Shape4b.mirror = true;
 		this.setRotation(Shape4b, 0F, 0F, 0F);
 
-		Shape220b = new ModelRenderer(this, 39, 10);
+		Shape220b = new LODModelPart(this, 39, 10);
 		Shape220b.addBox(-4F, -16F, 0F, 8, 16, 1);
 		Shape220b.setRotationPoint(0F, 34F, 6F);
 		Shape220b.setTextureSize(128, 128);
@@ -83,15 +85,15 @@ public class ModelBigTurbine extends ModelTurbine
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		super.renderAll(li, phi, theta);
-		this.renderHousing();
+		super.renderAll(te, li, phi, theta);
+		this.renderHousing(te);
 
 		if (stage == 0) {
-			//Shape4.render(f5);
-			//	Shape4a.render(f5);
-			//Shape4b.render(f5);
+			//Shape4.render(te, f5);
+			//	Shape4a.render(te, f5);
+			//Shape4b.render(te, f5);
 		}
 	}
 
@@ -155,14 +157,14 @@ public class ModelBigTurbine extends ModelTurbine
 		return 4;
 	}
 
-	private void renderHousing() {
+	private void renderHousing(TileEntity te) {
 		int a = 360/this.getHousingSegments();
 		for (int i = 0; i < 360; i += a) {
 			GL11.glTranslated(0, 1, 0);
 			GL11.glRotated(i, 0, 0, 1);
 			GL11.glTranslated(0, -1, 0);
-			housing.render(f5);
-			housing2.render(f5);
+			housing.render(te, f5);
+			housing2.render(te, f5);
 
 			if (stage == 0) {
 				double d = 1.25;
@@ -170,7 +172,7 @@ public class ModelBigTurbine extends ModelTurbine
 				double c = -0.3;
 				GL11.glTranslated(0, c, b);
 				GL11.glScaled(d, d, d);
-				Shape220b.render(f5);
+				Shape220b.render(te, f5);
 				GL11.glScaled(1/d, 1/d, 1/d);
 				GL11.glTranslated(0, -c, -b);
 			}

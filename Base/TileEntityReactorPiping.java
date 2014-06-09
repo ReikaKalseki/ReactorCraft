@@ -47,7 +47,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		}
 	}
 
-	private boolean isInteractableTile(TileEntity te) {
+	protected boolean isInteractableTile(TileEntity te) {
 		if (te == null)
 			return false;
 		if (te instanceof IFluidHandler) {

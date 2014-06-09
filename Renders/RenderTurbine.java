@@ -91,7 +91,7 @@ public class RenderTurbine extends ReactorRenderBase
 
 		if (tile.isInWorld()) {
 			if (tile.hasMultiBlock())
-				models[tile.getStage()].renderAll(ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
+				models[tile.getStage()].renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;
@@ -141,7 +141,7 @@ public class RenderTurbine extends ReactorRenderBase
 			double dx = iof ? 0.3 : 0.1;
 			GL11.glScaled(sc, sc, sc);
 			GL11.glTranslated(-dx, dy, 0);
-			models[0].renderAll(null, -tile.phi, 0);
+			models[0].renderAll(tile, null, -tile.phi, 0);
 			GL11.glTranslated(dx, -dy, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
 		}
