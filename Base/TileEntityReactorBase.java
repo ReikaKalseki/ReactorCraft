@@ -382,4 +382,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	public final void onDisconnect(Node node) {}
 	@Override
 	public final void onMessage(Message message) {}
+
+	@Override
+	public final boolean hasModel() {
+		return this.getMachine().hasRender();
+	}
 }

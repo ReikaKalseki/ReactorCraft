@@ -9,15 +9,23 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import java.util.Arrays;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe {
 
@@ -114,6 +122,10 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			return true;
 		if (id == ReactorTiles.BIGTURBINE.getBlockID() && meta == ReactorTiles.BIGTURBINE.getBlockMetadata())
 			return true;
+		if (id == MachineRegistry.PIPEPUMP.getBlockID() && meta == MachineRegistry.PIPEPUMP.getMachineMetadata()) {
+			boolean flag = ((TileEntityPipePump)this.getAdjacentTileEntity(dir)).canConnectToPipeOnSide(dir);
+			return flag;
+		}
 		return false;
 	}
 
@@ -175,6 +187,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
 		world.markBlockForRenderUpdate(x, y, z);
+		ReikaJavaLibrary.pConsole(Arrays.toString(connections), Side.SERVER);
 	}
 
 	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
@@ -215,7 +228,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		ReactorTiles m2 = ReactorTiles.getTE(worldObj, x, y, z);
 		if (m == m2)
 			return true;
-		//certain TEs
+		TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+		if (te instanceof PipeRenderConnector)
+			return ((PipeRenderConnector)te).canConnectToPipeOnSide(dir);
 		return false;
 	}
 
@@ -228,7 +243,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
 		if (p instanceof TileEntitySteamLine) {
 			WorkingFluid f = ((TileEntitySteamLine)p).fluid;
-			return f != null ? f.equals(fluid) : true;
+			return f != WorkingFluid.EMPTY ? f == fluid : true;
 		}
 		return false;
 	}
@@ -241,6 +256,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	@Override
 	public void transferFrom(PumpablePipe from, int amt) {
 		((TileEntitySteamLine)from).steam -= amt;
+		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
 	}
 }

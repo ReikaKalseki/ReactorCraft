@@ -591,7 +591,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		return 16384D;
+		return 4*super.getMaxRenderDistanceSquared();
 	}
 
 }
