@@ -80,7 +80,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	}
 
 	@Override
-	public final Fluid getLiquidType() {
+	public final Fluid getFluidType() {
 		return fluid;
 	}
 
@@ -178,7 +178,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			NBT.setBoolean("conn"+i, connections[i]);
 		}
 
-		ReikaNBTHelper.writeFluidToNBT(NBT, this.getLiquidType());
+		ReikaNBTHelper.writeFluidToNBT(NBT, this.getFluidType());
 		NBT.setInteger("level", this.getLevel());
 	}
 
@@ -213,7 +213,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
-					Fluid f = tp.getLiquidType();
+					Fluid f = tp.getFluidType();
 					if (f != null) {
 						int amt = tp.getLevel();
 						int dL = amt-this.getLevel();
@@ -266,7 +266,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	}
 
 	public void dumpContents(World world, int x, int y, int z) {
-		Fluid f = this.getLiquidType();
+		Fluid f = this.getFluidType();
 		if (this.getLevel() <= 0 || f == null)
 			return;
 		for (int i = 0; i < 6; i++) {

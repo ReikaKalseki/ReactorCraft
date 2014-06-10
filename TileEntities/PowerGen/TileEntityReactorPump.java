@@ -80,7 +80,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 			if (te instanceof TileEntityPipe) {
 				TileEntityPipe p = (TileEntityPipe)te;
 				if (p.canIntakeFluid(output.getActualFluid())) {
-					int dL = output.getLevel()-p.getLiquidLevel();
+					int dL = output.getLevel()-p.getFluidLevel();
 					//ReikaJavaLibrary.pConsole(dL);
 					if (dL/4 > 0) {
 						p.addFluid(dL/4);

@@ -239,7 +239,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 				li.add(s);
 			}
 			else {
-				String s = String.format("%s contains %d mB of %s", this.getTEName(), rp.getLevel(), rp.getLiquidType().getLocalizedName());
+				String s = String.format("%s contains %d mB of %s", this.getTEName(), rp.getLevel(), rp.getFluidType().getLocalizedName());
 				li.add(s);
 			}
 		}

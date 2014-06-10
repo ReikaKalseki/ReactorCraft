@@ -63,7 +63,7 @@ public class BlockDuct extends BlockReactorTile {
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(x, y, z);
-		return te != null && te.getLevel() > 0 && te.getLiquidType() != null ? te.getLiquidType().getLuminosity(te.worldObj, x, y, z) : 0;
+		return te != null && te.getLevel() > 0 && te.getFluidType() != null ? te.getFluidType().getLuminosity(te.worldObj, x, y, z) : 0;
 	}
 
 	@Override

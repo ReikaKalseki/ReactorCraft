@@ -17,8 +17,9 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 
-public class TileEntitySteamLine extends TileEntityReactorBase {
+public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe {
 
 	//private double storedEnergy;
 	private int steam;
@@ -221,5 +222,25 @@ public class TileEntitySteamLine extends TileEntityReactorBase {
 	@Override
 	public int getPacketDelay() {
 		return 4*super.getPacketDelay();
+	}
+
+	@Override
+	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
+		if (p instanceof TileEntitySteamLine) {
+			WorkingFluid f = ((TileEntitySteamLine)p).fluid;
+			return f != null ? f.equals(fluid) : true;
+		}
+		return false;
+	}
+
+	@Override
+	public int getFluidLevel() {
+		return this.getSteam();
+	}
+
+	@Override
+	public void transferFrom(PumpablePipe from, int amt) {
+		((TileEntitySteamLine)from).steam -= amt;
+		steam += amt;
 	}
 }
