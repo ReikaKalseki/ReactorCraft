@@ -9,15 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import java.util.Arrays;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
@@ -25,7 +22,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe {
 
@@ -187,7 +183,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
 		world.markBlockForRenderUpdate(x, y, z);
-		ReikaJavaLibrary.pConsole(Arrays.toString(connections), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(Arrays.toString(connections), Side.SERVER);
 	}
 
 	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
