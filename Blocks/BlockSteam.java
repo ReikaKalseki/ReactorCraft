@@ -49,7 +49,7 @@ public class BlockSteam extends Block {
 
 	public BlockSteam(int par1, Material mat) {
 		super(par1, mat);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 		this.setTickRandomly(true);
 		this.setResistance(3600000);
 		this.setLightOpacity(0);

@@ -18,7 +18,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.InertEntity;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
@@ -70,7 +69,6 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 		if (worldObj.isRaining()) {
 			if (rand.nextInt(36000) == 0) {
 				if (worldObj.getBiomeGenForCoords(this.getBlockX(), this.getBlockZ()).canSpawnLightningBolt()) {
-					ReikaJavaLibrary.pConsole(effectRange+":"+this);
 					this.clean();
 				}
 			}

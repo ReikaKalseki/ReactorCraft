@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -73,6 +74,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			return ReactorRenderList.getRenderForMachine(ReactorTiles.TEList[this.getIndex()]);
 		else
 			return null;
+	}
+
+	@Override
+	public final boolean canUpdate() {
+		return !ReactorCraft.instance.isLocked();
 	}
 
 	@Override

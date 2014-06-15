@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.DragonAPICore;
 
+@Deprecated //?
 public final class ReikaFluidHelper extends DragonAPICore {
 
 	/** Returns false positives! */

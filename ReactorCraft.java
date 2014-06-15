@@ -35,6 +35,7 @@ import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
+import Reika.DragonAPI.Auxiliary.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.InstallationException;
@@ -42,6 +43,7 @@ import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.GeoStrata.API.AcceleratorBlacklist;
 import Reika.GeoStrata.API.AcceleratorBlacklist.BlacklistReason;
@@ -65,7 +67,9 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
+import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -102,6 +106,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
+	private boolean isLocked = false;
+
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
@@ -136,6 +142,30 @@ public class ReactorCraft extends DragonAPIMod {
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
 	public static CommonProxy proxy;
 
+	public final boolean isLocked() {
+		return isLocked || RotaryCraft.instance.isLocked();
+	}
+
+	private final boolean checkForLock() {
+		for (int i = 0; i < ReactorItems.itemList.length; i++) {
+			ReactorItems r = ReactorItems.itemList[i];
+			if (!r.isDummiedOut()) {
+				int id = r.getShiftedItemID();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
+		}
+		for (int i = 0; i < ReactorBlocks.blockList.length; i++) {
+			ReactorBlocks r = ReactorBlocks.blockList[i];
+			if (!r.isDummiedOut()) {
+				int id = r.getBlockID();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
@@ -152,8 +182,25 @@ public class ReactorCraft extends DragonAPIMod {
 
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
-		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
 		proxy.registerSounds();
+
+		isLocked = this.checkForLock();
+		if (this.isLocked()) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= REACTORCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of ReactorCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the ReactorCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
+
+		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
 
 		this.addBlocks();
 		this.addItems();
@@ -179,8 +226,12 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		proxy.registerRenderers();
-		ReactorRecipes.addRecipes();
+		if (this.isLocked() && !RotaryCraft.instance.isLocked())
+			GameRegistry.registerPlayerTracker(LockNotification.instance);
+		if (!this.isLocked()) {
+			proxy.registerRenderers();
+			ReactorRecipes.addRecipes();
+		}
 		this.addEntities();
 		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
 		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
@@ -205,7 +256,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 		//TickRegistry.registerTickHandler(new VolcanicGasController(), Side.SERVER);
 
-		IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
+		if (!this.isLocked())
+			IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
 
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockGold);
@@ -213,12 +265,16 @@ public class ReactorCraft extends DragonAPIMod {
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker());
+
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.DYETREES, "Dense pitchblende generation in its biomes");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 	}
 
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
-		ReactorRecipes.addModInterface();
+		if (!this.isLocked())
+			ReactorRecipes.addModInterface();
 
 		//for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 		//	FluoriteTypes fl = FluoriteTypes.colorList[i];
@@ -243,7 +299,8 @@ public class ReactorCraft extends DragonAPIMod {
 	@ForgeSubscribe
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
-		setupLiquidIcons(event);
+		if (!this.isLocked())
+			setupLiquidIcons(event);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -399,12 +456,12 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@Override
 	public boolean hasWiki() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public URL getWiki() {
-		return null;
+		return RotaryCraft.instance.getWiki();
 	}
 
 	@Override
@@ -414,7 +471,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@Override
 	public String getVersionName() {
-		return null;
+		return RotaryCraft.instance.getVersionName();
 	}
 
 	@Override

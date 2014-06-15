@@ -24,7 +24,7 @@ public class BlockReactorMat extends Block {
 		super(par1, par2Material);
 		this.setHardness(1.5F);
 		this.setResistance(10F);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	@Override

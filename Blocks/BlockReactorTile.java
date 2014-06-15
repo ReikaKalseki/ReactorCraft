@@ -84,6 +84,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
+		if (ReactorCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
 			if (r.hasTextureStates()) {
@@ -155,6 +157,9 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
+		super.onBlockActivated(world, x, y, z, ep, par6, par7, par8, par9);
+		if (ReactorCraft.instance.isLocked())
+			return false;
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityBase)

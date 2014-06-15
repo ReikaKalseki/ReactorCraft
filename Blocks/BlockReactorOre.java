@@ -36,7 +36,7 @@ public class BlockReactorOre extends Block {
 		super(par1, par2Material);
 		this.setResistance(5);
 		this.setHardness(2);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	@Override

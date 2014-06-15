@@ -31,7 +31,7 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	public ReactorItemBase(int ID, int tex) {
 		super(ID);
 		index = tex;
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 		if (this.getDataValues() > 1) {
 			hasSubtypes = true;
 			this.setMaxDamage(0);

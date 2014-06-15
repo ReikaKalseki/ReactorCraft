@@ -14,6 +14,9 @@ import java.util.HashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
@@ -72,7 +75,13 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerRenderers() {
-		this.loadModels();
+		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
+			ReactorCraft.logger.log("Disabling all machine renders for FPS and lag profiling.");
+		}
+		else {
+			this.loadModels();
+		}
+
 		this.addArmorRenders();
 
 		lineRender = RenderingRegistry.getNextAvailableRenderId();

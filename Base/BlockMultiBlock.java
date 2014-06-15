@@ -37,7 +37,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 		super(par1, par2Material);
 		this.setResistance(10);
 		this.setHardness(2);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	public abstract int getNumberTextures();

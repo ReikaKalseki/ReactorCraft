@@ -11,6 +11,7 @@ package Reika.ReactorCraft.NEI;
 
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -38,6 +39,17 @@ public class NEI_ReactorConfig implements IConfigureNEI {
 		API.hideItem(ReactorBlocks.MODELREACTOR.getBlockID());
 		API.hideItem(ReactorBlocks.MACHINE.getBlockID());
 		API.hideItem(ReactorBlocks.MODELMACHINE.getBlockID());
+
+		if (ReactorCraft.instance.isLocked()) {
+			for (int i = 0; i < ReactorItems.itemList.length; i++) {
+				ReactorItems ir = ReactorItems.itemList[i];
+				API.hideItem(ir.getShiftedItemID());
+			}
+			for (int i = 0; i < ReactorBlocks.blockList.length; i++) {
+				ReactorBlocks b = ReactorBlocks.blockList[i];
+				API.hideItem(b.getBlockID());
+			}
+		}
 	}
 
 	@Override

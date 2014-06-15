@@ -31,7 +31,7 @@ public class BlockFluorite extends Block {
 		super(par1, par2Material);
 		this.setHardness(1.2F);
 		this.setResistance(4F);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 		this.setTickRandomly(true);
 	}
 

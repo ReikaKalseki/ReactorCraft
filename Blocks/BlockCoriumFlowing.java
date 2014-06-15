@@ -42,7 +42,7 @@ public class BlockCoriumFlowing extends BlockFlowing implements ILiquid {
 		this.setHardness(100F);
 		this.setLightOpacity(0);
 		this.setResistance(500);
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class ItemReactorPlacer extends Item {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		maxStackSize = 64;
-		this.setCreativeTab(ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	@Override
