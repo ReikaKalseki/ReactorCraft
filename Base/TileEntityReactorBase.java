@@ -174,13 +174,13 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			}
 		}
 
+		ReactorTiles src = this.getMachine();
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-			ReactorTiles src = this.getMachine();
 			if (r != null) {
 				TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof Temperatured) {
