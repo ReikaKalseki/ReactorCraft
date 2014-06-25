@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.InertEntity;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 
@@ -42,7 +43,7 @@ public class EntityFusion extends InertEntity {
 	}
 
 	private void spawnNeutrons(World world, int x, int y, int z) {
-		EntityFusionNeutron e = new EntityFusionNeutron(world, x, y, z, this.getRandomDirection());
+		EntityNeutron e = new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.FUSION);
 		if (!world.isRemote)
 			world.spawnEntityInWorld(e);
 	}

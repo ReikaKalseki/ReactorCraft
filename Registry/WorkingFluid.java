@@ -16,8 +16,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 public enum WorkingFluid {
 
 	EMPTY(0, 0, ""),
-	WATER(0.5F, 100, "water"),
-	AMMONIA(1, -33, "rc ammonia");
+	WATER(1F, 100, "water"),
+	AMMONIA(2, -33, "rc ammonia");
 
 	public final float efficiency;
 	public final int boilingTemp;

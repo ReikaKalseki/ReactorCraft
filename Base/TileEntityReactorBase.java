@@ -40,10 +40,11 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.ShaftMachine;
@@ -203,16 +204,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						}
 					}
 				}
-				if (r == ReactorTiles.BREEDER || r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
-					if (src == ReactorTiles.BOILER && temperature >= 100) {
-						world.setBlock(x, y, z, 0);
-						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
-					}
-				}
 				if (r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
-					if (src == ReactorTiles.SODIUMBOILER && temperature >= 300) {
-						world.setBlock(x, y, z, 0);
-						world.createExplosion(null, x+0.5, y+0.5, z+0.5, 5F, true);
+					if (src.getReactorType() != ReactorType.HTGR && temperature > Tamb) {
+						temperature -= Math.max(1, (temperature-Tamb)/2);
 					}
 				}
 			}

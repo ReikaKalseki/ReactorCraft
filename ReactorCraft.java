@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
@@ -174,7 +175,6 @@ public class ReactorCraft extends DragonAPIMod {
 			throw new InstallationException(instance, "ReactorCraft requires RotaryCraft!");
 		}
 
-		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
@@ -219,8 +219,7 @@ public class ReactorCraft extends DragonAPIMod {
 		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
-		ReikaRegistryHelper.setupModData(instance, evt);
-		ReikaRegistryHelper.setupVersionChecking(evt);
+		this.basicSetup(evt);
 	}
 
 	@Override
@@ -451,27 +450,17 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@Override
 	public URL getDocumentationSite() {
-		return DragonAPICore.getReikaForumPage(instance);
+		return DragonAPICore.getReikaForumPage();
 	}
 
 	@Override
-	public boolean hasWiki() {
-		return true;
+	public String getUpdateCheckURL() {
+		return CommandableUpdateChecker.reikaURL;
 	}
 
 	@Override
-	public URL getWiki() {
+	public String getWiki() {
 		return RotaryCraft.instance.getWiki();
-	}
-
-	@Override
-	public boolean hasVersion() {
-		return false;
-	}
-
-	@Override
-	public String getVersionName() {
-		return RotaryCraft.instance.getVersionName();
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Event.ReactorMeltdownEvent;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -48,7 +49,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
 			ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
@@ -192,9 +193,22 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		}
 	}
 
-	protected void spawnNeutronBurst(World world, int x, int y, int z) {
+	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
 		for (int i = 0; i < 3; i++)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection()));
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), this.getNeutronType()));
+	}
+
+	protected final NeutronType getNeutronType() {
+		switch(this.getMachine().getReactorType()) {
+		case BREEDER:
+			return NeutronType.BREEDER;
+		case FISSION:
+			return NeutronType.FISSION;
+		case FUSION:
+			return NeutronType.FUSION;
+		default:
+			return null;
+		}
 	}
 
 	@Override

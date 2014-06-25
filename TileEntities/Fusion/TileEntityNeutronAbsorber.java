@@ -16,8 +16,8 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Entities.EntityFusionNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
@@ -50,7 +50,7 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
-		if (e instanceof EntityFusionNeutron) {
+		if (e.getType() == NeutronType.FUSION) {
 			temperature += 40;
 			return true;
 		}

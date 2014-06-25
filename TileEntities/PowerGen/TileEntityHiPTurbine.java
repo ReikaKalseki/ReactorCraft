@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -23,6 +23,7 @@ import Reika.ReactorCraft.Blocks.BlockTurbineMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -31,6 +32,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	public static final int GEN_OMEGA = 131072;
 	public static final int TORQUE_CAP = 65536;
+	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
 	public boolean needsMultiblock() {
@@ -69,7 +71,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 				int tx = x+dir.offsetX*i+s.offsetX;
 				int tz = z+dir.offsetZ*i+s.offsetZ;
 				MachineRegistry m = MachineRegistry.getMachine(world, tx, ty, tz);
-				FluidStack fs = new FluidStack(FluidRegistry.getFluid("lowpwater"), TileEntityReactorBoiler.WATER_PER_STEAM);
+				FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), TileEntityReactorBoiler.WATER_PER_STEAM);
 				if (m == MachineRegistry.RESERVOIR) {
 					TileEntity te = this.getTileEntity(tx, ty, tz);
 					((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
@@ -83,10 +85,12 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 					ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, x+dir.offsetX*i, py, z+dir.offsetZ*i, 5);
 			}
 			int n = ConfigRegistry.SPRINKLER.getValue()*12;
+			double ax = s.offsetX > 0 ? 1.2 : -0.2;
+			double az = s.offsetZ > 0 ? 1.2 : -0.2;
 			for (int i = 0; i < n; i++) {
 				double px = x+(-th+rand.nextDouble()*th*2)*dir.offsetX;
 				double pz = z+(-th+rand.nextDouble()*th*2)*dir.offsetZ;
-				ReikaParticleHelper.RAIN.spawnAt(world, px, ty+1+rand.nextInt(th*2), pz);
+				ReikaParticleHelper.RAIN.spawnAt(world, px+ax, ty+1+rand.nextInt(th*2), pz+az);
 			}
 		}
 	}
@@ -135,7 +139,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.STEAMLINE) {
 			TileEntitySteamLine te = (TileEntitySteamLine)this.getAdjacentTileEntity(dir);
 			int s = te.getSteam();
-			if (s > 8 && te.getWorkingFluid() == WorkingFluid.WATER) {
+			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
 				int rm = s/8+1;
 				steam += rm;
 				te.removeSteam(rm);
@@ -144,6 +148,31 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		}
 
 		return flag;
+	}
+
+	private boolean canTakeIn(WorkingFluid f) {
+		return fluid == WorkingFluid.EMPTY || f == fluid;
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		fluid = WorkingFluid.getFromNBT(NBT);
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		fluid.saveToNBT(NBT);
+	}
+
+	@Override
+	protected float getTorqueFactor() {
+		return fluid.efficiency > 1 ? 1+(fluid.efficiency-1)*0.25F : fluid.efficiency;
 	}
 
 }

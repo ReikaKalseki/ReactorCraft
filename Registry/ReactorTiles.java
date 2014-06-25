@@ -37,6 +37,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
@@ -50,7 +51,6 @@ import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
@@ -323,6 +323,32 @@ public enum ReactorTiles {
 
 	public boolean isPipe() {
 		return this == GASPIPE || this == MAGNETPIPE;
+	}
+
+	public ReactorType getReactorType() {
+		switch (this) {
+		case ABSORBER:
+		case HEATER:
+		case INJECTOR:
+		case MAGNET:
+		case MAGNETPIPE:
+		case SOLENOID:
+			return ReactorType.FUSION;
+		case BOILER:
+		case CONTROL:
+		case COOLANT:
+		case CPU:
+		case FUEL:
+			return ReactorType.FISSION;
+		case BREEDER:
+		case SODIUMBOILER:
+			return ReactorType.BREEDER;
+		case CO2HEATER:
+		case PEBBLEBED:
+			return ReactorType.HTGR;
+		default:
+			return null;
+		}
 	}
 
 

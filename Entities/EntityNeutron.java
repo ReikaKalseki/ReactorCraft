@@ -27,9 +27,16 @@ import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-public class EntityNeutron extends ParticleEntity {
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
-	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f) {
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {
+
+	private NeutronType type;
+
+	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
 		super(world);
 		this.setLocationAndAngles(x+0.5, y+0.5, z+0.5, 0, 0);
 		motionX = f.offsetX*this.getSpeed();
@@ -39,6 +46,7 @@ public class EntityNeutron extends ParticleEntity {
 		oldBlockY = y;
 		oldBlockZ = z;
 		height = 1;
+		this.type = type;
 	}
 
 	public EntityNeutron(World par1World) {
@@ -125,6 +133,46 @@ public class EntityNeutron extends ParticleEntity {
 	@Override
 	public boolean despawnOverTime() {
 		return true;
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		data.writeInt(type.ordinal());
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		type = NeutronType.neutronList[data.readInt()];
+	}
+
+	public NeutronType getType() {
+		return type;
+	}
+
+	public static enum NeutronType {
+		DECAY(),
+		FISSION(),
+		BREEDER(),
+		FUSION(),
+		WASTE();
+
+		public static final NeutronType[] neutronList = values();
+
+		public int getBoilerAbsorptionChance() {
+			return this == BREEDER ? 80 : 0;
+		}
+
+		public int getSodiumBoilerAbsorptionChance() {
+			return this != BREEDER ? 90 : 0;
+		}
+
+		public boolean dealsDamage() {
+			return true;
+		}
+
+		public boolean stoppedByWater() {
+			return this != FUSION;
+		}
 	}
 
 }

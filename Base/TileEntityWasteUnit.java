@@ -19,6 +19,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
 public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBase {
@@ -55,7 +56,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected void leakRadiation(World world, int x, int y, int z) {
 		ForgeDirection dir = dirs[rand.nextInt(dirs.length)];
-		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir));
+		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir, NeutronType.WASTE));
 	}
 
 	@Override

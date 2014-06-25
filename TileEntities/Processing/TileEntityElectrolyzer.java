@@ -309,6 +309,7 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 		if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.salt))
 			return true;
 		List<ItemStack> li = OreDictionary.getOres("salt");
+		li.addAll(OreDictionary.getOres("dustSalt"));
 		return ReikaItemHelper.listContainsItemStack(li, itemstack);
 	}
 

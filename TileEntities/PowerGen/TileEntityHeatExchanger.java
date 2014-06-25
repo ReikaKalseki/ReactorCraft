@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;

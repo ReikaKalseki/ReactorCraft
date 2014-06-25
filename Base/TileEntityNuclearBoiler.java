@@ -81,7 +81,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 	}
 
 	@Override
-	public final boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
 	}
 

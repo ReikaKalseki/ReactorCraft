@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.PowerGen;
+package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,10 +21,13 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
+import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
@@ -194,6 +197,12 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 8, true);
 		for (int i = 0; i < 4; i++)
 			ReikaItemHelper.dropItem(world, x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), ItemStacks.scrap);
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		NeutronType type = e.getType();
+		return !tank.isEmpty() && ReikaRandomHelper.doWithChance(type.getBoilerAbsorptionChance());
 	}
 
 }

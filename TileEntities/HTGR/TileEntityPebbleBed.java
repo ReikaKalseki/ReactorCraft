@@ -51,7 +51,6 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			this.runDecayCycle();
 
 		if (DragonAPICore.debugtest) {
-			ReikaInventoryHelper.clearInventory(this);
 			ReikaInventoryHelper.addToIInv(ReactorItems.PELLET.getStackOf(), this);
 		}
 

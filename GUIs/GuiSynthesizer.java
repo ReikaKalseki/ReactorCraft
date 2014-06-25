@@ -41,9 +41,12 @@ public class GuiSynthesizer extends ReactorGuiBase {
 	public void initGui() {
 		super.initGui();
 
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
 		FluidTankInfo[] info = tile.getTankInfo(null);
-		input = new TankDisplay(info[0], 142, 50, 16, 60);
-		output = new TankDisplay(info[1], 259, 50, 16, 60);
+		input = new TankDisplay(info[0], j+17, k+18, 16, 60);
+		output = new TankDisplay(info[1], j+134, k+18, 16, 60);
 	}
 
 	@Override
