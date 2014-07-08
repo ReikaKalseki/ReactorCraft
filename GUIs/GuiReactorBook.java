@@ -32,6 +32,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
 public class GuiReactorBook extends GuiHandbook {
@@ -116,7 +117,7 @@ public class GuiReactorBook extends GuiHandbook {
 				in = ReactorItems.MAGNET.getStackOfMetadata(k-1);
 				out = ReactorItems.MAGNET.getStackOfMetadata(k);
 			}
-			ReikaGuiAPI.instance.drawCompressor(ri, fontRenderer, posX+66, posY+14, in, posX+120, posY+41, out);
+			MachineRecipeRenderer.instance.drawCompressor(posX+66, posY+14, in, posX+120, posY+41, out);
 		}
 	}
 

@@ -134,7 +134,7 @@ public class LiquidHandler {
 			if (type == BCPipeHandler.Types.IRON)
 				return true;
 		}
-		if (id == ThermalHandler.getInstance().liquiductID) {
+		if (id == ThermalHandler.getInstance().ductID) {
 			return ThermalHandler.getInstance().getConduitType(te) == ThermalHandler.Types.LIQUID;
 		}
 		return false;

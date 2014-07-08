@@ -62,7 +62,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	@Override
 	protected void dumpSteam(World world, int x, int y, int z, int meta) {
 		int stage = this.getStage();
-		if (stage == this.getNumberStagesTotal()) {
+		if (stage == this.getNumberStagesTotal()-1) {
 			ForgeDirection s = this.getSteamMovement();
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = ((BlockTurbineMulti)ReactorBlocks.TURBINEMULTI.getBlockVariable()).getThickness(stage);
@@ -98,19 +98,19 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	@Override
 	protected double getEfficiency() {
 		switch(this.getNumberStagesTotal()) {
-		case 0:
-			return 0.0125;
 		case 1:
-			return 0.025;
+			return 0.0125;
 		case 2:
-			return 0.075;
+			return 0.025;
 		case 3:
-			return 0.125;
+			return 0.075;
 		case 4:
-			return 0.25;
+			return 0.125;
 		case 5:
-			return 0.5;
+			return 0.25;
 		case 6:
+			return 0.5;
+		case 7:
 			return 1;
 		default:
 			return 0;

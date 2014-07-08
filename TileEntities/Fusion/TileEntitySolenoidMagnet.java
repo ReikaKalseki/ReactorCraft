@@ -36,6 +36,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 	private float speed = 0;
 
 	public static final int MINOMEGA = 256;
+	public static final int MAX_SPEED = 8192;
 	public static final int MINTORQUE = 32768;
 
 	@Override
@@ -61,7 +62,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		}
 		//if (this.arePowerReqsMet() && hasMultiBlock && this.getTicksExisted()%4 == 0)
 		//	ReactorSounds.FUSION.playSoundAtBlock(world, x, y, z);
-		if (omega > 32768) { //violently fail
+		if (omega > MAX_SPEED) { //violently fail
 			world.setBlock(x, y, z, 0);
 			FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, 16);
 			ex.doExplosionA();
@@ -100,11 +101,11 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 	}
 
 	private float getMaxRenderSpeed() {
-		if (omega >= 65536)
+		if (omega >= 4096)
 			return 32;
-		else if (omega >= 16384)
-			return 24;
 		else if (omega >= 2048)
+			return 24;
+		else if (omega >= 1024)
 			return 16;
 		else
 			return 8;

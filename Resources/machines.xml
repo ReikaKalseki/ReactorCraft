@@ -212,6 +212,7 @@
 		<note>
 			Minimum Speed: %d rad/s
 			Minimum Torque: %d Nm
+			Maximum Speed: %d rad/s
 		</note>
 	</solenoid>
 	<absorber>
@@ -293,6 +294,16 @@
 		</desc>
 		<note>
 			Can only use water steam
+		</note>
+	</bigturbine>
+		<bigturbine>
+		<desc>
+			The turbine dynamometer measures the speed of a turbine. It is placed below the body of a turbine, and will, with the aid of a redstone comparator, output a signal level corresponding to the turbine's speed as a fraction of its maximum speed.
+		</desc>
+		<note>
+			Must be placed below the turbine with a clear view above
+			Redstone signal level (Normal Turbine): (Speed/%d)*15
+			Redstone signal level (High-Pressure Turbine): (Speed/%d)*15
 		</note>
 	</bigturbine>
 </machines>

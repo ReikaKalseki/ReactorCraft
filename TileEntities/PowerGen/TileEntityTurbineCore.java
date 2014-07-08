@@ -267,15 +267,15 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	protected double getEfficiency() {
 		switch(this.getNumberStagesTotal()) {
-		case 0:
-			return 0.025;
 		case 1:
-			return 0.1;
+			return 0.025;
 		case 2:
-			return 0.25;
+			return 0.1;
 		case 3:
-			return 0.5;
+			return 0.25;
 		case 4:
+			return 0.5;
+		case 5:
 			return 1;
 		default:
 			return 0;
@@ -424,7 +424,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord)
 				return tile.getNumberStagesTotal();
 		}
-		return this.getStage();
+		return this.getStage()+1;
 	}
 
 	private void followHead(World world, int x, int y, int z, int meta) {

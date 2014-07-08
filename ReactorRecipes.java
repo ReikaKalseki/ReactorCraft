@@ -27,6 +27,7 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -106,7 +107,6 @@ public class ReactorRecipes {
 		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', RotaryCraft.obsidianglass);
 		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', CraftingItems.ALLOY.getItem(), 'C', Block.chest);
 		CraftingItems.ROD.addRecipe("SAS", "SAS", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem());
-		GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 		CraftingItems.FERROINGOT.addShapelessRecipe(ItemStacks.steelingot, Item.ingotIron, ReactorStacks.lodestone);
 		CraftingItems.MAGNETIC.addSizedRecipe(3, "SSS", 'S', CraftingItems.FERROINGOT.getItem());
 		CraftingItems.MAGNETCORE.addRecipe("CCC", "C C", "CCC", 'C', CraftingItems.MAGNETIC.getItem());
@@ -117,6 +117,12 @@ public class ReactorRecipes {
 		CraftingItems.FABRIC.addSizedRecipe(3, "LDL", "LDL", "LDL", 'D', ReactorItems.DEPLETED.getStackOf(), 'L', Item.leather);
 		CraftingItems.FABRIC.addSizedRecipe(1, "LDL", "LDL", "LDL", 'D', ReactorItems.OLDPELLET.getStackOf(), 'L', Item.leather);
 		CraftingItems.FABRIC.addSizedOreRecipe(2, "LDL", "LDL", "LDL", 'D', "ingotLead", 'L', Item.leather);
+
+
+		//GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
+		ItemStack is = ReikaItemHelper.getSizedItemStack(CraftingItems.ALLOY.getItem(), 3);
+		ShapelessOreRecipe slr = new ShapelessOreRecipe(is, "ingotCadmium", "ingotIndium", "ingotSilver");
+		RecipesBlastFurnace.getRecipes().add3x3Recipe(is, 800, slr, 1);
 	}
 
 	private static void addSmelting() {
