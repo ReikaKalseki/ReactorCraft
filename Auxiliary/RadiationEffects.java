@@ -160,7 +160,9 @@ public class RadiationEffects {
 			world.setBlock(x, y, z, id, meta+8, 3);
 			world.markBlockForRenderUpdate(x, y, z);
 		}
+
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			if (te instanceof INode) {
 				INode n = (INode)te;

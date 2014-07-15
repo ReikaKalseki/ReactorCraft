@@ -67,9 +67,11 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < li.size(); i++) {
 			EntityLivingBase e = li.get(i);
-			double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
-			if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {
-				RadiationEffects.applyEffects(e);
+			if (!RadiationEffects.hasHazmatSuit(e)) {
+				double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
+				if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {
+					RadiationEffects.applyEffects(e);
+				}
 			}
 		}
 	}
