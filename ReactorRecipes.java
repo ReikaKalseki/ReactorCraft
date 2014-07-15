@@ -121,12 +121,12 @@ public class ReactorRecipes {
 		//GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 		ItemStack is = ReikaItemHelper.getSizedItemStack(CraftingItems.ALLOY.getItem(), 3);
 		ShapelessOreRecipe slr = new ShapelessOreRecipe(is, "ingotCadmium", "ingotIndium", "ingotSilver");
-		RecipesBlastFurnace.getRecipes().addRecipe(is, 800, slr, 1);
+		RecipesBlastFurnace.getRecipes().addRecipe(is, 800, slr, 1, 0.8F);
 
 		//CraftingItems.FERROINGOT.addShapelessRecipe(ItemStacks.steelingot, Item.ingotIron, ReactorStacks.lodestone);
 		is = ReikaItemHelper.getSizedItemStack(CraftingItems.FERROINGOT.getItem(), 1);
 		ShapelessOreRecipe sor = new ShapelessOreRecipe(is, ItemStacks.steelingot, Item.ingotIron, ReactorStacks.lodestone);
-		RecipesBlastFurnace.getRecipes().addRecipe(is, 1200, sor, 1);
+		RecipesBlastFurnace.getRecipes().addRecipe(is, 1200, sor, 1, 1);
 	}
 
 	private static void addSmelting() {
