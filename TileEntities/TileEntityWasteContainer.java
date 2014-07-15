@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -19,13 +20,14 @@ import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
-public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE {
+public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE, Feedable {
 
 	public static final int WIDTH = 9;
 	public static final int HEIGHT = 3;
@@ -47,6 +49,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 		if (!world.isRemote)
 			this.decayWaste();
+
+		this.feed();
 
 		//this.fill();
 	}
@@ -139,6 +143,68 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 	@Override
 	public boolean isValidIsotope(Isotopes i) {
 		return true;
+	}
+
+	public boolean feed() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		int id = world.getBlockId(x, y-1, z);
+		int meta = world.getBlockMetadata(x, y-1, z);
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (tile instanceof TileEntityWasteContainer) {
+			if (((Feedable)tile).feedIn(inv[inv.length-1])) {
+				for (int i = inv.length-1; i > 0; i--)
+					inv[i] = inv[i-1];
+
+				id = world.getBlockId(x, y+1, z);
+				meta = world.getBlockMetadata(x, y+1, z);
+				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
+				if (tile instanceof TileEntityWasteContainer) {
+					inv[0] = ((Feedable) tile).feedOut();
+				}
+				else
+					inv[0] = null;
+			}
+		}
+		this.collapseInventory();
+		return false;
+	}
+
+	private void collapseInventory() {
+		for (int i = 0; i < inv.length; i++) {
+			for (int k = inv.length-1; k > 0; k--) {
+				if (inv[k] == null) {
+					inv[k] = inv[k-1];
+					inv[k-1] = null;
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean feedIn(ItemStack is) {
+		if (is == null)
+			return true;
+		if (!this.isItemValidForSlot(0, is))
+			return false;
+		if (inv[0] == null) {
+			inv[0] = is.copy();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ItemStack feedOut() {
+		if (inv[inv.length-1] == null)
+			return null;
+		else {
+			ItemStack is = inv[inv.length-1].copy();
+			inv[inv.length-1] = null;
+			return is;
+		}
 	}
 
 }

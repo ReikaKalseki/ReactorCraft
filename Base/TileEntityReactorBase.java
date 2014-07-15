@@ -31,7 +31,6 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -109,10 +108,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 		NBT.setInteger("temp", temperature);
 
-		if (phi >= 360)
-			phi = phi%360;
-		NBT.setFloat("ang", phi);
-
 	}
 
 	@Override
@@ -121,10 +116,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		super.readSyncTag(NBT);
 
 		temperature = NBT.getInteger("temp");
-
-		phi = NBT.getFloat("ang");
-		if (phi >= 360)
-			phi = phi%360;
 
 	}
 
@@ -258,7 +249,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			long power = sp.getPower();
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
-			ReikaJavaLibrary.pConsole(this);
 			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 		}
 		if (this instanceof TileEntitySteamLine) {

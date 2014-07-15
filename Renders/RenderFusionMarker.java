@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -47,13 +48,14 @@ public class RenderFusionMarker extends ReactorRenderBase
 
 			float t = GL11.glGetFloat(GL11.GL_LINE_WIDTH);
 			GL11.glLineWidth(4);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			ReikaRenderHelper.prepareGeoDraw(false);
 			this.renderPositions(tile, par2, par4, par6);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			ReikaRenderHelper.exitGeoDraw();
 			GL11.glLineWidth(t);
 		}
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		this.renderMarkerBody(tile, par2, par4, par6);
+		GL11.glRotated(90, 0, 1, 0);
 		this.renderMarkerBody(tile, par2, par4, par6);
 
 		if (tile.isInWorld())
@@ -70,7 +72,6 @@ public class RenderFusionMarker extends ReactorRenderBase
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
 		float dv = ico.getMaxV();
-
 		Tessellator v5 = Tessellator.instance;
 		GL11.glColor4d(0, 0.2, 1, 1);
 		if (tile.isInWorld()) {

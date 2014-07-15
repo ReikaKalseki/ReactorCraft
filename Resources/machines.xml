@@ -78,8 +78,8 @@
 			The pressurizer repressurizes the low-pressure water or ammonia so that it can be reused in the reactor, thus completing the thermodynamic cycle. Note that this is a centrifugal compressor.
 		</desc>
 		<note>
-		Minimum Power: %dW
-		Minimum Torque: %d Nm
+			Minimum Power: %dW
+			Minimum Torque: %d Nm
 			Liquid Input: Top
 			Liquid Output: Side
 			Power Input: Bottom
@@ -117,7 +117,7 @@
 			The pebble bed reactor core is the fuel unit for a pebble bed reactor. Load it up with fuel pellets, and it will undergo spontaneous fission and generate heat. This heat is best transferred to a carbon dioxide heat exchanger.
 		</desc>
 		<note>
-			
+
 		</note>
 	</pebblebed>
 	<co2heater>
@@ -142,7 +142,7 @@
 			The control rod allows you to manipulate the rate of a nuclear reaction by intercepting neutrons that could otherwise trigger more fission events. Control rods can be retracted or inserted - they are inserted by default - when commanded by a reactor CPU. They also can be dropped into place in the case of an emergency, a so-called "SCRAM" event.
 		</desc>
 		<note>
-			
+
 		</note>
 	</control>
 	<coolant>
@@ -150,7 +150,7 @@
 			Coolant cells draw away heat from the reactor. Note that this heat is essentially wasted, as it does not create any steam or useful energy. However, coolant cells are vital for distributing heat and stabilizing the temperature of larger reactors.
 		</desc>
 		<note>
-			
+
 		</note>
 	</coolant>
 	<cpu>
@@ -194,7 +194,7 @@
 			The plasma injector actually injects the fusion plasma into the tokamak reactor. Note that it must be contained in a proper multiblock structure.
 		</desc>
 		<note>
-			
+
 		</note>
 	</injector>
 	<magnet>
@@ -220,7 +220,7 @@
 			Neutron absorbers intercept neutrons and turn their kinetic energy into heat. Much like a heat exchanger, this heat can be transferred into adjacent machines.
 		</desc>
 		<note>
-			
+
 		</note>
 	</absorber>
 	<collector>
@@ -228,7 +228,7 @@
 			The gas collector collects carbon dioxide from a furnace burning coal or wood. This carbon dioxide is used as the working fluid in high-temperature gas reactors.
 		</desc>
 		<note>
-			
+
 		</note>
 	</collector>
 	<gaspipe>
@@ -236,7 +236,7 @@
 			Gas Ducts are used to transport gas, and are made of clay so as not to react with corrosive gases like hydrofluoric acid and uranium hexafluoride.
 		</desc>
 		<note>
-			
+
 		</note>
 	</gaspipe>
 	<magnetpipe>
@@ -261,7 +261,7 @@
 			The spent fuel container is the first disposal unit for nuclear waste. When placed in this container, the more radioactive nuclear waste with shorter half-lives will decay and generate heat and neutrons in the process. To keep the container cool, and to provide radiation shielding, it must be submerged underwater.
 		</desc>
 		<note>
-			
+
 		</note>
 	</wastecontainer>
 	<storage>
@@ -269,7 +269,7 @@
 			Longer-lived nuclear waste which will not decay in the spent fuel container must be placed in a waste disposal drum, where it may be safely stored underground indefinitely without risk of overheating or a radiation leak. Note that being in close proximity to a loaded container is still extremely dangerous.
 		</desc>
 		<note>
-			
+
 		</note>
 	</storage>
 	<reflector>
@@ -277,10 +277,10 @@
 			The neutron reflector has a chance of reflecting neutrons back in the direction from which they impacted the reflector. This allows for greater reactor efficiency by reusing a portion of the neutrons. Unreflected neutrons are absorbed.
 		</desc>
 		<note>
-			
+
 		</note>
 	</reflector>
-		<generator>
+	<generator>
 		<desc>
 			The generator convers shaft power directly from a turbine into RF power for ease of transport or use in other mods. Note that it is a multiblock that must be directly connected to the turbine. Also be aware that the extreme power supply this generator provides exceeds the capacities of many RF transport systems.
 		</desc>
@@ -288,7 +288,7 @@
 			RF Output: Back
 		</note>
 	</generator>
-		<bigturbine>
+	<bigturbine>
 		<desc>
 			The high-pressure turbine runs off of steam directly from the lines thanks to a built-in steam injection system, allowing it to run more efficiently and generate far more power. Due to the greatly increased size of this turbine, it requires far more steam to operate, and can be built to seven stages instead of five. This turbine also has a housing to prevent damage. Low-pressure liquid can be collected with reservoirs or BC tanks below the back of the turbine.
 		</desc>
@@ -296,7 +296,7 @@
 			Can only use water steam
 		</note>
 	</bigturbine>
-		<bigturbine>
+	<turbinemeter>
 		<desc>
 			The turbine dynamometer measures the speed of a turbine. It is placed below the body of a turbine, and will, with the aid of a redstone comparator, output a signal level corresponding to the turbine's speed as a fraction of its maximum speed.
 		</desc>
@@ -305,5 +305,13 @@
 			Redstone signal level (Normal Turbine): (Speed/%d)*15
 			Redstone signal level (High-Pressure Turbine): (Speed/%d)*15
 		</note>
-	</bigturbine>
+	</turbinemeter>
+	<marker>
+		<desc>
+			The tokamak blueprint highligher provides a general outline of the various parts of a tokamak fusion reactor to help with correctly placing and rotating the various components.
+		</desc>
+		<note>
+
+		</note>
+	</marker>
 </machines>

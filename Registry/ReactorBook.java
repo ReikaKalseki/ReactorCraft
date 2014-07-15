@@ -96,6 +96,7 @@ public enum ReactorBook implements HandbookEntry {
 	WASTESTORAGE(ReactorTiles.STORAGE),
 	REFLECTOR(ReactorTiles.REFLECTOR),
 	DYNAMOMETER(ReactorTiles.TURBINEMETER),
+	BLUEPRINT(ReactorTiles.MARKER),
 
 	TOOLDESC("Tools", ""),
 	GOGGLES(ReactorItems.GOGGLES),

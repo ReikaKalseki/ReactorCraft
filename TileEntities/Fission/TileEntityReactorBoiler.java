@@ -33,6 +33,8 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
@@ -109,7 +111,8 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 					if (id2 != 0 && b.blockMaterial == Material.glass) {
 						b.dropBlockAsItem(world, x+i, y+j, z+k, meta2, 0);
 						world.setBlock(x+i, y+j, z+k, 0);
-						ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, meta2);
+						if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+							ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, meta2);
 						flag = true;
 					}
 				}

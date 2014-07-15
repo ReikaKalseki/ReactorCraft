@@ -66,6 +66,7 @@ import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.RotaryCraft;
@@ -200,7 +201,7 @@ public class ReactorCraft extends DragonAPIMod {
 			ReikaJavaLibrary.pConsole("");
 		}
 
-		logger = new ModLogger(instance, ReactorOptions.LOGLOADING.getState(), ReactorOptions.DEBUGMODE.getState(), false);
+		logger = new ModLogger(instance, false);
 
 		this.addBlocks();
 		this.addItems();
@@ -362,6 +363,7 @@ public class ReactorCraft extends DragonAPIMod {
 			GameRegistry.registerTileEntity(ReactorTiles.TEList[i].getTEClass(), "Reactor"+ReactorTiles.TEList[i].getName());
 			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass());
 		}
+		GameRegistry.registerTileEntity(TileEntitySteamInjector.class, "ReactorSteamInjector");
 	}
 
 	private static void addLiquids() {

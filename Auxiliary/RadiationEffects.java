@@ -18,7 +18,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
+import thaumcraft.api.nodes.NodeModifier;
+import thaumcraft.api.nodes.NodeType;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
@@ -27,6 +33,8 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RadiationEffects {
+
+	private static final Random rand = new Random();
 
 	public static void applyEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e))
@@ -151,6 +159,29 @@ public class RadiationEffects {
 		if (id == ReactorBlocks.FLUORITE.getBlockID() || id == ReactorBlocks.FLUORITEORE.getBlockID()) {
 			world.setBlock(x, y, z, id, meta+8, 3);
 			world.markBlockForRenderUpdate(x, y, z);
+		}
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			if (te instanceof INode) {
+				INode n = (INode)te;
+				n.addToContainer(Aspect.POISON, 10);
+				n.addToContainer(Aspect.DEATH, 5);
+				n.addToContainer(Aspect.ENTROPY, 10);
+				n.addToContainer(Aspect.AURA, 5);
+				n.addToContainer(Aspect.TAINT, 5);
+				n.addToContainer(Aspect.ENERGY, 2);
+				if (rand.nextInt(4) == 0) {
+					if (n.getNodeType() == NodeType.NORMAL) {
+						n.setNodeType(NodeType.UNSTABLE);
+					}
+					else if (n.getNodeType() == NodeType.UNSTABLE) {
+						n.setNodeType(NodeType.TAINTED);
+					}
+				}
+				if (rand.nextInt(8) == 0) {
+					n.setNodeModifier(NodeModifier.BRIGHT);
+				}
+			}
 		}
 	}
 

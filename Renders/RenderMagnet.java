@@ -28,9 +28,6 @@ public class RenderMagnet extends ReactorRenderBase
 {
 	private ModelMagnet MagnetModel = new ModelMagnet();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityMagnetAt(TileEntityToroidMagnet tile, double par2, double par4, double par6, float par8)
 	{
 		ModelMagnet var14;
@@ -108,7 +105,7 @@ public class RenderMagnet extends ReactorRenderBase
 
 		v5.draw();
 		for (int i = 1; i < 4; i++)
-			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, ReikaColorAPI.RGBtoHex(255, 255, 255, a), Math.toRadians(90), 10);
+			ReikaRenderHelper.renderVCircle(i, 0, 0, 0, ReikaColorAPI.RGBtoHex(255, 255, 255, a), 90, 10);
 		GL11.glRotated(-ang, 0, 1, 0);
 		GL11.glTranslated(-par2-0.5, -par4, -par6-0.5);
 		ReikaRenderHelper.exitGeoDraw();

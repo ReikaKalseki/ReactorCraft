@@ -192,7 +192,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int z = zCoord;
 		int id = world.getBlockId(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
-		TileEntity tile = world.getBlockTileEntity(x, y-1, z);
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof TileEntityPebbleBed) {
 			if (((Feedable)tile).feedIn(inv[inv.length-1])) {
 				for (int i = inv.length-1; i > 0; i--)
@@ -200,7 +200,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 				id = world.getBlockId(x, y+1, z);
 				meta = world.getBlockMetadata(x, y+1, z);
-				tile = world.getBlockTileEntity(x, y+1, z);
+				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
 				if (tile instanceof TileEntityPebbleBed) {
 					inv[0] = ((Feedable) tile).feedOut();
 				}

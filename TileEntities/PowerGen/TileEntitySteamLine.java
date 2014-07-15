@@ -51,7 +51,6 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
 		}
-
 		//steam = 0;
 		//ReikaJavaLibrary.pConsole(steam+":"+fluid, Side.SERVER);
 	}

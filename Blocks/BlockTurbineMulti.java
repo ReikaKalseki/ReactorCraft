@@ -20,6 +20,7 @@ import Reika.DragonAPI.Instantiable.Data.SlicedBlockBlueprint;
 import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Transducerable;
 
@@ -31,6 +32,21 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 		super(par1, par2Material);
 		setup = new SlicedBlockBlueprint();
 		this.initMap();
+	}
+
+	@Override
+	public boolean hasTileEntity(int meta) {
+		return meta == 2;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, int meta) {
+		switch(meta) {
+		case 2:
+			return new TileEntitySteamInjector();
+		default:
+			return null;
+		}
 	}
 
 	@Override

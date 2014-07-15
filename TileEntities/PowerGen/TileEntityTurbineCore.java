@@ -23,6 +23,13 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -35,8 +42,11 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable {
+public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector {
 
 	protected int steam;
 
@@ -52,6 +62,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	public static final int GEN_OMEGA = 65536;
 	public static final int TORQUE_CAP = 32768;
+
+	protected final HybridTank tank = new HybridTank("turbine", 64000);
 
 	private Interference inter = null;
 
@@ -106,7 +118,9 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		thermalTicker.update();
 		soundTimer.update();
 
-		stage = this.getStage();
+		stage = this.calcStage();
+		this.intakeLubricant(world, x, y, z, meta);
+		this.distributeLubricant(world, x, y, z, meta);
 		this.readSurroundings(world, x, y, z, meta);
 		this.followHead(world, x, y, z, meta);
 		this.enviroTest(world, x, y, z, meta);
@@ -128,6 +142,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else {
 			if (soundTimer.checkCap() && stage == 0)
 				ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
+			if (!tank.isEmpty())
+				tank.removeLiquid(this.getConsumedLubricant());
 		}
 
 		steam *= this.getDamageEfficiency();
@@ -143,6 +159,32 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			rec.setTorque(this.getTorque());
 			rec.setPower(this.getPower());
 		}
+	}
+
+	protected int getConsumedLubricant() {
+		return 1;
+	}
+
+	private void distributeLubricant(World world, int x, int y, int z, int meta) {
+		ForgeDirection dir = this.getSteamMovement().getOpposite();
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+		if (r == this.getMachine()) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(dx, dy, dz);
+			int max = Math.min(tank.getRemainingSpace(), 1000);
+			int dl = te.tank.getLevel()-tank.getLevel();
+			if (dl > 1) {
+				int rem = Math.min(dl/2, max);
+				tank.addLiquid(rem, FluidRegistry.getFluid("lubricant"));
+				te.tank.removeLiquid(rem);
+			}
+		}
+	}
+
+	protected void intakeLubricant(World world, int x, int y, int z, int meta) {
+
 	}
 
 	protected void dumpSteam(World world, int x, int y, int z, int meta) {
@@ -218,6 +260,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private void updateSpeed(boolean up) {
+		if (!DragonAPICore.debugtest) {
+			if (tank.isEmpty())
+				up = false;
+		}
 		if (up) {
 			int max = this.getMaxSpeed();
 			if (omega < max) {
@@ -283,10 +329,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	public final int getStage() {
+		return stage;
+	}
+
+	private final int calcStage() {
 		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
 			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
-				int stage = tile.getStage();
+				int stage = tile.calcStage();
 				if (stage == this.getMaxStage())
 					return this.getMaxStage();
 				else
@@ -353,12 +403,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				}
 			}
 		}
-		boolean accel = this.intakeSteam(world, x, y, z, meta);
-		this.updateSpeed(accel);
+		if (this.getStage() == 0) {
+			boolean accel = this.intakeSteam(world, x, y, z, meta);
+			this.updateSpeed(accel);
+		}
 	}
 
 	protected double getRadius() {
-		return 1.5+this.getStage()/2;
+		return 1.5+stage/2;
 	}
 
 	private void fillSurroundings(World world, int x, int y, int z, int meta) {
@@ -414,6 +466,16 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		}
 	}
 
+	private boolean canDamageTurbine(EntityLivingBase e) {
+		if (e instanceof EntityPlayer) {
+			return !((EntityPlayer)e).capabilities.isCreativeMode;
+		}
+		String name = e.getEntityName().toLowerCase();
+		if (name.contains("firefly"))
+			return false;
+		return true;
+	}
+
 	protected void breakTurbine() {
 		damage++;
 	}
@@ -424,18 +486,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord)
 				return tile.getNumberStagesTotal();
 		}
-		return this.getStage()+1;
+		return this.calcStage()+1;
 	}
 
 	private void followHead(World world, int x, int y, int z, int meta) {
 		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
-				//omega = (omega+tile.omega)/2;
-				omega = tile.omega;
-				phi = tile.phi;
-				steam = tile.steam;
-				//return;
+				this.copyDataFrom(tile);
 			}
 		}
 		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
@@ -445,6 +503,13 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 					inter = tile.inter;
 			}
 		}
+	}
+
+	protected void copyDataFrom(TileEntityTurbineCore tile) {
+		//omega = (omega+tile.omega)/2;
+		omega = tile.omega;
+		phi = tile.phi;
+		steam = tile.steam;
 	}
 
 	@Override
@@ -510,6 +575,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		if (this.needsMultiblock())
 			hasMultiBlock = NBT.getBoolean("multi");
+
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -529,6 +596,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		if (this.needsMultiblock())
 			NBT.setBoolean("multi", hasMultiBlock);
+
+		tank.writeToNBT(NBT);
 	}
 
 	@Override
@@ -596,6 +665,51 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public double getMaxRenderDistanceSquared() {
 		return 4*super.getMaxRenderDistanceSquared();
+	}
+
+	@Override
+	public final boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p);
+	}
+
+	@Override
+	public final Flow getFlowForSide(ForgeDirection side) {
+		return side == this.getSteamMovement().getOpposite() ? Flow.INPUT : Flow.NONE;
+	}
+
+	@Override
+	public final int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return this.canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
+	}
+
+	@Override
+	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public final FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public final boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from == this.getSteamMovement().getOpposite() && fluid.equals(FluidRegistry.getFluid("lubricant"));
+	}
+
+	@Override
+	public final boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 }

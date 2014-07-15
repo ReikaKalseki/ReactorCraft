@@ -29,9 +29,6 @@ public class RenderSolenoid extends ReactorRenderBase
 {
 	private ModelSolenoid SolenoidModel = new ModelSolenoid();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntitySolenoidMagnetAt(TileEntitySolenoidMagnet tile, double par2, double par4, double par6, float par8)
 	{
 		ModelSolenoid var14;

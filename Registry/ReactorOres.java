@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ExtraUtilsHandler;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 
@@ -204,6 +205,8 @@ public enum ReactorOres {
 			return true;
 		if (id == ReikaTwilightHelper.getDimensionID() && dimensionID == 0)
 			return true;
+		if (id == ExtraUtilsHandler.getInstance().darkID && dimensionID == 0)
+			return true;
 		if (dimensionID == 0 && id != -1 && id != 1)
 			return true;
 		return false;
@@ -226,6 +229,8 @@ public enum ReactorOres {
 			return false;
 		if (!this.isValidDimension(id))
 			return false;
+		if (id == ExtraUtilsHandler.getInstance().darkID)
+			return true;
 		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.getDimensionID();
 	}
 

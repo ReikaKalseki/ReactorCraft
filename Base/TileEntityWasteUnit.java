@@ -41,7 +41,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].itemID == ReactorItems.WASTE.getShiftedItemID() && inv[i].stackTagCompound != null) {
 				Isotopes atom = Isotopes.getIsotope(inv[i].getItemDamage());
-				if (ReikaRandomHelper.doWithChance(0.125*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
+				if (ReikaRandomHelper.doWithChance(0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
 					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
 					if (this.leaksRadiation())
 						this.leakRadiation(worldObj, xCoord, yCoord, zCoord);

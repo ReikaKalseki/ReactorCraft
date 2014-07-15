@@ -54,7 +54,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 			ReikaInventoryHelper.clearInventory(this);
 			ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		}
+
 		this.feed();
+		this.feedWaste(world, x, y, z);
 
 		tempTimer.update();
 		if (tempTimer.checkCap()) {
@@ -70,6 +72,22 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 			if (rand.nextInt(20) == 0)
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
+		}
+	}
+
+	private void feedWaste(World world, int x, int y, int z) {
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (te instanceof TileEntityNuclearCore) {
+			for (int i = 4; i < 12; i++) {
+				if (inv[i] != null && inv[i].itemID == ReactorItems.WASTE.getShiftedItemID()) {
+					for (int k = 4; k < 12; k++) {
+						if (((TileEntityNuclearCore) te).inv[k] == null) {
+							((TileEntityNuclearCore) te).inv[k] = inv[i];
+							inv[i] = null;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -99,7 +117,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		int z = zCoord;
 		int id = world.getBlockId(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
-		TileEntity tile = world.getBlockTileEntity(x, y-1, z);
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof Feedable) {
 			if (((Feedable)tile).feedIn(inv[3])) {
 				inv[3] = inv[2];
@@ -108,7 +126,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 
 				id = world.getBlockId(x, y+1, z);
 				meta = world.getBlockMetadata(x, y+1, z);
-				tile = world.getBlockTileEntity(x, y+1, z);
+				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
 				if (tile instanceof Feedable) {
 					inv[0] = ((Feedable) tile).feedOut();
 				}

@@ -228,7 +228,6 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		super.readSyncTag(NBT);
 
 		aim = this.getAim(NBT.getInteger("aim"));
-		alpha = NBT.getInteger("al");
 		hasSolenoid = NBT.getBoolean("solenoid");
 
 		charge = NBT.getInteger("chg");
@@ -240,7 +239,6 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("aim", this.getAim().ordinal());
-		NBT.setInteger("al", alpha);
 		NBT.setBoolean("solenoid", hasSolenoid);
 
 		NBT.setInteger("chg", charge);
