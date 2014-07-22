@@ -14,8 +14,8 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
-import Reika.RotaryCraft.RotaryCraft;
 
 public class ContainerElectrolyzer extends CoreContainer {
 
@@ -45,9 +45,9 @@ public class ContainerElectrolyzer extends CoreContainer {
 
 			icrafting.sendProgressBarUpdate(this, 0, synth.time);
 		}
-		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, synth, "tankL");
-		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, synth, "tankH");
-		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, synth, "input");
+		ReikaPacketHelper.sendTankSyncPacket(ReactorCraft.packetChannel, synth, "tankL");
+		ReikaPacketHelper.sendTankSyncPacket(ReactorCraft.packetChannel, synth, "tankH");
+		ReikaPacketHelper.sendTankSyncPacket(ReactorCraft.packetChannel, synth, "input");
 	}
 
 	@Override
