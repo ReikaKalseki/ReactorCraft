@@ -18,15 +18,15 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ShaftPowerReceiver {
+public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ReactorPowerReceiver {
 
 	public static final long MINPOWER = 16384;
 	public static final int MINTORQUE = 1024;
@@ -260,5 +260,20 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	@Override
 	public int getMinTorque(int available) {
 		return MINTORQUE;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return MINTORQUE;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return 1;
+	}
+
+	@Override
+	public long getMinPower() {
+		return MINPOWER;
 	}
 }

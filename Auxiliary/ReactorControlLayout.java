@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
@@ -109,7 +110,7 @@ public class ReactorControlLayout {
 	}
 
 	public long getMinPower() {
-		return this.getPowerPerRod()*controls.size();
+		return DragonAPICore.debugtest ? 0 : this.getPowerPerRod()*controls.size();
 	}
 
 	private long getPowerPerRod() {
@@ -126,9 +127,11 @@ public class ReactorControlLayout {
 	}
 
 	public void SCRAM() {
+		int iter = 0;
 		for (List li : controls.keySet()) {
 			TileEntityControlRod rod = controls.get(li);
-			rod.drop();
+			rod.drop(iter == 0);
+			iter++;
 		}
 	}
 
@@ -145,6 +148,16 @@ public class ReactorControlLayout {
 		ArrayList<TileEntityControlRod> li = new ArrayList();
 		li.addAll(controls.values());
 		return li;
+	}
+
+	public int countLoweredRods() {
+		int count = 0;
+		for (List li : controls.keySet()) {
+			TileEntityControlRod rod = controls.get(li);
+			if (rod.isActive())
+				count++;
+		}
+		return count;
 	}
 
 }

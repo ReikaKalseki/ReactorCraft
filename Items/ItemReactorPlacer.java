@@ -19,16 +19,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -88,6 +96,9 @@ public class ItemReactorPlacer extends Item {
 		}
 		if (m == ReactorTiles.GENERATOR) {
 			((TileEntityReactorGenerator)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false));
+		}
+		if (m.isTurbine()) {
+			((TileEntityTurbineCore)te).setLubricant(is);
 		}
 		if (m == ReactorTiles.COLLECTOR) {
 			switch(side) {
@@ -216,5 +227,39 @@ public class ItemReactorPlacer extends Item {
 
 	@Override
 	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
+		ReactorTiles r = ReactorTiles.TEList[is.getItemDamage()];
+		if (r.isPowerReceiver()) {
+			ReactorPowerReceiver te = (ReactorPowerReceiver)r.createTEInstanceForRender();
+			int trq = te.getMinTorque();
+			int spd = te.getMinSpeed();
+			long pow = te.getMinPower();
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				if (pow > 1)
+					li.add(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow)));
+				if (trq > 1)
+					li.add(String.format("Minimum Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(trq), ReikaEngLibrary.getSIPrefix(trq)));
+				if (spd > 1)
+					li.add(String.format("Minimum Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(spd), ReikaEngLibrary.getSIPrefix(spd)));
+			}
+			else {
+				if (pow > 1 || trq > 1 || spd > 1) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Hold ");
+					sb.append(EnumChatFormatting.GREEN.toString());
+					sb.append("Shift");
+					sb.append(EnumChatFormatting.GRAY.toString());
+					sb.append(" for power data");
+					li.add(sb.toString());
+				}
+			}
+		}
+		if (r.isTurbine() && is.stackTagCompound != null) {
+			int lube = is.stackTagCompound.getInteger("lube");
+			li.add(String.format("Lubricant: %d mB", lube));
+		}
+	}
 
 }

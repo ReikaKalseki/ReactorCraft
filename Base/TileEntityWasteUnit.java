@@ -56,7 +56,8 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected void leakRadiation(World world, int x, int y, int z) {
 		ForgeDirection dir = dirs[rand.nextInt(dirs.length)];
-		world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir, NeutronType.WASTE));
+		if (!world.isRemote)
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir, NeutronType.WASTE));
 	}
 
 	@Override

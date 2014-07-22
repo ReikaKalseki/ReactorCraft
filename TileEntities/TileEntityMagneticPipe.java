@@ -70,7 +70,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	public Icon getGlassIcon() {
-		return RotaryCraft.blastglass.getIcon(0, 0);
+		return RotaryCraft.blastpane.getIcon(0, 0);
 	}
 
 	@Override

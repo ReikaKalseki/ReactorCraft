@@ -43,10 +43,19 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	private HybridTank h2 = new HybridTank("fusionheaterh2", 4000);
 	private HybridTank h3 = new HybridTank("fusionheaterh3", 4000);
 
+	private boolean hasMultiBlock() {
+		return hasMultiBlock && !ReikaWorldHelper.isExposedToAir(worldObj, xCoord, yCoord, zCoord);
+	}
+
 	@Override
-	public void whenInBeam(long power, int range) {
+	public void whenInBeam(World world, int x, int y, int z, long power, int range) {
 		int a = DragonAPICore.debugtest ? 64000 : 640;
-		temperature += a*ReikaMathLibrary.logbase(power, 2);
+		if (this.hasMultiBlock())
+			temperature += a*ReikaMathLibrary.logbase(power, 2);
+	}
+
+	public boolean blockBeam(World world, int x, int y, int z, long power) {
+		return this.hasMultiBlock();
 	}
 
 	@Override
@@ -61,7 +70,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private boolean canMake() {
-		return hasMultiBlock && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty() && tank.canTakeIn(100);
+		return this.hasMultiBlock() && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty() && tank.canTakeIn(100);
 	}
 
 	private void make() {

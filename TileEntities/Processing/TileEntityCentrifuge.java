@@ -24,17 +24,17 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ShaftPowerReceiver, PipeConnector {
+public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ReactorPowerReceiver, PipeConnector {
 
 	private int torque;
 	private int omega;
@@ -344,6 +344,21 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public int getMinTorque(int available) {
+		return 1;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return 1;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return MINSPEED;
+	}
+
+	@Override
+	public long getMinPower() {
 		return 1;
 	}
 }

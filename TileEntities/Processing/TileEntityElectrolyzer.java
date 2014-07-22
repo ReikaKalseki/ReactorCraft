@@ -28,10 +28,10 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -40,7 +40,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ShaftPowerReceiver, IFluidHandler, PipeConnector, TemperatureTE, ThermalMachine, Shockable {
+public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ReactorPowerReceiver, IFluidHandler,
+PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	public static final int SODIUM_MELT = 98;
 
@@ -480,6 +481,21 @@ public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase imp
 	@Override
 	public int getMinTorque(int available) {
 		return 8;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return 0;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return 0;
+	}
+
+	@Override
+	public long getMinPower() {
+		return 0;
 	}
 
 }

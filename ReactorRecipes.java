@@ -67,7 +67,7 @@ public class ReactorRecipes {
 
 	private static void addMultiblocks() {
 		int id = ReactorBlocks.HEATERMULTI.getBlockID();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SBS", "BLB", "SBS", 'B', RotaryCraft.obsidianglass, 'S', ItemStacks.steelingot, 'L', ItemStacks.lens);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SBS", "BLB", "SBS", 'B', RotaryCraft.blastglass, 'S', ItemStacks.steelingot, 'L', ItemStacks.lens);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "WSW", "WWW", 'W', Block.cloth, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SOS", "OSO", "SOS", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "OSO", "SSS", "OSO", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
@@ -104,7 +104,7 @@ public class ReactorRecipes {
 	}
 
 	private static void addCrafting() {
-		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', RotaryCraft.obsidianglass);
+		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', RotaryCraft.blastglass);
 		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', CraftingItems.ALLOY.getItem(), 'C', Block.chest);
 		CraftingItems.ROD.addRecipe("SAS", "SAS", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem());
 		CraftingItems.MAGNETIC.addSizedRecipe(3, "SSS", 'S', CraftingItems.FERROINGOT.getItem());
@@ -219,10 +219,10 @@ public class ReactorRecipes {
 		ReactorTiles.EXCHANGER.addCrafting("FPF", "GIG", "FPF", 'P', ItemStacks.pipe, 'I', ItemStacks.impeller, 'G', Item.ingotGold, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct());
 		ReactorTiles.STORAGE.addCrafting("SPS", "PCP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', Block.chest);
 		ReactorTiles.CPU.addCrafting("SCS", "CGC", "SCS", 'S', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', ItemStacks.gearunit);
-		ReactorTiles.MAGNETPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Item.ingotGold, 'G', RotaryCraft.obsidianglass);
+		ReactorTiles.MAGNETPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Item.ingotGold, 'G', RotaryCraft.blastglass);
 		ReactorTiles.MAGNET.addCrafting("MCM", "CHC", "MCM", 'H', CraftingItems.HYSTERESISRING.getItem(), 'M', CraftingItems.MAGNETCORE.getItem(), 'C', CraftingItems.COOLANT.getItem());
 		ReactorTiles.SOLENOID.addCrafting("SPS", "MCM", "IGI", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'M', CraftingItems.MAGNETIC.getItem(), 'C', CraftingItems.MAGNETCORE.getItem(), 'I', CraftingItems.FERROINGOT.getItem(), 'G', ItemStacks.gearunit16);
-		ReactorTiles.HEATER.addCrafting("MPM", "P P", "MPM", 'M', CraftingItems.FERROINGOT.getItem(), 'P', RotaryCraft.obsidianglass);
+		ReactorTiles.HEATER.addCrafting("MPM", "P P", "MPM", 'M', CraftingItems.FERROINGOT.getItem(), 'P', RotaryCraft.blastglass);
 		ReactorTiles.INJECTOR.addCrafting("PMP", "M M", "PMP", 'P', ReactorTiles.MAGNETPIPE.getCraftedProduct(), 'M', CraftingItems.MAGNETIC.getItem());
 		ReactorTiles.ABSORBER.addCrafting(" P ", "PCP", " P ", 'C', ItemStacks.steelblock, 'P', ReactorItems.DEPLETED.getStackOf());
 		ReactorTiles.ABSORBER.addCrafting("PPP", "PCP", "PPP", 'C', ItemStacks.steelblock, 'P', ReactorItems.OLDPELLET.getStackOf());

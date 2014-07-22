@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -146,10 +147,11 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	}
 
 	public NeutronType getType() {
-		return type;
+		return type != null ? type : NeutronType.NULL;
 	}
 
 	public static enum NeutronType {
+		NULL(),
 		DECAY(),
 		FISSION(),
 		BREEDER(),
@@ -167,12 +169,26 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		}
 
 		public boolean dealsDamage() {
-			return true;
+			return this != NULL;
 		}
 
 		public boolean stoppedByWater() {
 			return this != FUSION;
 		}
+
+		public boolean canIrradiateLiquids() {
+			return this == FISSION || this == FUSION || this == BREEDER;
+		}
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound NBT) {
+		type = NeutronType.neutronList[NBT.getInteger("ntype")];
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound NBT) {
+		NBT.setInteger("ntype", this.getType().ordinal());
 	}
 
 }

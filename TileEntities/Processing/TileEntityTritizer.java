@@ -17,11 +17,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -41,7 +44,11 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		//input.addLiquid(100, ReactorCraft.H2);
+		if (DragonAPICore.debugtest) {
+			input.addLiquid(100, ReactorCraft.H2);
+			if (output.getLevel() > CAPACITY/2)
+				output.empty();
+		}
 		//this.onNeutron(null, world, x, y, z);
 	}
 
@@ -70,10 +77,13 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		if (input.isEmpty())
 			return false;
-		Reactions r = Reactions.getReactionFrom(input.getActualFluid());
-		if (this.canMake(r) && ReikaRandomHelper.doWithChance(r.chance)) {
-			this.make(r);
-			return true;
+		NeutronType type = e.getType();
+		if (type.canIrradiateLiquids()) {
+			Reactions r = Reactions.getReactionFrom(input.getActualFluid());
+			if (!world.isRemote && this.canMake(r) && ReikaRandomHelper.doWithChance(r.chance)) {
+				this.make(r);
+				return true;
+			}
 		}
 		return false;
 	}

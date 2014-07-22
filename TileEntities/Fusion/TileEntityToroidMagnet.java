@@ -66,7 +66,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
 			}
 		}
-		this.collectCharge(world, x, y, z);
+		//this.collectCharge(world, x, y, z);
 
 		chargeTimer.update();
 		if ((chargeTimer.getTick()&4) != 0)

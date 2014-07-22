@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities.HTGR;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -96,7 +95,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int dT = temperature-Tamb;
 
 		if (dT != 0) {
-			int f = this.isExposedToAir(world, x, y, z) ? 32 : 96;
+			int f = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 96;
 			temperature -= (1+dT/f);
 		}
 
@@ -122,33 +121,6 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		if (temperature > this.getMaxTemperature()) {
 			world.setBlock(x, y, z, Block.lavaMoving.blockID);
 		}
-	}
-
-	private boolean isExposedToAir(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetZ;
-			int dz = z+dir.offsetY;
-			int id = world.getBlockId(dx, dy, dz);
-			if (id == 0)
-				return true;
-			Block b = Block.blocksList[id];
-			if (b == null)
-				return true;
-			if (b.getCollisionBoundingBoxFromPool(world, dx, dy, dz) == null)
-				return true;
-			Material mat = b.blockMaterial;
-			if (mat != null) {
-				if (mat == Material.circuits || mat == Material.air || mat == Material.cactus || mat == Material.fire)
-					return true;
-				if (mat == Material.plants || mat == Material.portal || mat == Material.vine || mat == Material.web)
-					return true;
-				if (!mat.isSolid())
-					return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

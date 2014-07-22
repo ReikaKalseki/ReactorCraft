@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
@@ -46,6 +47,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
+import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.GeoStrata.API.AcceleratorBlacklist;
 import Reika.GeoStrata.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
@@ -59,6 +61,7 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -79,6 +82,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -254,6 +258,15 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("lowpwater");
 		ReikaMystcraftHelper.disableFluidPage("hotsodium");
 
+		for (int i = 0; i < MatBlocks.matList.length; i++) {
+			ItemStack is = MatBlocks.matList[i].getStackOf();
+			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
+		}
+		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+			ItemStack is = FluoriteTypes.colorList[i].getStorageBlock();
+			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
+		}
+
 		//TickRegistry.registerTickHandler(new VolcanicGasController(), Side.SERVER);
 
 		if (!this.isLocked())
@@ -291,7 +304,42 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ModList.GEOSTRATA.isLoaded()) {
 			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 				ReactorTiles m = ReactorTiles.TEList[i];
-				AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+				if (m != ReactorTiles.PROCESSOR)
+					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+			}
+		}
+
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			for (int i = 0; i < ReactorOres.oreList.length; i++) {
+				ReactorOres ore = ReactorOres.oreList[i];
+				ItemStack block = ore.getOreBlock();
+				ItemStack drop = ore.getProduct();
+				ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
+			}
+
+			ReikaThaumHelper.addAspects(ReactorOres.CADMIUM.getOreBlock(), Aspect.METAL, 1);
+			ReikaThaumHelper.addAspects(ReactorOres.INDIUM.getOreBlock(), Aspect.METAL, 1, Aspect.GREED, 1);
+			ReikaThaumHelper.addAspects(ReactorOres.CALCITE.getOreBlock(), Aspect.CRYSTAL, 1);
+			ReikaThaumHelper.addAspects(ReactorOres.MAGNETITE.getOreBlock(), Aspect.METAL, 1, Aspect.CRYSTAL, 1, Aspect.AURA, 1);
+			ReikaThaumHelper.addAspects(ReactorOres.AMMONIUM.getOreBlock(), Aspect.FIRE, 1);
+
+			ReikaThaumHelper.addAspects(ReactorOres.MAGNETITE.getProduct(), Aspect.AURA, 2, Aspect.METAL, 2, Aspect.CRYSTAL, 2);
+			ReikaThaumHelper.addAspects(ReactorOres.CALCITE.getProduct(), Aspect.CRYSTAL, 2);
+			ReikaThaumHelper.addAspects(ReactorOres.AMMONIUM.getProduct(), Aspect.FIRE, 2);
+
+			for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+				FluoriteTypes f = FluoriteTypes.colorList[i];
+				ItemStack block = f.getOreBlock();
+				ItemStack drop = f.getItem();
+				ItemStack ore = f.getOreBlock();
+				ReikaThaumHelper.addAspects(ore, Aspect.CRYSTAL, 1);
+				ReikaThaumHelper.addAspects(ore, Aspect.SENSES, 1);
+
+				ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
+				ReikaThaumHelper.addAspects(block, Aspect.CRYSTAL, 1);
+				ReikaThaumHelper.addAspects(block, Aspect.SENSES, 1);
+
+				ReikaThaumHelper.addAspects(drop, Aspect.CRYSTAL, 2);
 			}
 		}
 	}

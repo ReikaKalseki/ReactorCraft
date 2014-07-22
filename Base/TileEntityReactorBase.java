@@ -159,6 +159,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 				diff = dT/Math.abs(dT);
 			temperature += diff;
 		}
+
+		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, Math.min(temperature, 1000));
+
 		if (this instanceof TileEntityReactorBoiler && temperature >= 300 && Tamb > 100) {
 			if (!((TileEntityReactorBoiler)this).tank.isEmpty()) {
 				world.setBlock(x, y, z, 0);
@@ -250,6 +253,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
 			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+			li.add(String.format("Lubricant level %d mB per block.", sp.getLubricant()));
 		}
 		if (this instanceof TileEntitySteamLine) {
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;

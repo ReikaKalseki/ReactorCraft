@@ -61,24 +61,27 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 		return ReactorTiles.CONTROL.ordinal();
 	}
 
-	public void toggle() {
+	public void toggle(boolean sound) {
 		if (lowered) {
 			motion = Motions.RAISING;
 		}
 		else {
 			motion = Motions.LOWERING;
 		}
-		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
+		if (sound)
+			ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(boolean active, boolean sound) {
 		motion = active ? Motions.LOWERING : Motions.RAISING;
-		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
+		if (sound)
+			ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
-	public void drop() {
-		if (rodOffset > MINOFFSET && motion != Motions.SCRAM)
-			ReactorSounds.SCRAM.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1F);
+	public void drop(boolean sound) {
+		if (sound)
+			if (rodOffset > MINOFFSET && motion != Motions.SCRAM)
+				ReactorSounds.SCRAM.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1F);
 		motion = Motions.SCRAM;
 	}
 

@@ -36,9 +36,11 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z);
 
-			if (temperature >= this.getMaxTemperature()) {
-				world.setBlock(x, y, z, Block.lavaMoving.blockID);
-				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+			if (!world.isRemote) {
+				if (temperature >= this.getMaxTemperature()) {
+					world.setBlock(x, y, z, Block.lavaMoving.blockID);
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+				}
 			}
 		}
 	}

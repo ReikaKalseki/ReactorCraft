@@ -212,6 +212,8 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	}
 
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
+		if (world.isRemote)
+			return;
 		for (int i = 0; i < 3; i++)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), this.getNeutronType()));
 	}

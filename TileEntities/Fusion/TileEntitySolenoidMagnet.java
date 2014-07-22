@@ -16,15 +16,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSolenoidMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ShaftPowerReceiver {
+public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver {
 
 	public boolean hasMultiBlock = false;
 	private boolean checkForToroids = true;
@@ -128,7 +128,6 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		NBT.setInteger("omg", omega);
 		NBT.setInteger("tq", torque);
 		NBT.setLong("pwr", power);
-		NBT.setFloat("spd", speed);
 	}
 
 	@Override
@@ -140,7 +139,6 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 		omega = NBT.getInteger("omg");
 		torque = NBT.getInteger("tq");
 		power = NBT.getLong("pwr");
-		speed = NBT.getFloat("spd");
 	}
 
 	public void addToToroids() {
@@ -267,6 +265,21 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements S
 	@Override
 	public int getMinTorque(int available) {
 		return MINTORQUE;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return MINTORQUE;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return MINOMEGA;
+	}
+
+	@Override
+	public long getMinPower() {
+		return 1;
 	}
 
 }

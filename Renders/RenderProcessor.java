@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -109,7 +110,7 @@ public class RenderProcessor extends ReactorRenderBase
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.DEFAULT.apply();
 
 		ReikaLiquidRenderer.bindFluidTexture(liq);
 		ReikaLiquidRenderer.setFluidColor(liquid);

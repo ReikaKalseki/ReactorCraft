@@ -22,9 +22,8 @@ import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.API.Transducerable;
 
-public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable {
+public class BlockTurbineMulti extends BlockMultiBlock {
 
 	private final SlicedBlockBlueprint setup;
 
@@ -36,12 +35,12 @@ public class BlockTurbineMulti extends BlockMultiBlock implements Transducerable
 
 	@Override
 	public boolean hasTileEntity(int meta) {
-		return meta == 2;
+		return meta%8 == 2;
 	}
 
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
-		switch(meta) {
+		switch(meta%8) {
 		case 2:
 			return new TileEntitySteamInjector();
 		default:

@@ -105,7 +105,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 
-		if (r == ReactorTiles.TURBINECORE || r == ReactorTiles.BIGTURBINE) {
+		if (r != null && r.isTurbine()) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getTileEntity(dx, dy, dz);
 			power = te.getPower();
 			omegain = te.getOmega();

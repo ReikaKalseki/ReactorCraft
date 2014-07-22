@@ -23,19 +23,19 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine implements TemperatureTE, ShaftPowerReceiver {
+public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine implements TemperatureTE, ReactorPowerReceiver {
 
 	public static final int CAPACITY = 2000;
 
@@ -379,6 +379,21 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	@Override
 	public int getMinTorque(int available) {
 		return 16;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return 1;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return MINSPEED;
+	}
+
+	@Override
+	public long getMinPower() {
+		return MINPOWER;
 	}
 
 }

@@ -266,7 +266,7 @@
 	</wastecontainer>
 	<storage>
 		<desc>
-			Longer-lived nuclear waste which will not decay in the spent fuel container must be placed in a waste disposal drum, where it may be safely stored underground indefinitely without risk of overheating or a radiation leak. Note that being in close proximity to a loaded container is still extremely dangerous.
+			Longer-lived nuclear waste which will not decay in the spent fuel container must be placed in a waste disposal drum, where it may be safely stored underground indefinitely without risk of overheating or a radiation leak. Note that being in close proximity to a loaded container is still extremely dangerous. Waste with half-lives shorter than one year cannot be safely stored in this machine, as they generate too much heat.
 		</desc>
 		<note>
 

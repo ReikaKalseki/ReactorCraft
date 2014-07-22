@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -33,6 +34,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -62,6 +64,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	public static final int GEN_OMEGA = 65536;
 	public static final int TORQUE_CAP = 32768;
+
+	private int forcedlube = 0;
 
 	protected final HybridTank tank = new HybridTank("turbine", 64000);
 
@@ -109,10 +113,13 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		this.getIOSides(world, x, y, z, meta);
 
 		if (!hasMultiBlock) {
+			//boolean checkMulti = this.getTicksExisted() < 5 || world.getTotalWorldTime()%32 == 0;
+			//if (!checkMulti && !this.checkForMultiblock(world, x, y, z, meta)) {
 			omega = 0;
 			phi = 0;
 			steam = 0;
 			return;
+			//}
 		}
 
 		thermalTicker.update();
@@ -159,6 +166,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			rec.setTorque(this.getTorque());
 			rec.setPower(this.getPower());
 		}
+	}
+
+	protected boolean checkForMultiblock(World world, int x, int y, int z, int meta) {
+		return false;
 	}
 
 	protected int getConsumedLubricant() {
@@ -573,7 +584,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 		damage = NBT.getInteger("dmg");
 
-		if (this.needsMultiblock())
+		if (this.needsMultiblock() && NBT.hasKey("multi"))
 			hasMultiBlock = NBT.getBoolean("multi");
 
 		tank.readFromNBT(NBT);
@@ -710,6 +721,52 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	@Override
 	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	public final int getLubricant() {
+		return tank.getLevel();
+	}
+
+	public int getLubricantToDrop() {
+		return Math.abs(forcedlube-tank.getLevel()) < 25 ? forcedlube : tank.getLevel();
+	}
+
+	public void onBreak() {
+		ForgeDirection dir = this.getSteamMovement();
+		int dx = xCoord+dir.offsetX;
+		int dy = yCoord+dir.offsetY;
+		int dz = zCoord+dir.offsetZ;
+		ReactorTiles m = ReactorTiles.getTE(worldObj, dx, dy, dz);
+		if (m == this.getMachine()) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getAdjacentTileEntity(dir);
+			te.forcedlube = this.getLubricantToDrop();
+		}
+		dir = dir.getOpposite();
+		dx = xCoord+dir.offsetX;
+		dy = yCoord+dir.offsetY;
+		dz = zCoord+dir.offsetZ;
+		m = ReactorTiles.getTE(worldObj, dx, dy, dz);
+		if (m == this.getMachine()) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getAdjacentTileEntity(dir);
+			te.forcedlube = this.getLubricantToDrop();
+		}
+	}
+
+	public final void setLubricant(ItemStack is) {
+		if (ReikaItemHelper.matchStacks(this.getMachine().getCraftedProduct(), is)) {
+			if (is.stackTagCompound != null) {
+				int lube = is.stackTagCompound.getInteger("lube");
+				tank.setContents(lube, FluidRegistry.getFluid("lubricant"));
+			}
+		}
+	}
+
+	public final void addLubricant(int amt) {
+		tank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+	}
+
+	public final boolean canAcceptLubricant(int amt) {
+		return tank.canTakeIn(amt);
 	}
 
 }

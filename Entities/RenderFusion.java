@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.ReactorCraft.ReactorCraft;
 
 public class RenderFusion extends Render {
@@ -47,7 +48,7 @@ public class RenderFusion extends Render {
 		GL11.glEnable(GL11.GL_BLEND);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		//GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+		BlendMode.ADDITIVE.apply();
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
 		v5.setColorOpaque(127, 127, 127);

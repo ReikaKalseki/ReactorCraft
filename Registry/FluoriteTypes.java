@@ -74,4 +74,12 @@ public enum FluoriteTypes {
 		return ReactorItems.FLUORITE.getStackOfMetadata(this.ordinal());
 	}
 
+	public ItemStack getOreBlock() {
+		return new ItemStack(ReactorOres.FLUORITE.getBlockID(), 1, this.ordinal());
+	}
+
+	public ItemStack getStorageBlock() {
+		return new ItemStack(ReactorBlocks.FLUORITE.getBlockID(), 1, this.ordinal());
+	}
+
 }

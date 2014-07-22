@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
 import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
@@ -109,6 +110,7 @@ public enum ReactorTiles {
 	private int meta;
 	private String render;
 	private final ReactorBlocks blockInstance;
+	private TileEntity renderInstance;
 
 	private static final HashMap<List<Integer>, ReactorTiles> reactorMappings = new HashMap();
 
@@ -182,17 +184,20 @@ public enum ReactorTiles {
 	}
 
 	public TileEntity createTEInstanceForRender() {
-		try {
-			return (TileEntity)teClass.newInstance();
+		if (renderInstance == null) {
+			try {
+				renderInstance = (TileEntity)teClass.newInstance();
+			}
+			catch (InstantiationException e) {
+				e.printStackTrace();
+				throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
+				throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
+			}
 		}
-		catch (InstantiationException e) {
-			e.printStackTrace();
-			throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
-		}
-		catch (IllegalAccessException e) {
-			e.printStackTrace();
-			throw new RegistrationException(ReactorCraft.instance, "Could not create TE instance to render "+this);
-		}
+		return renderInstance;
 	}
 
 	public boolean hasRender() {
@@ -349,6 +354,14 @@ public enum ReactorTiles {
 		default:
 			return null;
 		}
+	}
+
+	public boolean isTurbine() {
+		return TileEntityTurbineCore.class.isAssignableFrom(teClass);
+	}
+
+	public boolean isPowerReceiver() {
+		return ReactorPowerReceiver.class.isAssignableFrom(teClass);
 	}
 
 

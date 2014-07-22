@@ -52,7 +52,9 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 		int[] data = new int[0];
 		long longdata = 0;
 		float floatdata = 0;
-		int x,y,z;
+		int x = 0;
+		int y = 0;
+		int z = 0;
 		boolean readinglong = false;
 		String stringdata = null;
 		//System.out.print(packet.length);
@@ -106,10 +108,25 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 				int level = inputStream.readInt();
 				ReikaPacketHelper.updateTileEntityTankData(world, x, y, z, tank, level);
 				return;
+			case RAW:
+				control = inputStream.readInt();
+				pack = ReactorPackets.getEnum(control);
+				len = pack.getNumberDataInts();
+				data = new int[len];
+				readinglong = pack.isLongPacket();
+				if (!readinglong) {
+					for (int i = 0; i < len; i++)
+						data[i] = inputStream.readInt();
+				}
+				else
+					longdata = inputStream.readLong();
+				break;
 			}
-			x = inputStream.readInt();
-			y = inputStream.readInt();
-			z = inputStream.readInt();
+			if (packetType != PacketTypes.RAW) {
+				x = inputStream.readInt();
+				y = inputStream.readInt();
+				z = inputStream.readInt();
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -121,7 +138,7 @@ public abstract class ReactorPacketCore implements IPacketHandler {
 			case CPU:
 				if (control == ReactorPackets.CPU.getMinValue()) {
 					rod = (TileEntityControlRod)te;
-					rod.toggle();
+					rod.toggle(true);
 				}
 				else if (control == ReactorPackets.CPU.getMinValue()+1) {
 					TileEntityCPU cpu = (TileEntityCPU)te;

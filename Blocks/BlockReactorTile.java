@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
@@ -36,6 +37,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -310,6 +312,17 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 			}
 			return true;
 		}
+		if (r.isTurbine()) {
+			if (is != null && is.stackSize == 1 && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
+				int amt = 1000;
+				if (te.canAcceptLubricant(amt)) {
+					te.addLubricant(amt);
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+			}
+		}
 
 		if (ReactorCraft.hasGui(world, x, y, z, ep)) {
 			ep.openGui(ReactorCraft.instance, 0, world, x, y, z);
@@ -337,6 +350,9 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 				BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockVariable();
 				b.breakMultiBlock(world, x, y-1, z);
 			}
+		}
+		if (te instanceof TileEntityTurbineCore) {
+			((TileEntityTurbineCore)te).onBreak();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
@@ -389,7 +405,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		ArrayList li = new ArrayList();
 		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
 		if (r != null) {
-			if (r == ReactorTiles.TURBINECORE) {
+			if (r.isTurbine()) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
 				if (te == null)
 					return li;
@@ -399,11 +415,19 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 						li.add(ItemStacks.prop.copy());
 					}
 				}
-				else
-					li.add(r.getCraftedProduct());
+				else {
+					ItemStack is = r.getCraftedProduct();
+					if (te.getLubricant() > 0) {
+						is.stackTagCompound = new NBTTagCompound();
+						int lube = ReikaMathLibrary.roundDownToX(10, te.getLubricantToDrop()); //to help with stacking
+						is.stackTagCompound.setInteger("lube", lube);
+					}
+					li.add(is);
+				}
 			}
-			else
+			else {
 				li.add(r.getCraftedProduct());
+			}
 		}
 		return li;
 	}

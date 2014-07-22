@@ -15,17 +15,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Event.ScramEvent;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerReceiver, Temperatured {
+public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured {
 
 	private final ReactorControlLayout layout = new ReactorControlLayout(this);
 	private final BlockArray reactor = new BlockArray();
@@ -177,21 +178,43 @@ public class TileEntityCPU extends TileEntityReactorBase implements ShaftPowerRe
 		ArrayList<TileEntityControlRod> li = layout.getAllRods();
 		for (int i = 0; i < li.size(); i++) {
 			TileEntityControlRod te = li.get(i);
-			te.setActive(true);
+			te.setActive(true, false);
 		}
+		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
 	public void raiseAllRods() {
 		ArrayList<TileEntityControlRod> li = layout.getAllRods();
 		for (int i = 0; i < li.size(); i++) {
 			TileEntityControlRod te = li.get(i);
-			te.setActive(false);
+			te.setActive(false, false);
 		}
+		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}
 
 	@Override
 	public int getMinTorque(int available) {
 		return 1;
+	}
+
+	@Override
+	public int getMinTorque() {
+		return 1;
+	}
+
+	@Override
+	public int getMinSpeed() {
+		return 1;
+	}
+
+	@Override
+	public long getMinPower() {
+		return layout != null ? layout.getMinPower() : 0;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 15*layout.countLoweredRods()/layout.getNumberRods();
 	}
 
 }
