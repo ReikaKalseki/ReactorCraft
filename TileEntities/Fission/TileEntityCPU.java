@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -36,6 +37,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	private int omega;
 	private int torque;
 	private long power;
+
+	private int redstoneUpdate = 200;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -79,11 +82,22 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 				this.SCRAM();
 			}
 		}
+
+		if (redstoneUpdate > 0) {
+			redstoneUpdate--;
+			if (redstoneUpdate <= 0) {
+				world.markBlockForUpdate(x, y, z);
+				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
+			}
+		}
+
 	}
 
 	public void SCRAM() {
 		MinecraftForge.EVENT_BUS.post(new ScramEvent(this, temperature));
 		layout.SCRAM();
+		if (redstoneUpdate == 0)
+			redstoneUpdate = 7;
 	}
 
 	@Override
@@ -181,6 +195,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			te.setActive(true, false);
 		}
 		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
+		redstoneUpdate = 30;
 	}
 
 	public void raiseAllRods() {
@@ -190,6 +205,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			te.setActive(false, false);
 		}
 		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
+		redstoneUpdate = 30;
 	}
 
 	@Override
@@ -214,7 +230,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*layout.countLoweredRods()/layout.getNumberRods();
+		return layout.isEmpty() ? 0 : 15*layout.countLoweredRods()/layout.getNumberRods();
 	}
 
 }

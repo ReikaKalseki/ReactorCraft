@@ -160,4 +160,8 @@ public class ReactorControlLayout {
 		return count;
 	}
 
+	public boolean isEmpty() {
+		return controls.isEmpty();
+	}
+
 }
