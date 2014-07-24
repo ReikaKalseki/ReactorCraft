@@ -165,7 +165,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityBase)
-			((TileEntityBase)tile).syncAllData();
+			((TileEntityBase)tile).syncAllData(true);
 
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking())
@@ -450,6 +450,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 
 	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		TileEntity te = acc.getTileEntity();
+		if (te instanceof TileEntityReactorBase)
+			((TileEntityBase)te).syncAllData(false);
 		if (te instanceof Temperatured)
 			tip.add(String.format("Temperature: %dC", ((Temperatured) te).getTemperature()));
 		else if (te instanceof TemperatureTE)
