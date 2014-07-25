@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -57,22 +56,13 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		//ReikaJavaLibrary.pConsole(power, Side.SERVER);
 
 		if (power > 0) {
-			int writex = x+this.getFacing().getOpposite().offsetX;
-			int writey = y+this.getFacing().getOpposite().offsetY;
-			int writez = z+this.getFacing().getOpposite().offsetZ;
-			int id = world.getBlockId(writex, writey, writez);
-			if (id != 0) {
-				Block b = Block.blocksList[id];
-				int metadata = world.getBlockMetadata(writex, writey, writez);
-				if (b.hasTileEntity(metadata)) {
-					TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
-					if (tile instanceof IEnergyHandler) {
-						IEnergyHandler rc = (IEnergyHandler)tile;
-						if (rc.canInterface(facingDir)) {
-							int rf = this.getGenRF();
-							float used = rc.receiveEnergy(facingDir, rf, false);
-						}
-					}
+			ForgeDirection write = this.getFacing().getOpposite();
+			TileEntity tile = this.getAdjacentTileEntity(write);
+			if (tile instanceof IEnergyHandler) {
+				IEnergyHandler rc = (IEnergyHandler)tile;
+				if (rc.canInterface(facingDir)) {
+					int rf = this.getGenRF();
+					float used = rc.receiveEnergy(facingDir, rf, false);
 				}
 			}
 		}
