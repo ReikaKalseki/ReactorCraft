@@ -34,4 +34,9 @@ public class LuaGetTurbineSpeed extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.INTEGER;
+	}
+
 }

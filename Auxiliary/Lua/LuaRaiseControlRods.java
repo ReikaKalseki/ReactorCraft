@@ -35,4 +35,9 @@ public class LuaRaiseControlRods extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

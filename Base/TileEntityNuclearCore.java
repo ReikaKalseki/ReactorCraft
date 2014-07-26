@@ -33,8 +33,6 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable {
 
@@ -273,7 +271,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				int id = world.getBlockId(dx, dy, dz);
-				int meta = world.getBlockMetadata(dx, dy, dz);
+				int meta = world.getBlockMetadata(dx, dy, dz);/*
 				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
 					TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
 					if (te.getLiquidState().isWater() && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
@@ -281,6 +279,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 						temperature -= 20;
 					}
 				}
+				 */
 				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
 					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getBlockTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;

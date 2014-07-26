@@ -21,7 +21,6 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityBreederCore extends TileEntityNuclearCore {
@@ -47,7 +46,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);/*
 				if (r == ReactorTiles.COOLANT) {
 					TileEntityWaterCell w = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
 					int T = w.getTemperature();
@@ -56,7 +55,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 						w.setTemperature(T+dT/4);
 						temperature -= dT/4;
 					}
-				}
+				}*/
 				if (r == ReactorTiles.SODIUMBOILER) {
 					TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getBlockTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.getTemperature();

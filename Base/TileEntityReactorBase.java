@@ -11,21 +11,11 @@ package Reika.ReactorCraft.Base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import li.cil.oc.api.Network;
-import li.cil.oc.api.network.Arguments;
-import li.cil.oc.api.network.Component;
-import li.cil.oc.api.network.Context;
-import li.cil.oc.api.network.Environment;
-import li.cil.oc.api.network.ManagedPeripheral;
-import li.cil.oc.api.network.Message;
-import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -41,7 +31,6 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -51,11 +40,8 @@ import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.ILuaContext;
-import dan200.computer.api.IPeripheral;
 
-public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable, IPeripheral, Environment, ManagedPeripheral {
+public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -121,16 +107,12 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		if (node != null)
-			node.save(NBT);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		if (node != null)
-			node.load(NBT);
 	}
 
 	public boolean isThisTE(int id, int meta) {
@@ -178,11 +160,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 				TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof Temperatured) {
 					Temperatured tr = (Temperatured)te;
-					boolean flag = true;
+					boolean flag = true;/*
 					if (src == ReactorTiles.COOLANT) {
 						TileEntityWaterCell wc = (TileEntityWaterCell)this;
 						flag = tr.canDumpHeatInto(wc.getLiquidState());
-					}
+					}*/
 					if (tr instanceof TileEntityNuclearCore)
 						flag = true;
 					if (flag) {
@@ -266,117 +248,18 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		return 1;//DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 
-
-	/** ComputerCraft */
 	@Override
-	public final String[] getMethodNames() {
-		ArrayList<LuaMethod> li = new ArrayList();
-		List<LuaMethod> all = LuaMethod.getMethods();
-		for (int i = 0; i < all.size(); i++) {
-			LuaMethod l = all.get(i);
-			if (l.isValidFor(this))
-				li.add(l);
-		}
-		String[] s = new String[li.size()];
-		for (int i = 0; i < s.length; i++) {
-			LuaMethod l = li.get(i);
-			s[i] = l.displayName;
-			luaMethods.put(i, l);
-			methodNames.put(l.displayName, l);
-		}
-		return s;
-	}
-
-	@Override
-	public final Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return luaMethods.containsKey(method) ? luaMethods.get(method).invoke(this, arguments) : null;
-	}
-
-	@Override
-	public final boolean canAttachToSide(int side) {
-		return true;
-	}
-
-	@Override
-	public final void attach(IComputerAccess computer) {
-
-	}
-
-	@Override
-	public final void detach(IComputerAccess computer) {
-
-	}
-
-	@Override
-	public final String getType() {
-		return this.getName().replaceAll(" ", "");
-	}
-
-	/** OpenComputers */
-	public final String getComponentName() {
-		return this.getType();
-	}
-
-	@Override
-	public final String[] methods() {
-		return this.getMethodNames();
-	}
-
-	@Override
-	public final Object[] invoke(String method, Context context, Arguments args) throws Exception {
-		Object[] objs = new Object[args.count()];
-		for (int i = 0; i < objs.length; i++) {
-			objs[i] = args.checkAny(i);
-		}
-		return methodNames.containsKey(method) ? methodNames.get(method).invoke(this, objs) : null;
-	}
-
-	@Override
-	public int getRedstoneOverride() {
-		return 0;
-	}
-
-	@Override
-	public final void onChunkUnload() {
-		super.onChunkUnload();
-		if (node != null)
-			node.remove();
-	}
-
-	@Override
-	public final void invalidate() {
-		super.invalidate();
-		if (node != null)
-			node.remove();
-	}
-
-	private final Component node = this.createNode();
-
-	private Component createNode() {
-		if (ModList.OPENCOMPUTERS.isLoaded())
-			return Network.newNode(this, Visibility.Network).withComponent(this.getType(), this.getOCNetworkVisibility()).create();
-		else
-			return null;
-	}
-
 	protected final Visibility getOCNetworkVisibility() {
 		return this.getMachine().isPipe() ? Visibility.Neighbors : Visibility.Network;
 	}
 
 	@Override
-	public final Node node() {
-		return node;
+	public final boolean hasModel() {
+		return this.getMachine().hasRender();
 	}
 
 	@Override
-	public final void onConnect(Node node) {}
-	@Override
-	public final void onDisconnect(Node node) {}
-	@Override
-	public final void onMessage(Message message) {}
-
-	@Override
-	public final boolean hasModel() {
-		return this.getMachine().hasRender();
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

@@ -47,4 +47,9 @@ public class LuaReactorCheckPebbles extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.STRING;
+	}
+
 }

@@ -34,4 +34,9 @@ public class LuaReactorGetName extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.STRING;
+	}
+
 }

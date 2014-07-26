@@ -66,4 +66,9 @@ public class LuaReactorCheckFuel extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.STRING;
+	}
+
 }

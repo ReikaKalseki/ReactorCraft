@@ -34,4 +34,9 @@ public class LuaReactorGetTemperature extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.INTEGER;
+	}
+
 }
