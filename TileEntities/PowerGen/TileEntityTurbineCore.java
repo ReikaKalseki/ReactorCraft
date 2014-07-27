@@ -112,7 +112,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
 
-		if (!hasMultiBlock) {
+		if (!hasMultiBlock && !world.isRemote) {
 			//boolean checkMulti = this.getTicksExisted() < 5 || world.getTotalWorldTime()%32 == 0;
 			//if (!checkMulti && !this.checkForMultiblock(world, x, y, z, meta)) {
 			omega = 0;
@@ -149,7 +149,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else {
 			if (soundTimer.checkCap() && stage == 0)
 				ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
-			if (!tank.isEmpty())
+			if (!tank.isEmpty() && !world.isRemote)
 				tank.removeLiquid(this.getConsumedLubricant());
 		}
 
@@ -416,7 +416,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		}
 		if (this.getStage() == 0) {
 			boolean accel = this.intakeSteam(world, x, y, z, meta);
-			this.updateSpeed(accel);
+			if (!world.isRemote)
+				this.updateSpeed(accel);
 		}
 	}
 

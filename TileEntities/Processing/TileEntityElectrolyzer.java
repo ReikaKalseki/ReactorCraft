@@ -381,6 +381,8 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		if (this.canMakeSodium() || this.canMakeHydrogen()) {
 			int extra = charge-this.getMinDischarge();
 			int n = extra > 0 ? (int)Math.sqrt(extra)/16 : 1;
+			if (n == 0)
+				n = 1;
 			for (int i = 0; i < n; i++)
 				timer.update();
 		}

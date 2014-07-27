@@ -79,6 +79,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		return ReactorTiles.TEList[this.getIndex()].getName();
 	}
 
+	@Override
+	public final String getName() {
+		return this.getTEName();
+	}
+
 	public abstract int getIndex();
 
 	public int getTextureState(ForgeDirection side) {
@@ -117,10 +122,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	public boolean isThisTE(int id, int meta) {
 		return id == this.getTileEntityBlockID() && meta == this.getIndex();
-	}
-
-	public final String getName() {
-		return this.getTEName();
 	}
 
 	@Override
