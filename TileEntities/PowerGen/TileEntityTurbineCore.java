@@ -564,8 +564,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	@Override
-	public final boolean canWriteToBlock(int x, int y, int z) {
-		return x == writex && y == writey && z == writez;
+	public final boolean canWriteTo(ForgeDirection from) {
+		return xCoord+from.offsetX == writex && yCoord+from.offsetY == writey && zCoord+from.offsetZ == writez;
 	}
 
 	@Override

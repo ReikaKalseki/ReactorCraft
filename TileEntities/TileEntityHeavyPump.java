@@ -11,7 +11,6 @@ package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -93,8 +92,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return x == xCoord && y == yCoord-1 && z == zCoord;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override
@@ -110,8 +109,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
 			this.noInputMachine();
 		}
 

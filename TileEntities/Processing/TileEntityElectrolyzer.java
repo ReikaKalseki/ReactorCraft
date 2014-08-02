@@ -268,13 +268,8 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			if (x == xCoord+dir.offsetX && y == yCoord+dir.offsetY && z == zCoord+dir.offsetZ)
-				return true;
-		}
-		return false;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir.offsetY == 0;
 	}
 
 	@Override

@@ -45,8 +45,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
 			this.noInputMachine();
 		}
 
@@ -237,8 +236,8 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return x == xCoord && y == yCoord-1 && z == zCoord;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override

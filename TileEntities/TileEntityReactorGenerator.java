@@ -22,8 +22,6 @@ import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -104,62 +102,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		else {
 			omegain = torquein = 0;
 			power = 0;
-		}
-	}
-
-	protected void readFromCross(TileEntityShaft cross, int ex, int ey, int ez) {
-		if (cross.isWritingToCoordinate(ex, ey, ez)) {
-			omegain = cross.readomega[0];
-			torquein = cross.readtorque[0];
-		}
-		else if (cross.isWritingToCoordinate2(ex, ey, ez)) {
-			omegain = cross.readomega[1];
-			torquein = cross.readtorque[1];
-		}
-		else
-			return; //not its output
-	}
-
-	private void readFromSplitter(TileEntitySplitter spl, int ex, int ey, int ez) {
-		int sratio = spl.getRatioFromMode();
-		if (sratio == 0)
-			return;
-		boolean favorbent = false;
-		if (sratio < 0) {
-			favorbent = true;
-			sratio = -sratio;
-		}
-		if (ex == spl.writeinline[0] && ez == spl.writeinline[1]) { //We are the inline
-			omegain = spl.omega; //omega always constant
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torquein = spl.torque/2;
-				return;
-			}
-			if (favorbent) {
-				torquein = spl.torque/sratio;
-			}
-			else {
-				torquein = (int)(spl.torque*((sratio-1D))/sratio);
-			}
-		}
-		else if (ex == spl.writebend[0] && ez == spl.writebend[1]) { //We are the bend
-			omegain = spl.omega; //omega always constant
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torquein = spl.torque/2;
-				return;
-			}
-			if (favorbent) {
-				torquein = (int)(spl.torque*((sratio-1D)/(sratio)));
-			}
-			else {
-				torquein = spl.torque/sratio;
-			}
-		}
-		else { //We are not one of its write-to blocks
-			torquein = 0;
-			omegain = 0;
-			power = 0;
-			return;
 		}
 	}
 

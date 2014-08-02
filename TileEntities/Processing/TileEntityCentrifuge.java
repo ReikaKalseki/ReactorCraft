@@ -11,7 +11,6 @@ package Reika.ReactorCraft.TileEntities.Processing;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -91,8 +90,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		timer.setCap(this.setTimer());
 
-		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
 			this.noInputMachine();
 		}
 
@@ -232,8 +230,8 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return x == xCoord && y == yCoord-1 && z == zCoord;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override

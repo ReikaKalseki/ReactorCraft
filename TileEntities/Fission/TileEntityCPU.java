@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities.Fission;
 import java.util.ArrayList;
 
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -153,8 +154,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return Math.abs(x-xCoord)+Math.abs(y-yCoord)+Math.abs(z-zCoord) == 1; //one block away
+	public boolean canReadFrom(ForgeDirection dir) {
+		return true;
 	}
 
 	@Override

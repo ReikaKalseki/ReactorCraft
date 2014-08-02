@@ -66,11 +66,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public int getTileEntityBlockID() {
+	public final int getTileEntityBlockID() {
 		return ReactorTiles.TEList[this.getIndex()].getBlockID();
 	}
 
-	public ReactorTiles getMachine() {
+	public final ReactorTiles getMachine() {
 		return ReactorTiles.TEList[this.getIndex()];
 	}
 
@@ -245,18 +245,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public int getPacketDelay() {
-		return 1;//DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
-	}
-
-	@Override
 	protected final Visibility getOCNetworkVisibility() {
 		return this.getMachine().isPipe() ? Visibility.Neighbors : Visibility.Network;
-	}
-
-	@Override
-	public final boolean hasModel() {
-		return this.getMachine().hasRender();
 	}
 
 	@Override

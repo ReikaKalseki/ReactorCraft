@@ -12,7 +12,6 @@ package Reika.ReactorCraft.TileEntities.PowerGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -68,8 +67,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
 			this.noInputMachine();
 		}
 
@@ -338,8 +336,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return x == xCoord && z == zCoord && y == yCoord-1;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override

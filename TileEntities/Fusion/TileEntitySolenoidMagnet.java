@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -46,8 +45,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-		if (!PowerTransferHelper.checkPowerFrom(this, te)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
 			this.noInputMachine();
 		}
 
@@ -245,10 +243,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	}
 
 	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		if (x != xCoord || z != zCoord)
-			return false;
-		return y == yCoord-1 || y == yCoord+1;
+	public boolean canReadFrom(ForgeDirection dir) {
+		return dir == ForgeDirection.DOWN;
 	}
 
 	@Override

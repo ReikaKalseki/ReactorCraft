@@ -260,7 +260,7 @@ public enum ReactorTiles {
 	}
 
 	public int getBlockMetadata() {
-		return meta;
+		return meta%16;
 	}
 
 	public boolean renderInPass1() {
