@@ -13,11 +13,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import Reika.DragonAPI.Interfaces.PermaPotion;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
-public class PotionRadiation extends Potion {
+public class PotionRadiation extends Potion implements PermaPotion {
 
 	public PotionRadiation(int par1, boolean par2) {
 		super(par1, par2, 0x111111);
@@ -57,6 +58,11 @@ public class PotionRadiation extends Potion {
 	public boolean isReady(int time, int amp)
 	{
 		return time%20 == 0;
+	}
+
+	@Override
+	public boolean canBeCleared(EntityLivingBase e, PotionEffect pot) {
+		return e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode;
 	}
 
 }

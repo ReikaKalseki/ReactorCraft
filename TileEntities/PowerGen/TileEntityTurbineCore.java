@@ -112,7 +112,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
 
-		if (!hasMultiBlock && !world.isRemote) {
+		if (!hasMultiBlock) {
 			//boolean checkMulti = this.getTicksExisted() < 5 || world.getTotalWorldTime()%32 == 0;
 			//if (!checkMulti && !this.checkForMultiblock(world, x, y, z, meta)) {
 			omega = 0;
@@ -493,10 +493,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	public final int getNumberStagesTotal() {
+		if (this.needsMultiblock() && !this.hasMultiBlock())
+			return 0;
 		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(writex, writey, writez);
-			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord)
-				return tile.getNumberStagesTotal();
+			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord) {
+				if (tile.hasMultiBlock() || !tile.needsMultiblock())
+					return tile.getNumberStagesTotal();
+			}
 		}
 		return this.calcStage()+1;
 	}

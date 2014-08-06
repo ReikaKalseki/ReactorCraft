@@ -132,7 +132,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		this.onMeltdown(world, x, y, z);
+		if (!world.isRemote)
+			this.onMeltdown(world, x, y, z);
 	}
 
 	@Override

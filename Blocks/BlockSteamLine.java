@@ -93,7 +93,9 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	@Override
 	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		double d = 0.25;
-		return ReikaAABBHelper.getBlockAABB(x, y, z).contract(d, d, d);
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).contract(d, d, d);
+		this.setBounds(box, x, y, z);
+		return box;
 	}
 
 	@Override

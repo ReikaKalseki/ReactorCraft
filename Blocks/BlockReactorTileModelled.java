@@ -65,7 +65,9 @@ public class BlockReactorTileModelled extends BlockReactorTile {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return ReikaAABBHelper.getBlockAABB(x, y, z);
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
+		this.setBounds(box, x, y, z);
+		return box;
 	}
 
 	@Override
