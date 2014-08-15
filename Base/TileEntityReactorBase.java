@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -40,6 +33,16 @@ import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import li.cil.oc.api.network.Visibility;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
@@ -66,8 +69,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public final int getTileEntityBlockID() {
-		return ReactorTiles.TEList[this.getIndex()].getBlockID();
+	public final Block getTileEntityBlockID() {
+		return ReactorTiles.TEList[this.getIndex()].getBlock();
 	}
 
 	public final ReactorTiles getMachine() {
@@ -120,7 +123,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	}
 
-	public boolean isThisTE(int id, int meta) {
+	public boolean isThisTE(Block id, int meta) {
 		return id == this.getTileEntityBlockID() && meta == this.getIndex();
 	}
 
@@ -134,7 +137,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = Tamb-temperature;
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null) {
+		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.air) != null) {
 			int diff = (1+dT/32);
 			if (diff <= 1)
 				diff = dT/Math.abs(dT);
@@ -145,7 +148,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 		if (this instanceof TileEntityReactorBoiler && temperature >= 300 && Tamb > 100) {
 			if (!((TileEntityReactorBoiler)this).tank.isEmpty()) {
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 			}
 		}
@@ -158,7 +161,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			int dz = z+dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r != null) {
-				TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityReactorBase te = (TileEntityReactorBase)world.getTileEntity(dx, dy, dz);
 				if (te instanceof Temperatured) {
 					Temperatured tr = (Temperatured)te;
 					boolean flag = true;/*
@@ -234,7 +237,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
 			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
-			li.add(String.format("Lubricant level %d mB per block.", sp.getLubricant()));
+			li.add(String.format("Lubricant level %d mB per Blocks.", sp.getLubricant()));
 		}
 		if (this instanceof TileEntitySteamLine) {
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;

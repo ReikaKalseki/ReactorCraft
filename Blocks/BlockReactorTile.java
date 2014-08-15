@@ -9,31 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import mcp.mobius.waila.api.IWailaBlock;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -63,12 +38,39 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 
-	protected static final Icon[][][] icons = new Icon[ReactorTiles.TEList.length][6][16];
+	protected static final IIcon[][][] icons = new IIcon[ReactorTiles.TEList.length][6][16];
 
-	public BlockReactorTile(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockReactorTile(Material par2Material) {
+		super(par2Material);
 		this.setHardness(2F);
 		this.setResistance(10F);
 	}
@@ -80,55 +82,63 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
-		TileEntity te = ReactorTiles.createTEFromIDAndMetadata(blockID, meta);
+		TileEntity te = ReactorTiles.createTEFromIDAndMetadata(this, meta);
 		return te;
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public final boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
+	{
+		return false;
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister ico) {
 		if (ReactorCraft.instance.isLocked())
 			return;
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			if (r.hasTextureStates()) {
-				for (int k = 0; k < r.getTextureStates(); k++) {
+			if (!r.hasRender() && !r.isPipe()) {
+				if (r.hasTextureStates()) {
+					for (int k = 0; k < r.getTextureStates(); k++) {
+						if (r.hasSidedTextures()) {
+							for (int j = 0; j < 6; j++) {
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j+"_#"+k);
+							}
+						}
+						else if (r.isEndTextured()) {
+							for (int j = 0; j < 2; j++) {
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top"+"_#"+k);
+							}
+							for (int j = 2; j < 6; j++) {
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+							}
+						}
+						else {
+							for (int j = 0; j < 6; j++) {
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+							}
+						}
+					}
+				}
+				else {
 					if (r.hasSidedTextures()) {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j+"_#"+k);
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j);
 						}
 					}
 					else if (r.isEndTextured()) {
 						for (int j = 0; j < 2; j++) {
-							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top"+"_#"+k);
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top");
 						}
 						for (int j = 2; j < 6; j++) {
-							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
 						}
 					}
 					else {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
 						}
-					}
-				}
-			}
-			else {
-				if (r.hasSidedTextures()) {
-					for (int j = 0; j < 6; j++) {
-						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j);
-					}
-				}
-				else if (r.isEndTextured()) {
-					for (int j = 0; j < 2; j++) {
-						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top");
-					}
-					for (int j = 2; j < 6; j++) {
-						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
-					}
-				}
-				else {
-					for (int j = 0; j < 6; j++) {
-						icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
 					}
 				}
 			}
@@ -136,12 +146,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public Icon getBlockTexture(IBlockAccess iba, int x, int y, int z, int s) {
+	public IIcon getIcon(IBlockAccess iba, int x, int y, int z, int s) {
 		ReactorTiles r = ReactorTiles.getTE(iba, x, y, z);
 		if (r == null)
 			return null;
 		if (r.hasTextureStates()) {
-			TileEntityReactorBase te = (TileEntityReactorBase)iba.getBlockTileEntity(x, y, z);
+			TileEntityReactorBase te = (TileEntityReactorBase)iba.getTileEntity(x, y, z);
 			int k = te.getTextureState(ForgeDirection.VALID_DIRECTIONS[s]);
 			return icons[r.ordinal()][s][k];
 		}
@@ -151,9 +161,9 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		//for drops, needs to be r.ordinal(), not metadata
-		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
+		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(this, meta);
 		return r != null ? icons[r.ordinal()][s][0] : icons[meta][s][0];
 	}
 
@@ -163,7 +173,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		if (ReactorCraft.instance.isLocked())
 			return false;
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityBase)
 			((TileEntityBase)tile).syncAllData(true);
 
@@ -176,23 +186,23 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 				if (i.overridesRightClick(is))
 					return false;
 			}
-			if (is.itemID == ReactorItems.REMOTE.getShiftedItemID())
+			if (is.getItem() == ReactorItems.REMOTE.getItemInstance())
 				return false;
 		}
 		if (r == ReactorTiles.COOLANT && is != null) {
-			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y, z);
+			TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(x, y, z);
 			switch(te.getLiquidState()) {
 			case EMPTY:
-				if (is.itemID == Item.bucketWater.itemID) {
+				if (is.getItem() == Items.water_bucket) {
 					te.setLiquidState(LiquidStates.WATER);
 					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					return true;
 				}
-				else if (is.itemID == ReactorItems.BUCKET.getShiftedItemID()) {
+				else if (is.getItem() == ReactorItems.BUCKET.getItemInstance()) {
 					te.setLiquidState(LiquidStates.HEAVY);
 					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					return true;
 				}
 				else if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
@@ -203,14 +213,14 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 				}
 				break;
 			case WATER:
-				if (is.itemID == Item.bucketEmpty.itemID) {
+				if (is.getItem() == Items.bucket) {
 					te.setLiquidState(LiquidStates.EMPTY);
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketWater));
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.water_bucket));
 					return true;
 				}
 				break;
 			case HEAVY:
-				if (is.itemID == Item.bucketEmpty.itemID) {
+				if (is.getItem() == Items.bucket) {
 					te.setLiquidState(LiquidStates.EMPTY);
 					ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
 					return true;
@@ -225,25 +235,25 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 			}
 		}
 		if (r == ReactorTiles.SYNTHESIZER && is != null) {
-			TileEntitySynthesizer te = (TileEntitySynthesizer)world.getBlockTileEntity(x, y, z);
-			if (is.itemID == Item.bucketWater.itemID) {
+			TileEntitySynthesizer te = (TileEntitySynthesizer)world.getTileEntity(x, y, z);
+			if (is.getItem() == Items.water_bucket) {
 				boolean flag = te.addWater(1000);
 				if (flag && !ep.capabilities.isCreativeMode)
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 				return true;
 			}
 		}
 		if (r == ReactorTiles.ELECTROLYZER && is != null) {
-			TileEntityElectrolyzer te = (TileEntityElectrolyzer)world.getBlockTileEntity(x, y, z);
+			TileEntityElectrolyzer te = (TileEntityElectrolyzer)world.getTileEntity(x, y, z);
 			if (ReikaItemHelper.matchStacks(is, ReactorItems.BUCKET.getStackOf())) {
 				boolean flag = te.addHeavyWater(1000);
 				if (flag && !ep.capabilities.isCreativeMode)
-					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 				return true;
 			}
 		}
-		if (r == ReactorTiles.HEAVYPUMP && is != null && is.itemID == Item.bucketEmpty.itemID) {
-			TileEntityHeavyPump te = (TileEntityHeavyPump)world.getBlockTileEntity(x, y, z);
+		if (r == ReactorTiles.HEAVYPUMP && is != null && is.getItem() == Items.bucket) {
+			TileEntityHeavyPump te = (TileEntityHeavyPump)world.getTileEntity(x, y, z);
 			if (te.hasABucket()) {
 				te.subtractBucket();
 				ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
@@ -251,26 +261,26 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 			}
 		}
 		if (r == ReactorTiles.SODIUMBOILER && is != null) {
-			TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getBlockTileEntity(x, y, z);
+			TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getTileEntity(x, y, z);
 			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
 				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
 					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("sodium"))) {
 						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("sodium"));
 						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					}
 					return true;
 				}
 			}
 		}
 		if (r == ReactorTiles.BOILER && is != null) {
-			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y, z);
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y, z);
 			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
-				if (is.itemID == Item.bucketWater.itemID) {
+				if (is.getItem() == Items.water_bucket) {
 					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.WATER)) {
 						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.WATER);
 						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					}
 					return true;
 				}
@@ -284,8 +294,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 				}
 			}
 		}
-		if (r == ReactorTiles.PROCESSOR && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
-			TileEntityUProcessor te = (TileEntityUProcessor)world.getBlockTileEntity(x, y, z);
+		if (r == ReactorTiles.PROCESSOR && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance()) {
+			TileEntityUProcessor te = (TileEntityUProcessor)world.getTileEntity(x, y, z);
 			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
@@ -298,8 +308,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 			}
 			return true;
 		}
-		if (r == ReactorTiles.CENTRIFUGE && is != null && is.itemID == ReactorItems.CANISTER.getShiftedItemID()) {
-			TileEntityCentrifuge te = (TileEntityCentrifuge)world.getBlockTileEntity(x, y, z);
+		if (r == ReactorTiles.CENTRIFUGE && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance()) {
+			TileEntityCentrifuge te = (TileEntityCentrifuge)world.getTileEntity(x, y, z);
 			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
@@ -314,12 +324,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 		}
 		if (r.isTurbine()) {
 			if (is != null && is.stackSize == 1 && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x, y, z);
 				int amt = 1000;
 				if (te.canAcceptLubricant(amt)) {
 					te.addLubricant(amt);
 					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 				}
 			}
 		}
@@ -339,15 +349,15 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public final void breakBlock(World world, int x, int y, int z, int par5, int par6) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+	public final void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory)
 			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntitySolenoidMagnet) {
 			((TileEntitySolenoidMagnet) te).removeFromToroids();
-			int id = world.getBlockId(x, y-1, z);
-			if (id == ReactorBlocks.SOLENOIDMULTI.getBlockID()) {
-				BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockVariable();
+			Block id = world.getBlock(x, y-1, z);
+			if (id == ReactorBlocks.SOLENOIDMULTI.getBlockInstance()) {
+				BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockInstance();
 				b.breakMultiBlock(world, x, y-1, z);
 			}
 		}
@@ -373,7 +383,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public int getLightOpacity(World world, int x, int y, int z) {
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		if (r == ReactorTiles.HEATER)
 			return 0;
@@ -381,19 +391,19 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (!player.capabilities.isCreativeMode && this.canHarvest(world, player, x, y, z))
 			this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	@Override
 	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
-		if (world.getBlockId(x, y, z) == blockID)
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, this.getBlockDropped(world, x, y, z, meta, 0));
+		if (world.getBlock(x, y, z) == this)
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, this.getDrops(world, x, y, z, meta, 0));
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
@@ -401,12 +411,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList li = new ArrayList();
-		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(blockID, meta);
+		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(this, meta);
 		if (r != null) {
 			if (r.isTurbine()) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(x, y, z);
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x, y, z);
 				if (te == null)
 					return li;
 				if (te.getDamage() > 0) {
@@ -433,7 +443,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 	}
 
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return ReactorTiles.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
+		return ReactorTiles.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
 
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
@@ -464,7 +474,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 				for (int i = 0; i < tanks.length; i++) {
 					FluidTankInfo info = tanks[i];
 					FluidStack fs = info.fluid;
-					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName()) : "Empty";
+					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName(fs)) : "Empty";
 					tip.add("Tank "+i+": "+input);
 				}
 			}

@@ -9,23 +9,25 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.Arrays;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 
+import java.util.Arrays;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class BlockGeneratorMulti extends BlockMultiBlock {
 
-	public BlockGeneratorMulti(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockGeneratorMulti(Material par2Material) {
+		super(par2Material);
 	}
 
 	@Override
@@ -62,15 +64,15 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		for (int i = 0; i < l; i++) {
 			int dx = x+dir.offsetX*i;
 			int dz = z+dir.offsetZ*i;
-			int id = world.getBlockId(dx, y, dz);
+			Block b = world.getBlock(dx, y, dz);
 			int meta = world.getBlockMetadata(dx, y, dz);
-			if (id != blockID || meta != 0) {
+			if (b != this || meta != 0) {
 				return false;
 			}
 		}
 		int dx = x+dir.offsetX*l;
 		int dz = z+dir.offsetZ*l;
-		TileEntity te = world.getBlockTileEntity(dx, y, dz);
+		TileEntity te = world.getTileEntity(dx, y, dz);
 		if (te instanceof TileEntityReactorGenerator) {
 			return dir == ((TileEntityReactorGenerator)te).getFacing().getOpposite();
 		}
@@ -90,20 +92,20 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			int ddz2 = dz-left.offsetZ;
 			for (int k = -1; k <= 1; k++) {
 				int dy = y+k;
-				int id = world.getBlockId(ddx, dy, ddz);
+				Block id = world.getBlock(ddx, dy, ddz);
 				int meta = world.getBlockMetadata(ddx, dy, ddz);
-				int id2 = world.getBlockId(ddx2, dy, ddz2);
+				Block id2 = world.getBlock(ddx2, dy, ddz2);
 				int meta2 = world.getBlockMetadata(ddx2, dy, ddz2);
-				int id3 = world.getBlockId(dx, dy, dz);
+				Block id3 = world.getBlock(dx, dy, dz);
 				int meta3 = world.getBlockMetadata(dx, dy, dz);
-				if (id != blockID || meta != seekmeta) {
+				if (id != this || meta != seekmeta) {
 					return false;
 				}
-				if (id2 != blockID || meta2 != seekmeta) {
+				if (id2 != this || meta2 != seekmeta) {
 					return false;
 				}
 				if (k != 0) {
-					if (id3 != blockID || meta3 != seekmeta) {
+					if (id3 != this || meta3 != seekmeta) {
 						return false;
 					}
 				}
@@ -126,21 +128,21 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			int seekmeta = 2;
 			for (int k = -2; k <= 2; k += 4) {
 				int dy = y+k;
-				int id = world.getBlockId(ddx, dy, ddz);
+				Block id = world.getBlock(ddx, dy, ddz);
 				int meta = world.getBlockMetadata(ddx, dy, ddz);
-				int id2 = world.getBlockId(ddx2, dy, ddz2);
+				Block id2 = world.getBlock(ddx2, dy, ddz2);
 				int meta2 = world.getBlockMetadata(ddx2, dy, ddz2);
-				int id3 = world.getBlockId(dx, dy, dz);
+				Block id3 = world.getBlock(dx, dy, dz);
 				int meta3 = world.getBlockMetadata(dx, dy, dz);
 				if (i == 1 && k == 2)
 					seekmeta = 3;
-				if (id != blockID || meta != 2) {
+				if (id != this || meta != 2) {
 					return false;
 				}
-				if (id2 != blockID || meta2 != 2) {
+				if (id2 != this || meta2 != 2) {
 					return false;
 				}
-				if (id3 != blockID || meta3 != seekmeta) {
+				if (id3 != this || meta3 != seekmeta) {
 					return false;
 				}
 			}
@@ -152,14 +154,14 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 
 			for (int k = -1; k <= 1; k++) {
 				int dy = y+k;
-				int id = world.getBlockId(ddx, dy, ddz);
+				Block id = world.getBlock(ddx, dy, ddz);
 				int meta = world.getBlockMetadata(ddx, dy, ddz);
-				int id2 = world.getBlockId(ddx2, dy, ddz2);
+				Block id2 = world.getBlock(ddx2, dy, ddz2);
 				int meta2 = world.getBlockMetadata(ddx2, dy, ddz2);
-				if (id != blockID || meta != 2) {
+				if (id != this || meta != 2) {
 					return false;
 				}
-				if (id2 != blockID || meta2 != 2) {
+				if (id2 != this || meta2 != 2) {
 					return false;
 				}
 			}
@@ -179,9 +181,9 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 				if ((Math.abs(k) != 2 || Math.abs(m) != 2) && (k != 0 || m != 0)) {
 					int ddx = dx+left.offsetX*m;
 					int ddz = dz+left.offsetZ*m;
-					int id = world.getBlockId(ddx, dy, ddz);
+					Block id = world.getBlock(ddx, dy, ddz);
 					int meta = world.getBlockMetadata(ddx, dy, ddz);
-					if (id != blockID || meta != 2) {
+					if (id != this || meta != 2) {
 						return false;
 					}
 				}
@@ -195,25 +197,25 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			int ddz = dz+left.offsetZ*2;
 			int ddx2 = dx-left.offsetX*2;
 			int ddz2 = dz-left.offsetZ*2;
-			int id = world.getBlockId(ddx, y+2, ddz);
+			Block id = world.getBlock(ddx, y+2, ddz);
 			int meta = world.getBlockMetadata(ddx, y+2, ddz);
-			int id2 = world.getBlockId(ddx2, y+2, ddz2);
+			Block id2 = world.getBlock(ddx2, y+2, ddz2);
 			int meta2 = world.getBlockMetadata(ddx2, y+2, ddz2);
-			if (id != blockID || meta != 2) {
+			if (id != this || meta != 2) {
 				return false;
 			}
-			if (id2 != blockID || meta2 != 2) {
+			if (id2 != this || meta2 != 2) {
 				return false;
 			}
 
-			id = world.getBlockId(ddx, y-2, ddz);
+			id = world.getBlock(ddx, y-2, ddz);
 			meta = world.getBlockMetadata(ddx, y-2, ddz);
-			id2 = world.getBlockId(ddx2, y-2, ddz2);
+			id2 = world.getBlock(ddx2, y-2, ddz2);
 			meta2 = world.getBlockMetadata(ddx2, y-2, ddz2);
-			if (id != blockID || meta != 2) {
+			if (id != this || meta != 2) {
 				return false;
 			}
-			if (id2 != blockID || meta2 != 2) {
+			if (id2 != this || meta2 != 2) {
 				return false;
 			}
 		}
@@ -223,13 +225,13 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		int gid = ReactorTiles.GENERATOR.getBlockID();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, gid), x-12, y-4, z-12, x+12, y+4, z+12);
+		Block gid = ReactorTiles.GENERATOR.getBlock();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
-				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
 				te.hasMultiblock = false;
 			}
 			else if (meta >= 8) {
@@ -241,13 +243,13 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		int gid = ReactorTiles.GENERATOR.getBlockID();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, gid), x-12, y-4, z-12, x+12, y+4, z+12);
+		Block gid = ReactorTiles.GENERATOR.getBlock();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
-				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
 				te.hasMultiblock = true;
 			}
 			else if (meta < 8) {
@@ -296,11 +298,11 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-4, z-12, x+12, y+4, z+12);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.GENERATOR) {
-				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
 				return te;
 			}
 		}

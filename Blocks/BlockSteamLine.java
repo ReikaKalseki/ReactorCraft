@@ -9,23 +9,26 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+
 public class BlockSteamLine extends BlockReactorTileModelled {
 
-	public BlockSteamLine(int par1, Material par3Material) {
-		super(par1, par3Material);
+	public BlockSteamLine(Material par3Material) {
+		super(par3Material);
 		this.setHardness(0F);
 		this.setResistance(1F);
-		this.setLightValue(0F);
+		this.setLightLevel(0F);
 	}
 
 	@Override
@@ -39,9 +42,10 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	}
 
 	@Override
-	public int idDropped(int id, Random r, int fortune) {
-		return 0;
+	public Item getItemDropped(int id, Random r, int fortune) {
+		return null;
 	}
+
 
 	@Override
 	public boolean canRenderInPass(int pass)
@@ -78,14 +82,14 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int id) {
-		TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(x, y, z);
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
+		TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(x, y, z);
+		TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(x, y, z);
 		te.addToAdjacentConnections(world, x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}

@@ -9,26 +9,27 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 public class BlockFluorite extends Block {
 
-	protected Icon[] icons = new Icon[FluoriteTypes.colorList.length];
+	protected IIcon[] icons = new IIcon[FluoriteTypes.colorList.length];
 
 	protected static final Random rand = new Random();
 
-	public BlockFluorite(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockFluorite(Material par2Material) {
+		super(par2Material);
 		this.setHardness(1.2F);
 		this.setResistance(4F);
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
@@ -45,18 +46,18 @@ public class BlockFluorite extends Block {
 	public void updateTick(World world, int x, int y, int z, Random r)
 	{
 		if (this.isActivated(world, x, y, z))
-			world.setBlock(x, y, z, blockID, this.getColorType(world, x, y, z).ordinal(), 3);
+			world.setBlock(x, y, z, this, this.getColorType(world, x, y, z).ordinal(), 3);
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public void registerBlockIcons(IIconRegister ico) {
 		for (int k = 0; k < FluoriteTypes.colorList.length; k++) {
 			icons[k] = ico.registerIcon(FluoriteTypes.colorList[k].getBlockTextureName());
 		}
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return icons[meta%FluoriteTypes.colorList.length];
 	}
 

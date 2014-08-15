@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
@@ -21,6 +18,10 @@ import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBase {
 
@@ -39,7 +40,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected void decayWaste() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (inv[i] != null && inv[i].itemID == ReactorItems.WASTE.getShiftedItemID() && inv[i].stackTagCompound != null) {
+			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance() && inv[i].stackTagCompound != null) {
 				Isotopes atom = Isotopes.getIsotope(inv[i].getItemDamage());
 				if (ReikaRandomHelper.doWithChance(0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
 					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
@@ -62,7 +63,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack.itemID == ReactorItems.WASTE.getShiftedItemID();
+		return itemstack.getItem() == ReactorItems.WASTE.getItemInstance();
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		int count = 0;
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null) {
-				if (inv[i].itemID == ReactorItems.WASTE.getShiftedItemID()) {
+				if (inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 					count += inv[i].stackSize;
 				}
 			}
@@ -97,12 +98,12 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	}
 
 	public final double getHalfLife(ItemStack is) {
-		if (is.itemID != ReactorItems.WASTE.getShiftedItemID())
+		if (is.getItem() != ReactorItems.WASTE.getItemInstance())
 			return 0;
 		return WasteManager.getWasteList().get(is.getItemDamage()).getMCHalfLife();
 	}
 
 	protected final boolean isLongLivedWaste(ItemStack is) {
-		return is.itemID == ReactorItems.WASTE.getShiftedItemID() && this.getHalfLife(is) > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
+		return is.getItem() == ReactorItems.WASTE.getItemInstance() && this.getHalfLife(is) > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
 	}
 }

@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary.Lua;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class LuaReactorCheckFuel extends LuaMethod {
 
@@ -33,7 +34,7 @@ public class LuaReactorCheckFuel extends LuaMethod {
 			for (int i = 0; i < 4; i++) {
 				ItemStack is = tile.getStackInSlot(i);
 				if (is != null) {
-					if (is.itemID == ReactorItems.BREEDERFUEL.getShiftedItemID()) {
+					if (is.getItem() == ReactorItems.BREEDERFUEL.getItemInstance()) {
 						fuel += ReactorItems.BREEDERFUEL.getNumberMetadatas()-1-is.getItemDamage();
 					}
 				}
@@ -44,10 +45,10 @@ public class LuaReactorCheckFuel extends LuaMethod {
 			for (int i = 0; i < 4; i++) {
 				ItemStack is = tile.getStackInSlot(i);
 				if (is != null) {
-					if (is.itemID == ReactorItems.FUEL.getShiftedItemID()) {
+					if (is.getItem() == ReactorItems.FUEL.getItemInstance()) {
 						fuel += ReactorItems.FUEL.getNumberMetadatas()-1-is.getItemDamage();
 					}
-					else if (is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID()) {
+					else if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance()) {
 						fuel += ReactorItems.PLUTONIUM.getNumberMetadatas()-1-is.getItemDamage();
 					}
 				}

@@ -9,15 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.ReactorCraft.Registry.ReactorItems;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.Isotopes;
-import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class WasteManager {
 

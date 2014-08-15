@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import net.minecraft.item.ItemStack;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
+import net.minecraft.item.ItemStack;
 
 public class ReactorStacks {
 
@@ -37,6 +38,6 @@ public class ReactorStacks {
 	public static final ItemStack maxMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-1);
 	public static final ItemStack weakerMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-2);
 
-	public static final ItemStack insulCore = new ItemStack(ReactorBlocks.HEATERMULTI.getBlockID(), 1, 1);
+	public static final ItemStack insulCore = new ItemStack(ReactorBlocks.HEATERMULTI.getBlockInstance(), 1, 1);
 
 }

@@ -9,24 +9,27 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockReactorTileModelled extends BlockReactorTile {
 
-	public BlockReactorTileModelled(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockReactorTileModelled(Material par2Material) {
+		super(par2Material);
 	}
 
 	@Override
@@ -45,20 +48,25 @@ public class BlockReactorTileModelled extends BlockReactorTile {
 	}
 
 	@Override
-	public int getLightOpacity(World world, int x, int y, int z) {
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
 		return 0;
 	}
 
 	@Override
+	public final void registerBlockIcons(IIconRegister ico) {
+		blockIcon = ico.registerIcon("rotarycraft:steel");
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-	public final boolean addBlockDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer eff)
+	public final boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer eff)
 	{
 		return ReikaRenderHelper.addModelledBlockParticles("/Reika/ReactorCraft/Textures/TileEntity/", world, x, y, z, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), ReactorCraft.class);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final boolean addBlockHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
+	public final boolean addHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
 	{
 		return ReikaRenderHelper.addModelledBlockParticles("/Reika/ReactorCraft/Textures/TileEntity/", world, tg, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), ReactorCraft.class);
 	}
@@ -75,7 +83,7 @@ public class BlockReactorTileModelled extends BlockReactorTile {
 	{
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		if (r == ReactorTiles.MAGNET) {
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(x, y, z);
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(x, y, z);
 			float ang = te.getAngle();
 			double a = 1.5*Math.abs(Math.cos(Math.toRadians(ang)));
 			double b = 1.5*Math.abs(Math.sin(Math.toRadians(ang)));

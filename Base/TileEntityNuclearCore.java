@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -33,6 +28,14 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable {
 
@@ -77,7 +80,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (te instanceof TileEntityNuclearCore) {
 			for (int i = 4; i < 12; i++) {
-				if (inv[i] != null && inv[i].itemID == ReactorItems.WASTE.getShiftedItemID()) {
+				if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 					for (int k = 4; k < 12; k++) {
 						if (((TileEntityNuclearCore) te).inv[k] == null) {
 							((TileEntityNuclearCore) te).inv[k] = inv[i];
@@ -113,7 +116,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		int id = world.getBlockId(x, y-1, z);
+		Block id = world.getBlock(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof Feedable) {
@@ -122,7 +125,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				inv[2] = inv[1];
 				inv[1] = inv[0];
 
-				id = world.getBlockId(x, y+1, z);
+				id = world.getBlock(x, y+1, z);
 				meta = world.getBlockMetadata(x, y+1, z);
 				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
 				if (tile instanceof Feedable) {
@@ -187,7 +190,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		int count = 0;
 		for (int i = 4; i < 12; i++) {
 			ItemStack is = inv[i];
-			if (is != null && is.itemID == ReactorItems.WASTE.getShiftedItemID())
+			if (is != null && is.getItem() == ReactorItems.WASTE.getItemInstance())
 				count++;
 		}
 		return rand.nextInt(9-count) == 0;
@@ -245,7 +248,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 					ReactorTiles src = ReactorTiles.TEList[this.getIndex()];
 					ReactorTiles other = ReactorTiles.getTE(world, i, j, k);
 					if (src == other)
-						world.setBlock(i, j, k, ReactorBlocks.CORIUMFLOWING.getBlockID());
+						world.setBlock(i, j, k, ReactorBlocks.CORIUMFLOWING.getBlockInstance());
 				}
 			}
 		}
@@ -261,7 +264,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != null)
+		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.air) != null)
 			temperature -= (1+dT/32);
 
 		if (dT > 0) {
@@ -270,10 +273,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				int id = world.getBlockId(dx, dy, dz);
+				Block id = world.getBlock(dx, dy, dz);
 				int meta = world.getBlockMetadata(dx, dy, dz);/*
-				if (id == ReactorTiles.COOLANT.getBlockID() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
-					TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
+				if (id == ReactorTiles.COOLANT.getBlock() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
+					TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(dx, dy, dz);
 					if (te.getLiquidState().isWater() && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
 						te.setLiquidState(LiquidStates.EMPTY);
 						temperature -= 20;
@@ -281,7 +284,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				}
 				 */
 				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
-					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getBlockTileEntity(dx, dy, dz);
+					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
 						temperature -= dTemp/16;

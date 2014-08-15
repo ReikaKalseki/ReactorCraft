@@ -9,32 +9,33 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.API.Transducerable;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public abstract class BlockMultiBlock extends Block implements Transducerable {
 
-	private final Icon[] icons = new Icon[this.getNumberTextures()];
+	private final IIcon[] icons = new IIcon[this.getNumberTextures()];
 	protected static final ForgeDirection[] dirs = ForgeDirection.values();
 
-	public BlockMultiBlock(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockMultiBlock(Material par2Material) {
+		super(par2Material);
 		this.setResistance(10);
 		this.setHardness(2);
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
@@ -45,7 +46,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	public abstract boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir);
 
 	@Override
-	public final void onNeighborBlockChange(World world, int x, int y, int z, int idn) {
+	public final void onNeighborBlockChange(World world, int x, int y, int z, Block idn) {
 
 	}
 
@@ -66,7 +67,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int oldid, int oldmeta) {
+	public void breakBlock(World world, int x, int y, int z, Block oldid, int oldmeta) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -85,14 +86,14 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	public abstract int getNumberVariants();
 
 	@Override
-	public final Icon getIcon(int s, int meta) {
+	public final IIcon getIcon(int s, int meta) {
 		return icons[this.getItemTextureIndex(meta, s)];
 	}
 
 	protected abstract String getIconBaseName();
 
 	@Override
-	public final void registerIcons(IconRegister ico) {
+	public final void registerBlockIcons(IIconRegister ico) {
 		for (int i = 0; i < this.getNumberTextures(); i++) {
 			String name = this.getIconBaseName()+"_"+i;
 			icons[i] = ico.registerIcon("reactorcraft:multi/"+name);
@@ -100,11 +101,11 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	}
 
 	@Override
-	public final Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
+	public final IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int index = this.getTextureIndex(world, x, y, z, side, world.getBlockMetadata(x, y, z));
 		index = Math.max(0, Math.min(this.getNumberTextures()-1, index)); //safety net
 		return icons[index];
-		//return Block.blocksList[1+world.getBlockMetadata(x, y, z)*2].getIcon(0, 0);
+		//return Blocks.blocksList[1+world.getBlockMetadata(x, y, z)*2].getIcon(0, 0);
 	}
 
 	public abstract int getTextureIndex(IBlockAccess world, int x, int y, int z, int side, int meta);
@@ -123,7 +124,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition mov, World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z)&7;
-		return new ItemStack(blockID, 1, meta);
+		return new ItemStack(this, 1, meta);
 	}
 
 	public abstract boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta);

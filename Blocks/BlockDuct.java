@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
@@ -24,16 +16,26 @@ import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 public class BlockDuct extends BlockReactorTile {
 
-	private static final Icon[][] pipeIcons = new Icon[2][2];
-	private static Icon glowIcon;
+	private static final IIcon[][] pipeIcons = new IIcon[2][2];
+	private static IIcon glowIcon;
 
-	public BlockDuct(int ID, Material mat) {
-		super(ID, mat);
+	public BlockDuct(Material mat) {
+		super(mat);
 		this.setHardness(0F);
 		this.setResistance(1F);
-		this.setLightValue(0F);
+		this.setLightLevel(0F);
 	}
 
 	@Override
@@ -43,14 +45,14 @@ public class BlockDuct extends BlockReactorTile {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(x, y, z);
+		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(x, y, z);
 		te.addToAdjacentConnections(world, x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int id) {
-		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(x, y, z);
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
+		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
 
@@ -62,14 +64,14 @@ public class BlockDuct extends BlockReactorTile {
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(x, y, z);
+		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(x, y, z);
 		return te != null && te.getLevel() > 0 && te.getFluidType() != null ? te.getFluidType().getLuminosity(te.worldObj, x, y, z) : 0;
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
 		if (ReactorTiles.getTE(world, x, y, z) == ReactorTiles.MAGNETPIPE) {
-			TileEntityMagneticPipe te = (TileEntityMagneticPipe)world.getBlockTileEntity(x, y, z);
+			TileEntityMagneticPipe te = (TileEntityMagneticPipe)world.getTileEntity(x, y, z);
 			int charge = te.getCharge();
 			if (charge > 0) {
 				double sx = te.getAimX();
@@ -84,17 +86,17 @@ public class BlockDuct extends BlockReactorTile {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		s = Math.min(s, 1);
 		return pipeIcons[meta][s];
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
-		pipeIcons[0][0] = Block.hardenedClay.getIcon(1, 0);
-		pipeIcons[1][0] = Block.blockGold.getIcon(0, 0);
+	public void registerBlockIcons(IIconRegister ico) {
+		pipeIcons[0][0] = Blocks.hardened_clay.getIcon(1, 0);
+		pipeIcons[1][0] = Blocks.gold_block.getIcon(0, 0);
 
-		pipeIcons[0][1] = Block.glass.getIcon(0, 0);
+		pipeIcons[0][1] = Blocks.glass.getIcon(0, 0);
 		pipeIcons[1][1] = ico.registerIcon("rotarycraft:obsidiglass");
 
 		glowIcon = ico.registerIcon("reactorcraft:glowgold");
@@ -122,11 +124,11 @@ public class BlockDuct extends BlockReactorTile {
 	}
 
 	@Override
-	public int getLightOpacity(World world, int x, int y, int z) {
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
 		return 0;
 	}
 
-	public static Icon getGlow() {
+	public static IIcon getGlow() {
 		return glowIcon;
 	}
 }

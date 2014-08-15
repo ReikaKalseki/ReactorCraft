@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class SlotNuclearWaste extends Slot {
 
@@ -27,7 +28,7 @@ public class SlotNuclearWaste extends Slot {
 	@Override
 	public final boolean isItemValid(ItemStack is)
 	{
-		return is.itemID == ReactorItems.WASTE.getShiftedItemID() && tile.isItemValidForSlot(slotIndex, is);
+		return is.getItem() == ReactorItems.WASTE.getItemInstance() && tile.isItemValidForSlot(this.getSlotIndex(), is);
 	}
 
 }

@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.Arrays;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.SlicedBlockBlueprint;
 import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
@@ -23,14 +16,28 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 
+import java.util.Arrays;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class BlockTurbineMulti extends BlockMultiBlock {
 
 	private final SlicedBlockBlueprint setup;
 
-	public BlockTurbineMulti(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockTurbineMulti(Material par2Material) {
+		super(par2Material);
 		setup = new SlicedBlockBlueprint();
-		this.initMap();
+		try {
+			this.initMap();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -58,10 +65,10 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	}
 
 	private void initMap() {
-		setup.addMapping('t', blockID, 0);
-		setup.addMapping('h', blockID, 1);
-		setup.addMapping('e', blockID, 2);
-		setup.addAntiMapping('b', blockID);
+		setup.addMapping('t', this, 0);
+		setup.addMapping('h', this, 1);
+		setup.addMapping('e', this, 2);
+		setup.addAntiMapping('b', this);
 
 		setup.addSlice(
 				"xbbhhhhhbbx",
@@ -179,7 +186,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-12, z-12, x+12, y+12, z+12);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-12, y-12, z-12, x+12, y+12, z+12);
 		int sx;
 		int sz;
 		int n = this.checkForTurbines(world, x, y, z, dir, blocks); //only accept steam emitter at last turb stage
@@ -203,7 +210,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 			ReactorTiles r = ReactorTiles.getTE(world, dx, my, dz);
 			if (r == ReactorTiles.BIGTURBINE) {
 				c++;
-				((TileEntityTurbineCore)world.getBlockTileEntity(dx, my, dz)).markForMulti();
+				((TileEntityTurbineCore)world.getTileEntity(dx, my, dz)).markForMulti();
 			}
 			else
 				return c;
@@ -232,19 +239,19 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		int tid = ReactorTiles.BIGTURBINE.getBlockID();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, tid), x-12, y-12, z-12, x+12, y+12, z+12);
+		Block tid = ReactorTiles.BIGTURBINE.getBlock();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
-			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (id == blockID) {
+			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			if (b == this) {
 				int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 				if (meta >= 8) {
 					world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
 				}
 			}
-			else if (id == tid) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+			else if (b == tid) {
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
 				te.setHasMultiBlock(false);
 			}
 		}
@@ -253,19 +260,19 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		int tid = ReactorTiles.BIGTURBINE.getBlockID();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, tid), x-12, y-12, z-12, x+12, y+12, z+12);
+		Block tid = ReactorTiles.BIGTURBINE.getBlock();
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
-			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (id == blockID) {
+			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			if (b == this) {
 				int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 				if (meta < 8) {
 					world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
 				}
 			}
-			else if (id == tid) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+			else if (b == tid) {
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
 				te.setHasMultiBlock(true);
 			}
 		}
@@ -299,11 +306,11 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-12, y-12, z-12, x+12, y+12, z+12);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-12, y-12, z-12, x+12, y+12, z+12);
 		int mx = blocks.getMinX()+blocks.getSizeX()/2;
 		int my = blocks.getMinY()+blocks.getSizeY()/2;
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
-		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.BIGTURBINE ? world.getBlockTileEntity(mx, my, mz) : null;
+		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.BIGTURBINE ? world.getTileEntity(mx, my, mz) : null;
 	}
 
 	@Override

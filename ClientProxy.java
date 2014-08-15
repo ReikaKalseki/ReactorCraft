@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import java.util.HashMap;
-
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
@@ -29,6 +24,11 @@ import Reika.ReactorCraft.Entities.RenderRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import java.util.HashMap;
+
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -68,7 +68,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerSounds() {
-		MinecraftForge.EVENT_BUS.register(new SoundLoader(ReactorCraft.instance, ReactorSounds.soundList, ReactorSounds.SOUND_FOLDER));
+		new SoundLoader(ReactorCraft.class, ReactorSounds.soundList).register();
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class ClientProxy extends CommonProxy {
 
 		for (int i = 0; i < ReactorItems.itemList.length; i++) {
 			if (ReactorItems.itemList[i].getSpriteIndex() > -1)
-				MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getShiftedItemID(), items[ReactorItems.itemList[i].getSpriteSheet()]);
+				MinecraftForgeClient.registerItemRenderer(ReactorItems.itemList[i].getItemInstance(), items[ReactorItems.itemList[i].getSpriteSheet()]);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 
-		MinecraftForgeClient.registerItemRenderer(ReactorItems.PLACER.getShiftedItemID(), reactor);
+		MinecraftForgeClient.registerItemRenderer(ReactorItems.PLACER.getItemInstance(), reactor);
 	}
 
 	@Override

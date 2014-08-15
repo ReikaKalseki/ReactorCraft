@@ -18,14 +18,14 @@ public class IronFinderOverlay {
 
 	}
 	/*
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void eventHandler(RenderGameOverlayEvent event) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayer ep = mc.thePlayer;
 		World world = mc.theWorld;
 		RenderItem ri = new RenderItem();
 
-		if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().itemID == ReactorItems.IRONFINDER.getShiftedItemID()) {
+		if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().itemID == ReactorItems.IRONFINDER.getItemInstance()) {
 			int x = MathHelper.floor_double(ep.posX);
 			int y = MathHelper.floor_double(ep.posY)+1;
 			int z = MathHelper.floor_double(ep.posZ);
@@ -34,7 +34,7 @@ public class IronFinderOverlay {
 			int r = 6;
 			BlockArray iron = ItemIronFinder.getIronOreNearby(world, x, y, z, r);
 
-			Icon ico = Block.oreIron.getIcon(0, 0);
+			Icon ico = Blocks.iron_ore.getIcon(0, 0);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
@@ -54,7 +54,7 @@ public class IronFinderOverlay {
 				int dz = xyz[2]-z;
 
 				GL11.glTranslated(dx, dy, dz);
-				ReikaGuiAPI.instance.drawItemStack(ri, mc.fontRenderer, new ItemStack(Block.oreIron), bx-8, by-8);
+				ReikaGuiAPI.instance.drawItemStack(ri, mc.fontRenderer, new ItemStack(Blocks.iron_ore), bx-8, by-8);
 				GL11.glTranslated(-dx, -dy, -dz);
 
 			}

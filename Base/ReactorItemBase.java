@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorItems;
+
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,8 +29,7 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 
 	private int index;
 
-	public ReactorItemBase(int ID, int tex) {
-		super(ID);
+	public ReactorItemBase(int tex) {
 		index = tex;
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 		if (this.getDataValues() > 1) {
@@ -48,11 +48,11 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	}
 
 	@Override
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int ID, CreativeTabs cr, List li)
+	public void getSubItems(Item ID, CreativeTabs cr, List li)
 	{
 		ReactorItems ri = ReactorItems.getEntryByID(ID);
 		for (int i = 0; i < this.getDataValues(); i++) {
@@ -63,7 +63,7 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	}
 
 	public final int getDataValues() {
-		ReactorItems i = ReactorItems.getEntryByID(itemID);
+		ReactorItems i = ReactorItems.getEntryByID(this);
 		if (i == null)
 			return 0;
 		return i.getNumberMetadatas();
@@ -94,11 +94,17 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	}
 
 	private void checkAchievements(EntityPlayer player, ItemStack item) {
-		if (item.itemID == ReactorItems.DEPLETED.getShiftedItemID()) {
+		if (item.getItem() == ReactorItems.DEPLETED.getItemInstance()) {
 			ReactorAchievements.DEPLETED.triggerAchievement(player);
 		}
-		if (item.itemID == ReactorItems.PELLET.getShiftedItemID()) {
+		if (item.getItem() == ReactorItems.PELLET.getItemInstance()) {
 			ReactorAchievements.PEBBLE.triggerAchievement(player);
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		ReactorItems ir = ReactorItems.getEntry(is);
+		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
 	}
 }

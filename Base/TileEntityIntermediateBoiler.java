@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoiler {
@@ -62,7 +63,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 	private void transferFluid(World world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
 		if (r == this.getMachine()) {
-			TileEntityIntermediateBoiler te = (TileEntityIntermediateBoiler)world.getBlockTileEntity(x, y+1, z);
+			TileEntityIntermediateBoiler te = (TileEntityIntermediateBoiler)world.getTileEntity(x, y+1, z);
 			if (!te.tank.isFull() && !tank.isEmpty()) {
 				int amt = Math.min(100, te.tank.getCapacity()-te.tank.getLevel());
 				te.tank.addLiquid(amt, tank.getActualFluid());

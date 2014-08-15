@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -21,10 +16,18 @@ import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class BlockInjectorMulti extends BlockMultiBlock {
 
-	public BlockInjectorMulti(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockInjectorMulti(Material par2Material) {
+		super(par2Material);
 	}
 
 	@Override
@@ -36,8 +39,8 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-8, y-5, z-8, x+8, y+5, z+8);
-		while (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 5)
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
+		while (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 5)
 			y--;
 		if (!this.checkTop(world, x, y, z, dir, left, blocks))
 			return false;
@@ -56,43 +59,43 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkCorners(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 0; i <= 4; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 		}
 		for (int i = 5; i <= 6; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 		}
 		for (int i = 7; i <= 8; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 4)
+			if (b != this || meta != 4)
 				return false;
 		}
 
 		for (int i = 0; i <= 8; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 1)
+			if (b != this || meta != 1)
 				return false;
 		}
 
@@ -101,21 +104,21 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkTop(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 0; i <= 4; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y+3, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y+3, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+3, z+dir.offsetZ*i);
-			if (id != blockID || meta != 3)
+			if (b != this || meta != 3)
 				return false;
 		}
 		for (int i = 5; i <= 6; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			if (id != blockID || meta != 3)
+			if (b != this || meta != 3)
 				return false;
 		}
 		for (int i = 7; i <= 8; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			if (id != blockID || meta != 3)
+			if (b != this || meta != 3)
 				return false;
 		}
 		return true;
@@ -123,9 +126,9 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkBottom(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 0; i <= 8; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y-1, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y-1, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y-1, z+dir.offsetZ*i);
-			if (id != blockID || meta != 0)
+			if (b != this || meta != 0)
 				return false;
 		}
 		return true;
@@ -133,53 +136,53 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkSides(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 1; i <= 1; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 		}
 		for (int i = 3; i <= 7; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 		}
 		for (int i = 1; i <= 6; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 		}
 		for (int i = 1; i <= 4; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
+			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 
-			id = world.getBlockId(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
+			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
 			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			if (id != blockID || meta != 2)
+			if (b != this || meta != 2)
 				return false;
 		}
 		for (int i = 0; i <= 2; i++) {
-			int id = world.getBlockId(x, y+i, z);
+			Block b = world.getBlock(x, y+i, z);
 			int meta = world.getBlockMetadata(x, y+i, z);
-			if (id != blockID || meta != 5)
+			if (b != this || meta != 5)
 				return false;
 		}
 		return true;
@@ -187,21 +190,21 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkFiller(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 1; i <= 1; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y, z+dir.offsetZ*i);
-			if (id != blockID || meta != 7)
+			if (b != this || meta != 7)
 				return false;
 		}
 		for (int i = 1; i <= 6; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			if (id != blockID || meta != 7)
+			if (b != this || meta != 7)
 				return false;
 		}
 		for (int i = 1; i <= 4; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			if (id != blockID || meta != 7)
+			if (b != this || meta != 7)
 				return false;
 		}
 		return true;
@@ -209,9 +212,9 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	private boolean checkPipes(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
 		for (int i = 3; i <= 8; i++) {
-			int id = world.getBlockId(x+dir.offsetX*i, y, z+dir.offsetZ*i);
+			Block b = world.getBlock(x+dir.offsetX*i, y, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y, z+dir.offsetZ*i);
-			if (ReactorTiles.getMachineFromIDandMetadata(id, meta) != ReactorTiles.MAGNETPIPE)
+			if (ReactorTiles.getMachineFromIDandMetadata(b, meta) != ReactorTiles.MAGNETPIPE)
 				return false;
 		}
 		if (ReactorTiles.getTE(world, x+dir.offsetX*2, y, z+dir.offsetZ*2) != ReactorTiles.INJECTOR)
@@ -222,7 +225,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-8, y-5, z-8, x+8, y+5, z+8);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -231,7 +234,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			}
 			if (meta == 0) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
 					te.hasMultiBlock = true;
 				}
 			}
@@ -241,7 +244,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-8, y-5, z-8, x+8, y+5, z+8);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -250,7 +253,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			}
 			if (meta == 8) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
 					te.hasMultiBlock = false;
 				}
 			}
@@ -271,9 +274,9 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (side > 1 && (index == 19 || index == 23 || index == 24 || index == 25))
 				index = 9;
 			if (meta == 12 && side == 1) {
-				boolean s = world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 11;
-				boolean s0 = world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 11;
-				boolean s1 = world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 11;
+				boolean s = world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 11;
+				boolean s0 = world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 11;
+				boolean s1 = world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 11;
 				int a = 25;
 				int b = 23;
 				if (!s && !s0) {
@@ -295,15 +298,15 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (side == 1)
 				return 9;
 			if (side == 3 || side == 2) {
-				if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 0)
+				if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 0)
 					return side == 3 ? 5 : 6;
-				if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 0)
+				if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 0)
 					return side == 3 ? 6 : 5;
 			}
 			if (side == 4 || side == 5) {
-				if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 0)
+				if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 0)
 					return side == 4 ? 5 : 6;
-				if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 0)
+				if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 0)
 					return side == 4 ? 6 : 5;
 			}
 			return 9;
@@ -312,10 +315,10 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
-			if (id == 0)
+			Block b = world.getBlock(dx, dy, dz);
+			if (b == Blocks.air)
 				return 9;
-			return id == ReactorTiles.MAGNETPIPE.getBlockID() ? 0 : 9;
+			return b == ReactorTiles.MAGNETPIPE.getBlock() ? 0 : 9;
 		case 3:
 			if (side == 1)
 				return 9;
@@ -324,47 +327,47 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (side == 1)
 				return 9;
 			if (side == 3 || side == 2) {
-				if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 3)
+				if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 3)
 					return side == 3 ? 8 : 7;
-				if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 3)
+				if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 3)
 					return side == 3 ? 7 : 8;
 			}
 			if (side == 4 || side == 5) {
-				if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 3)
+				if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 3)
 					return side == 4 ? 8 : 7;
-				if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 3)
+				if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 3)
 					return side == 4 ? 7 : 8;
 			}
 			return 9;
 		case 5:
 			return 22;
 		case 6:
-			if (world.getBlockId(x+1, y, z) == blockID && (world.getBlockMetadata(x+1, y, z)&7) == 5) {
+			if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 5) {
 				if (side == 3)
 					return 2;
 				if (side == 2)
 					return 1;
 			}
-			if (world.getBlockId(x-1, y, z) == blockID && (world.getBlockMetadata(x-1, y, z)&7) == 5) {
+			if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 5) {
 				if (side == 3)
 					return 1;
 				if (side == 2)
 					return 2;
 			}
-			if (world.getBlockId(x, y, z+1) == blockID && (world.getBlockMetadata(x, y, z+1)&7) == 5) {
+			if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 5) {
 				if (side == 5)
 					return 1;
 				if (side == 4)
 					return 2;
 			}
-			if (world.getBlockId(x, y, z-1) == blockID && (world.getBlockMetadata(x, y, z-1)&7) == 5) {
+			if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 5) {
 				if (side == 4)
 					return 1;
 				if (side == 5)
 					return 2;
 			}
 
-			if (world.getBlockId(x+1, y, z) != blockID && world.getBlockId(x-1, y, z) != blockID) {
+			if (world.getBlock(x+1, y, z) != this && world.getBlock(x-1, y, z) != this) {
 				if (ReactorTiles.getTE(world, x+1, y, z) == ReactorTiles.MAGNETPIPE) {
 					if (side == 3)
 						return 2;
@@ -382,7 +385,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 						return 0;
 				}
 			}
-			if (world.getBlockId(x, y, z+1) != blockID && world.getBlockId(x, y, z-1) != blockID) {
+			if (world.getBlock(x, y, z+1) != this && world.getBlock(x, y, z-1) != this) {
 				if (ReactorTiles.getTE(world, x, y, z+1) == ReactorTiles.MAGNETPIPE) {
 					if (side == 5)
 						return 1;
@@ -450,11 +453,11 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	@Override
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-8, y-5, z-8, x+8, y+5, z+8);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-				TileEntityFusionInjector te = (TileEntityFusionInjector)world.getBlockTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
 				return te;
 			}
 		}

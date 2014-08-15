@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -26,16 +17,26 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 public class BlockFluoriteOre extends BlockFluorite {
 
-	private Icon rainbowIcon;
+	private IIcon rainbowIcon;
 
-	public BlockFluoriteOre(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockFluoriteOre(Material par2Material) {
+		super(par2Material);
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
 		int count = this.getNumberDrops(fortune);
@@ -62,7 +63,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return ReactorOptions.RAINBOW.getState() ? rainbowIcon : super.getIcon(s, meta);
 	}
 
@@ -70,11 +71,11 @@ public class BlockFluoriteOre extends BlockFluorite {
 	public ItemStack getPickBlock(MovingObjectPosition tgt, World world, int x, int y, int z)
 	{
 		int meta = world.getBlockMetadata(x, y, z);
-		return new ItemStack(ReactorBlocks.FLUORITEORE.getBlockID(), 1, meta);
+		return new ItemStack(ReactorBlocks.FLUORITEORE.getBlockInstance(), 1, meta);
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public void registerBlockIcons(IIconRegister ico) {
 		for (int k = 0; k < FluoriteTypes.colorList.length; k++) {
 			icons[k] = ico.registerIcon(FluoriteTypes.colorList[k].getOreTextureName());
 		}
@@ -94,13 +95,13 @@ public class BlockFluoriteOre extends BlockFluorite {
 	}
 
 	@Override
-	public float getAmbientOcclusionLightValue(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+	public float getAmbientOcclusionLightValue()
 	{
 		return 0.7F;
 	}
 
 	@Override
-	public int getLightOpacity(World world, int x, int y, int z)
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z)
 	{
 		return 0;
 	}

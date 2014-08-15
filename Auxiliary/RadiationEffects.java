@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
@@ -24,13 +33,6 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Entities.EntityRadiation;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RadiationEffects {
 
@@ -52,7 +54,7 @@ public class RadiationEffects {
 
 	public static boolean hasHazmatSuit(EntityLivingBase e) {
 		for (int i = 1; i < 5; i++) {
-			ItemStack is = e.getCurrentItemOrArmor(i);
+			ItemStack is = e.getEquipmentInSlot(i);
 			if (is == null)
 				return false;
 			ReactorItems ri = ReactorItems.getEntry(is);
@@ -79,89 +81,88 @@ public class RadiationEffects {
 	}
 
 	public static void transformBlock(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		if (id == 0)
+		if (id == Blocks.air)
 			return;
 		if (world.isRemote)
 			return;
-		if (id == Block.deadBush.blockID)
+		if (id == Blocks.deadbush)
 			return;
-		Block b = Block.blocksList[id];
-		if (id == Block.leaves.blockID || b.blockMaterial == Material.leaves || ModWoodList.isModLeaf(new ItemStack(id, 1, meta)))
-			world.setBlock(x, y, z, 0);
-		if (id == Block.reed.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.leaves || id == Blocks.leaves2 || id.getMaterial() == Material.leaves || ModWoodList.isModLeaf(id, meta))
+			world.setBlockToAir(x, y, z);
+		if (id == Blocks.reeds) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.tallGrass.blockID)
-			world.setBlock(x, y, z, Block.deadBush.blockID);
-		if (id == Block.vine.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.tallgrass)
+			world.setBlock(x, y, z, Blocks.deadbush);
+		if (id == Blocks.vine) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.waterlily.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.waterlily) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.plantRed.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.red_flower) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.plantYellow.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.yellow_flower) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.crops.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.wheat) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.carrot.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.carrots) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.potato.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.potatoes) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.cactus.blockID || b.blockMaterial == Material.cactus) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.cactus || id.getMaterial() == Material.cactus) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.pumpkin.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.pumpkin) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.pumpkinStem.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.pumpkin_stem) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.melon.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.melon_block) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.melonStem.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.melon_stem) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.sapling.blockID || b.blockMaterial == Material.plants)
-			world.setBlock(x, y, z, Block.deadBush.blockID);
-		if (id == Block.cocoaPlant.blockID) {
-			b.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.sapling || id.getMaterial() == Material.plants)
+			world.setBlock(x, y, z, Blocks.deadbush);
+		if (id == Blocks.cocoa) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.cobblestoneMossy.blockID)
-			world.setBlock(x, y, z, Block.cobblestone.blockID);
-		if (id == Block.grass.blockID || b.blockMaterial == Material.grass)
-			world.setBlock(x, y, z, Block.dirt.blockID);
-		if (id == Block.silverfish.blockID)
+		if (id == Blocks.mossy_cobblestone)
+			world.setBlock(x, y, z, Blocks.cobblestone);
+		if (id == Blocks.grass || id.getMaterial() == Material.grass)
+			world.setBlock(x, y, z, Blocks.dirt);
+		if (id == Blocks.monster_egg)
 			world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);
-		if (id == ReactorBlocks.FLUORITE.getBlockID() || id == ReactorBlocks.FLUORITEORE.getBlockID()) {
+		if (id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) {
 			world.setBlock(x, y, z, id, meta+8, 3);
-			world.markBlockForRenderUpdate(x, y, z);
+			world.func_147479_m(x, y, z);
 		}
 
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			if (te instanceof INode) {

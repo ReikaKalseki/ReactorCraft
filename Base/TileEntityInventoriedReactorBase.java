@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import Reika.DragonAPI.Interfaces.InertIInv;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Interfaces.InertIInv;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityInventoriedReactorBase extends TileEntityReactorBase implements ISidedInventory {
 
@@ -44,16 +46,6 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 	}
 
 	@Override
-	public String getInvName() {
-		return this.getTEName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
@@ -63,14 +55,28 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 		return ReikaMathLibrary.py3d(ep.posX-xCoord-0.5, ep.posY-yCoord-0.5, ep.posZ-zCoord-0.5) <= 8;
 	}
 
-	@Override
-	public void openChest() {
+	public void openInventory() {}
 
+	public void closeInventory() {}
+
+	@Override
+	public final boolean hasCustomInventoryName() {
+		return true;
+	}
+
+	public final String getInventoryName() {
+		return this.getTEName();
 	}
 
 	@Override
-	public void closeChest() {
+	public final void markDirty() {
+		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
+		if (this.getBlockType() != Blocks.air)
+		{
+			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
+		}
 	}
 
 	@Override
@@ -101,12 +107,12 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
 		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < inv.length)

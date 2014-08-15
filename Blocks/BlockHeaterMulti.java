@@ -9,26 +9,29 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import java.util.Arrays;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent {
 
-	public BlockHeaterMulti(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockHeaterMulti(Material par2Material) {
+		super(par2Material);
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, ReactorTiles.HEATER.getBlock()), x-6, y-6, z-6, x+6, y+6, z+6);
 		if (!this.checkCorners(world, x, y, z, blocks))
 			return false;
 		if (!this.checkEdges(world, x, y, z, blocks))
@@ -79,7 +82,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 							return false;
 					}
 					else {
-						List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, j, k);
+						ItemStack block = blocks.getBlockRelativeToMinXYZ(i, j, k);
 						int dx = blocks.getMinX()+i;
 						int dy = blocks.getMinY()+j;
 						int dz = blocks.getMinZ()+k;
@@ -88,14 +91,14 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 								return false;
 						}
 						else {
-							int id = block.get(0);
-							int meta = block.get(1);
+							Block id = Block.getBlockFromItem(block.getItem());
+							int meta = block.getItemDamage();
 							if (i == 2 && j == 2 && k == 2) {
-								if (id != ReactorTiles.HEATER.getBlockID() || meta != ReactorTiles.HEATER.getBlockMetadata())
+								if (id != ReactorTiles.HEATER.getBlock() || meta != ReactorTiles.HEATER.getBlockMetadata())
 									return false;
 							}
 							else {
-								if (id == blockID) {
+								if (id == this) {
 									if (meta > 1)
 										return false;
 									else
@@ -132,39 +135,39 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					}
 				}
 				else {
-					List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, 0, k);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					ItemStack block = blocks.getBlockRelativeToMinXYZ(i, 0, k);
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, 4, k);
-					if (block == null || block.get(0) != blockID || block.get(1) != 1) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 1) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, 5, k);
 					int meta2 = (i == 2 || k == 2) ? 3 : 2;
-					if (block == null || block.get(0) != blockID || block.get(1) != meta2) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != meta2) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, k, 0);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, k, 4);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(0, k, i);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(4, k, i);
-					if (block == null || block.get(0) != blockID || block.get(1) != 4) {
+					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
 						return false;
 					}
 				}
@@ -175,82 +178,82 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 
 	private boolean checkEdges(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		for (int i = 1; i < 4; i++) {
-			List<Integer> block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			ItemStack block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, i, 0);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, 0, i);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 0, 4);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, 0, i);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 4, 4);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, 4, i);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 4, 0);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, 4, i);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, i, 0);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, i, 4);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, i, 4);
-			if (block == null || block.get(0) != blockID || block.get(1) != 3)
+			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
 				return false;
 		}
 		return true;
 	}
 
 	private boolean checkCorners(World world, int x, int y, int z, StructuredBlockArray blocks) {
-		List<Integer> block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
-		//ReikaJavaLibrary.pConsole(blocks.getMinX()+", "+blocks.getMinY()+", "+blocks.getMinZ());
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		ItemStack block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
+		//ReikaJavaLibrary.pConsole(block.getMinX()+", "+block.getMinY()+", "+block.getMinZ());
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 0, 0);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 0, 4);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 0, 4);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 4, 0);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 4, 0);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 4, 4);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 4, 4);
-		if (block == null || block.get(0) != blockID || block.get(1) != 2)
+		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
 			return false;
 
 		return true;
@@ -259,7 +262,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-6, y-6, z-6, x+6, y+6, z+6);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -272,9 +275,9 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					int dx = xyz[0]+dir.offsetX;
 					int dy = xyz[1]+dir.offsetY;
 					int dz = xyz[2]+dir.offsetZ;
-					//ReikaJavaLibrary.pConsole(world.getBlockId(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
+					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
-						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getBlockTileEntity(dx, dy, dz);
+						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);
 						te.hasMultiBlock = true;
 					}
 				}
@@ -285,7 +288,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	protected void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		blocks.recursiveAddWithBounds(world, x, y, z, blockID, x-6, y-6, z-6, x+6, y+6, z+6);
+		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
@@ -296,9 +299,9 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					int dx = xyz[0]+dir.offsetX;
 					int dy = xyz[1]+dir.offsetY;
 					int dz = xyz[2]+dir.offsetZ;
-					//ReikaJavaLibrary.pConsole(world.getBlockId(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
+					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
-						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getBlockTileEntity(dx, dy, dz);
+						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);
 						te.hasMultiBlock = false;
 					}
 				}
@@ -331,111 +334,111 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		if (meta == 10) {
 			switch(side) {
 			case 0:
-				if (world.getBlockId(x+1, y, z+1) == blockID && world.getBlockMetadata(x+1, y, z+1) == 12)
+				if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 12)
 					return 2;
-				if (world.getBlockId(x-1, y, z+1) == blockID && world.getBlockMetadata(x-1, y, z+1) == 12)
+				if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 12)
 					return 3;
-				if (world.getBlockId(x+1, y, z-1) == blockID && world.getBlockMetadata(x+1, y, z-1) == 12)
+				if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 12)
 					return 5;
-				if (world.getBlockId(x-1, y, z-1) == blockID && world.getBlockMetadata(x-1, y, z-1) == 12)
+				if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 12)
 					return 4;
 				break;
 			case 1:
-				if (world.getBlockId(x+1, y, z+1) == blockID && world.getBlockMetadata(x+1, y, z+1) == 9)
+				if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 9)
 					return 2;
-				if (world.getBlockId(x-1, y, z+1) == blockID && world.getBlockMetadata(x-1, y, z+1) == 9)
+				if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 9)
 					return 3;
-				if (world.getBlockId(x+1, y, z-1) == blockID && world.getBlockMetadata(x+1, y, z-1) == 9)
+				if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 9)
 					return 5;
-				if (world.getBlockId(x-1, y, z-1) == blockID && world.getBlockMetadata(x-1, y, z-1) == 9)
+				if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 9)
 					return 4;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
 						return 2;
-					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
 						return 3;
-					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
 						return 5;
-					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
 						return 4;
 				}
 				break;
 			case 2:
-				if (world.getBlockId(x+1, y+1, z) == blockID && world.getBlockMetadata(x+1, y+1, z) == 12)
+				if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
 					return 4;
-				if (world.getBlockId(x-1, y+1, z) == blockID && world.getBlockMetadata(x-1, y+1, z) == 12)
+				if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
 					return 5;
-				if (world.getBlockId(x+1, y-1, z) == blockID && world.getBlockMetadata(x+1, y-1, z) == 12)
+				if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
 					return 3;
-				if (world.getBlockId(x-1, y-1, z) == blockID && world.getBlockMetadata(x-1, y-1, z) == 12)
+				if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
 					return 2;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
 						return 3;
-					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
 						return 2;
 				}
 				break;
 			case 3:
-				if (world.getBlockId(x+1, y+1, z) == blockID && world.getBlockMetadata(x+1, y+1, z) == 12)
+				if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
 					return 5;
-				if (world.getBlockId(x-1, y+1, z) == blockID && world.getBlockMetadata(x-1, y+1, z) == 12)
+				if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
 					return 4;
-				if (world.getBlockId(x+1, y-1, z) == blockID && world.getBlockMetadata(x+1, y-1, z) == 12)
+				if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
 					return 2;
-				if (world.getBlockId(x-1, y-1, z) == blockID && world.getBlockMetadata(x-1, y-1, z) == 12)
+				if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
 					return 3;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
 						return 2;
-					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
 						return 3;
 				}
 				break;
 			case 4:
-				if (world.getBlockId(x, y+1, z+1) == blockID && world.getBlockMetadata(x, y+1, z+1) == 12)
+				if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
 					return 5;
-				if (world.getBlockId(x, y+1, z-1) == blockID && world.getBlockMetadata(x, y+1, z-1) == 12)
+				if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
 					return 4;
-				if (world.getBlockId(x, y-1, z+1) == blockID && world.getBlockMetadata(x, y-1, z+1) == 12)
+				if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
 					return 2;
-				if (world.getBlockId(x, y-1, z-1) == blockID && world.getBlockMetadata(x, y-1, z-1) == 12)
+				if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
 					return 3;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
+					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta)
 						return 2;
-					if (world.getBlockId(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
+					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta)
 						return 3;
 				}
 				break;
 			case 5:
-				if (world.getBlockId(x, y+1, z+1) == blockID && world.getBlockMetadata(x, y+1, z+1) == 12)
+				if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
 					return 4;
-				if (world.getBlockId(x, y+1, z-1) == blockID && world.getBlockMetadata(x, y+1, z-1) == 12)
+				if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
 					return 5;
-				if (world.getBlockId(x, y-1, z+1) == blockID && world.getBlockMetadata(x, y-1, z+1) == 12)
+				if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
 					return 3;
-				if (world.getBlockId(x, y-1, z-1) == blockID && world.getBlockMetadata(x, y-1, z-1) == 12)
+				if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
 					return 2;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
+					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta)
 						return 3;
-					if (world.getBlockId(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
+					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta)
 						return 2;
 				}
 				break;
@@ -444,103 +447,103 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		if (meta == 11) {
 			switch(side) {
 			case 0:
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
+				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
 					return 8;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 12)
+				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
 					return 7;
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 12)
+				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
 					return 9;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 12)
+				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
 					return 6;
 				break;
 			case 1:
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 9)
+				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 9)
 					return 8;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 9)
+				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 9)
 					return 7;
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 9)
+				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 9)
 					return 9;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 9)
+				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 9)
 					return 6;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+					if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
 						return 8;
-					if (world.getBlockId(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+					if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
 						return 7;
-					if (world.getBlockId(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+					if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
 						return 9;
-					if (world.getBlockId(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+					if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
 						return 6;
 				}
 				break;
 			case 2:
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
+				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
 					return 7;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 12)
+				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
 					return 8;
-				if (world.getBlockId(x, y+1, z) == blockID && world.getBlockMetadata(x, y+1, z) == 12)
+				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
 					return 6;
-				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
+				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+					if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
 						return 9;
 				}
 				break;
 			case 3:
-				if (world.getBlockId(x+1, y, z) == blockID && world.getBlockMetadata(x+1, y, z) == 12)
+				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
 					return 8;
-				if (world.getBlockId(x-1, y, z) == blockID && world.getBlockMetadata(x-1, y, z) == 12)
+				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
 					return 7;
-				if (world.getBlockId(x, y+1, z) == blockID && world.getBlockMetadata(x, y+1, z) == 12)
+				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
 					return 6;
-				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
+				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+					if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
 						return 9;
 				}
 				break;
 			case 4:
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 12)
+				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
 					return 8;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 12)
+				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
 					return 7;
-				if (world.getBlockId(x, y+1, z) == blockID && world.getBlockMetadata(x, y+1, z) == 12)
+				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
 					return 6;
-				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
+				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+					if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
 						return 9;
 				}
 				break;
 			case 5:
-				if (world.getBlockId(x, y, z+1) == blockID && world.getBlockMetadata(x, y, z+1) == 12)
+				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
 					return 7;
-				if (world.getBlockId(x, y, z-1) == blockID && world.getBlockMetadata(x, y, z-1) == 12)
+				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
 					return 8;
-				if (world.getBlockId(x, y+1, z) == blockID && world.getBlockMetadata(x, y+1, z) == 12)
+				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
 					return 6;
-				if (world.getBlockId(x, y-1, z) == blockID && world.getBlockMetadata(x, y-1, z) == 12)
+				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 					return 9;
 
-				if (world.getBlockId(x, y, z) == blockID && world.getBlockMetadata(x, y-1, z) == 9) {
-					int did = ReactorTiles.MAGNETPIPE.getBlockID();
+				if (world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+					Block did = ReactorTiles.MAGNETPIPE.getBlock();
 					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlockId(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+					if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
 						return 9;
 				}
 				break;
@@ -574,11 +577,11 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(blockID, ReactorTiles.HEATER.getBlockID()), x-6, y-6, z-6, x+6, y+6, z+6);
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, ReactorTiles.HEATER.getBlock()), x-6, y-6, z-6, x+6, y+6, z+6);
 		int mx = blocks.getMinX()+blocks.getSizeX()/2;
 		int my = blocks.getMinY()+blocks.getSizeY()/2-1;
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
-		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.HEATER ? world.getBlockTileEntity(mx, my, mz) : null;
+		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.HEATER ? world.getTileEntity(mx, my, mz) : null;
 	}
 
 }

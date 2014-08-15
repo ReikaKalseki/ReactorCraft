@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -32,6 +28,10 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public final class ReactorDescriptions {
 

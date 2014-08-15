@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.ReactorCraft;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -16,10 +20,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.ReactorCraft;
 
 public abstract class ReactorGuiBase extends GuiContainer {
 
@@ -39,9 +39,9 @@ public abstract class ReactorGuiBase extends GuiContainer {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getName(), xSize/2, 5, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, tile.getName(), xSize/2, 5, 4210752);
 		if (tile instanceof IInventory)
-			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
+			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
 	}
 
 	@Override

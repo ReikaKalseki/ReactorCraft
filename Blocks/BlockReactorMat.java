@@ -9,26 +9,27 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.MatBlocks;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+
 public class BlockReactorMat extends Block {
 
-	private Icon[][] icons = new Icon[16][6];
+	private IIcon[][] icons = new IIcon[16][6];
 
-	public BlockReactorMat(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockReactorMat(Material par2Material) {
+		super(par2Material);
 		this.setHardness(1.5F);
 		this.setResistance(10F);
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public void registerBlockIcons(IIconRegister ico) {
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			if (MatBlocks.matList[i].isMultiSidedTexture()){
 				for (int j = 0; j < 6; j++) {
@@ -44,7 +45,7 @@ public class BlockReactorMat extends Block {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return icons[meta][s];
 	}
 

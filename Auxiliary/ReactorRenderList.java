@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

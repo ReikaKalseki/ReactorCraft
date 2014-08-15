@@ -9,22 +9,25 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
 
@@ -63,9 +66,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		int dx = x+side.offsetX;
 		int dy = y+side.offsetY;
 		int dz = z+side.offsetZ;
-		int id = world.getBlockId(dx, dy, dz);
+		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		if (id == 0)
+		if (id == Blocks.air)
 			return false;
 		ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 		if (m == this.getMachine())
@@ -119,9 +122,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	public final void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			connections[i] = this.isConnected(dirs[i]);
-			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
+			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
-		world.markBlockForRenderUpdate(x, y, z);
+		world.func_147479_m(x, y, z);
 	}
 
 	public final void deleteFromAdjacentConnections(World world, int x, int y, int z) {
@@ -132,9 +135,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 			if (m == ReactorTiles.TEList[this.getIndex()]) {
-				TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = false;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -147,9 +150,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 			if (m == ReactorTiles.TEList[this.getIndex()]) {
-				TileEntityReactorPiping te = (TileEntityReactorPiping)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = true;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -163,7 +166,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		if (m == m2) {
 			return true;
 		}
-		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+		TileEntity tile = worldObj.getTileEntity(x, y, z);
 		if (tile instanceof IFluidHandler && this.isInteractableTile(tile))
 			return true;
 		return false;
@@ -210,7 +213,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				TileEntity te = world.getTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					Fluid f = tp.getFluidType();
@@ -280,7 +283,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				TileEntity te = world.getTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					if (tp.canIntakeFluid(f)) {
@@ -359,7 +362,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	}
 
 	@Override
-	public Icon getOverlayIcon() {
+	public IIcon getOverlayIcon() {
 		return null;
 	}
 

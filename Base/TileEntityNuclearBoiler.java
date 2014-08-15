@@ -9,15 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, Temperatured {
@@ -93,7 +94,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 			int dz = z+dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r == ReactorTiles.TEList[this.getIndex()]) {
-				TileEntityNuclearBoiler te = (TileEntityNuclearBoiler)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityNuclearBoiler te = (TileEntityNuclearBoiler)world.getTileEntity(dx, dy, dz);
 				if (te.tank.getLevel() < tank.getLevel() && (te.tank.isEmpty() || te.tank.getActualFluid() == tank.getActualFluid())) {
 					int dl = tank.getLevel()-te.tank.getLevel();
 					te.tank.addLiquid(dl/4+1, tank.getActualFluid());
