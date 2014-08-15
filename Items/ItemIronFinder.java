@@ -9,21 +9,22 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+
 public class ItemIronFinder extends ReactorItemBase {
 
-	public ItemIronFinder(int ID, int tex) {
-		super(ID, tex);
+	public ItemIronFinder(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -32,10 +33,10 @@ public class ItemIronFinder extends ReactorItemBase {
 		int iron = 0;
 		for (float i = 0; i <= 12; i += 0.2) {
 			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
-			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			ItemStack ore = new ItemStack(id, 1, meta);
-			if (id == Block.oreIron.blockID) {
+			if (id == Blocks.iron_ore.blockID) {
 				iron++;
 			}
 			if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("oreIron"), ore)) {
@@ -85,7 +86,7 @@ BlockArray iron = getIronOreNearby(world, x, y, z, r);
 					int dy = y+j;
 					int dz = z+k;
 					ItemStack ore = ReikaBlockHelper.getWorldBlockAsItemStack(world, dx, dy, dz);
-					if (ore.itemID == Block.blockIron.blockID || ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("oreIron"), ore)) {
+					if (ReikaItemHelper.matchStackWithBlock(ore, Blocks.iron_ore) || ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("oreIron"), ore)) {
 						iron.addBlockCoordinate(dx, dy, dz);
 					}
 				}

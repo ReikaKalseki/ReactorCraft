@@ -13,8 +13,8 @@ import Reika.ReactorCraft.Base.ItemReactorTool;
 
 public class ItemCanister extends ItemReactorTool {
 
-	public ItemCanister(int ID, int tex) {
-		super(ID, tex);
+	public ItemCanister(int tex) {
+		super(tex);
 		this.setContainerItem(this);
 	}
 

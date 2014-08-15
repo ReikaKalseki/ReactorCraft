@@ -9,27 +9,29 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
+import Reika.ReactorCraft.Base.BlockMultiBlock;
+
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public final class ItemBlockMultiBlock extends ItemBlock {
 
-	public ItemBlockMultiBlock(int ID) {
-		super(ID);
+	public ItemBlockMultiBlock(Block b) {
+		super(b);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int ID, CreativeTabs cr, List li)
+	public void getSubItems(Item ID, CreativeTabs cr, List li)
 	{
 		for (int i = 0; i < this.getDataValues(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
@@ -38,7 +40,7 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 	}
 
 	public BlockMultiBlock getMultiBlockInstance() {
-		return (BlockMultiBlock)Block.blocksList[itemID];
+		return (BlockMultiBlock)field_150939_a;
 	}
 
 	private int getDataValues() {
@@ -46,7 +48,7 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is) {
+	public String getItemStackDisplayName(ItemStack is) {
 		return this.getMultiBlockInstance().getName(is.getItemDamage());
 	}
 

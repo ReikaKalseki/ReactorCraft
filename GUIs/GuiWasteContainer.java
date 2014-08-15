@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiWasteContainer extends ReactorGuiBase {
 

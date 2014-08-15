@@ -9,15 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.Rendering.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class GuiElectrolyzer extends ReactorGuiBase {
 
@@ -72,13 +73,13 @@ public class GuiElectrolyzer extends ReactorGuiBase {
 		String light = l != null ? l.getFluid().getLocalizedName() : "Empty";
 		String in = i != null ? i.getFluid().getLocalizedName() : "Empty";
 		if (ReikaGuiAPI.instance.isMouseInBox(j+97, j+114, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, heavy, x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, heavy, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, light, x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, light, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, in, x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, in, x, y);
 		}
 	}
 

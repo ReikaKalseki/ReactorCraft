@@ -9,14 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.Rendering.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class GuiSynthesizer extends ReactorGuiBase {
 
@@ -62,10 +63,10 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "Water", x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Water", x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "Ammonia", x, y);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Ammonia", x, y);
 		}
 	}
 

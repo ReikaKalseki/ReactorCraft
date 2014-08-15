@@ -10,7 +10,7 @@
 package Reika.ReactorCraft.Event;
 
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event;
+import cpw.mods.fml.common.eventhandler.Event;
 
 public class ReactorMeltdownEvent extends Event {
 

@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 public class ItemReactorBook extends ReactorItemBase {
 
-	public ItemReactorBook(int ID, int tex) {
-		super(ID, tex);
+	public ItemReactorBook(int tex) {
+		super(tex);
 		maxStackSize = 1;
 	}
 

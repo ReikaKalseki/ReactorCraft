@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorItems;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -21,19 +27,13 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 public class RenderRadiation extends Render {
 
 	public void renderEntity(EntityRadiation er, double par2, double par4, double par6, float par8, float par9)
 	{
 		EntityClientPlayerMP cam = Minecraft.getMinecraft().thePlayer;
 		ItemStack helmet = cam.inventory.armorInventory[3];
-		if (helmet != null && helmet.itemID == ReactorItems.GOGGLES.getShiftedItemID()) {
+		if (helmet != null && helmet.getItem() == ReactorItems.GOGGLES.getItemInstance()) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 			Tessellator v5 = Tessellator.instance;

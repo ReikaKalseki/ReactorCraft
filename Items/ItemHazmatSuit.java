@@ -9,20 +9,22 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.ReactorCraft.ClientProxy;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+
 public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 
 	private int sprite;
 
-	public ItemHazmatSuit(int ID, int ind, int render, int type) {
-		super(ID, ReactorCraft.HAZ, ReactorCraft.proxy.hazmat, type);
+	public ItemHazmatSuit(int ind, int render, int type) {
+		super(ReactorCraft.HAZ, ReactorCraft.proxy.hazmat, type);
 
 		maxStackSize = 1;
 		sprite = ind;
@@ -50,5 +52,15 @@ public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 		String sg = ClientProxy.getArmorTextureAsset(item);
 		return sg;
 	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		ReactorItems ir = ReactorItems.getEntry(is);
+		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+	}
+
+	@Override
+	public final void registerIcons(IIconRegister ico) {}
+
 
 }

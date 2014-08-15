@@ -12,6 +12,9 @@ package Reika.ReactorCraft.NEI;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -35,21 +38,25 @@ public class NEI_ReactorConfig implements IConfigureNEI {
 		API.registerUsageHandler(centrifuge);
 
 		ReactorCraft.logger.log("Hiding technical blocks from NEI!");
-		API.hideItem(ReactorBlocks.REACTOR.getBlockID());
-		API.hideItem(ReactorBlocks.MODELREACTOR.getBlockID());
-		API.hideItem(ReactorBlocks.MACHINE.getBlockID());
-		API.hideItem(ReactorBlocks.MODELMACHINE.getBlockID());
+		this.hideBlock(ReactorBlocks.REACTOR.getBlockInstance());
+		this.hideBlock(ReactorBlocks.MODELREACTOR.getBlockInstance());
+		this.hideBlock(ReactorBlocks.MACHINE.getBlockInstance());
+		this.hideBlock(ReactorBlocks.MODELMACHINE.getBlockInstance());
 
 		if (ReactorCraft.instance.isLocked()) {
 			for (int i = 0; i < ReactorItems.itemList.length; i++) {
 				ReactorItems ir = ReactorItems.itemList[i];
-				API.hideItem(ir.getShiftedItemID());
+				API.hideItem(new ItemStack(ir.getItemInstance()));
 			}
 			for (int i = 0; i < ReactorBlocks.blockList.length; i++) {
 				ReactorBlocks b = ReactorBlocks.blockList[i];
-				API.hideItem(b.getBlockID());
+				this.hideBlock(b.getBlockInstance());
 			}
 		}
+	}
+
+	private void hideBlock(Block b) {
+		API.hideItem(new ItemStack(b));
 	}
 
 	@Override

@@ -9,7 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +24,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-import Reika.ReactorCraft.GUIs.GuiCentrifuge;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -71,7 +71,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(ReactorCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(75, 7, 224, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(75, 7, 224, 20, 16, 60);
 	}
 
 	@Override

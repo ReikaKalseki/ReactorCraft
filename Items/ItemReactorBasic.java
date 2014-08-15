@@ -13,8 +13,8 @@ import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemReactorBasic extends ReactorItemBase {
 
-	public ItemReactorBasic(int ID, int tex) {
-		super(ID, tex);
+	public ItemReactorBasic(int tex) {
+		super(tex);
 	}
 
 }

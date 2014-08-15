@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -34,6 +22,18 @@ import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiReactorBook extends GuiHandbook {
 
@@ -101,13 +101,13 @@ public class GuiReactorBook extends GuiHandbook {
 			List<ItemStack> out = ReikaJavaLibrary.makeListFrom(h.getMachine().getCraftedProduct());
 			if (out == null || out.size() <= 0)
 				return;
-			ReikaGuiAPI.instance.drawCustomRecipes(ri, fontRenderer, out, HandbookAuxData.getWorktable(), posX+72-18, posY+18, posX-1620, posY+32);
+			ReikaGuiAPI.instance.drawCustomRecipes(ri, fontRendererObj, out, HandbookAuxData.getWorktable(), posX+72-18, posY+18, posX-1620, posY+32);
 		}
 		if (this.getGuiLayout() == PageType.CRAFTING) {
 			List<ItemStack> out = ReikaJavaLibrary.makeListFrom(h.getItem().getStackOf());
 			if (out == null || out.size() <= 0)
 				return;
-			ReikaGuiAPI.instance.drawCustomRecipes(ri, fontRenderer, out, CraftingManager.getInstance().getRecipeList(), posX+72, posY+18, posX+162, posY+32);
+			ReikaGuiAPI.instance.drawCustomRecipes(ri, fontRendererObj, out, CraftingManager.getInstance().getRecipeList(), posX+72, posY+18, posX+162, posY+32);
 		}
 		if (h == ReactorBook.MAGNET) {
 			ItemStack in = ReactorStacks.lodestone;
@@ -148,7 +148,7 @@ public class GuiReactorBook extends GuiHandbook {
 				GL11.glRotatef(renderq, 1, 0, 0);
 				GL11.glRotatef(r, 0, 1, 0);
 				GL11.glTranslated(a, b, c);
-				TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, 0, -0.5, 0);
+				TileEntityRendererDispatcher.instance.renderTileEntityAt(te, -0.5, 0, -0.5, 0);
 				GL11.glTranslated(-a, -b, -c);
 				GL11.glRotatef(-r, 0, 1, 0);
 				GL11.glRotatef(-renderq, 1, 0, 0);
@@ -165,7 +165,7 @@ public class GuiReactorBook extends GuiHandbook {
 				GL11.glRotatef(r, 0, 1, 0);
 				ReikaTextureHelper.bindTerrainTexture();
 				GL11.glTranslated(a, b, c);
-				rb.renderBlockAsItem(rt.getBlockVariable(), rt.getBlockMetadata(), 1);
+				rb.renderBlockAsItem(rt.getBlockInstance(), rt.getBlockMetadata(), 1);
 				GL11.glTranslated(-a, -b, -c);
 				GL11.glRotatef(-r, 0, 1, 0);
 				GL11.glRotatef(-renderq, 1, 0, 0);

@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -28,9 +20,16 @@ import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {
@@ -71,35 +70,34 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		oldBlockY = y;
 		oldBlockZ = z;
 
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (id != 0) {
-			Block b = Block.blocksList[id];
-			if (b.hasTileEntity(meta)) {
-				TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (id != Blocks.air) {
+			if (id.hasTileEntity(meta)) {
+				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof ReactorCoreTE) {
 					return ((ReactorCoreTE)te).onNeutron(this, world, x, y, z);
 				}
 			}
-			else if (b instanceof NeutronBlock) {
-				return ((NeutronBlock) b).onNeutron(this, world, x, y, z);
+			else if (id instanceof NeutronBlock) {
+				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
 			}
 
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {
 				return ReikaRandomHelper.doWithChance(90);
 			}
-			if (id == ReactorBlocks.MATS.getBlockID() && meta == MatBlocks.CONCRETE.ordinal()) {
+			if (id == ReactorBlocks.MATS.getBlockInstance() && meta == MatBlocks.CONCRETE.ordinal()) {
 				return ReikaRandomHelper.doWithChance(60);
 			}
-			if ((id == ReactorBlocks.FLUORITE.getBlockID() || id == ReactorBlocks.FLUORITEORE.getBlockID()) && meta < FluoriteTypes.colorList.length) {
+			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
 				world.setBlock(x, y, z, id, meta+8, 3);
-				world.markBlockForRenderUpdate(x, y, z);
+				world.func_147479_m(x, y, z);
 			}
-			if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID)
+			if (id == Blocks.flowing_water || id == Blocks.water)
 				return ReikaRandomHelper.doWithChance(30);
 
-			boolean flag = b.isOpaqueCube() ? b.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || rand.nextInt((int)(12 - b.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-b.getLightOpacity(world, x, y, z) == 0 ? rand.nextInt(b.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
+			boolean flag = id.isOpaqueCube() ? id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || rand.nextInt((int)(12 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? rand.nextInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
 			if (flag) {
 				if (ReikaRandomHelper.doWithChance(20)) {
 					//AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
@@ -137,12 +135,12 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(type.ordinal());
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		type = NeutronType.neutronList[data.readInt()];
 	}
 

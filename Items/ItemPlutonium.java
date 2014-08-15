@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 public class ItemPlutonium extends ReactorItemBase {
 
-	public ItemPlutonium(int ID, int tex) {
-		super(ID, tex);
+	public ItemPlutonium(int tex) {
+		super(tex);
 	}
 
 	@Override

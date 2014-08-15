@@ -9,16 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class ReactorItemRenderer implements IItemRenderer {
 
@@ -52,13 +52,13 @@ public class ReactorItemRenderer implements IItemRenderer {
 		ReactorTiles machine = ReactorTiles.TEList[item.getItemDamage()];
 		if (machine.isPipe()) {
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(ReactorBlocks.DUCT.getBlockVariable(), machine.getBlockMetadata(), 1);
+			rb.renderBlockAsItem(ReactorBlocks.DUCT.getBlockInstance(), machine.getBlockMetadata(), 1);
 		}
 		else if (machine.hasRender())
-			TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
 		else {
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(machine.getBlockVariable(), machine.getBlockMetadata(), 1);
+			rb.renderBlockAsItem(machine.getBlockInstance(), machine.getBlockMetadata(), 1);
 		}
 	}
 }

@@ -9,7 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.GUIs.GuiSynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +25,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-import Reika.ReactorCraft.GUIs.GuiSynthesizer;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -72,7 +72,7 @@ public class NH3Handler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(ReactorCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -105,8 +105,8 @@ public class NH3Handler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(12, 7, 208, 20, 16, 60);
-		drawTexturedModalRect(129, 7, 224, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(12, 7, 208, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(129, 7, 224, 20, 16, 60);
 	}
 
 }

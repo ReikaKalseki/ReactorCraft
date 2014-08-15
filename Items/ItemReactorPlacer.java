@@ -9,10 +9,30 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.RotaryCraft.API.ShaftMachine;
+import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,30 +44,13 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.API.ShaftMachine;
-import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemReactorPlacer extends Item {
 
-	public ItemReactorPlacer(int ID, int tex) {
-		super(ID);
+	public ItemReactorPlacer(int tex) {
+		super();
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		maxStackSize = 64;
@@ -56,7 +59,7 @@ public class ItemReactorPlacer extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -69,7 +72,7 @@ public class ItemReactorPlacer extends Item {
 				--x;
 			if (side == 5)
 				++x;
-			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
+			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}
 		if (!this.checkValidBounds(is, ep, world, x, y, z))
@@ -85,11 +88,11 @@ public class ItemReactorPlacer extends Item {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, m.getBlockID(), m.getBlockMetadata(), 3);
+			world.setBlock(x, y, z, m.getBlock(), m.getBlockMetadata(), 3);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-		TileEntityReactorBase te = (TileEntityReactorBase)world.getBlockTileEntity(x, y, z);
-		te.placer = ep.getEntityName();
+		TileEntityReactorBase te = (TileEntityReactorBase)world.getTileEntity(x, y, z);
+		te.setPlacer(ep);
 		te.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		if (m == ReactorTiles.INJECTOR) {
 			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
@@ -148,7 +151,7 @@ public class ItemReactorPlacer extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			if (ReactorTiles.TEList[i].isAvailableInCreativeInventory()) {
 				ItemStack item = new ItemStack(par1, 1, i);
@@ -161,7 +164,7 @@ public class ItemReactorPlacer extends Item {
 		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.TURBINECORE) {
 			int meta = RotaryAux.get4SidedMetadataFromPlayerLook(ep);
 			BlockArray contact = new BlockArray();
-			AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 			int r = 3;
 			switch(meta) {
 			case 2:
@@ -185,7 +188,7 @@ public class ItemReactorPlacer extends Item {
 			}
 			for (int i = 0; i < contact.getSize(); i++) {
 				int[] xyz = contact.getNthBlock(i);
-				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				Block id2 = world.getBlock(xyz[0], xyz[1], xyz[2]);
 				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z)) {
 					return false;
@@ -203,7 +206,7 @@ public class ItemReactorPlacer extends Item {
 							}
 							else {
 								ReikaWorldHelper.dropBlockAt(world, x+i, y+j, z+k);
-								world.setBlock(x+i, y+j, z+k, 0);
+								world.setBlockToAir(x+i, y+j, z+k);
 							}
 						}
 					}
@@ -226,7 +229,7 @@ public class ItemReactorPlacer extends Item {
 	}
 
 	@Override
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
@@ -260,6 +263,12 @@ public class ItemReactorPlacer extends Item {
 			int lube = is.stackTagCompound.getInteger("lube");
 			li.add(String.format("Lubricant: %d mB", lube));
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		ReactorItems ir = ReactorItems.getEntry(is);
+		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
 	}
 
 }

@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import java.awt.Color;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -23,6 +17,13 @@ import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Registry.ReactorPackets;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
+
+import java.awt.Color;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 
 public class GuiCPU extends ReactorGuiBase {
 

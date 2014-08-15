@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiCentrifuge extends ReactorGuiBase {
 
@@ -38,7 +39,7 @@ public class GuiCentrifuge extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getName(), xSize/2, 5, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, tile.getName(), xSize/2, 5, 4210752);
 	}
 
 	@Override

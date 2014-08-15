@@ -9,26 +9,30 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorOres;
+
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import Reika.ReactorCraft.Registry.ReactorOres;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBlockReactorOre extends ItemBlock {
 
-	public ItemBlockReactorOre(int ID) {
-		super(ID);
+	public ItemBlockReactorOre(Block b) {
+		super(b);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int ID, CreativeTabs cr, List li)
+	public void getSubItems(Item ID, CreativeTabs cr, List li)
 	{
 		for (int i = 1; i < this.getDataValues(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
@@ -52,5 +56,10 @@ public class ItemBlockReactorOre extends ItemBlock {
 	public int getMetadata(int meta)
 	{
 		return meta;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack itemstack) {
+		return ReactorBlocks.ORE.getMultiValuedName(itemstack.getItemDamage());
 	}
 }

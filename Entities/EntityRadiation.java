@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import Reika.DragonAPI.Base.InertEntity;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+
+import io.netty.buffer.ByteBuf;
+
 import java.util.List;
 import java.util.Random;
 
@@ -17,13 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Base.InertEntity;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityRadiation extends InertEntity implements IEntityAdditionalSpawnData {
@@ -93,7 +92,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 		double y = posY;
 		double z = posZ;
 		Random r = new Random();
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x, y, z).expand(effectRange, effectRange, effectRange);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(effectRange, effectRange, effectRange);
 		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLivingBase e = inbox.get(i);
@@ -124,12 +123,12 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(effectRange);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		effectRange = data.readInt();
 	}
 

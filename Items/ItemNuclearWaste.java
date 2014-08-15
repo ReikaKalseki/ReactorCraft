@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -24,13 +16,23 @@ import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemNuclearWaste extends ReactorItemBase {
 
-	public ItemNuclearWaste(int ID, int tex) {
-		super(ID, tex);
+	public ItemNuclearWaste(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public class ItemNuclearWaste extends ReactorItemBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int ID, CreativeTabs cr, List li)
+	public void getSubItems(Item ID, CreativeTabs cr, List li)
 	{
 		List<Isotopes> waste = WasteManager.getWasteList();
 		for (int i = 0; i < waste.size(); i++) {
@@ -89,7 +91,7 @@ public class ItemNuclearWaste extends ReactorItemBase {
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is) {
+	public String getItemStackDisplayName(ItemStack is) {
 		return ReactorItems.WASTE.getBasicName();
 	}
 

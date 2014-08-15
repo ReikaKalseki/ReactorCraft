@@ -9,19 +9,18 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData {
@@ -79,7 +78,7 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	}
 
 	private void checkFusion() {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
 		List<EntityPlasma> li = worldObj.getEntitiesWithinAABB(EntityPlasma.class, box);
 		if (li.size() >= this.getFusionThreshold()) {
 			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ, placerOfInjector);
@@ -120,14 +119,14 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeDouble(originX);
 		data.writeDouble(originY);
 		data.writeDouble(originZ);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		originX = data.readDouble();
 		originY = data.readDouble();
 		originZ = data.readDouble();

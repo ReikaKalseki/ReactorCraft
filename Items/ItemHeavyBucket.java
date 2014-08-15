@@ -9,14 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import net.minecraft.item.Item;
 import Reika.ReactorCraft.Base.ItemReactorTool;
+
+import net.minecraft.init.Items;
 
 public class ItemHeavyBucket extends ItemReactorTool {
 
-	public ItemHeavyBucket(int ID, int tex) {
-		super(ID, tex);
-		this.setContainerItem(Item.bucketEmpty);
+	public ItemHeavyBucket(int tex) {
+		super(tex);
+		this.setContainerItem(Items.bucket);
 	}
 
 }

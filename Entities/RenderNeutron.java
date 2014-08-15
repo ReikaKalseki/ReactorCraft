@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.ReactorCraft.Registry.ReactorOptions;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,9 +20,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.ReactorCraft.Registry.ReactorOptions;
 
 public class RenderNeutron extends Render
 {

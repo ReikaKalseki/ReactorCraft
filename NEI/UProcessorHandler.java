@@ -9,18 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.IC2Handler;
@@ -31,6 +21,16 @@ import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -87,7 +87,7 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(ReactorCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -124,9 +124,9 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(93, 7, 208, 20, 16, 60);
-		drawTexturedModalRect(93+18, 7, 208-16, 20, 16, 60);
-		drawTexturedModalRect(93+36, 7, 208+16, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(93, 7, 208, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(93+18, 7, 208-16, 20, 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModalRect(93+36, 7, 208+16, 20, 16, 60);
 	}
 
 }

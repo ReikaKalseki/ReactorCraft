@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import java.util.ArrayList;
-
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
+
+import java.util.ArrayList;
 
 public class ReactorConfig extends ControlledConfig {
 
@@ -25,8 +25,8 @@ public class ReactorConfig extends ControlledConfig {
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ReactorAchievements.class);
 	public int[] achievementIDs = new int[entries.size()];
 
-	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
-		super(mod, option, blocks, items, id, cfg);
+	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
+		super(mod, option, id, cfg);
 	}
 
 	@Override

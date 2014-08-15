@@ -9,32 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import java.net.URL;
-
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.EnumHelper;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.aspects.Aspect;
+import Reika.ChromatiCraft.API.AcceleratorBlacklist;
+import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
+import Reika.DragonAPI.Auxiliary.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Auxiliary.SuggestedModsTracker;
@@ -44,12 +26,11 @@ import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
-import Reika.GeoStrata.API.AcceleratorBlacklist;
-import Reika.GeoStrata.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -76,6 +57,29 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+
+import java.net.URL;
+
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -85,8 +89,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -94,21 +97,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod( modid = "ReactorCraft", name="ReactorCraft", version="beta", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true,
-clientPacketHandlerSpec = @SidedPacketHandler(channels = { "ReactorCraftData" }, packetHandler = ClientPackets.class),
-serverPacketHandlerSpec = @SidedPacketHandler(channels = { "ReactorCraftData" }, packetHandler = ServerPackets.class))
 public class ReactorCraft extends DragonAPIMod {
 
 	@Instance("ReactorCraft")
 	public static ReactorCraft instance = new ReactorCraft();
 
-	public static final ReactorConfig config = new ReactorConfig(instance, ReactorOptions.optionList, ReactorBlocks.blockList, ReactorItems.itemList, null, 1);
+	public static final ReactorConfig config = new ReactorConfig(instance, ReactorOptions.optionList, null, 1);
 
 	public static final String packetChannel = "ReactorCraftData";
 
 	public static CreativeTabs tabRctr = new ReactorTab(CreativeTabs.getNextID(), "ReactorCraft");
 
-	public static final EnumArmorMaterial HAZ = EnumHelper.addArmorMaterial("RCHazmat", Integer.MAX_VALUE, new int[]{0,0,0,0}, 0);
+	public static final ArmorMaterial HAZ = EnumHelper.addArmorMaterial("RCHazmat", Integer.MAX_VALUE, new int[]{0,0,0,0}, 0);
 
 	public static ModLogger logger;
 
@@ -138,6 +138,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
+	public static final Fluid CORIUM = new Fluid("corium").setDensity(5000).setViscosity(8000).setTemperature(2173);
+
 	public static PotionRadiation radiation;
 
 	public static Achievement[] achievements;
@@ -156,7 +158,7 @@ public class ReactorCraft extends DragonAPIMod {
 		for (int i = 0; i < ReactorItems.itemList.length; i++) {
 			ReactorItems r = ReactorItems.itemList[i];
 			if (!r.isDummiedOut()) {
-				int id = r.getShiftedItemID();
+				Item id = r.getItemInstance();
 				if (BannedItemReader.instance.containsID(id))
 					return true;
 			}
@@ -164,7 +166,7 @@ public class ReactorCraft extends DragonAPIMod {
 		for (int i = 0; i < ReactorBlocks.blockList.length; i++) {
 			ReactorBlocks r = ReactorBlocks.blockList[i];
 			if (!r.isDummiedOut()) {
-				int id = r.getBlockID();
+				Block id = r.getBlockInstance();
 				if (BannedItemReader.instance.containsID(id))
 					return true;
 			}
@@ -207,14 +209,17 @@ public class ReactorCraft extends DragonAPIMod {
 
 		logger = new ModLogger(instance, false);
 
+		this.addLiquids();
 		this.addBlocks();
 		this.addItems();
-		this.addLiquids();
+		this.addLiquidContainers();
 		this.registerOres();
 		ReactorTiles.loadMappings();
 
-		if (ReactorBlocks.CORIUMSTILL.getBlockID() != ReactorBlocks.CORIUMFLOWING.getBlockID()+1)
-			throw new InstallationException(instance, "The still corium block ID needs to be exactly one more than the flowing ID!");
+		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new ReactorPacketCore());
+
+		//if (ReactorBlocks.CORIUMSTILL.getBlock() != ReactorBlocks.CORIUMFLOWING.getBlock()+1)
+		//	throw new InstallationException(instance, "The still corium block ID needs to be exactly one more than the flowing ID!");
 
 		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
 			achievements = new Achievement[ReactorAchievements.list.length];
@@ -231,14 +236,14 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		if (this.isLocked() && !RotaryCraft.instance.isLocked())
-			GameRegistry.registerPlayerTracker(LockNotification.instance);
+			PlayerHandler.instance.registerTracker(LockNotification.instance);
 		if (!this.isLocked()) {
 			proxy.registerRenderers();
 			ReactorRecipes.addRecipes();
 		}
 		this.addEntities();
-		NetworkRegistry.instance().registerGuiHandler(instance, new ReactorGuiHandler());
-		GameRegistry.registerWorldGenerator(new ReactorOreGenerator());
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ReactorGuiHandler());
+		GameRegistry.registerWorldGenerator(new ReactorOreGenerator(), 0);
 		if (ReactorOptions.RETROGEN.getState()) {
 			RetroGenController.getInstance().addRetroGenerator(new ReactorRetroGen());
 			//Set state back
@@ -267,14 +272,14 @@ public class ReactorCraft extends DragonAPIMod {
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
 		}
 
-		//TickRegistry.registerTickHandler(new VolcanicGasController(), Side.SERVER);
+		//TickRegistry.instance.registerTickHandler(new VolcanicGasController(), Side.SERVER);
 
 		if (!this.isLocked())
 			IntegrityChecker.instance.addMod(instance, ReactorBlocks.blockList, ReactorItems.itemList);
 
-		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
-		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockGold);
-		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Blocks.bedrock);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Blocks.gold_block);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Blocks.hardened_clay);
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker());
@@ -291,12 +296,12 @@ public class ReactorCraft extends DragonAPIMod {
 
 		//for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 		//	FluoriteTypes fl = FluoriteTypes.colorList[i];
-		//	BlockColorMapper.instance.addModBlockColor(ReactorBlocks.FLUORITEORE.getBlockID(), i, fl.red, fl.green, fl.blue);
+		//	BlockColorMapper.instance.addModBlockColor(ReactorBlocks.FLUORITEORE.getBlock(), i, fl.red, fl.green, fl.blue);
 		//}
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			//BlockColorMapper.instance.addModBlockColor(r.getBlockID(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
-			BlockColorInterface.addGPRBlockColor(r.getBlockID(), r.getBlockMetadata(), 200, 200, 200);
+			//BlockColorMapper.instance.addModBlockColor(r.getBlock(), r.getBlockMetadata(), ReikaColorAPI.RGBtoHex(200, 200, 200));
+			BlockColorInterface.addGPRBlockColor(r.getBlock(), r.getBlockMetadata(), 200, 200, 200);
 		}
 
 		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
@@ -344,7 +349,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
 		if (!this.isLocked())
@@ -355,22 +360,25 @@ public class ReactorCraft extends DragonAPIMod {
 	private static void setupLiquidIcons(TextureStitchEvent.Pre event) {
 		logger.log("Loading Liquid Icons");
 
-		if (event.map.textureType == 0) {
-			Icon d2o = event.map.registerIcon("ReactorCraft:heavywater");
-			Icon hf = event.map.registerIcon("ReactorCraft:hf");
-			Icon uf6 = event.map.registerIcon("ReactorCraft:uf6");
+		if (event.map.getTextureType() == 0) {
+			IIcon d2o = event.map.registerIcon("ReactorCraft:heavywater");
+			IIcon hf = event.map.registerIcon("ReactorCraft:hf");
+			IIcon uf6 = event.map.registerIcon("ReactorCraft:uf6");
 
-			Icon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
-			Icon na = event.map.registerIcon("ReactorCraft:sodium");
-			Icon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
-			Icon cl = event.map.registerIcon("ReactorCraft:chlorine");
-			Icon o = event.map.registerIcon("ReactorCraft:oxygen");
+			IIcon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
+			IIcon na = event.map.registerIcon("ReactorCraft:sodium");
+			IIcon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
+			IIcon cl = event.map.registerIcon("ReactorCraft:chlorine");
+			IIcon o = event.map.registerIcon("ReactorCraft:oxygen");
 
-			Icon h2 = event.map.registerIcon("ReactorCraft:deuterium");
-			Icon h3 = event.map.registerIcon("ReactorCraft:tritium");
-			Icon plasma = event.map.registerIcon("ReactorCraft:plasma");
+			IIcon h2 = event.map.registerIcon("ReactorCraft:deuterium");
+			IIcon h3 = event.map.registerIcon("ReactorCraft:tritium");
+			IIcon plasma = event.map.registerIcon("ReactorCraft:plasma");
 
-			Icon co2 = event.map.registerIcon("ReactorCraft:co2");
+			IIcon co2 = event.map.registerIcon("ReactorCraft:co2");
+
+			IIcon corium = event.map.registerIcon("ReactorCraft:slag_flow");
+			IIcon corium2 = event.map.registerIcon("ReactorCraft:slag_flow");
 
 			D2O.setIcons(d2o);
 			HF.setIcons(hf);
@@ -386,11 +394,13 @@ public class ReactorCraft extends DragonAPIMod {
 			PLASMA.setIcons(plasma);
 
 			NH3_lo.setIcons(nh3);
-			H2O_lo.setIcons(Block.waterStill.getIcon(1, 0));
+			H2O_lo.setIcons(Blocks.water.getIcon(1, 0));
 			NA_hot.setIcons(nahot);
 
 			CO2.setIcons(co2);
 			CO2_hot.setIcons(co2);
+
+			CORIUM.setIcons(corium, corium2);
 		}
 	}
 
@@ -415,8 +425,6 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	private static void addLiquids() {
-		logger.log("Loading And Registering Liquids");
-
 		FluidRegistry.registerFluid(D2O);
 		FluidRegistry.registerFluid(HF);
 		FluidRegistry.registerFluid(UF6);
@@ -437,7 +445,13 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(CO2);
 		FluidRegistry.registerFluid(CO2_hot);
 
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
+		FluidRegistry.registerFluid(CORIUM);
+	}
+
+	private static void addLiquidContainers() {
+		logger.log("Loading And Registering Liquids");
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(UF6, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan);
 
@@ -472,16 +486,16 @@ public class ReactorCraft extends DragonAPIMod {
 			if (ore != ReactorOres.FLUORITE) {
 				OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock());
 				OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
-				MinecraftForge.setBlockHarvestLevel(ReactorBlocks.ORE.getBlockVariable(), ore.getBlockMetadata(), "pickaxe", ore.harvestLevel);
+				ReactorBlocks.ORE.getBlockInstance().setHarvestLevel("pickaxe", ore.harvestLevel, ore.getBlockMetadata());
 			}
 		}
-		Block b = ReactorBlocks.FLUORITEORE.getBlockVariable();
-		MinecraftForge.setBlockHarvestLevel(b, "pickaxe", ReactorOres.FLUORITE.harvestLevel);
+		Block b = ReactorBlocks.FLUORITEORE.getBlockInstance();
+		b.setHarvestLevel("pickaxe", ReactorOres.FLUORITE.harvestLevel);
 		OreDictionary.registerOre("dustQuicklime", ReactorStacks.lime.copy());
 
 		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 			FluoriteTypes fl = FluoriteTypes.colorList[i];
-			ItemStack is = new ItemStack(ReactorBlocks.FLUORITEORE.getBlockID(), 1, i);
+			ItemStack is = new ItemStack(ReactorBlocks.FLUORITEORE.getBlockInstance(), 1, i);
 			//ReikaOreHelper.addOreForReference(is);
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getDictionaryName(), is);
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getProductDictionaryName(), fl.getItem());

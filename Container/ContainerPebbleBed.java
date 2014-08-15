@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerPebbleBed extends CoreContainer {
 

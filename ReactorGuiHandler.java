@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
@@ -41,6 +38,10 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ReactorGuiHandler implements IGuiHandler {
@@ -52,7 +53,7 @@ public class ReactorGuiHandler implements IGuiHandler {
 		if (ID == 0) {
 			ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 			if (r != null) {
-				TileEntity te = world.getBlockTileEntity(x, y, z);
+				TileEntity te = world.getTileEntity(x, y, z);
 				switch(r) {
 				case FUEL:
 				case BREEDER:
@@ -87,7 +88,7 @@ public class ReactorGuiHandler implements IGuiHandler {
 			return new GuiReactorBook(player, world, 0, 0);
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		if (r != null) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			switch(r) {
 			case FUEL:
 			case BREEDER:

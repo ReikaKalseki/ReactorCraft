@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -17,8 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
 public class EntityNuclearWaste extends EntityItem {
 
@@ -62,7 +63,7 @@ public class EntityNuclearWaste extends EntityItem {
 		double x = posX;
 		double y = posY;
 		double z = posZ;
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x, y, z).expand(RANGE, RANGE, RANGE);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(RANGE, RANGE, RANGE);
 		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLivingBase e = inbox.get(i);
