@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -22,6 +16,13 @@ import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityCondenser extends TileEntityTankedReactorMachine {
@@ -35,12 +36,12 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
 		//this.getSteam(world, x, y, z);
-		if (world.getBlockId(x, y-1, z) == ReactorBlocks.STEAM.getBlockID() && !tank.isFull() && temperature < 100 && !world.isRemote) {
+		if (world.getBlock(x, y-1, z) == ReactorBlocks.STEAM.getBlockInstance() && !tank.isFull() && temperature < 100 && !world.isRemote) {
 			int smeta = world.getBlockMetadata(x, y-1, z);
 			Fluid f = this.getFluidFromSteamMetadata(smeta);
 			//ReikaJavaLibrary.pConsole(f.getName());
 			if (tank.isEmpty() || tank.getActualFluid().equals(f)) {
-				world.setBlock(x, y-1, z, 0);
+				world.setBlockToAir(x, y-1, z);
 				tank.addLiquid(TileEntityReactorBoiler.WATER_PER_STEAM, f);
 			}
 		}
@@ -64,7 +65,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 			int dz = z+dir.offsetZ;
 			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
 			if (rt == ReactorTiles.CONDENSER) {
-				TileEntityCondenser te = (TileEntityCondenser)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityCondenser te = (TileEntityCondenser)world.getTileEntity(dx, dy, dz);
 				int dL = te.tank.getLevel() - tank.getLevel();
 				if (dL/4 > 0) {
 					tank.addLiquid(dL/4, te.tank.getActualFluid());

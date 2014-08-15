@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
@@ -20,6 +16,11 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.API.Screwdriverable;
+
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable {
 
@@ -39,7 +40,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 
 		if (!world.isRemote && this.canMakeSteam(world, x, y, z)) {
 			steam--;
-			world.setBlock(x, y+1, z, ReactorBlocks.STEAM.getBlockID(), this.getSteamMetadata(), 3);
+			world.setBlock(x, y+1, z, ReactorBlocks.STEAM.getBlockInstance(), this.getSteamMetadata(), 3);
 		}
 
 		if (steam <= 0) {
@@ -62,7 +63,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 			if (ig.getSoundVolReductionAmount() > 1)
 				return false;
 		}
-		return ((BlockSteam)ReactorBlocks.STEAM.getBlockVariable()).canMoveInto(world, x, y+1, z);
+		return ((BlockSteam)ReactorBlocks.STEAM.getBlockInstance()).canMoveInto(world, x, y+1, z);
 	}
 
 	private ForgeDirection getFacing(int meta) {
@@ -104,7 +105,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 			int dz = z+dir.offsetZ;
 			ReactorTiles rt = ReactorTiles.getTE(world, dx, dy, dz);
 			if (rt == ReactorTiles.STEAMLINE) {
-				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
+				TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(dx, dy, dz);
 				if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
 					fluid = te.getWorkingFluid();
 					int ds = te.getSteam()-steam;

@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -39,6 +25,21 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ReactorPowerReceiver, IFluidHandler,
 PipeConnector, TemperatureTE, ThermalMachine, Shockable {
@@ -316,13 +317,13 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		if (waterside != null) {
 			Tamb /= 2;
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
 			Tamb += 200;
 		}
@@ -341,12 +342,12 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature > 100) {
-			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
-			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 0);
 		}
 	}
 
@@ -367,7 +368,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
 	}
 

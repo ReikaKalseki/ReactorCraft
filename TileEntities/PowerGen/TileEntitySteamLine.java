@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
@@ -23,6 +17,14 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe {
 
@@ -60,7 +62,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	private void drawFromBoiler(World world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		if (r == ReactorTiles.BOILER) {
-			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y-1, z);
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y-1, z);
 			if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
@@ -85,10 +87,10 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
+			Block b = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata()) {
-				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
+			if (b == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata()) {
+				TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(dx, dy, dz);
 				if (this.canTakeInWorkingFluid(te.fluid))
 					this.readPipe(te);
 			}
@@ -110,17 +112,17 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		int dx = x+dir.offsetX;
 		int dy = y+dir.offsetY;
 		int dz = z+dir.offsetZ;
-		int id = world.getBlockId(dx, dy, dz);
+		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		if (id == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata())
 			return true;
-		if (id == ReactorTiles.BOILER.getBlockID() && meta == ReactorTiles.BOILER.getBlockMetadata() && dir == ForgeDirection.DOWN)
+		if (id == ReactorTiles.BOILER.getBlock() && meta == ReactorTiles.BOILER.getBlockMetadata() && dir == ForgeDirection.DOWN)
 			return true;
-		if (id == ReactorTiles.GRATE.getBlockID() && meta == ReactorTiles.GRATE.getBlockMetadata())
+		if (id == ReactorTiles.GRATE.getBlock() && meta == ReactorTiles.GRATE.getBlockMetadata())
 			return true;
-		if (id == ReactorTiles.BIGTURBINE.getBlockID() && meta == ReactorTiles.BIGTURBINE.getBlockMetadata())
+		if (id == ReactorTiles.BIGTURBINE.getBlock() && meta == ReactorTiles.BIGTURBINE.getBlockMetadata())
 			return true;
-		if (id == MachineRegistry.PIPEPUMP.getBlockID() && meta == MachineRegistry.PIPEPUMP.getMachineMetadata()) {
+		if (id == MachineRegistry.PIPEPUMP.getBlock() && meta == MachineRegistry.PIPEPUMP.getMachineMetadata()) {
 			boolean flag = ((TileEntityPipePump)this.getAdjacentTileEntity(dir)).canConnectToPipeOnSide(dir);
 			return flag;
 		}
@@ -182,9 +184,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	public void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			connections[i] = this.isConnected(dirs[i]);
-			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
+			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
-		world.markBlockForRenderUpdate(x, y, z);
+		world.func_147479_m(x, y, z);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(connections), Side.SERVER);
 	}
 
@@ -196,9 +198,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 			if (m == this.getMachine()) {
-				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
+				TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = false;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -211,9 +213,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
 			if (m == this.getMachine()) {
-				TileEntitySteamLine te = (TileEntitySteamLine)world.getBlockTileEntity(dx, dy, dz);
+				TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = true;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -226,7 +228,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		ReactorTiles m2 = ReactorTiles.getTE(worldObj, x, y, z);
 		if (m == m2)
 			return true;
-		TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+		TileEntity te = worldObj.getTileEntity(x, y, z);
 		if (te instanceof PipeRenderConnector)
 			return ((PipeRenderConnector)te).canConnectToPipeOnSide(dir);
 		return false;

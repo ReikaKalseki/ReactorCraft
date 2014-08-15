@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
@@ -22,6 +18,12 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 import Reika.RotaryCraft.API.PowerTransferHelper;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver {
 
@@ -61,7 +63,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		//if (this.arePowerReqsMet() && hasMultiBlock && this.getTicksExisted()%4 == 0)
 		//	ReactorSounds.FUSION.playSoundAtBlock(world, x, y, z);
 		if (hasMultiBlock && omega > MAX_SPEED) { //violently fail
-			world.setBlock(x, y, z, 0);
+			world.setBlockToAir(x, y, z);
 			FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, 16);
 			ex.doExplosionA();
 			ex.doExplosionB(true);
@@ -69,9 +71,9 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	}
 
 	private void checkForMultiBlock(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y-1, z);
-		if (id == ReactorBlocks.SOLENOIDMULTI.getBlockID()) {
-			BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockVariable();
+		Block id = world.getBlock(x, y-1, z);
+		if (id == ReactorBlocks.SOLENOIDMULTI.getBlockInstance()) {
+			BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockInstance();
 			if (b.checkForFullMultiBlock(world, x, y-1, z, ForgeDirection.UNKNOWN)) {
 				b.onCreateFullMultiBlock(world, x, y-1, z);
 			}
@@ -153,7 +155,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		Aim a = Aim.W;
 		while ((r == ReactorTiles.MAGNET || r == ReactorTiles.INJECTOR) && c < 38) {
 			if (r == ReactorTiles.MAGNET) {
-				TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(x, y, z);
+				TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(x, y, z);
 				te.hasSolenoid = true;
 				a = te.getAim();
 			}
@@ -180,7 +182,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		Aim a = Aim.W;
 		while ((r == ReactorTiles.MAGNET || r == ReactorTiles.INJECTOR) && c < 38) {
 			if (r == ReactorTiles.MAGNET) {
-				TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(x, y, z);
+				TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(x, y, z);
 				te.hasSolenoid = false;
 				a = te.getAim();
 			}

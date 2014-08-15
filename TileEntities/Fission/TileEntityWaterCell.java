@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import java.util.HashMap;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -30,6 +19,18 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import java.util.HashMap;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 
@@ -43,7 +44,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
 		if (ReactorTiles.getTE(world, x, y-1, z) == this.getMachine()) {
-			TileEntityWaterCell te = (TileEntityWaterCell)world.getBlockTileEntity(x, y-1, z);
+			TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(x, y-1, z);
 			if (te.getLiquidState() == LiquidStates.EMPTY && this.getLiquidState() != LiquidStates.EMPTY) {
 				te.setLiquidState(this.getLiquidState());
 				this.setLiquidState(LiquidStates.EMPTY);
@@ -67,7 +68,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		}
 
 		if (this.getLiquidState() == LiquidStates.EMPTY) {
-			TileEntity te = world.getBlockTileEntity(x, y+1, z);
+			TileEntity te = world.getTileEntity(x, y+1, z);
 			if (te instanceof IFluidHandler) {
 				IFluidHandler ic = (IFluidHandler)te;
 				FluidStack liq = ic.drain(ForgeDirection.DOWN, FluidContainerRegistry.BUCKET_VOLUME, false);

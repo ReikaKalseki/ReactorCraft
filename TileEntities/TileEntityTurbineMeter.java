@@ -9,13 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityTurbineMeter extends TileEntityReactorBase {
 
@@ -44,8 +46,8 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 				return;
 			}
 			else {
-				int id = world.getBlockId(x, i, z);
-				if (id != 0 && Block.blocksList[id].getLightOpacity(world, x, i, z) > 0) {
+				Block b = world.getBlock(x, i, z);
+				if (b != Blocks.air && b.getLightOpacity(world, x, i, z) > 0) {
 					turbineY = -1;
 					return;
 				}

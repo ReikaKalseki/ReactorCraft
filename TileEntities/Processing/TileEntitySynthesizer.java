@@ -9,22 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -34,6 +18,23 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ThermalMachine;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine {
 
@@ -82,13 +83,13 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (waterside != null) {
 			Tamb /= 2;
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
 			Tamb += 200;
 		}
@@ -107,12 +108,12 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature > 100) {
-			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
-			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 0);
 		}
 	}
 
@@ -162,9 +163,9 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	private void getWaterBuckets() {
-		if (inv[0] != null && inv[0].itemID == Item.bucketWater.itemID && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
+		if (inv[0] != null && inv[0].getItem() == Items.water_bucket && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
 			water.fill(FluidRegistry.getFluidStack("water", FluidContainerRegistry.BUCKET_VOLUME), true);
-			inv[0] = new ItemStack(Item.bucketEmpty);
+			inv[0] = new ItemStack(Items.bucket);
 		}
 	}
 
@@ -214,7 +215,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public boolean canRemoveItem(int i, ItemStack itemstack) {
-		return itemstack.itemID == Item.bucketEmpty.itemID;
+		return itemstack.getItem() == Items.bucket;
 	}
 
 	@Override
@@ -225,7 +226,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
-			return is.itemID == Item.bucketWater.itemID;
+			return is.getItem() == Items.water_bucket;
 		if (i == 1)
 			return ReikaItemHelper.matchStacks(is, ReactorStacks.lime);
 		if (i == 2)

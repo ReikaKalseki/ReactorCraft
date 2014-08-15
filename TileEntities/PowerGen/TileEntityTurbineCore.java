@@ -9,26 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -47,6 +27,27 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector {
 
@@ -183,7 +184,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		int dz = z+dir.offsetZ;
 		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 		if (r == this.getMachine()) {
-			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(dx, dy, dz);
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(dx, dy, dz);
 			int max = Math.min(tank.getRemainingSpace(), 1000);
 			int dl = te.tank.getLevel()-tank.getLevel();
 			if (dl > 1) {
@@ -292,7 +293,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	public final boolean isAtEndOFLine() {
 		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(readx, ready, readz);
 			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
 				return false;
 			}
@@ -345,7 +346,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private final int calcStage() {
 		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(readx, ready, readz);
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(readx, ready, readz);
 			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
 				int stage = tile.calcStage();
 				if (stage == this.getMaxStage())
@@ -358,7 +359,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	protected AxisAlignedBB getBoundingBox(World world, int x, int y, int z, int meta) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		int r = 2+stage;
 		switch(meta) {
 		case 2:
@@ -374,10 +375,10 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	protected boolean intakeSteam(World world, int x, int y, int z, int meta) {
-		int id = world.getBlockId(x, y-1, z);
+		Block id = world.getBlock(x, y-1, z);
 		int meta2 = world.getBlockMetadata(x, y-1, z);
 		boolean canAccel = false;
-		if (id == ReactorBlocks.STEAM.getBlockID() && stage == 0) {
+		if (id == ReactorBlocks.STEAM.getBlockInstance() && stage == 0) {
 			if ((meta2&2) != 0 && (meta2&8) == 0) {
 				int newmeta = 1+(meta2&4);
 				if ((meta2&4) != 0) {
@@ -400,15 +401,15 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		for (int i = 0; i < contact.getSize(); i++) {
 			int[] xyz = contact.getNthBlock(i);
 			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= this.getRadius()) {
-				int id2 = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				Block id2 = world.getBlock(xyz[0], xyz[1], xyz[2]);
 				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockID()) {
+				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
 					phi = 0;
 					omega = 0;
 					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
 						inter = Interference.JAM;
 				}
-				else if (Block.blocksList[id2] instanceof BlockFluid || Block.blocksList[id2] instanceof BlockFluidBase) {
+				else if (id2 instanceof BlockLiquid || id2 instanceof BlockFluidBase) {
 					if (inter == null || inter.maxSpeed > Interference.FLUID.maxSpeed)
 						inter = Interference.FLUID;
 				}
@@ -426,7 +427,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	private void fillSurroundings(World world, int x, int y, int z, int meta) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		int r = 3;
 		switch(meta) {
 		case 2:
@@ -482,7 +483,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		if (e instanceof EntityPlayer) {
 			return !((EntityPlayer)e).capabilities.isCreativeMode;
 		}
-		String name = e.getEntityName().toLowerCase();
+		String name = e.getCommandSenderName().toLowerCase();
 		if (name.contains("firefly"))
 			return false;
 		return true;
@@ -496,7 +497,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		if (this.needsMultiblock() && !this.hasMultiBlock())
 			return 0;
 		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(writex, writey, writez);
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(writex, writey, writez);
 			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord) {
 				if (tile.hasMultiBlock() || !tile.needsMultiblock())
 					return tile.getNumberStagesTotal();
@@ -507,13 +508,13 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private void followHead(World world, int x, int y, int z, int meta) {
 		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getBlockTileEntity(readx, ready, readz);
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
 				this.copyDataFrom(tile);
 			}
 		}
 		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
-			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getBlockTileEntity(writex, writey, writez); //write!
+			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(writex, writey, writez); //write!
 			if (tile.readx == x && tile.ready == y && tile.readz == z) {
 				if (tile.inter != null)
 					inter = tile.inter;
@@ -618,7 +619,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(6, 6, 6);
+		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(6, 6, 6);
 	}
 
 	private static enum Interference {

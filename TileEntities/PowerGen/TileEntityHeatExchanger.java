@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
@@ -32,6 +23,16 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine implements TemperatureTE, ReactorPowerReceiver {
@@ -90,7 +91,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 			int dz = z+dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r == ReactorTiles.BOILER) {
-				TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(dx, dy, dz);
 				int dT = temperature - te.getTemperature();
 				if (dT > 0) {
 					temperature -= dT/4;
@@ -222,19 +223,19 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		if (waterside != null) {
 			Tamb /= 2;
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
 			Tamb += 200;
 			if (temperature < 100)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, fireside, 0, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, fireside, Blocks.air, 0);
 			else {
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 6, ConfigRegistry.BLOCKDAMAGE.getState());
 			}
 		}
@@ -242,9 +243,9 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		if (lavaside != null) {
 			Tamb += 600;
 			if (temperature < 100)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, lavaside, Block.stone.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, lavaside, Blocks.stone, 0);
 			else {
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 6, ConfigRegistry.BLOCKDAMAGE.getState());
 			}
 		}
@@ -259,12 +260,12 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature > 100) {
-			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
-			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 0);
 		}
 	}
 

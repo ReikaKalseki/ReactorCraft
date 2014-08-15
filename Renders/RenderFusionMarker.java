@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -27,6 +16,17 @@ import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
+
+import java.util.ArrayList;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderFusionMarker extends ReactorRenderBase
 {
@@ -66,7 +66,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 	}
 
 	private void renderMarkerBody(TileEntityFusionMarker tile, double par2, double par4, double par6) {
-		Icon ico = Block.torchRedstoneActive.getIcon(0, 0);
+		IIcon ico = Blocks.redstone_torch.getIcon(0, 0);
 		ReikaTextureHelper.bindTerrainTexture();
 		float u = ico.getMinU();
 		float v = ico.getMinV();

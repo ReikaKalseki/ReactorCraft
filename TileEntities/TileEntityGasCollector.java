@@ -9,22 +9,24 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityGasCollector extends TileEntityReactorBase implements IFluidHandler {
 
@@ -42,9 +44,9 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 			ticks -= 8;
 
 		this.getIOSides(world, x, y, z, meta);
-		int id = world.getBlockId(readx, ready, readz);
-		if (id == Block.furnaceBurning.blockID) {
-			TileEntityFurnace te = (TileEntityFurnace)world.getBlockTileEntity(readx, ready, readz);
+		Block id = world.getBlock(readx, ready, readz);
+		if (id == Blocks.lit_furnace) {
+			TileEntityFurnace te = (TileEntityFurnace)world.getTileEntity(readx, ready, readz);
 			ItemStack fuel = te.getStackInSlot(1);
 			if (fuel != null) {
 				ItemMaterial mat = ItemMaterialController.instance.getMaterial(fuel);
@@ -60,8 +62,8 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	}
 
 	public boolean hasFurnace() {
-		int id = worldObj.getBlockId(readx, ready, readz);
-		return id == Block.furnaceIdle.blockID || id == Block.furnaceBurning.blockID;
+		Block id = worldObj.getBlock(readx, ready, readz);
+		return id == Blocks.furnace || id == Blocks.lit_furnace;
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

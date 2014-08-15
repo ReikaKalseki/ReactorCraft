@@ -9,18 +9,18 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderWaterLine extends ReactorRenderBase {
 
@@ -63,7 +63,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 	}
 
 	private void renderBlock(TileEntitySteamLine te, double par2, double par4, double par6) {
-		Icon ico = Block.stone.getIcon(0, 0);
+		IIcon ico = Blocks.stone.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();

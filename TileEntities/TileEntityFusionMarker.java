@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
+
 import java.util.ArrayList;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 
 public class TileEntityFusionMarker extends TileEntityReactorBase {
 

@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -23,6 +16,13 @@ import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderGasCollector extends ReactorRenderBase
 {
@@ -114,7 +114,7 @@ public class RenderGasCollector extends ReactorRenderBase
 
 	private void renderTarget(TileEntityGasCollector tile, double par2, double par4, double par6) {
 		int[] xyz = tile.getTarget();
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(xyz[0], xyz[1], xyz[2], xyz[0]+1, xyz[1]+1, xyz[2]+1).expand(0.03125, 0.03125, 0.03125);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xyz[0], xyz[1], xyz[2], xyz[0]+1, xyz[1]+1, xyz[2]+1).expand(0.03125, 0.03125, 0.03125);
 		ReikaAABBHelper.renderAABB(box, par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, tile.ticks, 0, 127, 255, true);
 	}
 

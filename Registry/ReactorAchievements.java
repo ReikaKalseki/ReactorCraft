@@ -9,17 +9,20 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorAchievementPage;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraftforge.common.AchievementPage;
 
 public enum ReactorAchievements {
 
@@ -29,20 +32,20 @@ public enum ReactorAchievements {
 	DEPLETED(			2, -2,	ReactorItems.DEPLETED, 											UF6,			false), //make
 	FISSION(			4, 0,	ReactorItems.FUEL, 												UF6,			false), //fission event
 	PLUTONIUM(			6, 0,	ReactorItems.PLUTONIUM, 										FISSION,		true), //make
-	PUPOISON(			8, 0,	Item.spiderEye, 												PLUTONIUM,		false), //s/e
+	PUPOISON(			8, 0,	Items.spider_eye, 												PLUTONIUM,		false), //s/e
 	HOLDWASTE(			4, 4,	ReactorItems.WASTE,												FISSION,		false), //s/e
 	DECAY(				6, 2,	ReactorTiles.STORAGE, 											FISSION,		true), //s/e
 	WASTELEAK(			6, 4,	ReactorItems.GOGGLES,											HOLDWASTE,		false), //s/e
 	AMMONIA(			6, -2,	ReactorStacks.nh3can,											FISSION,		false), //make NH3 steam
 	NH3EXPLODE(			8, -2,	ReactorTiles.STEAMLINE,											AMMONIA,		false), //explosion
 	GIGATURBINE(		6, -4,	ReactorTiles.TURBINECORE, 										AMMONIA,		true), //GW on one turbine
-	HOTCORE(			4, -4,	Block.lavaMoving, 												FISSION,		false), //500C core
+	HOTCORE(			4, -4,	Blocks.flowing_lava, 												FISSION,		false), //500C core
 	SCRAM(				2, -4,	ReactorTiles.CPU, 												HOTCORE,		false), //s/e
 	MELTDOWN(			4, -6,	MatBlocks.SLAG.getStackOf(),									HOTCORE,		false), //s/e
 	HEAVYWATER(			-2, 0,	ReactorItems.BUCKET, 											MINEURANIUM,	false), //make
 	CANDU(				-2, 2,	ReactorTiles.COOLANT, 											HEAVYWATER,		false), //d20 in cool cell
 	PLASMA(				-4, 0,	ReactorTiles.HEATER, 											HEAVYWATER,		true), //make plasma
-	ESCAPE(				-4, -2,	Block.fire,			 											PLASMA,			false), //!canAffect(e)
+	ESCAPE(				-4, -2,	Blocks.fire,			 											PLASMA,			false), //!canAffect(e)
 	MELTPIPE(			-4, 2,	ReactorTiles.MAGNETPIPE,										PLASMA,			false), //s/e
 	FUSION(				-6, 0,	ReactorTiles.MAGNET, 											PLASMA,			true), //fusion event
 	FIFTYGW(			-6, 2,	MachineRegistry.DYNAMOMETER.getCraftedProduct(),				FUSION,			true); //per reactor
@@ -104,7 +107,7 @@ public enum ReactorAchievements {
 		//ReikaJavaLibrary.pConsole(Arrays.toString(ReactorCraft.config.achievementIDs));
 		for (int i = 0; i < list.length; i++) {
 			ReactorAchievements a = list[i];
-			int id = ReactorCraft.config.achievementIDs[i];
+			String id = a.name();
 			Achievement dep = a.hasDependency() ? a.dependency.get() : null;
 			Achievement ach = new Achievement(id, a.name().toLowerCase(), a.xPosition, a.yPosition, a.iconItem, dep);
 			id = ach.statId;
@@ -114,7 +117,7 @@ public enum ReactorAchievements {
 			if (a.isSpecial)
 				ach.setSpecial();
 			ReactorCraft.achievements[i] = ach;
-			ach.registerAchievement();
+			ach.registerStat();
 			ReactorCraft.logger.log("Registering achievement "+a+" with ID "+id+" and ingame name \""+a+"\" (slot "+i+").");
 		}
 		AchievementPage.registerAchievementPage(new ReactorAchievementPage("ReactorCraft", ReactorCraft.achievements));

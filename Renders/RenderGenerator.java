@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
@@ -25,6 +17,14 @@ import Reika.ReactorCraft.Models.ModelGenerator;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderGenerator extends ReactorRenderBase
 {
@@ -69,7 +69,7 @@ public class RenderGenerator extends ReactorRenderBase
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;
-				Icon ico = ReactorBlocks.GENERATORMULTI.getBlockVariable().getIcon(0, -1);
+				IIcon ico = ReactorBlocks.GENERATORMULTI.getBlockInstance().getIcon(0, -1);
 				ReikaTextureHelper.bindTerrainTexture();
 				float u = ico.getMinU();
 				float v = ico.getMinV();

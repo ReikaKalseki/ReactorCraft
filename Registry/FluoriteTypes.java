@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public enum FluoriteTypes {
 
@@ -75,11 +76,11 @@ public enum FluoriteTypes {
 	}
 
 	public ItemStack getOreBlock() {
-		return new ItemStack(ReactorOres.FLUORITE.getBlockID(), 1, this.ordinal());
+		return new ItemStack(ReactorOres.FLUORITE.getBlock(), 1, this.ordinal());
 	}
 
 	public ItemStack getStorageBlock() {
-		return new ItemStack(ReactorBlocks.FLUORITE.getBlockID(), 1, this.ordinal());
+		return new ItemStack(ReactorBlocks.FLUORITE.getBlockInstance(), 1, this.ordinal());
 	}
 
 }

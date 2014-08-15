@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.RelativePositionList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
@@ -30,6 +23,15 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
@@ -82,9 +84,9 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				int mid = world.getBlockId(dx, dy, dz);
+				Block mid = world.getBlock(dx, dy, dz);
 				int mmeta = world.getBlockMetadata(dx, dy, dz);
-				if (mid != ReactorBlocks.TURBINEMULTI.getBlockID())
+				if (mid != ReactorBlocks.TURBINEMULTI.getBlockInstance())
 					return false;
 				if (mmeta < 8)
 					return false;
@@ -138,7 +140,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 							TileEntity te = this.getTileEntity(tx, ty, tz);
 							((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
 						}
-						else if (world.getBlockId(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
+						else if (world.getBlock(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
 							TileEntity te = this.getTileEntity(tx, ty, tz);
 							((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
 						}
@@ -207,7 +209,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 				int sx = xyz[0];
 				int sy = xyz[1];
 				int sz = xyz[2];
-				TileEntity tile = world.getBlockTileEntity(sx, sy, sz);
+				TileEntity tile = world.getTileEntity(sx, sy, sz);
 				if (tile instanceof TileEntitySteamInjector) {
 					TileEntitySteamInjector te = (TileEntitySteamInjector)tile;
 					int lube = te.getLubricant();

@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -28,6 +22,13 @@ import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
+
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class TileEntityWasteStorage extends TileEntityWasteUnit implements RangedEffect {
 
@@ -47,7 +48,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 				if (rand.nextInt(4) == 0)
 					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 				if (rand.nextInt(200) == 0) {
-					world.setBlock(x, y, z, 0);
+					world.setBlockToAir(x, y, z);
 					world.newExplosion(null, x+0.5, y+0.5, y+0.5, 4F, true, true);
 				}
 			}

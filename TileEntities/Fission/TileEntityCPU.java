@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import java.util.ArrayList;
-
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -27,6 +22,13 @@ import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.PowerTransferHelper;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured {
 
@@ -49,8 +51,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		if (reactor.isEmpty()) {
 			layout.clear();
 			int r = 6;
-			int id = ReactorBlocks.REACTOR.getBlockID();
-			int id2 = ReactorBlocks.MODELREACTOR.getBlockID();
+			Block id = ReactorBlocks.REACTOR.getBlockInstance();
+			Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
 			for (int i = 2; i < 6; i++)
 				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y, z-r, x+r, y, z+r, id, id2);
 			for (int i = 0; i < reactor.getSize(); i++) {
@@ -58,10 +60,10 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 				int dx = xyz[0];
 				int dy = xyz[1];
 				int dz = xyz[2];
-				int idx = world.getBlockId(dx, dy, dz);
+				Block idx = world.getBlock(dx, dy, dz);
 				int metax = world.getBlockMetadata(dx, dy, dz);
-				if (idx == ReactorTiles.CONTROL.getBlockID() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {
-					TileEntityControlRod rod = (TileEntityControlRod)world.getBlockTileEntity(dx, dy, dz);
+				if (idx == ReactorTiles.CONTROL.getBlock() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {
+					TileEntityControlRod rod = (TileEntityControlRod)world.getTileEntity(dx, dy, dz);
 					layout.addControlRod(rod);
 				}
 			}

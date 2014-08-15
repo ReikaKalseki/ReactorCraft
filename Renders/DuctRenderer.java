@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Renders.PipeRenderer;
+
+import net.minecraft.tileentity.TileEntity;
 
 public class DuctRenderer extends ReactorRenderBase
 {

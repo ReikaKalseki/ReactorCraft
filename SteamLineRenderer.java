@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import Reika.DragonAPI.Instantiable.Rendering.WorldPipingRenderer;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Instantiable.Rendering.WorldPipingRenderer;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class SteamLineRenderer extends WorldPipingRenderer {
 
@@ -31,7 +32,7 @@ public class SteamLineRenderer extends WorldPipingRenderer {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		super.renderWorldBlock(world, x, y, z, block, modelId, renderer);
-		TileEntitySteamLine tile = (TileEntitySteamLine)world.getBlockTileEntity(x, y, z);
+		TileEntitySteamLine tile = (TileEntitySteamLine)world.getTileEntity(x, y, z);
 		GL11.glColor4f(1, 1, 1, 1);
 		for (int i = 0; i < 6; i++) {
 			this.renderFace(tile, x, y, z, dirs[i], 0.333333);
@@ -43,8 +44,8 @@ public class SteamLineRenderer extends WorldPipingRenderer {
 	protected void renderFace(TileEntity te, int x, int y, int z, ForgeDirection dir, double size) {
 		TileEntitySteamLine tile = (TileEntitySteamLine)te;
 		Tessellator v5 = Tessellator.instance;
-		//Icon ico = Block.cloth.getIcon(0, 15);
-		Icon ico = Block.stone.getIcon(0, 0);
+		//Icon ico = Blocks.wool.getIcon(0, 15);
+		IIcon ico = Blocks.stone.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();

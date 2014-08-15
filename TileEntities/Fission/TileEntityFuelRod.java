@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
@@ -21,6 +18,11 @@ import Reika.ReactorCraft.Registry.ReactorFuel;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class TileEntityFuelRod extends TileEntityNuclearCore {
 
@@ -38,20 +40,20 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (inv[i] != null)
 			return false;
-		if (is.itemID == ReactorItems.FUEL.getShiftedItemID())
+		if (is.getItem() == ReactorItems.FUEL.getItemInstance())
 			return i < 4;
-		if (is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID())
+		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
 			return i < 4;
-		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+		if (is.getItem() == ReactorItems.DEPLETED.getItemInstance())
 			return i < 4;
 		return false;
 	}
 
 	@Override
 	public boolean canRemoveItem(int i, ItemStack is) {
-		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
+		if (is.getItem() == ReactorItems.WASTE.getItemInstance())
 			return true;
-		if (is.itemID == ReactorItems.DEPLETED.getShiftedItemID())
+		if (is.getItem() == ReactorItems.DEPLETED.getItemInstance())
 			return true;
 		return false;
 	}
@@ -66,7 +68,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 				int slot = -1;
 				for (int i = 3; i >= 0; i--) {
 					ItemStack is = inv[i];
-					if (is != null && is.itemID == ReactorItems.FUEL.getShiftedItemID()) {
+					if (is != null && is.getItem() == ReactorItems.FUEL.getItemInstance()) {
 						slot = i;
 						i = -1;
 					}
@@ -89,7 +91,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					return true;
 				}
 				else {
-					slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getShiftedItemID(), this);
+					slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getItemInstance(), this);
 					if (slot != -1) {
 
 						if (ReikaRandomHelper.doWithChance(4)) {
@@ -114,14 +116,14 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	}
 
 	private int getFirstFuelSlot() {
-		int fuel = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getShiftedItemID(), this);
+		int fuel = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getItemInstance(), this);
 		return fuel;
 	}
 
 	@Override
 	public boolean isFissile() {
 		for (int i = 0; i < ReactorFuel.fuelList.length; i++) {
-			int id = ReactorFuel.fuelList[i].getFuelItem().itemID;
+			Item id = ReactorFuel.fuelList[i].getFuelItem().getItem();
 			if (ReikaInventoryHelper.checkForItem(id, inv))
 				return true;
 		}

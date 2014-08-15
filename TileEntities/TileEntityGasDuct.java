@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 
 public class TileEntityGasDuct extends TileEntityReactorPiping {
 
@@ -27,8 +29,8 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return Block.hardenedClay.getIcon(1, 0);
+	public IIcon getBlockIcon() {
+		return Blocks.hardened_clay.getIcon(1, 0);
 	}
 
 	public boolean isConnectedToNonSelf(ForgeDirection dir) {
@@ -40,9 +42,9 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
 		World world = worldObj;
-		int id = world.getBlockId(dx, dy, dz);
+		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return id != this.getMachine().getBlockID() || meta != this.getMachine().getBlockMetadata();
+		return id != this.getMachine().getBlock() || meta != this.getMachine().getBlockMetadata();
 	}
 
 	@Override
@@ -57,12 +59,12 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 
 	@Override
 	public Block getPipeBlockType() {
-		return Block.hardenedClay;
+		return Blocks.hardened_clay;
 	}
 
 	@Override
-	public Icon getGlassIcon() {
-		return Block.glass.getIcon(0, 0);
+	public IIcon getGlassIcon() {
+		return Blocks.glass.getIcon(0, 0);
 	}
 
 }

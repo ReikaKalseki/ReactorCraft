@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -27,6 +20,15 @@ import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable {
 
@@ -86,13 +88,13 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		int dz = zCoord+a.zOffset;
 		ReactorTiles r = ReactorTiles.getTE(worldObj, dx, yCoord, dz);
 		if (r == ReactorTiles.MAGNET) {
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getBlockTileEntity(dx, yCoord, dz);
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getTileEntity(dx, yCoord, dz);
 			hasSolenoid = te.hasSolenoid;
 		}
 		else if (r == ReactorTiles.INJECTOR) {
 			dx += a.xOffset;
 			dz += a.zOffset;
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getBlockTileEntity(dx, yCoord, dz);
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getTileEntity(dx, yCoord, dz);
 			if (te != null) {
 				hasSolenoid = te.hasSolenoid;
 			}
@@ -102,7 +104,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	private void collectCharge(World world, int x, int y, int z) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-3, z);
 		if (m == MachineRegistry.VANDEGRAFF) {
-			TileEntityVanDeGraff te = (TileEntityVanDeGraff)world.getBlockTileEntity(x, y-3, z);
+			TileEntityVanDeGraff te = (TileEntityVanDeGraff)world.getTileEntity(x, y-3, z);
 			te.dischargeToBlock(x, y, z, this);
 		}
 	}
@@ -113,7 +115,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		int dz = z+a.zOffset;
 		ReactorTiles r = ReactorTiles.getTE(world, dx, y, dz);
 		if (r == ReactorTiles.MAGNET) {
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(dx, y, dz);
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(dx, y, dz);
 			int dC = charge-te.charge;
 			if (dC > 0) {
 				te.charge += dC/4;
@@ -141,7 +143,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		else if (r == ReactorTiles.INJECTOR) {
 			dx += a.xOffset;
 			dz += a.zOffset;
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getBlockTileEntity(dx, y, dz);
+			TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(dx, y, dz);
 			if (te != null) {
 				int dC = charge-te.charge;
 				if (dC > 0) {
@@ -181,9 +183,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		for (int i = -r; i <= r; i++) {
 			for (int j = -r; j <= r; j++) {
 				for (int k = -r; k <= r; k++) {
-					int id = world.getBlockId(x+i, y+j, z+k);
-					if (id == Block.grass.blockID || id == Block.dirt.blockID) {
-						world.setBlock(x+i, y+j, z+k, 0);
+					Block b = world.getBlock(x+i, y+j, z+k);
+					if (b == Blocks.grass || b == Blocks.dirt) {
+						world.setBlockToAir(x+i, y+j, z+k);
 					}
 				}
 			}

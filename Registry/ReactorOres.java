@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -27,6 +16,20 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ExtraUtilsHandler;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.oredict.OreDictionary;
 
 public enum ReactorOres {
 
@@ -76,19 +79,19 @@ public enum ReactorOres {
 	}
 
 	public static ReactorOres getOre(IBlockAccess iba, int x, int y, int z) {
-		int id = iba.getBlockId(x, y, z);
+		Block id = iba.getBlock(x, y, z);
 		int meta = iba.getBlockMetadata(x, y, z);
-		if (id == ReactorBlocks.FLUORITEORE.getBlockID())
+		if (id == ReactorBlocks.FLUORITEORE.getBlockInstance())
 			return FLUORITE;
-		if (id != ReactorBlocks.ORE.getBlockID())
+		if (id != ReactorBlocks.ORE.getBlockInstance())
 			return null;
 		return oreList[meta];
 	}
 
-	public static ReactorOres getOre(int id, int meta) {
-		if (id == ReactorBlocks.FLUORITEORE.getBlockID())
+	public static ReactorOres getOre(Block id, int meta) {
+		if (id == ReactorBlocks.FLUORITEORE.getBlockInstance())
 			return FLUORITE;
-		if (id != ReactorBlocks.ORE.getBlockID())
+		if (id != ReactorBlocks.ORE.getBlockInstance())
 			return null;
 		return oreList[meta];
 	}
@@ -120,11 +123,11 @@ public enum ReactorOres {
 		}
 	}
 
-	public int getBlockID() {
+	public Block getBlock() {
 		if (this == FLUORITE)
-			return ReactorBlocks.FLUORITEORE.getBlockID();
+			return ReactorBlocks.FLUORITEORE.getBlockInstance();
 		else
-			return ReactorBlocks.ORE.getBlockID();
+			return ReactorBlocks.ORE.getBlockInstance();
 	}
 
 
@@ -136,7 +139,7 @@ public enum ReactorOres {
 	}
 
 	public ItemStack getOreBlock() {
-		return new ItemStack(this.getBlockID(), 1, this.getBlockMetadata());
+		return new ItemStack(this.getBlock(), 1, this.getBlockMetadata());
 	}
 
 	public ItemStack getProduct() {
@@ -163,11 +166,11 @@ public enum ReactorOres {
 		case CALCITE:
 			return ReikaJavaLibrary.makeListFrom(ReactorStacks.calcite.copy());
 		case AMMONIUM:
-			return ReikaJavaLibrary.makeListFrom(ReactorStacks.ammonium.copy(), new ItemStack(Block.netherrack));
+			return ReikaJavaLibrary.makeListFrom(ReactorStacks.ammonium.copy(), new ItemStack(Blocks.netherrack));
 		case MAGNETITE:
 			return ReikaJavaLibrary.makeListFrom(ReactorStacks.lodestone.copy());
 		default:
-			return ReikaJavaLibrary.makeListFrom(new ItemStack(ReactorBlocks.ORE.getBlockID(), 1, meta));
+			return ReikaJavaLibrary.makeListFrom(new ItemStack(ReactorBlocks.ORE.getBlockInstance(), 1, meta));
 		}
 	}
 
@@ -185,18 +188,18 @@ public enum ReactorOres {
 		}
 	}
 
-	public int getReplaceableBlock() {
+	public Block getReplaceableBlock() {
 		switch(dimensionID) {
 		case 0:
-			return Block.stone.blockID;
+			return Blocks.stone;
 		case 1:
-			return Block.whiteStone.blockID;
+			return Blocks.end_stone;
 		case -1:
-			return Block.netherrack.blockID;
+			return Blocks.netherrack;
 		case 7:
-			return Block.stone.blockID;
+			return Blocks.stone;
 		default:
-			return Block.stone.blockID;
+			return Blocks.stone;
 		}
 	}
 
@@ -258,12 +261,12 @@ public enum ReactorOres {
 
 	public boolean canGenAt(World world, int x, int y, int z) {
 		if (this == AMMONIUM)
-			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaStill.blockID) != null || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.lavaMoving.blockID) != null;
+			return ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.lava) != null || ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.flowing_lava) != null;
 		return true;
 	}
 
 	public boolean dropsSelf(int meta) {
 		List<ItemStack> li = this.getOreDrop(meta);
-		return li.size() == 1 && li.get(0).itemID == ReactorBlocks.ORE.getBlockID() && li.get(0).getItemDamage() == meta;
+		return li.size() == 1 && li.get(0).getItem() == Item.getItemFromBlock(ReactorBlocks.ORE.getBlockInstance()) && li.get(0).getItemDamage() == meta;
 	}
 }

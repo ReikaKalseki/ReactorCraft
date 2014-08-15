@@ -9,15 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+
+import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderFusionHeater extends ReactorRenderBase
 {

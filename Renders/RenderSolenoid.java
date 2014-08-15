@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -24,6 +17,13 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelSolenoid;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderSolenoid extends ReactorRenderBase
 {
@@ -56,7 +56,7 @@ public class RenderSolenoid extends ReactorRenderBase
 		else {
 			GL11.glTranslated(-0.5, -0.5, -0.5);
 			Tessellator v5 = Tessellator.instance;
-			Icon ico = ReactorBlocks.SOLENOIDMULTI.getBlockVariable().getIcon(0, 0);
+			IIcon ico = ReactorBlocks.SOLENOIDMULTI.getBlockInstance().getIcon(0, 0);
 			ReikaTextureHelper.bindTerrainTexture();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
@@ -73,7 +73,7 @@ public class RenderSolenoid extends ReactorRenderBase
 			v5.addVertexWithUV(1, 2, 0, du, v);
 			v5.addVertexWithUV(0, 2, 0, u, v);
 
-			ico = ReactorBlocks.SOLENOIDMULTI.getBlockVariable().getIcon(2, 5);
+			ico = ReactorBlocks.SOLENOIDMULTI.getBlockInstance().getIcon(2, 5);
 			u = ico.getMinU();
 			v = ico.getMinV();
 			du = ico.getMaxU();

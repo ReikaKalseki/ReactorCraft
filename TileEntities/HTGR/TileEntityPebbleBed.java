@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.HTGR;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -25,6 +20,13 @@ import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable {
 
@@ -67,7 +69,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			int slot = -1;
 			for (int i = inv.length-1; i >= 0; i--) {
 				ItemStack is = inv[i];
-				if (is != null && is.itemID == ReactorItems.PELLET.getShiftedItemID()) {
+				if (is != null && is.getItem() == ReactorItems.PELLET.getItemInstance()) {
 					slot = i;
 					i = -1;
 				}
@@ -108,7 +110,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 
 				if (r == this.getMachine()) {
-					TileEntityPebbleBed te = (TileEntityPebbleBed)world.getBlockTileEntity(dx, dy, dz);
+					TileEntityPebbleBed te = (TileEntityPebbleBed)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
 						temperature -= dTemp/16;
@@ -119,13 +121,13 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		}
 
 		if (temperature > this.getMaxTemperature()) {
-			world.setBlock(x, y, z, Block.lavaMoving.blockID);
+			world.setBlock(x, y, z, Blocks.flowing_lava);
 		}
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return is.itemID == ReactorItems.PELLET.getShiftedItemID() || is.itemID == ReactorItems.OLDPELLET.getShiftedItemID();
+		return is.getItem() == ReactorItems.PELLET.getItemInstance() || is.getItem() == ReactorItems.OLDPELLET.getItemInstance();
 	}
 
 	@Override
@@ -140,7 +142,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	@Override
 	public boolean canRemoveItem(int slot, ItemStack is) {
-		return is.itemID == ReactorItems.OLDPELLET.getShiftedItemID();
+		return is.getItem() == ReactorItems.OLDPELLET.getItemInstance();
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	}
 
 	public boolean isFissile() {
-		return ReikaInventoryHelper.checkForItem(ReactorItems.PELLET.getShiftedItemID(), inv);
+		return ReikaInventoryHelper.checkForItem(ReactorItems.PELLET.getItemInstance(), inv);
 	}
 
 	public boolean feed() {
@@ -162,7 +164,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		int id = world.getBlockId(x, y-1, z);
+		Block id = world.getBlock(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof TileEntityPebbleBed) {
@@ -170,7 +172,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 				for (int i = inv.length-1; i > 0; i--)
 					inv[i] = inv[i-1];
 
-				id = world.getBlockId(x, y+1, z);
+				id = world.getBlock(x, y+1, z);
 				meta = world.getBlockMetadata(x, y+1, z);
 				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
 				if (tile instanceof TileEntityPebbleBed) {

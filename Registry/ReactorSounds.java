@@ -9,49 +9,52 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.net.URL;
-
-import net.minecraft.network.packet.Packet;
-import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.SoundList;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Interfaces.SoundEnum;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import cpw.mods.fml.client.FMLClientHandler;
+
+import java.net.URL;
+
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public enum ReactorSounds implements SoundList {
+public enum ReactorSounds implements SoundEnum {
 
-	TURBINE("#turbine"),
-	FUSION("fusion"),
-	CONTROL("control"),
-	SCRAM("scram");
+	TURBINE("#turbine", SoundCategory.AMBIENT),
+	FUSION("fusion", SoundCategory.AMBIENT),
+	CONTROL("control", SoundCategory.BLOCKS),
+	SCRAM("scram", SoundCategory.BLOCKS);
 
 	public static final ReactorSounds[] soundList = values();
 
-	public static final String SOUND_FOLDER = "Reika/ReactorCraft/Sounds/";
+	public static final String PREFIX = "Reika/ReactorCraft/";
+	public static final String SOUND_FOLDER = "Sounds/";
 	private static final String SOUND_PREFIX = "Reika.ReactorCraft.Sounds.";
 	private static final String SOUND_DIR = "Sounds/";
 	private static final String SOUND_EXT = ".ogg";
 	private static final String MUSIC_FOLDER = "music/";
 	private static final String MUSIC_PREFIX = "music.";
 
-	private String path;
-	private String name;
+	private final String path;
+	private final String name;
+	private final SoundCategory category;
 
 	private boolean isVolumed = false;
 
-	private ReactorSounds(String n) {
+	private ReactorSounds(String n, SoundCategory cat) {
 		if (n.startsWith("#")) {
 			isVolumed = true;
 			n = n.substring(1);
 		}
 		name = n;
 		path = SOUND_FOLDER+name+SOUND_EXT;
+		category = cat;
 	}
 
 	public float getSoundVolume() {
@@ -73,7 +76,7 @@ public enum ReactorSounds implements SoundList {
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		ReikaPacketHelper.sendSoundPacket(ReactorCraft.packetChannel, this.getPlayableReference(), world, x, y, z, vol*this.getModVolume(), pitch);
+		ReikaPacketHelper.sendSoundPacket(ReactorCraft.packetChannel, this, world, x, y, z, vol*this.getModVolume(), pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
@@ -84,16 +87,20 @@ public enum ReactorSounds implements SoundList {
 		this.playSound(world, x+0.5, y+0.5, z+0.5, 1, 1);
 	}
 
+	public void playSoundAtBlock(TileEntity te) {
+		this.playSoundAtBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	public void playSoundAtBlock(WorldLocation loc) {
+		this.playSoundAtBlock(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
+	}
+
 	public String getName() {
 		return this.name();
 	}
 
 	public String getPath() {
 		return path;
-	}
-
-	public String getPlayableReference() {
-		return SOUND_PREFIX+name;
 	}
 
 	public URL getURL() {
@@ -109,21 +116,8 @@ public enum ReactorSounds implements SoundList {
 		return null;
 	}
 
-	public static void playSoundPacket(DataInputStream in) {
-		String name;
-		try {
-			name = Packet.readString(in, Short.MAX_VALUE);
-			//ReikaJavaLibrary.pConsole(name+" on "+FMLCommonHandler.instance().getEffectiveSide());
-			double x = in.readDouble();
-			double y = in.readDouble();
-			double z = in.readDouble();
-			float v = in.readFloat();
-			float p = in.readFloat();
-			FMLClientHandler.instance().getClient().sndManager.playSound(name, (float)x, (float)y, (float)z, v, p);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			ReikaJavaLibrary.pConsole("Sound could not be played due to IOException!");
-		}
+	@Override
+	public SoundCategory getCategory() {
+		return category;
 	}
 }

@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -22,6 +17,12 @@ import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -73,7 +74,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	private void fail(World world, int x, int y, int z) {
 		int l = this.getGeneratorLength()/2;
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		double dx = x+0.5+this.getFacing().offsetX*l;
 		double dz = z+0.5+this.getFacing().offsetZ*l;
 		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, dx, y+0.5, dz, 12);
@@ -187,7 +188,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		int mz = Math.min(z1, zCoord);
 		int mx2 = Math.max(x1, xCoord);
 		int mz2 = Math.max(z1, zCoord);
-		return AxisAlignedBB.getAABBPool().getAABB(mx, yCoord-2, mz, mx2, yCoord+3, mz2).expand(6, 6, 6);
+		return AxisAlignedBB.getBoundingBox(mx, yCoord-2, mz, mx2, yCoord+3, mz2).expand(6, 6, 6);
 	}
 
 }

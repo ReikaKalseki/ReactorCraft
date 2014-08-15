@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
@@ -26,6 +20,14 @@ import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE, Feedable {
 
@@ -64,9 +66,9 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 				temperature -= ReikaThermoHelper.getTemperatureIncrease(1, 15000, ReikaThermoHelper.WATER_BLOCK_HEAT);
 				//ReikaJavaLibrary.pConsole(temperature);
 				if (temperature > 100)
-					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
 				else
-					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 6);
+					ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 6);
 			}
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
@@ -151,7 +153,7 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		int id = world.getBlockId(x, y-1, z);
+		Block id = world.getBlock(x, y-1, z);
 		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof TileEntityWasteContainer) {
@@ -159,7 +161,7 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 				for (int i = inv.length-1; i > 0; i--)
 					inv[i] = inv[i-1];
 
-				id = world.getBlockId(x, y+1, z);
+				id = world.getBlock(x, y+1, z);
 				meta = world.getBlockMetadata(x, y+1, z);
 				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
 				if (tile instanceof TileEntityWasteContainer) {

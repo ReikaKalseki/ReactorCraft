@@ -9,18 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.Data.BlockMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
@@ -63,6 +53,15 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
@@ -105,14 +104,14 @@ public enum ReactorTiles {
 	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3),
 	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine");
 
-	private String name;
+	private final String name;
 	private final Class teClass;
-	private int meta;
+	private final int meta;
 	private String render;
 	private final ReactorBlocks blockInstance;
 	private TileEntity renderInstance;
 
-	private static final HashMap<List<Integer>, ReactorTiles> reactorMappings = new HashMap();
+	private static final BlockMap<ReactorTiles> reactorMappings = new BlockMap();
 
 	public static final ReactorTiles[] TEList = values();
 
@@ -145,7 +144,7 @@ public enum ReactorTiles {
 		return li;
 	}
 
-	public static TileEntity createTEFromIDAndMetadata(int id, int meta) {
+	public static TileEntity createTEFromIDAndMetadata(Block id, int meta) {
 		ReactorTiles index = getMachineFromIDandMetadata(id, meta);
 		if (index == null) {
 			ReactorCraft.logger.logError("ID "+id+" and metadata "+meta+" are not a valid machine identification pair!");
@@ -165,8 +164,8 @@ public enum ReactorTiles {
 		}
 	}
 
-	public static ReactorTiles getMachineFromIDandMetadata(int id, int meta) {
-		return reactorMappings.get(Arrays.asList(id, meta));
+	public static ReactorTiles getMachineFromIDandMetadata(Block id, int meta) {
+		return reactorMappings.get(id, meta);
 	}
 
 	public boolean isAvailableInCreativeInventory() {
@@ -174,13 +173,13 @@ public enum ReactorTiles {
 	}
 
 	public static ReactorTiles getTE(IBlockAccess iba, int x, int y, int z) {
-		int id = iba.getBlockId(x, y, z);
+		Block id = iba.getBlock(x, y, z);
 		int meta = iba.getBlockMetadata(x, y, z);
 		return getMachineFromIDandMetadata(id, meta);
 	}
 
 	public ItemStack getCraftedProduct() {
-		return new ItemStack(ReactorItems.PLACER.getShiftedItemID(), 1, this.ordinal());
+		return new ItemStack(ReactorItems.PLACER.getItemInstance(), 1, this.ordinal());
 	}
 
 	public TileEntity createTEInstanceForRender() {
@@ -251,12 +250,12 @@ public enum ReactorTiles {
 		return this.getTextureStates() > 1;
 	}
 
-	public int getBlockID() {
-		return this.getBlockVariable().blockID;
+	public Block getBlock() {
+		return this.getBlockInstance();
 	}
 
-	public Block getBlockVariable() {
-		return blockInstance.getBlockVariable();
+	public Block getBlockInstance() {
+		return blockInstance.getBlockInstance();
 	}
 
 	public int getBlockMetadata() {
@@ -319,10 +318,9 @@ public enum ReactorTiles {
 	public static void loadMappings() {
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles r = ReactorTiles.TEList[i];
-			int id = r.getBlockID();
+			Block id = r.getBlock();
 			int meta = r.getBlockMetadata();
-			List<Integer> li = Arrays.asList(id, meta);
-			reactorMappings.put(li, r);
+			reactorMappings.put(id, meta, r);
 		}
 	}
 

@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityReactorFlywheel extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable {
 
@@ -49,7 +50,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 		int dz = z+this.getFacing().offsetZ;
 		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 		if (r != null && r.isTurbine()) {
-			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getBlockTileEntity(dx, dy, dz);
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(dx, dy, dz);
 			//if (te.getOmega() > omega && omega < MAXSPEED && te.getTorque() >= MINTORQUE) {
 			//	omega++;
 			//}

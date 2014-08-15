@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -28,9 +19,20 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.Entities.EntityDischarge;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityMagneticPipe extends TileEntityReactorPiping implements Shockable {
 
@@ -44,13 +46,13 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return charge > 0 ? BlockDuct.getGlow() : Block.blockGold.getIcon(0, 0);
+	public IIcon getBlockIcon() {
+		return charge > 0 ? BlockDuct.getGlow() : Blocks.gold_block.getIcon(0, 0);
 	}
 
 	@Override
 	public Block getPipeBlockType() {
-		return Block.blockGold;
+		return Blocks.gold_block;
 	}
 
 	@Override
@@ -69,8 +71,8 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	}
 
 	@Override
-	public Icon getGlassIcon() {
-		return RotaryCraft.blastpane.getIcon(0, 0);
+	public IIcon getGlassIcon() {
+		return BlockRegistry.BLASTPANE.getBlockInstance().getIcon(0, 0);
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 		if (charge <= 0 && !world.isRemote) {
 			charge = 0;
 			if (fluid != null && fluid.getTemperature(world, x, y, z) > 5000) {
-				world.setBlock(x, y, z, Block.lavaMoving.blockID);
+				world.setBlock(x, y, z, Blocks.flowing_lava);
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 				ReikaParticleHelper.LAVA.spawnAroundBlock(world, x, y, z, 5);
 				ReactorAchievements.MELTPIPE.triggerAchievement(this.getPlacer());
@@ -99,7 +101,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 			int dz = z+dir.offsetZ;
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r == ReactorTiles.MAGNETPIPE) {
-				TileEntityMagneticPipe tile = (TileEntityMagneticPipe)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityMagneticPipe tile = (TileEntityMagneticPipe)world.getTileEntity(dx, dy, dz);
 				int dq = charge - tile.charge;
 				if (dq > 0) {
 					tile.charge += dq/4;
@@ -167,7 +169,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	}
 
 	@Override
-	public Icon getOverlayIcon() {
+	public IIcon getOverlayIcon() {
 		return null;
 	}
 

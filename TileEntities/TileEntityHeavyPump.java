@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -31,6 +20,19 @@ import Reika.RotaryCraft.API.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityHeavyPump extends TileEntityReactorBase implements ReactorPowerReceiver, IFluidHandler, PipeConnector {
 
@@ -141,9 +143,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
+			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
+			if (id == Blocks.flowing_water || id == Blocks.water) {
 				water++;
 			}
 		}
@@ -151,9 +153,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 			return false;
 		for (int i = 1; i < MINDEPTH; i++) {
 			int dy = y+i;
-			int id = world.getBlockId(x, dy, z);
+			Block id = world.getBlock(x, dy, z);
 			int meta = world.getBlockMetadata(x, dy, z);
-			if (id != Block.waterMoving.blockID && id != Block.waterStill.blockID) {
+			if (id != Blocks.flowing_water && id != Blocks.water) {
 				return false;
 			}
 		}

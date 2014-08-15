@@ -9,19 +9,21 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.ReactorCraft.Auxiliary.ReactorBookData;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public enum ReactorBook implements HandbookEntry {
 
@@ -39,10 +41,10 @@ public enum ReactorBook implements HandbookEntry {
 	RESOURCE(ReactorItems.FUEL.getStackOf()),
 	//---------------------INFO--------------------//
 	INTRO("Introduction", ""),
-	PHYSICS("Nuclear Physics", Item.book),
+	PHYSICS("Nuclear Physics", Items.book),
 	FISSIONINFO("Nuclear Fission", ReactorItems.FUEL),
 	FUSIONINFO("Nuclear Fusion", ReactorStacks.h2can),
-	BASICS("Nuclear Power Basics", ReactorBlocks.STEAM.getBlockVariable()),
+	BASICS("Nuclear Power Basics", ReactorBlocks.STEAM.getBlockInstance()),
 	ENRICHMENT("Uranium Enrichment", ReactorTiles.CENTRIFUGE),
 	MELTDOWN("Meltdowns", MatBlocks.SLAG.getStackOf()),
 	RADIATION("Radiation", ReactorItems.WASTE),

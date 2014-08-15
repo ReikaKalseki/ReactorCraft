@@ -35,11 +35,11 @@ public enum MatBlocks {
 	}
 
 	public ItemStack getStackOf() {
-		return new ItemStack(ReactorBlocks.MATS.getBlockID(), 1, this.ordinal());
+		return new ItemStack(ReactorBlocks.MATS.getBlockInstance(), 1, this.ordinal());
 	}
 
 	public ItemStack getStackOf(int size) {
-		return new ItemStack(ReactorBlocks.MATS.getBlockID(), size, this.ordinal());
+		return new ItemStack(ReactorBlocks.MATS.getBlockInstance(), size, this.ordinal());
 	}
 
 }

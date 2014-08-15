@@ -9,13 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemBlock;
-import Reika.DragonAPI.Interfaces.RegistryEnum;
+import Reika.DragonAPI.Interfaces.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Blocks.BlockCorium;
 import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Blocks.BlockFluorite;
@@ -36,12 +32,18 @@ import Reika.ReactorCraft.Items.ItemBlockMultiBlock;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
 
-public enum ReactorBlocks implements RegistryEnum {
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
+public enum ReactorBlocks implements BlockEnum {
 
 	REACTOR(		BlockReactorTile.class, 									"Reactor", 					false),
 	MATS(			BlockReactorMat.class, 			ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
 	CORIUMFLOWING(	BlockCoriumFlowing.class, 									"Molten Corium (Flowing)", 	false),
-	CORIUMSTILL(	BlockCorium.class, 											"Molten Corium", 			false),
+	//CORIUMSTILL(	BlockCorium.class, 											"Molten Corium", 			false),
 	MODELREACTOR(	BlockReactorTileModelled.class, 							"ReactorModelled", 			true),
 	MACHINE(		BlockReactorTile.class, 									"Machine", 					false),
 	MODELMACHINE(	BlockReactorTileModelled.class, 							"MachineModelled", 			true),
@@ -79,8 +81,8 @@ public enum ReactorBlocks implements RegistryEnum {
 		this(cl, null, n, m);
 	}
 
-	public int getBlockID() {
-		return ReactorCraft.config.getBlockID(this.ordinal());
+	public static ReactorBlocks getFromItem(ItemStack is) {
+		return null;
 	}
 
 	public Material getBlockMaterial() {
@@ -91,7 +93,7 @@ public enum ReactorBlocks implements RegistryEnum {
 		case FLUORITEORE:
 			return Material.rock;
 		case CORIUMFLOWING:
-		case CORIUMSTILL:
+			//case CORIUMSTILL:
 			return Material.lava;
 		case REACTOR:
 			return Material.iron;
@@ -102,12 +104,12 @@ public enum ReactorBlocks implements RegistryEnum {
 
 	@Override
 	public Class[] getConstructorParamTypes() {
-		return new Class[]{int.class, Material.class};
+		return new Class[]{Material.class};
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
-		return new Object[]{this.getBlockID(), this.getBlockMaterial()};
+		return new Object[]{this.getBlockMaterial()};
 	}
 
 	@Override
@@ -137,7 +139,7 @@ public enum ReactorBlocks implements RegistryEnum {
 		case FLUORITEORE:
 			return FluoriteTypes.colorList[meta].getOreName();
 		default:
-			return "";
+			return this.getBasicName();
 		}
 	}
 
@@ -176,36 +178,11 @@ public enum ReactorBlocks implements RegistryEnum {
 		return itemBlock != null;
 	}
 
-	@Override
-	public String getConfigName() {
-		return this.getBasicName();
-	}
-
-	@Override
-	public int getDefaultID() {
-		return 1600+this.ordinal();
-	}
-
-	@Override
-	public boolean isBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean isItem() {
-		return false;
-	}
-
-	@Override
-	public String getCategory() {
-		return "Reactor Blocks";
-	}
-
 	public boolean isDummiedOut() {
 		return blockClass == null;
 	}
 
-	public Block getBlockVariable() {
+	public Block getBlockInstance() {
 		return ReactorCraft.blocks[this.ordinal()];
 	}
 
@@ -213,13 +190,12 @@ public enum ReactorBlocks implements RegistryEnum {
 		return model;
 	}
 
-	public int getID() {
-		return this.getBlockID();
+	public Item getItem() {
+		return Item.getItemFromBlock(this.getBlockInstance());
 	}
 
-	@Override
-	public boolean overwritingItem() {
-		return false;
+	public boolean matchItem(ItemStack is) {
+		return is.getItem() == this.getItem();
 	}
 
 }

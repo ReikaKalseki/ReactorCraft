@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -33,6 +25,16 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -87,16 +89,16 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	private void detonateAmmonia(World world, int x, int y, int z) {
 		ReactorAchievements.NH3EXPLODE.triggerAchievement(this.getPlacer());
 		BlockArray pipes = new BlockArray();
-		int id = ReactorTiles.STEAMLINE.getBlockID();
+		Block id = ReactorTiles.STEAMLINE.getBlock();
 		int meta = ReactorTiles.STEAMLINE.getBlockMetadata();
 		pipes.recursiveAddWithMetadata(world, x, y+1, z, id, meta);
 		for (int i = 0; i < pipes.getSize(); i++) {
 			int[] xyz = pipes.getNthBlock(i);
-			world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+			world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
 			ReikaParticleHelper.EXPLODE.spawnAt(world, xyz[0], xyz[1], xyz[2]);
-			ReikaItemHelper.dropItem(world, xyz[0], xyz[1], xyz[2], new ItemStack(Item.netherrackBrick));
+			ReikaItemHelper.dropItem(world, xyz[0], xyz[1], xyz[2], new ItemStack(Items.netherbrick));
 		}
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		ReikaItemHelper.dropItem(world, x, y, z, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(18)));
 		ReikaParticleHelper.EXPLODE.spawnAt(world, x, y, z);
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1.2F, 1);
@@ -105,14 +107,13 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		for (int i = -r; i <= r; i++) {
 			for (int j = -r; j <= r; j++) {
 				for (int k = -r; k <= r; k++) {
-					int id2 = world.getBlockId(x+i, y+j, z+k);
+					Block id2 = world.getBlock(x+i, y+j, z+k);
 					int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-					Block b = Block.blocksList[id2];
-					if (id2 != 0 && b.blockMaterial == Material.glass) {
-						b.dropBlockAsItem(world, x+i, y+j, z+k, meta2, 0);
-						world.setBlock(x+i, y+j, z+k, 0);
+					if (id2 != Blocks.air && id2.getMaterial() == Material.glass) {
+						id2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, 0);
+						world.setBlockToAir(x+i, y+j, z+k);
 						if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-							ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, meta2);
+							ReikaRenderHelper.spawnDropParticles(world, x, y, z, id2, meta2);
 						flag = true;
 					}
 				}
@@ -125,7 +126,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	protected void transferSteam(World world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
 		if (r == ReactorTiles.BOILER) {
-			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getBlockTileEntity(x, y+1, z);
+			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y+1, z);
 			if (steam > 0 && fluid != WorkingFluid.EMPTY) {
 				if (te.fluid == WorkingFluid.EMPTY || te.fluid == fluid) {
 					te.fluid = fluid;

@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission.Breeder;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -22,6 +19,10 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityBreederCore extends TileEntityNuclearCore {
 
@@ -48,7 +49,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 				int dz = z+dir.offsetZ;
 				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);/*
 				if (r == ReactorTiles.COOLANT) {
-					TileEntityWaterCell w = (TileEntityWaterCell)world.getBlockTileEntity(dx, dy, dz);
+					TileEntityWaterCell w = (TileEntityWaterCell)world.getTileEntity(dx, dy, dz);
 					int T = w.getTemperature();
 					int dT = temperature-T;
 					if (dT > 0) {
@@ -57,7 +58,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 					}
 				}*/
 				if (r == ReactorTiles.SODIUMBOILER) {
-					TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getBlockTileEntity(dx, dy, dz);
+					TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.getTemperature();
 					if (dTemp > 0) {
 						temperature -= dTemp/16;
@@ -73,14 +74,14 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public boolean isFissile() {
-		return ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv) != -1;
+		return ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv) != -1;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (inv[i] != null)
 			return false;
-		if (itemstack.itemID == ReactorItems.BREEDERFUEL.getShiftedItemID())
+		if (itemstack.getItem() == ReactorItems.BREEDERFUEL.getItemInstance())
 			return i < 4;
 		return false;
 	}
@@ -106,7 +107,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 			if (this.isPoisoned())
 				return true;
 			if (ReikaRandomHelper.doWithChance(25) && this.isFissile()) {
-				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getShiftedItemID(), inv);
+				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv);
 				if (slot != -1) {
 					if (ReikaRandomHelper.doWithChance(5)) {
 						int dmg = inv[slot].getItemDamage();
@@ -137,9 +138,9 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public boolean canRemoveItem(int slot, ItemStack is) {
-		if (is.itemID == ReactorItems.PLUTONIUM.getShiftedItemID())
+		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
 			return true;
-		if (is.itemID == ReactorItems.WASTE.getShiftedItemID())
+		if (is.getItem() == ReactorItems.WASTE.getItemInstance())
 			return true;
 		return false;
 	}

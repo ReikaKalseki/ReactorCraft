@@ -9,14 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.World;
 
-import java.util.Random;
-
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
+
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class ReactorOreGenerator implements IWorldGenerator {
@@ -34,7 +36,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 	public void generate(ReactorOres ore, World world, Random random, int chunkX, int chunkZ) {
 		//ReikaJavaLibrary.pConsole("Generating "+ore);
 		//ReikaJavaLibrary.pConsole(chunkX+", "+chunkZ);
-		int id = ore.getBlockID();
+		Block id = ore.getBlock();
 		int meta = ore.getBlockMetadata();
 		int passes = ore.perChunk;
 		if (ore == ReactorOres.FLUORITE) {
@@ -60,7 +62,7 @@ public class ReactorOreGenerator implements IWorldGenerator {
 				for (int k = -r; k <= r; k++) {
 					for (int l = -r; l <= r; l++) {
 						for (int m = -r; m <= r; m++) {
-							world.markBlockForRenderUpdate(posX, posY, posZ);
+							world.func_147479_m(posX, posY, posZ);
 						}
 					}
 				}

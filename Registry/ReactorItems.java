@@ -9,11 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import Reika.DragonAPI.Interfaces.RegistryEnum;
+import Reika.DragonAPI.Interfaces.ItemEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -34,7 +30,11 @@ import Reika.ReactorCraft.Items.ItemReactorPlacer;
 import Reika.ReactorCraft.Items.ItemRemoteControl;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public enum ReactorItems implements RegistryEnum {
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+
+public enum ReactorItems implements ItemEnum {
 
 	WASTE(0,		"item.waste", 			ItemNuclearWaste.class),
 	FUEL(1,			"item.fuel",			ItemReactorBasic.class),
@@ -46,7 +46,7 @@ public enum ReactorItems implements RegistryEnum {
 	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
-	CRAFTING(80,	"Crafting Items", 		ItemReactorBasic.class),
+	CRAFTING(80,	"Crafting item", 		ItemReactorBasic.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
 	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
@@ -80,15 +80,15 @@ public enum ReactorItems implements RegistryEnum {
 	@Override
 	public Class[] getConstructorParamTypes() {
 		if (this.isHazmat())
-			return new Class[]{int.class, int.class, int.class, int.class};
-		return new Class[]{int.class, int.class};
+			return new Class[]{int.class, int.class, int.class};
+		return new Class[]{int.class};
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
 		if (this.isHazmat())
-			return new Object[]{this.getItemID(), this.getSpriteIndex(), 0, this.ordinal()-HAZHELMET.ordinal()};
-		return new Object[]{this.getItemID(), this.getSpriteIndex()};
+			return new Object[]{this.getSpriteIndex(), 0, this.ordinal()-HAZHELMET.ordinal()};
+		return new Object[]{this.getSpriteIndex()};
 	}
 
 	public int getSpriteIndex() {
@@ -233,59 +233,16 @@ public enum ReactorItems implements RegistryEnum {
 		}
 	}
 
-	public int getItemID() {
-		return ReactorCraft.config.getItemID(this.ordinal());
-	}
-
-	public int getShiftedItemID() {
-		return ReactorCraft.config.getItemID(this.ordinal())+256;
-	}
-
-	@Override
-	public Class<? extends ItemBlock> getItemBlock() {
-		return null;
-	}
-
-	@Override
-	public boolean hasItemBlock() {
-		return false;
-	}
-
-	@Override
-	public String getConfigName() {
-		return this.getBasicName();
-	}
-
-	@Override
-	public int getDefaultID() {
-		return 18000+this.ordinal();
-	}
-
-	@Override
-	public boolean isBlock() {
-		return false;
-	}
-
-	@Override
-	public boolean isItem() {
-		return true;
-	}
-
-	@Override
-	public String getCategory() {
-		return "Item IDs";
-	}
-
 	public boolean isDummiedOut() {
 		return itemClass == null;
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
-		return new ItemStack(this.getShiftedItemID(), amt, 0);
+		return new ItemStack(this.getItemInstance(), amt, 0);
 	}
 
 	public ItemStack getCraftedMetadataProduct(int amt, int meta) {
-		return new ItemStack(this.getShiftedItemID(), amt, meta);
+		return new ItemStack(this.getItemInstance(), amt, meta);
 	}
 
 	public ItemStack getStackOf() {
@@ -300,9 +257,9 @@ public enum ReactorItems implements RegistryEnum {
 		return ReactorCraft.items[this.ordinal()];
 	}
 
-	public static ReactorItems getEntryByID(int id) {
+	public static ReactorItems getEntryByID(Item id) {
 		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getShiftedItemID() == id)
+			if (itemList[i].getItemInstance() == id)
 				return itemList[i];
 		}
 		//throw new RegistrationException(ReactorCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
@@ -312,7 +269,7 @@ public enum ReactorItems implements RegistryEnum {
 	public static ReactorItems getEntry(ItemStack is) {
 		if (is == null)
 			return null;
-		return getEntryByID(is.itemID);
+		return getEntryByID(is.getItem());
 	}
 
 	public boolean isAvailableInCreative(ItemStack item) {
@@ -327,10 +284,6 @@ public enum ReactorItems implements RegistryEnum {
 		default:
 			return true;
 		}
-	}
-
-	public int getID() {
-		return this.getItemID();
 	}
 
 	@Override

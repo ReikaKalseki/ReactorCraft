@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -36,6 +22,21 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
 
@@ -110,7 +111,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	private boolean hasFluorite() {
 		if (inv[0] == null)
 			return false;
-		if (inv[0].itemID == ReactorItems.FLUORITE.getShiftedItemID())
+		if (inv[0].getItem() == ReactorItems.FLUORITE.getItemInstance())
 			return true;
 		ArrayList<ItemStack> shards = OreDictionary.getOres("gemFluorite");
 		return ReikaItemHelper.listContainsItemStack(shards, inv[0]);
@@ -165,9 +166,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	private void getWaterBuckets() {
-		if (inv[1] != null && inv[1].itemID == Item.bucketWater.itemID && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
+		if (inv[1] != null && inv[1].getItem() == Items.water_bucket && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
 			water.fill(FluidRegistry.getFluidStack("water", FluidContainerRegistry.BUCKET_VOLUME), true);
-			inv[1] = new ItemStack(Item.bucketEmpty);
+			inv[1] = new ItemStack(Items.bucket);
 		}
 	}
 
@@ -197,9 +198,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 2)
 			return this.isValidUranium(is);
-		if (is.itemID == ReactorItems.FLUORITE.getShiftedItemID())
+		if (is.getItem() == ReactorItems.FLUORITE.getItemInstance())
 			return i == 0;
-		if (is.itemID == Item.bucketWater.itemID)
+		if (is.getItem() == Items.water_bucket)
 			return i == 1;
 		return false;
 	}
@@ -287,7 +288,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public static boolean isUF6Ingredient(ItemStack is) {
-		if (is.itemID == ReactorItems.FLUORITE.getShiftedItemID())
+		if (is.getItem() == ReactorItems.FLUORITE.getItemInstance())
 			return true;
 		if (isValidUranium(is))
 			return true;

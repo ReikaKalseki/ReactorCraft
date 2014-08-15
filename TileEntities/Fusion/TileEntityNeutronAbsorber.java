@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -20,6 +18,9 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 
 public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements Temperatured, ReactorCoreTE {
 
@@ -38,7 +39,7 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 
 			if (!world.isRemote) {
 				if (temperature >= this.getMaxTemperature()) {
-					world.setBlock(x, y, z, Block.lavaMoving.blockID);
+					world.setBlock(x, y, z, Blocks.flowing_lava);
 					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 				}
 			}
