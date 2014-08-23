@@ -10,8 +10,8 @@
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Instantiable.RelativePositionList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.RelativePositionList;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;

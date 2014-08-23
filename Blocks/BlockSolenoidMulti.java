@@ -308,9 +308,9 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
 			}
 		}
-		int midX = blocks.getMinX()+blocks.getSizeX()/2;
-		int midY = blocks.getMinY()+blocks.getSizeY()/2;
-		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
+		int midX = blocks.getMidX();
+		int midY = blocks.getMidY();
+		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.SOLENOID) {
 			TileEntitySolenoidMagnet te = (TileEntitySolenoidMagnet)world.getTileEntity(midX, midY, midZ);
 			te.hasMultiBlock = false;
@@ -328,9 +328,9 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
 			}
 		}
-		int midX = blocks.getMinX()+blocks.getSizeX()/2;
-		int midY = blocks.getMinY()+blocks.getSizeY()/2;
-		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
+		int midX = blocks.getMidX();
+		int midY = blocks.getMidY();
+		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.SOLENOID) {
 			TileEntitySolenoidMagnet te = (TileEntitySolenoidMagnet)world.getTileEntity(midX, midY, midZ);
 			te.hasMultiBlock = true;
