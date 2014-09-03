@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -22,13 +28,6 @@ import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.PowerTransferHelper;
-
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured {
 

@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.DragonAPI.Libraries.MathSci.Isotopes;
-import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-import Reika.ReactorCraft.Auxiliary.WasteManager;
-import Reika.ReactorCraft.Base.ReactorItemBase;
-import Reika.ReactorCraft.Entities.EntityNuclearWaste;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,10 +18,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.WasteManager;
+import Reika.ReactorCraft.Base.ItemReactorMulti;
+import Reika.ReactorCraft.Entities.EntityNuclearWaste;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemNuclearWaste extends ReactorItemBase {
+public class ItemNuclearWaste extends ItemReactorMulti {
 
 	public ItemNuclearWaste(int tex) {
 		super(tex);

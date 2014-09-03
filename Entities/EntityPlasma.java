@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import Reika.DragonAPI.Base.ParticleEntity;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.ReactorCraft;
-
 import io.netty.buffer.ByteBuf;
 
 import java.util.List;
@@ -21,6 +16,10 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.ParticleEntity;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData {

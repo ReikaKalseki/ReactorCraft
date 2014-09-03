@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.ReactorCraft.Base.ReactorItemBase;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemIronFinder extends ReactorItemBase {
 

@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Base.ReactorItemBase;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ChargeableTool;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -28,6 +21,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Base.ReactorItemBase;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ChargeableTool;
 
 public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool {
 

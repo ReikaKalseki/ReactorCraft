@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,6 +17,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,10 +31,6 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	public ReactorItemBase(int tex) {
 		index = tex;
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
-		if (this.getDataValues() > 1) {
-			hasSubtypes = true;
-			this.setMaxDamage(0);
-		}
 	}
 
 	@Override
@@ -62,22 +57,19 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 		}
 	}
 
-	public final int getDataValues() {
-		ReactorItems i = ReactorItems.getEntryByID(this);
-		if (i == null)
-			return 0;
-		return i.getNumberMetadatas();
+	public int getDataValues() {
+		return 1;
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack is) {
+	public final String getUnlocalizedName(ItemStack is) {
 		if (this.getDataValues() <= 1)
 			return super.getUnlocalizedName(is);
 		int d = is.getItemDamage();
 		return super.getUnlocalizedName() + "." + d;
 	}
 
-	public Class getTextureReferenceClass() {
+	public final Class getTextureReferenceClass() {
 		return ReactorCraft.class;
 	}
 

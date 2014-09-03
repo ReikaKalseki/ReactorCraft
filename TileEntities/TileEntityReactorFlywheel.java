@@ -9,14 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
 public class TileEntityReactorFlywheel extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable {
 
@@ -27,7 +29,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	private ForgeDirection facing;
 
-	public boolean hasMultiBlock = true;
+	public boolean hasMultiblock = true;
 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;
@@ -71,6 +73,13 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 			omega = 0;
 		}
 		power = (long)omega*(long)torque;
+		TileEntity tg = this.getAdjacentTileEntity(this.getFacing().getOpposite());
+		if (tg instanceof ShaftPowerReceiver) {
+			ShaftPowerReceiver rec = (ShaftPowerReceiver)tg;
+			rec.setOmega(this.getOmega());
+			rec.setTorque(this.getTorque());
+			rec.setPower(this.getPower());
+		}
 	}
 
 	private ForgeDirection setFacing(int meta) {
@@ -90,7 +99,15 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-
+		int dx = x+this.getFacing().offsetX;
+		int dy = y+this.getFacing().offsetY;
+		int dz = z+this.getFacing().offsetZ;
+		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+		if (r != null && r.isTurbine()) {
+			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(dx, dy, dz);
+			phi = te.phi*6;
+		}
+		iotick -= 8;
 	}
 
 	@Override
@@ -136,7 +153,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	@Override
 	public boolean isEmitting() {
-		return hasMultiBlock;
+		return hasMultiblock;
 	}
 
 	@Override
@@ -167,6 +184,26 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 		else
 			this.setBlockMetadata(0);
 		return true;
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		facing = dirs[NBT.getInteger("face")];
+		hasMultiblock = NBT.getBoolean("multi");
+
+		power = NBT.getLong("pwr");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("face", this.getFacing().ordinal());
+		NBT.setBoolean("multi", hasMultiblock);
+
+		NBT.setLong("pwr", power);
 	}
 
 }

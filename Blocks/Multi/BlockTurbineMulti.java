@@ -7,14 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Blocks;
-
-import Reika.DragonAPI.Instantiable.Data.SlicedBlockBlueprint;
-import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+package Reika.ReactorCraft.Blocks.Multi;
 
 import java.util.Arrays;
 
@@ -24,6 +17,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.SlicedBlockBlueprint;
+import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 
 public class BlockTurbineMulti extends BlockMultiBlock {
 
@@ -32,12 +31,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	public BlockTurbineMulti(Material par2Material) {
 		super(par2Material);
 		setup = new SlicedBlockBlueprint();
-		try {
-			this.initMap();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.initMap();
 	}
 
 	@Override

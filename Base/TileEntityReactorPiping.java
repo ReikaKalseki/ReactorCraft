@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +21,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
 public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
 

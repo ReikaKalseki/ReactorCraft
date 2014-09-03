@@ -9,6 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
@@ -20,14 +27,6 @@ import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE, Feedable {
 

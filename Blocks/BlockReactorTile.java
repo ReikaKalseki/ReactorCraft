@@ -9,35 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.DragonAPI.Base.BlockTEBase;
-import Reika.DragonAPI.Base.TileEntityBase;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
-import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
-import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +35,35 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Base.BlockTEBase;
+import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
 

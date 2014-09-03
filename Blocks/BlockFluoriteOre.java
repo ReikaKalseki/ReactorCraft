@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Registry.FluoriteTypes;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorOptions;
-import Reika.ReactorCraft.Registry.ReactorOres;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -26,6 +18,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOptions;
+import Reika.ReactorCraft.Registry.ReactorOres;
 
 public class BlockFluoriteOre extends BlockFluorite {
 

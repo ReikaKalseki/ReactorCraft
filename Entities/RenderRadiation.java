@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -26,6 +20,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RenderRadiation extends Render {
 

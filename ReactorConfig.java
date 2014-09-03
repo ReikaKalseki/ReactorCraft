@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.ArrayList;
+
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
-
-import java.util.ArrayList;
 
 public class ReactorConfig extends ControlledConfig {
 

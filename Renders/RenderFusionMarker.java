@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.Base.ReactorRenderBase;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
-
 import java.util.ArrayList;
 
 import net.minecraft.client.renderer.Tessellator;
@@ -27,6 +19,14 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.Base.ReactorRenderBase;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 
 public class RenderFusionMarker extends ReactorRenderBase
 {

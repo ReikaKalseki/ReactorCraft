@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.ReactorCraft;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,6 +16,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.ReactorCraft;
 
 public abstract class ReactorGuiBase extends GuiContainer {
 

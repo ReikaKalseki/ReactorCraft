@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.RelativePositionList;
@@ -23,15 +31,6 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
-
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
@@ -269,7 +268,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected int getConsumedLubricant() {
-		return 5;
+		return 100;
 	}
 
 	private boolean canTakeIn(WorkingFluid f) {

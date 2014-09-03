@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary.Lua;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaReactorCheckPebbles extends LuaMethod {
 

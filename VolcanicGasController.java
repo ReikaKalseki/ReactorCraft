@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
-import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -20,6 +16,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class VolcanicGasController implements TickHandler {
@@ -52,8 +51,8 @@ public class VolcanicGasController implements TickHandler {
 	}
 
 	@Override
-	public Phase getPhase() {
-		return Phase.START;
+	public boolean canFire(Phase p) {
+		return p == Phase.START;
 	}
 
 	@Override

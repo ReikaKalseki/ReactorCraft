@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.ReactorCraft.Base.TileEntityWasteUnit;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import Reika.ReactorCraft.Base.TileEntityWasteUnit;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class SlotNuclearWaste extends Slot {
 

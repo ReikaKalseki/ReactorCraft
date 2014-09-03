@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.ReactorCraft.Registry.ReactorTiles;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

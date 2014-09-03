@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.DragonAPI.DragonAPICore;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import Reika.DragonAPI.DragonAPICore;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -9,16 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class ReactorItemRenderer implements IItemRenderer {
 

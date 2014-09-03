@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 

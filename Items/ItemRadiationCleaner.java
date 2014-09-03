@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.ReactorCraft.Base.ItemReactorTool;
-import Reika.ReactorCraft.Entities.EntityRadiation;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.RotaryCraft.API.ChargeableTool;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +17,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.ReactorCraft.Base.ItemReactorTool;
+import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.RotaryCraft.API.ChargeableTool;
 
 public class ItemRadiationCleaner extends ItemReactorTool implements ChargeableTool {
 

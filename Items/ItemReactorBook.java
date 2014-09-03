@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Base.ReactorItemBase;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemReactorBook extends ReactorItemBase {
 

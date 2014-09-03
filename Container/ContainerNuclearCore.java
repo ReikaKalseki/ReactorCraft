@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Container;
 
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.ReactorCraft.Base.TileEntityNuclearCore;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 
 public class ContainerNuclearCore extends CoreContainer {
 

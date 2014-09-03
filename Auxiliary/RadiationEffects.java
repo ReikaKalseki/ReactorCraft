@@ -9,20 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Entities.EntityRadiation;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -33,6 +26,13 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class RadiationEffects {
 
@@ -41,6 +41,10 @@ public class RadiationEffects {
 	public static void applyEffects(EntityLivingBase e) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e))
 			e.addPotionEffect(RadiationEffects.getRadiationEffect(36000));
+		if (e instanceof EntityCreeper) {
+			EntityCreeper ec = (EntityCreeper)e;
+			//no event for creeper detonation, cannot make irradiate
+		}
 	}
 
 	public static void applyPulseEffects(EntityLivingBase e) {

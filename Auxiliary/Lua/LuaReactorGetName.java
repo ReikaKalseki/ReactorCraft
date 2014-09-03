@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary.Lua;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaReactorGetName extends LuaMethod {
 

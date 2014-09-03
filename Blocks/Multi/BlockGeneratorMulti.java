@@ -7,13 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Blocks;
-
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+package Reika.ReactorCraft.Blocks.Multi;
 
 import java.util.Arrays;
 
@@ -23,6 +17,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 
 public class BlockGeneratorMulti extends BlockMultiBlock {
 

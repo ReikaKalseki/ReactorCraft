@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorStacks;
-import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ThermalMachine;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -35,6 +25,15 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.ThermalMachine;
 
 public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine {
 

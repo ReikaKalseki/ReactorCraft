@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import net.minecraft.item.ItemStack;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
-
-import net.minecraft.item.ItemStack;
 
 public class ReactorStacks {
 

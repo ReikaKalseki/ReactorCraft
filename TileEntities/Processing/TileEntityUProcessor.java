@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.ParallelTicker;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.IC2Handler;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorOres;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 
 import net.minecraft.init.Items;
@@ -37,6 +23,19 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.ParallelTicker;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.IC2Handler;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOres;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
 

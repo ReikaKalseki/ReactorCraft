@@ -16,6 +16,8 @@ public class ItemCanister extends ItemReactorTool {
 	public ItemCanister(int tex) {
 		super(tex);
 		this.setContainerItem(this);
+		hasSubtypes = true;
+		this.setMaxDamage(0);
 	}
 
 }

@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Entities.EntityNeutron;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
-
 import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +20,16 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class TileEntityWaterCell extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
 

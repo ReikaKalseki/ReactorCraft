@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -28,12 +33,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ReactorRecipes {
@@ -102,6 +101,11 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sss", "sss", 's', ItemStacks.prop);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "BBB", "SSS", "ppp", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', ItemStacks.prop);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bPb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel);
+
+		id = ReactorBlocks.FLYWHEELMULTI.getBlockInstance();
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sSs", "sss", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "SSS", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "sss", "sSs", "sss", 's', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
 
 	private static void addCrafting() {
@@ -235,6 +239,7 @@ public class ReactorRecipes {
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Blocks.redstone_torch);
 		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Blocks.glowstone, 'r', Items.redstone, 'S', ItemStacks.steelingot);
 		ReactorTiles.BIGTURBINE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ReactorTiles.TURBINECORE.getCraftedProduct());
+		ReactorTiles.FLYWHEEL.addCrafting("BBB", "SSS", "BBB", 'B', ItemStacks.steelblock, 'S', ItemStacks.shaftitem);
 	}
 
 }

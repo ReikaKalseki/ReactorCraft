@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -20,15 +28,6 @@ import Reika.RotaryCraft.API.Shockable;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
-
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable {
 

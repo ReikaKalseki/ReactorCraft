@@ -9,21 +9,20 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
-import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
-import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Blocks.BlockSolenoidMulti;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
-import Reika.RotaryCraft.API.PowerTransferHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
+import Reika.RotaryCraft.API.PowerTransferHelper;
 
 public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver {
 

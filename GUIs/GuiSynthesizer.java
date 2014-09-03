@@ -9,15 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.Rendering.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class GuiSynthesizer extends ReactorGuiBase {
 

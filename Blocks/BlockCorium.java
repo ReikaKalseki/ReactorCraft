@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Registry.MatBlocks;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Registry.MatBlocks;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

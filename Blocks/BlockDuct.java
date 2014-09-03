@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.ReactorCraft.Base.TileEntityReactorPiping;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
-import Reika.RotaryCraft.ClientProxy;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Entities.EntityDischarge;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,6 +18,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.ReactorCraft.Base.TileEntityReactorPiping;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
+import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Entities.EntityDischarge;
 
 public class BlockDuct extends BlockReactorTile {
 

@@ -9,6 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.NEI;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -21,16 +30,6 @@ import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import org.lwjgl.opengl.GL11;
-
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 

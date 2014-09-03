@@ -9,6 +9,28 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.net.URL;
+
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
@@ -57,29 +79,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-
-import java.net.URL;
-
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.aspects.Aspect;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -215,6 +214,7 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addLiquidContainers();
 		this.registerOres();
 		ReactorTiles.loadMappings();
+		ReactorItems.loadMappings();
 
 		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new ReactorPacketCore());
 
@@ -284,7 +284,7 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker());
 
-		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.DYETREES, "Dense pitchblende generation in its biomes");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 	}
 
@@ -319,7 +319,7 @@ public class ReactorCraft extends DragonAPIMod {
 				ReactorOres ore = ReactorOres.oreList[i];
 				ItemStack block = ore.getOreBlock();
 				ItemStack drop = ore.getProduct();
-				ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
+				//ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
 			}
 
 			ReikaThaumHelper.addAspects(ReactorOres.CADMIUM.getOreBlock(), Aspect.METAL, 1);
@@ -340,7 +340,7 @@ public class ReactorCraft extends DragonAPIMod {
 				ReikaThaumHelper.addAspects(ore, Aspect.CRYSTAL, 1);
 				ReikaThaumHelper.addAspects(ore, Aspect.SENSES, 1);
 
-				ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
+				//ReikaThaumHelper.addAspects(block, Aspect.STONE, 1);
 				ReikaThaumHelper.addAspects(block, Aspect.CRYSTAL, 1);
 				ReikaThaumHelper.addAspects(block, Aspect.SENSES, 1);
 

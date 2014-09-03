@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.world.World;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-
-import net.minecraft.world.World;
 
 public class TileEntityNeutronReflector extends TileEntityReactorBase implements ReactorCoreTE {
 

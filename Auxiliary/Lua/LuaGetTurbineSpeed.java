@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary.Lua;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaGetTurbineSpeed extends LuaMethod {
 

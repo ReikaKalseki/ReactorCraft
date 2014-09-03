@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -18,9 +20,6 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
 
 public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements Temperatured, ReactorCoreTE {
 

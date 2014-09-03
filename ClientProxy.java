@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.HashMap;
+
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
@@ -24,11 +28,6 @@ import Reika.ReactorCraft.Entities.RenderRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-
-import java.util.HashMap;
-
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -68,7 +67,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerSounds() {
-		new SoundLoader(ReactorCraft.class, ReactorSounds.soundList).register();
+		new SoundLoader(ReactorSounds.soundList).register();
 	}
 
 	@Override

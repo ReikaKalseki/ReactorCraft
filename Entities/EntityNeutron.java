@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import Reika.DragonAPI.Base.ParticleEntity;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.Auxiliary.NeutronBlock;
-import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Registry.FluoriteTypes;
-import Reika.ReactorCraft.Registry.MatBlocks;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -30,6 +19,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Base.ParticleEntity;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.Auxiliary.NeutronBlock;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.MatBlocks;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {

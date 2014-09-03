@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
-import Reika.ReactorCraft.Base.TileEntityReactorPiping;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import Reika.ReactorCraft.Base.TileEntityReactorPiping;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityGasDuct extends TileEntityReactorPiping {
 

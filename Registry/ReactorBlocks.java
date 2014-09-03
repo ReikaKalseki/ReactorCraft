@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
@@ -16,27 +21,22 @@ import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Blocks.BlockFluorite;
 import Reika.ReactorCraft.Blocks.BlockFluoriteOre;
-import Reika.ReactorCraft.Blocks.BlockGeneratorMulti;
-import Reika.ReactorCraft.Blocks.BlockHeaterMulti;
-import Reika.ReactorCraft.Blocks.BlockInjectorMulti;
 import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
-import Reika.ReactorCraft.Blocks.BlockSolenoidMulti;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Blocks.BlockSteamLine;
-import Reika.ReactorCraft.Blocks.BlockTurbineMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockFlywheelMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockGeneratorMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockHeaterMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockInjectorMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
+import Reika.ReactorCraft.Blocks.Multi.BlockTurbineMulti;
 import Reika.ReactorCraft.Items.ItemBlockFluorite;
 import Reika.ReactorCraft.Items.ItemBlockMultiBlock;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
 public enum ReactorBlocks implements BlockEnum {
 
@@ -57,7 +57,8 @@ public enum ReactorBlocks implements BlockEnum {
 	HEATERMULTI(	BlockHeaterMulti.class, 		ItemBlockMultiBlock.class,	"multiblock.heater",		false),
 	SOLENOIDMULTI(	BlockSolenoidMulti.class,		ItemBlockMultiBlock.class,	"multiblock.solenoid",		false),
 	GENERATORMULTI(	BlockGeneratorMulti.class,		ItemBlockMultiBlock.class,	"multiblock.generator",		false),
-	TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false);
+	TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false),
+	FLYWHEELMULTI(	BlockFlywheelMulti.class,		ItemBlockMultiBlock.class,	"multiblock.flywheel",		false);
 
 	private Class blockClass;
 	private String blockName;

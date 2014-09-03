@@ -9,6 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import li.cil.oc.api.network.Visibility;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -33,16 +42,6 @@ import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
@@ -237,7 +236,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
 			li.add(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
-			li.add(String.format("Lubricant level %d mB per Blocks.", sp.getLubricant()));
+			li.add(String.format("Lubricant level %d mB per block.", sp.getLubricant()));
 		}
 		if (this instanceof TileEntitySteamLine) {
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;

@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public enum FluoriteTypes {
 

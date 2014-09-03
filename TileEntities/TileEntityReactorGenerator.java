@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -17,12 +22,6 @@ import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,7 +58,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			TileEntity tile = this.getAdjacentTileEntity(write);
 			if (tile instanceof IEnergyHandler) {
 				IEnergyHandler rc = (IEnergyHandler)tile;
-				if (rc.canInterface(facingDir)) {
+				if (rc.canConnectEnergy(facingDir)) {
 					int rf = this.getGenRF();
 					float used = rc.receiveEnergy(facingDir, rf, false);
 				}
@@ -163,7 +162,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	@Override
-	public boolean canInterface(ForgeDirection from) {
+	public boolean canConnectEnergy(ForgeDirection from) {
 		return from == this.getFacing().getOpposite();
 	}
 

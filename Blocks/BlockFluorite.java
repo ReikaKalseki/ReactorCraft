@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.FluoriteTypes;
-
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -21,6 +17,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
 
 public class BlockFluorite extends Block {
 

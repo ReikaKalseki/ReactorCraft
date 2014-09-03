@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import Reika.DragonAPI.Base.InertEntity;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-
 import io.netty.buffer.ByteBuf;
 
 import java.util.List;
@@ -23,6 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.InertEntity;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityRadiation extends InertEntity implements IEntityAdditionalSpawnData {

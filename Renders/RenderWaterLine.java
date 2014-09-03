@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.Base.ReactorRenderBase;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +16,11 @@ import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.Base.ReactorRenderBase;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class RenderWaterLine extends ReactorRenderBase {
 

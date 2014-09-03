@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -22,13 +28,6 @@ import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class TileEntityWasteStorage extends TileEntityWasteUnit implements RangedEffect {
 

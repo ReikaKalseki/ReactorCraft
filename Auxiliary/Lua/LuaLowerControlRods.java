@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary.Lua;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaLowerControlRods extends LuaMethod {
 

@@ -9,25 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.ReactorCraft.Registry.ReactorSounds;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.Screwdriverable;
-import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -48,6 +29,25 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorSounds;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.Screwdriverable;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector {
 
@@ -95,6 +95,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	private StepTimer soundTimer = new StepTimer(41);
 
 	private int stage;
+
+	private final StepTimer lubeTimer = new StepTimer((int)(20/DifficultyEffects.LUBEUSAGE.getChance()));
 
 	public int getDamage() {
 		return damage;
@@ -150,7 +152,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		else {
 			if (soundTimer.checkCap() && stage == 0)
 				ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
-			if (!tank.isEmpty() && !world.isRemote)
+			lubeTimer.update();
+			if (!tank.isEmpty() && !world.isRemote && lubeTimer.checkCap())
 				tank.removeLiquid(this.getConsumedLubricant());
 		}
 
@@ -174,7 +177,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 	}
 
 	protected int getConsumedLubricant() {
-		return 1;
+		return 20;
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z, int meta) {

@@ -7,14 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Blocks;
-
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
-import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
+package Reika.ReactorCraft.Blocks.Multi;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,6 +16,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 
 public class BlockInjectorMulti extends BlockMultiBlock {
 

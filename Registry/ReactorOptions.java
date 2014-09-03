@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraftforge.common.config.Configuration;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.ReactorCraft.ReactorCraft;
-
-import net.minecraftforge.common.config.Configuration;
 
 public enum ReactorOptions implements ConfigList {
 

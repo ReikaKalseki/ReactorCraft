@@ -7,26 +7,24 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.Blocks;
-
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
-import Reika.DragonAPI.Interfaces.SemiTransparent;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
-import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
-import Reika.RotaryCraft.Registry.MachineRegistry;
+package Reika.ReactorCraft.Blocks.Multi;
 
 import java.util.Arrays;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockMap.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.StructuredBlockArray;
+import Reika.DragonAPI.Interfaces.SemiTransparent;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent {
 
@@ -82,7 +80,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 							return false;
 					}
 					else {
-						ItemStack block = blocks.getBlockRelativeToMinXYZ(i, j, k);
+						BlockKey block = blocks.getBlockRelativeToMinXYZ(i, j, k);
 						int dx = blocks.getMinX()+i;
 						int dy = blocks.getMinY()+j;
 						int dz = blocks.getMinZ()+k;
@@ -91,8 +89,8 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 								return false;
 						}
 						else {
-							Block id = Block.getBlockFromItem(block.getItem());
-							int meta = block.getItemDamage();
+							Block id = block.blockID;
+							int meta = block.metadata;
 							if (i == 2 && j == 2 && k == 2) {
 								if (id != ReactorTiles.HEATER.getBlock() || meta != ReactorTiles.HEATER.getBlockMetadata())
 									return false;
@@ -135,39 +133,39 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					}
 				}
 				else {
-					ItemStack block = blocks.getBlockRelativeToMinXYZ(i, 0, k);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
+					BlockKey block = blocks.getBlockRelativeToMinXYZ(i, 0, k);
+					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, 4, k);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 1) {
+					if (block == null || block.blockID != this || block.metadata != 1) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, 5, k);
 					int meta2 = (i == 2 || k == 2) ? 3 : 2;
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != meta2) {
+					if (block == null || block.blockID != this || block.metadata != meta2) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, k, 0);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
+					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(i, k, 4);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
+					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(0, k, i);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
+					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
 					block = blocks.getBlockRelativeToMinXYZ(4, k, i);
-					if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 4) {
+					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 				}
@@ -178,82 +176,82 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 
 	private boolean checkEdges(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		for (int i = 1; i < 4; i++) {
-			ItemStack block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			BlockKey block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, i, 0);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, 0, i);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 0, 4);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, 0, i);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 4, 4);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, 4, i);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(i, 4, 0);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, 4, i);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, i, 0);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(0, i, 4);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
 			block = blocks.getBlockRelativeToMinXYZ(4, i, 4);
-			if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 3)
+			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 		}
 		return true;
 	}
 
 	private boolean checkCorners(World world, int x, int y, int z, StructuredBlockArray blocks) {
-		ItemStack block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
+		BlockKey block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
 		//ReikaJavaLibrary.pConsole(block.getMinX()+", "+block.getMinY()+", "+block.getMinZ());
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 0, 0);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 0, 4);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 0, 4);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 4, 0);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 4, 0);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(0, 4, 4);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 		block = blocks.getBlockRelativeToMinXYZ(4, 4, 4);
-		if (block == null || !ReikaItemHelper.matchStackWithBlock(block, this) || block.getItemDamage() != 2)
+		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 
 		return true;

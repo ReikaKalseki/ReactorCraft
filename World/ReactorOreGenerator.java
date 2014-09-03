@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.World;
 
-import Reika.ReactorCraft.Registry.FluoriteTypes;
-import Reika.ReactorCraft.Registry.ReactorOptions;
-import Reika.ReactorCraft.Registry.ReactorOres;
-
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.ReactorOptions;
+import Reika.ReactorCraft.Registry.ReactorOres;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class ReactorOreGenerator implements IWorldGenerator {

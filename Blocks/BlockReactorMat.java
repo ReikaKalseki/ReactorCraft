@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.MatBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.MatBlocks;
 
 public class BlockReactorMat extends Block {
 

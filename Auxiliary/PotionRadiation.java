@@ -9,15 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.DragonAPI.Interfaces.PermaPotion;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.ReactorCraft.ReactorCraft;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import Reika.DragonAPI.Interfaces.PermaPotion;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.ReactorCraft.ReactorCraft;
 
 public class PotionRadiation extends Potion implements PermaPotion {
 

@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.BlockMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -53,15 +61,6 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles {
@@ -97,7 +96,7 @@ public enum ReactorTiles {
 	COLLECTOR("machine.collector",				ReactorBlocks.MODELMACHINE,		TileEntityGasCollector.class,	6, "RenderGasCollector"),
 	PEBBLEBED("machine.pebblebed",				ReactorBlocks.REACTOR,			TileEntityPebbleBed.class,		9),
 	CO2HEATER("machine.co2heater",				ReactorBlocks.REACTOR,			TileEntityCO2Heater.class,		10),
-	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7),
+	FLYWHEEL("machine.turbinewheel",			ReactorBlocks.MODELMACHINE,		TileEntityReactorFlywheel.class,7, "RenderTurbineWheel"),
 	REFLECTOR("machine.reflector",				ReactorBlocks.REACTOR,			TileEntityNeutronReflector.class,11),
 	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator"),
 	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker"),

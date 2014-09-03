@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Interfaces.IPacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -20,13 +26,6 @@ import Reika.ReactorCraft.Registry.ReactorPackets;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 
 public class ReactorPacketCore implements IPacketHandler {
@@ -117,6 +116,8 @@ public class ReactorPacketCore implements IPacketHandler {
 				}
 				else
 					longdata = inputStream.readLong();
+				break;
+			case NBT:
 				break;
 			}
 			if (packetType.hasCoordinates()) {

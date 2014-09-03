@@ -9,6 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Renders;
 
+import java.lang.reflect.Constructor;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -21,16 +31,6 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-
-import java.lang.reflect.Constructor;
-
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class RenderTurbine extends ReactorRenderBase
 {
@@ -66,7 +66,6 @@ public class RenderTurbine extends ReactorRenderBase
 	public final void renderTileEntityTurbineCoreAt(TileEntityTurbineCore tile, double par2, double par4, double par6, float par8)
 	{
 		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/"+this.getTextureName()+".png");
-
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

@@ -9,15 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import Reika.DragonAPI.Base.InertEntity;
-import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorSounds;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Base.InertEntity;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 
 public class EntityFusion extends InertEntity {
 

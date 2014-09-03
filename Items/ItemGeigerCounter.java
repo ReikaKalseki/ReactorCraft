@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.ReactorCraft.Base.ItemReactorTool;
-import Reika.ReactorCraft.Entities.EntityRadiation;
-
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.Base.ItemReactorTool;
+import Reika.ReactorCraft.Entities.EntityRadiation;
 
 public class ItemGeigerCounter extends ItemReactorTool {
 

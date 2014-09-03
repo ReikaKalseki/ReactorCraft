@@ -9,15 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.ReactorCraft.ClientProxy;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Registry.ReactorItems;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.ReactorCraft.ClientProxy;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 

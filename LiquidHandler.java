@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.BCPipeHandler;
-import Reika.DragonAPI.ModInteract.ThermalHandler;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
-import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -29,6 +19,15 @@ import net.minecraftforge.fluids.FluidEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.BCPipeHandler;
+import Reika.DragonAPI.ModInteract.ThermalHandler;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LiquidHandler {

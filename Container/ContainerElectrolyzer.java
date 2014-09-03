@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Container;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 
 public class ContainerElectrolyzer extends CoreContainer {
 

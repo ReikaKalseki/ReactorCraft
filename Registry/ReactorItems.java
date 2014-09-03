@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.HashMap;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Interfaces.ItemEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -16,6 +21,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
+import Reika.ReactorCraft.Base.ItemReactorMulti;
 import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemGeigerCounter;
 import Reika.ReactorCraft.Items.ItemHazmatSuit;
@@ -30,30 +36,26 @@ import Reika.ReactorCraft.Items.ItemReactorPlacer;
 import Reika.ReactorCraft.Items.ItemRemoteControl;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-
 public enum ReactorItems implements ItemEnum {
 
 	WASTE(0,		"item.waste", 			ItemNuclearWaste.class),
-	FUEL(1,			"item.fuel",			ItemReactorBasic.class),
+	FUEL(1,			"item.fuel",			ItemReactorMulti.class),
 	DEPLETED(2, 	"item.depleted",		ItemReactorBasic.class),
 	PLACER(-1,		"Part Placer",			ItemReactorPlacer.class),
 	BUCKET(3,		"item.heavybucket", 	ItemHeavyBucket.class),
-	RAW(4,			"Raw Materials",		ItemReactorBasic.class),
-	FLUORITE(16,	"Fluorite",				ItemReactorBasic.class),
-	INGOTS(32,		"Ingots",				ItemReactorBasic.class),
+	RAW(4,			"Raw Materials",		ItemReactorMulti.class),
+	FLUORITE(16,	"Fluorite",				ItemReactorMulti.class),
+	INGOTS(32,		"Ingots",				ItemReactorMulti.class),
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
-	CRAFTING(80,	"Crafting item", 		ItemReactorBasic.class),
+	CRAFTING(80,	"Crafting item", 		ItemReactorMulti.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
-	THORIUM(97,		"item.thorium",			ItemReactorBasic.class),
-	BREEDERFUEL(98,	"item.breeder",			ItemReactorBasic.class),
+	THORIUM(97,		"item.thorium",			ItemReactorMulti.class),
+	BREEDERFUEL(98,	"item.breeder",			ItemReactorMulti.class),
 	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
-	MAGNET(100,		"item.magnet",			ItemReactorBasic.class),
+	MAGNET(100,		"item.magnet",			ItemReactorMulti.class),
 	REMOTE(101,		"item.remotecpu",		ItemRemoteControl.class),
-	PELLET(102,		"item.pellet",			ItemReactorBasic.class),
+	PELLET(102,		"item.pellet",			ItemReactorMulti.class),
 	OLDPELLET(103,	"item.depletedpellet",	ItemReactorBasic.class),
 	BOOK(104,		"item.reactorbook",		ItemReactorBook.class),
 	HAZHELMET(112,	"item.hazhelmet",		ItemHazmatSuit.class),
@@ -69,6 +71,7 @@ public enum ReactorItems implements ItemEnum {
 	private int spritesheet;
 
 	public static final ReactorItems[] itemList = values();
+	private static final HashMap<Item, ReactorItems> itemMap = new HashMap();
 
 	private ReactorItems(int index, String n, Class<? extends Item> cl) {
 		name = n;
@@ -258,12 +261,7 @@ public enum ReactorItems implements ItemEnum {
 	}
 
 	public static ReactorItems getEntryByID(Item id) {
-		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getItemInstance() == id)
-				return itemList[i];
-		}
-		//throw new RegistrationException(ReactorCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
-		return null;
+		return itemMap.get(id);
 	}
 
 	public static ReactorItems getEntry(ItemStack is) {
@@ -289,6 +287,13 @@ public enum ReactorItems implements ItemEnum {
 	@Override
 	public boolean overwritingItem() {
 		return false;
+	}
+
+	public static void loadMappings() {
+		for (int i = 0; i < itemList.length; i++) {
+			ReactorItems r = itemList[i];
+			itemMap.put(r.getItemInstance(), r);
+		}
 	}
 
 }

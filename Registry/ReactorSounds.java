@@ -9,18 +9,17 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.net.URL;
+
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Interfaces.SoundEnum;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-
-import java.net.URL;
-
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -53,7 +52,7 @@ public enum ReactorSounds implements SoundEnum {
 			n = n.substring(1);
 		}
 		name = n;
-		path = SOUND_FOLDER+name+SOUND_EXT;
+		path = PREFIX+SOUND_FOLDER+name+SOUND_EXT;
 		category = cat;
 	}
 

@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.ReactorCraft.World;
 
-import Reika.DragonAPI.Interfaces.RetroactiveGenerator;
-import Reika.ReactorCraft.Registry.ReactorOres;
-
 import java.util.Random;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import Reika.DragonAPI.Interfaces.RetroactiveGenerator;
+import Reika.ReactorCraft.Registry.ReactorOres;
 
 public class ReactorRetroGen implements RetroactiveGenerator {
 

@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
@@ -18,10 +21,6 @@ import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorItems;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBase {
 

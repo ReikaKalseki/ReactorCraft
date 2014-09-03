@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
-
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -21,6 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class BlockSteamLine extends BlockReactorTileModelled {
 
