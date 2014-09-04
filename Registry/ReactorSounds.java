@@ -25,10 +25,10 @@ import cpw.mods.fml.relauncher.Side;
 
 public enum ReactorSounds implements SoundEnum {
 
-	TURBINE("#turbine", SoundCategory.AMBIENT),
-	FUSION("fusion", SoundCategory.AMBIENT),
-	CONTROL("control", SoundCategory.BLOCKS),
-	SCRAM("scram", SoundCategory.BLOCKS);
+	TURBINE("#turbine"),
+	FUSION("fusion"),
+	CONTROL("control"),
+	SCRAM("scram");
 
 	public static final ReactorSounds[] soundList = values();
 
@@ -42,18 +42,16 @@ public enum ReactorSounds implements SoundEnum {
 
 	private final String path;
 	private final String name;
-	private final SoundCategory category;
 
 	private boolean isVolumed = false;
 
-	private ReactorSounds(String n, SoundCategory cat) {
+	private ReactorSounds(String n) {
 		if (n.startsWith("#")) {
 			isVolumed = true;
 			n = n.substring(1);
 		}
 		name = n;
 		path = PREFIX+SOUND_FOLDER+name+SOUND_EXT;
-		category = cat;
 	}
 
 	public float getSoundVolume() {
@@ -117,6 +115,6 @@ public enum ReactorSounds implements SoundEnum {
 
 	@Override
 	public SoundCategory getCategory() {
-		return category;
+		return SoundCategory.MASTER;
 	}
 }
