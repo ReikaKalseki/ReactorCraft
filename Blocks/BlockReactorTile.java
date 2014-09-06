@@ -12,9 +12,9 @@ package Reika.ReactorCraft.Blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -65,7 +65,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class BlockReactorTile extends BlockTEBase implements IWailaBlock {
+public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider {
 
 	protected static final IIcon[][][] icons = new IIcon[ReactorTiles.TEList.length][6][16];
 

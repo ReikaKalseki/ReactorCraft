@@ -39,6 +39,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		Fluid f = this.getFluidType();
 		this.intakeFluid(world, x, y, z);
 		if (this.getLevel() <= 0) {
 			this.setLevel(0);
@@ -46,6 +47,11 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		}
 		else {
 			this.dumpContents(world, x, y, z);
+		}
+		Fluid f2 = this.getFluidType();
+		if (f != f2) {
+			this.syncAllData(true);
+			world.markBlockForUpdate(x, y, z);
 		}
 	}
 
@@ -123,6 +129,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			connections[i] = this.isConnected(dirs[i]);
 			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
+		this.syncAllData(true);
 		world.func_147479_m(x, y, z);
 	}
 
@@ -349,11 +356,6 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	}
 
 	protected abstract void onIntake(TileEntity te);
-
-	@Override
-	public boolean needsToCauseBlockUpdates() {
-		return true;
-	}
 
 	@Override
 	public final boolean isFluidPipe() {

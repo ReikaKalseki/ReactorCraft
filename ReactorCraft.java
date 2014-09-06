@@ -306,7 +306,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
 
-		if (ModList.GEOSTRATA.isLoaded()) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 				ReactorTiles m = ReactorTiles.TEList[i];
 				if (m != ReactorTiles.PROCESSOR)
