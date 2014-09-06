@@ -20,6 +20,7 @@ public enum ReactorOptions implements ConfigList {
 	SILVERORE("Generate Silver Ore", true),
 	RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false);
+	//CHUNKLOADING("Fission Cores Chunkload When Active", true);
 
 	private String label;
 	private boolean defaultState;

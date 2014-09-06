@@ -9,11 +9,16 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
@@ -41,6 +46,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	protected StepTimer tempTimer = new StepTimer(20);
 
 	protected int hydrogen = 0;
+	private int activeTimer = 0;
 
 	public static final int CLADDING = 800;
 	public static final int HYDROGEN = 1400;
@@ -58,6 +64,11 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		this.feed();
 		this.feedWaste(world, x, y, z);
 
+		if (activeTimer > 0) {
+			activeTimer--;
+			this.onActivityChange(false);
+		}
+
 		tempTimer.update();
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z);
@@ -73,6 +84,34 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}
+	}
+
+	private void onActivityChange(boolean active) {
+		/*
+		if (ReactorOptions.CHUNKLOADING.getState()) {
+			Ticket tk = ForgeChunkManager.requestTicket(ReactorCraft.instance, worldObj, ForgeChunkManager.Type.NORMAL);
+			ArrayList<ChunkCoordIntPair> li = this.getChunksToLoad();
+			for (int i = 0; i < li.size(); i++) {
+				ChunkCoordIntPair chp = li.get(i);
+				if (active) {
+					ForgeChunkManager.forceChunk(tk, chp);
+				}
+				else {
+					ForgeChunkManager.unforceChunk(tk, chp);
+				}
+			}
+		}*/
+	}
+
+	private ArrayList<ChunkCoordIntPair> getChunksToLoad() {
+		ArrayList li = new ArrayList();
+		for (int i = -1; i <= i; i++) {
+			for (int k = -1; k <= i; k++) {
+				Chunk ch = worldObj.getChunkFromBlockCoords(xCoord+i*16, zCoord+k*16);
+				li.add(new ChunkCoordIntPair(ch.xPosition, ch.zPosition));
+			}
+		}
+		return li;
 	}
 
 	private void feedWaste(World world, int x, int y, int z) {
@@ -211,6 +250,14 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		}
 	}
 
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		boolean inactive = activeTimer <= 0;
+		activeTimer = 2400; //2 min
+		if (inactive)
+			this.onActivityChange(true);
+		return false;
+	}
+
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
@@ -304,12 +351,28 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 			this.onMeltdown(world, x, y, z);
 			ReactorAchievements.MELTDOWN.triggerAchievement(this.getPlacer());
 		}
+
 		if (temperature > HYDROGEN) {
 			hydrogen += 1;
 			if (hydrogen > 200) {
 				this.onMeltdown(world, x, y, z);
 			}
 		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		activeTimer = NBT.getInteger("activetick");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setInteger("activetick", activeTimer);
+
 	}
 
 }

@@ -47,6 +47,11 @@ public class EntityNuclearWaste extends EntityItem {
 				velocityChanged = true;
 			motionY = Math.abs(motionY);
 			posY = Math.max(posY, 0);
+
+			int ix = MathHelper.floor_double(posX);
+			int iy = MathHelper.floor_double(posY);
+			int iz = MathHelper.floor_double(posZ);
+			RadiationEffects.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2);
 		}
 		timer++;
 	}
