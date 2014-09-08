@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
+import Reika.ReactorCraft.ReactorNames;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 
 public class ItemCanister extends ItemReactorTool {
@@ -18,6 +19,11 @@ public class ItemCanister extends ItemReactorTool {
 		this.setContainerItem(this);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
+	}
+
+	@Override
+	public int getDataValues() {
+		return ReactorNames.canNames.length;
 	}
 
 }
