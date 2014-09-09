@@ -14,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.ModList;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -58,7 +57,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 			return false;
 		if (world.isBlockIndirectlyGettingPowered(x, y, z) != requireRedstone)
 			return false;
-		if (ModList.GALACTICRAFT.isLoaded() && world.provider instanceof IGalacticraftWorldProvider) {
+		if (world.provider instanceof IGalacticraftWorldProvider) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 			if (ig.getSoundVolReductionAmount() > 1)
 				return false;
