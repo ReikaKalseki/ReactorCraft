@@ -20,6 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.BlockMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
@@ -168,6 +169,8 @@ public enum ReactorTiles {
 	}
 
 	public boolean isAvailableInCreativeInventory() {
+		if (this == GENERATOR)
+			return PowerTypes.RF.exists();
 		return true;
 	}
 

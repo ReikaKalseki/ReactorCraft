@@ -9,12 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Items;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper.EntityDistanceComparator;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
@@ -32,6 +34,7 @@ public class ItemGeigerCounter extends ItemReactorTool {
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(e.posX, e.posY, e.posZ, e.posX, e.posY, e.posZ).expand(r, r, r);
 			List<EntityRadiation> li = world.getEntitiesWithinAABB(EntityRadiation.class, box);
 			if (!li.isEmpty()) {
+				Collections.sort(li, new EntityDistanceComparator(e.posX, e.posY, e.posZ));
 				EntityRadiation er = li.get(0);
 				double dist = ReikaMathLibrary.py3d(e.posX-er.posX, e.posY-er.posY, e.posZ-er.posZ);
 				if (itemRand.nextDouble()*r*16 > dist*dist) {

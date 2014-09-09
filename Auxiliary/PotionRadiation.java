@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.PermaPotion;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -37,8 +38,12 @@ public class PotionRadiation extends Potion implements PermaPotion {
 		e.removePotionEffect(Potion.resistance.id);
 		e.removePotionEffect(Potion.nightVision.id);
 
-		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getHealth()*50))
-			e.attackEntityFrom(ReactorCraft.radiationDamage, 1);
+		boolean p = e.worldObj.difficultySetting == EnumDifficulty.PEACEFUL;
+		int c = p ? 75 : 50;
+		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getHealth()*c)) {
+			int amt = p ? 2 : 1;
+			e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
+		}
 
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
@@ -52,6 +57,7 @@ public class PotionRadiation extends Potion implements PermaPotion {
 			e.addPotionEffect(new PotionEffect(Potion.confusion.id, 120, 0));
 
 		e.addPotionEffect(new PotionEffect(Potion.poison.id, 20, 0));
+		e.addPotionEffect(new PotionEffect(Potion.jump.id, 20, -2));
 	}
 
 	@Override

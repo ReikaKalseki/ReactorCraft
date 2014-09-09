@@ -17,6 +17,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -235,7 +236,10 @@ public class ReactorRecipes {
 		ReactorTiles.PEBBLEBED.addCrafting("SHS", "PCP", "SHS", 'H', Blocks.hopper, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
-		ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Items.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
+
+		if (PowerTypes.RF.exists())
+			ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Items.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
+
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Blocks.redstone_torch);
 		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Blocks.glowstone, 'r', Items.redstone, 'S', ItemStacks.steelingot);
 		ReactorTiles.BIGTURBINE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ReactorTiles.TURBINECORE.getCraftedProduct());
