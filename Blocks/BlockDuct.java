@@ -15,9 +15,11 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
@@ -53,6 +55,24 @@ public class BlockDuct extends BlockReactorTile {
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
 		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
+	}
+
+	@Override
+	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		TileEntityReactorPiping te = (TileEntityReactorPiping)world.getTileEntity(x, y, z);
+		double d = 0.125;
+		double[] dd = new double[6];
+		for (int i = 0; i < 6; i++)
+			dd[i] = te.isConnectedDirectly(ForgeDirection.VALID_DIRECTIONS[i]) ? 0 : d;
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+dd[4], y+dd[1], z+dd[2], x+1-dd[5], y+1-dd[0], z+1-dd[3]);
+		this.setBounds(box, x, y, z);
+		return box;
+	}
+
+	@Override
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override

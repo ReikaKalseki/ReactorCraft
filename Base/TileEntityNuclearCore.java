@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -18,11 +18,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -41,7 +42,8 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable {
+public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable,
+ChunkLoadingTile {
 
 	protected StepTimer tempTimer = new StepTimer(20);
 
@@ -87,31 +89,18 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	}
 
 	private void onActivityChange(boolean active) {
-		/*
-		if (ReactorOptions.CHUNKLOADING.getState()) {
-			Ticket tk = ForgeChunkManager.requestTicket(ReactorCraft.instance, worldObj, ForgeChunkManager.Type.NORMAL);
-			ArrayList<ChunkCoordIntPair> li = this.getChunksToLoad();
-			for (int i = 0; i < li.size(); i++) {
-				ChunkCoordIntPair chp = li.get(i);
-				if (active) {
-					ForgeChunkManager.forceChunk(tk, chp);
-				}
-				else {
-					ForgeChunkManager.unforceChunk(tk, chp);
-				}
-			}
-		}*/
+		//if (!worldObj.isRemote && ReactorOptions.CHUNKLOADING.getState()) {
+		//	if (active) {
+		//		ChunkManager.instance.loadChunks(worldObj, xCoord, yCoord, zCoord, this);
+		//	}
+		//	else {
+		//		ChunkManager.instance.unloadChunks(worldObj, xCoord, yCoord, zCoord);
+		//	}
+		//}
 	}
 
-	private ArrayList<ChunkCoordIntPair> getChunksToLoad() {
-		ArrayList li = new ArrayList();
-		for (int i = -1; i <= i; i++) {
-			for (int k = -1; k <= i; k++) {
-				Chunk ch = worldObj.getChunkFromBlockCoords(xCoord+i*16, zCoord+k*16);
-				li.add(new ChunkCoordIntPair(ch.xPosition, ch.zPosition));
-			}
-		}
-		return li;
+	public Collection<ChunkCoordIntPair> getChunksToLoad() {
+		return ChunkManager.getChunkSquare(xCoord, zCoord, 1);
 	}
 
 	private void feedWaste(World world, int x, int y, int z) {

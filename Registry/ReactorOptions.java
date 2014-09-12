@@ -19,8 +19,9 @@ public enum ReactorOptions implements ConfigList {
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore", true),
 	RETROGEN("Retrogen Ores", false),
-	RAINBOW("Rainbow Fluorite", false);
-	//CHUNKLOADING("Fission Cores Chunkload When Active", true);
+	RAINBOW("Rainbow Fluorite", false),
+	TOROIDCHARGE("Toroid Spark Delay", 4),
+	CHUNKLOADING("Fission Cores Chunkload When Active", true);
 
 	private String label;
 	private boolean defaultState;
@@ -119,6 +120,11 @@ public enum ReactorOptions implements ConfigList {
 	@Override
 	public boolean shouldLoad() {
 		return true;
+	}
+
+	public static int getToroidChargeRate() {
+		int base = TOROIDCHARGE.getValue();
+		return Math.max(Math.min(base, 20), 4);
 	}
 
 }

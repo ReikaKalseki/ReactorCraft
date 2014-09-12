@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Auxiliary.Lua;
 import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
+import dan200.computercraft.api.lua.LuaException;
 
 public class LuaGetTurbineSpeed extends LuaMethod {
 
@@ -20,7 +21,7 @@ public class LuaGetTurbineSpeed extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
 		return new Object[]{((TileEntityTurbineMeter)te).getAnalogValue()};
 	}
 

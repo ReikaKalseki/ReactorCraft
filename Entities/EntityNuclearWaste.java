@@ -45,13 +45,15 @@ public class EntityNuclearWaste extends EntityItem {
 			//posY = 0;
 			if (!worldObj.isRemote)
 				velocityChanged = true;
-			motionY = Math.abs(motionY);
+			motionY = Math.abs(motionY); //try 8?
 			posY = Math.max(posY, 0);
 
-			int ix = MathHelper.floor_double(posX);
-			int iy = MathHelper.floor_double(posY);
-			int iz = MathHelper.floor_double(posZ);
-			RadiationEffects.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2);
+			if (timer%256 == 0) {
+				int ix = MathHelper.floor_double(posX);
+				int iy = MathHelper.floor_double(posY);
+				int iz = MathHelper.floor_double(posZ);
+				RadiationEffects.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2);
+			}
 		}
 		timer++;
 	}

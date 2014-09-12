@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.Shockable;
@@ -42,6 +43,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	private int charge = 0;
 
 	private StepTimer chargeTimer = new StepTimer(20);
+
+	private static final int RATE = ReactorOptions.getToroidChargeRate();
 
 	@Override
 	public int getIndex() {
@@ -70,7 +73,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		//this.collectCharge(world, x, y, z);
 
 		chargeTimer.update();
-		if ((chargeTimer.getTick()&4) != 0)
+		if (chargeTimer.getTick()%RATE == 0)
 			this.distributeCharge(world, x, y, z);
 		if (chargeTimer.checkCap()) {
 			this.updateCharge(world, x, y, z);

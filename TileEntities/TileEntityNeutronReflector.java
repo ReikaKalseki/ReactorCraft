@@ -26,7 +26,7 @@ public class TileEntityNeutronReflector extends TileEntityReactorBase implements
 			return false;
 		}
 		else
-			return true;
+			return rand.nextBoolean();
 	}
 
 	@Override

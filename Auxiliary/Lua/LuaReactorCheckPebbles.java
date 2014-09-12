@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
+import dan200.computercraft.api.lua.LuaException;
 
 public class LuaReactorCheckPebbles extends LuaMethod {
 
@@ -22,7 +23,7 @@ public class LuaReactorCheckPebbles extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
 		TileEntityPebbleBed tile = (TileEntityPebbleBed)te;
 		int fuel = 0;
 		int maxfuel = tile.getSizeInventory()*ReactorItems.PELLET.getNumberMetadatas();
