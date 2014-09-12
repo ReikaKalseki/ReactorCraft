@@ -14,11 +14,11 @@ import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -56,7 +56,7 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 		public List<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			List<ItemStack> li = OreDictionary.getOres("ingotUranium");
+			List<ItemStack> li = ReikaRecipeHelper.getMutableOreDictList("ingotUranium");
 			li.add(0, ReactorOres.PITCHBLENDE.getProduct());
 			if (ModList.IC2.isLoaded()) {
 				li.add(IC2Handler.getInstance().getPurifiedCrushedUranium());

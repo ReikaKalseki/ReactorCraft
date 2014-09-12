@@ -10,8 +10,9 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -144,10 +145,8 @@ public class ReactorControlLayout {
 		return controls.size();
 	}
 
-	public ArrayList<TileEntityControlRod> getAllRods() {
-		ArrayList<TileEntityControlRod> li = new ArrayList();
-		li.addAll(controls.values());
-		return li;
+	public Collection<TileEntityControlRod> getAllRods() {
+		return Collections.unmodifiableCollection(controls.values());
 	}
 
 	public int countLoweredRods() {

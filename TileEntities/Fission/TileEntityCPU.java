@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -191,9 +191,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	public void lowerAllRods() {
-		ArrayList<TileEntityControlRod> li = layout.getAllRods();
-		for (int i = 0; i < li.size(); i++) {
-			TileEntityControlRod te = li.get(i);
+		Collection<TileEntityControlRod> li = layout.getAllRods();
+		for (TileEntityControlRod te : li) {
 			te.setActive(true, false);
 		}
 		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
@@ -201,9 +200,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	public void raiseAllRods() {
-		ArrayList<TileEntityControlRod> li = layout.getAllRods();
-		for (int i = 0; i < li.size(); i++) {
-			TileEntityControlRod te = li.get(i);
+		Collection<TileEntityControlRod> li = layout.getAllRods();
+		for (TileEntityControlRod te : li) {
 			te.setActive(false, false);
 		}
 		ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
