@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -23,6 +24,7 @@ import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Registry.ReactorPackets;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class GuiCPU extends ReactorGuiBase {
 
@@ -31,6 +33,7 @@ public class GuiCPU extends ReactorGuiBase {
 
 	public static final int BUTTON_SIZE = 8;
 	public static final int BUTTON_SPACE = 10;
+	private int offsetY = 0;
 
 	public GuiCPU(EntityPlayer player, TileEntityCPU cpu) {
 		super(new CoreContainer(player, cpu), player, cpu);
@@ -49,12 +52,29 @@ public class GuiCPU extends ReactorGuiBase {
 
 		buttonList.add(new GuiButton(0, j+8, -1+k+19, 72, 20, "Retract All"));
 		buttonList.add(new GuiButton(1, j+96, -1+k+19, 72, 20, "Insert All"));
+
+		String tex = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
+		buttonList.add(new ImagedGuiButton(2, j+7, k+84, 12, 48, 90, 60, tex, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(3, j+157, k+84, 12, 48, 90, 108, tex, RotaryCraft.class));
 	}
 
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile);
+		switch(button.id) {
+		case 0:
+		case 1:
+			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile);
+			break;
+		case 2:
+			if (layout.getMinY() < offsetY)
+				offsetY--;
+			break;
+		case 3:
+			if (layout.getMaxY() > offsetY)
+				offsetY++;
+			break;
+		}
 		this.updateScreen();
 	}
 
@@ -72,12 +92,12 @@ public class GuiCPU extends ReactorGuiBase {
 
 		int r = BUTTON_SIZE;
 		int s = BUTTON_SPACE;
-		int ox = xSize/2-s/2;
+		int ox = 1+xSize/2-s/2;
 		int oy = ySize/2-s/2+18;
 		for (int a = layout.getMinX(); a <= layout.getMaxX(); a++) {
 			for (int b = layout.getMinZ(); b <= layout.getMaxZ(); b++) {
 				if (a != 0 || b != 0) {
-					Color c = layout.getDisplayColorAtRelativePosition(a, b);
+					Color c = layout.getDisplayColorAtRelativePosition(a, offsetY, b);
 					int x = ox+a*s;
 					int y = oy+b*s;
 					this.drawRect(x, y, x+r, y+r, c.getRGB());
@@ -92,13 +112,13 @@ public class GuiCPU extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		int s = BUTTON_SPACE;
-		int ox = j+xSize/2-s/2;
+		int ox = 1+j+xSize/2-s/2;
 		int oy = k+ySize/2-s/2+18;
 		int dx = x-ox;
 		int dy = y-oy;
 		int a = MathHelper.floor_double(dx/(double)s);
 		int b = MathHelper.floor_double(dy/(double)s);
-		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(a, b);
+		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
 			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod);

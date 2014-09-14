@@ -10,13 +10,12 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.Coordinate;
+import Reika.DragonAPI.Instantiable.Data.TileEntityCache;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
@@ -26,10 +25,12 @@ public class ReactorControlLayout {
 
 	private final TileEntityCPU controller;
 
-	private final HashMap<List<Integer>, TileEntityControlRod> controls = new HashMap();
+	private final TileEntityCache<TileEntityControlRod> controls = new TileEntityCache();
 	private int minX = Integer.MAX_VALUE;
+	private int minY = Integer.MAX_VALUE;
 	private int minZ = Integer.MAX_VALUE;
 	private int maxX = Integer.MIN_VALUE;
+	private int maxY = Integer.MIN_VALUE;
 	private int maxZ = Integer.MIN_VALUE;
 
 	public ReactorControlLayout(TileEntityCPU cpu) {
@@ -40,42 +41,55 @@ public class ReactorControlLayout {
 		return maxX-minX+1;
 	}
 
+	public int getSizeY() {
+		return maxY-minY+1;
+	}
+
 	public int getSizeZ() {
 		return maxZ-minZ+1;
 	}
 
 	public void addControlRod(TileEntityControlRod rod) {
 		int x = this.getXPosition(rod);
+		int y = this.getYPosition(rod);
 		int z = this.getZPosition(rod);
 		if (minX > x)
 			minX = x;
 		if (maxX < x)
 			maxX = x;
+		if (minY > y)
+			minY = y;
+		if (maxY < y)
+			maxY = y;
 		if (minZ > z)
 			minZ = z;
 		if (maxZ < z)
 			maxZ = z;
-		controls.put(Arrays.asList(x, z), rod);
+		controls.put(new Coordinate(x, y, z), rod);
 	}
 
-	public boolean hasControlRodAtRelativePosition(int x, int z) {
-		return this.getControlRodAtRelativePosition(x, z) != null;
+	public boolean hasControlRodAtRelativePosition(int x, int y, int z) {
+		return this.getControlRodAtRelativePosition(x, y, z) != null;
 	}
 
-	public boolean hasControlRodAtAbsolutePosition(int x, int z) {
-		return this.getControlRodAtAbsolutePosition(x, z) != null;
+	public boolean hasControlRodAtAbsolutePosition(int x, int y, int z) {
+		return this.getControlRodAtAbsolutePosition(x, y, z) != null;
 	}
 
-	public TileEntityControlRod getControlRodAtRelativePosition(int x, int z) {
-		return controls.get(Arrays.asList(x, z));
+	public TileEntityControlRod getControlRodAtRelativePosition(int x, int y, int z) {
+		return controls.get(new Coordinate(x, y, z));
 	}
 
-	public TileEntityControlRod getControlRodAtAbsolutePosition(int x, int z) {
-		return controls.get(Arrays.asList(x-controller.xCoord, z-controller.zCoord));
+	public TileEntityControlRod getControlRodAtAbsolutePosition(int x, int y, int z) {
+		return controls.get(new Coordinate(x-controller.xCoord, y-controller.yCoord, z-controller.zCoord));
 	}
 
 	private int getXPosition(TileEntityControlRod rod) {
 		return rod.xCoord-controller.xCoord;
+	}
+
+	private int getYPosition(TileEntityControlRod rod) {
+		return rod.yCoord-controller.yCoord;
 	}
 
 	private int getZPosition(TileEntityControlRod rod) {
@@ -90,6 +104,14 @@ public class ReactorControlLayout {
 		return maxX;
 	}
 
+	public int getMinY() {
+		return minY;
+	}
+
+	public int getMaxY() {
+		return maxY;
+	}
+
 	public int getMinZ() {
 		return minZ;
 	}
@@ -99,8 +121,8 @@ public class ReactorControlLayout {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Color getDisplayColorAtRelativePosition(int x, int z) {
-		TileEntityControlRod rod = this.getControlRodAtRelativePosition(x, z);
+	public Color getDisplayColorAtRelativePosition(int x, int y, int z) {
+		TileEntityControlRod rod = this.getControlRodAtRelativePosition(x, y, z);
 		if (rod != null) {
 			if (controller.getPower() >= this.getMinPower())
 				return rod.isActive() ? Color.GREEN : Color.RED;
@@ -129,8 +151,8 @@ public class ReactorControlLayout {
 
 	public void SCRAM() {
 		int iter = 0;
-		for (List li : controls.keySet()) {
-			TileEntityControlRod rod = controls.get(li);
+		for (Coordinate c : controls.keySet()) {
+			TileEntityControlRod rod = controls.get(c);
 			rod.drop(iter == 0);
 			iter++;
 		}
@@ -151,8 +173,8 @@ public class ReactorControlLayout {
 
 	public int countLoweredRods() {
 		int count = 0;
-		for (List li : controls.keySet()) {
-			TileEntityControlRod rod = controls.get(li);
+		for (Coordinate c : controls.keySet()) {
+			TileEntityControlRod rod = controls.get(c);
 			if (rod.isActive())
 				count++;
 		}

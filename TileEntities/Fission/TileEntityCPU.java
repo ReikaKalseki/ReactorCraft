@@ -53,7 +53,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			Block id = ReactorBlocks.REACTOR.getBlockInstance();
 			Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
 			for (int i = 2; i < 6; i++)
-				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y, z-r, x+r, y, z+r, id, id2);
+				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y-4, z-r, x+r, y+4, z+r, id, id2);
 			for (int i = 0; i < reactor.getSize(); i++) {
 				int[] xyz = reactor.getNthBlock(i);
 				int dx = xyz[0];
@@ -71,15 +71,19 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		if ((world.getTotalWorldTime()&16) == 16)
 			reactor.clear();
 
+		//TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		//if (te instanceof TileEntityCPU) {
+		//	power = ((TileEntityCPU)te).power;
+		//}
 		if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
 			this.noInputMachine();
 		}
 
-		if (power < layout.getMinPower())
+		if (power < this.getMinPower())
 			this.SCRAM();
 
 		if (layout.getNumberRods() > 0) {
-			if (temperature > this.getMaxTemperature() && power >= layout.getMinPower()*4) {
+			if (temperature > this.getMaxTemperature() && power >= this.getMinPower()*4) {
 				ReactorAchievements.SCRAM.triggerAchievement(this.getPlacer());
 				this.SCRAM();
 			}
@@ -100,6 +104,9 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		layout.SCRAM();
 		if (redstoneUpdate == 0)
 			redstoneUpdate = 7;
+		//TileEntity te = this.getAdjacentTileEntity(ForgeDirection.UP);
+		//if (te instanceof TileEntityCPU)
+		//	((TileEntityCPU)te).SCRAM();
 	}
 
 	@Override
@@ -225,7 +232,11 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 
 	@Override
 	public long getMinPower() {
-		return layout != null ? layout.getMinPower() : 0;
+		long base = layout != null ? layout.getMinPower() : 0;
+		//TileEntity te = this.getAdjacentTileEntity(ForgeDirection.UP);
+		//if (te instanceof TileEntityCPU)
+		//	base += ((TileEntityCPU)te).getMinPower();
+		return base;
 	}
 
 	@Override
