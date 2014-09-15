@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -132,7 +133,9 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	}
 
 	private boolean isOcean(BiomeGenBase biome) {
-		return biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean || biome.biomeName.toLowerCase().contains("ocean");
+		if (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.deepOcean)
+			return true;
+		return ReikaStringParser.containsWord(biome.biomeName.toLowerCase(), "ocean");
 	}
 
 	private boolean isOceanFloor(World world, int x, int y, int z) {
