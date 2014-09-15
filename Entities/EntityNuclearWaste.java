@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 
-public class EntityNuclearWaste extends EntityItem {
+public final class EntityNuclearWaste extends EntityItem {
 
 	public static final int RANGE = 6;
 	private int timer = 0;
@@ -88,6 +88,12 @@ public class EntityNuclearWaste extends EntityItem {
 		if (timer%12000 == 0 && timer >= 18000) {
 			RadiationEffects.contaminateArea(world, ix, iy, iz, RANGE*4, 2);
 		}
+	}
+
+	@Override
+	public void setAgeToCreativeDespawnTime()
+	{
+
 	}
 
 }
