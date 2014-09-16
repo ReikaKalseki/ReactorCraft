@@ -46,6 +46,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		else {
 			omegain = torquein = 0;
 		}
+
 		power = (long)omegain*(long)torquein;
 
 		if (omegain > 0)
