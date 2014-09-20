@@ -160,6 +160,8 @@ public class ItemReactorPlacer extends Item {
 	}
 
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
+		if (y < 0 || y > world.provider.getHeight()-1)
+			return false;
 		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.TURBINECORE) {
 			int meta = RotaryAux.get4SidedMetadataFromPlayerLook(ep);
 			BlockArray contact = new BlockArray();

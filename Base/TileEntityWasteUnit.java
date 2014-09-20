@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -39,8 +41,9 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected void decayWaste() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance() && inv[i].stackTagCompound != null) {
-				Isotopes atom = Isotopes.getIsotope(inv[i].getItemDamage());
+			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
+				List<Isotopes> iso = WasteManager.getWasteList();
+				Isotopes atom = iso.get(inv[i].getItemDamage());
 				if (ReikaRandomHelper.doWithChance(0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
 					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
 					if (this.leaksRadiation())
