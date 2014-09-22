@@ -370,4 +370,9 @@ public enum ReactorBook implements HandbookEntry {
 		return (this.ordinal()-this.getParent().ordinal())%8;
 	}
 
+	@Override
+	public boolean isConfigDisabled() {
+		return false;
+	}
+
 }
