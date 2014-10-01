@@ -29,7 +29,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	private ForgeDirection facing;
 
-	public boolean hasMultiblock = true;
+	public boolean hasMultiblock = false;
 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;

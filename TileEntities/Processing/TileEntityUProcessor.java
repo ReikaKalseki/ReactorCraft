@@ -152,6 +152,10 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		return p*this.getUF6()/output.getCapacity();
 	}
 
+	public int getCapacity() {
+		return water.getCapacity();
+	}
+
 	public int getWater() {
 		return water.getLevel();
 	}
@@ -306,7 +310,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

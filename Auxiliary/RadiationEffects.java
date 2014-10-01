@@ -21,42 +21,63 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Event.CreeperExplodeEvent;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RadiationEffects {
 
 	private static final Random rand = new Random();
 
-	public static void applyEffects(EntityLivingBase e) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e))
-			e.addPotionEffect(RadiationEffects.getRadiationEffect(36000));
-		if (e instanceof EntityCreeper) {
-			EntityCreeper ec = (EntityCreeper)e;
-			//no event for creeper detonation, cannot make irradiate
+	public static final RadiationEffects instance = new RadiationEffects();
+
+	private RadiationEffects() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void dirtyBombs(CreeperExplodeEvent evt) {
+		if (evt.creeper.getEntityData().getBoolean("radioactive")) {
+			World world = evt.creeper.worldObj;
+			int x = MathHelper.floor_double(evt.creeper.posX);
+			int y = MathHelper.floor_double(evt.creeper.posY);
+			int z = MathHelper.floor_double(evt.creeper.posZ);
+			this.contaminateArea(world, x, y, z, 4, 3);
 		}
 	}
 
-	public static void applyPulseEffects(EntityLivingBase e) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !isEntityImmuneToAll(e) && !hasHazmatSuit(e))
-			e.addPotionEffect(RadiationEffects.getRadiationEffect(20));
+	public void applyEffects(EntityLivingBase e) {
+		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e))
+			e.addPotionEffect(this.getRadiationEffect(36000));
+		if (e instanceof EntityCreeper) {
+			EntityCreeper ec = (EntityCreeper)e;
+			ec.getEntityData().setBoolean("radioactive", true);
+		}
 	}
 
-	public static boolean isEntityImmuneToAll(EntityLivingBase e) {
+	public void applyPulseEffects(EntityLivingBase e) {
+		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e) && !this.hasHazmatSuit(e))
+			e.addPotionEffect(this.getRadiationEffect(20));
+	}
+
+	public boolean isEntityImmuneToAll(EntityLivingBase e) {
 		return e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode;
 	}
 
-	public static boolean hasHazmatSuit(EntityLivingBase e) {
+	public boolean hasHazmatSuit(EntityLivingBase e) {
 		for (int i = 1; i < 5; i++) {
 			ItemStack is = e.getEquipmentInSlot(i);
 			if (is == null)
@@ -70,7 +91,7 @@ public class RadiationEffects {
 		return true;
 	}
 
-	public static void contaminateArea(World world, int x, int y, int z, int range, float density) {
+	public void contaminateArea(World world, int x, int y, int z, int range, float density) {
 		Random r = new Random();
 		int num = (int)(Math.sqrt(range)*density);
 		for (int i = 0; i < num; i++) {
@@ -84,7 +105,7 @@ public class RadiationEffects {
 		}
 	}
 
-	public static void transformBlock(World world, int x, int y, int z) {
+	public void transformBlock(World world, int x, int y, int z) {
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		if (id == Blocks.air)
@@ -192,7 +213,7 @@ public class RadiationEffects {
 		}
 	}
 
-	public static PotionEffect getRadiationEffect(int duration) {
+	public PotionEffect getRadiationEffect(int duration) {
 		PotionEffect pot = new PotionEffect(ReactorCraft.radiation.id, duration, 0);
 		pot.setCurativeItems(new ArrayList());
 		return pot;

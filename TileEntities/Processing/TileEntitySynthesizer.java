@@ -34,8 +34,11 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine {
+public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine, PipeConnector {
 
 	private static final int WATER_PER_AMMONIA = 250;
 	private static final int AMMONIA_PER_STEP = 1000;
@@ -67,6 +70,8 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 			if (steptimer.checkCap())
 				this.makeAmmonia();
 		}
+		else
+			steptimer.reset();
 		timer = steptimer.getTick();
 		//ReikaJavaLibrary.pConsole(tank);
 		tempTimer.update();
@@ -311,6 +316,21 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public boolean canExitToSide(ForgeDirection dir) {
 		return true;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m.isStandardPipe();
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry m, ForgeDirection side) {
+		return this.canConnectToPipe(m);
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? Flow.INPUT : Flow.OUTPUT;
 	}
 
 }

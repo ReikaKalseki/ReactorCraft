@@ -28,8 +28,8 @@ public class ItemPlutonium extends ItemReactorMulti {
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 			if (!ep.capabilities.isCreativeMode) {
-				if (!RadiationEffects.hasHazmatSuit(ep)) {
-					ep.addPotionEffect(RadiationEffects.getRadiationEffect(1200));
+				if (!RadiationEffects.instance.hasHazmatSuit(ep)) {
+					ep.addPotionEffect(RadiationEffects.instance.getRadiationEffect(1200));
 					ReactorAchievements.PUPOISON.triggerAchievement(ep);
 				}
 			}

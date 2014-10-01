@@ -152,7 +152,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

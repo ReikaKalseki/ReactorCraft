@@ -54,6 +54,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
@@ -478,6 +479,11 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 					tip.add("Tank "+i+": "+input);
 				}
 			}
+		}
+		if (te instanceof TileEntityToroidMagnet) {
+			tip.add(String.format("Charge: %dkV", ((TileEntityToroidMagnet)te).getCharge()));
+			tip.add(String.format("Coolant: %dmB", ((TileEntityToroidMagnet)te).getCoolant()));
+			tip.add(String.format("Direction: %s", ((TileEntityToroidMagnet)te).getAim().toString()));
 		}
 		return tip;
 	}

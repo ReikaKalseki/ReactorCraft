@@ -97,7 +97,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 			EntityLivingBase e = inbox.get(i);
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= effectRange) {
-				RadiationEffects.applyEffects(e);
+				RadiationEffects.instance.applyEffects(e);
 			}
 		}
 
@@ -106,7 +106,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 			int dx = (int)x-effectRange+r.nextInt(effectRange*2+1);
 			int dy = (int)y-effectRange+r.nextInt(effectRange*2+1);
 			int dz = (int)z-effectRange+r.nextInt(effectRange*2+1);
-			RadiationEffects.transformBlock(world, dx, dy, dz);
+			RadiationEffects.instance.transformBlock(world, dx, dy, dz);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	public boolean attackEntityFrom(DamageSource src, float par2)
 	{
 		if (src.isExplosion()) {
-			RadiationEffects.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F);
+			RadiationEffects.instance.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F);
 			this.setDead();
 			return true;
 		}

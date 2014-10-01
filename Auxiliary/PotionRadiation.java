@@ -17,7 +17,6 @@ import net.minecraft.world.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.PermaPotion;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.ReactorCraft.ReactorCraft;
 
 public class PotionRadiation extends Potion implements PermaPotion {
 
@@ -42,8 +41,9 @@ public class PotionRadiation extends Potion implements PermaPotion {
 		int c = p ? 75 : 50;
 		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getHealth()*c)) {
 			int amt = p ? 2 : 1;
-			e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
+			//e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
 		}
+		e.heal(18);
 
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;

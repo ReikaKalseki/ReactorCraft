@@ -95,7 +95,7 @@ public class RenderProcessor extends ReactorRenderBase
 
 		FluidStack liquid = new FluidStack(liq, 1);
 
-		int amount = tile.getFluid(liquid);
+		int amount = Math.min(tile.getFluid(liquid), tile.getCapacity());
 		if (amount == 0)
 			return;
 

@@ -57,7 +57,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	{
 		if (ReikaRandomHelper.doWithChance(12.5)) {
 			if (e instanceof EntityLivingBase) {
-				RadiationEffects.applyPulseEffects((EntityLivingBase)e);
+				RadiationEffects.instance.applyPulseEffects((EntityLivingBase)e);
 				this.setDead();
 			}
 		}
@@ -105,7 +105,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					//	RadiationEffects.contaminateArea(world, x, y, z, 1);
 				}
 				if (ReikaRandomHelper.doWithChance(20))
-					RadiationEffects.transformBlock(world, x, y, z);
+					RadiationEffects.instance.transformBlock(world, x, y, z);
 			}
 			return flag;
 		}

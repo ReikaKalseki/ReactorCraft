@@ -14,9 +14,12 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -26,6 +29,7 @@ import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.Shockable;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
@@ -46,6 +50,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	private static final int RATE = ReactorOptions.getToroidChargeRate();
 
+	private final HybridTank tank = new HybridTank("toroid", 1000);
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.MAGNET.ordinal();
@@ -65,12 +71,25 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			if (this.canAffect(e)) {
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
+				tank.removeLiquid(25);
 			}
 			else {
 				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
 			}
 		}
 		//this.collectCharge(world, x, y, z);
+
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y+2, z);
+		if (m != null && m.isStandardPipe()) {
+			TileEntity te = world.getTileEntity(x, y+2, z);
+			int amt = Math.min(tank.getRemainingSpace(), ((TileEntityPiping)te).getFluidLevel());
+			if (amt > 0) {
+				if (FluidRegistry.getFluid("liquid nitrogen").equals(((TileEntityPiping)te).getFluidType())) {
+					tank.addLiquid(amt, FluidRegistry.getFluid("liquid nitrogen"));
+					((TileEntityPiping)te).removeLiquid(amt);
+				}
+			}
+		}
 
 		chargeTimer.update();
 		if (chargeTimer.getTick()%RATE == 0)
@@ -82,6 +101,14 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		//if (this.getTicksExisted() == 0)
 		//	this.clearArea(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(aim, !hasSolenoid && this.getSide() == Side.SERVER);
+	}
+
+	public int getCoolant() {
+		return tank.getLevel();
+	}
+
+	public int getCharge() {
+		return charge;
 	}
 
 	private void checkSurroundingMagnetsAndCopySolenoidState() {
@@ -199,6 +226,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			return false;
 		if (charge <= 0)
 			return false;
+		if (tank.isEmpty())
+			return false;
 		int o = this.getOrdinal();
 		int p = e.magnetOrdinal;
 		if (p == -1)
@@ -235,6 +264,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		hasSolenoid = NBT.getBoolean("solenoid");
 
 		charge = NBT.getInteger("chg");
+
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -246,6 +277,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		NBT.setBoolean("solenoid", hasSolenoid);
 
 		NBT.setInteger("chg", charge);
+
+		tank.writeToNBT(NBT);
 	}
 
 	public Aim getAim() {

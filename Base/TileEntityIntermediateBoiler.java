@@ -95,7 +95,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	@Override
 	public final boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

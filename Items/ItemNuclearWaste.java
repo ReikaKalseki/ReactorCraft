@@ -60,8 +60,8 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
 		if (e instanceof EntityLivingBase) {
-			if (!RadiationEffects.hasHazmatSuit((EntityLivingBase)e)) {
-				RadiationEffects.applyEffects((EntityLivingBase)e);
+			if (!RadiationEffects.instance.hasHazmatSuit((EntityLivingBase)e)) {
+				RadiationEffects.instance.applyEffects((EntityLivingBase)e);
 				if (e instanceof EntityPlayer) {
 					if (!((EntityPlayer)e).capabilities.isCreativeMode)
 						ReactorAchievements.HOLDWASTE.triggerAchievement((EntityPlayer)e);
