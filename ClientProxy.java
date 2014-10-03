@@ -40,6 +40,7 @@ public class ClientProxy extends CommonProxy {
 
 	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();
 	public static SteamLineRenderer line;
+	public static TritiumLampRenderer lamp;
 
 	private static final HashMap<ReactorItems, String> armorAssets = new HashMap();
 
@@ -84,6 +85,10 @@ public class ClientProxy extends CommonProxy {
 		lineRender = RenderingRegistry.getNextAvailableRenderId();
 		line = new SteamLineRenderer(lineRender);
 		RenderingRegistry.registerBlockHandler(lineRender, line);
+
+		lampRender = RenderingRegistry.getNextAvailableRenderId();
+		lamp = new TritiumLampRenderer(lampRender);
+		RenderingRegistry.registerBlockHandler(lampRender, lamp);
 
 		this.registerSpriteSheets();
 

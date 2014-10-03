@@ -23,7 +23,7 @@ public enum FluoriteTypes {
 	MAGENTA(178, 0, 255),
 	GREEN(0, 188, 18),
 	RED(255, 50, 50),
-	WHITE(1024, 1024, 1024), //to ensure pure white
+	WHITE(255, 255, 255),
 	YELLOW(255, 216, 0);
 
 	public final int red;
@@ -59,15 +59,19 @@ public enum FluoriteTypes {
 	public String getBlockName() {
 		if (ReactorOptions.RAINBOW.getState())
 			return StatCollector.translateToLocal("block.fluorite");
-		return ReikaStringParser.capFirstChar(this.name())+" "+StatCollector.translateToLocal("block.fluorite");
+		return this.getName()+" "+StatCollector.translateToLocal("block.fluorite");
 	}
 
 	public String getOreName() {
-		return ReikaStringParser.capFirstChar(this.name())+" "+StatCollector.translateToLocal("ore.fluorite");
+		return this.getName()+" "+StatCollector.translateToLocal("ore.fluorite");
 	}
 
 	public String getItemName() {
-		return ReikaStringParser.capFirstChar(this.name())+" "+StatCollector.translateToLocal("item.fluorite");
+		return this.getName()+" "+StatCollector.translateToLocal("item.fluorite");
+	}
+
+	public String getName() {
+		return ReikaStringParser.capFirstChar(this.name());
 	}
 
 	public ItemStack getItem() {

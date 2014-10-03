@@ -158,8 +158,10 @@ public class ReactorRecipes {
 			FluoriteTypes fl = FluoriteTypes.colorList[i];
 			ItemStack block = new ItemStack(ReactorBlocks.FLUORITE.getBlockInstance(), 1, fl.ordinal());
 			ItemStack shard = ReactorItems.FLUORITE.getStackOfMetadata(fl.ordinal());
+			ItemStack lamp = new ItemStack(ReactorBlocks.LAMP.getBlockInstance(), 1, fl.ordinal());
 			GameRegistry.addRecipe(block, "CCC", "CCC", "CCC", 'C', shard);
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(shard, 9), block);
+			GameRegistry.addRecipe(lamp, "SCS", "C C", "SOS", 'C', shard, 'S', ItemStacks.steelingot, 'O', Blocks.obsidian);
 		}
 
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);

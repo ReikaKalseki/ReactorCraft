@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 public class CommonProxy {
 
 	public static int lineRender;
+	public static int lampRender;
 	public static int hazmat;
 
 	public void registerRenderers()

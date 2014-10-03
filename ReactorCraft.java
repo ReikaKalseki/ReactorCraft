@@ -10,6 +10,7 @@
 package Reika.ReactorCraft;
 
 import java.net.URL;
+import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -44,7 +45,6 @@ import Reika.DragonAPI.Auxiliary.RetroGenController;
 import Reika.DragonAPI.Auxiliary.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
-import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -59,6 +59,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
+import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
@@ -174,12 +175,16 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	@Override
+	protected HashMap<String, String> getDependencies() {
+		HashMap map = new HashMap();
+		map.put("RotaryCraft", RotaryCraft.currentVersion);
+		return map;
+	}
+
+	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
-
-		if (!ModList.ROTARYCRAFT.isLoaded()) {
-			throw new InstallationException(instance, "ReactorCraft requires RotaryCraft!");
-		}
+		this.verifyVersions();
 
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
@@ -422,6 +427,7 @@ public class ReactorCraft extends DragonAPIMod {
 			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass());
 		}
 		GameRegistry.registerTileEntity(TileEntitySteamInjector.class, "ReactorSteamInjector");
+		GameRegistry.registerTileEntity(TileEntityTritiumLamp.class, "ReactorTritiumLamp");
 	}
 
 	private static void addLiquids() {

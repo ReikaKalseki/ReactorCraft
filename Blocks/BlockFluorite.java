@@ -79,6 +79,9 @@ public class BlockFluorite extends Block {
 		double r = fl.red/255D;
 		double g = fl.green/255D;
 		double b = fl.blue/255D;
+		if (fl == FluoriteTypes.WHITE) {
+			r = g = b = 4;
+		}
 		//ReikaJavaLibrary.pConsole(r+":"+g+":"+b);
 		if (this.isActivated(world, x, y, z)) {
 			ReikaParticleHelper.spawnColoredParticlesWithOutset(world, x, y, z, r, g, b, 4, offset);

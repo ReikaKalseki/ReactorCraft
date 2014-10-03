@@ -14,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Interfaces.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
@@ -27,6 +28,7 @@ import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Blocks.BlockSteamLine;
+import Reika.ReactorCraft.Blocks.BlockTritiumLamp;
 import Reika.ReactorCraft.Blocks.Multi.BlockFlywheelMulti;
 import Reika.ReactorCraft.Blocks.Multi.BlockGeneratorMulti;
 import Reika.ReactorCraft.Blocks.Multi.BlockHeaterMulti;
@@ -34,6 +36,7 @@ import Reika.ReactorCraft.Blocks.Multi.BlockInjectorMulti;
 import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
 import Reika.ReactorCraft.Blocks.Multi.BlockTurbineMulti;
 import Reika.ReactorCraft.Items.ItemBlockFluorite;
+import Reika.ReactorCraft.Items.ItemBlockLampMulti;
 import Reika.ReactorCraft.Items.ItemBlockMultiBlock;
 import Reika.ReactorCraft.Items.ItemBlockReactorMat;
 import Reika.ReactorCraft.Items.ItemBlockReactorOre;
@@ -58,7 +61,8 @@ public enum ReactorBlocks implements BlockEnum {
 	SOLENOIDMULTI(	BlockSolenoidMulti.class,		ItemBlockMultiBlock.class,	"multiblock.solenoid",		false),
 	GENERATORMULTI(	BlockGeneratorMulti.class,		ItemBlockMultiBlock.class,	"multiblock.generator",		false),
 	TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false),
-	FLYWHEELMULTI(	BlockFlywheelMulti.class,		ItemBlockMultiBlock.class,	"multiblock.flywheel",		false);
+	FLYWHEELMULTI(	BlockFlywheelMulti.class,		ItemBlockMultiBlock.class,	"multiblock.flywheel",		false),
+	LAMP(			BlockTritiumLamp.class,			ItemBlockLampMulti.class,	"reactor.lamp",				false);
 
 	private Class blockClass;
 	private String blockName;
@@ -98,6 +102,8 @@ public enum ReactorBlocks implements BlockEnum {
 			return Material.lava;
 		case REACTOR:
 			return Material.iron;
+		case LAMP:
+			return Material.glass;
 		default:
 			return Material.iron;
 		}
@@ -139,6 +145,8 @@ public enum ReactorBlocks implements BlockEnum {
 			return FluoriteTypes.colorList[meta].getBlockName();
 		case FLUORITEORE:
 			return FluoriteTypes.colorList[meta].getOreName();
+		case LAMP:
+			return FluoriteTypes.colorList[meta].getName()+" "+StatCollector.translateToLocal(this.getBasicName());
 		default:
 			return this.getBasicName();
 		}
