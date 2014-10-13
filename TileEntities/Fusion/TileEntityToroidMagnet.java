@@ -58,16 +58,18 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!hasSolenoid && this.getTicksExisted() == 0) {
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (!hasSolenoid) {
 			this.checkSurroundingMagnetsAndCopySolenoidState();
 		}
+	}
 
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
 		List<EntityPlasma> li = world.getEntitiesWithinAABB(EntityPlasma.class, box);
 		int[] tg = this.getTarget();
-		for (int i = 0; i < li.size(); i++) {
-			EntityPlasma e = li.get(i);
+		for (EntityPlasma e : li) {
 			if (this.canAffect(e)) {
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();

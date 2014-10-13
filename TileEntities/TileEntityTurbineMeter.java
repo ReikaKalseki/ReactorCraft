@@ -21,6 +21,8 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 public class TileEntityTurbineMeter extends TileEntityReactorBase {
 
 	private int turbineY = -1;
+	private int oldlvl;
+	private int lvl;
 
 	@Override
 	public int getIndex() {
@@ -29,12 +31,18 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (this.getTicksExisted() < 1 || (world.getTotalWorldTime()&31) == 0) {
+		if (this.getTicksExisted() == 0 || world.getTotalWorldTime()%32 == 0) {
 			this.remapTurbine(world, x, y, z);
 		}
-		if (this.getTicksExisted() < 1 || (world.getTotalWorldTime()&7) == 0) {
+
+		TileEntityTurbineCore te = this.getTurbine();
+		lvl = te != null ? this.getRedstoneFrom(te) : 0;
+
+		if (this.getTicksExisted() == 0 || oldlvl != lvl) {
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
+
+		oldlvl = lvl;
 	}
 
 	private void remapTurbine(World world, int x, int y, int z) {
@@ -61,8 +69,7 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 
 	@Override
 	public int getRedstoneOverride() {
-		TileEntityTurbineCore te = this.getTurbine();
-		return te != null ? this.getRedstoneFrom(te) : 0;
+		return lvl;
 	}
 
 	private int getRedstoneFrom(TileEntityTurbineCore te) {

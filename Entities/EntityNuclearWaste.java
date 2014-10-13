@@ -71,8 +71,7 @@ public final class EntityNuclearWaste extends EntityItem {
 		double z = posZ;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(RANGE, RANGE, RANGE);
 		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityLivingBase e = inbox.get(i);
+		for (EntityLivingBase e : inbox) {
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= RANGE) {
 				if (!RadiationEffects.instance.hasHazmatSuit(e))

@@ -65,8 +65,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		int r = this.getRange();
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(r, r, r);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase e = li.get(i);
+		for (EntityLivingBase e : li) {
 			if (!RadiationEffects.instance.hasHazmatSuit(e)) {
 				double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {

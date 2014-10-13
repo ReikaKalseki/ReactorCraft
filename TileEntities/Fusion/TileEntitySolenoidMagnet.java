@@ -50,9 +50,6 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 			this.noInputMachine();
 		}
 
-		if (!hasMultiBlock && this.getTicksExisted() == 0) {
-			this.checkForMultiBlock(world, x, y, z);
-		}
 		if (hasMultiBlock && checkForToroids && this.arePowerReqsMet()) {
 			this.addToToroids();
 		}
@@ -66,6 +63,13 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 			FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, 16);
 			ex.doExplosionA();
 			ex.doExplosionB(true);
+		}
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (!hasMultiBlock) {
+			this.checkForMultiBlock(world, x, y, z);
 		}
 	}
 

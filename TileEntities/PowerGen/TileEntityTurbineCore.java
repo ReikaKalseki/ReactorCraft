@@ -459,8 +459,7 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 		AxisAlignedBB box = this.getBoundingBox(world, x, y, z, meta);
 		int r = 2+stage/2;
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase e = li.get(i);
+		for (EntityLivingBase e : li) {
 			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
 				if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)) {
 					if (!world.isRemote) {

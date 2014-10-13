@@ -95,7 +95,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public boolean canMakeUF6() {
-		return (this.hasUranium()) && this.getHF() > ACID_PER_UNIT && this.canAcceptMoreUF6(FluidContainerRegistry.BUCKET_VOLUME);
+		return this.hasUranium() && this.getHF() >= ACID_PER_UNIT && this.canAcceptMoreUF6(FluidContainerRegistry.BUCKET_VOLUME);
 	}
 
 	private boolean hasUranium() {
