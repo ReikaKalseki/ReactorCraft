@@ -144,7 +144,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static Achievement[] achievements;
 
-	public static final CustomStringDamageSource radiationDamage = (CustomStringDamageSource)new CustomStringDamageSource("died of Radiation Poisoning").setDamageBypassesArmor();
+	public static final CustomStringDamageSource radiationDamage = (CustomStringDamageSource)new CustomStringDamageSource("died of radiation poisoning").setDamageBypassesArmor();
 	public static final CustomStringDamageSource fusionDamage = new CustomStringDamageSource("jumped in a Fusion Reactor");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
