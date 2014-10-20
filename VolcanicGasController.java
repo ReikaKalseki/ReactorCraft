@@ -26,7 +26,7 @@ public class VolcanicGasController implements TickHandler {
 	private static final Random rand = new Random();
 
 	@Override
-	public void tick(Object... tickData) {
+	public void tick(TickType type, Object... tickData) {
 		World world = (World)tickData[0];
 		if (world != null && world.provider.dimensionId == -1 || world.provider.isHellWorld) {
 			int y = 32;
