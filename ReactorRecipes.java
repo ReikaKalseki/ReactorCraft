@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -184,7 +185,9 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.DEPLETED.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.depdust.copy());
 		GameRegistry.addRecipe(ReactorItems.FUEL.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.fueldust.copy());
 
-		GameRegistry.addRecipe(ReactorItems.PELLET.getCraftedProduct(3), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
+		//GameRegistry.addRecipe(ReactorItems.PELLET.getCraftedProduct(3), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
+		ShapedRecipes sr = ReikaRecipeHelper.getShapedRecipeFor(ReactorItems.PELLET.getCraftedProduct(4), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
+		RecipesBlastFurnace.getRecipes().addRecipe(ReactorItems.PELLET.getCraftedProduct(4), 750, sr, 1, 1);
 
 		GameRegistry.addRecipe(ReactorItems.BREEDERFUEL.getCraftedProduct(4), " D ", "DED", " D ", 'D', ReactorItems.DEPLETED.getStackOf(), 'E', ReactorItems.FUEL.getStackOf());
 
