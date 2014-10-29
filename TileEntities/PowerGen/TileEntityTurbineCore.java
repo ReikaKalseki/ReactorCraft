@@ -68,6 +68,8 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 
 	private int forcedlube = 0;
 
+	private boolean ammonia;
+
 	protected final HybridTank tank = new HybridTank("turbine", 64000);
 
 	private Interference inter = null;
@@ -386,13 +388,20 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 				int newmeta = 1+(meta2&4);
 				if ((meta2&4) != 0) {
 					steam += 2;
+					ammonia = true;
 				}
-				else
+				else {
 					steam++;
+					ammonia = false;
+				}
 				canAccel = true;
 			}
 		}
 		return canAccel;
+	}
+
+	public boolean isAmmonia() {
+		return ammonia;
 	}
 
 	private void readSurroundings(World world, int x, int y, int z, int meta) {

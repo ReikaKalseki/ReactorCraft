@@ -62,7 +62,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 			//torque = te.getTorque();
 			//ReikaJavaLibrary.pConsole(torque+"/"+te.getTorque()+":"+omega+"/"+te.getOmega(), Side.SERVER);
 			omega = te.getOmega();
-			torque = Math.min(te.getTorque(), MAXTORQUE);
+			torque = Math.min(te.getTorque(), te.isAmmonia() ? MAXTORQUE*2 : MAXTORQUE);
 		}
 		else {
 			if (omega > 0)

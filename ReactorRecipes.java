@@ -152,6 +152,8 @@ public class ReactorRecipes {
 
 		ReikaRecipeHelper.addSmelting(ReactorStacks.calcite, ReactorStacks.lime, 0.2F);
 		ReikaRecipeHelper.addSmelting(ItemStacks.coaldust, CraftingItems.GRAPHITE.getItem(), 0);
+
+		RecipesBlastFurnace.getRecipes().addRecipe(ReactorStacks.lime, 850, ReikaRecipeHelper.getShapelessRecipeFor(ReactorStacks.lime, new ItemStack(Items.egg)), 1, 0.1F);
 	}
 
 	private static void addMisc() {
