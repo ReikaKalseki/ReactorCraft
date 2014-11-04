@@ -97,7 +97,7 @@ public class GuiCPU extends ReactorGuiBase {
 		for (int a = layout.getMinX(); a <= layout.getMaxX(); a++) {
 			for (int b = layout.getMinZ(); b <= layout.getMaxZ(); b++) {
 				if (a != 0 || b != 0) {
-					Color c = layout.getDisplayColorAtRelativePosition(a, offsetY, b);
+					Color c = layout.getDisplayColorAtRelativePosition(tile.worldObj, a, offsetY, b);
 					int x = ox+a*s;
 					int y = oy+b*s;
 					this.drawRect(x, y, x+r, y+r, c.getRGB());
@@ -118,7 +118,7 @@ public class GuiCPU extends ReactorGuiBase {
 		int dy = y-oy;
 		int a = MathHelper.floor_double(dx/(double)s);
 		int b = MathHelper.floor_double(dy/(double)s);
-		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(a, offsetY, b);
+		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(tile.worldObj, a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
 			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod);

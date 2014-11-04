@@ -13,9 +13,10 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.Collections;
 
+import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Instantiable.Data.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.TileEntityCache;
+import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
@@ -65,23 +66,23 @@ public class ReactorControlLayout {
 			minZ = z;
 		if (maxZ < z)
 			maxZ = z;
-		controls.put(new Coordinate(x, y, z), rod);
+		controls.put(new WorldLocation(rod.worldObj, x, y, z), rod);
 	}
 
-	public boolean hasControlRodAtRelativePosition(int x, int y, int z) {
-		return this.getControlRodAtRelativePosition(x, y, z) != null;
+	public boolean hasControlRodAtRelativePosition(World world, int x, int y, int z) {
+		return this.getControlRodAtRelativePosition(world, x, y, z) != null;
 	}
 
-	public boolean hasControlRodAtAbsolutePosition(int x, int y, int z) {
-		return this.getControlRodAtAbsolutePosition(x, y, z) != null;
+	public boolean hasControlRodAtAbsolutePosition(World world, int x, int y, int z) {
+		return this.getControlRodAtAbsolutePosition(world, x, y, z) != null;
 	}
 
-	public TileEntityControlRod getControlRodAtRelativePosition(int x, int y, int z) {
-		return controls.get(new Coordinate(x, y, z));
+	public TileEntityControlRod getControlRodAtRelativePosition(World world, int x, int y, int z) {
+		return controls.get(new WorldLocation(world, x, y, z));
 	}
 
-	public TileEntityControlRod getControlRodAtAbsolutePosition(int x, int y, int z) {
-		return controls.get(new Coordinate(x-controller.xCoord, y-controller.yCoord, z-controller.zCoord));
+	public TileEntityControlRod getControlRodAtAbsolutePosition(World world, int x, int y, int z) {
+		return controls.get(new WorldLocation(world, x-controller.xCoord, y-controller.yCoord, z-controller.zCoord));
 	}
 
 	private int getXPosition(TileEntityControlRod rod) {
@@ -121,8 +122,8 @@ public class ReactorControlLayout {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Color getDisplayColorAtRelativePosition(int x, int y, int z) {
-		TileEntityControlRod rod = this.getControlRodAtRelativePosition(x, y, z);
+	public Color getDisplayColorAtRelativePosition(World world, int x, int y, int z) {
+		TileEntityControlRod rod = this.getControlRodAtRelativePosition(world, x, y, z);
 		if (rod != null) {
 			if (controller.getPower() >= this.getMinPower())
 				return rod.isActive() ? Color.GREEN : Color.RED;
@@ -151,7 +152,7 @@ public class ReactorControlLayout {
 
 	public void SCRAM() {
 		int iter = 0;
-		for (Coordinate c : controls.keySet()) {
+		for (WorldLocation c : controls.keySet()) {
 			TileEntityControlRod rod = controls.get(c);
 			rod.drop(iter == 0);
 			iter++;
@@ -173,7 +174,7 @@ public class ReactorControlLayout {
 
 	public int countLoweredRods() {
 		int count = 0;
-		for (Coordinate c : controls.keySet()) {
+		for (WorldLocation c : controls.keySet()) {
 			TileEntityControlRod rod = controls.get(c);
 			if (rod.isActive())
 				count++;
