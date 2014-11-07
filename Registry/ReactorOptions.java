@@ -18,6 +18,7 @@ public enum ReactorOptions implements ConfigList {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore", true),
+	MAGNETRORE("Generate Magnetite Ore", true),
 	RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),

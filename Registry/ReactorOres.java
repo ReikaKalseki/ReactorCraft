@@ -40,7 +40,7 @@ public enum ReactorOres {
 	ENDBLENDE(		0, 	64, 16, 6, 	1,	1,	1F,		"ore.pitchblende"),
 	AMMONIUM(		32,	32,	8,	6,	-1,	1,	0.8F,	"ore.ammonium"),
 	CALCITE(		32, 60,	4,	12,	0,	0,	0.4F,	"ore.calcite"),
-	MAGNETITE(		60,	128,16,	7,	0,	1,	0.8F,	"ore.magnetite");
+	MAGNETITE(		60,	128,16,	7,	0,	1,	0.8F,	"ore.magnetite", ReactorOptions.MAGNETRORE.getState());
 
 	public final int minY;
 	public final int maxY;

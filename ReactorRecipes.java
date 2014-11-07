@@ -9,11 +9,14 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -55,6 +58,13 @@ public class ReactorRecipes {
 
 	public static void addModInterface() {
 		addRCInterface();
+
+		ArrayList<ItemStack> li = OreDictionary.getOres(ReactorOres.MAGNETITE.getDictionaryName());
+		for(ItemStack is : li) {
+			if (is.getItem() != ReactorStacks.lodestone.getItem()) {
+				GameRegistry.addShapelessRecipe(is, ReactorStacks.lodestone);
+			}
+		}
 	}
 
 	public static void addRecipes() {
