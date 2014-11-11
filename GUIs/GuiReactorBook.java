@@ -28,11 +28,14 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
 public class GuiReactorBook extends GuiHandbook {
@@ -118,6 +121,14 @@ public class GuiReactorBook extends GuiHandbook {
 				out = ReactorItems.MAGNET.getStackOfMetadata(k);
 			}
 			MachineRecipeRenderer.instance.drawCompressor(posX+66, posY+14, in, posX+120, posY+41, out);
+		}
+		if (h == ReactorBook.PELLET) {
+			ItemStack in = CraftingItems.GRAPHITE.getItem();
+			ItemStack in2 = CraftingItems.UDUST.getItem();
+			ItemStack out = ReactorItems.PELLET.getStackOf();
+			BlastCrafting r = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(out).get(0);
+			MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(posX+99, posY+18, posX+180, posY+32, r);
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, r.temperature+"C", posX+56, posY+66, 0);
 		}
 	}
 
@@ -210,7 +221,7 @@ public class GuiReactorBook extends GuiHandbook {
 		if (h == ReactorBook.MAGNET)
 			return PageType.COMPACTOR;
 		if (h == ReactorBook.PELLET)
-			return PageType.CRAFTING;
+			return PageType.BLASTFURNACE;
 		return PageType.PLAIN;
 	}
 
