@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Interfaces.HandbookEntry;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -31,7 +32,6 @@ import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
-import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
