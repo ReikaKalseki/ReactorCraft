@@ -14,36 +14,32 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
+import Reika.DragonAPI.Auxiliary.TickRegistry;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
 import Reika.DragonAPI.Interfaces.PermaPotion;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.ReactorCraft.ReactorCraft;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.Side;
 
 public class PotionRadiation extends Potion implements PermaPotion {
 
 	public PotionRadiation(int par1, boolean par2) {
 		super(par1, par2, 0x111111);
+
+		TickRegistry.instance.registerTickHandler(PotionMapCMEAvoidance.instance, Side.SERVER);
 	}
 
 	@Override
 	public void performEffect(EntityLivingBase e, int level) {
-		e.removePotionEffect(Potion.regeneration.id);
-		e.removePotionEffect(Potion.field_76443_y.id);
-		e.removePotionEffect(Potion.moveSpeed.id);
-		e.removePotionEffect(Potion.digSpeed.id);
-		e.removePotionEffect(Potion.damageBoost.id);
-		e.removePotionEffect(Potion.heal.id);
-		e.removePotionEffect(Potion.jump.id);
-		e.removePotionEffect(Potion.fireResistance.id);
-		e.removePotionEffect(Potion.resistance.id);
-		e.removePotionEffect(Potion.nightVision.id);
-
 		boolean p = e.worldObj.difficultySetting == EnumDifficulty.PEACEFUL;
 		int c = p ? 75 : 50;
-		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getHealth()*c)) {
+		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getMaxHealth()*c)) {
 			int amt = p ? 2 : 1;
 			//e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
 		}
-		e.heal(18);
 
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
@@ -52,12 +48,6 @@ public class PotionRadiation extends Potion implements PermaPotion {
 			ReikaPlayerAPI.setFoodLevel(ep, 1);
 			ReikaPlayerAPI.setSaturationLevel(ep, 0);
 		}
-
-		if (!e.isPotionActive(Potion.confusion))
-			e.addPotionEffect(new PotionEffect(Potion.confusion.id, 120, 0));
-
-		e.addPotionEffect(new PotionEffect(Potion.poison.id, 20, 0));
-		e.addPotionEffect(new PotionEffect(Potion.jump.id, 20, -2));
 	}
 
 	@Override
@@ -69,6 +59,53 @@ public class PotionRadiation extends Potion implements PermaPotion {
 	@Override
 	public boolean canBeCleared(EntityLivingBase e, PotionEffect pot) {
 		return e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode;
+	}
+
+	public static class PotionMapCMEAvoidance implements TickHandler {
+
+		private static final PotionMapCMEAvoidance instance = new PotionMapCMEAvoidance();
+
+		private PotionMapCMEAvoidance() {
+
+		}
+
+		@Override
+		public void tick(TickType type, Object... tickData) {
+			EntityPlayer e = (EntityPlayer)tickData[0];
+			if (e.isPotionActive(ReactorCraft.radiation)) {
+				e.removePotionEffect(Potion.regeneration.id);
+				e.removePotionEffect(Potion.field_76443_y.id);
+				e.removePotionEffect(Potion.moveSpeed.id);
+				e.removePotionEffect(Potion.digSpeed.id);
+				e.removePotionEffect(Potion.damageBoost.id);
+				e.removePotionEffect(Potion.heal.id);
+				e.removePotionEffect(Potion.jump.id);
+				e.removePotionEffect(Potion.fireResistance.id);
+				e.removePotionEffect(Potion.resistance.id);
+				e.removePotionEffect(Potion.nightVision.id);
+
+				if (!e.isPotionActive(Potion.confusion))
+					e.addPotionEffect(new PotionEffect(Potion.confusion.id, 120, 0));
+
+				e.addPotionEffect(new PotionEffect(Potion.poison.id, 20, 0));
+				e.addPotionEffect(new PotionEffect(Potion.jump.id, 20, -2));
+			}
+		}
+
+		@Override
+		public TickType getType() {
+			return TickType.PLAYER;
+		}
+
+		@Override
+		public boolean canFire(Phase p) {
+			return true;
+		}
+
+		@Override
+		public String getLabel() {
+			return "Radiation Potion Control";
+		}
 	}
 
 }
