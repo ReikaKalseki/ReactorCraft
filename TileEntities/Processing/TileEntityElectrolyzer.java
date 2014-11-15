@@ -305,8 +305,12 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.salt))
 			return true;
 		List<ItemStack> li = OreDictionary.getOres("salt");
-		li.addAll(OreDictionary.getOres("dustSalt"));
-		return ReikaItemHelper.listContainsItemStack(li, itemstack);
+		if (ReikaItemHelper.listContainsItemStack(li, itemstack))
+			return true;
+		li = OreDictionary.getOres("dustSalt");
+		if (ReikaItemHelper.listContainsItemStack(li, itemstack))
+			return true;
+		return false;
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
