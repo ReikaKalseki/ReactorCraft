@@ -73,7 +73,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			if (this.canAffect(e)) {
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
-				tank.removeLiquid(25);
+				tank.removeLiquid(10);
 			}
 			else {
 				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
