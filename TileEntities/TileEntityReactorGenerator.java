@@ -9,24 +9,36 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.ReikaEUHelper;
+import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.RotaryCraft.API.Screwdriverable;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler {
+@Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource"})
+public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable {
 
 	private ForgeDirection facingDir;
 
@@ -34,11 +46,13 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	private int torquein;
 	private int omegain;
 
+	private Modes mode = Modes.RF;
+
 	public boolean hasMultiblock;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if ((world.getWorldTime()&31) == 0)
+		if (world.getWorldTime()%128 == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (hasMultiblock)
@@ -57,12 +71,23 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		if (power > 0) {
 			ForgeDirection write = this.getFacing().getOpposite();
 			TileEntity tile = this.getAdjacentTileEntity(write);
-			if (tile instanceof IEnergyHandler) {
-				IEnergyHandler rc = (IEnergyHandler)tile;
-				if (rc.canConnectEnergy(facingDir)) {
-					int rf = this.getGenRF();
-					float used = rc.receiveEnergy(facingDir, rf, false);
+			switch(mode) {
+			case RF:
+				if (tile instanceof IEnergyHandler) {
+					IEnergyHandler rc = (IEnergyHandler)tile;
+					if (rc.canConnectEnergy(this.getFacing())) {
+						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
+					}
 				}
+				break;
+			case EU:
+				if (tile instanceof IEnergySink) {
+					IEnergySink rc = (IEnergySink)tile;
+					if (rc.acceptsEnergyFrom(this, this.getFacing())) {
+						double used = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -106,10 +131,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		}
 	}
 
-	public int getGenRF() {
-		return (int)(power*10/ReikaBuildCraftHelper.getWattsPerMJ());
-	}
-
 	public ForgeDirection getFacing() {
 		return facingDir != null ? facingDir : ForgeDirection.EAST;
 	}
@@ -140,6 +161,9 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		hasMultiblock = NBT.getBoolean("multi");
 
 		power = NBT.getLong("pwr");
+
+		if (NBT.hasKey("mode"))
+			mode = Modes.list[NBT.getInteger("mode")];
 	}
 
 	@Override
@@ -150,6 +174,8 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		NBT.setBoolean("multi", hasMultiblock);
 
 		NBT.setLong("pwr", power);
+
+		NBT.setInteger("mode", mode.ordinal());
 	}
 
 	@Override
@@ -159,7 +185,11 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		return this.getGenRF();
+		return mode == Modes.RF ? (int)this.getGenUnits() : 0;
+	}
+
+	public double getGenUnits() {
+		return power*mode.ratio;
 	}
 
 	@Override
@@ -189,6 +219,108 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		int mx2 = Math.max(x1, xCoord);
 		int mz2 = Math.max(z1, zCoord);
 		return AxisAlignedBB.getBoundingBox(mx, yCoord-2, mz, mx2, yCoord+3, mz2).expand(6, 6, 6);
+	}
+
+	public static enum Modes {
+		RF("Redstone Flux", 10D/ReikaBuildCraftHelper.getWattsPerMJ(), PowerTypes.RF),
+		EU("EU", ReikaEUHelper.WATTS_PER_EU, PowerTypes.EU);
+
+		public final String name;
+		private final double ratio;
+		public final PowerTypes type;
+
+		private static final Modes[] list = values();
+
+		private Modes(String s, double r, PowerTypes p) {
+			name = s;
+			ratio = r;
+			type = p;
+		}
+
+		public boolean exists() {
+			return type.exists();
+		}
+	}
+
+	public Modes stepType() {
+		int o = mode.ordinal();
+		Modes m = Modes.list[o];
+		do {
+			if (o < Modes.list.length-1) {
+				o++;
+			}
+			else {
+				o = 0;
+			}
+			m = Modes.list[o];
+		} while (!m.exists());
+		mode = m;
+		return mode;
+	}
+
+	public String getUnitSymbol() {
+		return mode.name();
+	}
+
+	public Modes getMode() {
+		return mode;
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection dir) {
+		return mode == Modes.EU && dir == this.getFacing().getOpposite();
+	}
+
+	@Override
+	public double getOfferedEnergy() {
+		return mode == Modes.EU ? this.getGenUnits() : 0;
+	}
+
+	@Override
+	public void drawEnergy(double amount) {
+
+	}
+
+	@Override
+	public int getSourceTier() {
+		return 5;
+	}
+
+	@Override
+	public void onFirstTick(World world, int x, int y, int z) {
+		if (!world.isRemote && ModList.IC2.isLoaded())
+			this.addTileToNet();
+	}
+
+	@ModDependent(ModList.IC2)
+	private void addTileToNet() {
+		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+	}
+
+	@Override
+	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalidate) {
+		if (!world.isRemote && ModList.IC2.isLoaded())
+			this.removeTileFromNet();
+	}
+
+	@ModDependent(ModList.IC2)
+	private void removeTileFromNet() {
+		MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+	}
+
+	@Override
+	public boolean onShiftRightClick(World world, int x, int y, int z, ForgeDirection side) {
+		this.stepType();
+		return true;
+	}
+
+	@Override
+	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
+		if (side.offsetY == 0) {
+			this.setFacing(side);
+			return true;
+		}
+		return false;
 	}
 
 }

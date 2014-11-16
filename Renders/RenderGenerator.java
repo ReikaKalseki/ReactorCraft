@@ -34,12 +34,9 @@ public class RenderGenerator extends ReactorRenderBase
 		super();
 	}
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityReactorGeneratorAt(TileEntityReactorGenerator tile, double par2, double par4, double par6, float par8)
 	{
-		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/generator.png");
+		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/generator"+tile.getMode().ordinal()+".png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -69,7 +66,7 @@ public class RenderGenerator extends ReactorRenderBase
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;
-				IIcon ico = ReactorBlocks.GENERATORMULTI.getBlockInstance().getIcon(0, -1);
+				IIcon ico = ReactorBlocks.GENERATORMULTI.getBlockInstance().getIcon(0, -(1+tile.getMode().ordinal()));
 				ReikaTextureHelper.bindTerrainTexture();
 				float u = ico.getMinU();
 				float v = ico.getMinV();

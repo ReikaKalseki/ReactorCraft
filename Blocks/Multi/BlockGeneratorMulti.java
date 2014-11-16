@@ -31,7 +31,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getNumberTextures() {
-		return 11;
+		return 12;
 	}
 
 	@Override
@@ -280,8 +280,8 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getItemTextureIndex(int meta, int side) {
-		if (meta == -1)
-			return 10;
+		if (meta < 0)
+			return 9-meta;
 		if (meta >= 8)
 			return 9;
 		if (meta == 3)

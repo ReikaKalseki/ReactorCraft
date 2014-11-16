@@ -228,7 +228,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		}
 		if (this instanceof TileEntityReactorGenerator) {
 			TileEntityReactorGenerator sp = (TileEntityReactorGenerator)this;
-			li.add(String.format("%s generating %d RF/t.", sp.getName(), sp.getGenRF()));
+			li.add(String.format("%s generating %d %s/t.", sp.getName(), sp.getUnitSymbol(), sp.getGenUnits()));
 		}
 		if (this instanceof TileEntityTurbineCore) {
 			TileEntityTurbineCore sp = (TileEntityTurbineCore)this;
