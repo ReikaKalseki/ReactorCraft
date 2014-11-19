@@ -35,6 +35,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -66,6 +69,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
+@Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider {
 
 	protected static final IIcon[][][] icons = new IIcon[ReactorTiles.TEList.length][6][16];
@@ -443,10 +447,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 		return li;
 	}
 
+	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		return ReactorTiles.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
 
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		World world = acc.getWorld();
 		MovingObjectPosition mov = acc.getPosition();
@@ -459,6 +465,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 		return currenttip;
 	}
 
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		TileEntity te = acc.getTileEntity();
 		if (te instanceof TileEntityReactorBase)
@@ -488,6 +495,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 		return tip;
 	}
 
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		String s1 = EnumChatFormatting.ITALIC.toString();
 		String s2 = EnumChatFormatting.BLUE.toString();
