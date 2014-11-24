@@ -27,7 +27,7 @@ public class LuaReactorCheckPebbles extends LuaMethod {
 		TileEntityPebbleBed tile = (TileEntityPebbleBed)te;
 		int fuel = 0;
 		int maxfuel = tile.getSizeInventory()*ReactorItems.PELLET.getNumberMetadatas();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < tile.getSizeInventory(); i++) {
 			ItemStack is = tile.getStackInSlot(i);
 			if (is != null) {
 				if (is.getItem() == ReactorItems.PELLET.getItemInstance()) {
