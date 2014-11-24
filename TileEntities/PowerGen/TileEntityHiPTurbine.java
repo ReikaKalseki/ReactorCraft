@@ -223,10 +223,34 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	}
 
 	@Override
-	protected boolean intakeSteam(World world, int x, int y, int z, int meta) {
+	protected boolean enabled(World world, int x, int y, int z) {
 		if (!DragonAPICore.debugtest && tank.isEmpty())
 			return false;
+		if (this.isRedstoned(world, x, y, z))
+			return false;
+		return true;
+	}
 
+	private boolean isRedstoned(World world, int x, int y, int z) {
+		ForgeDirection dir = this.getSteamMovement().getOpposite();
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		RelativePositionList li = this.getInjectors();
+		BlockArray pos = li.getPositionsRelativeTo(dx, dy, dz);
+		for (int i = 0; i < pos.getSize(); i++) {
+			int[] xyz = pos.getNthBlock(i);
+			int sx = xyz[0];
+			int sy = xyz[1];
+			int sz = xyz[2];
+			if (world.isBlockIndirectlyGettingPowered(sx, sy, sz))
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	protected boolean intakeSteam(World world, int x, int y, int z, int meta) {
 		ForgeDirection dir = this.getSteamMovement().getOpposite();
 		int dx = x+dir.offsetX;
 		int dy = y+dir.offsetY;

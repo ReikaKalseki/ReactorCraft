@@ -428,10 +428,14 @@ public class TileEntityTurbineCore extends TileEntityReactorBase implements Shaf
 			}
 		}
 		if (this.getStage() == 0) {
-			boolean accel = this.intakeSteam(world, x, y, z, meta);
+			boolean accel = this.enabled(world, x, y, z) && this.intakeSteam(world, x, y, z, meta);
 			if (!world.isRemote)
 				this.updateSpeed(accel);
 		}
+	}
+
+	protected boolean enabled(World world, int x, int y, int z) {
+		return true;
 	}
 
 	protected double getRadius() {
