@@ -38,7 +38,7 @@ public class PotionRadiation extends Potion implements PermaPotion {
 		int c = p ? 75 : 50;
 		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getMaxHealth()*c)) {
 			int amt = p ? 2 : 1;
-			//e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
+			e.attackEntityFrom(ReactorCraft.radiationDamage, amt);
 		}
 
 		if (e instanceof EntityPlayer) {
