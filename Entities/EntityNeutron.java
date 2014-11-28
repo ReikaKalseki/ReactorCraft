@@ -165,6 +165,10 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			return this != BREEDER ? 90 : 0;
 		}
 
+		public boolean canTriggerFuelConversion() {
+			return this == BREEDER;
+		}
+
 		public boolean dealsDamage() {
 			return this != NULL;
 		}

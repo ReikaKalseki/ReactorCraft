@@ -109,7 +109,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 			if (ReikaRandomHelper.doWithChance(25) && this.isFissile()) {
 				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv);
 				if (slot != -1) {
-					if (ReikaRandomHelper.doWithChance(5)) {
+					if (e.getType().canTriggerFuelConversion() && ReikaRandomHelper.doWithChance(5)) {
 						int dmg = inv[slot].getItemDamage();
 						if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
 							inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
