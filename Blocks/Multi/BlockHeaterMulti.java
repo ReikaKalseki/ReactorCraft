@@ -80,7 +80,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 							return false;
 					}
 					else {
-						BlockKey block = blocks.getBlockRelativeToMinXYZ(i, j, k);
+						BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(i, j, k);
 						int dx = blocks.getMinX()+i;
 						int dy = blocks.getMinY()+j;
 						int dz = blocks.getMinZ()+k;
@@ -133,38 +133,38 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					}
 				}
 				else {
-					BlockKey block = blocks.getBlockRelativeToMinXYZ(i, 0, k);
+					BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, k);
 					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(i, 4, k);
+					block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, k);
 					if (block == null || block.blockID != this || block.metadata != 1) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(i, 5, k);
+					block = blocks.getBlockKeyRelativeToMinXYZ(i, 5, k);
 					int meta2 = (i == 2 || k == 2) ? 3 : 2;
 					if (block == null || block.blockID != this || block.metadata != meta2) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(i, k, 0);
+					block = blocks.getBlockKeyRelativeToMinXYZ(i, k, 0);
 					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(i, k, 4);
+					block = blocks.getBlockKeyRelativeToMinXYZ(i, k, 4);
 					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(0, k, i);
+					block = blocks.getBlockKeyRelativeToMinXYZ(0, k, i);
 					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
 
-					block = blocks.getBlockRelativeToMinXYZ(4, k, i);
+					block = blocks.getBlockKeyRelativeToMinXYZ(4, k, i);
 					if (block == null || block.blockID != this || block.metadata != 4) {
 						return false;
 					}
@@ -176,51 +176,51 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 
 	private boolean checkEdges(World world, int x, int y, int z, StructuredBlockArray blocks) {
 		for (int i = 1; i < 4; i++) {
-			BlockKey block = blocks.getBlockRelativeToMinXYZ(i, 0, 0);
+			BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, 0);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(0, i, 0);
+			block = blocks.getBlockKeyRelativeToMinXYZ(0, i, 0);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(0, 0, i);
+			block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, i);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(i, 0, 4);
+			block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, 4);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(4, 0, i);
+			block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, i);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(i, 4, 4);
+			block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, 4);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(4, 4, i);
+			block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, i);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(i, 4, 0);
+			block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, 0);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(0, 4, i);
+			block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, i);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(4, i, 0);
+			block = blocks.getBlockKeyRelativeToMinXYZ(4, i, 0);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(0, i, 4);
+			block = blocks.getBlockKeyRelativeToMinXYZ(0, i, 4);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 
-			block = blocks.getBlockRelativeToMinXYZ(4, i, 4);
+			block = blocks.getBlockKeyRelativeToMinXYZ(4, i, 4);
 			if (block == null || block.blockID != this || block.metadata != 3)
 				return false;
 		}
@@ -228,29 +228,29 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	}
 
 	private boolean checkCorners(World world, int x, int y, int z, StructuredBlockArray blocks) {
-		BlockKey block = blocks.getBlockRelativeToMinXYZ(0, 0, 0);
+		BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, 0);
 		//ReikaJavaLibrary.pConsole(block.getMinX()+", "+block.getMinY()+", "+block.getMinZ());
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(4, 0, 0);
+		block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, 0);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(0, 0, 4);
+		block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, 4);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(4, 0, 4);
+		block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, 4);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(0, 4, 0);
+		block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, 0);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(4, 4, 0);
+		block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, 0);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(0, 4, 4);
+		block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, 4);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
-		block = blocks.getBlockRelativeToMinXYZ(4, 4, 4);
+		block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, 4);
 		if (block == null || block.blockID != this || block.metadata != 2)
 			return false;
 
