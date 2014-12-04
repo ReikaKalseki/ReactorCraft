@@ -102,7 +102,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		world.setBlockToAir(x, y, z);
 		double dx = x+0.5+this.getFacing().offsetX*l;
 		double dz = z+0.5+this.getFacing().offsetZ*l;
-		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, dx, y+0.5, dz, 12);
+		FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, dx, y+0.5, dz, 12);
 		ex.doExplosionA();
 		ex.doExplosionB(true);
 	}

@@ -60,7 +60,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		//	ReactorSounds.FUSION.playSoundAtBlock(world, x, y, z);
 		if (hasMultiBlock && omega > MAX_SPEED) { //violently fail
 			world.setBlockToAir(x, y, z);
-			FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, null, x+0.5, y+0.5, z+0.5, 16);
+			FlyingBlocksExplosion ex = new FlyingBlocksExplosion(world, x+0.5, y+0.5, z+0.5, 16);
 			ex.doExplosionA();
 			ex.doExplosionB(true);
 		}
