@@ -35,7 +35,6 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	public static final int GEN_OMEGA = 131072;
-	public static final int TORQUE_CAP = 65536;
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	private RelativePositionList getInjectors() {
