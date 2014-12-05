@@ -183,6 +183,7 @@ public final class ReactorDescriptions {
 		addNotes(ReactorTiles.ELECTROLYZER, TileEntityElectrolyzer.SALTPOWER, TileEntityElectrolyzer.SALT_MELT);
 		addNotes(ReactorTiles.SYNTHESIZER, TileEntitySynthesizer.AMMONIATEMP);
 		addNotes(ReactorTiles.TURBINECORE, TileEntityTurbineCore.GEN_OMEGA, TileEntityTurbineCore.TORQUE_CAP);
+		addNotes(ReactorTiles.BIGTURBINE, TileEntityHiPTurbine.GEN_OMEGA);
 		addNotes(ReactorTiles.PUMP, TileEntityReactorPump.MINPOWER, TileEntityReactorPump.MINTORQUE);
 		addNotes(ReactorTiles.EXCHANGER, TileEntityHeatExchanger.MINPOWER, TileEntityHeatExchanger.MINSPEED);
 		addNotes(ReactorTiles.FUEL, TileEntityFuelRod.EXPLOSION);

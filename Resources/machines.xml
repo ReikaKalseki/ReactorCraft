@@ -293,7 +293,7 @@
 			The high-pressure turbine runs off of steam directly from the lines thanks to a built-in steam injection system, allowing it to run more efficiently and generate far more power. Due to the greatly increased size of this turbine, it requires far more steam to operate, and can be built to seven stages instead of five. This turbine also has a housing to prevent damage. Low-pressure liquid can be collected with reservoirs or BC tanks below the back of the turbine.
 		</desc>
 		<note>
-			
+			Max Speed: %d rad/s
 		</note>
 	</bigturbine>
 	<turbinemeter>

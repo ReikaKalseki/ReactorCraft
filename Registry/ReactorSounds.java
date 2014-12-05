@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Interfaces.SoundEnum;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -73,7 +73,7 @@ public enum ReactorSounds implements SoundEnum {
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		ReikaPacketHelper.sendSoundPacket(ReactorCraft.packetChannel, this, world, x, y, z, vol*this.getModVolume(), pitch);
+		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol*this.getModVolume(), pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
@@ -116,5 +116,17 @@ public enum ReactorSounds implements SoundEnum {
 	@Override
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
+	}
+
+	@Override
+	public int getTickDuration() {
+		switch(this) {
+		case TURBINE:
+			return 41;
+		case CONTROL:
+			return 43;
+		default:
+			return 0;
+		}
 	}
 }
