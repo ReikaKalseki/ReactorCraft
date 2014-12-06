@@ -117,16 +117,4 @@ public enum ReactorSounds implements SoundEnum {
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
-
-	@Override
-	public int getTickDuration() {
-		switch(this) {
-		case TURBINE:
-			return 41;
-		case CONTROL:
-			return 43;
-		default:
-			return 0;
-		}
-	}
 }

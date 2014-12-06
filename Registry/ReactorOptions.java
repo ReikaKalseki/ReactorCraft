@@ -17,8 +17,9 @@ import Reika.ReactorCraft.ReactorCraft;
 public enum ReactorOptions implements ConfigList {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
-	SILVERORE("Generate Silver Ore", true),
-	MAGNETRORE("Generate Magnetite Ore", true),
+	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
+	MAGNETORE("Generate Magnetite Ore Even If Other Mods Do", true),
+	CALCITEORE("Generate Calcite Ore Even If Other Mods Do", true),
 	RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),
