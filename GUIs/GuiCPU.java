@@ -59,7 +59,7 @@ public class GuiCPU extends ReactorGuiBase {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		switch(button.id) {
 		case 0:
