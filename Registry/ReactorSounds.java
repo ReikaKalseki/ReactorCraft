@@ -117,4 +117,9 @@ public enum ReactorSounds implements SoundEnum {
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
+
+	@Override
+	public boolean canOverlap() {
+		return this == FUSION;
+	}
 }
