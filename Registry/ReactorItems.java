@@ -127,6 +127,8 @@ public enum ReactorItems implements ItemEnum {
 		case BREEDERFUEL:
 		case CLEANUP:
 		case MAGNET:
+		case GEIGER:
+		case REMOTE:
 			return false;
 		default:
 			return true;

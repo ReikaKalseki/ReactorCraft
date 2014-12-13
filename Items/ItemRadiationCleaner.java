@@ -20,9 +20,8 @@ import net.minecraft.world.World;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.RotaryCraft.API.ChargeableTool;
 
-public class ItemRadiationCleaner extends ItemReactorTool implements ChargeableTool {
+public class ItemRadiationCleaner extends ItemReactorTool {
 
 	public ItemRadiationCleaner(int tex) {
 		super(tex);

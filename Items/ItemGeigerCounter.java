@@ -12,7 +12,10 @@ package Reika.ReactorCraft.Items;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -20,8 +23,10 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper.EntityDistanceComparator;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.RotaryCraft.API.ChargeableTool;
 
-public class ItemGeigerCounter extends ItemReactorTool {
+public class ItemGeigerCounter extends ItemReactorTool implements ChargeableTool {
 
 	public ItemGeigerCounter(int tex) {
 		super(tex);
@@ -29,7 +34,7 @@ public class ItemGeigerCounter extends ItemReactorTool {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int slot, boolean currentHeld) {
-		if (currentHeld) {
+		if (currentHeld && is.getItemDamage() > 0) {
 			int r = 20;
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(e.posX, e.posY, e.posZ, e.posX, e.posY, e.posZ).expand(r, r, r);
 			List<EntityRadiation> li = world.getEntitiesWithinAABB(EntityRadiation.class, box);
@@ -42,7 +47,27 @@ public class ItemGeigerCounter extends ItemReactorTool {
 					e.playSound("random.click", 1, 2F);
 				}
 			}
+			if (itemRand.nextInt(8) == 0)
+				is.setItemDamage(is.getItemDamage()-1);
 		}
+	}
+
+	@Override
+	public int setCharged(ItemStack is, int charge, boolean strongcoil) {
+		int ret = is.getItemDamage();
+		is.setItemDamage(charge);
+		return ret;
+	}
+
+	@Override
+	public void getSubItems(Item id, CreativeTabs tab, List li) {
+		li.add(ReactorItems.GEIGER.getStackOfMetadata(0));
+		li.add(ReactorItems.GEIGER.getStackOfMetadata(32000));
+	}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
+		li.add("Charge: "+is.getItemDamage()+" kJ");
 	}
 
 }

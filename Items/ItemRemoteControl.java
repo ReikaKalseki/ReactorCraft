@@ -51,7 +51,7 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 				int meta = w.getBlockMetadata(x, y, z);
 				if (id == ReactorTiles.CPU.getBlock() && meta == ReactorTiles.CPU.getBlockMetadata()) {
 					ep.openGui(ReactorCraft.instance, 0, w, x, y, z);
-					//is.setItemDamage(is.getItemDamage()-1);
+					is.setItemDamage(is.getItemDamage()-1);
 				}
 			}
 		}
@@ -121,6 +121,7 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 
 	@Override
 	public void getSubItems(Item id, CreativeTabs tab, List li) {
+		li.add(ReactorItems.REMOTE.getStackOfMetadata(0));
 		li.add(ReactorItems.REMOTE.getStackOfMetadata(32000));
 	}
 
@@ -136,5 +137,13 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 		else {
 			li.add("No linked CPU");
 		}
+		li.add("Charge: "+is.getItemDamage()+" kJ");
+	}
+
+	@Override
+	public int setCharged(ItemStack is, int charge, boolean strongcoil) {
+		int ret = is.getItemDamage();
+		is.setItemDamage(charge);
+		return ret;
 	}
 }
