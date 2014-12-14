@@ -24,11 +24,12 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.UnCopyableBlock;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.API.Transducerable;
 
-public abstract class BlockMultiBlock extends Block implements Transducerable {
+public abstract class BlockMultiBlock extends Block implements Transducerable, UnCopyableBlock {
 
 	private final IIcon[] icons = new IIcon[this.getNumberTextures()];
 	protected static final ForgeDirection[] dirs = ForgeDirection.values();
@@ -134,6 +135,11 @@ public abstract class BlockMultiBlock extends Block implements Transducerable {
 	public final ArrayList<String> getMessages(World world, int x, int y, int z, int side) {
 		TileEntity te = this.getTileEntityForPosition(world, x, y, z);
 		return te instanceof TileEntityReactorBase ? ((TileEntityReactorBase)te).getMessages(world, x, y, z, side) : new ArrayList();
+	}
+
+	@Override
+	public final boolean disallowCopy(int meta) {
+		return true;
 	}
 
 }

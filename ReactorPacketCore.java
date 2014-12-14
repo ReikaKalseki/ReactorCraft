@@ -30,8 +30,6 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 
 public class ReactorPacketCore implements IPacketHandler {
 
-	private TileEntityControlRod rod;
-
 	protected ReactorPackets pack;
 
 	public void handleData(PacketObj packet, World world, EntityPlayer ep) {
@@ -143,8 +141,7 @@ public class ReactorPacketCore implements IPacketHandler {
 			switch (pack) {
 			case CPU:
 				if (control == ReactorPackets.CPU.getMinValue()) {
-					rod = (TileEntityControlRod)te;
-					rod.toggle(true);
+					((TileEntityControlRod)te).toggle(true);
 				}
 				else if (control == ReactorPackets.CPU.getMinValue()+1) {
 					TileEntityCPU cpu = (TileEntityCPU)te;
