@@ -267,6 +267,8 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("lowpammonia");
 		ReikaMystcraftHelper.disableFluidPage("lowpwater");
 		ReikaMystcraftHelper.disableFluidPage("hotsodium");
+		ReikaMystcraftHelper.disableFluidPage("rc co2");
+		ReikaMystcraftHelper.disableFluidPage("rc hot co2");
 
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			ItemStack is = MatBlocks.matList[i].getStackOf();
@@ -470,6 +472,9 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(H3, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.h3can, ReactorStacks.emptycan);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(CO2, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.co2can, ReactorStacks.emptycan);
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(CO2_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotco2can, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(NA_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotnacan, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

@@ -33,6 +33,8 @@ public class ReactorStacks {
 	public static final ItemStack clcan = ReactorItems.CANISTER.getStackOfMetadata(7);
 	public static final ItemStack ocan = ReactorItems.CANISTER.getStackOfMetadata(8);
 	public static final ItemStack co2can = ReactorItems.CANISTER.getStackOfMetadata(9);
+	public static final ItemStack hotco2can = ReactorItems.CANISTER.getStackOfMetadata(10);
+	public static final ItemStack hotnacan = ReactorItems.CANISTER.getStackOfMetadata(11);
 
 	public static final ItemStack maxMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-1);
 	public static final ItemStack weakerMagnet = ReactorItems.MAGNET.getStackOfMetadata(ReactorItems.MAGNET.getNumberMetadatas()-2);
