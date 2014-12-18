@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,6 +27,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Entities.EntityDischarge;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockDuct extends BlockReactorTile {
 
@@ -34,7 +36,7 @@ public class BlockDuct extends BlockReactorTile {
 
 	public BlockDuct(Material mat) {
 		super(mat);
-		this.setHardness(0F);
+		this.setHardness(MathHelper.clamp_float(ConfigRegistry.PIPEHARDNESS.getFloat(), 0, 1));
 		this.setResistance(1F);
 		this.setLightLevel(0F);
 	}

@@ -133,7 +133,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 						int tx = x+dir.offsetX*i+s.offsetX*d;
 						int tz = z+dir.offsetZ*i+s.offsetZ*d;
 						MachineRegistry m = MachineRegistry.getMachine(world, tx, ty, tz);
-						FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), TileEntityReactorBoiler.WATER_PER_STEAM/4);
+						FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), TileEntityReactorBoiler.WATER_PER_STEAM/12);
 						if (m == MachineRegistry.RESERVOIR) {
 							TileEntity te = this.getTileEntity(tx, ty, tz);
 							((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());

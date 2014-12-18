@@ -412,6 +412,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		if (this instanceof BlockDuct)
+			return true;
 		return RotaryAux.canHarvestSteelMachine(ep);
 	}
 
