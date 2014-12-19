@@ -12,13 +12,16 @@ package Reika.ReactorCraft.TileEntities.HTGR;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -32,8 +35,10 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	protected StepTimer tempTimer = new StepTimer(20);
 
 	public static final int MINTEMP = 800;
-	public static final int OVERTEMP = 1600;
+	public static final int OVERTEMP = 1200;
 	public static final int FAILTEMP = 4400;
+
+	private int damage = 0;
 
 	@Override
 	public int getSizeInventory() {
@@ -47,10 +52,11 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(2.5))
+		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(6))
 			this.runDecayCycle();
 
 		if (DragonAPICore.debugtest) {
+			ReikaInventoryHelper.clearInventory(this);
 			ReikaInventoryHelper.addToIInv(ReactorItems.PELLET.getStackOf(), this);
 		}
 
@@ -60,6 +66,10 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		tempTimer.update();
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z);
+		}
+
+		if (damage > 0 && rand.nextInt(800) == 0) {
+			damage--;
 		}
 	}
 
@@ -119,8 +129,23 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			}
 		}
 
-		if (temperature > this.getMaxTemperature()) {
+		if (temperature >= this.getMaxTemperature()) {
 			world.setBlock(x, y, z, Blocks.flowing_lava);
+		}
+		else if (temperature >= OVERTEMP) {
+			int chance = 5+(FAILTEMP-temperature)/240;
+			if (rand.nextInt(chance) == 0) {
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+				ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
+				damage++;
+				if (damage >= 100) {
+					this.delete();
+					world.setBlock(x, y, z, Blocks.flowing_lava);
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 2, 0.1F);
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 0.2F);
+					ReikaParticleHelper.LAVA.spawnAroundBlockWithOutset(world, x, y, z, 12, 0.0625);
+				}
+			}
 		}
 	}
 
@@ -258,6 +283,20 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		else if (r == src)
 			return 3;
 		return 0;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		damage = NBT.getInteger("dmg");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setInteger("dmg", damage);
 	}
 
 }

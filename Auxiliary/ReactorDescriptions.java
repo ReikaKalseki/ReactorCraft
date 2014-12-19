@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.Language;
+import net.minecraftforge.common.MinecraftForge;
+import Reika.ChromatiCraft.ChromatiCraft;
+import Reika.DragonAPI.Instantiable.Event.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -32,10 +37,11 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public final class ReactorDescriptions {
 
-	public static final String PARENT = "Resources/";
+	private static String PARENT = getParent();
 	public static final String DESC_SUFFIX = ":desc";
 	public static final String NOTE_SUFFIX = ":note";
 
@@ -54,6 +60,22 @@ public final class ReactorDescriptions {
 	private static final XMLInterface tools = new XMLInterface(ReactorCraft.class, PARENT+"tools.xml", mustLoad);
 	private static final XMLInterface resources = new XMLInterface(ReactorCraft.class, PARENT+"resource.xml", mustLoad);
 	private static final XMLInterface infos = new XMLInterface(ReactorCraft.class, PARENT+"info.xml", mustLoad);
+
+	private static String getParent() {
+		Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
+		String lang = language.getLanguageCode();
+		String sg = lang.toUpperCase().substring(0, 2)+"/";
+		if (hasLocalizedFor(language) && !"EN".equals(sg))
+			return "Resources/"+sg;
+		return "Resources/";
+	}
+
+	private static boolean hasLocalizedFor(Language language) {
+		String lang = language.getLanguageCode();
+		String sg = lang.toUpperCase().substring(0, 2)+"/";
+		Object o = ChromatiCraft.class.getResourceAsStream("Resources/"+sg+"categories.xml");
+		return o != null;
+	}
 
 	public static String getTOC() {
 		List<ReactorBook> toctabs = ReactorBook.getTOCTabs();
@@ -90,6 +112,8 @@ public final class ReactorDescriptions {
 	}
 
 	public static void reload() {
+		PARENT = getParent();
+
 		data.clear();
 		loadNumericalData();
 
@@ -176,6 +200,16 @@ public final class ReactorDescriptions {
 
 	static {
 		loadNumericalData();
+		MinecraftForge.EVENT_BUS.register(new ReloadListener());
+	}
+
+	private static class ReloadListener {
+
+		@SubscribeEvent
+		public void reload(ResourceReloadEvent evt) {
+			ReactorDescriptions.reload();
+		}
+
 	}
 
 	private static void loadNumericalData() {

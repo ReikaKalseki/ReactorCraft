@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Registry;
 import java.net.URL;
 
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
@@ -68,6 +69,14 @@ public enum ReactorSounds implements SoundEnum {
 			return 1F;
 		else
 			return this.getSoundVolume();
+	}
+
+	public void playSound(Entity e) {
+		this.playSound(e, 1, 1);
+	}
+
+	public void playSound(Entity e, float vol, float pitch) {
+		this.playSound(e.worldObj, e.posX, e.posY, e.posZ, vol, pitch);
 	}
 
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
