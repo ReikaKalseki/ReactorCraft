@@ -254,7 +254,8 @@ public class ReactorCraft extends DragonAPIMod {
 			//Set state back
 		}
 
-		ReactorDescriptions.loadData();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			ReactorDescriptions.loadData();
 
 		ReikaMystcraftHelper.disableFluidPage("fusion plasma");
 		ReikaMystcraftHelper.disableFluidPage("rc deuterium");

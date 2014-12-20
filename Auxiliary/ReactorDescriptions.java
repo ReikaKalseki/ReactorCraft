@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraftforge.common.MinecraftForge;
-import Reika.ChromatiCraft.ChromatiCraft;
 import Reika.DragonAPI.Instantiable.Event.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -73,7 +72,7 @@ public final class ReactorDescriptions {
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
 		String sg = lang.toUpperCase().substring(0, 2)+"/";
-		Object o = ChromatiCraft.class.getResourceAsStream("Resources/"+sg+"categories.xml");
+		Object o = ReactorCraft.class.getResourceAsStream("Resources/"+sg+"categories.xml");
 		return o != null;
 	}
 
