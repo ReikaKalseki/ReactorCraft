@@ -53,6 +53,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -189,7 +190,7 @@ public class ReactorCraft extends DragonAPIMod {
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-			;//MinecraftForge.EVENT_BUS.register(IronFinderOverlay.instance);
+			MinecraftForge.EVENT_BUS.register(IronFinderOverlay.instance);
 
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
@@ -270,6 +271,7 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("hotsodium");
 		ReikaMystcraftHelper.disableFluidPage("rc co2");
 		ReikaMystcraftHelper.disableFluidPage("rc hot co2");
+		ReikaMystcraftHelper.disableFluidPage("corium");
 
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			ItemStack is = MatBlocks.matList[i].getStackOf();

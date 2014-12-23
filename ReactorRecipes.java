@@ -216,7 +216,7 @@ public class ReactorRecipes {
 
 		GameRegistry.addRecipe(ReactorItems.GEIGER.getStackOf(), " r ", "sSs", "sgs", 'g', ItemStacks.steelgear, 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'r', ItemStacks.radar);
 
-		//GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
+		GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
 	}
 
 	private static void addMachines() {

@@ -26,6 +26,7 @@ import Reika.ReactorCraft.Items.ItemCanister;
 import Reika.ReactorCraft.Items.ItemGeigerCounter;
 import Reika.ReactorCraft.Items.ItemHazmatSuit;
 import Reika.ReactorCraft.Items.ItemHeavyBucket;
+import Reika.ReactorCraft.Items.ItemIronFinder;
 import Reika.ReactorCraft.Items.ItemNuclearWaste;
 import Reika.ReactorCraft.Items.ItemPlutonium;
 import Reika.ReactorCraft.Items.ItemRadiationCleaner;
@@ -62,8 +63,8 @@ public enum ReactorItems implements ItemEnum {
 	HAZCHEST(113,	"item.hazchest",		ItemHazmatSuit.class),
 	HAZLEGS(114,	"item.hazlegs",			ItemHazmatSuit.class),
 	HAZBOOTS(115,	"item.hazboots",		ItemHazmatSuit.class),
-	GEIGER(116, 	"item.geiger",			ItemGeigerCounter.class);
-	//IRONFINDER(117, "item.ironfinder",		ItemIronFinder.class);
+	GEIGER(116, 	"item.geiger",			ItemGeigerCounter.class),
+	IRONFINDER(117, "item.ironfinder",		ItemIronFinder.class);
 
 	private String name;
 	private Class itemClass;
@@ -296,6 +297,10 @@ public enum ReactorItems implements ItemEnum {
 			ReactorItems r = itemList[i];
 			itemMap.put(r.getItemInstance(), r);
 		}
+	}
+
+	public boolean matchWith(ItemStack is) {
+		return is != null && is.getItem() == this.getItemInstance();
 	}
 
 }
