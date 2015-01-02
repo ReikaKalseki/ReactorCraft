@@ -38,16 +38,18 @@ public enum ReactorAchievements {
 	AMMONIA(			6, -2,	ReactorStacks.nh3can,											FISSION,		false), //make NH3 steam
 	NH3EXPLODE(			8, -2,	ReactorTiles.STEAMLINE,											AMMONIA,		false), //explosion
 	GIGATURBINE(		6, -4,	ReactorTiles.TURBINECORE, 										AMMONIA,		true), //GW on one turbine
-	HOTCORE(			4, -4,	Blocks.flowing_lava, 												FISSION,		false), //500C core
+	HOTCORE(			4, -4,	Blocks.flowing_lava, 											FISSION,		false), //500C core
 	SCRAM(				2, -4,	ReactorTiles.CPU, 												HOTCORE,		false), //s/e
 	MELTDOWN(			4, -6,	MatBlocks.SLAG.getStackOf(),									HOTCORE,		false), //s/e
 	HEAVYWATER(			-2, 0,	ReactorItems.BUCKET, 											MINEURANIUM,	false), //make
 	CANDU(				-2, 2,	ReactorTiles.COOLANT, 											HEAVYWATER,		false), //d20 in cool cell
 	PLASMA(				-4, 0,	ReactorTiles.HEATER, 											HEAVYWATER,		true), //make plasma
-	ESCAPE(				-4, -2,	Blocks.fire,			 											PLASMA,			false), //!canAffect(e)
+	ESCAPE(				-4, -2,	Blocks.fire,			 										PLASMA,			false), //!canAffect(e)
 	MELTPIPE(			-4, 2,	ReactorTiles.MAGNETPIPE,										PLASMA,			false), //s/e
 	FUSION(				-6, 0,	ReactorTiles.MAGNET, 											PLASMA,			true), //fusion event
-	FIFTYGW(			-6, 2,	MachineRegistry.DYNAMOMETER.getCraftedProduct(),				FUSION,			true); //per reactor
+	FIFTYGW(			-6, 2,	MachineRegistry.DYNAMOMETER.getCraftedProduct(),				FUSION,			true), //per reactor
+	PEBBLEFAIL(			0,	-4,	ReactorItems.OLDPELLET,											PEBBLE,			true);
+	;
 
 	public static final ReactorAchievements[] list = values();
 

@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
@@ -139,14 +140,19 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 				ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 				damage++;
 				if (damage >= 100) {
-					this.delete();
-					world.setBlock(x, y, z, Blocks.flowing_lava);
-					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 2, 0.1F);
-					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 0.2F);
-					ReikaParticleHelper.LAVA.spawnAroundBlockWithOutset(world, x, y, z, 12, 0.0625);
+					this.melt(world, x, y, z);
 				}
 			}
 		}
+	}
+
+	private void melt(World world, int x, int y, int z) {
+		ReactorAchievements.PEBBLEFAIL.triggerAchievement(this.getPlacer());
+		this.delete();
+		world.setBlock(x, y, z, Blocks.flowing_lava);
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 2, 0.1F);
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 0.2F);
+		ReikaParticleHelper.LAVA.spawnAroundBlockWithOutset(world, x, y, z, 12, 0.0625);
 	}
 
 	@Override

@@ -207,4 +207,8 @@ public enum ReactorBlocks implements BlockEnum {
 		return is.getItem() == this.getItem();
 	}
 
+	public ItemStack getStackOfMetadata(int meta) {
+		return new ItemStack(this.getBlockInstance(), 1, meta);
+	}
+
 }
