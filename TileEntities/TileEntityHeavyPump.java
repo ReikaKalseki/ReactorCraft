@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -23,8 +22,8 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -128,14 +127,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	}
 
 	private boolean canHarvest(World world, int x, int y, int z) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		return this.isOcean(biome) && y < MAXY && this.isOceanFloor(world, x, y, z);
-	}
-
-	private boolean isOcean(BiomeGenBase biome) {
-		if (biome == BiomeGenBase.ocean || biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.deepOcean)
-			return true;
-		return ReikaStringParser.containsWord(biome.biomeName.toLowerCase(), "ocean");
+		return ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && y < MAXY && this.isOceanFloor(world, x, y, z);
 	}
 
 	private boolean isOceanFloor(World world, int x, int y, int z) {
