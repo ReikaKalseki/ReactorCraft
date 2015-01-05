@@ -32,7 +32,7 @@ import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.API.Screwdriverable;
+import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

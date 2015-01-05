@@ -22,7 +22,7 @@ import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
-import Reika.RotaryCraft.API.PowerTransferHelper;
+import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
 public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver {
 

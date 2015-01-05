@@ -38,10 +38,10 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
-import Reika.RotaryCraft.API.ShaftMachine;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
-import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.API.Transducerable;
+import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
+import Reika.RotaryCraft.API.Interfaces.Transducerable;
+import Reika.RotaryCraft.API.Power.ShaftMachine;
+import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 

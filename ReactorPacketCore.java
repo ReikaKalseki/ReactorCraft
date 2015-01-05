@@ -11,6 +11,7 @@ package Reika.ReactorCraft;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -44,6 +45,7 @@ public class ReactorPacketCore implements IPacketHandler {
 		int z = 0;
 		boolean readinglong = false;
 		String stringdata = null;
+		UUID id = null;
 		//System.out.print(packet.length);
 		try {
 			//ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
@@ -124,6 +126,13 @@ public class ReactorPacketCore implements IPacketHandler {
 				data = new int[pack.getNumberDataInts()];
 				for (int i = 0; i < data.length; i++)
 					data[i] = inputStream.readInt();
+				break;
+			case UUID:
+				control = inputStream.readInt();
+				pack = ReactorPackets.getEnum(control);
+				long l1 = inputStream.readLong(); //most
+				long l2 = inputStream.readLong(); //least
+				id = new UUID(l1, l2);
 				break;
 			}
 			if (packetType.hasCoordinates()) {

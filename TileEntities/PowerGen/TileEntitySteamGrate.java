@@ -20,7 +20,7 @@ import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
-import Reika.RotaryCraft.API.Screwdriverable;
+import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 
 public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable {
 

@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.RotaryCraft.API.ChargeableTool;
+import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 
 public class ItemGeigerCounter extends ItemReactorTool implements ChargeableTool {
 

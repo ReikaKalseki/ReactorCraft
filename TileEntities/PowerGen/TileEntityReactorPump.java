@@ -21,7 +21,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.PowerTransferHelper;
+import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import buildcraft.api.transport.IPipeTile.PipeType;

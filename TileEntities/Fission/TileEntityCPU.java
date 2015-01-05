@@ -27,7 +27,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
-import Reika.RotaryCraft.API.PowerTransferHelper;
+import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
 public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured {
 

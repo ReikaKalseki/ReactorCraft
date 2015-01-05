@@ -27,7 +27,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.UnCopyableBlock;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.RotaryCraft.API.Transducerable;
+import Reika.RotaryCraft.API.Interfaces.Transducerable;
 
 public abstract class BlockMultiBlock extends Block implements Transducerable, UnCopyableBlock {
 

@@ -21,7 +21,7 @@ import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
-import Reika.RotaryCraft.API.Transducerable;
+import Reika.RotaryCraft.API.Interfaces.Transducerable;
 
 public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerable, NeutronBlock {
 

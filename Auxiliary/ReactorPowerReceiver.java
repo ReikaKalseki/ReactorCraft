@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 
 public interface ReactorPowerReceiver extends ShaftPowerReceiver {
 

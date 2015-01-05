@@ -26,7 +26,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.ChargeableTool;
+import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 
 public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool {
 
