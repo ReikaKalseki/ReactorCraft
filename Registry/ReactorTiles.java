@@ -60,7 +60,7 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
-import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
