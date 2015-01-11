@@ -90,7 +90,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "MWM", "MHM", "MMM", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "WMW", "MHM", "WMW", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "MMM", "HHH", "WWW", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
-		GameRegistry.addRecipe(new ItemStack(id, 1, 4), "MMM", "HHH", "MWM", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 4), "MMM", "MHM", "MWM", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 5), "MWM", "HHH", "MWM", 'H', CraftingItems.WIRE.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 6), "MWM", "MHM", "MWM", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 7), "HWH", "WMW", "HWH", 'H', CraftingItems.HYSTERESIS.getItem(), 'M', CraftingItems.MAGNETIC.getItem(), 'W', ReactorStacks.insulCore);

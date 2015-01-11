@@ -45,6 +45,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.RetroGenController;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -56,6 +57,7 @@ import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
+import Reika.ReactorCraft.Auxiliary.RadiationDamage;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -146,7 +148,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static Achievement[] achievements;
 
-	public static final CustomStringDamageSource radiationDamage = (CustomStringDamageSource)new CustomStringDamageSource("died of radiation poisoning").setDamageBypassesArmor();
+	public static final RadiationDamage radiationDamage = new RadiationDamage();
 	public static final CustomStringDamageSource fusionDamage = new CustomStringDamageSource("jumped in a Fusion Reactor");
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
@@ -186,6 +188,7 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
+		this.startTiming(LoadPhase.PRELOAD);
 		this.verifyVersions();
 
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
@@ -237,11 +240,13 @@ public class ReactorCraft extends DragonAPIMod {
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
 		this.basicSetup(evt);
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		this.startTiming(LoadPhase.LOAD);
 		if (this.isLocked() && !RotaryCraft.instance.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
 		if (!this.isLocked()) {
@@ -300,11 +305,15 @@ public class ReactorCraft extends DragonAPIMod {
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
+
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
+		this.startTiming(LoadPhase.POSTLOAD);
+
 		if (!this.isLocked())
 			ReactorRecipes.addModInterface();
 
@@ -361,6 +370,8 @@ public class ReactorCraft extends DragonAPIMod {
 				ReikaThaumHelper.addAspects(drop, Aspect.CRYSTAL, 2);
 			}
 		}
+
+		this.finishTiming();
 	}
 
 	@SubscribeEvent
