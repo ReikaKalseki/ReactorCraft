@@ -100,7 +100,7 @@ public class BlockDuct extends BlockReactorTile {
 				double sy = te.getAimY();
 				double sz = te.getAimZ();
 				EntityDischarge ed = new EntityDischarge(world, sx, sy, sz, charge, e.posX, e.posY+e.getEyeHeight()/4, e.posZ);
-				te.onDischarge(1, 1);
+				te.onDischarge(-1, 1);
 				if (!world.isRemote)
 					world.spawnEntityInWorld(ed);
 				e.attackEntityFrom(DamageSource.generic, 1);

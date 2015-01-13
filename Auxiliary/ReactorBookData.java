@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import Reika.DragonAPI.Instantiable.Data.ArrayMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.ArrayMap;
 import Reika.ReactorCraft.Registry.ReactorBook;
 
 public class ReactorBookData {

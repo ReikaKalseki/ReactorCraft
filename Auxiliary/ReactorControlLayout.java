@@ -15,8 +15,8 @@ import java.util.Collections;
 
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Instantiable.Data.TileEntityCache;
-import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Maps.TileEntityCache;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 import cpw.mods.fml.relauncher.Side;
