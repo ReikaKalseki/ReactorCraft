@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -99,9 +100,10 @@ public class BlockDuct extends BlockReactorTile {
 				double sy = te.getAimY();
 				double sz = te.getAimZ();
 				EntityDischarge ed = new EntityDischarge(world, sx, sy, sz, charge, e.posX, e.posY+e.getEyeHeight()/4, e.posZ);
-				te.onDischarge(-charge, 1);
+				te.onDischarge(1, 1);
 				if (!world.isRemote)
 					world.spawnEntityInWorld(ed);
+				e.attackEntityFrom(DamageSource.generic, 1);
 			}
 		}
 	}

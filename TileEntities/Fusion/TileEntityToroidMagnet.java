@@ -50,7 +50,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	private static final int RATE = ReactorOptions.getToroidChargeRate();
 
-	private final HybridTank tank = new HybridTank("toroid", 1000);
+	private final HybridTank tank = new HybridTank("toroid", 8000);
 
 	@Override
 	public int getIndex() {
@@ -73,7 +73,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			if (this.canAffect(e)) {
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
-				tank.removeLiquid(25);
+				tank.removeLiquid(10);
 			}
 			else {
 				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
@@ -156,11 +156,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 				float ang = this.getAngle();
 				float ang2 = te.getAngle();
-				double fx = 1.75*Math.cos(Math.toRadians(ang));
-				double fz = 1.75*Math.sin(Math.toRadians(ang));
-				double fx2 = 1.75*Math.cos(Math.toRadians(ang2));
-				double fz2 = 1.75*Math.sin(Math.toRadians(ang2));
-
+				double fx = 1.75*Math.sin(Math.toRadians(ang));
+				double fz = 1.75*Math.cos(Math.toRadians(ang));
+				double fx2 = 1.75*Math.sin(Math.toRadians(ang2));
+				double fz2 = 1.75*Math.cos(Math.toRadians(ang2));
 				EntityDischarge e3 = new EntityDischarge(world, x+0.5+fx, y+0.5, z+0.5+fz, charge, te.xCoord+0.5+fx2, te.yCoord+0.5, te.zCoord+0.5+fz2);
 				EntityDischarge e4 = new EntityDischarge(world, x+0.5-fx, y+0.5, z+0.5-fz, charge, te.xCoord+0.5-fx2, te.yCoord+0.5, te.zCoord+0.5-fz2);
 				if (!world.isRemote && this.shouldSpawnSparks(world)) {
@@ -193,13 +192,15 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	private boolean shouldSpawnSparks(World world) {
+		/*
 		int rate = this.getPacketDelay();
 		if (rate < 5)
 			return true;
 		else if (rate < 10)
 			return world.getTotalWorldTime()%2 == 0;
 		else
-			return (world.getTotalWorldTime()&3) == 0;
+			return (world.getTotalWorldTime()&3) == 0;*/
+		return rand.nextBoolean();//true;
 	}
 
 	private void updateCharge(World world, int x, int y, int z) {

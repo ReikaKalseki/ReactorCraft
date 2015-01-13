@@ -11,7 +11,6 @@ package Reika.ReactorCraft.Items;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.MultiMap;
+import Reika.DragonAPI.Instantiable.Data.PlayerMap;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -29,7 +29,7 @@ import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemIronFinder extends ReactorItemBase {
 
-	private static final HashMap<String, OreCollection> cache = new HashMap();
+	private static final PlayerMap<OreCollection> cache = new PlayerMap();
 
 	private static final OreType[] ores = {
 		ReikaOreHelper.IRON,
@@ -101,11 +101,10 @@ BlockArray iron = getIronOreNearby(world, x, y, z, r);
 	}
 
 	public static MultiMap<OreType, Coordinate> getOreNearby(EntityPlayer ep, int range) {
-		String n = ep.getCommandSenderName();
-		OreCollection c = cache.get(n);
+		OreCollection c = cache.get(ep);
 		if (c == null || System.currentTimeMillis()-c.time >= 500) {
 			c = new OreCollection(ep, findOreNearby(ep, range, ores));
-			cache.put(n, c);
+			cache.put(ep, c);
 		}
 		return c.locations;
 	}
