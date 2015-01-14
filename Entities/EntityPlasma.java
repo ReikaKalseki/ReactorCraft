@@ -14,6 +14,8 @@ import io.netty.buffer.ByteBuf;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ParticleEntity;
@@ -92,7 +94,8 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 
 	@Override
 	public void applyEntityCollision(Entity e) {
-		e.attackEntityFrom(ReactorCraft.fusionDamage, Integer.MAX_VALUE);
+		int dmg = e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(Potion.fireResistance) ? 4 : Integer.MAX_VALUE;
+		e.attackEntityFrom(ReactorCraft.fusionDamage, dmg);
 	}
 
 	@Override
