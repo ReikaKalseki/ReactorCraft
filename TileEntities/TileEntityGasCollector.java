@@ -107,12 +107,12 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return tank.drain(resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		return this.canDrain(from, null) ? tank.drain(maxDrain, doDrain) : null;
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return from == ForgeDirection.UP;
 	}
 
 	@Override
