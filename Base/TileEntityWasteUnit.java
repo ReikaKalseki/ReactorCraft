@@ -39,7 +39,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	public abstract boolean isValidIsotope(Isotopes i);
 
-	protected void decayWaste() {
+	protected final void decayWaste() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 				List<Isotopes> iso = WasteManager.getWasteList();
@@ -52,9 +52,14 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
 				if (ReikaNuclearHelper.shouldDecay(atom)) {
 					ReikaInventoryHelper.decrStack(i, inv);
+					this.onDecayWaste(i);
 				}
 			}
 		}
+	}
+
+	protected void onDecayWaste(int i) {
+
 	}
 
 	protected void leakRadiation(World world, int x, int y, int z) {

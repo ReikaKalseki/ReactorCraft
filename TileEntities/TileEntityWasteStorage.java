@@ -55,8 +55,8 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	@Override
-	protected void decayWaste() {
-		super.decayWaste();
+	protected void onDecayWaste(int i) {
+		super.onDecayWaste(i);
 		if (ReikaInventoryHelper.isEmpty(this))
 			ReactorAchievements.DECAY.triggerAchievement(this.getPlacer());
 	}
