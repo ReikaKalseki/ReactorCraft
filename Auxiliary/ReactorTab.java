@@ -9,34 +9,27 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.DragonAPI.Instantiable.GUI.EnumCreativeTab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ReactorTab extends CreativeTabs {
+public class ReactorTab extends EnumCreativeTab {
 
-	public ReactorTab(int position, String tabID) {
-		super(position, tabID);
+	private ItemStack icon;
+
+	public ReactorTab(String tabID) {
+		super(tabID);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
-		return ReactorTiles.MAGNET.getCraftedProduct();
+		return icon;
 	}
 
-	@Override
-	public String getTranslatedTabLabel() {
-		return "ReactorCraft";
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem() {
-		return null;
+	public void setIcon(ItemStack is) {
+		icon = is;
 	}
 
 }

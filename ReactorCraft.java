@@ -13,7 +13,6 @@ import java.net.URL;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -110,7 +109,9 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final String packetChannel = "ReactorCraftData";
 
-	public static CreativeTabs tabRctr = new ReactorTab(CreativeTabs.getNextID(), "ReactorCraft");
+	public static ReactorTab tabRctr = new ReactorTab("ReactorCraft");
+	public static ReactorTab tabRctrItems = new ReactorTab("ReactorCraft Items");
+	public static ReactorTab tabRctrMultis = new ReactorTab("ReactorCraft Components");
 
 	public static final ArmorMaterial HAZ = EnumHelper.addArmorMaterial("RCHazmat", Integer.MAX_VALUE, new int[]{0,0,0,0}, 0);
 
@@ -189,7 +190,7 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 		this.startTiming(LoadPhase.PRELOAD);
-		this.verifyVersions();
+		this.verifyInstallation();
 
 		MinecraftForge.EVENT_BUS.register(new LiquidHandler());
 
@@ -225,6 +226,10 @@ public class ReactorCraft extends DragonAPIMod {
 		this.registerOres();
 		ReactorTiles.loadMappings();
 		ReactorItems.loadMappings();
+
+		tabRctr.setIcon(ReactorTiles.MAGNET.getCraftedProduct());
+		tabRctrItems.setIcon(ReactorItems.WASTE.getStackOf());
+		tabRctrMultis.setIcon(ReactorBlocks.SOLENOIDMULTI.getStackOfMetadata(2)); //central magnet
 
 		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new ReactorPacketCore());
 
