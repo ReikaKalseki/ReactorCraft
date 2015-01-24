@@ -10,11 +10,11 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Instantiable.GUI.EnumCreativeTab;
+import Reika.DragonAPI.Instantiable.GUI.RegistryEnumCreativeTab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ReactorTab extends EnumCreativeTab {
+public class ReactorTab extends RegistryEnumCreativeTab {
 
 	private ItemStack icon;
 

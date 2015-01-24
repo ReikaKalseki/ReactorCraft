@@ -35,6 +35,7 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
@@ -230,6 +231,8 @@ public class ReactorCraft extends DragonAPIMod {
 		tabRctr.setIcon(ReactorTiles.MAGNET.getCraftedProduct());
 		tabRctrItems.setIcon(ReactorItems.WASTE.getStackOf());
 		tabRctrMultis.setIcon(ReactorBlocks.SOLENOIDMULTI.getStackOfMetadata(2)); //central magnet
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabRctrMultis, tabRctr);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabRctrItems, tabRctrMultis);
 
 		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new ReactorPacketCore());
 
