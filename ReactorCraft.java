@@ -248,6 +248,8 @@ public class ReactorCraft extends DragonAPIMod {
 		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
+		FMLInterModComms.sendMessage("CustomConfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
+
 		this.basicSetup(evt);
 		this.finishTiming();
 	}
