@@ -123,6 +123,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case THORIUM:
 		case PELLET:
 		case WASTE:
 		case BREEDERFUEL:
@@ -156,6 +157,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case THORIUM:
 		case PELLET:
 			if (meta == 0)
 				return this.getBasicName()+" (Fresh)";
@@ -190,6 +192,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 		case FUEL:
 		case PLUTONIUM:
+		case THORIUM:
 		case PELLET:
 		case PLACER:
 		case RAW:
@@ -212,6 +215,8 @@ public enum ReactorItems implements ItemEnum {
 		case FUEL:
 		case PLUTONIUM:
 			return 100;
+		case THORIUM:
+			return 40;
 		case PELLET:
 			return 25;
 		case PLACER:
@@ -278,6 +283,7 @@ public enum ReactorItems implements ItemEnum {
 		case INGOTS:
 			return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
 		case FUEL:
+		case THORIUM:
 		case PLUTONIUM:
 		case BREEDERFUEL:
 		case PELLET:

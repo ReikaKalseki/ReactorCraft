@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import net.minecraft.world.World;
-import Reika.ReactorCraft.Entities.EntityNeutron;
-
-public interface ReactorCoreTE extends ReactorBlock {
-
-	public abstract boolean onNeutron(EntityNeutron e, World world, int x, int y, int z);
+public interface ReactorBlock {
 
 }

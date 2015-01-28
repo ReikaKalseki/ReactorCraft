@@ -35,6 +35,7 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
@@ -56,13 +57,16 @@ import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.RadiationDamage;
+import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
+import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -78,12 +82,14 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -93,6 +99,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -248,7 +255,7 @@ public class ReactorCraft extends DragonAPIMod {
 		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID(), true).setPotionName("Radiation Sickness");
 
-		FMLInterModComms.sendMessage("CustomConfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
+		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
 		this.basicSetup(evt);
 		this.finishTiming();
@@ -540,6 +547,19 @@ public class ReactorCraft extends DragonAPIMod {
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getDictionaryName(), is);
 			OreDictionary.registerOre(ReactorOres.FLUORITE.getProductDictionaryName(), fl.getItem());
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@ModDependent(ModList.BLOODMAGIC)
+	public void noTelepose(TeleposeEvent evt) {
+		if (evt.getInitialTile() instanceof ReactorBlock || evt.getFinalTile() instanceof ReactorBlock)
+			evt.setCanceled(true);
+		if (evt.getInitialTile() instanceof MultiBlockTile || evt.getFinalTile() instanceof MultiBlockTile)
+			evt.setCanceled(true);
+		if (evt.getInitialTile() instanceof TileEntityReactorPiping || evt.getFinalTile() instanceof TileEntityReactorPiping)
+			evt.setCanceled(true);
+		if (evt.getInitialTile() instanceof TileEntitySteamLine || evt.getFinalTile() instanceof TileEntitySteamLine)
+			evt.setCanceled(true);
 	}
 
 	@Override

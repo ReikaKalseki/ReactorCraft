@@ -196,6 +196,7 @@ public class ReactorRecipes {
 	private static void addItems() {
 		GameRegistry.addRecipe(ReactorItems.DEPLETED.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.depdust.copy());
 		GameRegistry.addRecipe(ReactorItems.FUEL.getCraftedProduct(2), "dd", "dd", 'd', ReactorStacks.fueldust.copy());
+		GameRegistry.addRecipe(ReactorItems.THORIUM.getCraftedProduct(1), "dd", "dd", 'd', ReactorStacks.thordust.copy());
 
 		//GameRegistry.addRecipe(ReactorItems.PELLET.getCraftedProduct(3), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());
 		ShapedRecipes sr = ReikaRecipeHelper.getShapedRecipeFor(ReactorItems.PELLET.getCraftedProduct(4), " G ", "GUG", " G ", 'G', CraftingItems.GRAPHITE.getItem(), 'U', CraftingItems.UDUST.getItem());

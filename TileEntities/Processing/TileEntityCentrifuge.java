@@ -142,10 +142,15 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private void make() {
 		tank.drain(UF6_PER_DUST, true);
-		if (ReikaRandomHelper.doWithChance(FUEL_CHANCE/100D))
+		if (ReikaRandomHelper.doWithChance(FUEL_CHANCE)) {
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
-		else
+		}
+		else {
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
+			if (ReikaRandomHelper.doWithChance(20)) {
+				ReikaInventoryHelper.addOrSetStack(ReactorStacks.thordust.copy(), inv, 0);
+			}
+		}
 
 		ReactorAchievements.UF6.triggerAchievement(this.getPlacer());
 	}

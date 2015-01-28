@@ -19,10 +19,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -77,6 +79,12 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
+
+		charge = 5000;
+		if (this.getTicksExisted() == 0) {
+			fluid = ReactorCraft.PLASMA;
+			level = 50000;
+		}
 
 		this.distributeCharge(world, x, y, z);
 		this.updateCharge(world, x, y, z);
@@ -182,7 +190,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	protected boolean isInteractableTile(TileEntity te) {
-		return this.isPlasmaAcceptingBlock(te);
+		return te instanceof WorldRift || this.isPlasmaAcceptingBlock(te);
 	}
 
 }

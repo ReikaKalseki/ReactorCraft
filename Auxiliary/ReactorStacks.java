@@ -22,6 +22,7 @@ public class ReactorStacks {
 	public static final ItemStack lime = ReactorItems.RAW.getStackOfMetadata(4);
 	public static final ItemStack calcite = ReactorItems.RAW.getStackOfMetadata(5);
 	public static final ItemStack lodestone = ReactorItems.RAW.getStackOfMetadata(6);
+	public static final ItemStack thordust = ReactorItems.RAW.getStackOfMetadata(7);
 
 	public static final ItemStack emptycan = ReactorItems.CANISTER.getStackOfMetadata(0);
 	public static final ItemStack uf6can = ReactorItems.CANISTER.getStackOfMetadata(1);

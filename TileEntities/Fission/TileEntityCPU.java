@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -29,7 +30,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
-public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured {
+public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured, ReactorBlock {
 
 	private final ReactorControlLayout layout = new ReactorControlLayout(this);
 	private final BlockArray reactor = new BlockArray();

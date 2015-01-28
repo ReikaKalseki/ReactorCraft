@@ -23,7 +23,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
@@ -228,7 +231,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		this.setLevel(this.getLevel()+toadd);
 	}
 
-	public final void intakeFluid(World world, int x, int y, int z) {
+	private final void intakeFluid(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			if (this.canInteractWith(world, x, y, z, dir)) {
@@ -236,6 +239,20 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getTileEntity(dx, dy, dz);
+
+				if (te instanceof WorldRift) {
+					WorldLocation loc = ((WorldRift)te).getLinkTarget();
+					if (loc != null) {
+						te = ((WorldRift)te).getTileEntityFrom(dir);
+						if (te == null)
+							continue;
+						dx = te.xCoord;
+						dy = te.yCoord;
+						dz = te.zCoord;
+						world = te.worldObj;
+					}
+				}
+
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					Fluid f = tp.getFluidType();
@@ -244,6 +261,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						int dL = amt-this.getLevel();
 						int todrain = this.getPipeIntake(dL);
 						if (todrain > 0 && this.canIntakeFluid(f)) {
+							ReikaJavaLibrary.pConsole("took in "+todrain+", had "+this.getLevel()+" here and "+amt+" in other");
 							this.setFluid(f);
 							this.addFluid(todrain);
 							tp.removeLiquid(todrain);
@@ -290,7 +308,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		}
 	}
 
-	public void dumpContents(World world, int x, int y, int z) {
+	private final void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getFluidType();
 		if (this.getLevel() <= 0 || f == null)
 			return;
@@ -306,6 +324,20 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getTileEntity(dx, dy, dz);
+
+				if (te instanceof WorldRift) {
+					WorldLocation loc = ((WorldRift)te).getLinkTarget();
+					if (loc != null) {
+						te = ((WorldRift)te).getTileEntityFrom(dir);
+						if (te == null)
+							continue;
+						dx = te.xCoord;
+						dy = te.yCoord;
+						dz = te.zCoord;
+						world = te.worldObj;
+					}
+				}
+
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					if (tp.canIntakeFluid(f)) {
@@ -313,8 +345,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						int dL = level-otherlevel;
 						int toadd = this.getPipeOutput(dL);
 						if (toadd > 0) {
-							this.addFluid(toadd);
-							tp.removeLiquid(toadd);
+							//ReikaJavaLibrary.pConsole("dumped "+toadd+", had "+this.getLevel()+" here and "+otherlevel+" in other");
+							tp.addFluid(toadd);
+							this.removeLiquid(toadd);
 						}
 					}
 				}

@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
@@ -24,7 +25,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
-public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver {
+public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver, MultiBlockTile {
 
 	public boolean hasMultiBlock = false;
 	private boolean checkForToroids = true;

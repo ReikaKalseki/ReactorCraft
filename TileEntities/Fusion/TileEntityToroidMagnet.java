@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -34,7 +35,7 @@ import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
-public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable {
+public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile {
 
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;

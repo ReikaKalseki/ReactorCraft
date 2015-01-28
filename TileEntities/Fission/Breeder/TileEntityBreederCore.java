@@ -104,7 +104,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (this.isPoisoned())
+			if (this.checkPoisonedChance())
 				return true;
 			if (ReikaRandomHelper.doWithChance(25) && this.isFissile()) {
 				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv);

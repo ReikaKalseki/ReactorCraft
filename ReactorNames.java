@@ -12,7 +12,7 @@ package Reika.ReactorCraft;
 public class ReactorNames {
 
 	public static final String[] rawNames = {
-		"raw.hf", "raw.fueldust", "raw.depdust", "raw.ammonium", "raw.lime", "raw.calcite", "raw.magnetite"
+		"raw.hf", "raw.fueldust", "raw.depdust", "raw.ammonium", "raw.lime", "raw.calcite", "raw.magnetite", "raw.thordust"
 	};
 
 	public static final String[] canNames = {

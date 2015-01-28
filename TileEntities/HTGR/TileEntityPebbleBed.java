@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
+import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -31,7 +32,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable {
+public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable, ReactorBlock {
 
 	protected StepTimer tempTimer = new StepTimer(20);
 

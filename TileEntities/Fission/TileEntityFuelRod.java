@@ -9,11 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -39,12 +36,20 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (inv[i] != null)
 			return false;
-		if (is.getItem() == ReactorItems.FUEL.getItemInstance())
-			return i < 4;
-		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
+		if (this.isFuel(is))
 			return i < 4;
 		if (is.getItem() == ReactorItems.DEPLETED.getItemInstance())
 			return i < 4;
+		return false;
+	}
+
+	private boolean isFuel(ItemStack is) {
+		if (is.getItem() == ReactorItems.FUEL.getItemInstance())
+			return true;
+		if (is.getItem() == ReactorItems.THORIUM.getItemInstance())
+			return true;
+		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
+			return true;
 		return false;
 	}
 
@@ -57,96 +62,38 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 		return false;
 	}
 
+	private ReactorFuel getFuel() {
+		return ReactorFuel.getFrom(inv[3]);
+	}
+
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (this.isPoisoned())
+			if (this.checkPoisonedChance())
 				return true;
-			if (this.isFissile() && ReikaRandomHelper.doWithChance(25)) {
-				ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
-				int slot = -1;
-				for (int i = 3; i >= 0; i--) {
-					ItemStack is = inv[i];
-					if (is != null && is.getItem() == ReactorItems.FUEL.getItemInstance()) {
-						slot = i;
-						i = -1;
-					}
-				}
-				if (slot != -1) {
-					if (ReikaRandomHelper.doWithChance(3)) {
-						ItemStack is = inv[slot];
-						inv[slot] = ReactorFuel.URANIUM.getFissionProduct(is);
-
-						if (ReikaRandomHelper.doWithChance(5)) {
+			if (this.isFissile()) {
+				ReactorFuel f = this.getFuel();
+				if (ReikaRandomHelper.doWithChance(f.fissionChance)) {
+					ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
+					if (ReikaRandomHelper.doWithChance(f.consumeChance)) {
+						ItemStack is = inv[3];
+						inv[3] = f.getFissionProduct(is);
+						if (ReikaRandomHelper.doWithChance(f.wasteChance))
 							this.addWaste();
-						}
 					}
-
 					this.spawnNeutronBurst(world, x, y, z);
-					//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
-					//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
-					//storedEnergy += E;
-					temperature += 20;
+					temperature += f.temperatureStep;
 					return true;
-				}
-				else {
-					slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.PLUTONIUM.getItemInstance(), this);
-					if (slot != -1) {
-
-						if (ReikaRandomHelper.doWithChance(4)) {
-							inv[slot] = ReactorFuel.PLUTONIUM.getFissionProduct(inv[slot]);
-
-							if (ReikaRandomHelper.doWithChance(10)) {
-								this.addWaste();
-							}
-						}
-
-						this.spawnNeutronBurst(world, x, y, z);
-						//double E = Math.pow(ReikaNuclearHelper.AVOGADRO*ReikaNuclearHelper.getEnergyJ(ReikaNuclearHelper.URANIUM_FISSION_ENERGY), 0.33);
-						//temperature += ReikaThermoHelper.getTemperatureIncrease(ReikaThermoHelper.GRAPHITE_HEAT, ReikaEngLibrary.rhographite, E);
-						//storedEnergy += E;
-						temperature += 30;
-						return true;
-					}
 				}
 			}
 		}
 		return false;
 	}
 
-	private int getFirstFuelSlot() {
-		int fuel = ReikaInventoryHelper.locateIDInInventory(ReactorItems.FUEL.getItemInstance(), this);
-		return fuel;
-	}
-
 	@Override
 	public boolean isFissile() {
-		for (int i = 0; i < ReactorFuel.fuelList.length; i++) {
-			Item id = ReactorFuel.fuelList[i].getFuelItem().getItem();
-			if (ReikaInventoryHelper.checkForItem(id, inv))
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
-		super.readSyncTag(NBT);
-
-		hydrogen = NBT.getInteger("h2");
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
-
-		NBT.setInteger("h2", hydrogen);
+		return this.getFuel() != null;
 	}
 
 	@Override

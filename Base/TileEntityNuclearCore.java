@@ -213,7 +213,7 @@ ChunkLoadingTile {
 		return dir == ForgeDirection.DOWN;
 	}
 
-	protected final boolean isPoisoned() {
+	protected final boolean checkPoisonedChance() {
 		int count = 0;
 		for (int i = 4; i < 12; i++) {
 			ItemStack is = inv[i];
@@ -362,6 +362,22 @@ ChunkLoadingTile {
 
 		NBT.setInteger("activetick", activeTimer);
 
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		hydrogen = NBT.getInteger("h2");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("h2", hydrogen);
 	}
 
 }

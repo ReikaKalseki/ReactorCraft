@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -27,7 +28,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector {
+public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile {
 
 	private HybridTank tank = new HybridTank("injector", 8000);
 
