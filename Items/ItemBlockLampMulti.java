@@ -59,6 +59,15 @@ public class ItemBlockLampMulti extends ItemBlock implements Fillable {
 		return flag;
 	}
 
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
+		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
+		if (flag && this.isFull(stack)) {
+			world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z)+FluoriteTypes.colorList.length, 3);
+		}
+		return flag;
+	}
+
 	private int getDataValues() {
 		return FluoriteTypes.colorList.length*2;
 	}
