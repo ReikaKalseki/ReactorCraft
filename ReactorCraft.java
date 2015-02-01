@@ -35,6 +35,7 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
@@ -53,6 +54,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
@@ -72,6 +74,7 @@ import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -324,6 +327,14 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
+		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.FUEL.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.BREEDERFUEL.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PELLET.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.fueldust);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.thordust);
+		MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.ALLOY.getItem());
+		MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.FERROINGOT.getItem());
+
 		this.finishTiming();
 	}
 
@@ -551,6 +562,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@ModDependent(ModList.BLOODMAGIC)
+	@ClassDependent("WayofTime.alchemicalWizardry.api.event.TeleposeEvent")
 	public void noTelepose(TeleposeEvent evt) {
 		if (evt.getInitialTile() instanceof ReactorBlock || evt.getFinalTile() instanceof ReactorBlock)
 			evt.setCanceled(true);
