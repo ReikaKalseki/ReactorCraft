@@ -202,7 +202,7 @@ public final class ReactorDescriptions {
 		MinecraftForge.EVENT_BUS.register(new ReloadListener());
 	}
 
-	private static class ReloadListener {
+	public static class ReloadListener {
 
 		@SubscribeEvent
 		public void reload(ResourceReloadEvent evt) {
