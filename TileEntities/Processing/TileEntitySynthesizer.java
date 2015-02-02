@@ -138,7 +138,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (ReikaItemHelper.matchStacks(inv[1], ReactorStacks.lime))
 			return true;
 		ArrayList<ItemStack> lime = OreDictionary.getOres("dustQuicklime");
-		return ReikaItemHelper.listContainsItemStack(lime, inv[1]);
+		return ReikaItemHelper.collectionContainsItemStack(lime, inv[1]);
 	}
 
 	private boolean hasAmmonium() {
@@ -147,7 +147,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (ReikaItemHelper.matchStacks(inv[2], ReactorStacks.ammonium))
 			return true;
 		ArrayList<ItemStack> dust = OreDictionary.getOres("dustAmmonium");
-		return ReikaItemHelper.listContainsItemStack(dust, inv[2]);
+		return ReikaItemHelper.collectionContainsItemStack(dust, inv[2]);
 	}
 
 	private int getWater() {

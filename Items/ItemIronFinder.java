@@ -126,7 +126,7 @@ BlockArray iron = getIronOreNearby(world, x, y, z, r);
 							int dy = y+j;
 							int dz = z+k;
 							ItemStack block = ReikaBlockHelper.getWorldBlockAsItemStack(world, dx, dy, dz);
-							if (ReikaItemHelper.listContainsItemStack(ore.getAllOreBlocks(), block)) {
+							if (ReikaItemHelper.collectionContainsItemStack(ore.getAllOreBlocks(), block)) {
 								m.addValue(ore, new Coordinate(dx, dy, dz));
 							}
 						}

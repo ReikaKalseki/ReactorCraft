@@ -104,7 +104,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		if (ReikaItemHelper.matchStacks(inv[2], ReactorOres.PITCHBLENDE.getProduct()))
 			return true;
 		ArrayList<ItemStack> ingots = OreDictionary.getOres("ingotUranium");
-		return ReikaItemHelper.listContainsItemStack(ingots, inv[2]);
+		return ReikaItemHelper.collectionContainsItemStack(ingots, inv[2]);
 	}
 
 	private boolean hasFluorite() {
@@ -113,7 +113,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		if (inv[0].getItem() == ReactorItems.FLUORITE.getItemInstance())
 			return true;
 		ArrayList<ItemStack> shards = OreDictionary.getOres("gemFluorite");
-		return ReikaItemHelper.listContainsItemStack(shards, inv[0]);
+		return ReikaItemHelper.collectionContainsItemStack(shards, inv[0]);
 	}
 
 	public boolean canMakeAcid() {
@@ -213,7 +213,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 			return true;
 		if (ReikaItemHelper.matchStacks(is, IC2Handler.getInstance().getPurifiedCrushedUranium()))
 			return true;
-		if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
+		if (ReikaItemHelper.collectionContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
 			return true;
 		return false;
 	}
