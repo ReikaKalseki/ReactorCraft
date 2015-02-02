@@ -97,6 +97,8 @@ public abstract class ReactorItemBase extends Item implements IndexedItemSprites
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		ReactorItems ir = ReactorItems.getEntry(is);
+		if (ir == null)
+			return super.getItemStackDisplayName(is);
 		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
 	}
 }
