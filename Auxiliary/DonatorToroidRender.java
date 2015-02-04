@@ -33,8 +33,12 @@ public class DonatorToroidRender implements PlayerRenderObj {
 		double d = 0.1875;
 		GL11.glTranslated(-d, 2.0625, -d);
 		double angle = (System.currentTimeMillis()/10)%360;
+		GL11.glTranslated(-d, d, 0);
 		GL11.glTranslated(d, 0, d);
-		GL11.glRotated(angle, 0, 1, 0);
+		GL11.glTranslated(d, d, 0);
+		GL11.glRotated(90, 0, 0, 1);
+		GL11.glRotated(angle, 1, 0, 0);
+		GL11.glTranslated(-d, -d, 0);
 		GL11.glTranslated(-d, 0, -d);
 		//GL11.glRotated(-dat.getRenderYaw(), 0, 1, 0);
 		//GL11.glRotated(45, 1, 0, 0);
