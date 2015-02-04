@@ -10,6 +10,8 @@
 package Reika.ReactorCraft;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
@@ -35,6 +37,7 @@ import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -43,6 +46,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
@@ -361,8 +365,14 @@ public class ReactorCraft extends DragonAPIMod {
 
 		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
 
-		for (Donator s : DonatorController.instance.getReikasDonators()) {
-			PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorToroidRender.instance);
+		Collection<Donator> donators = new ArrayList();
+		donators.addAll(DonatorController.instance.getReikasDonators());
+		donators.addAll(PatreonController.instance.getModPatrons(DragonAPIInit.instance));
+		for (Donator s : donators) {
+			if (s.ingameName != null)
+				PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorToroidRender.instance);
+			else
+				logger.logError("Donator "+s.displayName+" UUID could not be found! Cannot give special render!");
 		}
 
 		if (ModList.CHROMATICRAFT.isLoaded()) {
