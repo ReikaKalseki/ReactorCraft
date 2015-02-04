@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -39,9 +40,12 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
+import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
+import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.RetroGenController;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
@@ -54,10 +58,12 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
-import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.ReactorCraft.Auxiliary.DonatorToroidRender;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
@@ -87,7 +93,6 @@ import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
-import Reika.ReactorCraft.World.ReactorRetroGen;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
@@ -276,11 +281,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 		this.addEntities();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ReactorGuiHandler());
-		GameRegistry.registerWorldGenerator(new ReactorOreGenerator(), 0);
-		if (ReactorOptions.RETROGEN.getState()) {
-			RetroGenController.getInstance().addRetroGenerator(new ReactorRetroGen());
-			//Set state back
-		}
+		RetroGenController.instance.addHybridGenerator(ReactorOreGenerator.instance, 0, ReactorOptions.RETROGEN.getState());
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			ReactorDescriptions.loadData();
@@ -327,13 +328,15 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
-		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.FUEL.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.BREEDERFUEL.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PELLET.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.fueldust);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.thordust);
-		MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.ALLOY.getItem());
-		MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.FERROINGOT.getItem());
+		if (MTInteractionManager.isMTLoaded()) {
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.FUEL.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.BREEDERFUEL.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PELLET.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.fueldust);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.thordust);
+			MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.ALLOY.getItem());
+			MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.FERROINGOT.getItem());
+		}
 
 		this.finishTiming();
 	}
@@ -357,6 +360,10 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
+
+		for (Donator s : DonatorController.instance.getReikasDonators()) {
+			PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorToroidRender.instance);
+		}
 
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
@@ -560,18 +567,31 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 	}
 
+	@SubscribeEvent
+	public void cancelFramez(FrameUsageEvent evt) {
+		if (!this.isMovable(evt.tile)) {
+			evt.setCanceled(true);
+		}
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@ModDependent(ModList.BLOODMAGIC)
 	@ClassDependent("WayofTime.alchemicalWizardry.api.event.TeleposeEvent")
 	public void noTelepose(TeleposeEvent evt) {
-		if (evt.getInitialTile() instanceof ReactorBlock || evt.getFinalTile() instanceof ReactorBlock)
+		if (!this.isMovable(evt.getInitialTile()) || !this.isMovable(evt.getFinalTile()))
 			evt.setCanceled(true);
-		if (evt.getInitialTile() instanceof MultiBlockTile || evt.getFinalTile() instanceof MultiBlockTile)
-			evt.setCanceled(true);
-		if (evt.getInitialTile() instanceof TileEntityReactorPiping || evt.getFinalTile() instanceof TileEntityReactorPiping)
-			evt.setCanceled(true);
-		if (evt.getInitialTile() instanceof TileEntitySteamLine || evt.getFinalTile() instanceof TileEntitySteamLine)
-			evt.setCanceled(true);
+	}
+
+	private boolean isMovable(TileEntity te) {
+		if (te instanceof ReactorBlock)
+			return false;
+		if (te instanceof MultiBlockTile)
+			return false;
+		if (te instanceof TileEntityReactorPiping)
+			return false;
+		if (te instanceof TileEntitySteamLine)
+			return false;
+		return true;
 	}
 
 	@Override

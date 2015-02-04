@@ -15,12 +15,18 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import Reika.DragonAPI.Interfaces.RetroactiveGenerator;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
-import cpw.mods.fml.common.IWorldGenerator;
 
-public class ReactorOreGenerator implements IWorldGenerator {
+public class ReactorOreGenerator implements RetroactiveGenerator {
+
+	public static final ReactorOreGenerator instance = new ReactorOreGenerator();
+
+	private ReactorOreGenerator() {
+
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkgen, IChunkProvider provider) {
@@ -67,6 +73,16 @@ public class ReactorOreGenerator implements IWorldGenerator {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getIDString() {
+		return "ReactorCraft Ores";
+	}
+
+	@Override
+	public boolean canGenerateAt(Random rand, World world, int chunkX, int chunkZ) {
+		return true;
 	}
 
 }

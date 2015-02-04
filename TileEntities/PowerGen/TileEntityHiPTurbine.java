@@ -23,7 +23,7 @@ import Reika.DragonAPI.Instantiable.Data.Collections.RelativePositionList;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.ModInteract.BCMachineHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
