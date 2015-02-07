@@ -107,7 +107,7 @@ public class GuiCPU extends ReactorGuiBase {
 	}
 
 	@Override
-	public void mouseClicked(int x, int y, int id) {
+	protected void mouseClicked(int x, int y, int id) {
 		super.mouseClicked(x, y, id);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
