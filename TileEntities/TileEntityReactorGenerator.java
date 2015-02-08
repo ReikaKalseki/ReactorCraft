@@ -26,8 +26,8 @@ import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.Power.ReikaBuildCraftHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -220,8 +220,8 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	public static enum Modes {
-		RF("Redstone Flux", 10D/ReikaBuildCraftHelper.getWattsPerMJ(), PowerTypes.RF),
-		EU("EU", ReikaEUHelper.WATTS_PER_EU, PowerTypes.EU);
+		RF("Redstone Flux", ReikaRFHelper.getWattsPerRF(), PowerTypes.RF),
+		EU("EU", ReikaEUHelper.getWattsPerEU(), PowerTypes.EU);
 
 		public final String name;
 		private final double ratio;
