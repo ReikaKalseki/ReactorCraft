@@ -64,7 +64,7 @@ public enum ReactorOres {
 		minY = min;
 		maxY = max;
 		veinSize = size;
-		perChunk = count;
+		perChunk = Math.max(1, (int)(count*ReactorOptions.getOreMultiplier()));
 		shouldGen = gen;
 		dimensionID = dim;
 		oreName = StatCollector.translateToLocal(name);

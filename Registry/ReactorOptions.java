@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.ConfigList;
@@ -23,7 +24,8 @@ public enum ReactorOptions implements ConfigList {
 	RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),
-	CHUNKLOADING("Fission Cores Chunkload When Active", true);
+	CHUNKLOADING("Fission Cores Chunkload When Active", true),
+	OREDENSITY("Ore Density Percentage", 100);
 
 	private String label;
 	private boolean defaultState;
@@ -127,6 +129,10 @@ public enum ReactorOptions implements ConfigList {
 	public static int getToroidChargeRate() {
 		int base = TOROIDCHARGE.getValue();
 		return Math.max(Math.min(base, 20), 4);
+	}
+
+	public static float getOreMultiplier() {
+		return MathHelper.clamp_float(OREDENSITY.getValue()/100F, 0.5F, 2F);
 	}
 
 }

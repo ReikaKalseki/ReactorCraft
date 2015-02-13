@@ -36,4 +36,8 @@ public class CommonProxy {
 
 	}
 
+	public void loadDonatorRender() {
+
+	}
+
 }

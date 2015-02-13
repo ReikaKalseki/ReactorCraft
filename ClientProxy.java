@@ -9,13 +9,21 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
+import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
+import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
+import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
+import Reika.ReactorCraft.Auxiliary.DonatorToroidRender;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -121,6 +129,19 @@ public class ClientProxy extends CommonProxy {
 	public World getClientWorld()
 	{
 		return FMLClientHandler.instance().getClient().theWorld;
+	}
+
+	@Override
+	public void loadDonatorRender() {
+		Collection<Donator> donators = new ArrayList();
+		donators.addAll(DonatorController.instance.getReikasDonators());
+		donators.addAll(PatreonController.instance.getModPatrons(DragonAPIInit.instance));
+		for (Donator s : donators) {
+			if (s.ingameName != null)
+				PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorToroidRender.instance);
+			else
+				ReactorCraft.logger.logError("Donator "+s.displayName+" UUID could not be found! Cannot give special render!");
+		}
 	}
 
 }
