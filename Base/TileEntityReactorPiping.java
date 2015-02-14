@@ -26,7 +26,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
@@ -261,7 +260,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						int dL = amt-this.getLevel();
 						int todrain = this.getPipeIntake(dL);
 						if (todrain > 0 && this.canIntakeFluid(f)) {
-							ReikaJavaLibrary.pConsole("took in "+todrain+", had "+this.getLevel()+" here and "+amt+" in other");
+							//ReikaJavaLibrary.pConsole("took in "+todrain+", had "+this.getLevel()+" here and "+amt+" in other");
 							this.setFluid(f);
 							this.addFluid(todrain);
 							tp.removeLiquid(todrain);
