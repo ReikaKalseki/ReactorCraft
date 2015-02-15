@@ -183,34 +183,38 @@ public class BlockTritiumLamp extends Block {
 		}
 
 		public void onBreak() {
-			int r = 24;
-			for (int i = 0; i < blocks.getSize(); i++) {
-				int[] xyz = blocks.getNthBlock(i);
-				int x = xyz[0];
-				int y = xyz[1];
-				int z = xyz[2];
-				if (worldObj.getBlock(x, y, z) == BlockRegistry.LIGHT.getBlockInstance()) {
-					worldObj.setBlockToAir(x, y, z);
+			if (!worldObj.isRemote) {
+				int r = 24;
+				for (int i = 0; i < blocks.getSize(); i++) {
+					int[] xyz = blocks.getNthBlock(i);
+					int x = xyz[0];
+					int y = xyz[1];
+					int z = xyz[2];
+					if (worldObj.getBlock(x, y, z) == BlockRegistry.LIGHT.getBlockInstance()) {
+						worldObj.setBlockToAir(x, y, z);
+					}
 				}
 			}
 		}
 
 		public void onCreate() {
-			int r = 16;
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					for (int k = -r; k <= r; k++) {
-						if (ReikaMathLibrary.py3d(i, j, k) <= r) {
-							int x = xCoord+i;
-							int y = yCoord+j;
-							int z = zCoord+k;
-							if (worldObj.getBlock(x, y, z) == Blocks.air) {
-								worldObj.setBlock(x, y, z, BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
-								worldObj.markBlockForUpdate(x, y, z);
-								blocks.addBlockCoordinate(x, y, z);
-							}
-							else {
+			if (!worldObj.isRemote) {
+				int r = 16;
+				for (int i = -r; i <= r; i++) {
+					for (int j = -r; j <= r; j++) {
+						for (int k = -r; k <= r; k++) {
+							if (ReikaMathLibrary.py3d(i, j, k) <= r) {
+								int x = xCoord+i;
+								int y = yCoord+j;
+								int z = zCoord+k;
+								if (worldObj.getBlock(x, y, z) == Blocks.air) {
+									worldObj.setBlock(x, y, z, BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
+									worldObj.markBlockForUpdate(x, y, z);
+									blocks.addBlockCoordinate(x, y, z);
+								}
+								else {
 
+								}
 							}
 						}
 					}

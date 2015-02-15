@@ -318,8 +318,14 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new ReactorBookTracker());
 
-		ReikaEEHelper.blacklistRegistry(ReactorBlocks.blockList);
-		ReikaEEHelper.blacklistRegistry(ReactorItems.itemList);
+		//ReikaEEHelper.blacklistRegistry(ReactorBlocks.blockList);
+		//ReikaEEHelper.blacklistRegistry(ReactorItems.itemList);
+
+		ReikaEEHelper.blacklistEntry(ReactorItems.FUEL);
+		ReikaEEHelper.blacklistEntry(ReactorItems.BREEDERFUEL);
+		ReikaEEHelper.blacklistEntry(ReactorItems.PELLET);
+		ReikaEEHelper.blacklistEntry(ReactorItems.PLUTONIUM);
+		ReikaEEHelper.blacklistEntry(ReactorItems.THORIUM);
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
@@ -327,6 +333,8 @@ public class ReactorCraft extends DragonAPIMod {
 		if (MTInteractionManager.isMTLoaded()) {
 			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.FUEL.getItemInstance());
 			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.BREEDERFUEL.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PLUTONIUM.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.THORIUM.getItemInstance());
 			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PELLET.getItemInstance());
 			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.fueldust);
 			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.thordust);

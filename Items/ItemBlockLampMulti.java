@@ -64,6 +64,7 @@ public class ItemBlockLampMulti extends ItemBlock implements Fillable {
 		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 		if (flag && this.isFull(stack)) {
 			world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z)+FluoriteTypes.colorList.length, 3);
+			world.getBlock(x, y, z).onBlockAdded(world, x, y, z);
 		}
 		return flag;
 	}
@@ -100,7 +101,7 @@ public class ItemBlockLampMulti extends ItemBlock implements Fillable {
 
 	@Override
 	public int getCurrentFillLevel(ItemStack is) {
-		return this.isFull(is) ? this.getCapacity(is) : is.stackTagCompound != null ? is.stackTagCompound.getInteger("fill") : 0;
+		return is.stackTagCompound != null ? is.stackTagCompound.getInteger("fill") : 0;
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public class ItemBlockLampMulti extends ItemBlock implements Fillable {
 
 	@Override
 	public boolean isFull(ItemStack is) {
-		return is.getItemDamage() >= FluoriteTypes.colorList.length;
+		return is.getItemDamage() >= FluoriteTypes.colorList.length || this.getCurrentFillLevel(is) == this.getCapacity(is);
 	}
 
 	@Override
