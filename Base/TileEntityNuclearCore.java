@@ -97,6 +97,7 @@ ChunkLoadingTile {
 		//		ChunkManager.instance.unloadChunks(worldObj, xCoord, yCoord, zCoord);
 		//	}
 		//}
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public Collection<ChunkCoordIntPair> getChunksToLoad() {
@@ -245,6 +246,10 @@ ChunkLoadingTile {
 		if (inactive)
 			this.onActivityChange(true);
 		return false;
+	}
+
+	public final boolean isActive() {
+		return activeTimer > 0;
 	}
 
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {

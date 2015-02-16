@@ -41,12 +41,15 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -79,6 +82,20 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 		super(par2Material);
 		this.setHardness(2F);
 		this.setResistance(10F);
+	}
+
+	@Override
+	public int getLightValue(IBlockAccess iba, int x, int y, int z) {
+		TileEntity te = iba.getTileEntity(x, y, z);
+		if (te instanceof TileEntityNuclearCore) {
+			TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
+			if (tile.isActive()) {
+				if (ReikaWorldHelper.isSubmerged(iba, x, y, z)) {
+					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x0000ff, 15) : 15;
+				}
+			}
+		}
+		return 0;
 	}
 
 	@Override
