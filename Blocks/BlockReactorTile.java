@@ -91,7 +91,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
 			if (tile.isActive()) {
 				if (ReikaWorldHelper.isSubmerged(iba, x, y, z)) {
-					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x0000ff, 15) : 15;
+					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x00aaff, 15) : 15;
 				}
 			}
 		}
