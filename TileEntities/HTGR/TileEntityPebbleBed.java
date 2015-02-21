@@ -18,12 +18,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
+import Reika.ReactorCraft.Auxiliary.PebbleBedArrangement;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
@@ -32,9 +34,11 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable, ReactorBlock {
+public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable, ReactorBlock, BreakAction {
 
 	protected StepTimer tempTimer = new StepTimer(20);
+
+	private PebbleBedArrangement reactor;
 
 	public static final int MINTEMP = 800;
 	public static final int OVERTEMP = 1200;
@@ -54,7 +58,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(6))
+		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(this.getFissionChance()))
 			this.runDecayCycle();
 
 		if (DragonAPICore.debugtest) {
@@ -73,6 +77,60 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		if (damage > 0 && rand.nextInt(800) == 0) {
 			damage--;
 		}
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		this.checkAndJoinArrangement(world, x, y, z);
+	}
+
+	private void checkAndJoinArrangement(World world, int x, int y, int z) {
+		reactor = new PebbleBedArrangement(this);
+		int r = 3;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					int dx = x+i;
+					int dy = y+j;
+					int dz = z+k;
+					TileEntity te = this.getTileEntity(dx, dy, dz);
+					if (te instanceof TileEntityPebbleBed) {
+						reactor.merge(((TileEntityPebbleBed)te).reactor);
+					}
+				}
+			}
+		}
+	}
+
+	private double getFissionChance() {
+		int size = this.getReactorSize();
+		if (size >= 128)
+			return 30;
+		else if (size >= 72)
+			return 18;
+		else if (size >= 48)
+			return 12;
+		else if (size >= 24)
+			return 8;
+		else if (size >= 12)
+			return 6;
+		else if (size >= 6)
+			return 4;
+		else
+			return 2;
+	}
+
+	private int getReactorSize() {
+		return reactor.getSize();
+	}
+
+	public void setReactorObject(PebbleBedArrangement pba) {
+		reactor = pba;
+	}
+
+	@Override
+	public void breakBlock() {
+		reactor.remove(this);
 	}
 
 	private void runDecayCycle() {
@@ -135,9 +193,9 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 			world.setBlock(x, y, z, Blocks.flowing_lava);
 		}
 		else if (temperature >= OVERTEMP) {
-			int chance = 5+(FAILTEMP-temperature)/240;
+			int chance = 5+(FAILTEMP-temperature)/10/this.getReactorSize();
 			if (rand.nextInt(chance) == 0) {
-				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 1, 0.5F);
 				ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 				damage++;
 				if (damage >= 100) {

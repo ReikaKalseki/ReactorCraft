@@ -33,6 +33,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -51,7 +52,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector,
-MultiBlockTile {
+MultiBlockTile, BreakAction {
 
 	protected int steam;
 
@@ -754,7 +755,7 @@ MultiBlockTile {
 		return Math.abs(forcedlube-tank.getLevel()) < 25 ? forcedlube : tank.getLevel();
 	}
 
-	public void onBreak() {
+	public void breakBlock() {
 		ForgeDirection dir = this.getSteamMovement();
 		int dx = xCoord+dir.offsetX;
 		int dy = yCoord+dir.offsetY;

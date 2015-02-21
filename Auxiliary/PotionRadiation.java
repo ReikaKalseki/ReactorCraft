@@ -26,8 +26,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PotionRadiation extends Potion implements PermaPotion {
 
-	public PotionRadiation(int par1, boolean par2) {
-		super(par1, par2, 0x111111);
+	public PotionRadiation(int par1) {
+		super(par1, true, 0x111111);
 
 		TickRegistry.instance.registerTickHandler(PotionMapCMEAvoidance.instance, Side.SERVER);
 	}

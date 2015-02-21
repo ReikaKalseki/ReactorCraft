@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -55,7 +56,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		if (world.getWorldTime()%128 == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
-		if (hasMultiblock)
+		if (hasMultiblock || DragonAPICore.debugtest)
 			this.getPower(world, x, y, z, meta);
 		else {
 			omegain = torquein = 0;
@@ -220,7 +221,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	public static enum Modes {
-		RF("Redstone Flux", ReikaRFHelper.getWattsPerRF(), PowerTypes.RF),
+		RF("Redstone Flux", 1D/ReikaRFHelper.getWattsPerRF(), PowerTypes.RF),
 		EU("EU", ReikaEUHelper.getWattsPerEU(), PowerTypes.EU);
 
 		public final String name;

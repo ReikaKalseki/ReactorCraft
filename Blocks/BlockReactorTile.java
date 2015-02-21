@@ -41,6 +41,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -91,7 +92,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
 			if (tile.isActive()) {
 				if (ReikaWorldHelper.isSubmerged(iba, x, y, z)) {
-					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x00aaff, 15) : 15;
+					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x0077ff, 15) : 15;
 				}
 			}
 		}
@@ -384,8 +385,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				b.breakMultiBlock(world, x, y-1, z);
 			}
 		}
-		if (te instanceof TileEntityTurbineCore) {
-			((TileEntityTurbineCore)te).onBreak();
+		if (te instanceof BreakAction) {
+			((BreakAction)te).breakBlock();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
