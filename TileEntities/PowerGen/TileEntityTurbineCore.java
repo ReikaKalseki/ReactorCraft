@@ -501,8 +501,12 @@ MultiBlockTile, BreakAction {
 		if (e instanceof EntityPlayer) {
 			return !((EntityPlayer)e).capabilities.isCreativeMode;
 		}
-		String name = e.getCommandSenderName().toLowerCase();
-		if (name.contains("firefly"))
+		String name = e.getClass().getSimpleName();
+		if (name.equalsIgnoreCase("EntityTFMobileFirefly"))
+			return false;
+		if (name.equalsIgnoreCase("EntityWisp"))
+			return false;
+		if (name.equalsIgnoreCase("EntityBallLightning"))
 			return false;
 		return true;
 	}

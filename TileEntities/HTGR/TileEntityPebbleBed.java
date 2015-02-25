@@ -105,19 +105,19 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	private double getFissionChance() {
 		int size = this.getReactorSize();
 		if (size >= 128)
-			return 30;
+			return 20;
 		else if (size >= 72)
-			return 18;
-		else if (size >= 48)
 			return 12;
-		else if (size >= 24)
+		else if (size >= 48)
 			return 8;
-		else if (size >= 12)
+		else if (size >= 24)
 			return 6;
-		else if (size >= 6)
+		else if (size >= 12)
 			return 4;
-		else
+		else if (size >= 6)
 			return 2;
+		else
+			return 1;
 	}
 
 	private int getReactorSize() {

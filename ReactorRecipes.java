@@ -144,6 +144,11 @@ public class ReactorRecipes {
 		is = ReikaItemHelper.getSizedItemStack(CraftingItems.FERROINGOT.getItem(), 1);
 		ShapelessOreRecipe sor = new ShapelessOreRecipe(is, ItemStacks.steelingot, Items.iron_ingot, ReactorStacks.lodestone);
 		RecipesBlastFurnace.getRecipes().addRecipe(is, 1200, sor, 1, 1); //1600
+
+		if (ReikaItemHelper.oreItemExists("ingotNickel")) {
+			sor = new ShapelessOreRecipe(is, ItemStacks.steelingot, "ingotNickel", ReactorStacks.lodestone);
+			RecipesBlastFurnace.getRecipes().addRecipe(is, 1200, sor, 1, 1); //1600
+		}
 	}
 
 	private static void addSmelting() {
