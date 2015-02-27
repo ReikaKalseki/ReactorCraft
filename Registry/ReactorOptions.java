@@ -25,7 +25,8 @@ public enum ReactorOptions implements ConfigList {
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),
 	CHUNKLOADING("Fission Cores Chunkload When Active", true),
-	OREDENSITY("Ore Density Percentage", 100);
+	OREDENSITY("Ore Density Percentage", 100),
+	DISCRETE("Ore Discretization", 1);
 
 	private String label;
 	private boolean defaultState;

@@ -43,6 +43,9 @@ public class ReactorPacketCore implements IPacketHandler {
 		int x = 0;
 		int y = 0;
 		int z = 0;
+		double dx = 0;
+		double dy = 0;
+		double dz = 0;
 		boolean readinglong = false;
 		String stringdata = null;
 		UUID id = null;
@@ -78,6 +81,19 @@ public class ReactorPacketCore implements IPacketHandler {
 				}
 				else
 					longdata = inputStream.readLong();
+				break;
+			case POS:
+				control = inputStream.readInt();
+				pack = ReactorPackets.getEnum(control);
+				dx = inputStream.readDouble();
+				dy = inputStream.readDouble();
+				dz = inputStream.readDouble();
+				len = pack.getNumberDataInts();
+				if (len > 0) {
+					data = new int[len];
+					for (int i = 0; i < len; i++)
+						data[i] = inputStream.readInt();
+				}
 				break;
 			case UPDATE:
 				control = inputStream.readInt();

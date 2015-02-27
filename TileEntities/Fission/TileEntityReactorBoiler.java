@@ -69,9 +69,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 
 		if (DragonAPICore.debugtest) {
 			tank.addLiquid(500, FluidRegistry.WATER);
-			if (temperature < 100) {
-				temperature = 120;
-			}
+			temperature = 120;
 		}
 
 		if (steam <= 0) {

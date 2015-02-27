@@ -16,6 +16,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
@@ -86,12 +87,20 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			Block b = world.getBlock(dx, dy, dz);
-			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (b == this.getTileEntityBlockID() && meta == ReactorTiles.STEAMLINE.getBlockMetadata()) {
-				TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(dx, dy, dz);
-				if (this.canTakeInWorkingFluid(te.fluid))
-					this.readPipe(te);
+			TileEntity te = world.getTileEntity(dx, dy, dz);
+			if (te instanceof TileEntitySteamLine) {
+				TileEntitySteamLine tile = (TileEntitySteamLine)te;
+				if (this.canTakeInWorkingFluid(tile.fluid))
+					this.readPipe(tile);
+			}
+			else if (te instanceof WorldRift) {
+				WorldRift wr = (WorldRift)te;
+				TileEntity tile = wr.getTileEntityFrom(dir);
+				if (tile instanceof TileEntitySteamLine) {
+					TileEntitySteamLine ts = (TileEntitySteamLine)tile;
+					if (this.canTakeInWorkingFluid(ts.fluid))
+						this.readPipe(ts);
+				}
 			}
 		}
 	}
@@ -125,6 +134,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			boolean flag = ((TileEntityPipePump)this.getAdjacentTileEntity(dir)).canConnectToPipeOnSide(dir);
 			return flag;
 		}
+		if (world.getTileEntity(dx, dy, dz) instanceof WorldRift)
+			return true;
 		return false;
 	}
 
@@ -230,6 +241,8 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		TileEntity te = worldObj.getTileEntity(x, y, z);
 		if (te instanceof PipeRenderConnector)
 			return ((PipeRenderConnector)te).canConnectToPipeOnSide(dir);
+		else if (te instanceof WorldRift)
+			return true;
 		return false;
 	}
 

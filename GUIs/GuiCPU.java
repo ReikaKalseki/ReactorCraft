@@ -37,7 +37,7 @@ public class GuiCPU extends ReactorGuiBase {
 
 	public GuiCPU(EntityPlayer player, TileEntityCPU cpu) {
 		super(new CoreContainer(player, cpu), player, cpu);
-		ySize = 182;
+		ySize = 210;
 		xSize = 176;
 		tile = cpu;
 		layout = tile.getLayout();
@@ -80,7 +80,7 @@ public class GuiCPU extends ReactorGuiBase {
 
 	@Override
 	public String getGuiTexture() {
-		return "control";
+		return "control2";
 	}
 
 	@Override

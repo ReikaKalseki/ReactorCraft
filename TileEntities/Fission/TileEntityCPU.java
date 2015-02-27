@@ -50,7 +50,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			this.updateTemperature(world, x, y, z);
 		if (reactor.isEmpty()) {
 			layout.clear();
-			int r = 6;
+			int r = 12;
 			Block id = ReactorBlocks.REACTOR.getBlockInstance();
 			Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
 			for (int i = 2; i < 6; i++)
@@ -69,7 +69,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			}
 		}
 
-		if ((world.getTotalWorldTime()&16) == 16)
+		if (world.getTotalWorldTime()%64 == 0)
 			reactor.clear();
 
 		//TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);

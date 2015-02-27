@@ -32,7 +32,7 @@ public class ReactorOreGenerator implements RetroactiveGenerator {
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkgen, IChunkProvider provider) {
 		for (int i = 0; i < ReactorOres.oreList.length; i++) {
 			ReactorOres ore = ReactorOres.oreList[i];
-			if (ore.canGenerateInChunk(world, chunkX, chunkZ)) {
+			if (ore.canGenerateInChunk(world, chunkX, chunkZ) && random.nextInt(ReactorOptions.DISCRETE.getValue()) == 0) {
 				this.generate(ore, world, random, chunkX*16, chunkZ*16);
 			}
 		}
@@ -43,7 +43,7 @@ public class ReactorOreGenerator implements RetroactiveGenerator {
 		//ReikaJavaLibrary.pConsole(chunkX+", "+chunkZ);
 		Block id = ore.getBlock();
 		int meta = ore.getBlockMetadata();
-		int passes = ore.perChunk;
+		int passes = ore.perChunk*ReactorOptions.DISCRETE.getValue();
 		if (ore == ReactorOres.FLUORITE) {
 			meta = FluoriteTypes.getRandomColor().ordinal();
 			if (ReactorOptions.RAINBOW.getState()) {
