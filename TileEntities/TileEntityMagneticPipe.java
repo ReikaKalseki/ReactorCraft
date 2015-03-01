@@ -62,7 +62,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return f != null && f.equals(FluidRegistry.getFluid("fusion plasma"));
+		return f != null && f.equals(FluidRegistry.getFluid("rc fusion plasma"));
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		ReactorAchievements.PLASMA.triggerAchievement(this.getPlacer());
 		h2.removeLiquid(50);
 		h3.removeLiquid(50);
-		tank.addLiquid(100, FluidRegistry.getFluid("fusion plasma"));
+		tank.addLiquid(100, FluidRegistry.getFluid("rc fusion plasma"));
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {

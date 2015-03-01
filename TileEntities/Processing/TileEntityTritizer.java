@@ -101,7 +101,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	private static enum Reactions {
 		TRITIUM("rc deuterium", "rc tritium", 75, 25),
-		D20("water", "heavy water", 25, 100);
+		D20("water", "rc heavy water", 25, 100);
 
 		public final Fluid input;
 		public final Fluid output;

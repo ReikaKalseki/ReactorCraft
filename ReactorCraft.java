@@ -134,18 +134,18 @@ public class ReactorCraft extends DragonAPIMod {
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
-	public static final Fluid D2O = new Fluid("heavy water").setDensity(1100).setViscosity(1050);
-	public static final Fluid HF = new Fluid("hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
-	public static final Fluid UF6 = new Fluid("uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
+	public static final Fluid D2O = new Fluid("rc heavy water").setDensity(1100).setViscosity(1050);
+	public static final Fluid HF = new Fluid("rc hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
+	public static final Fluid UF6 = new Fluid("rc uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
 	public static final Fluid NH3 = new Fluid("rc ammonia").setDensity(682).setViscosity(600);
 	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(1100);
 	public static final Fluid CL = new Fluid("rc chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 	public static final Fluid O = new Fluid("rc oxygen").setDensity(138).setViscosity(20).setGaseous(true);
 
-	public static final Fluid NH3_lo = new Fluid("lowpammonia").setDensity(200).setViscosity(600);
-	public static final Fluid H2O_lo = new Fluid("lowpwater").setDensity(800).setViscosity(800);
-	public static final Fluid NA_hot = new Fluid("hotsodium").setDensity(720).setViscosity(650).setTemperature(2000);
+	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
+	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
+	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
@@ -153,9 +153,9 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid CO2 = new Fluid("rc co2").setDensity(2).setViscosity(7).setGaseous(true);
 	public static final Fluid CO2_hot = new Fluid("rc hot co2").setDensity(1).setViscosity(5).setGaseous(true);
 
-	public static final Fluid PLASMA = new Fluid("fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
+	public static final Fluid PLASMA = new Fluid("rc fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
-	public static final Fluid CORIUM = new Fluid("corium").setDensity(5000).setViscosity(8000).setTemperature(2173);
+	public static final Fluid CORIUM = new Fluid("rc corium").setDensity(5000).setViscosity(8000).setTemperature(2173);
 
 	public static PotionRadiation radiation;
 
@@ -282,20 +282,20 @@ public class ReactorCraft extends DragonAPIMod {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			ReactorDescriptions.loadData();
 
-		ReikaMystcraftHelper.disableFluidPage("fusion plasma");
+		ReikaMystcraftHelper.disableFluidPage("rc fusion plasma");
 		ReikaMystcraftHelper.disableFluidPage("rc deuterium");
 		ReikaMystcraftHelper.disableFluidPage("rc tritium");
-		ReikaMystcraftHelper.disableFluidPage("hydrofluoric acid");
-		ReikaMystcraftHelper.disableFluidPage("uranium hexafluoride");
+		ReikaMystcraftHelper.disableFluidPage("rc hydrofluoric acid");
+		ReikaMystcraftHelper.disableFluidPage("rc uranium hexafluoride");
 		ReikaMystcraftHelper.disableFluidPage("rc sodium");
 		ReikaMystcraftHelper.disableFluidPage("rc chlorine");
 		ReikaMystcraftHelper.disableFluidPage("rc oxygen");
-		ReikaMystcraftHelper.disableFluidPage("lowpammonia");
-		ReikaMystcraftHelper.disableFluidPage("lowpwater");
-		ReikaMystcraftHelper.disableFluidPage("hotsodium");
+		ReikaMystcraftHelper.disableFluidPage("rc lowpammonia");
+		ReikaMystcraftHelper.disableFluidPage("rc lowpwater");
+		ReikaMystcraftHelper.disableFluidPage("rc hotsodium");
 		ReikaMystcraftHelper.disableFluidPage("rc co2");
 		ReikaMystcraftHelper.disableFluidPage("rc hot co2");
-		ReikaMystcraftHelper.disableFluidPage("corium");
+		ReikaMystcraftHelper.disableFluidPage("rc corium");
 
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			ItemStack is = MatBlocks.matList[i].getStackOf();

@@ -147,7 +147,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	private boolean hasHeavyWater() {
-		return !input.isEmpty() && input.getLevel() > 100 && input.getActualFluid().equals(FluidRegistry.getFluid("heavy water"));
+		return !input.isEmpty() && input.getLevel() > 100 && input.getActualFluid().equals(FluidRegistry.getFluid("rc heavy water"));
 	}
 
 	private void makeSodium() {
@@ -239,7 +239,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0 && fluid.equals(FluidRegistry.getFluid("heavy water"));
+		return from.offsetY == 0 && fluid.equals(FluidRegistry.getFluid("rc heavy water"));
 	}
 
 	@Override
@@ -299,7 +299,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		return this.isSalt(itemstack);
 	}
 
-	private boolean isSalt(ItemStack itemstack) {
+	public static boolean isSalt(ItemStack itemstack) {
 		if (itemstack == null)
 			return false;
 		if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.salt))
@@ -444,7 +444,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	public boolean addHeavyWater(int amt) {
 		if (input.canTakeIn(amt)) {
-			input.addLiquid(amt, FluidRegistry.getFluid("heavy water"));
+			input.addLiquid(amt, FluidRegistry.getFluid("rc heavy water"));
 			return true;
 		}
 		return false;

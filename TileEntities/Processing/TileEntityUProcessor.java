@@ -36,6 +36,8 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
 
@@ -128,7 +130,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	private void makeUF6() {
 		ReikaInventoryHelper.decrStack(2, inv);
-		output.fill(FluidRegistry.getFluidStack("uranium hexafluoride", FluidContainerRegistry.BUCKET_VOLUME), true);
+		output.fill(FluidRegistry.getFluidStack("rc uranium hexafluoride", FluidContainerRegistry.BUCKET_VOLUME), true);
 		acid.drain(ACID_PER_UNIT, true);
 	}
 
@@ -251,7 +253,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public void addHF(int amt) {
-		int a = acid.fill(FluidRegistry.getFluidStack("hydrofluoric acid", amt), true);
+		int a = acid.fill(FluidRegistry.getFluidStack("rc hydrofluoric acid", amt), true);
 	}
 
 	@Override
@@ -340,15 +342,18 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setWater(int level) {
 		water.setContents(level, FluidRegistry.WATER);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setHF(int level) {
-		acid.setContents(level, FluidRegistry.getFluid("hydrofluoric acid"));
+		acid.setContents(level, FluidRegistry.getFluid("rc hydrofluoric acid"));
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setUF6(int level) {
-		output.setContents(level, FluidRegistry.getFluid("uranium hexafluoride"));
+		output.setContents(level, FluidRegistry.getFluid("rc uranium hexafluoride"));
 	}
 }

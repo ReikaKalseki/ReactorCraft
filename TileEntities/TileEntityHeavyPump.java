@@ -123,7 +123,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	private void harvest() {
 		ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
-		tank.fill(new FluidStack(FluidRegistry.getFluid("heavy water"), 200), true);
+		tank.fill(new FluidStack(FluidRegistry.getFluid("rc heavy water"), 200), true);
 	}
 
 	private boolean canHarvest(World world, int x, int y, int z) {

@@ -60,7 +60,7 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 
 	@Override
 	protected Fluid getOutputFluid() {
-		return FluidRegistry.getFluid("hotsodium");
+		return FluidRegistry.getFluid("rc hotsodium");
 	}
 
 	@Override

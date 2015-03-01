@@ -65,9 +65,9 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 			return true;
 		if (output.isFull())
 			return false;
-		if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpwater")))
+		if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc lowpwater")))
 			return output.getActualFluid().equals(FluidRegistry.WATER);
-		if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpammonia")))
+		if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc lowpammonia")))
 			return output.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia"));
 		return false;
 	}
@@ -103,10 +103,10 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 		int amt = Math.min(tank.getLevel(), output.getRemainingSpace());
 		if (amt <= 0)
 			return;
-		if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpwater"))) {
+		if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc lowpwater"))) {
 			output.addLiquid(amt, FluidRegistry.WATER);
 		}
-		else if (tank.getActualFluid().equals(FluidRegistry.getFluid("lowpammonia"))) {
+		else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc lowpammonia"))) {
 			output.addLiquid(amt, FluidRegistry.getFluid("rc ammonia"));
 		}
 		tank.removeLiquid(amt);
@@ -188,9 +188,9 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		if (f.equals(FluidRegistry.getFluid("lowpwater")))
+		if (f.equals(FluidRegistry.getFluid("rc lowpwater")))
 			return true;
-		if (f.equals(FluidRegistry.getFluid("lowpammonia")))
+		if (f.equals(FluidRegistry.getFluid("rc lowpammonia")))
 			return true;
 		return false;
 	}

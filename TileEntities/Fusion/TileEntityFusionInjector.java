@@ -39,7 +39,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (DragonAPICore.debugtest) {
-			tank.addLiquid(1000, FluidRegistry.getFluid("fusion plasma"));
+			tank.addLiquid(1000, FluidRegistry.getFluid("rc fusion plasma"));
 			hasMultiBlock = true;
 		}
 
@@ -115,7 +115,7 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("fusion plasma")) && this.getAdjacentTileEntity(from) instanceof TileEntityMagneticPipe;
+		return fluid.equals(FluidRegistry.getFluid("rc fusion plasma")) && this.getAdjacentTileEntity(from) instanceof TileEntityMagneticPipe;
 	}
 
 	@Override

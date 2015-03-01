@@ -37,7 +37,7 @@ public class BlockCoriumFlowing extends BlockFluidClassic {
 	private IIcon[] icon;
 
 	public BlockCoriumFlowing(Material material) {
-		super(FluidRegistry.getFluid("corium"), material);
+		super(FluidRegistry.getFluid("rc corium"), material);
 
 		this.setHardness(100F);
 		this.setLightOpacity(0);

@@ -52,8 +52,8 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	private Fluid getFluidFromSteamMetadata(int smeta) {
 		//ReikaJavaLibrary.pConsole(String.format("%4s", Integer.toBinaryString(smeta)).replace(" ", "0"), Side.SERVER);
 		if ((smeta&4) == 4)
-			return FluidRegistry.getFluid("lowpammonia");
-		return FluidRegistry.getFluid("lowpwater");
+			return FluidRegistry.getFluid("rc lowpammonia");
+		return FluidRegistry.getFluid("rc lowpwater");
 	}
 
 	private void balance(World world, int x, int y, int z) {

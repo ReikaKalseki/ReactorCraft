@@ -267,7 +267,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("uranium hexafluoride"));
+		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("rc uranium hexafluoride"));
 	}
 
 	@Override
@@ -313,7 +313,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public void addUF6(int amt) {
-		tank.fill(FluidRegistry.getFluidStack("uranium hexafluoride", amt), true);
+		tank.fill(FluidRegistry.getFluidStack("rc uranium hexafluoride", amt), true);
 	}
 
 	public void removeFluid(int volume) {
