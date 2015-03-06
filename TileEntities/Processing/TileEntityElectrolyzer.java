@@ -499,4 +499,9 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		return 0;
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

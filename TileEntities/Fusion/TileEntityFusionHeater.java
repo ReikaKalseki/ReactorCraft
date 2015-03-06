@@ -208,4 +208,9 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		return 0;
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

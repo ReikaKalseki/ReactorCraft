@@ -394,4 +394,9 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		return MINPOWER;
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
 }

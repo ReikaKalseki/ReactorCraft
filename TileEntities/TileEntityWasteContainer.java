@@ -209,4 +209,9 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		}
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

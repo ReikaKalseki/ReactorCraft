@@ -55,11 +55,11 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
-import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
@@ -330,17 +330,15 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
-		if (MTInteractionManager.isMTLoaded()) {
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.FUEL.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.BREEDERFUEL.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PLUTONIUM.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.THORIUM.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorItems.PELLET.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.fueldust);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ReactorStacks.thordust);
-			MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.ALLOY.getItem());
-			MTInteractionManager.instance.blacklistNewRecipesFor(CraftingItems.FERROINGOT.getItem());
-		}
+		SensitiveItemRegistry.registerItem(ReactorItems.FUEL.getItemInstance());
+		SensitiveItemRegistry.registerItem(ReactorItems.BREEDERFUEL.getItemInstance());
+		SensitiveItemRegistry.registerItem(ReactorItems.PLUTONIUM.getItemInstance());
+		SensitiveItemRegistry.registerItem(ReactorItems.THORIUM.getItemInstance());
+		SensitiveItemRegistry.registerItem(ReactorItems.PELLET.getItemInstance());
+		SensitiveItemRegistry.registerItem(ReactorStacks.fueldust);
+		SensitiveItemRegistry.registerItem(ReactorStacks.thordust);
+		SensitiveItemRegistry.registerItem(CraftingItems.ALLOY.getItem());
+		SensitiveItemRegistry.registerItem(CraftingItems.FERROINGOT.getItem());
 
 		this.finishTiming();
 	}
