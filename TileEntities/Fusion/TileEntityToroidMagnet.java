@@ -40,7 +40,6 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;
 
-
 	private int alpha = 512;
 
 	protected boolean hasSolenoid = false;
@@ -52,6 +51,14 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	private static final int RATE = ReactorOptions.getToroidChargeRate();
 
 	private final HybridTank tank = new HybridTank("toroid", 8000);
+
+	public boolean hasMultiBlock() {
+		return true;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+
+	}
 
 	@Override
 	public int getIndex() {

@@ -276,7 +276,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
 						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);
-						te.hasMultiBlock = true;
+						te.setHasMultiBlock(true);
 					}
 				}
 			}
@@ -300,7 +300,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
 						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);
-						te.hasMultiBlock = false;
+						te.setHasMultiBlock(false);
 					}
 				}
 			}

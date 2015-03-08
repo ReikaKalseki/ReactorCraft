@@ -125,7 +125,7 @@ public class BlockFlywheelMulti extends BlockMultiBlock {
 		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.FLYWHEEL) {
 			TileEntityReactorFlywheel te = (TileEntityReactorFlywheel)world.getTileEntity(midX, midY, midZ);
-			te.hasMultiblock = false;
+			te.setHasMultiBlock(false);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class BlockFlywheelMulti extends BlockMultiBlock {
 		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.FLYWHEEL) {
 			TileEntityReactorFlywheel te = (TileEntityReactorFlywheel)world.getTileEntity(midX, midY, midZ);
-			te.hasMultiblock = true;
+			te.setHasMultiBlock(true);
 		}
 	}
 

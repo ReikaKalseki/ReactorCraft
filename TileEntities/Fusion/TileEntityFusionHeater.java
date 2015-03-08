@@ -38,14 +38,18 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	private int temperature;
 
-	public boolean hasMultiBlock = false;
+	private boolean hasMultiBlock = false;
 
 	private HybridTank tank = new HybridTank("fusionheater", 8000);
 	private HybridTank h2 = new HybridTank("fusionheaterh2", 4000);
 	private HybridTank h3 = new HybridTank("fusionheaterh3", 4000);
 
-	private boolean hasMultiBlock() {
+	public boolean hasMultiBlock() {
 		return hasMultiBlock && !ReikaWorldHelper.isExposedToAir(worldObj, xCoord, yCoord, zCoord);
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		hasMultiBlock = has && !ReikaWorldHelper.isExposedToAir(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override

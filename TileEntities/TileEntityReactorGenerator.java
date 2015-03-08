@@ -24,7 +24,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
@@ -49,7 +48,23 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	private Modes mode = Modes.RF;
 
-	public boolean hasMultiblock;
+	private boolean hasMultiblock;
+
+	public boolean hasMultiBlock() {
+		return hasMultiblock;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		if (hasMultiblock && !has)
+			this.testBreakageFailure();
+		hasMultiblock = has;
+	}
+
+	private void testBreakageFailure() {
+		if (omegain > 1024) {
+			this.fail(worldObj, xCoord, yCoord, zCoord);
+		}
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -63,9 +78,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		}
 
 		power = (long)omegain*(long)torquein;
-
-		if (omegain > 0)
-			;//this.testFailure(world, x, y, z);
 
 		//ReikaJavaLibrary.pConsole(power, Side.SERVER);
 
@@ -91,11 +103,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 				break;
 			}
 		}
-	}
-
-	private void testFailure(World world, int x, int y, int z) {
-		if (ReikaEngLibrary.mat_rotfailure(ReikaEngLibrary.rhoiron, 7, omegain, 100*ReikaEngLibrary.Tsteel))
-			this.fail(world, x, y, z);
 	}
 
 	private void fail(World world, int x, int y, int z) {

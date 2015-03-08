@@ -61,7 +61,7 @@ public class RenderGenerator extends ReactorRenderBase
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.hasMultiblock)
+			if (tile.hasMultiBlock())
 				model.renderAll(tile, null, tile.phi, 0);
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);

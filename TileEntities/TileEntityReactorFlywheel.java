@@ -30,11 +30,19 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	private ForgeDirection facing;
 
-	public boolean hasMultiblock = false;
+	private boolean hasMultiBlock = false;
 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;
 	public static final int MAXTORQUE = 12750;
+
+	public boolean hasMultiBlock() {
+		return hasMultiBlock;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		hasMultiBlock = has;
+	}
 
 	public ForgeDirection getFacing() {
 		return facing != null ? facing : ForgeDirection.EAST;
@@ -154,7 +162,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	@Override
 	public boolean isEmitting() {
-		return hasMultiblock;
+		return this.hasMultiBlock();
 	}
 
 	@Override
@@ -192,7 +200,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 		super.readSyncTag(NBT);
 
 		facing = dirs[NBT.getInteger("face")];
-		hasMultiblock = NBT.getBoolean("multi");
+		hasMultiBlock = NBT.getBoolean("multi");
 
 		power = NBT.getLong("pwr");
 	}
@@ -202,7 +210,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("face", this.getFacing().ordinal());
-		NBT.setBoolean("multi", hasMultiblock);
+		NBT.setBoolean("multi", hasMultiBlock);
 
 		NBT.setLong("pwr", power);
 	}

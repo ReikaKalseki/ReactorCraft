@@ -27,7 +27,7 @@ import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
 public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver, MultiBlockTile {
 
-	public boolean hasMultiBlock = false;
+	private boolean hasMultiBlock = false;
 	private boolean checkForToroids = true;
 
 	private int torque;
@@ -45,6 +45,27 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		return ReactorTiles.SOLENOID.ordinal();
 	}
 
+	public boolean hasMultiBlock() {
+		return hasMultiBlock;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		if (hasMultiBlock && !has)
+			this.testBreakageFailure();
+		hasMultiBlock = has;
+	}
+
+	private void testBreakageFailure() {
+		if (omega > 32) {
+			this.fail(worldObj, xCoord, yCoord, zCoord);
+		}
+	}
+
+	private void fail(World world, int x, int y, int z) {
+		world.setBlockToAir(x, y, z);
+		new FlyingBlocksExplosion(this, 12).doExplosion();
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
@@ -57,8 +78,6 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		if (!hasMultiBlock || !this.arePowerReqsMet()) {
 			this.removeFromToroids();
 		}
-		//if (this.arePowerReqsMet() && hasMultiBlock && this.getTicksExisted()%4 == 0)
-		//	ReactorSounds.FUSION.playSoundAtBlock(world, x, y, z);
 		if (hasMultiBlock && omega > MAX_SPEED) { //violently fail
 			world.setBlockToAir(x, y, z);
 			new FlyingBlocksExplosion(this, 16).doExplosion();

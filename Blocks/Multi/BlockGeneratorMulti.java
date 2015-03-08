@@ -231,7 +231,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
 				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
-				te.hasMultiblock = false;
+				te.setHasMultiBlock(false);
 			}
 			else if (meta >= 8) {
 				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
@@ -249,7 +249,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			if (ReactorTiles.getTE(world, xyz[0], xyz[1], xyz[2]) == ReactorTiles.GENERATOR) {
 				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
-				te.hasMultiblock = true;
+				te.setHasMultiBlock(true);
 			}
 			else if (meta < 8) {
 				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);

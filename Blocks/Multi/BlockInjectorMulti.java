@@ -234,7 +234,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (meta == 0) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
 					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					te.hasMultiBlock = true;
+					te.setHasMultiBlock(true);
 				}
 			}
 		}
@@ -253,7 +253,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (meta == 8) {
 				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
 					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
-					te.hasMultiBlock = false;
+					te.setHasMultiBlock(false);
 				}
 			}
 		}

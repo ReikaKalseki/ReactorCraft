@@ -312,7 +312,7 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.SOLENOID) {
 			TileEntitySolenoidMagnet te = (TileEntitySolenoidMagnet)world.getTileEntity(midX, midY, midZ);
-			te.hasMultiBlock = false;
+			te.setHasMultiBlock(false);
 		}
 	}
 
@@ -332,7 +332,7 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 		int midZ = blocks.getMidZ();
 		if (ReactorTiles.getTE(world, midX, midY, midZ) == ReactorTiles.SOLENOID) {
 			TileEntitySolenoidMagnet te = (TileEntitySolenoidMagnet)world.getTileEntity(midX, midY, midZ);
-			te.hasMultiBlock = true;
+			te.setHasMultiBlock(true);
 		}
 	}
 

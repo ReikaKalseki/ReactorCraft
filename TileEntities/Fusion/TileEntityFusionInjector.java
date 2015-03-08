@@ -34,7 +34,15 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 
 	private ForgeDirection facing;
 
-	public boolean hasMultiBlock;
+	private boolean hasMultiBlock;
+
+	public boolean hasMultiBlock() {
+		return hasMultiBlock;
+	}
+
+	public void setHasMultiBlock(boolean has) {
+		hasMultiBlock = has;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

@@ -56,7 +56,7 @@ MultiBlockTile, BreakAction {
 
 	protected int steam;
 
-	private int omega;
+	protected int omega;
 	private int iotick;
 
 	private int readx;
@@ -84,7 +84,7 @@ MultiBlockTile, BreakAction {
 	protected boolean hasMultiBlock = !this.needsMultiblock();
 	private boolean readyForMultiBlock = false;
 
-	public void markForMulti() {
+	public final void markForMulti() {
 		readyForMultiBlock = true;
 	}
 
@@ -93,7 +93,7 @@ MultiBlockTile, BreakAction {
 		readyForMultiBlock = false;
 	}
 
-	public boolean hasMultiBlock() {
+	public final boolean hasMultiBlock() {
 		return hasMultiBlock;
 	}
 

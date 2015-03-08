@@ -11,8 +11,8 @@ package Reika.ReactorCraft.Auxiliary;
 
 public interface MultiBlockTile {
 
-	//public boolean hasMultiblock();
+	public boolean hasMultiBlock();
 
-	//public void setHasMultiblock(boolean has);
+	public void setHasMultiBlock(boolean has);
 
 }

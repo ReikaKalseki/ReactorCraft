@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Collections.RelativePositionList;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -72,6 +73,24 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	@Override
 	public boolean needsMultiblock() {
 		return true;
+	}
+
+	@Override
+	public void setHasMultiBlock(boolean has) {
+		if (hasMultiBlock && !has)
+			this.testBreakageFailure();
+		super.setHasMultiBlock(has);
+	}
+
+	private void testBreakageFailure() {
+		if (omega > 2048) {
+			this.fail(worldObj, xCoord, yCoord, zCoord);
+		}
+	}
+
+	private void fail(World world, int x, int y, int z) {
+		world.setBlockToAir(x, y, z);
+		new FlyingBlocksExplosion(world, x, y+0.5, z, 4).doExplosion();
 	}
 
 	@Override
