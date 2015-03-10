@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -78,7 +79,7 @@ public class BlockSteam extends Block {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int maxh = 256;
-		if (y > maxh) {
+		if (y > maxh || ClearSteamCommand.clearSteam()) {
 			world.setBlockToAir(x, y, z);
 			return;
 		}
