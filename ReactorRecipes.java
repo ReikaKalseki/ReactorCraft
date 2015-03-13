@@ -147,7 +147,7 @@ public class ReactorRecipes {
 
 		if (ReikaItemHelper.oreItemExists("ingotNickel")) {
 			sor = new ShapelessOreRecipe(is, ItemStacks.steelingot, "ingotNickel", ReactorStacks.lodestone);
-			RecipesBlastFurnace.getRecipes().addAlloyingRecipe(is, 1200, sor, 1, 1); //1600
+			RecipesBlastFurnace.getRecipes().addAlloyingRecipe(is, 1500, sor, 1, 1); //1600
 		}
 	}
 
