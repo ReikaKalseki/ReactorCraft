@@ -55,7 +55,7 @@ public class RenderSteamGrate extends ReactorRenderBase
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
+		if (this.doRenderModel((TileEntityReactorBase)tile))
 			this.renderTileEntitySteamGrateAt((TileEntitySteamGrate)tile, par2, par4, par6, par8);
 	}
 

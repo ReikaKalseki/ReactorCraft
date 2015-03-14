@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.ReactorCraft.ReactorCraft;
@@ -23,6 +24,11 @@ public abstract class ReactorRenderBase extends TileEntityRenderBase implements 
 	@Override
 	protected Class getModClass() {
 		return ReactorCraft.class;
+	}
+
+	@Override
+	protected final boolean doRenderModel(TileEntityBase te) {
+		return this.isValidMachineRenderPass(te);
 	}
 
 }
