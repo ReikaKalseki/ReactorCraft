@@ -96,7 +96,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			if (id == Blocks.flowing_water || id == Blocks.water)
 				return ReikaRandomHelper.doWithChance(30);
 
-			boolean flag = id.isOpaqueCube() ? id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || rand.nextInt((int)(12 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? rand.nextInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
+			boolean flag = id.isOpaqueCube() ? id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || ReikaRandomHelper.getSafeRandomInt((int)(12 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
 			if (flag) {
 				if (ReikaRandomHelper.doWithChance(20)) {
 					//AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
