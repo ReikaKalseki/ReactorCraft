@@ -16,7 +16,8 @@ public enum MatBlocks {
 
 	CONCRETE("block.concrete"),
 	SLAG("block.slag"),
-	CALCITE("block.calcite");
+	CALCITE("block.calcite"),
+	SCRUBBER("block.scrubber");
 
 	private String name;
 
@@ -31,6 +32,8 @@ public enum MatBlocks {
 	}
 
 	public boolean isMultiSidedTexture() {
+		if (this == SCRUBBER)
+			return true;
 		return false;
 	}
 

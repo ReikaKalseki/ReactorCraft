@@ -12,7 +12,10 @@ package Reika.ReactorCraft.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.MatBlocks;
 
@@ -41,6 +44,27 @@ public class BlockReactorMat extends Block {
 				}
 			}
 		}
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		MatBlocks m = MatBlocks.matList[world.getBlockMetadata(x, y, z)];
+		if (m == MatBlocks.SCRUBBER)
+			return null;
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
+		MatBlocks m = MatBlocks.matList[world.getBlockMetadata(x, y, z)];
+		if (m == MatBlocks.SCRUBBER)
+			return 0;
+		return super.getLightOpacity(world, x, y, z);
 	}
 
 	@Override

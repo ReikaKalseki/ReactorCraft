@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
+import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -123,6 +124,10 @@ public class BlockSteam extends Block {
 	}
 
 	private void defaultMovement(World world, int x, int y, int z, Random rand, int meta) {
+		if (world.getBlock(x, y+1, z) == ReactorBlocks.MATS.getBlockInstance() && world.getBlockMetadata(x, y+1, z) == MatBlocks.SCRUBBER.ordinal()) {
+			world.setBlockToAir(x, y, z);
+			return;
+		}
 		if (ReactorTiles.getTE(world, x, y+1, z) == ReactorTiles.TURBINECORE) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x, y+1, z);
 			ForgeDirection dir = te.getSteamMovement();
