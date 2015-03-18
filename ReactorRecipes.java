@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -50,6 +51,10 @@ public class ReactorRecipes {
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.PITCHBLENDE), CraftingItems.UDUST.getItem());
 		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.PITCHBLENDE.getProductOreDictName(), CraftingItems.UDUST.getItem());
 		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.URANIUM.getProductOreDictName(), CraftingItems.UDUST.getItem());
+
+		RecipesGrinder.getRecipes().addRecipe(ItemStacks.tungsteningot, ItemStacks.tungstenflakes);
+
+		RecipesPulseFurnace.smelting().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 
 		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
@@ -133,7 +138,8 @@ public class ReactorRecipes {
 		CraftingItems.FABRIC.addSizedRecipe(3, "LDL", "LDL", "LDL", 'D', ReactorItems.DEPLETED.getStackOf(), 'L', Items.leather);
 		CraftingItems.FABRIC.addSizedRecipe(1, "LDL", "LDL", "LDL", 'D', ReactorItems.OLDPELLET.getStackOf(), 'L', Items.leather);
 		CraftingItems.FABRIC.addSizedOreRecipe(2, "LDL", "LDL", "LDL", 'D', "ingotLead", 'L', Items.leather);
-
+		CraftingItems.CARBIDEFLAKES.addShapelessRecipe(ItemStacks.coaldust, ItemStacks.tungstenflakes);
+		CraftingItems.TURBCORE.addRecipe("CCC", "CTC", "CCC", 'C', CraftingItems.CARBIDE.getItem(), 'T', ItemStacks.compoundturb);
 
 		//GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 		ItemStack is = ReikaItemHelper.getSizedItemStack(CraftingItems.ALLOY.getItem(), 3);
@@ -231,7 +237,7 @@ public class ReactorRecipes {
 		ReactorTiles.FUEL.addCrafting("SHS", "PCP", "SCS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', CraftingItems.CANISTER.getItem(), 'H', Blocks.hopper);
 		ReactorTiles.CONTROL.addCrafting("SGS", "RRR", "PPP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'R', CraftingItems.ROD.getItem(), 'G', ItemStacks.gearunit);
 		ReactorTiles.COOLANT.addCrafting("SPS", "GRG", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'G', Blocks.glass, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
-		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ItemStacks.compoundturb);
+		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', CraftingItems.TURBCORE.getItem());
 		ReactorTiles.STEAMLINE.addSizedCrafting(3, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', ItemStacks.pipe);
 		ReactorTiles.HEAVYPUMP.addCrafting("PpP", "GIG", "PSP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Blocks.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
 		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit16);

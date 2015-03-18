@@ -32,7 +32,10 @@ public enum CraftingItems {
 	HYSTERESISRING(),
 	GRAPHITE(),
 	UDUST(),
-	FABRIC();
+	FABRIC(),
+	CARBIDEFLAKES(),
+	CARBIDE(),
+	TURBCORE();
 
 	public final String itemName;
 

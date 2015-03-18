@@ -60,6 +60,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
+import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -370,8 +371,10 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 				ReactorTiles m = ReactorTiles.TEList[i];
-				if (m != ReactorTiles.PROCESSOR)
+				if (m != ReactorTiles.PROCESSOR) {
 					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
+				}
 			}
 		}
 

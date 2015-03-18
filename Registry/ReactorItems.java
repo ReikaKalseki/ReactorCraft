@@ -49,7 +49,7 @@ public enum ReactorItems implements ItemEnum {
 	INGOTS(32,		"Ingots",				ItemReactorMulti.class),
 	CANISTER(48,	"Fluid Canister",		ItemCanister.class),
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
-	CRAFTING(80,	"Crafting item", 		ItemReactorMulti.class),
+	CRAFTING(144,	"Crafting item", 		ItemReactorMulti.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
 	THORIUM(97,		"item.thorium",			ItemReactorMulti.class),
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorMulti.class),
