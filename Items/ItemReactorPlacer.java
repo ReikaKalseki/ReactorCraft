@@ -25,6 +25,9 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -43,10 +46,17 @@ import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
+import com.bioxx.tfc.api.Enums.EnumItemReach;
+import com.bioxx.tfc.api.Enums.EnumSize;
+import com.bioxx.tfc.api.Enums.EnumWeight;
+import com.bioxx.tfc.api.Interfaces.ISize;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemReactorPlacer extends Item {
+@Strippable(value = {"com.bioxx.tfc.api.Interfaces.ISize"})
+public class ItemReactorPlacer extends Item implements ISize {
 
 	public ItemReactorPlacer(int tex) {
 		super();
@@ -270,6 +280,30 @@ public class ItemReactorPlacer extends Item {
 	public String getItemStackDisplayName(ItemStack is) {
 		ReactorItems ir = ReactorItems.getEntry(is);
 		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public EnumSize getSize(ItemStack is) {
+		return ReactorTiles.TEList[is.getItemDamage()].isMultiblock() ? EnumSize.HUGE : EnumSize.LARGE;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public EnumWeight getWeight(ItemStack is) {
+		return EnumWeight.HEAVY;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public EnumItemReach getReach(ItemStack is) {
+		return EnumItemReach.MEDIUM;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public boolean canStack() {
+		return true;
 	}
 
 }
