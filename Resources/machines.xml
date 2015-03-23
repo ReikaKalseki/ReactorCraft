@@ -199,7 +199,7 @@
 	</injector>
 	<magnet>
 		<desc>
-			The toroidal magnets are the main component of the tokamak reactor, and contain the plasma into a narrow beam in their center. In order to function properly, they must be placed and rotated correctly.
+			The toroidal magnets are the main component of the tokamak reactor, and contain the plasma into a narrow beam in their center. In order to function properly, they must be placed and rotated correctly, and kept very cold.
 		</desc>
 		<note>
 			Can not be placed on flat ground due to large size

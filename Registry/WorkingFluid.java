@@ -36,7 +36,7 @@ public enum WorkingFluid {
 	}
 
 	public Fluid getLowPressureFluid() {
-		return FluidRegistry.getFluid("lowp"+this.name().toLowerCase());
+		return FluidRegistry.getFluid("rc lowp"+this.name().toLowerCase());
 	}
 
 	public static WorkingFluid getFromNBT(NBTTagCompound NBT) {

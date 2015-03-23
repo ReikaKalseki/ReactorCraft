@@ -17,12 +17,22 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, Temperatured {
 
 	protected int steam;
+	protected ReactorType type;
+
+	public final void setReactorType(ReactorType t) {
+		type = t;
+	}
+
+	public final ReactorType getReactorType() {
+		return type;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
@@ -77,12 +78,12 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 			this.cool(e);
 		temp.update();
 		if (temp.checkCap()) {
-			this.distributeHeat(world, x, y, z);
+			this.distributeHeat(world, x, y, z, e);
 			this.updateTemperature(world, x, y, z, meta);
 		}
 	}
 
-	private void distributeHeat(World world, int x, int y, int z) {
+	private void distributeHeat(World world, int x, int y, int z, Exchange e) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -95,6 +96,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 				if (dT > 0) {
 					temperature -= dT/4;
 					te.setTemperature(te.getTemperature()+dT/4);
+					te.setReactorType(e.type);
 				}
 			}
 		}
@@ -197,21 +199,23 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	//Add API to allow others to add fluids
 	protected static enum Exchange {
-		SODIUM(FluidRegistry.getFluid("rc hotsodium"), FluidRegistry.getFluid("rc sodium"), ReikaThermoHelper.SODIUM_HEAT, 600),
-		CO2(FluidRegistry.getFluid("rc hot co2"), FluidRegistry.getFluid("rc co2"), ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP);
+		SODIUM("rc hotsodium", "rc sodium", ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
+		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;
 		public final double heatCapacity;
 		public final int maxTemperature;
+		public final ReactorType type;
 
 		public static final Exchange[] list = values();
 
-		private Exchange(Fluid from, Fluid to, double c, int max) {
-			coldFluid = to;
-			hotFluid = from;
+		private Exchange(String from, String to, double c, int max, ReactorType t) {
+			coldFluid = FluidRegistry.getFluid(to);
+			hotFluid = FluidRegistry.getFluid(from);
 			heatCapacity = c;
 			maxTemperature = max;
+			type = t;
 		}
 	}
 

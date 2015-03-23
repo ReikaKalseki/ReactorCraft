@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -72,7 +73,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	@Override
 	public boolean needsMultiblock() {
-		return true;
+		return !DragonAPICore.debugtest;
 	}
 
 	@Override
@@ -282,14 +283,17 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			int s = te.getSteam();
 			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
-				int rm = s/8+1;
-				if (steam < this.getMaxSteam()) {
-					int rm2 = Math.min(rm, this.getMaxSteam()-steam);
-					steam += rm2;
-					fluid = te.getWorkingFluid();
-					te.removeSteam(rm2);
+				ReactorType source = te.getSourceReactorType();
+				if (this.canRunOffOf(source)) {
+					int rm = s/8+1;
+					if (steam < this.getMaxSteam()) {
+						int rm2 = Math.min(rm, this.getMaxSteam()-steam);
+						steam += rm2;
+						fluid = te.getWorkingFluid();
+						te.removeSteam(rm2);
+					}
+					flag = s > rm+32;
 				}
-				flag = s > rm+32;
 			}
 		}
 		else if (r == this.getMachine()) {
@@ -302,6 +306,10 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		}
 
 		return flag;
+	}
+
+	private boolean canRunOffOf(ReactorType source) {
+		return source != ReactorType.HTGR;
 	}
 
 	private int getMaxSteam() {

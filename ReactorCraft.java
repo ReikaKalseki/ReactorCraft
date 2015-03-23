@@ -57,8 +57,8 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
-import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
@@ -285,21 +285,6 @@ public class ReactorCraft extends DragonAPIMod {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			ReactorDescriptions.loadData();
 
-		ReikaMystcraftHelper.disableFluidPage("rc fusion plasma");
-		ReikaMystcraftHelper.disableFluidPage("rc deuterium");
-		ReikaMystcraftHelper.disableFluidPage("rc tritium");
-		ReikaMystcraftHelper.disableFluidPage("rc hydrofluoric acid");
-		ReikaMystcraftHelper.disableFluidPage("rc uranium hexafluoride");
-		ReikaMystcraftHelper.disableFluidPage("rc sodium");
-		ReikaMystcraftHelper.disableFluidPage("rc chlorine");
-		ReikaMystcraftHelper.disableFluidPage("rc oxygen");
-		ReikaMystcraftHelper.disableFluidPage("rc lowpammonia");
-		ReikaMystcraftHelper.disableFluidPage("rc lowpwater");
-		ReikaMystcraftHelper.disableFluidPage("rc hotsodium");
-		ReikaMystcraftHelper.disableFluidPage("rc co2");
-		ReikaMystcraftHelper.disableFluidPage("rc hot co2");
-		ReikaMystcraftHelper.disableFluidPage("rc corium");
-
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			ItemStack is = MatBlocks.matList[i].getStackOf();
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
@@ -333,15 +318,30 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
-		SensitiveItemRegistry.registerItem(ReactorItems.FUEL.getItemInstance());
-		SensitiveItemRegistry.registerItem(ReactorItems.BREEDERFUEL.getItemInstance());
-		SensitiveItemRegistry.registerItem(ReactorItems.PLUTONIUM.getItemInstance());
-		SensitiveItemRegistry.registerItem(ReactorItems.THORIUM.getItemInstance());
-		SensitiveItemRegistry.registerItem(ReactorItems.PELLET.getItemInstance());
-		SensitiveItemRegistry.registerItem(ReactorStacks.fueldust);
-		SensitiveItemRegistry.registerItem(ReactorStacks.thordust);
-		SensitiveItemRegistry.registerItem(CraftingItems.ALLOY.getItem());
-		SensitiveItemRegistry.registerItem(CraftingItems.FERROINGOT.getItem());
+		SensitiveItemRegistry.instance.registerItem(ReactorItems.FUEL.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ReactorItems.BREEDERFUEL.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ReactorItems.PLUTONIUM.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ReactorItems.THORIUM.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ReactorItems.PELLET.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ReactorStacks.fueldust);
+		SensitiveItemRegistry.instance.registerItem(ReactorStacks.thordust);
+		SensitiveItemRegistry.instance.registerItem(CraftingItems.ALLOY.getItem());
+		SensitiveItemRegistry.instance.registerItem(CraftingItems.FERROINGOT.getItem());
+
+		SensitiveFluidRegistry.instance.registerFluid("rc fusion plasma");
+		SensitiveFluidRegistry.instance.registerFluid("rc deuterium");
+		SensitiveFluidRegistry.instance.registerFluid("rc tritium");
+		SensitiveFluidRegistry.instance.registerFluid("rc hydrofluoric acid");
+		SensitiveFluidRegistry.instance.registerFluid("rc uranium hexafluoride");
+		SensitiveFluidRegistry.instance.registerFluid("rc sodium");
+		SensitiveFluidRegistry.instance.registerFluid("rc chlorine");
+		SensitiveFluidRegistry.instance.registerFluid("rc oxygen");
+		SensitiveFluidRegistry.instance.registerFluid("rc lowpammonia");
+		SensitiveFluidRegistry.instance.registerFluid("rc lowpwater");
+		SensitiveFluidRegistry.instance.registerFluid("rc hotsodium");
+		SensitiveFluidRegistry.instance.registerFluid("rc co2");
+		SensitiveFluidRegistry.instance.registerFluid("rc hot co2");
+		SensitiveFluidRegistry.instance.registerFluid("rc corium");
 
 		this.finishTiming();
 	}

@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
@@ -34,6 +35,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	private boolean[] connections = new boolean[6];
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
+	private ReactorType source = null;
 
 	@Override
 	public int getIndex() {
@@ -67,6 +69,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
 				steam += s;
+				source = te.getReactorType();
 			}
 		}
 	}
@@ -112,6 +115,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			steam += dS/2+1;
 			te.steam -= dS/2+1;
 			fluid = te.fluid;
+			source = te.source;
 		}
 	}
 
@@ -270,5 +274,9 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		((TileEntitySteamLine)from).steam -= amt;
 		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
+	}
+
+	public ReactorType getSourceReactorType() {
+		return source;
 	}
 }
