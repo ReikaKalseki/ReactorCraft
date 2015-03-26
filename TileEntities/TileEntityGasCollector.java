@@ -47,7 +47,7 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		if (id == Blocks.lit_furnace) {
 			TileEntityFurnace te = (TileEntityFurnace)world.getTileEntity(readx, ready, readz);
 			ItemStack fuel = te.getStackInSlot(1);
-			if (fuel != null) {
+			if (fuel != null && te.isBurning() && te.currentItemBurnTime > 0) {
 				ItemMaterial mat = ItemMaterialController.instance.getMaterial(fuel);
 				if (mat == ItemMaterial.COAL || mat == ItemMaterial.WOOD)
 					tank.addLiquid(10, FluidRegistry.getFluid("rc co2"));

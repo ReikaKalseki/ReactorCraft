@@ -86,10 +86,13 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {
 				return ReikaRandomHelper.doWithChance(90);
 			}
-			if (id == ReactorBlocks.MATS.getBlockInstance() && meta == MatBlocks.CONCRETE.ordinal()) {
+			else if (ReikaItemHelper.matchStacks(ItemStacks.bedingotblock, new ItemStack(id, 1, meta))) {
+				return ReikaRandomHelper.doWithChance(97.5);
+			}
+			else if (id == ReactorBlocks.MATS.getBlockInstance() && meta == MatBlocks.CONCRETE.ordinal()) {
 				return ReikaRandomHelper.doWithChance(60);
 			}
-			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
+			else if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
 				world.setBlock(x, y, z, id, meta+8, 3);
 				world.func_147479_m(x, y, z);
 			}
