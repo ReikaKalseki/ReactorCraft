@@ -27,7 +27,7 @@ public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 
 		maxStackSize = 1;
 		sprite = ind;
-		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
+		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctrItems);
 	}
 
 	@Override

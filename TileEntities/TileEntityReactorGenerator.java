@@ -34,6 +34,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,7 +52,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	private boolean hasMultiblock;
 
 	public boolean hasMultiBlock() {
-		return hasMultiblock;
+		return hasMultiblock || DragonAPICore.debugtest;
 	}
 
 	public void setHasMultiBlock(boolean has) {
@@ -86,18 +87,24 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			TileEntity tile = this.getAdjacentTileEntity(write);
 			switch(mode) {
 			case RF:
-				if (tile instanceof IEnergyHandler) {
+				if (tile instanceof IEnergyReceiver) {
+					IEnergyReceiver rc = (IEnergyReceiver)tile;
+					//if (rc.canConnectEnergy(this.getFacing())) {
+					int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
+					//}
+				}
+				else if (tile instanceof IEnergyHandler) {
 					IEnergyHandler rc = (IEnergyHandler)tile;
-					if (rc.canConnectEnergy(this.getFacing())) {
-						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
-					}
+					//if (rc.canConnectEnergy(this.getFacing())) {
+					int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
+					//}
 				}
 				break;
 			case EU:
 				if (tile instanceof IEnergySink) {
 					IEnergySink rc = (IEnergySink)tile;
 					if (rc.acceptsEnergyFrom(this, this.getFacing())) {
-						double used = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
+						double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
 					}
 				}
 				break;
