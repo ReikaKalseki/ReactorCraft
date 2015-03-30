@@ -214,4 +214,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

@@ -217,4 +217,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

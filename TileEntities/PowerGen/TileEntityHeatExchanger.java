@@ -403,4 +403,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 		return true;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }
