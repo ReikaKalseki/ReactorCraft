@@ -84,7 +84,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}
-		if (!this.checkValidBounds(is, ep, world, x, y, z))
+		if (!ep.capabilities.isCreativeMode && !this.checkValidBounds(is, ep, world, x, y, z))
 			return false;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		List inblock = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
@@ -150,10 +150,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 		if (te instanceof ShaftMachine) {
 			ShaftMachine sm = (ShaftMachine)te;
 			sm.setIORenderAlpha(512);
-		}/*
-		if (te instanceof Feedable && !world.isRemote) {
-			((Feedable) te).getOrCreateNetwork(world, x, y, z);
-		}*/
+		}
 
 		return true;
 	}

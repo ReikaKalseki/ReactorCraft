@@ -96,7 +96,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 				if (dT > 0) {
 					temperature -= dT/4;
 					te.setTemperature(te.getTemperature()+dT/4);
-					te.setReactorType(e.type);
+					te.setReactorType(e != null ? e.type : null);
 				}
 			}
 		}

@@ -58,7 +58,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(8*this.getFissionChance()/100D))
+		if (!world.isRemote && this.isFissile() && ReikaRandomHelper.doWithChance(this.getFissionChance()/100D))
 			this.runDecayCycle();
 
 		if (DragonAPICore.debugtest) {

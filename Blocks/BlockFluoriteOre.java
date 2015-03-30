@@ -18,6 +18,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -84,7 +86,9 @@ public class BlockFluoriteOre extends BlockFluorite {
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) //may need to call lighting updates on generate
 	{
-		return this.isActivated(world, x, y, z) ? 12 : 6;
+		int color = this.getColorType(world, x, y, z).getColor();
+		int l = this.isActivated(world, x, y, z) ? 12 : 6;
+		return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(color, l) : l;
 	}
 
 	@Override

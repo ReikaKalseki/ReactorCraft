@@ -477,7 +477,7 @@ MultiBlockTile, BreakAction {
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
 			if (this.getOmega() > 0 && ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5) < r) {
-				if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)) {
+				if (this.canDamageTurbine(e)) {
 					if (!world.isRemote) {
 						Explosion exp = world.createExplosion(null, e.posX, e.posY+e.getEyeHeight()/1F, e.posZ, 2, false);
 						e.attackEntityFrom(DamageSource.setExplosionSource(exp), 2);

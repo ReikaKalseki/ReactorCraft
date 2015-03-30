@@ -12,7 +12,6 @@ package Reika.ReactorCraft.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -23,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TritiumLampRenderer;
@@ -48,8 +48,8 @@ public class BlockTritiumLamp extends Block {
 	public int getLightValue(IBlockAccess iba, int x, int y, int z) {
 		if (iba.getBlockMetadata(x, y, z) < FluoriteTypes.colorList.length)
 			return 0;
-		FluoriteTypes color = this.getColor(iba, x, y, z);
-		return ModList.COLORLIGHT.isLoaded() ? color.blue << 15 | color.green << 10 | color.red << 5 | 15 : 15;
+		int color = this.getColor(iba, x, y, z).getColor();
+		return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(color, 15) : 15;
 	}
 
 	private FluoriteTypes getColor(IBlockAccess iba, int x, int y, int z) {
@@ -128,10 +128,7 @@ public class BlockTritiumLamp extends Block {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityTritiumLamp te = new TileEntityTritiumLamp();
-		world.setTileEntity(x, y, z, te);
-		if (this.getLightValue(world, x, y, z) > 0)
-			te.onCreate();
+
 	}
 
 	@Override
@@ -150,15 +147,26 @@ public class BlockTritiumLamp extends Block {
 
 		private BlockArray blocks = new BlockArray();
 
+		private int ticks;
+
 		@Override
 		public boolean canUpdate() {
-			return false;
+			return true;
+		}
+
+		@Override
+		public void updateEntity() {
+			if (ticks == 0) {
+				this.onCreate();
+			}
+			ticks++;
 		}
 
 		@Override
 		public void writeToNBT(NBTTagCompound NBT) {
 			super.writeToNBT(NBT);
 
+			//ReikaJavaLibrary.pConsole("NBT write: "+this+" % "+FMLCommonHandler.instance().getEffectiveSide()+"/"+blocks);
 			blocks.writeToNBT("blocks", NBT);
 		}
 
@@ -167,6 +175,7 @@ public class BlockTritiumLamp extends Block {
 			super.readFromNBT(NBT);
 
 			blocks.readFromNBT("blocks", NBT);
+			//ReikaJavaLibrary.pConsole("NBT read: "+this+" % "+blocks);
 		}
 
 		@Override
@@ -182,9 +191,9 @@ public class BlockTritiumLamp extends Block {
 			this.readFromNBT(p.field_148860_e);
 		}
 
-		public void onBreak() {
+		private void onBreak() {
 			if (!worldObj.isRemote) {
-				int r = 24;
+				//ReikaJavaLibrary.pConsole("Break: "+this+" % "+blocks);
 				for (int i = 0; i < blocks.getSize(); i++) {
 					int[] xyz = blocks.getNthBlock(i);
 					int x = xyz[0];
@@ -194,10 +203,26 @@ public class BlockTritiumLamp extends Block {
 						worldObj.setBlockToAir(x, y, z);
 					}
 				}
+
+				/*
+				int r = 24;
+				for (int i = -r; i <= r; i++) {
+					for (int j = -r; j <= r; j++) {
+						for (int k = -r; k <= r; k++) {
+							int x = xCoord+i;
+							int y = yCoord+j;
+							int z = zCoord+k;
+							if (worldObj.getBlock(x, y, z) == BlockRegistry.LIGHT.getBlockInstance()) {
+								worldObj.setBlockToAir(x, y, z);
+							}
+						}
+					}
+				}
+				 */
 			}
 		}
 
-		public void onCreate() {
+		private void onCreate() {
 			if (!worldObj.isRemote) {
 				int r = 16;
 				for (int i = -r; i <= r; i++) {
@@ -207,7 +232,7 @@ public class BlockTritiumLamp extends Block {
 								int x = xCoord+i;
 								int y = yCoord+j;
 								int z = zCoord+k;
-								if (worldObj.getBlock(x, y, z) == Blocks.air) {
+								if (worldObj.getBlock(x, y, z).isAir(worldObj, x, y, z)) {
 									worldObj.setBlock(x, y, z, BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
 									worldObj.markBlockForUpdate(x, y, z);
 									blocks.addBlockCoordinate(x, y, z);
@@ -219,6 +244,7 @@ public class BlockTritiumLamp extends Block {
 						}
 					}
 				}
+				//ReikaJavaLibrary.pConsole("Create: "+this+" % "+blocks);
 			}
 		}
 

@@ -17,6 +17,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -68,7 +70,8 @@ public class BlockFluorite extends Block {
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z)
 	{
-		return this.isActivated(world, x, y, z) ? 15 : 0;
+		int color = this.getColorType(world, x, y, z).getColor();
+		return this.isActivated(world, x, y, z) ? (ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(color, 15) : 15) : 0;
 	}
 
 	@Override
@@ -93,7 +96,7 @@ public class BlockFluorite extends Block {
 		return meta >= FluoriteTypes.colorList.length;
 	}
 
-	public FluoriteTypes getColorType(World world, int x, int y, int z) {
+	public FluoriteTypes getColorType(IBlockAccess world, int x, int y, int z) {
 		return FluoriteTypes.colorList[world.getBlockMetadata(x, y, z)%FluoriteTypes.colorList.length];
 	}
 }

@@ -13,6 +13,7 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public enum FluoriteTypes {
@@ -84,6 +85,10 @@ public enum FluoriteTypes {
 
 	public ItemStack getStorageBlock() {
 		return new ItemStack(ReactorBlocks.FLUORITE.getBlockInstance(), 1, this.ordinal());
+	}
+
+	public int getColor() {
+		return ReikaColorAPI.RGBtoHex(red, green, blue);
 	}
 
 }
