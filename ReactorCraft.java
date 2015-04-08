@@ -128,7 +128,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static ReactorTab tabRctrItems = new ReactorTab("ReactorCraft Items");
 	public static ReactorTab tabRctrMultis = new ReactorTab("ReactorCraft Components");
 
-	public static final ArmorMaterial HAZ = EnumHelper.addArmorMaterial("RCHazmat", Integer.MAX_VALUE, new int[]{0,0,0,0}, 0);
+	public static final ArmorMaterial HAZ = EnumHelper.addArmorMaterial("RCHazmat", 0/*Integer.MAX_VALUE*/, new int[]{0,0,0,0}, 0);
 
 	public static ModLogger logger;
 

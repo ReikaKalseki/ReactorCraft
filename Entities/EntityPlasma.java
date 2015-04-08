@@ -22,9 +22,10 @@ import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData {
+public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData, CustomFanEntity {
 
 	private int targetX;
 	private int targetZ;
@@ -137,6 +138,16 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	@Override
 	public boolean despawnOverTime() {
 		return false;
+	}
+
+	@Override
+	public long getBlowPower() {
+		return 16777216;
+	}
+
+	@Override
+	public double getMaxDeflection() {
+		return 0.5;
 	}
 
 }

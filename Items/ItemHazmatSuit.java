@@ -11,14 +11,18 @@ package Reika.ReactorCraft.Items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.ISpecialArmor;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.ReactorCraft.ClientProxy;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
-public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
+public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites, ISpecialArmor {
 
 	private int sprite;
 
@@ -60,6 +64,21 @@ public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites {
 
 	@Override
 	public final void registerIcons(IIconRegister ico) {}
+
+	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource src, double damage, int slot) {
+		ArmorProperties prop = new ArmorProperties(Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
+		return prop;
+	}
+
+	@Override
+	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+		return 0;
+	}
+
+	@Override
+	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+
+	}
 
 
 }
