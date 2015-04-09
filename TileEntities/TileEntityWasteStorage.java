@@ -38,7 +38,9 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.sickenMobs(world, x, y, z);
+		if (rand.nextInt(20) == 0)
+			this.sickenMobs(world, x, y, z);
+
 		this.decayWaste();
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) > 100) {
@@ -119,7 +121,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	public int getRangeFromWasteCount(int amt) {
-		return amt;
+		return (int)Math.sqrt(amt);
 	}
 
 	@Override
