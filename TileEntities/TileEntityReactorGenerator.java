@@ -236,7 +236,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	public static enum Modes {
 		RF("Redstone Flux", 1D/ReikaRFHelper.getWattsPerRF(), PowerTypes.RF),
-		EU("EU", ReikaEUHelper.getWattsPerEU(), PowerTypes.EU);
+		EU("EU", 1D/ReikaEUHelper.getWattsPerEU(), PowerTypes.EU);
 
 		public final String name;
 		private final double ratio;

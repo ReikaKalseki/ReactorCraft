@@ -156,7 +156,7 @@ public class BlockTritiumLamp extends Block {
 
 		@Override
 		public void updateEntity() {
-			if (ticks == 0) {
+			if (ticks == 0 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= FluoriteTypes.colorList.length) {
 				this.onCreate();
 			}
 			ticks++;
