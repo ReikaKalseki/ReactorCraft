@@ -18,8 +18,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Base.ParticleEntity;
+import Reika.DragonAPI.Instantiable.BasicTeleporter;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
@@ -78,6 +83,17 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 				if (te instanceof ReactorCoreTE) {
 					return ((ReactorCoreTE)te).onNeutron(this, world, x, y, z);
 				}
+				else if (te instanceof WorldRift) {
+					WorldLocation tgt = ((WorldRift)te).getLinkTarget();
+					if (tgt != null) {
+						//this.setPosition(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5);
+						this.setLocationAndAngles(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5, 0, 0);
+						if (tgt.dimensionID != worldObj.provider.dimensionId && !worldObj.isRemote)
+							ReikaEntityHelper.transferEntityToDimension(this, tgt.dimensionID, new BasicTeleporter((WorldServer)tgt.getWorld()));
+						if (rand.nextInt(2) == 0)
+							this.setDead();
+					}
+				}
 			}
 			else if (id instanceof NeutronBlock) {
 				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
@@ -99,7 +115,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			if (id == Blocks.flowing_water || id == Blocks.water)
 				return ReikaRandomHelper.doWithChance(30);
 
-			boolean flag = id.isOpaqueCube() ? id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12 || ReikaRandomHelper.getSafeRandomInt((int)(12 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
+			boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
 			if (flag) {
 				if (ReikaRandomHelper.doWithChance(20)) {
 					//AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
@@ -182,6 +198,14 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 
 		public boolean canIrradiateLiquids() {
 			return this == FISSION || this == FUSION || this == BREEDER;
+		}
+
+		public boolean isFissionType() {
+			return this == DECAY || this == FISSION || this == BREEDER;
+		}
+
+		public boolean canTriggerFission() {
+			return this.isFissionType() || (this == WASTE && ReikaRandomHelper.doWithChance(40));
 		}
 	}
 

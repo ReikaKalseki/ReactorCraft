@@ -32,6 +32,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityNeutronReflector;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+import Reika.ReactorCraft.TileEntities.TileEntitySteamDiffuser;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
@@ -103,7 +104,8 @@ public enum ReactorTiles {
 	GENERATOR("machine.reactorgenerator",		ReactorBlocks.MODELMACHINE,		TileEntityReactorGenerator.class,8, "RenderGenerator"),
 	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker"),
 	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3),
-	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine");
+	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine"),
+	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser");
 
 	private final String name;
 	private final Class teClass;

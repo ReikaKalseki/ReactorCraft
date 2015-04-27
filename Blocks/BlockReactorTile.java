@@ -213,7 +213,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			if (is.getItem() == ReactorItems.REMOTE.getItemInstance())
 				return false;
 		}
-		if (r == ReactorTiles.COOLANT && is != null) {
+		if (r == ReactorTiles.COOLANT && is != null && is.stackSize == 1) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(x, y, z);
 			switch(te.getLiquidState()) {
 			case EMPTY:
@@ -258,7 +258,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				}
 			}
 		}
-		if (r == ReactorTiles.SYNTHESIZER && is != null) {
+		if (r == ReactorTiles.SYNTHESIZER && is != null && is.stackSize == 1) {
 			TileEntitySynthesizer te = (TileEntitySynthesizer)world.getTileEntity(x, y, z);
 			if (is.getItem() == Items.water_bucket) {
 				boolean flag = te.addWater(1000);
@@ -267,7 +267,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				return true;
 			}
 		}
-		if (r == ReactorTiles.ELECTROLYZER && is != null) {
+		if (r == ReactorTiles.ELECTROLYZER && is != null && is.stackSize == 1) {
 			TileEntityElectrolyzer te = (TileEntityElectrolyzer)world.getTileEntity(x, y, z);
 			if (ReikaItemHelper.matchStacks(is, ReactorItems.BUCKET.getStackOf())) {
 				boolean flag = te.addHeavyWater(1000);
@@ -276,7 +276,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				return true;
 			}
 		}
-		if (r == ReactorTiles.HEAVYPUMP && is != null && is.getItem() == Items.bucket) {
+		if (r == ReactorTiles.HEAVYPUMP && is != null && is.getItem() == Items.bucket && is.stackSize == 1) {
 			TileEntityHeavyPump te = (TileEntityHeavyPump)world.getTileEntity(x, y, z);
 			if (te.hasABucket()) {
 				te.subtractBucket();
@@ -284,7 +284,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				return true;
 			}
 		}
-		if (r == ReactorTiles.SODIUMBOILER && is != null) {
+		if (r == ReactorTiles.SODIUMBOILER && is != null && is.stackSize == 1) {
 			TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getTileEntity(x, y, z);
 			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
 				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
@@ -297,7 +297,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				}
 			}
 		}
-		if (r == ReactorTiles.BOILER && is != null) {
+		if (r == ReactorTiles.BOILER && is != null && is.stackSize == 1) {
 			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y, z);
 			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
 				if (is.getItem() == Items.water_bucket) {
@@ -318,7 +318,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				}
 			}
 		}
-		if (r == ReactorTiles.PROCESSOR && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance()) {
+		if (r == ReactorTiles.PROCESSOR && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance() && is.stackSize == 1) {
 			TileEntityUProcessor te = (TileEntityUProcessor)world.getTileEntity(x, y, z);
 			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
@@ -332,7 +332,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			}
 			return true;
 		}
-		if (r == ReactorTiles.CENTRIFUGE && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance()) {
+		if (r == ReactorTiles.CENTRIFUGE && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance() && is.stackSize == 1) {
 			TileEntityCentrifuge te = (TileEntityCentrifuge)world.getTileEntity(x, y, z);
 			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)

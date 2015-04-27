@@ -56,7 +56,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		if (power > 0) {
+		if (power >= MINPOWER && torque >= MINTORQUE) {
 			phi += 10F;
 		}
 		iotick -= 8;
@@ -133,7 +133,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	private boolean isOceanFloor(World world, int x, int y, int z) {
 		int water = 0;
 		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = ForgeDirection.values()[i];
+			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;

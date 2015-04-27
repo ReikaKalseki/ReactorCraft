@@ -44,14 +44,14 @@ public class SteamLineRenderer extends WorldPipingRenderer {
 	protected void renderFace(TileEntity te, int x, int y, int z, ForgeDirection dir, double size) {
 		TileEntitySteamLine tile = (TileEntitySteamLine)te;
 		Tessellator v5 = Tessellator.instance;
-		//Icon ico = Blocks.wool.getIcon(0, 15);
-		IIcon ico = Blocks.stone.getIcon(0, 0);
+		IIcon ico = Blocks.wool.getIcon(0, 15);
+		//IIcon ico = Blocks.stone.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
 		float dv = ico.getMaxV();
 
-		float br = 0.2F;
+		float br = 0.5F;//0.2F;
 
 		v5.setColorOpaque(255, 255, 255);
 		v5.addTranslation(x, y, z);

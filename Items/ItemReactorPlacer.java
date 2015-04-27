@@ -22,12 +22,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -41,6 +44,9 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
+import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
@@ -109,6 +115,9 @@ public class ItemReactorPlacer extends Item implements ISize {
 		if (m == ReactorTiles.GENERATOR) {
 			((TileEntityReactorGenerator)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false));
 		}
+		if (m == ReactorTiles.MARKER && DragonAPICore.debugtest) {
+			this.placeFusionReactor(world, x, y, z, ep);
+		}
 		if (m.isTurbine()) {
 			((TileEntityTurbineCore)te).setLubricant(is);
 		}
@@ -144,7 +153,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 			((ThermalMachine)te).setTemperature(Tb);
 		}
 		else if (te instanceof TemperatureTE) {
-			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+			int Tb = ReikaWorldHelper.	getAmbientTemperatureAt(world, x, y, z);
 			((TemperatureTE)te).addTemperature(Tb);
 		}
 		if (te instanceof ShaftMachine) {
@@ -153,6 +162,62 @@ public class ItemReactorPlacer extends Item implements ISize {
 		}
 
 		return true;
+	}
+
+	private void placeFusionReactor(World world, int x, int y, int z, EntityPlayer ep) {
+		int dx = x+14;
+		int dy = y+1;
+		int dz = z;
+
+		world.setBlock(dx, dy, dz, ReactorTiles.INJECTOR.getBlock(), ReactorTiles.INJECTOR.getBlockMetadata(), 3);
+		world.setBlock(dx-28, dy, dz, ReactorTiles.INJECTOR.getBlock(), ReactorTiles.INJECTOR.getBlockMetadata(), 3);
+		world.setBlock(dx-14, dy, dz-14, ReactorTiles.INJECTOR.getBlock(), ReactorTiles.INJECTOR.getBlockMetadata(), 3);
+		world.setBlock(dx-14, dy, dz+14, ReactorTiles.INJECTOR.getBlock(), ReactorTiles.INJECTOR.getBlockMetadata(), 3);
+
+		((TileEntityBase)world.getTileEntity(dx, dy, dz)).setPlacer(ep);
+		((TileEntityBase)world.getTileEntity(dx-28, dy, dz)).setPlacer(ep);
+		((TileEntityBase)world.getTileEntity(dx-14, dy, dz-14)).setPlacer(ep);
+		((TileEntityBase)world.getTileEntity(dx-14, dy, dz+14)).setPlacer(ep);
+
+		((TileEntityFusionInjector)world.getTileEntity(dx, dy, dz)).setFacing(ForgeDirection.NORTH);
+		((TileEntityFusionInjector)world.getTileEntity(dx-28, dy, dz)).setFacing(ForgeDirection.SOUTH);
+		((TileEntityFusionInjector)world.getTileEntity(dx-14, dy, dz+14)).setFacing(ForgeDirection.EAST);
+		((TileEntityFusionInjector)world.getTileEntity(dx-14, dy, dz-14)).setFacing(ForgeDirection.WEST);
+
+		dz -= 2;
+
+		Aim a = Aim.W;
+
+		for (int k = 0; k < 4; k++) {
+			for (int i = 0; i < 9; i++) {
+				world.setBlock(dx, dy, dz, ReactorTiles.MAGNET.getBlock(), ReactorTiles.MAGNET.getBlockMetadata(), 3);
+				((TileEntityToroidMagnet)world.getTileEntity(dx, dy, dz)).setAim(a);
+				((TileEntityToroidMagnet)world.getTileEntity(dx, dy, dz)).setPlacer(ep);
+
+				dx += a.xOffset;
+				dz += a.zOffset;
+
+				a = a.getNext();
+			}
+
+			a = a.getPrev();
+			dx += a.xOffset;
+			dz += a.zOffset;
+		}
+
+		/*
+		for (int i = 2; i < 6; i++) {
+			for (int k = 2; k < 8; k++) {
+				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
+				world.setBlock(x+dir.offsetX*k, y+1, z+dir.offsetZ*k, ReactorBlocks.SOLENOIDMULTI.getBlockInstance(), 4, 3);
+			}
+		}
+		 */
+
+		world.setBlock(x, y+1, z, ReactorTiles.SOLENOID.getBlock(), ReactorTiles.SOLENOID.getBlockMetadata(), 3);
+		((TileEntitySolenoidMagnet)world.getTileEntity(x, y+1, z)).setPlacer(ep);
+		((TileEntitySolenoidMagnet)world.getTileEntity(x, y+1, z)).setHasMultiBlock(true);
+
 	}
 
 	@Override

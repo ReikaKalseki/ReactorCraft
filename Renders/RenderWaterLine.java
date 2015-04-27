@@ -63,7 +63,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 	}
 
 	private void renderBlock(TileEntitySteamLine te, double par2, double par4, double par6) {
-		IIcon ico = Blocks.stone.getIcon(0, 0);
+		IIcon ico = Blocks.wool.getIcon(0, 7);//Blocks.stone.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
@@ -71,7 +71,7 @@ public class RenderWaterLine extends ReactorRenderBase {
 		GL11.glTranslated(par2, par4, par6);
 		Tessellator v5 = Tessellator.instance;
 
-		float f = 0.15F;
+		float f = 1F;//0.15F;
 		double s = 0.375;
 		GL11.glColor4f(f, f, f, 1);
 		GL11.glScaled(s, s, s);

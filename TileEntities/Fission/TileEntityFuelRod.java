@@ -70,21 +70,23 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (this.checkPoisonedChance())
-				return true;
-			if (this.isFissile()) {
-				ReactorFuel f = this.getFuel();
-				if (ReikaRandomHelper.doWithChance(f.fissionChance)) {
-					ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
-					if (ReikaRandomHelper.doWithChance(f.consumeChance)) {
-						ItemStack is = inv[3];
-						inv[3] = f.getFissionProduct(is);
-						if (ReikaRandomHelper.doWithChance(f.wasteChance))
-							this.addWaste();
-					}
-					this.spawnNeutronBurst(world, x, y, z);
-					temperature += f.temperatureStep;
+			if (e.getType().canTriggerFission()) {
+				if (this.checkPoisonedChance())
 					return true;
+				if (this.isFissile()) {
+					ReactorFuel f = this.getFuel();
+					if (ReikaRandomHelper.doWithChance(f.fissionChance)) {
+						ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
+						if (ReikaRandomHelper.doWithChance(f.consumeChance)) {
+							ItemStack is = inv[3];
+							inv[3] = f.getFissionProduct(is);
+							if (ReikaRandomHelper.doWithChance(f.wasteChance))
+								this.addWaste();
+						}
+						this.spawnNeutronBurst(world, x, y, z);
+						temperature += f.temperatureStep;
+						return true;
+					}
 				}
 			}
 		}

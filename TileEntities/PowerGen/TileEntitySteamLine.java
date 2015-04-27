@@ -21,6 +21,7 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.Registry.WorkingFluid;
+import Reika.ReactorCraft.TileEntities.TileEntitySteamDiffuser;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
@@ -134,6 +135,10 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			return true;
 		if (id == ReactorTiles.BIGTURBINE.getBlock() && meta == ReactorTiles.BIGTURBINE.getBlockMetadata())
 			return true;
+		if (id == ReactorTiles.DIFFUSER.getBlock() && meta == ReactorTiles.DIFFUSER.getBlockMetadata()) {
+			boolean flag = ((TileEntitySteamDiffuser)this.getAdjacentTileEntity(dir)).getFacing().getOpposite() == dir;
+			return flag;
+		}
 		if (id == MachineRegistry.PIPEPUMP.getBlock() && meta == MachineRegistry.PIPEPUMP.getMachineMetadata()) {
 			boolean flag = ((TileEntityPipePump)this.getAdjacentTileEntity(dir)).canConnectToPipeOnSide(dir);
 			return flag;
@@ -147,7 +152,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		return steam;
 	}
 
-	protected void removeSteam(int amt) {
+	public void removeSteam(int amt) {
 		steam -= amt;
 	}
 

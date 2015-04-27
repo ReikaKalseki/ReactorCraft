@@ -36,6 +36,8 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 
 	public int magnetOrdinal = -1;
 
+	private int escapeTicks = 0;
+
 	private String placerOfInjector;
 
 	public EntityPlasma(World world) {
@@ -82,7 +84,7 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	private void checkFusion() {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
 		List<EntityPlasma> li = worldObj.getEntitiesWithinAABB(EntityPlasma.class, box);
-		if (li.size() >= this.getFusionThreshold()) {
+		if (li.size() >= this.getFusionThreshold() && !li.get(0).hasEscaped() && !li.get(li.size()-1).hasEscaped()) {
 			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ, placerOfInjector);
 			worldObj.spawnEntityInWorld(fus);
 			this.setDead();
@@ -103,10 +105,12 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	protected void onTick() {
 		if (ticksExisted > 1200)
 			;//this.setDead();
-		if (!worldObj.isRemote && rand.nextInt(12) == 0)
+		if (!worldObj.isRemote && !this.hasEscapedSeverely() && rand.nextInt(this.hasEscaped() ? 48 : 12) == 0)
 			this.checkFusion();
 		motionY = 0;
 		posY = originY;
+
+		escapeTicks++;
 
 		if (this.getDistanceFromSpawn() > 100)
 			this.setDead();
@@ -148,6 +152,18 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	@Override
 	public double getMaxDeflection() {
 		return 0.5;
+	}
+
+	public void resetEscapeTimer() {
+		escapeTicks = 0;
+	}
+
+	public boolean hasEscaped() {
+		return escapeTicks >= 4;
+	}
+
+	public boolean hasEscapedSeverely() {
+		return escapeTicks >= 8;
 	}
 
 }

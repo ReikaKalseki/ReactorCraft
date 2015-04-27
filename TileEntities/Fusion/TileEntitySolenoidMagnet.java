@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -72,7 +73,14 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 			this.noInputMachine();
 		}
 
-		if (hasMultiBlock && checkForToroids && this.arePowerReqsMet()) {
+		if (DragonAPICore.debugtest) {
+			hasMultiBlock = true;
+			torque = MINTORQUE;
+			omega = 1024;
+			power = omega*torque;
+		}
+
+		if (DragonAPICore.debugtest || hasMultiBlock && checkForToroids && this.arePowerReqsMet()) {
 			this.addToToroids();
 		}
 		if (!hasMultiBlock || !this.arePowerReqsMet()) {
@@ -174,7 +182,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
 		int c = 0;
 		Aim a = Aim.W;
-		while ((r == ReactorTiles.MAGNET || r == ReactorTiles.INJECTOR) && c < 38) {
+		while ((r == ReactorTiles.MAGNET || r == ReactorTiles.INJECTOR) && c <= 38) {
 			if (r == ReactorTiles.MAGNET) {
 				TileEntityToroidMagnet te = (TileEntityToroidMagnet)world.getTileEntity(x, y, z);
 				te.hasSolenoid = true;

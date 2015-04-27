@@ -41,7 +41,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		if (rand.nextInt(20) == 0)
 			this.sickenMobs(world, x, y, z);
 
-		this.decayWaste();
+		this.decayWaste(this.getAccelerationFactor(world, x, y, z));
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) > 100) {
 			if (this.hasWaste()) {

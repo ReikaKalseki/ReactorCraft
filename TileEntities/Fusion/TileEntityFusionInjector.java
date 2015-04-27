@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -19,6 +20,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
@@ -28,7 +30,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile {
+public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile, FusionReactorToroidPart {
 
 	private HybridTank tank = new HybridTank("injector", 8000);
 
@@ -85,6 +87,13 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		int dx = xCoord+this.getFacing().offsetX;
 		int dz = zCoord+this.getFacing().offsetZ;
 		return new int[]{dx, yCoord, dz};
+	}
+
+	public FusionReactorToroidPart getNextPart(World world, int x, int y, int z) {
+		int dx = xCoord+this.getFacing().offsetX*2;
+		int dz = zCoord+this.getFacing().offsetZ*2;
+		TileEntity te = world.getTileEntity(dx, y, dz);
+		return te instanceof FusionReactorToroidPart ? (FusionReactorToroidPart)te : null;
 	}
 
 	public ForgeDirection getFacing() {

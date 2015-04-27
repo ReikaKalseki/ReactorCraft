@@ -314,4 +314,20 @@
 
 		</note>
 	</marker>
+	<flywheel>
+		<desc>
+			The turbine flywheel stabilizes the power output of a low-pressure turbine.
+		</desc>
+		<note>
+
+		</note>
+	</flywheel>
+	<diffuser>
+		<desc>
+			The steam diffuser takes hot, high-pressure steam from a reactor boiler and expands and cools it to more conventional lower-pressure steam for use in conventional steam turbines designed for use with coal boilers.
+		</desc>
+		<note>
+
+		</note>
+	</diffuser>
 </machines>

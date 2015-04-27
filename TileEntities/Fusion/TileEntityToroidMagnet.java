@@ -19,15 +19,18 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Interfaces.Shockable;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
@@ -35,7 +38,7 @@ import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
-public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile {
+public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile, FusionReactorToroidPart {
 
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;
@@ -47,10 +50,13 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	private int charge = 0;
 
 	private StepTimer chargeTimer = new StepTimer(20);
+	private StepTimer reCheckTimer = new StepTimer(20);
 
 	private static final int RATE = ReactorOptions.getToroidChargeRate();
 
 	private final HybridTank tank = new HybridTank("toroid", 8000);
+
+	private boolean hasNext;
 
 	public boolean hasMultiBlock() {
 		return true;
@@ -70,15 +76,23 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		if (!hasSolenoid) {
 			this.checkSurroundingMagnetsAndCopySolenoidState();
 		}
+		hasNext = this.checkCompleteness(world, x, y, z);
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+
+		if (DragonAPICore.debugtest) {
+			tank.addLiquid(1000, RotaryCraft.nitrogenFluid);
+			charge = 25000;
+		}
+
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
 		List<EntityPlasma> li = world.getEntitiesWithinAABB(EntityPlasma.class, box);
 		int[] tg = this.getTarget();
 		for (EntityPlasma e : li) {
 			if (this.canAffect(e)) {
+				e.resetEscapeTimer();
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
 				tank.removeLiquid(10);
@@ -108,9 +122,37 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			this.updateCharge(world, x, y, z);
 		}
 
+		reCheckTimer.update();
+		if (reCheckTimer.checkCap() && !world.isRemote) {
+			//hasNext =
+			this.checkCompleteness(world, x, y, z);
+		}
+
 		//if (this.getTicksExisted() == 0)
 		//	this.clearArea(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(aim, !hasSolenoid && this.getSide() == Side.SERVER);
+	}
+
+	private boolean checkCompleteness(World world, int x, int y, int z) {
+		FusionReactorToroidPart te = this.getNextPart(world, x, y, z);
+		int i = 60;
+		while (te != null && te != this && i >= 0) {
+			te = te.getNextPart(world, x, y, z);
+			i--;
+		}
+		//ReikaJavaLibrary.pConsole("B:"+(te == world.getTileEntity(x+aim.xOffset, y, z+aim.zOffset))+"   "+te+"/"+this+"@"+aim, Side.SERVER);
+		if (te != this)
+			if (te instanceof TileEntityToroidMagnet)
+				((TileEntityToroidMagnet)te).hasNext = false;
+		return te == this;
+	}
+
+	public FusionReactorToroidPart getNextPart(World world, int x, int y, int z) {
+		Aim a = this.getAim();
+		int dx = xCoord+a.xOffset;
+		int dz = zCoord+a.zOffset;
+		TileEntity te = worldObj.getTileEntity(dx, y, dz);
+		return te instanceof FusionReactorToroidPart ? (FusionReactorToroidPart)te : null;
 	}
 
 	public int getCoolant() {
@@ -129,6 +171,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		if (r == ReactorTiles.MAGNET) {
 			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getTileEntity(dx, yCoord, dz);
 			hasSolenoid = te.hasSolenoid;
+			te.checkCompleteness(worldObj, xCoord, yCoord, zCoord);
 		}
 		else if (r == ReactorTiles.INJECTOR) {
 			dx += a.xOffset;
@@ -233,6 +276,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	}
 
 	private boolean canAffect(EntityPlasma e) {
+		if (!hasNext)
+			return false;
 		if (!hasSolenoid)
 			return false;
 		if (charge <= 0)
@@ -277,6 +322,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		charge = NBT.getInteger("chg");
 
 		tank.readFromNBT(NBT);
+
+		hasNext = NBT.getBoolean("next");
 	}
 
 	@Override
@@ -290,6 +337,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		NBT.setInteger("chg", charge);
 
 		tank.writeToNBT(NBT);
+
+		NBT.setBoolean("next", hasNext);
 	}
 
 	public Aim getAim() {
@@ -414,6 +463,10 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 			return this.ordinal() < list.length-1 ? list[this.ordinal()+1] : list[0];
 		}
 
+		public Aim getPrev() {
+			return this.ordinal() > 0 ? list[this.ordinal()-1] : list[list.length-1];
+		}
+
 		public boolean isCardinal() {
 			return this.ordinal()%8 == 0;
 		}
@@ -442,5 +495,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	@Override
 	public float getAimZ() {
 		return 0.5F;
+	}
+
+	public void setAim(Aim a) {
+		aim = a != null ? a : aim;
 	}
 }

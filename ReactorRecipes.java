@@ -275,6 +275,8 @@ public class ReactorRecipes {
 		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Blocks.glowstone, 'r', Items.redstone, 'S', ItemStacks.steelingot);
 		ReactorTiles.BIGTURBINE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ReactorTiles.TURBINECORE.getCraftedProduct());
 		ReactorTiles.FLYWHEEL.addCrafting("BBB", "SSS", "BBB", 'B', ItemStacks.steelblock, 'S', ItemStacks.shaftitem);
+
+		ReactorTiles.DIFFUSER.addCrafting("BBB", "DPD", "BBB", 'B', ItemStacks.basepanel, 'D', ItemStacks.diffuser, 'P', ItemStacks.pipe);
 	}
 
 }

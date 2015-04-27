@@ -12,11 +12,14 @@ package Reika.ReactorCraft.Base;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.Accelerator;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -39,14 +42,29 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	public abstract boolean isValidIsotope(Isotopes i);
 
+	protected final int getAccelerationFactor(World world, int x, int y, int z) {
+		int mult = 1;
+		for (int i = 0; i < 6; i++) {
+			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
+			if (te instanceof Accelerator) {
+				mult *= ReikaMathLibrary.logbase2(((Accelerator)te).getAccelerationFactor());
+			}
+		}
+		return mult;
+	}
+
 	protected final void decayWaste() {
+		this.decayWaste(1);
+	}
+
+	protected final void decayWaste(int mult) {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 				List<Isotopes> iso = WasteManager.getWasteList();
 				Isotopes atom = iso.get(inv[i].getItemDamage());
-				if (ReikaRandomHelper.doWithChance(0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
+				if (ReikaRandomHelper.doWithChance(mult*0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
 					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
-					if (this.leaksRadiation())
+					if (this.leaksRadiation() && rand.nextBoolean())
 						this.leakRadiation(worldObj, xCoord, yCoord, zCoord);
 				}
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
@@ -112,5 +130,9 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected final boolean isLongLivedWaste(ItemStack is) {
 		return is.getItem() == ReactorItems.WASTE.getItemInstance() && this.getHalfLife(is) > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
+	}
+
+	protected final boolean isLongLivedWaste(Isotopes i) {
+		return i.getMCHalfLife() > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
 	}
 }

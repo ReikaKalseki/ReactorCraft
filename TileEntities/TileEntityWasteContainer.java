@@ -144,7 +144,7 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 	@Override
 	public boolean isValidIsotope(Isotopes i) {
-		return true;
+		return !this.isLongLivedWaste(i);
 	}
 
 	public boolean feed() {
