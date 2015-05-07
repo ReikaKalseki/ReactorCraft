@@ -130,12 +130,12 @@ ChunkLoadingTile {
 	}
 
 	@Override
-	public int getTemperature() {
+	public final int getTemperature() {
 		return temperature;
 	}
 
 	@Override
-	public void setTemperature(int T) {
+	public final void setTemperature(int T) {
 		temperature = T;
 	}
 

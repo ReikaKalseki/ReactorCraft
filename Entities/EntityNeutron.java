@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.API.NeutronShield;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -87,16 +88,22 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					WorldLocation tgt = ((WorldRift)te).getLinkTarget();
 					if (tgt != null) {
 						//this.setPosition(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5);
-						this.setLocationAndAngles(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5, 0, 0);
-						if (tgt.dimensionID != worldObj.provider.dimensionId && !worldObj.isRemote)
-							ReikaEntityHelper.transferEntityToDimension(this, tgt.dimensionID, new BasicTeleporter((WorldServer)tgt.getWorld()));
-						if (rand.nextInt(2) == 0)
+						if (rand.nextInt(2) == 0) {
 							this.setDead();
+						}
+						else {
+							this.setLocationAndAngles(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5, 0, 0);
+							if (tgt.dimensionID != worldObj.provider.dimensionId && !worldObj.isRemote)
+								ReikaEntityHelper.transferEntityToDimension(this, tgt.dimensionID, new BasicTeleporter((WorldServer)tgt.getWorld()));
+						}
 					}
 				}
 			}
 			else if (id instanceof NeutronBlock) {
 				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
+			}
+			else if (id instanceof NeutronShield) {
+				return ReikaRandomHelper.doWithChance(((NeutronShield)id).getAbsorptionChance(this.getType().name()));
 			}
 
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {
@@ -172,16 +179,17 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		FISSION(),
 		BREEDER(),
 		FUSION(),
-		WASTE();
+		WASTE(),
+		THORIUM();
 
 		public static final NeutronType[] neutronList = values();
 
 		public int getBoilerAbsorptionChance() {
-			return this == BREEDER ? 80 : 0;
+			return this == BREEDER || this == THORIUM ? 80 : 0;
 		}
 
 		public int getSodiumBoilerAbsorptionChance() {
-			return this != BREEDER ? 90 : 0;
+			return this != BREEDER && this != DECAY ? 90 : 0;
 		}
 
 		public boolean canTriggerFuelConversion() {
@@ -197,11 +205,11 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		}
 
 		public boolean canIrradiateLiquids() {
-			return this == FISSION || this == FUSION || this == BREEDER;
+			return this == FISSION || this == FUSION || this == BREEDER || this == THORIUM;
 		}
 
 		public boolean isFissionType() {
-			return this == DECAY || this == FISSION || this == BREEDER;
+			return this == DECAY || this == FISSION || this == BREEDER || this == THORIUM;
 		}
 
 		public boolean canTriggerFission() {

@@ -146,25 +146,30 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			ForgeDirection s = this.getSteamMovement();
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = (int)(this.getRadius());
-			for (int dy = 2; dy < 5; dy++) {
-				int ty = y-th-dy;
-				for (int d = 0; d <= 1; d++) {
-					for (int i = -th; i <= th; i++) {
-						int tx = x+dir.offsetX*i+s.offsetX*d;
-						int tz = z+dir.offsetZ*i+s.offsetZ*d;
-						MachineRegistry m = MachineRegistry.getMachine(world, tx, ty, tz);
-						FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), TileEntityReactorBoiler.WATER_PER_STEAM/12);
-						if (m == MachineRegistry.RESERVOIR) {
-							TileEntity te = this.getTileEntity(tx, ty, tz);
-							((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
+			if (!world.isRemote) {
+				for (int dy = 2; dy < 5; dy++) {
+					int ty = y-th-dy;
+					for (int d = 0; d <= 1; d++) {
+						for (int i = -th; i <= th; i++) {
+							int tx = x+dir.offsetX*i+s.offsetX*d;
+							int tz = z+dir.offsetZ*i+s.offsetZ*d;
+							MachineRegistry m = MachineRegistry.getMachine(world, tx, ty, tz);
+							if (fluid != null && fluid.getLowPressureFluid() == null) {
+
+							}
+							FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), TileEntityReactorBoiler.WATER_PER_STEAM/12);
+							if (m == MachineRegistry.RESERVOIR) {
+								TileEntity te = this.getTileEntity(tx, ty, tz);
+								((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
+							}
+							else if (world.getBlock(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
+								TileEntity te = this.getTileEntity(tx, ty, tz);
+								((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
+							}
+							int py = ty+1+rand.nextInt(th*2);
+							if (ReikaMathLibrary.py3d(dir.offsetX*i, py-y, dir.offsetZ*i) < th)
+								ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, x+dir.offsetX*i, py, z+dir.offsetZ*i, 5);
 						}
-						else if (world.getBlock(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
-							TileEntity te = this.getTileEntity(tx, ty, tz);
-							((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
-						}
-						int py = ty+1+rand.nextInt(th*2);
-						if (ReikaMathLibrary.py3d(dir.offsetX*i, py-y, dir.offsetZ*i) < th)
-							ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, x+dir.offsetX*i, py, z+dir.offsetZ*i, 5);
 					}
 				}
 			}

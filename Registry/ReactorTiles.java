@@ -43,6 +43,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityNeutronAbsorber;
@@ -105,7 +106,8 @@ public enum ReactorTiles {
 	MARKER("machine.fusionmarker",				ReactorBlocks.MODELMACHINE,		TileEntityFusionMarker.class,	9,	"RenderFusionMarker"),
 	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3),
 	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine"),
-	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser");
+	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser"),
+	THORIUM("machine.thorium",					ReactorBlocks.REACTOR,			TileEntityThoriumCore.class,	12);
 
 	private final String name;
 	private final Class teClass;
@@ -354,6 +356,8 @@ public enum ReactorTiles {
 		case CO2HEATER:
 		case PEBBLEBED:
 			return ReactorType.HTGR;
+		case THORIUM:
+			return ReactorType.THORIUM;
 		default:
 			return null;
 		}

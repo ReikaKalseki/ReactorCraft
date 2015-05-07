@@ -148,7 +148,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 		else {
 			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
 			if (ReikaRandomHelper.doWithChance(20)) {
-				ReikaInventoryHelper.addOrSetStack(ReactorStacks.thordust.copy(), inv, 0);
+				//ReikaInventoryHelper.addOrSetStack(ReactorStacks.thordust.copy(), inv, 0);
 			}
 		}
 

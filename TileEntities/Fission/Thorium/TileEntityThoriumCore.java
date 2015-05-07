@@ -1,13 +1,4 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2015
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
-package Reika.ReactorCraft.TileEntities.Fission.Breeder;
+package Reika.ReactorCraft.TileEntities.Fission.Thorium;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -18,14 +9,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityBreederCore extends TileEntityNuclearCore {
+public class TileEntityThoriumCore extends TileEntityNuclearCore {
 
-	private StepTimer timer2 = new StepTimer(10);
+	private StepTimer timer2 = new StepTimer(20);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -35,7 +26,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
-			ReikaInventoryHelper.addToIInv(ReactorItems.BREEDERFUEL.getStackOf(), this);
+			ReikaInventoryHelper.addToIInv(ReactorItems.THORIUM.getStackOf(), this);
 		}
 
 		timer2.update();
@@ -46,16 +37,8 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);/*
-				if (r == ReactorTiles.COOLANT) {
-					TileEntityWaterCell w = (TileEntityWaterCell)world.getTileEntity(dx, dy, dz);
-					int T = w.getTemperature();
-					int dT = temperature-T;
-					if (dT > 0) {
-						w.setTemperature(T+dT/4);
-						temperature -= dT/4;
-					}
-				}*/
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+				/*
 				if (r == ReactorTiles.SODIUMBOILER) {
 					TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.getTemperature();
@@ -64,30 +47,23 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 						te.setTemperature(te.getTemperature()+dTemp/16);
 					}
 				}
+				 */
 			}
 		}
-		//ReikaJavaLibrary.pConsole(temperature);
-
-		//ReikaInventoryHelper.addToIInv(ReactorItems.BREEDERFUEL.getStackOf(), this);
 	}
 
 	@Override
-	public boolean isFissile() {
-		return ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv) != -1;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (inv[i] != null)
-			return false;
-		if (itemstack.getItem() == ReactorItems.BREEDERFUEL.getItemInstance())
-			return i < 4;
+	public boolean canDumpHeatInto(LiquidStates liq) {
 		return false;
 	}
 
 	@Override
-	public int getMaxTemperature() {
-		return 900;
+	public boolean isItemValidForSlot(int i, ItemStack is) {
+		if (inv[i] != null)
+			return false;
+		if (is.getItem() == ReactorItems.THORIUM.getItemInstance())
+			return i < 4;
+		return false;
 	}
 
 	@Override
@@ -97,25 +73,24 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 			if (this.checkPoisonedChance())
 				return true;
 			if (ReikaRandomHelper.doWithChance(25) && this.isFissile()) {
-				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv);
+				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.THORIUM.getItemInstance(), inv);
 				if (slot != -1) {
-					if (e.getType().canTriggerFuelConversion() && ReikaRandomHelper.doWithChance(5)) {
+					if (e.getType() == NeutronType.THORIUM && ReikaRandomHelper.doWithChance(5)) {
 						int dmg = inv[slot].getItemDamage();
-						if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
-							inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
-							ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
+						if (dmg == ReactorItems.THORIUM.getNumberMetadatas()-1) {
+							inv[slot] = null;
 						}
 						else {
-							inv[slot] = ReactorItems.BREEDERFUEL.getStackOfMetadata(dmg+1);
+							inv[slot] = ReactorItems.THORIUM.getStackOfMetadata(dmg+1);
 						}
 						temperature += 50;
 					}
 					else {
-						temperature += temperature >= 700 ? 30 : 20;
+						temperature += 20;
 					}
 					this.spawnNeutronBurst(world, x, y, z);
 
-					if (ReikaRandomHelper.doWithChance(10)) {
+					if (ReikaRandomHelper.doWithChance(2.5)) {
 						this.addWaste();
 					}
 
@@ -127,9 +102,17 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 	}
 
 	@Override
+	public boolean isFissile() {
+		return ReikaInventoryHelper.locateInInventory(ReactorItems.THORIUM.getItemInstance(), inv) != -1;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 1600;
+	}
+
+	@Override
 	public boolean canRemoveItem(int slot, ItemStack is) {
-		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
-			return true;
 		if (is.getItem() == ReactorItems.WASTE.getItemInstance())
 			return true;
 		return false;
@@ -137,17 +120,12 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.BREEDER.ordinal();
+		return ReactorTiles.THORIUM.ordinal();
 	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 
-	}
-
-	@Override
-	public boolean canDumpHeatInto(LiquidStates liq) {
-		return liq == LiquidStates.SODIUM;
 	}
 
 }

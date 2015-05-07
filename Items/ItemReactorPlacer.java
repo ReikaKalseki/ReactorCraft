@@ -115,7 +115,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 		if (m == ReactorTiles.GENERATOR) {
 			((TileEntityReactorGenerator)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false));
 		}
-		if (m == ReactorTiles.MARKER && DragonAPICore.debugtest) {
+		if (m == ReactorTiles.MARKER && DragonAPICore.debugtest && ep.capabilities.isCreativeMode) {
 			this.placeFusionReactor(world, x, y, z, ep);
 		}
 		if (m.isTurbine()) {

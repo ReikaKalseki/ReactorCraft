@@ -56,6 +56,7 @@ public class ReactorGuiHandler implements IGuiHandler {
 				switch(r) {
 				case FUEL:
 				case BREEDER:
+				case THORIUM:
 					return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
 				case WASTECONTAINER:
 					return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
@@ -91,6 +92,7 @@ public class ReactorGuiHandler implements IGuiHandler {
 			switch(r) {
 			case FUEL:
 			case BREEDER:
+			case THORIUM:
 				return new GuiNuclearCore(player, (TileEntityNuclearCore)te);
 			case WASTECONTAINER:
 				return new GuiWasteContainer(player, (TileEntityWasteContainer)te);

@@ -14,5 +14,6 @@ public enum ReactorType {
 	FISSION(),
 	BREEDER(),
 	HTGR(),
+	THORIUM(),
 	FUSION();
 }
