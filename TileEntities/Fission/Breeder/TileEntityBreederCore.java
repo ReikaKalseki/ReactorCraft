@@ -82,6 +82,8 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 			return false;
 		if (itemstack.getItem() == ReactorItems.BREEDERFUEL.getItemInstance())
 			return i < 4;
+		if (itemstack.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
+			return i < 4;
 		return false;
 	}
 

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +26,7 @@ import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -141,8 +143,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected void dumpSteam(World world, int x, int y, int z, int meta) {
-		int stage = this.getStage();
-		if (stage == this.getNumberStagesTotal()-1) {
+		if (this.dumpLiquid(world, x, y, z, meta)) {
 			ForgeDirection s = this.getSteamMovement();
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = (int)(this.getRadius());
@@ -183,6 +184,15 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 				ReikaParticleHelper.RAIN.spawnAt(world, px+ax, y-th+1+rand.nextInt(th*2), pz+az);
 			}
 		}
+	}
+
+	private boolean dumpLiquid(World world, int x, int y, int z, int meta) {
+		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			if (ig.getSoundVolReductionAmount() > 1)
+				return false;
+		}
+		return this.getStage() == this.getNumberStagesTotal()-1;
 	}
 
 	@Override
