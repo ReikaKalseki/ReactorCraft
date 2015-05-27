@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -226,14 +227,14 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
 			if (meta < 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
+				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 			}
 			if (meta == 0) {
-				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				if (ReactorTiles.getTE(world, c.xCoord, c.yCoord+1, c.zCoord) == ReactorTiles.INJECTOR) {
+					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(c.xCoord, c.yCoord+1, c.zCoord);
 					te.setHasMultiBlock(true);
 				}
 			}
@@ -245,14 +246,14 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
 			if (meta >= 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
+				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 			}
 			if (meta == 8) {
-				if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+				if (ReactorTiles.getTE(world, c.xCoord, c.yCoord+1, c.zCoord) == ReactorTiles.INJECTOR) {
+					TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(c.xCoord, c.yCoord+1, c.zCoord);
 					te.setHasMultiBlock(false);
 				}
 			}
@@ -454,9 +455,9 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			if (ReactorTiles.getTE(world, xyz[0], xyz[1]+1, xyz[2]) == ReactorTiles.INJECTOR) {
-				TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(xyz[0], xyz[1]+1, xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			if (ReactorTiles.getTE(world, c.xCoord, c.yCoord+1, c.zCoord) == ReactorTiles.INJECTOR) {
+				TileEntityFusionInjector te = (TileEntityFusionInjector)world.getTileEntity(c.xCoord, c.yCoord+1, c.zCoord);
 				return te;
 			}
 		}

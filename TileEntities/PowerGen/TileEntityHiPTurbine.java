@@ -22,6 +22,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Collections.RelativePositionList;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -238,10 +239,10 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			RelativePositionList li = this.getInjectors();
 			BlockArray pos = li.getPositionsRelativeTo(dx, dy, dz);
 			for (int i = 0; i < pos.getSize(); i++) {
-				int[] xyz = pos.getNthBlock(i);
-				int sx = xyz[0];
-				int sy = xyz[1];
-				int sz = xyz[2];
+				Coordinate c = pos.getNthBlock(i);
+				int sx = c.xCoord;
+				int sy = c.yCoord;
+				int sz = c.zCoord;
 				TileEntity tile = world.getTileEntity(sx, sy, sz);
 				if (tile instanceof TileEntitySteamInjector) {
 					TileEntitySteamInjector te = (TileEntitySteamInjector)tile;
@@ -273,10 +274,10 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		RelativePositionList li = this.getInjectors();
 		BlockArray pos = li.getPositionsRelativeTo(dx, dy, dz);
 		for (int i = 0; i < pos.getSize(); i++) {
-			int[] xyz = pos.getNthBlock(i);
-			int sx = xyz[0];
-			int sy = xyz[1];
-			int sz = xyz[2];
+			Coordinate c = pos.getNthBlock(i);
+			int sx = c.xCoord;
+			int sy = c.yCoord;
+			int sz = c.zCoord;
 			if (world.isBlockIndirectlyGettingPowered(sx, sy, sz))
 				return true;
 		}

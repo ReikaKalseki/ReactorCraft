@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
@@ -195,10 +196,10 @@ public class BlockTritiumLamp extends Block {
 			if (!worldObj.isRemote) {
 				//ReikaJavaLibrary.pConsole("Break: "+this+" % "+blocks);
 				for (int i = 0; i < blocks.getSize(); i++) {
-					int[] xyz = blocks.getNthBlock(i);
-					int x = xyz[0];
-					int y = xyz[1];
-					int z = xyz[2];
+					Coordinate c = blocks.getNthBlock(i);
+					int x = c.xCoord;
+					int y = c.yCoord;
+					int z = c.zCoord;
 					if (worldObj.getBlock(x, y, z) == BlockRegistry.LIGHT.getBlockInstance()) {
 						worldObj.setBlockToAir(x, y, z);
 					}

@@ -33,6 +33,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -414,11 +415,11 @@ MultiBlockTile, BreakAction {
 		}
 		inter = null;
 		for (int i = 0; i < contact.getSize(); i++) {
-			int[] xyz = contact.getNthBlock(i);
-			if (ReikaMathLibrary.py3d(x-xyz[0], y-xyz[1], z-xyz[2]) <= this.getRadius()) {
-				Block id2 = world.getBlock(xyz[0], xyz[1], xyz[2]);
-				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
+			Coordinate c = contact.getNthBlock(i);
+			if (ReikaMathLibrary.py3d(x-c.xCoord, y-c.yCoord, z-c.zCoord) <= this.getRadius()) {
+				Block id2 = c.getBlock(world);
+				int meta2 = worldc.getBlockMetadata();
+				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !(c.xCoord == x && c.yCoord == y && c.zCoord == z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
 					phi = 0;
 					omega = 0;
 					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)

@@ -15,6 +15,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -114,10 +115,10 @@ public class BlockFlywheelMulti extends BlockMultiBlock {
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z+1, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z-1, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
 			if (meta >= 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
+				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 			}
 		}
 		int midX = blocks.getMidX();
@@ -134,10 +135,10 @@ public class BlockFlywheelMulti extends BlockMultiBlock {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
 			if (meta < 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
+				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 			}
 		}
 		int midX = blocks.getMidX();

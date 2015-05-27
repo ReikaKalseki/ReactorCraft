@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -58,17 +59,17 @@ public class LiquidHandler {
 						}
 					}
 					for (int i = 0; i < blocks.getSize(); i++) {
-						int[] xyz = blocks.getNthBlock(i);
-						TileEntity te2 = world.getTileEntity(xyz[0], xyz[1], xyz[2]);
+						Coordinate c = blocks.getNthBlock(i);
+						TileEntity te2 = world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 						if (!(te2 instanceof TileEntityReactorBase)) {
-							ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
-							ReikaParticleHelper.LAVA.spawnAroundBlock(world, xyz[0], xyz[1], xyz[2], 36);
-							world.setBlock(xyz[0], xyz[1], xyz[2], Blocks.flowing_lava);
+							ReikaSoundHelper.playSoundAtBlock(world, c.xCoord, c.yCoord, c.zCoord, "random.fizz", 0.4F, 1);
+							ReikaParticleHelper.LAVA.spawnAroundBlock(world, c.xCoord, c.yCoord, c.zCoord, 36);
+							c.setBlock(world, Blocks.flowing_lava);
 							int r = 4;
-							for (int dx = xyz[0]-r; dx <= xyz[0]+r; dx++) {
-								for (int dy = xyz[1]-r; dy <= xyz[1]+r; dy++) {
-									for (int dz = xyz[2]-r; dz <= xyz[2]+r; dz++) {
-										ReikaWorldHelper.temperatureEnvironment(world, xyz[0], xyz[1], xyz[2], TileEntityFusionHeater.PLASMA_TEMP);
+							for (int dx = c.xCoord-r; dx <= c.xCoord+r; dx++) {
+								for (int dy = c.yCoord-r; dy <= c.yCoord+r; dy++) {
+									for (int dz = c.zCoord-r; dz <= c.zCoord+r; dz++) {
+										ReikaWorldHelper.temperatureEnvironment(world, c.xCoord, c.yCoord, c.zCoord, TileEntityFusionHeater.PLASMA_TEMP);
 									}
 								}
 							}
@@ -95,15 +96,15 @@ public class LiquidHandler {
 						}
 					}
 					for (int i = 0; i < blocks.getSize(); i++) {
-						int[] xyz = blocks.getNthBlock(i);
-						if (this.isCorrodable(world, xyz[0], xyz[1], xyz[2])) {
-							ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
+						Coordinate c = blocks.getNthBlock(i);
+						if (this.isCorrodable(world, c.xCoord, c.yCoord, c.zCoord)) {
+							ReikaSoundHelper.playSoundAtBlock(world, c.xCoord, c.yCoord, c.zCoord, "random.fizz", 0.4F, 1);
 							ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 6);
-							world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+							c.setBlock(world, Blocks.air);
 						}
-						else if (this.isExplodable(world, xyz[0], xyz[1], xyz[2])) {
-							world.createExplosion(null, xyz[0]+0.5, xyz[1]+0.5, xyz[2]+0.5, 2F, true);
-							world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+						else if (this.isExplodable(world, c.xCoord, c.yCoord, c.zCoord)) {
+							world.createExplosion(null, c.xCoord+0.5, c.yCoord+0.5, c.zCoord+0.5, 2F, true);
+							c.setBlock(world, Blocks.air);
 						}
 					}
 				}

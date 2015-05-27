@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -56,10 +57,10 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			for (int i = 2; i < 6; i++)
 				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y-4, z-r, x+r, y+4, z+r, id, id2);
 			for (int i = 0; i < reactor.getSize(); i++) {
-				int[] xyz = reactor.getNthBlock(i);
-				int dx = xyz[0];
-				int dy = xyz[1];
-				int dz = xyz[2];
+				Coordinate c = reactor.getNthBlock(i);
+				int dx = c.xCoord;
+				int dy = c.yCoord;
+				int dz = c.zCoord;
 				Block idx = world.getBlock(dx, dy, dz);
 				int metax = world.getBlockMetadata(dx, dy, dz);
 				if (idx == ReactorTiles.CONTROL.getBlock() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {

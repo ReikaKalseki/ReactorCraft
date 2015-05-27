@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -262,17 +263,17 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
 			if (meta < 8) {
-				world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
+				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 			}
 			if (meta == 0) {
 				for (int k = 2; k < 6; k++) {
 					ForgeDirection dir = dirs[k];
-					int dx = xyz[0]+dir.offsetX;
-					int dy = xyz[1]+dir.offsetY;
-					int dz = xyz[2]+dir.offsetZ;
+					int dx = c.xCoord+dir.offsetX;
+					int dy = c.yCoord+dir.offsetY;
+					int dz = c.zCoord+dir.offsetZ;
 					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
 						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);
@@ -288,15 +289,15 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-			world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta&7, 3);
+			Coordinate c = blocks.getNthBlock(i);
+			int meta = worldc.getBlockMetadata();
+			world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta&7, 3);
 			if (meta == 8) {
 				for (int k = 2; k < 6; k++) {
 					ForgeDirection dir = dirs[k];
-					int dx = xyz[0]+dir.offsetX;
-					int dy = xyz[1]+dir.offsetY;
-					int dz = xyz[2]+dir.offsetZ;
+					int dx = c.xCoord+dir.offsetX;
+					int dy = c.yCoord+dir.offsetY;
+					int dz = c.zCoord+dir.offsetZ;
 					//ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz)+":"+world.getBlockMetadata(dx, dy, dz)+" from "+Arrays.toString(xyz));
 					if (ReactorTiles.getTE(world, dx, dy, dz) == ReactorTiles.HEATER) {
 						TileEntityFusionHeater te = (TileEntityFusionHeater)world.getTileEntity(dx, dy, dz);

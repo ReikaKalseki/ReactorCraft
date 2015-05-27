@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -90,10 +91,10 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 		int meta = ReactorTiles.STEAMLINE.getBlockMetadata();
 		pipes.recursiveAddWithMetadata(world, x, y+1, z, id, meta);
 		for (int i = 0; i < pipes.getSize(); i++) {
-			int[] xyz = pipes.getNthBlock(i);
-			world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-			ReikaParticleHelper.EXPLODE.spawnAt(world, xyz[0], xyz[1], xyz[2]);
-			ReikaItemHelper.dropItem(world, xyz[0], xyz[1], xyz[2], new ItemStack(Items.netherbrick));
+			Coordinate c = pipes.getNthBlock(i);
+			c.setBlock(world, Blocks.air);
+			ReikaParticleHelper.EXPLODE.spawnAt(world, c.xCoord, c.yCoord, c.zCoord);
+			ReikaItemHelper.dropItem(world, c.xCoord, c.yCoord, c.zCoord, new ItemStack(Items.netherbrick));
 		}
 		world.setBlockToAir(x, y, z);
 		ReikaItemHelper.dropItem(world, x, y, z, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(18)));

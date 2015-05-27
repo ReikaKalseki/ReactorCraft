@@ -32,6 +32,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -260,10 +261,10 @@ public class ItemReactorPlacer extends Item implements ISize {
 				break;
 			}
 			for (int i = 0; i < contact.getSize(); i++) {
-				int[] xyz = contact.getNthBlock(i);
-				Block id2 = world.getBlock(xyz[0], xyz[1], xyz[2]);
-				int meta2 = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-				if (!ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]) && !(xyz[0] == x && xyz[1] == y && xyz[2] == z)) {
+				Coordinate c = contact.getNthBlock(i);
+				Block id2 = c.getBlock(world);
+				int meta2 = worldc.getBlockMetadata();
+				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !(c.xCoord == x && c.yCoord == y && c.zCoord == z)) {
 					return false;
 				}
 			}

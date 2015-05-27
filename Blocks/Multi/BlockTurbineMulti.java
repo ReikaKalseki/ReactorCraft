@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.SlicedBlockBlueprint;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
@@ -236,16 +237,16 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			Block b = c.getBlock(world);
 			if (b == this) {
-				int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+				int meta = worldc.getBlockMetadata();
 				if (meta >= 8) {
-					world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta-8, 3);
+					world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 				}
 			}
 			else if (b == tid) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 				te.setHasMultiBlock(false);
 			}
 		}
@@ -257,16 +258,16 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = blocks.getNthBlock(i);
+			Block b = c.getBlock(world);
 			if (b == this) {
-				int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+				int meta = worldc.getBlockMetadata();
 				if (meta < 8) {
-					world.setBlockMetadataWithNotify(xyz[0], xyz[1], xyz[2], meta+8, 3);
+					world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 				}
 			}
 			else if (b == tid) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 				te.setHasMultiBlock(true);
 			}
 		}
