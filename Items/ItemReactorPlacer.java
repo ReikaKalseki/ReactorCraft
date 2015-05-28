@@ -263,8 +263,8 @@ public class ItemReactorPlacer extends Item implements ISize {
 			for (int i = 0; i < contact.getSize(); i++) {
 				Coordinate c = contact.getNthBlock(i);
 				Block id2 = c.getBlock(world);
-				int meta2 = worldc.getBlockMetadata();
-				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !(c.xCoord == x && c.yCoord == y && c.zCoord == z)) {
+				int meta2 = c.getBlockMetadata(world);
+				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !c.equals(x, y, z)) {
 					return false;
 				}
 			}

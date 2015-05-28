@@ -303,7 +303,7 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z-1, this, x-20, y-3, z-20, x+20, y+3, z+20, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (meta >= 8) {
 				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 			}
@@ -323,7 +323,7 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-20, y-3, z-20, x+20, y+3, z+20, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (meta < 8) {
 				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 			}

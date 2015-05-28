@@ -240,7 +240,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 			Coordinate c = blocks.getNthBlock(i);
 			Block b = c.getBlock(world);
 			if (b == this) {
-				int meta = worldc.getBlockMetadata();
+				int meta = c.getBlockMetadata(world);
 				if (meta >= 8) {
 					world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 				}
@@ -261,7 +261,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 			Coordinate c = blocks.getNthBlock(i);
 			Block b = c.getBlock(world);
 			if (b == this) {
-				int meta = worldc.getBlockMetadata();
+				int meta = c.getBlockMetadata(world);
 				if (meta < 8) {
 					world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 				}

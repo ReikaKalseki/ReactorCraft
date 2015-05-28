@@ -228,7 +228,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (meta < 8) {
 				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta+8, 3);
 			}
@@ -247,7 +247,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (meta >= 8) {
 				world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 			}

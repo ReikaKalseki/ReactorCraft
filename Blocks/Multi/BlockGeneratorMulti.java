@@ -229,7 +229,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (ReactorTiles.getTE(world, c.xCoord, c.yCoord, c.zCoord) == ReactorTiles.GENERATOR) {
 				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 				te.setHasMultiBlock(false);
@@ -247,7 +247,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
-			int meta = worldc.getBlockMetadata();
+			int meta = c.getBlockMetadata(world);
 			if (ReactorTiles.getTE(world, c.xCoord, c.yCoord, c.zCoord) == ReactorTiles.GENERATOR) {
 				TileEntityReactorGenerator te = (TileEntityReactorGenerator)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 				te.setHasMultiBlock(true);

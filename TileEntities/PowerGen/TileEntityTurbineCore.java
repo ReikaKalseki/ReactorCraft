@@ -418,8 +418,8 @@ MultiBlockTile, BreakAction {
 			Coordinate c = contact.getNthBlock(i);
 			if (ReikaMathLibrary.py3d(x-c.xCoord, y-c.yCoord, z-c.zCoord) <= this.getRadius()) {
 				Block id2 = c.getBlock(world);
-				int meta2 = worldc.getBlockMetadata();
-				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !(c.xCoord == x && c.yCoord == y && c.zCoord == z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
+				int meta2 = c.getBlockMetadata(world);
+				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !c.equals(x, y, z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
 					phi = 0;
 					omega = 0;
 					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
