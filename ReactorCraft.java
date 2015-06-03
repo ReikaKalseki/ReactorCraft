@@ -74,15 +74,12 @@ import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
-import Reika.ReactorCraft.Entities.EntityFusion;
-import Reika.ReactorCraft.Entities.EntityNeutron;
-import Reika.ReactorCraft.Entities.EntityPlasma;
-import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorEntities;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
@@ -109,7 +106,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -480,10 +476,7 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	private static void addEntities() {
-		EntityRegistry.registerModEntity(EntityNeutron.class, "Neutron", EntityRegistry.findGlobalUniqueEntityId(), instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityRadiation.class, "Radiation", EntityRegistry.findGlobalUniqueEntityId()+1, instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityPlasma.class, "Plasma", EntityRegistry.findGlobalUniqueEntityId()+2, instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityFusion.class, "Fusion", EntityRegistry.findGlobalUniqueEntityId()+3, instance, 64, 20, true);
+		ReikaRegistryHelper.registerModEntities(instance, ReactorEntities.entityList);
 	}
 
 	private static void addBlocks() {
