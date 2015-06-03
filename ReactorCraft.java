@@ -41,6 +41,7 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
@@ -289,6 +290,8 @@ public class ReactorCraft extends DragonAPIMod {
 			ItemStack is = FluoriteTypes.colorList[i].getStorageBlock();
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
 		}
+
+		PackModificationTracker.instance.addMod(this, config);
 
 		//TickRegistry.instance.registerTickHandler(new VolcanicGasController(), Side.SERVER);
 
