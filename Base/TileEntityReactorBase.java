@@ -65,6 +65,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
+	public final boolean allowTickAcceleration() {
+		return false;
+	}
+
+	@Override
 	public final boolean canUpdate() {
 		return !ReactorCraft.instance.isLocked();
 	}

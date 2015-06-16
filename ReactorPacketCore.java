@@ -54,6 +54,8 @@ public class ReactorPacketCore implements IPacketHandler {
 			//ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
 			PacketTypes packetType = packet.getType();
 			switch(packetType) {
+			case FULLSOUND:
+				break;
 			case SOUND:
 				control = inputStream.readInt();
 				ReactorSounds s = ReactorSounds.soundList[control];
