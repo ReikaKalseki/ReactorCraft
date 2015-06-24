@@ -20,6 +20,7 @@ public class ReactorLuaMethods {
 	private static final LuaMethod checkFuel = new LuaReactorCheckFuel();
 	private static final LuaMethod checkPebbles = new LuaReactorCheckPebbles();
 	private static final LuaMethod getTurbine = new LuaGetTurbineSpeed();
+	private static final LuaMethod triggerSCRAM = new LuaSCRAM();
 
 
 }

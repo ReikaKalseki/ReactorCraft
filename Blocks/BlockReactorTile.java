@@ -276,7 +276,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				return true;
 			}
 		}
-		if (r == ReactorTiles.HEAVYPUMP && is != null && is.getItem() == Items.bucket && is.stackSize == 1) {
+		if (r == ReactorTiles.FLUIDEXTRACTOR && is != null && is.getItem() == Items.bucket && is.stackSize == 1) {
 			TileEntityHeavyPump te = (TileEntityHeavyPump)world.getTileEntity(x, y, z);
 			if (te.hasABucket()) {
 				te.subtractBucket();

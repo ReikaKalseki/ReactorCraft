@@ -92,7 +92,7 @@ public enum ReactorBook implements HandbookEntry {
 	GASCOLLECTOR(ReactorTiles.COLLECTOR),
 	GASDUCT(ReactorTiles.GASPIPE),
 	MAGNETPIPE(ReactorTiles.MAGNETPIPE),
-	HEAVYPUMP(ReactorTiles.HEAVYPUMP),
+	HEAVYPUMP(ReactorTiles.FLUIDEXTRACTOR),
 	WASTECONTAINER(ReactorTiles.WASTECONTAINER),
 	WASTESTORAGE(ReactorTiles.STORAGE),
 	REFLECTOR(ReactorTiles.REFLECTOR),

@@ -12,6 +12,7 @@ package Reika.ReactorCraft;
 import java.net.URL;
 import java.util.HashMap;
 
+import net.bdew.gendustry.api.GendustryAPI;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -145,17 +146,22 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
-	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000);
+	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000).setLuminosity(8);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
 
 	public static final Fluid CO2 = new Fluid("rc co2").setDensity(2).setViscosity(7).setGaseous(true);
-	public static final Fluid CO2_hot = new Fluid("rc hot co2").setDensity(1).setViscosity(5).setGaseous(true);
+	public static final Fluid CO2_hot = new Fluid("rc hot co2").setDensity(1).setViscosity(5).setGaseous(true).setLuminosity(2);
 
 	public static final Fluid PLASMA = new Fluid("rc fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
 	public static final Fluid CORIUM = new Fluid("rc corium").setDensity(5000).setViscosity(8000).setTemperature(2173);
+
+	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
+
+	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(600).setViscosity(800).setTemperature(800);
+	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(600).setViscosity(800).setTemperature(2000).setLuminosity(8);
 
 	public static PotionRadiation radiation;
 
@@ -411,6 +417,14 @@ public class ReactorCraft extends DragonAPIMod {
 			}
 		}
 
+		if (ModList.GENDUSTRY.isLoaded()) {
+			GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.WASTE.getItemInstance(), 10000);
+			GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.FUEL.getItemInstance(), 2000);
+			GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PLUTONIUM.getItemInstance(), 5000);
+			GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PELLET.getItemInstance(), 1200);
+			GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
+		}
+
 		this.finishTiming();
 	}
 
@@ -450,6 +464,11 @@ public class ReactorCraft extends DragonAPIMod {
 			IIcon corium = event.map.registerIcon("ReactorCraft:slag_flow");
 			IIcon corium2 = event.map.registerIcon("ReactorCraft:slag_flow");
 
+			IIcon li = event.map.registerIcon("ReactorCraft:lithium");
+
+			IIcon lifbe = event.map.registerIcon("ReactorCraft:lifbe");
+			IIcon lifbe_hot = event.map.registerIcon("ReactorCraft:lifbe_hot");
+
 			D2O.setIcons(d2o);
 			HF.setIcons(hf);
 			UF6.setIcons(uf6);
@@ -471,6 +490,11 @@ public class ReactorCraft extends DragonAPIMod {
 			CO2_hot.setIcons(co2);
 
 			CORIUM.setIcons(corium, corium2);
+
+			LI.setIcons(li);
+
+			LIFBe.setIcons(lifbe);
+			LIFBe_hot.setIcons(lifbe_hot);
 		}
 	}
 
@@ -493,6 +517,7 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	private static void addLiquids() {
+		logger.log("Loading And Registering Liquids");
 		FluidRegistry.registerFluid(D2O);
 		FluidRegistry.registerFluid(HF);
 		FluidRegistry.registerFluid(UF6);
@@ -514,11 +539,14 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(CO2_hot);
 
 		FluidRegistry.registerFluid(CORIUM);
+
+		FluidRegistry.registerFluid(LI);
+
+		FluidRegistry.registerFluid(LIFBe);
+		FluidRegistry.registerFluid(LIFBe_hot);
 	}
 
 	private static void addLiquidContainers() {
-		logger.log("Loading And Registering Liquids");
-
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(D2O, FluidContainerRegistry.BUCKET_VOLUME), ReactorItems.BUCKET.getStackOfMetadata(0), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(HF, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hfcan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(UF6, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.uf6can, ReactorStacks.emptycan);
@@ -535,6 +563,11 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(CO2_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotco2can, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(NA_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotnacan, ReactorStacks.emptycan);
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(LI, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.lican, ReactorStacks.emptycan);
+
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(LIFBe, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.lifbecan, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(LIFBe_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotlifbecan, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

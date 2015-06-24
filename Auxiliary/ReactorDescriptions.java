@@ -224,9 +224,10 @@ public final class ReactorDescriptions {
 		addNotes(ReactorTiles.BREEDER, TileEntityBreederCore.EXPLOSION);
 		addNotes(ReactorTiles.HEATER, TileEntityFusionHeater.PLASMA_TEMP);
 		addNotes(ReactorTiles.SOLENOID, TileEntitySolenoidMagnet.MINOMEGA, TileEntitySolenoidMagnet.MINTORQUE, TileEntitySolenoidMagnet.MAX_SPEED);
-		addData(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINDEPTH, TileEntityHeavyPump.MAXY);
+		//addData(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINDEPTH, TileEntityHeavyPump.MAXY);
 		addData(ReactorTiles.BOILER, TileEntityReactorBoiler.DETTEMP);
-		addNotes(ReactorTiles.HEAVYPUMP, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
+		addData(ReactorTiles.FLUIDEXTRACTOR, TileEntityHeavyPump.HeavyWaterExtraction.MAXY, TileEntityHeavyPump.HeavyWaterExtraction.MINDEPTH);
+		addNotes(ReactorTiles.FLUIDEXTRACTOR, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
 		addNotes(ReactorTiles.TURBINEMETER, TileEntityTurbineCore.GEN_OMEGA, TileEntityHiPTurbine.GEN_OMEGA);
 	}
 }

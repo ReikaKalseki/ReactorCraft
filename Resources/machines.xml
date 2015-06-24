@@ -256,6 +256,15 @@
 			Minimum Torque: %d Nm
 		</note>
 	</heavypump>
+	<fluidextractor>
+		<desc>
+			The fluid extractor, when submerged in (and has at least three sides in contact with) a fluid, can centrifuge it and obtain trace quantities of another fluid that was mixed in. For example, heavy water can be centrifuged out of the bottom of oceans (below y=%d and with at least %dm of water above), or molten lithium can be skimmed off the surface of lava.
+		</desc>
+		<note>
+			Minimum Power: %dW
+			Minimum Torque: %d Nm
+		</note>
+	</fluidextractor>
 	<wastecontainer>
 		<desc>
 			The spent fuel container is the first disposal unit for nuclear waste. When placed in this container, the more radioactive nuclear waste with shorter half-lives will decay and generate heat and neutrons in the process. To keep the container cool, and to provide radiation shielding, it must be submerged underwater.

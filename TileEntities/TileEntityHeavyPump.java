@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +26,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -42,8 +45,12 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	private long power;
 	private int iotick;
 
-	public static final int MAXY = 45;
-	public static final int MINDEPTH = 16;
+	private static final HashMap<Fluid, Extraction> extractions = new HashMap();
+
+	static {
+		extractions.put(FluidRegistry.WATER, new HeavyWaterExtraction());
+		extractions.put(FluidRegistry.LAVA, new MoltenLithiumExtraction());
+	}
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -51,7 +58,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public int getIndex() {
-		return ReactorTiles.HEAVYPUMP.ordinal();
+		return ReactorTiles.FLUIDEXTRACTOR.ordinal();
 	}
 
 	@Override
@@ -94,7 +101,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public boolean canReadFrom(ForgeDirection dir) {
-		return dir == ForgeDirection.DOWN;
+		return dir.offsetY != 0;
 	}
 
 	@Override
@@ -110,50 +117,50 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
+		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN) && !PowerTransferHelper.checkPowerFrom(this, ForgeDirection.UP)) {
 			this.noInputMachine();
 		}
 
-		timer.setCap(Math.max(1, 20-2*(int)ReikaMathLibrary.logbase(omega, 2)));
-		timer.update();
-		if (timer.checkCap() && power >= MINPOWER && torque >= MINTORQUE && this.canHarvest(world, x, y, z)) {
-			this.harvest();
+		if (power >= MINPOWER && torque >= MINTORQUE) {
+			timer.setCap(Math.max(1, 20-2*(int)ReikaMathLibrary.logbase(omega, 2)));
+			timer.update();
+			Extraction e = this.getExtraction(world, x, y, z);
+			if (e != null) {
+				if (timer.checkCap() && e.canPerform(world, x, y, z)) {
+					this.harvest(e, world, x, y, z);
+				}
+			}
+			else {
+				timer.reset();
+			}
 		}
 	}
 
-	private void harvest() {
-		ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
-		tank.fill(new FluidStack(FluidRegistry.getFluid("rc heavy water"), 200), true);
-	}
-
-	private boolean canHarvest(World world, int x, int y, int z) {
-		return ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && y < MAXY && this.isOceanFloor(world, x, y, z);
-	}
-
-	private boolean isOceanFloor(World world, int x, int y, int z) {
-		int water = 0;
+	private Extraction getExtraction(World world, int x, int y, int z) {
+		Fluid f = null;
+		int c = 0;
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			Block id = world.getBlock(dx, dy, dz);
-			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id == Blocks.flowing_water || id == Blocks.water) {
-				water++;
+			Fluid f2 = ReikaWorldHelper.getFluid(world, dx, y, dz);
+			if (f2 != null && ReikaWorldHelper.isLiquidSourceBlock(world, dx, y, dz)) {
+				if (f == null || f2 == f) {
+					c++;
+					f = f2;
+				}
+				else {
+					return null;
+				}
 			}
 		}
-		if (water < 3)
-			return false;
-		for (int i = 1; i < MINDEPTH; i++) {
-			int dy = y+i;
-			Block id = world.getBlock(x, dy, z);
-			int meta = world.getBlockMetadata(x, dy, z);
-			if (id != Blocks.flowing_water && id != Blocks.water) {
-				return false;
-			}
-		}
-		return true;
+		return f != null && c >= 3 ? extractions.get(f) : null;
+	}
+
+	private void harvest(Extraction e, World world, int x, int y, int z) {
+		if (e instanceof HeavyWaterExtraction)
+			ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
+		tank.fill(new FluidStack(e.output, e.getExtractedAmount(world, x, y, z)), true);
 	}
 
 	@Override
@@ -268,6 +275,88 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	@Override
 	public long getMinPower() {
 		return MINPOWER;
+	}
+
+	private static abstract class Extraction {
+
+		protected final Fluid output;
+
+		private Extraction(Fluid f) {
+			output = f;
+		}
+
+		protected abstract boolean canPerform(World world, int x, int y, int z);
+
+		protected abstract int getExtractedAmount(World world, int x, int y, int z);
+
+	}
+
+	public static class HeavyWaterExtraction extends Extraction {
+
+		public static final int MAXY = 45;
+		public static final int MINDEPTH = 16;
+
+		private HeavyWaterExtraction() {
+			super(FluidRegistry.getFluid("rc heavy water"));
+		}
+
+		@Override
+		protected boolean canPerform(World world, int x, int y, int z) {
+			return y < MAXY && ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && this.isOceanFloor(world, x, y, z);
+		}
+
+		private boolean isOceanFloor(World world, int x, int y, int z) {
+			for (int i = 1; i < MINDEPTH; i++) {
+				int dy = y+i;
+				Block id = world.getBlock(x, dy, z);
+				int meta = world.getBlockMetadata(x, dy, z);
+				if ((id != Blocks.flowing_water && id != Blocks.water) || meta != 0) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		@Override
+		protected int getExtractedAmount(World world, int x, int y, int z) {
+			return 200;
+		}
+
+	}
+
+	private static class MoltenLithiumExtraction extends Extraction {
+
+		private MoltenLithiumExtraction() {
+			super(FluidRegistry.getFluid("rc lithium"));
+		}
+
+		@Override
+		protected boolean canPerform(World world, int x, int y, int z) {
+			return y == this.getSurfaceY(world, x, y, z) && this.isLavaSurface(world, x, y, z);
+		}
+
+		private boolean isLavaSurface(World world, int x, int y, int z) {
+			Block b = world.getBlock(x, y-1, z);
+			Block b2 = world.getBlock(x, y+1, z);
+			return (b == Blocks.lava || b == Blocks.flowing_lava) && (b2 != Blocks.lava && b2 != Blocks.flowing_lava);
+		}
+
+		private int getSurfaceY(World world, int x, int y, int z) {
+			switch(world.provider.dimensionId) {
+			case 0:
+				return 10;
+			case -1:
+				return 31;
+			default:
+				return -1;
+			}
+		}
+
+		@Override
+		protected int getExtractedAmount(World world, int x, int y, int z) {
+			return world.provider.dimensionId == -1 ? 10+rand.nextInt(21)+rand.nextInt(51) : 10+rand.nextInt(31);
+		}
+
 	}
 
 }

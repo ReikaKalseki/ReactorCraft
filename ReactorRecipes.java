@@ -55,6 +55,8 @@ public class ReactorRecipes {
 
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.tungsteningot, ItemStacks.tungstenflakes);
 
+		RecipesGrinder.getRecipes().addRecipe(new ItemStack(Items.emerald), ReactorStacks.emeralddust);
+
 		RecipesPulseFurnace.smelting().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 
 		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
@@ -240,7 +242,7 @@ public class ReactorRecipes {
 		ReactorTiles.COOLANT.addCrafting("SPS", "GRG", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'G', Blocks.glass, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', CraftingItems.TURBCORE.getItem());
 		ReactorTiles.STEAMLINE.addSizedCrafting(3, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', ItemStacks.pipe);
-		ReactorTiles.HEAVYPUMP.addCrafting("PpP", "GIG", "PSP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Blocks.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
+		ReactorTiles.FLUIDEXTRACTOR.addCrafting("PpP", "GIG", "PSP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Blocks.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
 		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit16);
 		ReactorTiles.PROCESSOR.addCrafting("POP", "OMO", 'O', CraftingItems.TANK.getItem(), 'M', ItemStacks.mixer, 'P', ItemStacks.pipe);
 		ReactorTiles.WASTECONTAINER.addCrafting("SCS", "CcC", "SCS", 'S', ItemStacks.steelingot, 'C', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'c', Blocks.chest);
