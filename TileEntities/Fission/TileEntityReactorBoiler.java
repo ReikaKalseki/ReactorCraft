@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
@@ -38,7 +39,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
+public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements SteamTile {
 
 	public static final int WATER_PER_STEAM = 200;
 	public static final int DETTEMP = 650;
@@ -205,6 +206,11 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		NeutronType type = e.getType();
 		return !tank.isEmpty() && ReikaRandomHelper.doWithChance(type.getBoilerAbsorptionChance());
+	}
+
+	@Override
+	public int getSteam() {
+		return steam;
 	}
 
 }

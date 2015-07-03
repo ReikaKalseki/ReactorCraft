@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -40,10 +41,11 @@ import Reika.ReactorCraft.Event.ReactorMeltdownEvent;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable,
-ChunkLoadingTile {
+ChunkLoadingTile, BreakAction {
 
 	protected StepTimer tempTimer = new StepTimer(20);
 
@@ -89,15 +91,19 @@ ChunkLoadingTile {
 	}
 
 	private void onActivityChange(boolean active) {
-		//if (!worldObj.isRemote && ReactorOptions.CHUNKLOADING.getState()) {
-		//	if (active) {
-		//		ChunkManager.instance.loadChunks(worldObj, xCoord, yCoord, zCoord, this);
-		//	}
-		//	else {
-		//		ChunkManager.instance.unloadChunks(worldObj, xCoord, yCoord, zCoord);
-		//	}
-		//}
+		if (!worldObj.isRemote && ReactorOptions.CHUNKLOADING.getState()) {
+			if (active) {
+				ChunkManager.instance.loadChunks(this);
+			}
+			else {
+				this.unload();
+			}
+		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private void unload() {
+		ChunkManager.instance.unloadChunks(this);
 	}
 
 	public Collection<ChunkCoordIntPair> getChunksToLoad() {
@@ -383,6 +389,20 @@ ChunkLoadingTile {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("h2", hydrogen);
+	}
+
+	public final void breakBlock() {
+		if (!worldObj.isRemote)
+			this.unload();
+	}
+
+	@Override
+	protected final void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
+		if (!world.isRemote) {
+			if (invalid) {
+				this.unload();
+			}
+		}
 	}
 
 }

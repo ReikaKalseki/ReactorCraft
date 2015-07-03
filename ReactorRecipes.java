@@ -28,6 +28,7 @@ import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -183,12 +184,21 @@ public class ReactorRecipes {
 	private static void addMisc() {
 		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 			FluoriteTypes fl = FluoriteTypes.colorList[i];
-			ItemStack block = new ItemStack(ReactorBlocks.FLUORITE.getBlockInstance(), 1, fl.ordinal());
-			ItemStack shard = ReactorItems.FLUORITE.getStackOfMetadata(fl.ordinal());
-			ItemStack lamp = new ItemStack(ReactorBlocks.LAMP.getBlockInstance(), 1, fl.ordinal());
+			ItemStack block = new ItemStack(ReactorBlocks.FLUORITE.getBlockInstance(), 1, i);
+			ItemStack shard = ReactorItems.FLUORITE.getStackOfMetadata(i);
+			ItemStack lamp = new ItemStack(ReactorBlocks.LAMP.getBlockInstance(), 1, i);
 			GameRegistry.addRecipe(block, "CCC", "CCC", "CCC", 'C', shard);
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(shard, 9), block);
 			GameRegistry.addRecipe(lamp, "SCS", "C C", "SOS", 'C', shard, 'S', ItemStacks.steelingot, 'O', Blocks.obsidian);
+
+			if (ReactorOptions.DYECRAFT.getState()) {
+				for (int k = 0; k < FluoriteTypes.colorList.length; k++) {
+					if (k != i) {
+						String dye = FluoriteTypes.colorList[k].getCorrespondingDyeType().getOreDictName();
+						GameRegistry.addRecipe(new ShapelessOreRecipe(ReactorItems.FLUORITE.getStackOfMetadata(k), shard, dye));
+					}
+				}
+			}
 		}
 
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);

@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 
 public enum FluoriteTypes {
 
@@ -89,6 +90,10 @@ public enum FluoriteTypes {
 
 	public int getColor() {
 		return ReikaColorAPI.RGBtoHex(red, green, blue);
+	}
+
+	public ReikaDyeHelper getCorrespondingDyeType() {
+		return ReikaDyeHelper.valueOf(this.name());
 	}
 
 }

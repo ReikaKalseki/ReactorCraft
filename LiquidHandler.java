@@ -25,7 +25,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCPipeHandler;
-import Reika.DragonAPI.ModInteract.ItemHandlers.ThermalHandler;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -136,9 +135,9 @@ public class LiquidHandler {
 			if (type == BCPipeHandler.Types.IRON)
 				return true;
 		}
-		if (id == ThermalHandler.getInstance().ductID) {
-			return ThermalHandler.getInstance().getConduitType(te) == ThermalHandler.Types.LIQUID;
-		}
+		//if (id == ThermalHandler.getInstance().ductID) {
+		//	return ThermalHandler.getInstance().getConduitType(te) == ThermalHandler.Types.LIQUID;
+		//}
 		return false;
 	}
 

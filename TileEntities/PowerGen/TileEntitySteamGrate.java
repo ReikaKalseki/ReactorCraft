@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -22,7 +23,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 
-public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable {
+public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable, SteamTile {
 
 	private int steam;
 	private boolean requireRedstone;
@@ -156,6 +157,11 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 	@Override
 	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
+	}
+
+	@Override
+	public int getSteam() {
+		return steam;
 	}
 
 }

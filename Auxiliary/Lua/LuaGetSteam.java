@@ -11,24 +11,23 @@ package Reika.ReactorCraft.Auxiliary.Lua;
 
 import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.Auxiliary.SteamTile;
 import dan200.computercraft.api.lua.LuaException;
 
-public class LuaSCRAM extends LuaMethod {
+public class LuaGetSteam extends LuaMethod {
 
-	public LuaSCRAM() {
-		super("triggerSCRAM", TileEntityCPU.class);
+	public LuaGetSteam() {
+		super("getSteam", SteamTile.class);
 	}
 
 	@Override
 	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
-		((TileEntityCPU)te).SCRAM();
-		return null;
+		return new Object[]{((SteamTile)te).getSteam()};
 	}
 
 	@Override
 	public String getDocumentation() {
-		return "Triggers a reactor SCRAM.";
+		return "Returns the steam content of a machine.";
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class LuaSCRAM extends LuaMethod {
 
 	@Override
 	public ReturnType getReturnType() {
-		return ReturnType.VOID;
+		return ReturnType.INTEGER;
 	}
 
 }

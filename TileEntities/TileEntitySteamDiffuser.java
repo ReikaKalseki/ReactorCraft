@@ -15,13 +15,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine {
+public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine implements SteamTile {
 
 	public static final int RATIO = calculateConversionRatio();
 
@@ -156,6 +157,11 @@ public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine {
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side == this.getFacing().getOpposite() ? Flow.OUTPUT : Flow.NONE;
+	}
+
+	@Override
+	public int getSteam() {
+		return steam;
 	}
 
 }

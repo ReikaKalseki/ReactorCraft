@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
+import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -28,7 +29,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
 
-public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe {
+public class TileEntitySteamLine extends TileEntityReactorBase implements PumpablePipe, SteamTile {
 
 	//private double storedEnergy;
 	private int steam;
