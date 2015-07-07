@@ -221,4 +221,9 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return Integer.MAX_VALUE;
+	}
+
 }

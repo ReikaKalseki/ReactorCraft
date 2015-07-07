@@ -57,6 +57,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
@@ -112,7 +113,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod( modid = "ReactorCraft", name="ReactorCraft", version="beta", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
+@Mod( modid = "ReactorCraft", name="ReactorCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
 public class ReactorCraft extends DragonAPIMod {
 
 	@Instance("ReactorCraft")
@@ -284,6 +285,8 @@ public class ReactorCraft extends DragonAPIMod {
 		this.addEntities();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ReactorGuiHandler());
 		RetroGenController.instance.addHybridGenerator(ReactorOreGenerator.instance, 0, ReactorOptions.RETROGEN.getState());
+
+		ItemStackRepository.instance.registerClass(this, ReactorStacks.class);
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			ReactorDescriptions.loadData();

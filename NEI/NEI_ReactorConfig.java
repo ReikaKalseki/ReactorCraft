@@ -45,6 +45,8 @@ public class NEI_ReactorConfig implements IConfigureNEI {
 		this.hideBlock(ReactorBlocks.MODELREACTOR.getBlockInstance());
 		this.hideBlock(ReactorBlocks.MACHINE.getBlockInstance());
 		this.hideBlock(ReactorBlocks.MODELMACHINE.getBlockInstance());
+		this.hideBlock(ReactorBlocks.DUCT.getBlockInstance());
+		this.hideBlock(ReactorBlocks.LINE.getBlockInstance());
 
 		if (ReactorCraft.instance.isLocked()) {
 			for (int i = 0; i < ReactorItems.itemList.length; i++) {

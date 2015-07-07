@@ -53,4 +53,9 @@ public class DonatorToroidRender implements PlayerRenderObj {
 		GL11.glPopMatrix();
 	}
 
+	@Override
+	public int getRenderPriority() {
+		return 0;
+	}
+
 }

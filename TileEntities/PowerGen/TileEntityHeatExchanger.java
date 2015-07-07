@@ -407,4 +407,9 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }
