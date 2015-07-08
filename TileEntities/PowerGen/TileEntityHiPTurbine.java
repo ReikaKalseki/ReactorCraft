@@ -40,6 +40,8 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	public static final int GEN_OMEGA = 131072;
+	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM*1030/43/24;
+
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	private RelativePositionList getInjectors() {
@@ -147,7 +149,6 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		if (this.dumpLiquid(world, x, y, z, meta)) {
 			ForgeDirection s = this.getSteamMovement();
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
-			int amt = TileEntityReactorBoiler.WATER_PER_STEAM*103/20/24;
 			int th = (int)(this.getRadius());
 			if (!world.isRemote) {
 				for (int dy = 2; dy < 5; dy++) {
@@ -160,7 +161,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 							if (fluid != null && fluid.getLowPressureFluid() == null) {
 
 							}
-							FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), amt);
+							FluidStack fs = new FluidStack(fluid.getLowPressureFluid(), FLUID_PER_RESERVOIR);
 							if (m == MachineRegistry.RESERVOIR) {
 								TileEntity te = this.getTileEntity(tx, ty, tz);
 								((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());

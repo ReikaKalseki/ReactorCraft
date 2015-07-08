@@ -26,6 +26,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 
 public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool {
@@ -41,7 +42,7 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
 		if (this.canUse(is, world, ep)) {
 			TileEntity te = this.getLinkedCPU(is);
-			if (te != null) {
+			if (te instanceof TileEntityCPU) {
 				int x = is.stackTagCompound.getInteger("cx");
 				int y = is.stackTagCompound.getInteger("cy");
 				int z = is.stackTagCompound.getInteger("cz");
@@ -50,8 +51,8 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 				Block id = w.getBlock(x, y, z);
 				int meta = w.getBlockMetadata(x, y, z);
 				if (id == ReactorTiles.CPU.getBlock() && meta == ReactorTiles.CPU.getBlockMetadata()) {
-					ep.openGui(ReactorCraft.instance, 0, w, x, y, z);
 					is.setItemDamage(is.getItemDamage()-1);
+					ep.openGui(ReactorCraft.instance, 0, w, x, y, z);
 				}
 			}
 		}

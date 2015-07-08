@@ -31,8 +31,8 @@ public class GuiCPU extends ReactorGuiBase {
 	private TileEntityCPU tile;
 	private ReactorControlLayout layout;
 
-	public static final int BUTTON_SIZE = 8;
-	public static final int BUTTON_SPACE = 10;
+	public static final int BUTTON_SIZE = 3;
+	public static final int BUTTON_SPACE = 5;
 	private int offsetY = 0;
 
 	public GuiCPU(EntityPlayer player, TileEntityCPU cpu) {
@@ -92,8 +92,8 @@ public class GuiCPU extends ReactorGuiBase {
 
 		int r = BUTTON_SIZE;
 		int s = BUTTON_SPACE;
-		int ox = 1+xSize/2-s/2;
-		int oy = ySize/2-s/2+18;
+		int ox = 1+xSize/2-s/2-1;
+		int oy = ySize/2-s/2+5;
 		for (int a = layout.getMinX(); a <= layout.getMaxX(); a++) {
 			for (int b = layout.getMinZ(); b <= layout.getMaxZ(); b++) {
 				if (a != 0 || b != 0) {
@@ -112,8 +112,8 @@ public class GuiCPU extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		int s = BUTTON_SPACE;
-		int ox = 1+j+xSize/2-s/2;
-		int oy = k+ySize/2-s/2+18;
+		int ox = 1+j+xSize/2-s/2-1;
+		int oy = k+ySize/2-s/2+5;
 		int dx = x-ox;
 		int dy = y-oy;
 		int a = MathHelper.floor_double(dx/(double)s);

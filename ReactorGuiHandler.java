@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.Container.ContainerElectrolyzer;
@@ -32,6 +33,7 @@ import Reika.ReactorCraft.GUIs.GuiReactorBook;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
+import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
@@ -73,7 +75,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 				case PEBBLEBED:
 					return new ContainerPebbleBed(player, (TileEntityPebbleBed)te);
 				case CPU:
-					return new CoreContainer(player, te).setAlwaysInteractable();
+					int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.REMOTE.getItemInstance(), player.inventory);
+					return new CoreContainer(player, te).setAlwaysInteractable().addSlotRelay(player.inventory, slot);
 				default:
 					return null;
 				}

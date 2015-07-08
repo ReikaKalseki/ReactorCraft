@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -77,7 +78,12 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		//if (te instanceof TileEntityCPU) {
 		//	power = ((TileEntityCPU)te).power;
 		//}
-		if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
+		if (DragonAPICore.debugtest) {
+			omega = 1024;
+			torque = 1024;
+			power = omega*torque;
+		}
+		else if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
 			this.noInputMachine();
 		}
 
