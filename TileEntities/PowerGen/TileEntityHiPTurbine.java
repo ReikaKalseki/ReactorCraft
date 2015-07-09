@@ -40,7 +40,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 
 	public static final int GEN_OMEGA = 131072;
-	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM*1030/43/24;
+	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM*131/20/24;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
