@@ -75,7 +75,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 
 		if (DragonAPICore.debugtest) {
 			hasMultiBlock = true;
-			torque = MINTORQUE;
+			torque = MINTORQUE*8;
 			omega = 1024;
 			power = omega*torque;
 		}

@@ -54,9 +54,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public void whenInBeam(World world, int x, int y, int z, long power, int range) {
-		int a = DragonAPICore.debugtest ? 64000 : 640;
 		if (this.hasMultiBlock())
-			temperature += a*ReikaMathLibrary.logbase(power, 2);
+			temperature += 640*ReikaMathLibrary.logbase(power, 2);
 	}
 
 	public boolean blockBeam(World world, int x, int y, int z, long power) {
@@ -66,6 +65,10 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.updateTemperature(world, x, y, z, meta);
+
+		if (DragonAPICore.debugtest) {
+			temperature = 200000000;
+		}
 
 		//ReikaJavaLibrary.pConsole(temperature+": "+((float)temperature/PLASMA_TEMP), Side.SERVER);
 		//ReikaJavaLibrary.pConsole(h2, Side.SERVER);

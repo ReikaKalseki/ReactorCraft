@@ -159,11 +159,11 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	}
 
 	public boolean hasEscaped() {
-		return escapeTicks >= 4;
+		return escapeTicks >= 6; //was 4
 	}
 
 	public boolean hasEscapedSeverely() {
-		return escapeTicks >= 8;
+		return escapeTicks >= 12; //was 8
 	}
 
 }

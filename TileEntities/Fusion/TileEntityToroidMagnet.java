@@ -84,7 +84,7 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 		if (DragonAPICore.debugtest) {
 			tank.addLiquid(1000, RotaryCraft.nitrogenFluid);
-			charge = 25000;
+			charge = 250000;
 		}
 
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
