@@ -60,9 +60,9 @@ public class ReactorRecipes {
 
 		RecipesPulseFurnace.smelting().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 
-		RecipesCompactor.getRecipes().addCompacting(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
+		RecipesCompactor.getRecipes().addRecipe(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
-			RecipesCompactor.getRecipes().addCompacting(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
+			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 	}
 
 	public static void addModInterface() {
