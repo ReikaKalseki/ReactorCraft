@@ -58,7 +58,7 @@ public class ReactorRecipes {
 
 		RecipesGrinder.getRecipes().addRecipe(new ItemStack(Items.emerald), ReactorStacks.emeralddust);
 
-		RecipesPulseFurnace.smelting().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
+		RecipesPulseFurnace.getRecipes().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 
 		RecipesCompactor.getRecipes().addRecipe(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
