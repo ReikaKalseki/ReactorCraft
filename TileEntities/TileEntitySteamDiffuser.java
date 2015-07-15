@@ -68,7 +68,7 @@ public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine impl
 			Fluid f = FluidRegistry.getFluid("steam");
 			if (f != null) {
 				int amt = Math.min(1+steam/4, tank.getRemainingSpace()/RATIO);
-				tank.addLiquid(amt*RATIO, f);
+				tank.addLiquid(amt*RATIO*1000, f);
 				steam -= amt;
 			}
 		}
