@@ -239,13 +239,13 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
 			Block b = c.getBlock(world);
+			int meta = c.getBlockMetadata(world);
 			if (b == this) {
-				int meta = c.getBlockMetadata(world);
 				if (meta >= 8) {
 					world.setBlockMetadataWithNotify(c.xCoord, c.yCoord, c.zCoord, meta-8, 3);
 				}
 			}
-			else if (b == tid) {
+			else if (b == tid && meta == ReactorTiles.BIGTURBINE.getBlockMetadata()) {
 				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 				te.setHasMultiBlock(false);
 			}

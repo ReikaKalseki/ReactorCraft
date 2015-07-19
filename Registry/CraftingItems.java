@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Registry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -64,6 +65,10 @@ public enum CraftingItems {
 
 	public void addShapelessRecipe(Object... o) {
 		GameRegistry.addShapelessRecipe(this.getItem(), o);
+	}
+
+	public void addShapelessOreRecipe(Object... o) {
+		GameRegistry.addRecipe(new ShapelessOreRecipe(this.getItem(), o));
 	}
 
 }

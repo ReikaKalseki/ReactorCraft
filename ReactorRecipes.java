@@ -142,7 +142,7 @@ public class ReactorRecipes {
 		CraftingItems.FABRIC.addSizedRecipe(3, "LDL", "LDL", "LDL", 'D', ReactorItems.DEPLETED.getStackOf(), 'L', Items.leather);
 		CraftingItems.FABRIC.addSizedRecipe(1, "LDL", "LDL", "LDL", 'D', ReactorItems.OLDPELLET.getStackOf(), 'L', Items.leather);
 		CraftingItems.FABRIC.addSizedOreRecipe(2, "LDL", "LDL", "LDL", 'D', "ingotLead", 'L', Items.leather);
-		CraftingItems.CARBIDEFLAKES.addShapelessRecipe(ItemStacks.coaldust, ItemStacks.tungstenflakes);
+		CraftingItems.CARBIDEFLAKES.addShapelessOreRecipe("dustCoal", ItemStacks.tungstenflakes);
 		CraftingItems.TURBCORE.addRecipe("CCC", "CTC", "CCC", 'C', CraftingItems.CARBIDE.getItem(), 'T', ItemStacks.compoundturb);
 
 		//GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
@@ -281,7 +281,7 @@ public class ReactorRecipes {
 		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
 
-		if (PowerTypes.RF.exists())
+		if (PowerTypes.RF.exists() || PowerTypes.EU.exists())
 			ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Items.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
 
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Blocks.redstone_torch);
