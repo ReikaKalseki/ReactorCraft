@@ -276,7 +276,7 @@ public enum ReactorBook implements HandbookEntry {
 		return ReactorDescriptions.getData(this);
 	}
 
-	public String getNotes() {
+	public String getNotes(int subpage) {
 		return ReactorDescriptions.getNotes(this);
 	}
 

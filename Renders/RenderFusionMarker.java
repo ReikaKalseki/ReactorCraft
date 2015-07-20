@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
@@ -35,6 +36,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 
 		//this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/exchanger.png");
 
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -43,6 +45,8 @@ public class RenderFusionMarker extends ReactorRenderBase
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;
 		float var13;
+		GL11.glEnable(GL11.GL_BLEND);
+		BlendMode.DEFAULT.apply();
 
 		if (tile.isInWorld()) {
 
@@ -61,6 +65,7 @@ public class RenderFusionMarker extends ReactorRenderBase
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
+		GL11.glPopAttrib();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 	}

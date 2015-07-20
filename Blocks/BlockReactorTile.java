@@ -25,7 +25,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -471,11 +470,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 
 	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return ReactorTiles.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
+		return null;//ReactorTiles.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		/*
 		World world = acc.getWorld();
 		MovingObjectPosition mov = acc.getPosition();
 		if (mov != null) {
@@ -483,7 +483,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			int y = mov.blockY;
 			int z = mov.blockZ;
 			currenttip.add(EnumChatFormatting.WHITE+this.getPickBlock(mov, world, x, y, z).getDisplayName());
-		}
+		}*/
 		return currenttip;
 	}
 
@@ -521,9 +521,10 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		/*
 		String s1 = EnumChatFormatting.ITALIC.toString();
 		String s2 = EnumChatFormatting.BLUE.toString();
-		currenttip.add(s2+s1+"ReactorCraft");
+		currenttip.add(s2+s1+"ReactorCraft");*/
 		return currenttip;
 	}
 
