@@ -14,7 +14,7 @@ import java.util.HashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import Reika.DragonAPI.Interfaces.ItemEnum;
+import Reika.DragonAPI.Interfaces.Registry.ItemEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;

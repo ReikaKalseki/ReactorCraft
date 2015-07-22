@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
-import Reika.DragonAPI.Interfaces.IPacketHandler;
+import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
@@ -29,7 +29,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 
 
-public class ReactorPacketCore implements IPacketHandler {
+public class ReactorPacketCore implements PacketHandler {
 
 	protected ReactorPackets pack;
 

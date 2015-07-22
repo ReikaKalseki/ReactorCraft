@@ -15,7 +15,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelCentrifuge;

@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.PlayerMap;
-import Reika.DragonAPI.Interfaces.OreType;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;

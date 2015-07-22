@@ -68,7 +68,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 						this.leakRadiation(worldObj, xCoord, yCoord, zCoord);
 				}
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
-				if (ReikaNuclearHelper.shouldDecay(atom)) {
+				if (ReikaNuclearHelper.shouldDecay(atom, mult)) {
 					ReikaInventoryHelper.decrStack(i, inv);
 					this.onDecayWaste(i);
 				}

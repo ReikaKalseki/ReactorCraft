@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import Reika.DragonAPI.Interfaces.BlockEnum;
+import Reika.DragonAPI.Interfaces.Registry.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;

@@ -16,7 +16,7 @@ import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.ReactorRenderBase;

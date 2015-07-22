@@ -10,12 +10,11 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.config.Configuration;
-import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Interfaces.ConfigList;
+import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
+import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
 import Reika.ReactorCraft.ReactorCraft;
 
-public enum ReactorOptions implements ConfigList {
+public enum ReactorOptions implements IntegerConfig, BooleanConfig {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
@@ -32,7 +31,6 @@ public enum ReactorOptions implements ConfigList {
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
-	private float defaultFloat;
 	private Class type;
 
 	public static final ReactorOptions[] optionList = ReactorOptions.values();
@@ -57,38 +55,12 @@ public enum ReactorOptions implements ConfigList {
 		return type == int.class;
 	}
 
-	public boolean isDecimal() {
-		return type == float.class;
-	}
-
-	public float setDecimal(Configuration config) {
-		if (!this.isDecimal())
-			throw new RegistrationException(ReactorCraft.instance, "Config Property \""+this.getLabel()+"\" is not decimal!");
-		return (float)config.get("Control Setup", this.getLabel(), defaultFloat).getDouble(defaultFloat);
-	}
-
-	public float getFloat() {
-		return (Float)ReactorCraft.config.getControl(this.ordinal());
-	}
-
 	public Class getPropertyType() {
 		return type;
 	}
 
-	public int setValue(Configuration config) {
-		if (!this.isNumeric())
-			throw new RegistrationException(ReactorCraft.instance, "Config Property \""+this.getLabel()+"\" is not numerical!");
-		return config.get("Control Setup", this.getLabel(), defaultValue).getInt();
-	}
-
 	public String getLabel() {
 		return label;
-	}
-
-	public boolean setState(Configuration config) {
-		if (!this.isBoolean())
-			throw new RegistrationException(ReactorCraft.instance, "Config Property \""+this.getLabel()+"\" is not boolean!");
-		return config.get("Control Setup", this.getLabel(), defaultState).getBoolean(defaultState);
 	}
 
 	public boolean getState() {
@@ -111,11 +83,6 @@ public enum ReactorOptions implements ConfigList {
 	@Override
 	public int getDefaultValue() {
 		return defaultValue;
-	}
-
-	@Override
-	public float getDefaultFloat() {
-		return defaultFloat;
 	}
 
 	@Override

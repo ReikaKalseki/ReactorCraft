@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
-import Reika.DragonAPI.Interfaces.OreType;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
