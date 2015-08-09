@@ -43,10 +43,10 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
 		switch(meta%8) {
-		case 2:
-			return new TileEntitySteamInjector();
-		default:
-			return null;
+			case 2:
+				return new TileEntitySteamInjector();
+			default:
+				return null;
 		}
 	}
 
@@ -316,6 +316,10 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
+	}
+
+	public SlicedBlockBlueprint getBlueprint() {
+		return setup.copy();
 	}
 
 }

@@ -19,16 +19,26 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Registry.RadiationShield;
 
 public class HydrogenExplosion extends Explosion {
 
+	private static final Random rand = new Random();
+
 	private World world;
+	private final double scatterFraction;
 
 	public HydrogenExplosion(World world, Entity e, double x, double y, double z, float power) {
+		this(world, e, x, y, z, power, 1);
+	}
+
+	public HydrogenExplosion(World world, Entity e, double x, double y, double z, float power, double fraction) {
 		super(world, e, x, y, z, power);
 		this.world = world;
+		scatterFraction = fraction;
 	}
 
 	@Override
@@ -38,20 +48,27 @@ public class HydrogenExplosion extends Explosion {
 		int y = (int)Math.floor(explosionY);
 		int z = (int)Math.floor(explosionZ);
 
+		//scatterFraction = RadiationEffects.instance.contaminateArea(world, x, y, z, (int)(explosionSize*4), 8, 2, true);
+
 		List<EntityFallingBlock> li = new ArrayList();
 		if (!world.isRemote) {
 			for (int i = x-r; i <= x+r; i++) {
 				for (int j = y-r; j <= y+r; j++) {
 					for (int k = z-r; k <= z+r; k++) {
-						Block id = world.getBlock(i, j, k);
-						int meta = world.getBlockMetadata(i, j, k);
-						if (this.canEntitize(world, i, j, k, id, meta)) {
-							EntityFallingBlock e = new EntityFallingBlock(world, i, j, k, id, meta);
-							li.add(e);
-							e.field_145812_b = -10000;
-							e.field_145813_c = false;
-							world.setBlockToAir(i, j, k);
-							world.spawnEntityInWorld(e);
+						if (scatterFraction == 1 || ReikaRandomHelper.doWithChance(scatterFraction)) {
+							Block id = world.getBlock(i, j, k);
+							int meta = world.getBlockMetadata(i, j, k);
+							RadiationShield rs = RadiationShield.getFrom(id, meta);
+							if (rs == null || ReikaRandomHelper.doWithChance(rs.radiationDeflectChance)) {
+								if (this.canEntitize(world, i, j, k, id, meta)) {
+									EntityFallingBlock e = new EntityFallingBlock(world, i, j, k, id, meta);
+									li.add(e);
+									e.field_145812_b = -10000;
+									e.field_145813_c = false;
+									world.setBlockToAir(i, j, k);
+									world.spawnEntityInWorld(e);
+								}
+							}
 						}
 					}
 				}
@@ -60,15 +77,13 @@ public class HydrogenExplosion extends Explosion {
 
 		super.doExplosionA();
 
-		for (int i = 0; i < li.size(); i++) {
-			EntityFallingBlock e = li.get(i);
+		for (EntityFallingBlock e : li) {
 			double dx = e.posX-explosionX;
 			double dy = e.posY-explosionY;
 			double dz = e.posZ-explosionZ;
 
 			double dd = 0.3;
 			double vy = 1.5;
-			Random rand = new Random();
 
 			e.motionX = dx*dd*rand.nextDouble();
 			e.motionY = dy*dd*rand.nextDouble()+vy;
@@ -81,11 +96,12 @@ public class HydrogenExplosion extends Explosion {
 	@Override
 	public void doExplosionB(boolean fire) {
 		super.doExplosionB(fire);
-
+		/*
 		int x = (int)Math.floor(explosionX);
 		int y = (int)Math.floor(explosionY);
 		int z = (int)Math.floor(explosionZ);
-		RadiationEffects.instance.contaminateArea(world, x, y, z, (int)(explosionSize*4), 8);
+		RadiationEffects.instance.contaminateArea(world, x, y, z, (int)(explosionSize*4), 8, true);
+		 */
 	}
 
 	private boolean canEntitize(World world, int x, int y, int z, Block id, int meta) {

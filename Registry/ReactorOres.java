@@ -34,8 +34,8 @@ public enum ReactorOres {
 
 	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.4F,	"ore.fluorite"),
 	PITCHBLENDE(	8, 	24, 16, 3, 	0,	1,	1F,		"ore.pitchblende"),
-	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"ore.cadmium"),
-	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"ore.indium"),
+	CADMIUM(		12, 32, 9, 	3, 	0,	2,	0.7F,	"ore.cadmium", ReactorOptions.CADMIUMORE.getState()),
+	INDIUM(			0, 	16, 7, 	2, 	0,	2,	1F,		"ore.indium", ReactorOptions.INDIUMORE.getState()),
 	SILVER(			16, 40, 9, 	2, 	0,	2,	0.5F, 	"ore.silver", ReactorOptions.SILVERORE.getState()),
 	ENDBLENDE(		0, 	64, 16, 6, 	1,	1,	1F,		"ore.pitchblende"),
 	AMMONIUM(		32,	32,	8,	6,	-1,	1,	0.8F,	"ore.ammonium"),
@@ -108,18 +108,18 @@ public enum ReactorOres {
 
 	public String getProductDictionaryName() {
 		switch(this) {
-		case FLUORITE:
-			return "gem"+ReikaStringParser.capFirstChar(this.name());
-		case PITCHBLENDE:
-		case ENDBLENDE:
-			return "ingotUranium";
-		case CALCITE:
-		case MAGNETITE:
-			return "gem"+ReikaStringParser.capFirstChar(this.name());
-		case AMMONIUM:
-			return "dust"+ReikaStringParser.capFirstChar(this.name());
-		default:
-			return "ingot"+ReikaStringParser.capFirstChar(this.name());
+			case FLUORITE:
+				return "gem"+ReikaStringParser.capFirstChar(this.name());
+			case PITCHBLENDE:
+			case ENDBLENDE:
+				return "ingotUranium";
+			case CALCITE:
+			case MAGNETITE:
+				return "gem"+ReikaStringParser.capFirstChar(this.name());
+			case AMMONIUM:
+				return "dust"+ReikaStringParser.capFirstChar(this.name());
+			default:
+				return "ingot"+ReikaStringParser.capFirstChar(this.name());
 		}
 	}
 
@@ -144,33 +144,33 @@ public enum ReactorOres {
 
 	public ItemStack getProduct() {
 		switch(this) {
-		case FLUORITE:
-			return ReactorItems.FLUORITE.getStackOfMetadata(FluoriteTypes.WHITE.ordinal());
-		case ENDBLENDE:
-			return PITCHBLENDE.getProduct();
-		case AMMONIUM:
-			return ReactorStacks.ammonium.copy();
-		case CALCITE:
-			return ReactorStacks.calcite.copy();
-		case MAGNETITE:
-			return ReactorStacks.lodestone.copy();
-		default:
-			return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
+			case FLUORITE:
+				return ReactorItems.FLUORITE.getStackOfMetadata(FluoriteTypes.WHITE.ordinal());
+			case ENDBLENDE:
+				return PITCHBLENDE.getProduct();
+			case AMMONIUM:
+				return ReactorStacks.ammonium.copy();
+			case CALCITE:
+				return ReactorStacks.calcite.copy();
+			case MAGNETITE:
+				return ReactorStacks.lodestone.copy();
+			default:
+				return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
 		}
 	}
 
 	public List<ItemStack> getOreDrop(int meta) {
 		switch(this) {
-		case FLUORITE:
-			return ReikaJavaLibrary.makeListFrom(ReactorItems.FLUORITE.getStackOfMetadata(meta));
-		case CALCITE:
-			return ReikaJavaLibrary.makeListFrom(ReactorStacks.calcite.copy());
-		case AMMONIUM:
-			return ReikaJavaLibrary.makeListFrom(ReactorStacks.ammonium.copy(), new ItemStack(Blocks.netherrack));
-		case MAGNETITE:
-			return ReikaJavaLibrary.makeListFrom(ReactorStacks.lodestone.copy());
-		default:
-			return ReikaJavaLibrary.makeListFrom(new ItemStack(ReactorBlocks.ORE.getBlockInstance(), 1, meta));
+			case FLUORITE:
+				return ReikaJavaLibrary.makeListFrom(ReactorItems.FLUORITE.getStackOfMetadata(meta));
+			case CALCITE:
+				return ReikaJavaLibrary.makeListFrom(ReactorStacks.calcite.copy());
+			case AMMONIUM:
+				return ReikaJavaLibrary.makeListFrom(ReactorStacks.ammonium.copy(), new ItemStack(Blocks.netherrack));
+			case MAGNETITE:
+				return ReikaJavaLibrary.makeListFrom(ReactorStacks.lodestone.copy());
+			default:
+				return ReikaJavaLibrary.makeListFrom(new ItemStack(ReactorBlocks.ORE.getBlockInstance(), 1, meta));
 		}
 	}
 
@@ -180,26 +180,26 @@ public enum ReactorOres {
 
 	public String getProductName() {
 		switch(this) {
-		case PITCHBLENDE:
-		case ENDBLENDE:
-			return StatCollector.translateToLocal("item.uranium");
-		default:
-			return StatCollector.translateToLocal("item."+this.name().toLowerCase());
+			case PITCHBLENDE:
+			case ENDBLENDE:
+				return StatCollector.translateToLocal("item.uranium");
+			default:
+				return StatCollector.translateToLocal("item."+this.name().toLowerCase());
 		}
 	}
 
 	public Block getReplaceableBlock() {
 		switch(dimensionID) {
-		case 0:
-			return Blocks.stone;
-		case 1:
-			return Blocks.end_stone;
-		case -1:
-			return Blocks.netherrack;
-		case 7:
-			return Blocks.stone;
-		default:
-			return Blocks.stone;
+			case 0:
+				return Blocks.stone;
+			case 1:
+				return Blocks.end_stone;
+			case -1:
+				return Blocks.netherrack;
+			case 7:
+				return Blocks.stone;
+			default:
+				return Blocks.stone;
 		}
 	}
 
@@ -217,12 +217,12 @@ public enum ReactorOres {
 
 	public boolean isValidBiome(BiomeGenBase biome) {
 		switch(this) {
-		case PITCHBLENDE:
-			if ("Rainbow Forest".equals(biome.biomeName))
+			case PITCHBLENDE:
+				if ("Rainbow Forest".equals(biome.biomeName))
+					return true;
+				return biome == BiomeGenBase.river || biome == BiomeGenBase.ocean || biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
+			default:
 				return true;
-			return biome == BiomeGenBase.river || biome == BiomeGenBase.ocean || biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
-		default:
-			return true;
 		}
 	}
 

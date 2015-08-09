@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -46,8 +47,8 @@ public class VolcanicGasController implements TickHandler {
 	}
 
 	@Override
-	public TickType getType() {
-		return TickType.WORLD;
+	public EnumSet<TickType> getType() {
+		return EnumSet.of(TickType.WORLD);
 	}
 
 	@Override

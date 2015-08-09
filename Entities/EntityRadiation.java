@@ -18,8 +18,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.InertEntity;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -102,9 +104,9 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 
 		int c = 1;//20
 		if (r.nextInt(c) == 0) {
-			int dx = (int)x-effectRange+r.nextInt(effectRange*2+1);
-			int dy = (int)y-effectRange+r.nextInt(effectRange*2+1);
-			int dz = (int)z-effectRange+r.nextInt(effectRange*2+1);
+			int dx = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(x), effectRange);
+			int dy = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(y), effectRange);
+			int dz = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(z), effectRange);
 			RadiationEffects.instance.transformBlock(world, dx, dy, dz);
 		}
 	}
@@ -134,7 +136,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	public boolean attackEntityFrom(DamageSource src, float par2)
 	{
 		if (src.isExplosion()) {
-			RadiationEffects.instance.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F);
+			RadiationEffects.instance.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F, 0.5, true);
 			this.setDead();
 			return true;
 		}

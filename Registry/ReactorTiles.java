@@ -63,6 +63,7 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -218,20 +219,20 @@ public enum ReactorTiles {
 
 	public int getTextureStates() {
 		switch(this) {
-		case COOLANT:
-			return TileEntityWaterCell.LiquidStates.list.length;
-		case BOILER:
-		case SODIUMBOILER:
-		case CO2HEATER:
-			return 4;
-		case PEBBLEBED:
-			return 5;
-		case INJECTOR:
-			return 3;
-		case TURBINEMETER:
-			return 3;
-		default:
-			return 1;
+			case COOLANT:
+				return TileEntityWaterCell.LiquidStates.list.length;
+			case BOILER:
+			case SODIUMBOILER:
+			case CO2HEATER:
+				return 4;
+			case PEBBLEBED:
+				return 5;
+			case INJECTOR:
+				return 3;
+			case TURBINEMETER:
+				return 3;
+			default:
+				return 1;
 		}
 	}
 
@@ -241,15 +242,15 @@ public enum ReactorTiles {
 
 	public boolean isEndTextured() {
 		switch(this) {
-		case FUEL:
-		case CONTROL:
-		case WASTECONTAINER:
-		case SYNTHESIZER:
-		case BREEDER:
-		case TRITIZER:
-			return true;
-		default:
-			return false;
+			case FUEL:
+			case CONTROL:
+			case WASTECONTAINER:
+			case SYNTHESIZER:
+			case BREEDER:
+			case TRITIZER:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -271,14 +272,14 @@ public enum ReactorTiles {
 
 	public boolean renderInPass1() {
 		switch(this) {
-		case PROCESSOR:
-		case MAGNET:
-		case GASPIPE:
-		case MAGNETPIPE:
-		case COLLECTOR:
-			return true;
-		default:
-			return false;
+			case PROCESSOR:
+			case MAGNET:
+			case GASPIPE:
+			case MAGNETPIPE:
+			case COLLECTOR:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -288,7 +289,7 @@ public enum ReactorTiles {
 
 	public void addRecipe(IRecipe ir) {
 		if (!this.isDummiedOut()) {
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, RecipeLevel.CORE);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -297,7 +298,7 @@ public enum ReactorTiles {
 
 	public void addRecipe(ItemStack is, Object... obj) {
 		if (!this.isDummiedOut()) {
-			WorktableRecipes.getInstance().addRecipe(is, obj);
+			WorktableRecipes.getInstance().addRecipe(is, RecipeLevel.CORE, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
 			}
@@ -306,7 +307,7 @@ public enum ReactorTiles {
 
 	public void addCrafting(Object... obj) {
 		if (!this.isDummiedOut()) {
-			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), RecipeLevel.CORE, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
 			}
@@ -315,7 +316,7 @@ public enum ReactorTiles {
 
 	public void addSizedCrafting(int num, Object... obj) {
 		if (!this.isDummiedOut()) {
-			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), RecipeLevel.CORE, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			}
@@ -337,29 +338,29 @@ public enum ReactorTiles {
 
 	public ReactorType getReactorType() {
 		switch (this) {
-		case ABSORBER:
-		case HEATER:
-		case INJECTOR:
-		case MAGNET:
-		case MAGNETPIPE:
-		case SOLENOID:
-			return ReactorType.FUSION;
-		case BOILER:
-		case CONTROL:
-		case COOLANT:
-		case CPU:
-		case FUEL:
-			return ReactorType.FISSION;
-		case BREEDER:
-		case SODIUMBOILER:
-			return ReactorType.BREEDER;
-		case CO2HEATER:
-		case PEBBLEBED:
-			return ReactorType.HTGR;
-		case THORIUM:
-			return ReactorType.THORIUM;
-		default:
-			return null;
+			case ABSORBER:
+			case HEATER:
+			case INJECTOR:
+			case MAGNET:
+			case MAGNETPIPE:
+			case SOLENOID:
+				return ReactorType.FUSION;
+			case BOILER:
+			case CONTROL:
+			case COOLANT:
+			case CPU:
+			case FUEL:
+				return ReactorType.FISSION;
+			case BREEDER:
+			case SODIUMBOILER:
+				return ReactorType.BREEDER;
+			case CO2HEATER:
+			case PEBBLEBED:
+				return ReactorType.HTGR;
+			case THORIUM:
+				return ReactorType.THORIUM;
+			default:
+				return null;
 		}
 	}
 

@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.ReactorCraft;
 
 public enum ReactorPackets {
 
@@ -58,7 +58,7 @@ public enum ReactorPackets {
 			if (ReikaMathLibrary.isValueInsideBoundsIncl(e.getMinValue(), e.getMaxValue(), index))
 				return e;
 		}
-		ReikaJavaLibrary.pConsole("Index "+index+" does not correspond to an existing packet classification!");
+		ReactorCraft.logger.logError("Index "+index+" does not correspond to an existing packet classification!");
 		return null;
 	}
 

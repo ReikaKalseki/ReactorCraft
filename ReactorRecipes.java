@@ -243,6 +243,8 @@ public class ReactorRecipes {
 
 		GameRegistry.addRecipe(ReactorItems.GEIGER.getStackOf(), " r ", "sSs", "sgs", 'g', ItemStacks.steelgear, 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'r', ItemStacks.radar);
 
+		GameRegistry.addRecipe(ReactorItems.CLEANUP.getStackOf(), " sp", "sbs", "ss ", 'b', Items.water_bucket, 's', ItemStacks.steelingot, 'p', ItemStacks.pipe);
+
 		GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
 	}
 

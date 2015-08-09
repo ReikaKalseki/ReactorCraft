@@ -10,13 +10,16 @@
 package Reika.ReactorCraft.Entities;
 
 import io.netty.buffer.ByteBuf;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -24,17 +27,16 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Instantiable.BasicTeleporter;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.API.NeutronShield;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
-import Reika.ReactorCraft.Registry.MatBlocks;
+import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {
@@ -106,29 +108,22 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 				return ReikaRandomHelper.doWithChance(((NeutronShield)id).getAbsorptionChance(this.getType().name()));
 			}
 
-			if (ReikaItemHelper.matchStacks(ItemStacks.steelblock, new ItemStack(id, 1, meta))) {
-				return ReikaRandomHelper.doWithChance(90);
-			}
-			else if (ReikaItemHelper.matchStacks(ItemStacks.bedingotblock, new ItemStack(id, 1, meta))) {
-				return ReikaRandomHelper.doWithChance(97.5);
-			}
-			else if (id == ReactorBlocks.MATS.getBlockInstance() && meta == MatBlocks.CONCRETE.ordinal()) {
-				return ReikaRandomHelper.doWithChance(60);
-			}
-			else if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
+			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
 				world.setBlock(x, y, z, id, meta+8, 3);
 				world.func_147479_m(x, y, z);
 			}
-			if (id == Blocks.flowing_water || id == Blocks.water)
-				return ReikaRandomHelper.doWithChance(30);
+
+			RadiationShield rs = RadiationShield.getFrom(id, meta);
+			if (rs != null && ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance))
+				return true;
 
 			boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
 			if (flag) {
-				if (ReikaRandomHelper.doWithChance(20)) {
-					//AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
-					//List inbox = world.getEntitiesWithinAABB(EntityRadiation.class, box);
-					//if (inbox.size() < 10)
-					//	RadiationEffects.contaminateArea(world, x, y, z, 1);
+				if (ReikaRandomHelper.doWithChance(2)) {
+					AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
+					List inbox = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+					if (inbox.size() < 3)
+						RadiationEffects.instance.contaminateArea(world, x, y, z, 1, 1, 0, false);
 				}
 				if (ReikaRandomHelper.doWithChance(20))
 					RadiationEffects.instance.transformBlock(world, x, y, z);

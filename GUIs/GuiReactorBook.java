@@ -12,6 +12,7 @@ package Reika.ReactorCraft.GUIs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,14 +20,18 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Auxiliary.ReactorStructures;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -39,6 +44,8 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCraft
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
 public class GuiReactorBook extends GuiHandbook {
+
+	private int structureMode;
 
 	public GuiReactorBook(EntityPlayer p5ep, World world, int s, int p) {
 		super(p5ep, world, s, p);
@@ -55,39 +62,89 @@ public class GuiReactorBook extends GuiHandbook {
 	}
 
 	@Override
-	public int getMaxPage() {
-		return ReactorBook.RESOURCEDESC.getScreen()+ReactorBook.RESOURCEDESC.getNumberChildren()/8;
+	public int getMaxScreen() {
+		return ReactorBook.RESOURCEDESC.getScreen()+ReactorBook.RESOURCEDESC.getNumberChildren()/GuiHandbook.PAGES_PER_SCREEN;
+	}
+
+	@Override
+	protected void onInitGui(int j, int k, HandbookEntry h) {
+		for (int i = 0; i < ReactorStructures.structureList.length; i++) {
+			StructureRenderer s = ReactorStructures.structureList[i].getRenderer();
+			s.resetRotation();
+			if (h != ReactorBook.STRUCTURES)
+				s.reset();
+		}
+
+		if (h == ReactorBook.STRUCTURES && subpage > 0) {
+			buttonList.add(new GuiButton(20, j+xSize-77, k+6, 20, 20, "3D"));
+			buttonList.add(new GuiButton(21, j+xSize-57, k+6, 20, 20, "2D"));
+
+			if (structureMode == 1) {
+				buttonList.add(new GuiButton(22, j+xSize-77, k+40, 20, 20, "+"));
+				buttonList.add(new GuiButton(23, j+xSize-57, k+40, 20, 20, "-"));
+			}
+		}
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton b) {
+		if (b.id == 20) {
+			structureMode = 0;
+			this.initGui();
+			ReactorStructures.structureList[subpage-1].getRenderer().resetStepY();
+			return;
+		}
+		else if (b.id == 21) {
+			structureMode = 1;
+			this.initGui();
+			ReactorStructures.structureList[subpage-1].getRenderer().resetStepY();
+			return;
+		}
+		else if (b.id == 22) {
+			ReactorStructures.structureList[subpage-1].getRenderer().incrementStepY();
+			this.initGui();
+			return;
+		}
+		else if (b.id == 23) {
+			ReactorStructures.structureList[subpage-1].getRenderer().decrementStepY();
+			this.initGui();
+			return;
+		}
+		super.actionPerformed(b);
 	}
 
 	@Override
 	public int getMaxSubpage() {
 		ReactorBook h = ReactorBook.getFromScreenAndPage(screen, page);
+		if (h == ReactorBook.STRUCTURES) {
+			return ReactorStructures.structureList.length;
+		}
 		return h.isMachine() ? 1 : 0;
 	}
 
 	@Override
 	protected int getNewScreenByTOCButton(int id) {
 		switch(id) {
-		case 1:
-			return ReactorBook.INTRO.getScreen();
-		case 2:
-			return ReactorBook.PROCDESC.getScreen();
-		case 3:
-			return ReactorBook.GENDESC.getScreen();
-		case 4:
-			return ReactorBook.HTGRDESC.getScreen();
-		case 5:
-			return ReactorBook.FISSIONDESC.getScreen();
-		case 6:
-			return ReactorBook.BREEDERDESC.getScreen();
-		case 7:
-			return ReactorBook.FUSIONDESC.getScreen();
-		case 8:
-			return ReactorBook.ACCDESC.getScreen();
-		case 9:
-			return ReactorBook.TOOLDESC.getScreen();
-		case 10:
-			return ReactorBook.RESOURCEDESC.getScreen();
+			case 1:
+				return ReactorBook.INTRO.getScreen();
+			case 2:
+				return ReactorBook.PROCDESC.getScreen();
+			case 3:
+				return ReactorBook.GENDESC.getScreen();
+			case 4:
+				return ReactorBook.HTGRDESC.getScreen();
+			case 5:
+				return ReactorBook.FISSIONDESC.getScreen();
+			case 6:
+				return ReactorBook.BREEDERDESC.getScreen();
+			case 7:
+				return ReactorBook.FUSIONDESC.getScreen();
+			case 8:
+				return ReactorBook.ACCDESC.getScreen();
+			case 9:
+				return ReactorBook.TOOLDESC.getScreen();
+			case 10:
+				return ReactorBook.RESOURCEDESC.getScreen();
 		}
 		return 0;
 	}
@@ -122,7 +179,7 @@ public class GuiReactorBook extends GuiHandbook {
 			}
 			MachineRecipeRenderer.instance.drawCompressor(posX+66, posY+14, in, posX+120, posY+41, out);
 		}
-		if (h == ReactorBook.PELLET) {
+		else if (h == ReactorBook.PELLET) {
 			ItemStack in = CraftingItems.GRAPHITE.getItem();
 			ItemStack in2 = CraftingItems.UDUST.getItem();
 			ItemStack out = ReactorItems.PELLET.getStackOf();
@@ -191,6 +248,43 @@ public class GuiReactorBook extends GuiHandbook {
 		ReactorBook h = (ReactorBook)this.getEntry();
 		ReikaGuiAPI api = ReikaGuiAPI.instance;
 
+		if (h == ReactorBook.STRUCTURES) {
+			if (subpage == 0) {
+
+			}
+			else {
+				ReactorStructures s = ReactorStructures.structureList[subpage-1];
+				StructureRenderer r = s.getRenderer();
+
+				if (structureMode == 0) {
+
+					if (Mouse.isButtonDown(0) && this.getGuiTick() > 2) {
+						r.rotate(0.25*Mouse.getDY(), 0.25*Mouse.getDX(), 0);
+					}
+					else if (Mouse.isButtonDown(1)) {
+						r.resetRotation();
+					}
+
+					if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+						r.rotate(0, 0.75, 0);
+					}
+					else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+						r.rotate(0, -0.75, 0);
+					}
+					else if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+						r.rotate(-0.75, 0, 0);
+					}
+					else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+						r.rotate(0.75, 0, 0);
+					}
+
+					r.draw3D(posX, posY);
+				}
+				else {
+					r.drawSlice(posX, posY);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -208,7 +302,9 @@ public class GuiReactorBook extends GuiHandbook {
 		ReactorBook h = (ReactorBook)this.getEntry();
 		if (h.isParent())
 			return PageType.PLAIN;
-		if (subpage == 1)
+		if (h == ReactorBook.STRUCTURES)
+			return PageType.SOLID;
+		if (subpage >= 1)
 			return PageType.PLAIN;
 		if (h.isMachine())
 			return PageType.MACHINERENDER;

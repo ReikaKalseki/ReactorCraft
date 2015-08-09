@@ -20,6 +20,8 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig {
 	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
 	MAGNETORE("Generate Magnetite Ore Even If Other Mods Do", true),
 	CALCITEORE("Generate Calcite Ore Even If Other Mods Do", true),
+	CADMIUMORE("Generate Cadmium Ore Even If Other Mods Do", true),
+	INDIUMORE("Generate Indium Ore Even If Other Mods Do", true),
 	RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),

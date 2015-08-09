@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities.Fission;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -250,6 +251,30 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	@Override
 	public int getRedstoneOverride() {
 		return layout.isEmpty() ? 0 : 15*layout.countLoweredRods()/layout.getNumberRods();
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		omega = NBT.getInteger("speed");
+		torque = NBT.getInteger("trq");
+		power = NBT.getLong("pwr");
+
+		redstoneUpdate = NBT.getInteger("redsu");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("speed", omega);
+		NBT.setInteger("trq", torque);
+		NBT.setLong("pwr", power);
+
+		NBT.setInteger("redsu", redstoneUpdate);
 	}
 
 }

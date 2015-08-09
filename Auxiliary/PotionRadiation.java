@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -22,14 +24,13 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
 
 public class PotionRadiation extends Potion implements PermaPotion {
 
 	public PotionRadiation(int par1) {
 		super(par1, true, 0x111111);
 
-		TickRegistry.instance.registerTickHandler(PotionMapCMEAvoidance.instance, Side.SERVER);
+		TickRegistry.instance.registerTickHandler(PotionMapCMEAvoidance.instance);
 	}
 
 	@Override
@@ -93,8 +94,8 @@ public class PotionRadiation extends Potion implements PermaPotion {
 		}
 
 		@Override
-		public TickType getType() {
-			return TickType.PLAYER;
+		public EnumSet<TickType> getType() {
+			return EnumSet.of(TickType.PLAYER);
 		}
 
 		@Override

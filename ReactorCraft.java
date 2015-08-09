@@ -36,6 +36,7 @@ import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -237,6 +238,8 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		logger = new ModLogger(instance, false);
+		if (DragonOptions.FILELOG.getState())
+			logger.setOutput("**_Loading_Log.log");
 
 		this.addLiquids();
 		this.addBlocks();

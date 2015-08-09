@@ -29,11 +29,16 @@ import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Event.CreeperExplodeEvent;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -55,7 +60,7 @@ public class RadiationEffects {
 			int x = MathHelper.floor_double(evt.creeper.posX);
 			int y = MathHelper.floor_double(evt.creeper.posY);
 			int z = MathHelper.floor_double(evt.creeper.posZ);
-			this.contaminateArea(world, x, y, z, 4, 3);
+			this.contaminateArea(world, x, y, z, 4, 3, 1.5, true);
 		}
 	}
 
@@ -91,18 +96,47 @@ public class RadiationEffects {
 		return true;
 	}
 
-	public void contaminateArea(World world, int x, int y, int z, int range, float density) {
-		Random r = new Random();
+	public double contaminateArea(World world, int x, int y, int z, int range, float density, double force, boolean los) {
+		double frac = 1;
 		int num = (int)(Math.sqrt(range)*density);
 		for (int i = 0; i < num; i++) {
-			int dx = x-range+r.nextInt(range*2+1);
-			int dy = y-range+r.nextInt(range*2+1);
-			int dz = z-range+r.nextInt(range*2+1);
+			int dx = ReikaRandomHelper.getRandomPlusMinus(x, range);
+			int dy = ReikaRandomHelper.getRandomPlusMinus(y, range);
+			int dz = ReikaRandomHelper.getRandomPlusMinus(z, range);
+			while(los && !this.isValidRadiationPosition(world, x, y, z, dx, dy, dz, 2)) {
+				dx = ReikaRandomHelper.getRandomPlusMinus(x, range);
+				dy = ReikaRandomHelper.getRandomPlusMinus(y, range);
+				dz = ReikaRandomHelper.getRandomPlusMinus(z, range);
+			}
+			if (ReikaMathLibrary.py3d(dx-x, dy-y, dz-z) <= force) {
+				frac -= 1D/num;
+			}
 			EntityRadiation rad = new EntityRadiation(world, range);
 			rad.setLocationAndAngles(dx+0.5, dy+0.5, dz+0.5, 0, 0);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(rad);
 		}
+		return frac;
+	}
+
+	private boolean isValidRadiationPosition(World world, int x, int y, int z, int dx, int dy, int dz, double forceDist) {
+		if (ReikaMathLibrary.py3d(dx-x, dy-y, dz-z) <= forceDist)
+			return true;
+		ArrayList<BlockKey> li = ReikaWorldHelper.getBlocksAlongVector(world, x+0.5, y+0.5, z+0.5, dx+0.5, dy+0.5, dz+0.5);
+		double chance = 1;
+		for (BlockKey bk : li) {
+			RadiationShield rs = RadiationShield.getFrom(bk.blockID, bk.metadata);
+			if (rs != null) {
+				chance *= 1-rs.radiationDeflectChance/100D;
+			}
+		}
+		boolean flag = chance > 0 && ReikaRandomHelper.doWithChance(chance);
+		//if (flag) {
+		//String vec = String.format("%d->%d,%d->%d,%d-%d", x, dx, y, dy, z, dz);
+		//ReikaJavaLibrary.pConsole(String.format("Got %.10f%s chance for %s from %s", chance, "%", vec, li.toString()));
+		//ReikaJavaLibrary.pConsole("Success");
+		//}
+		return flag;
 	}
 
 	public void transformBlock(World world, int x, int y, int z) {

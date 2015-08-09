@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -52,14 +53,17 @@ ChunkLoadingTile, BreakAction {
 	protected int hydrogen = 0;
 	private int activeTimer = 0;
 
+	private static final int MAX_HYDROGEN = 200;
+
 	public static final int CLADDING = 800;
 	public static final int HYDROGEN = 1400;
-	public static final int EXPLOSION = 1800;
+	public static final int MELTDOWN = 1800;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
+
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
 			ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
@@ -267,20 +271,20 @@ ChunkLoadingTile, BreakAction {
 
 	protected final NeutronType getNeutronType() {
 		switch(this.getMachine().getReactorType()) {
-		case BREEDER:
-			return NeutronType.BREEDER;
-		case FISSION:
-			return NeutronType.FISSION;
-		case FUSION:
-			return NeutronType.FUSION;
-		default:
-			return null;
+			case BREEDER:
+				return NeutronType.BREEDER;
+			case FISSION:
+				return NeutronType.FISSION;
+			case FUSION:
+				return NeutronType.FUSION;
+			default:
+				return null;
 		}
 	}
 
 	@Override
 	public int getMaxTemperature() {
-		return EXPLOSION;
+		return MELTDOWN;
 	}
 
 	protected void onMeltdown(World world, int x, int y, int z) {
@@ -299,9 +303,17 @@ ChunkLoadingTile, BreakAction {
 			}
 		}
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 8, false);
-		HydrogenExplosion ex = new HydrogenExplosion(world, null, x+0.5, y+0.5, z+0.5, 7);
-		ex.doExplosionA();
-		ex.doExplosionB(false);
+
+		double scatter = RadiationEffects.instance.contaminateArea(world, x, y, z, 32, 8, 2, true);
+		this.testAndDoHydrogenExplosion(world, x, y, z, scatter);
+	}
+
+	private void testAndDoHydrogenExplosion(World world, int x, int y, int z, double scatter) {
+		if (true || ReikaRandomHelper.doWithChance((double)hydrogen/MAX_HYDROGEN)) {
+			HydrogenExplosion ex = new HydrogenExplosion(world, null, x+0.5, y+0.5, z+0.5, 7/*, scatter*/);
+			ex.doExplosionA();
+			ex.doExplosionB(false);
+		}
 	}
 
 	@Override
@@ -340,23 +352,23 @@ ChunkLoadingTile, BreakAction {
 			}
 		}
 
-		if (hydrogen > 0)
-			hydrogen--;
-
 		if (temperature >= 500) {
 			ReactorAchievements.HOTCORE.triggerAchievement(this.getPlacer());
 		}
 
-		if (temperature > this.getMaxTemperature()) {
+		if (temperature > MELTDOWN) {
 			this.onMeltdown(world, x, y, z);
 			ReactorAchievements.MELTDOWN.triggerAchievement(this.getPlacer());
 		}
 
 		if (temperature > HYDROGEN) {
 			hydrogen += 1;
-			if (hydrogen > 200) {
-				this.onMeltdown(world, x, y, z);
+			if (hydrogen > MAX_HYDROGEN) {
+				this.testAndDoHydrogenExplosion(world, x, y, z, 1);
 			}
+		}
+		else if (hydrogen > 0) {
+			hydrogen--;
 		}
 	}
 

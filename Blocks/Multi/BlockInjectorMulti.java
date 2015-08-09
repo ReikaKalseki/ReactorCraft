@@ -99,6 +99,30 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 				return false;
 		}
 
+
+
+		for (int k = 0; k <= 2; k++) {
+			Block b = world.getBlock(x+left.offsetX, y+k, z+left.offsetZ);
+			int meta = world.getBlockMetadata(x+left.offsetX, y+k, z+left.offsetZ);
+			if (b != this || meta != 6)
+				return false;
+
+			b = world.getBlock(x-left.offsetX, y+k, z-left.offsetZ);
+			meta = world.getBlockMetadata(x-left.offsetX, y+k, z-left.offsetZ);
+			if (b != this || meta != 6)
+				return false;
+		}
+
+		Block b = world.getBlock(x+left.offsetX+dir.offsetX*8, y, z+left.offsetZ+dir.offsetZ*8);
+		int meta = world.getBlockMetadata(x+left.offsetX, y, z+left.offsetZ+dir.offsetZ*8);
+		if (b != this || meta != 6)
+			return false;
+
+		b = world.getBlock(x-left.offsetX+dir.offsetX*8, y, z-left.offsetZ+dir.offsetZ*8);
+		meta = world.getBlockMetadata(x-left.offsetX+dir.offsetX*8, y, z-left.offsetZ+dir.offsetZ*8);
+		if (b != this || meta != 6)
+			return false;
+
 		return true;
 	}
 
@@ -185,6 +209,16 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			if (b != this || meta != 5)
 				return false;
 		}
+
+		Block b = world.getBlock(x+dir.offsetX*2+left.offsetX, y, z+dir.offsetZ*2+left.offsetZ);
+		int meta = world.getBlockMetadata(x+dir.offsetX*2+left.offsetX, y, z+dir.offsetZ*2+left.offsetZ);
+		if (b != Blocks.air)
+			return false;
+		b = world.getBlock(x+dir.offsetX*2-left.offsetX, y, z+dir.offsetZ*2-left.offsetZ);
+		meta = world.getBlockMetadata(x+dir.offsetX*2-left.offsetX, y, z+dir.offsetZ*2-left.offsetZ);
+		if (b != Blocks.air)
+			return false;
+
 		return true;
 	}
 
@@ -290,124 +324,124 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			return index;
 		}
 		switch(meta) {
-		case 0:
-			if (side == 0)
+			case 0:
+				if (side == 0)
+					return 9;
+				return side < 2 ? 0 : 4;
+			case 1:
+				if (side == 1)
+					return 9;
+				if (side == 3 || side == 2) {
+					if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 0)
+						return side == 3 ? 5 : 6;
+					if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 0)
+						return side == 3 ? 6 : 5;
+				}
+				if (side == 4 || side == 5) {
+					if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 0)
+						return side == 4 ? 5 : 6;
+					if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 0)
+						return side == 4 ? 6 : 5;
+				}
 				return 9;
-			return side < 2 ? 0 : 4;
-		case 1:
-			if (side == 1)
+			case 2:
+				ForgeDirection dir = dirs[side];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				Block b = world.getBlock(dx, dy, dz);
+				if (b == Blocks.air)
+					return 9;
+				return b == ReactorTiles.MAGNETPIPE.getBlock() ? 0 : 9;
+			case 3:
+				if (side == 1)
+					return 9;
+				return side < 2 ? 0 : 3;
+			case 4:
+				if (side == 1)
+					return 9;
+				if (side == 3 || side == 2) {
+					if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 3)
+						return side == 3 ? 8 : 7;
+					if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 3)
+						return side == 3 ? 7 : 8;
+				}
+				if (side == 4 || side == 5) {
+					if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 3)
+						return side == 4 ? 8 : 7;
+					if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 3)
+						return side == 4 ? 7 : 8;
+				}
 				return 9;
-			if (side == 3 || side == 2) {
-				if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 0)
-					return side == 3 ? 5 : 6;
-				if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 0)
-					return side == 3 ? 6 : 5;
-			}
-			if (side == 4 || side == 5) {
-				if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 0)
-					return side == 4 ? 5 : 6;
-				if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 0)
-					return side == 4 ? 6 : 5;
-			}
-			return 9;
-		case 2:
-			ForgeDirection dir = dirs[side];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			Block b = world.getBlock(dx, dy, dz);
-			if (b == Blocks.air)
-				return 9;
-			return b == ReactorTiles.MAGNETPIPE.getBlock() ? 0 : 9;
-		case 3:
-			if (side == 1)
-				return 9;
-			return side < 2 ? 0 : 3;
-		case 4:
-			if (side == 1)
-				return 9;
-			if (side == 3 || side == 2) {
-				if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 3)
-					return side == 3 ? 8 : 7;
-				if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 3)
-					return side == 3 ? 7 : 8;
-			}
-			if (side == 4 || side == 5) {
-				if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 3)
-					return side == 4 ? 8 : 7;
-				if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 3)
-					return side == 4 ? 7 : 8;
-			}
-			return 9;
-		case 5:
-			return 22;
-		case 6:
-			if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 5) {
-				if (side == 3)
-					return 2;
-				if (side == 2)
-					return 1;
-			}
-			if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 5) {
-				if (side == 3)
-					return 1;
-				if (side == 2)
-					return 2;
-			}
-			if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 5) {
-				if (side == 5)
-					return 1;
-				if (side == 4)
-					return 2;
-			}
-			if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 5) {
-				if (side == 4)
-					return 1;
-				if (side == 5)
-					return 2;
-			}
+			case 5:
+				return 22;
+			case 6:
+				if (world.getBlock(x+1, y, z) == this && (world.getBlockMetadata(x+1, y, z)&7) == 5) {
+					if (side == 3)
+						return 2;
+					if (side == 2)
+						return 1;
+				}
+				if (world.getBlock(x-1, y, z) == this && (world.getBlockMetadata(x-1, y, z)&7) == 5) {
+					if (side == 3)
+						return 1;
+					if (side == 2)
+						return 2;
+				}
+				if (world.getBlock(x, y, z+1) == this && (world.getBlockMetadata(x, y, z+1)&7) == 5) {
+					if (side == 5)
+						return 1;
+					if (side == 4)
+						return 2;
+				}
+				if (world.getBlock(x, y, z-1) == this && (world.getBlockMetadata(x, y, z-1)&7) == 5) {
+					if (side == 4)
+						return 1;
+					if (side == 5)
+						return 2;
+				}
 
-			if (world.getBlock(x+1, y, z) != this && world.getBlock(x-1, y, z) != this) {
-				if (ReactorTiles.getTE(world, x+1, y, z) == ReactorTiles.MAGNETPIPE) {
-					if (side == 3)
-						return 2;
-					if (side == 2)
-						return 1;
-					if (side == 5)
-						return 0;
+				if (world.getBlock(x+1, y, z) != this && world.getBlock(x-1, y, z) != this) {
+					if (ReactorTiles.getTE(world, x+1, y, z) == ReactorTiles.MAGNETPIPE) {
+						if (side == 3)
+							return 2;
+						if (side == 2)
+							return 1;
+						if (side == 5)
+							return 0;
+					}
+					if (ReactorTiles.getTE(world, x-1, y, z) == ReactorTiles.MAGNETPIPE) {
+						if (side == 3)
+							return 1;
+						if (side == 2)
+							return 2;
+						if (side == 4)
+							return 0;
+					}
 				}
-				if (ReactorTiles.getTE(world, x-1, y, z) == ReactorTiles.MAGNETPIPE) {
-					if (side == 3)
-						return 1;
-					if (side == 2)
-						return 2;
-					if (side == 4)
-						return 0;
+				if (world.getBlock(x, y, z+1) != this && world.getBlock(x, y, z-1) != this) {
+					if (ReactorTiles.getTE(world, x, y, z+1) == ReactorTiles.MAGNETPIPE) {
+						if (side == 5)
+							return 1;
+						if (side == 4)
+							return 2;
+						if (side == 3)
+							return 0;
+					}
+					if (ReactorTiles.getTE(world, x, y, z-1) == ReactorTiles.MAGNETPIPE) {
+						if (side == 4)
+							return 1;
+						if (side == 5)
+							return 2;
+						if (side == 2)
+							return 0;
+					}
 				}
-			}
-			if (world.getBlock(x, y, z+1) != this && world.getBlock(x, y, z-1) != this) {
-				if (ReactorTiles.getTE(world, x, y, z+1) == ReactorTiles.MAGNETPIPE) {
-					if (side == 5)
-						return 1;
-					if (side == 4)
-						return 2;
-					if (side == 3)
-						return 0;
-				}
-				if (ReactorTiles.getTE(world, x, y, z-1) == ReactorTiles.MAGNETPIPE) {
-					if (side == 4)
-						return 1;
-					if (side == 5)
-						return 2;
-					if (side == 2)
-						return 0;
-				}
-			}
-			return 9;
-		case 7:
-			return 0;
-		default:
-			return 0;
+				return 9;
+			case 7:
+				return 0;
+			default:
+				return 0;
 		}
 	}
 

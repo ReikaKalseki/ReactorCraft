@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;

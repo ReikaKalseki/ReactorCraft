@@ -23,6 +23,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
+import Reika.RotaryCraft.GUIs.GuiHandbook;
 
 public enum ReactorBook implements HandbookEntry {
 
@@ -47,6 +48,7 @@ public enum ReactorBook implements HandbookEntry {
 	ENRICHMENT("Uranium Enrichment", ReactorTiles.CENTRIFUGE),
 	MELTDOWN("Meltdowns", MatBlocks.SLAG.getStackOf()),
 	RADIATION("Radiation", ReactorItems.WASTE),
+	STRUCTURES("Structures", ReactorBlocks.HEATERMULTI.getStackOfMetadata(11)),
 
 	//--------------------PROCESSING---------------//
 	PROCDESC("Processing Machines", ""),
@@ -297,7 +299,7 @@ public enum ReactorBook implements HandbookEntry {
 
 	@Override
 	public boolean hasSubpages() {
-		return this.isMachine();
+		return this.isMachine() || this == STRUCTURES;
 	}
 
 	public String getTabImageFile() {
@@ -307,7 +309,7 @@ public enum ReactorBook implements HandbookEntry {
 
 	public int getRelativeScreen() {
 		int offset = this.ordinal()-this.getParent().ordinal();
-		return offset/8;
+		return offset/GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	public ReactorBook getParent() {
@@ -332,7 +334,7 @@ public enum ReactorBook implements HandbookEntry {
 		for (int i = 0; i < this.ordinal(); i++) {
 			ReactorBook h = tabList[i];
 			if (h.isParent) {
-				sc += h.getNumberChildren()/8+1;
+				sc += h.getNumberChildren()/GuiHandbook.PAGES_PER_SCREEN+1;
 			}
 		}
 		return sc;
@@ -361,7 +363,7 @@ public enum ReactorBook implements HandbookEntry {
 
 	public int getRelativeTabPosn() {
 		int offset = this.ordinal()-this.getParent().ordinal();
-		return offset-this.getRelativeScreen()*8;
+		return offset-this.getRelativeScreen()*GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	public int getScreen() {
@@ -369,7 +371,7 @@ public enum ReactorBook implements HandbookEntry {
 	}
 
 	public int getPage() {
-		return (this.ordinal()-this.getParent().ordinal())%8;
+		return (this.ordinal()-this.getParent().ordinal())%GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	@Override
