@@ -33,7 +33,7 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -111,10 +111,10 @@ public class ItemReactorPlacer extends Item implements ISize {
 		te.setPlacer(ep);
 		te.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		if (m == ReactorTiles.INJECTOR) {
-			((TileEntityFusionInjector)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false).getOpposite());
+			((TileEntityFusionInjector)te).setFacing(ReikaEntityHelper.getDirectionFromEntityLook(ep, false).getOpposite());
 		}
 		if (m == ReactorTiles.GENERATOR) {
-			((TileEntityReactorGenerator)te).setFacing(ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false));
+			((TileEntityReactorGenerator)te).setFacing(ReikaEntityHelper.getDirectionFromEntityLook(ep, false));
 		}
 		if (m == ReactorTiles.MARKER && DragonAPICore.debugtest && ep.capabilities.isCreativeMode) {
 			this.placeFusionReactor(world, x, y, z, ep);
@@ -124,24 +124,24 @@ public class ItemReactorPlacer extends Item implements ISize {
 		}
 		if (m == ReactorTiles.COLLECTOR) {
 			switch(side) {
-			case 0:
-				te.setBlockMetadata(1);
-				break;
-			case 1:
-				te.setBlockMetadata(0);
-				break;
-			case 2:
-				te.setBlockMetadata(4);
-				break;
-			case 3:
-				te.setBlockMetadata(2);
-				break;
-			case 4:
-				te.setBlockMetadata(5);
-				break;
-			case 5:
-				te.setBlockMetadata(3);
-				break;
+				case 0:
+					te.setBlockMetadata(1);
+					break;
+				case 1:
+					te.setBlockMetadata(0);
+					break;
+				case 2:
+					te.setBlockMetadata(4);
+					break;
+				case 3:
+					te.setBlockMetadata(2);
+					break;
+				case 4:
+					te.setBlockMetadata(5);
+					break;
+				case 5:
+					te.setBlockMetadata(3);
+					break;
 			}
 			return true;
 		}
@@ -241,24 +241,24 @@ public class ItemReactorPlacer extends Item implements ISize {
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 			int r = 3;
 			switch(meta) {
-			case 2:
-			case 3:
-				for (int i = x-r; i <= x+r; i++) {
-					for (int j = y-r; j <= y+r; j++) {
-						if (x != i || y != j)
-							contact.addBlockCoordinate(i, j, z);
+				case 2:
+				case 3:
+					for (int i = x-r; i <= x+r; i++) {
+						for (int j = y-r; j <= y+r; j++) {
+							if (x != i || y != j)
+								contact.addBlockCoordinate(i, j, z);
+						}
 					}
-				}
-				break;
-			case 0:
-			case 1:
-				for (int i = z-r; i <= z+r; i++) {
-					for (int j = y-r; j <= y+r; j++) {
-						if (z != i || y != j)
-							contact.addBlockCoordinate(x, j, i);
+					break;
+				case 0:
+				case 1:
+					for (int i = z-r; i <= z+r; i++) {
+						for (int j = y-r; j <= y+r; j++) {
+							if (z != i || y != j)
+								contact.addBlockCoordinate(x, j, i);
+						}
 					}
-				}
-				break;
+					break;
 			}
 			for (int i = 0; i < contact.getSize(); i++) {
 				Coordinate c = contact.getNthBlock(i);

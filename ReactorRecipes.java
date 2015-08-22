@@ -32,6 +32,7 @@ import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
@@ -51,8 +52,8 @@ public class ReactorRecipes {
 
 		RecipesGrinder.getRecipes().addRecipe(ReactorOres.PITCHBLENDE.getProduct(), CraftingItems.UDUST.getItem());
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.PITCHBLENDE), CraftingItems.UDUST.getItem());
-		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.PITCHBLENDE.getProductOreDictName(), CraftingItems.UDUST.getItem());
-		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.URANIUM.getProductOreDictName(), CraftingItems.UDUST.getItem());
+		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.PITCHBLENDE.getProductOreDictName(), CraftingItems.UDUST.getItem(), RecipeLevel.CORE);
+		RecipesGrinder.getRecipes().addOreDictRecipe(ModOreList.URANIUM.getProductOreDictName(), CraftingItems.UDUST.getItem(), RecipeLevel.CORE);
 
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.tungsteningot, ItemStacks.tungstenflakes);
 

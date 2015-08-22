@@ -26,6 +26,7 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -50,6 +51,11 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 				output.empty();
 		}
 		//this.onNeutron(null, world, x, y, z);
+
+		thermalTicker.update();
+		if (thermalTicker.checkCap()) {
+			this.updateTemperature(world, x, y, z);
+		}
 	}
 
 	@Override
@@ -180,6 +186,26 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		if (side == ForgeDirection.DOWN)
 			return Flow.OUTPUT;
 		return Flow.NONE;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 1000;
+	}
+
+	@Override
+	public boolean canDumpHeatInto(LiquidStates liq) {
+		return liq != LiquidStates.EMPTY;
 	}
 
 }

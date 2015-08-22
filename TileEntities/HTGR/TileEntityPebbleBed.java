@@ -67,7 +67,8 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		}
 
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
-		this.feed();
+		if (!world.isRemote)
+			this.feed();
 
 		tempTimer.update();
 		if (tempTimer.checkCap()) {

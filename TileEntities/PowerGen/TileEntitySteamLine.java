@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -37,7 +38,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 	private boolean[] connections = new boolean[6];
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
-	private ReactorType source = null;
+	private Proportionality<ReactorType> source = new Proportionality();
 
 	@Override
 	public int getIndex() {
@@ -71,7 +72,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
 				steam += s;
-				source = te.getReactorType();
+				source.addValue(te.getReactorType(), s);
 			}
 		}
 	}
@@ -282,7 +283,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		steam += amt;
 	}
 
-	public ReactorType getSourceReactorType() {
+	public Proportionality<ReactorType> getSourceReactorType() {
 		return source;
 	}
 }

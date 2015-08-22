@@ -130,4 +130,9 @@ public enum ReactorSounds implements SoundEnum {
 	public boolean canOverlap() {
 		return this == FUSION;
 	}
+
+	@Override
+	public boolean attenuate() {
+		return true;
+	}
 }

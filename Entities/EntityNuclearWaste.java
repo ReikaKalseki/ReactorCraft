@@ -85,7 +85,11 @@ public final class EntityNuclearWaste extends EntityItem {
 
 		//Contaminate the area slightly every 10 min left in the world
 		if (timer%12000 == 0 && timer >= 18000) {
-			RadiationEffects.instance.contaminateArea(world, ix, iy, iz, RANGE*4, 2, 0, false); //no LOS to simulate groundwater/air particulates
+			AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(12, 8, 12);
+			List<EntityRadiation> near = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+			if (near.size() < 32) {
+				RadiationEffects.instance.contaminateArea(world, ix, iy, iz, RANGE*4, 2, 0, false); //no LOS to simulate groundwater/air particulates
+			}
 		}
 	}
 

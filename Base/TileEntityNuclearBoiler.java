@@ -14,14 +14,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE, Temperatured {
+public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE {
 
 	protected int steam;
 	protected ReactorType type;

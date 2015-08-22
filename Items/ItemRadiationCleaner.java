@@ -98,9 +98,11 @@ public class ItemRadiationCleaner extends ItemReactorTool implements ChargeableT
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int ticksLeft) {
-		int used = this.getMaxItemUseDuration(is)-ticksLeft;
-		is.setItemDamage(Math.max(0, is.getItemDamage()-(used/TICK_PER_KJ)));
-		this.addWater(is, -WATER_PER_TICK*used);
+		if (!ep.capabilities.isCreativeMode) {
+			int used = this.getMaxItemUseDuration(is)-ticksLeft;
+			is.setItemDamage(Math.max(0, is.getItemDamage()-(used/TICK_PER_KJ)));
+			this.addWater(is, -WATER_PER_TICK*used);
+		}
 	}
 
 	@Override

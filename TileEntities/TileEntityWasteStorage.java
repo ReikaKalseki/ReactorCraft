@@ -11,10 +11,13 @@ package Reika.ReactorCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -23,13 +26,14 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 
-public class TileEntityWasteStorage extends TileEntityWasteUnit implements RangedEffect {
+public class TileEntityWasteStorage extends TileEntityWasteUnit implements RangedEffect, Feedable {
 
 	@Override
 	public int getSizeInventory() {
@@ -42,6 +46,9 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 			this.sickenMobs(world, x, y, z);
 
 		this.decayWaste(this.getAccelerationFactor(world, x, y, z));
+
+		if (!world.isRemote)
+			this.feed();
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) > 100) {
 			if (this.hasWaste()) {
@@ -127,6 +134,68 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	@Override
 	public final int getInventoryStackLimit() {
 		return 16;
+	}
+
+	public boolean feed() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		Block id = world.getBlock(x, y-1, z);
+		int meta = world.getBlockMetadata(x, y-1, z);
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (tile instanceof TileEntityWasteStorage) {
+			if (((Feedable)tile).feedIn(inv[inv.length-1])) {
+				for (int i = inv.length-1; i > 0; i--)
+					inv[i] = inv[i-1];
+
+				id = world.getBlock(x, y+1, z);
+				meta = world.getBlockMetadata(x, y+1, z);
+				tile = this.getAdjacentTileEntity(ForgeDirection.UP);
+				if (tile instanceof TileEntityWasteStorage) {
+					inv[0] = ((Feedable) tile).feedOut();
+				}
+				else
+					inv[0] = null;
+			}
+		}
+		this.collapseInventory();
+		return false;
+	}
+
+	private void collapseInventory() {
+		for (int i = 0; i < inv.length; i++) {
+			for (int k = inv.length-1; k > 0; k--) {
+				if (inv[k] == null) {
+					inv[k] = inv[k-1];
+					inv[k-1] = null;
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean feedIn(ItemStack is) {
+		if (is == null)
+			return true;
+		if (!this.isItemValidForSlot(0, is))
+			return false;
+		if (inv[0] == null) {
+			inv[0] = is.copy();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ItemStack feedOut() {
+		if (inv[inv.length-1] == null)
+			return null;
+		else {
+			ItemStack is = inv[inv.length-1].copy();
+			inv[inv.length-1] = null;
+			return is;
+		}
 	}
 
 }

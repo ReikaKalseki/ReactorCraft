@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.UnCopyableBlock;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
 
@@ -61,7 +61,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable, U
 	public final void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack is) {
 		if (!world.isRemote && this.canTriggerMultiBlockCheck(world, x, y, z, world.getBlockMetadata(x, y, z))) {
 			if (e instanceof EntityPlayer)
-				if (this.checkForFullMultiBlock(world, x, y, z, ReikaPlayerAPI.getDirectionFromPlayerLook((EntityPlayer)e, false)))
+				if (this.checkForFullMultiBlock(world, x, y, z, ReikaEntityHelper.getDirectionFromEntityLook(e, false)))
 					this.onCreateFullMultiBlock(world, x, y, z);
 		}
 	}

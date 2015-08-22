@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -16,12 +17,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -38,7 +42,8 @@ import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
-public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile, FusionReactorToroidPart {
+public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile, FusionReactorToroidPart,
+ChunkLoadingTile {
 
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;
@@ -57,6 +62,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 	private final HybridTank tank = new HybridTank("toroid", 8000);
 
 	private boolean hasNext;
+
+	private boolean isActive;
+	private int lastPlasma;
 
 	public boolean hasMultiBlock() {
 		return true;
@@ -81,6 +89,9 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		
+		if (alpha > 0)
+			alpha -= 8;
 
 		if (DragonAPICore.debugtest) {
 			tank.addLiquid(1000, RotaryCraft.nitrogenFluid);
@@ -96,6 +107,8 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
 				tank.removeLiquid(10);
+
+				this.setActive();
 			}
 			else {
 				ReactorAchievements.ESCAPE.triggerAchievement(this.getPlacer());
@@ -131,6 +144,34 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 		//if (this.getTicksExisted() == 0)
 		//	this.clearArea(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(aim, !hasSolenoid && this.getSide() == Side.SERVER);
+
+		if (lastPlasma > 0) {
+			lastPlasma--;
+			if (lastPlasma == 0) {
+				this.setInactive();
+			}
+		}
+	}
+
+	private void setActive() {
+		boolean last = isActive;
+		isActive = true;
+		lastPlasma = 20;
+		if (!last) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			if (ReactorOptions.CHUNKLOADING.getState()) {
+				ChunkManager.instance.loadChunks(this);
+			}
+		}
+	}
+
+	private void setInactive() {
+		boolean last = isActive;
+		isActive = false;
+		if (last) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			ChunkManager.instance.unloadChunks(this);
+		}
 	}
 
 	private boolean checkCompleteness(World world, int x, int y, int z) {
@@ -307,13 +348,11 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		if (alpha > 0)
-			alpha -= 8;
+	
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		aim = this.getAim(NBT.getInteger("aim"));
@@ -321,24 +360,33 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 		charge = NBT.getInteger("chg");
 
+		alpha = NBT.getInteger("alp");
+
 		tank.readFromNBT(NBT);
 
 		hasNext = NBT.getBoolean("next");
+
+		isActive = NBT.getBoolean("active");
+		lastPlasma = NBT.getInteger("lastplasma");
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("aim", this.getAim().ordinal());
 		NBT.setBoolean("solenoid", hasSolenoid);
+
+		NBT.setInteger("alp", alpha);
 
 		NBT.setInteger("chg", charge);
 
 		tank.writeToNBT(NBT);
 
 		NBT.setBoolean("next", hasNext);
+
+		NBT.setBoolean("active", isActive);
+		NBT.setInteger("lastplasma", lastPlasma);
 	}
 
 	public Aim getAim() {
@@ -499,5 +547,19 @@ public class TileEntityToroidMagnet extends TileEntityReactorBase implements Scr
 
 	public void setAim(Aim a) {
 		aim = a != null ? a : aim;
+	}
+
+	@Override
+	public void breakBlock() {
+		ChunkManager.instance.unloadChunks(this);
+	}
+
+	@Override
+	public Collection<ChunkCoordIntPair> getChunksToLoad() {
+		return ChunkManager.instance.getChunkSquare(xCoord, yCoord, 2);
+	}
+
+	public boolean isActive() {
+		return isActive;
 	}
 }

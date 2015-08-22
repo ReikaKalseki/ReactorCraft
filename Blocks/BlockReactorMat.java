@@ -48,6 +48,8 @@ public class BlockReactorMat extends Block {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		if (world.getBlock(x, y, z) != this) //because MC is retarded
+			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 		MatBlocks m = MatBlocks.matList[world.getBlockMetadata(x, y, z)];
 		if (m == MatBlocks.SCRUBBER)
 			return null;

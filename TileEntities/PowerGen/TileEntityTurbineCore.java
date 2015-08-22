@@ -222,53 +222,53 @@ MultiBlockTile, BreakAction {
 
 	public ForgeDirection getSteamMovement() {
 		switch(this.getBlockMetadata()) {
-		case 0:
-			return ForgeDirection.WEST;
-		case 1:
-			return ForgeDirection.EAST;
-		case 2:
-			return ForgeDirection.NORTH;
-		case 3:
-			return ForgeDirection.SOUTH;
-		default:
-			return ForgeDirection.DOWN;
+			case 0:
+				return ForgeDirection.WEST;
+			case 1:
+				return ForgeDirection.EAST;
+			case 2:
+				return ForgeDirection.NORTH;
+			case 3:
+				return ForgeDirection.SOUTH;
+			default:
+				return ForgeDirection.DOWN;
 		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			readx = x+1;
-			ready = y;
-			readz = z;
-			writex = x-1;
-			writey = y;
-			writez = z;
-			break;
-		case 1:
-			readx = x-1;
-			ready = y;
-			readz = z;
-			writex = x+1;
-			writey = y;
-			writez = z;
-			break;
-		case 2:
-			readx = x;
-			ready = y;
-			readz = z+1;
-			writex = x;
-			writey = y;
-			writez = z-1;
-			break;
-		case 3:
-			readx = x;
-			ready = y;
-			readz = z-1;
-			writex = x;
-			writey = y;
-			writez = z+1;
-			break;
+			case 0:
+				readx = x+1;
+				ready = y;
+				readz = z;
+				writex = x-1;
+				writey = y;
+				writez = z;
+				break;
+			case 1:
+				readx = x-1;
+				ready = y;
+				readz = z;
+				writex = x+1;
+				writey = y;
+				writez = z;
+				break;
+			case 2:
+				readx = x;
+				ready = y;
+				readz = z+1;
+				writex = x;
+				writey = y;
+				writez = z-1;
+				break;
+			case 3:
+				readx = x;
+				ready = y;
+				readz = z-1;
+				writex = x;
+				writey = y;
+				writez = z+1;
+				break;
 		}
 	}
 
@@ -334,18 +334,18 @@ MultiBlockTile, BreakAction {
 
 	protected double getEfficiency() {
 		switch(this.getNumberStagesTotal()) {
-		case 1:
-			return 0.025;
-		case 2:
-			return 0.1;
-		case 3:
-			return 0.25;
-		case 4:
-			return 0.5;
-		case 5:
-			return 1;
-		default:
-			return 0;
+			case 1:
+				return 0.025;
+			case 2:
+				return 0.1;
+			case 3:
+				return 0.25;
+			case 4:
+				return 0.5;
+			case 5:
+				return 1;
+			default:
+				return 0;
 		}
 	}
 
@@ -371,14 +371,14 @@ MultiBlockTile, BreakAction {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		int r = 2+stage;
 		switch(meta) {
-		case 2:
-		case 3:
-			box = box.expand(r/2, r/2, 0);
-			break;
-		case 0:
-		case 1:
-			box = box.expand(0, r/2, r/2);
-			break;
+			case 2:
+			case 3:
+				box = box.expand(r/2, r/2, 0);
+				break;
+			case 0:
+			case 1:
+				box = box.expand(0, r/2, r/2);
+				break;
 		}
 		return box;
 	}
@@ -450,24 +450,24 @@ MultiBlockTile, BreakAction {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		int r = 3;
 		switch(meta) {
-		case 2:
-		case 3:
-			for (int i = x-r; i <= x+r; i++) {
-				for (int j = y-r; j <= y+r; j++) {
-					if (x != i || y != j)
-						contact.addBlockCoordinate(i, j, z);
+			case 2:
+			case 3:
+				for (int i = x-r; i <= x+r; i++) {
+					for (int j = y-r; j <= y+r; j++) {
+						if (x != i || y != j)
+							contact.addBlockCoordinate(i, j, z);
+					}
 				}
-			}
-			break;
-		case 0:
-		case 1:
-			for (int i = z-r; i <= z+r; i++) {
-				for (int j = y-r; j <= y+r; j++) {
-					if (z != i || y != j)
-						contact.addBlockCoordinate(x, j, i);
+				break;
+			case 0:
+			case 1:
+				for (int i = z-r; i <= z+r; i++) {
+					for (int j = y-r; j <= y+r; j++) {
+						if (z != i || y != j)
+							contact.addBlockCoordinate(x, j, i);
+					}
 				}
-			}
-			break;
+				break;
 		}
 
 	}
@@ -617,6 +617,8 @@ MultiBlockTile, BreakAction {
 			hasMultiBlock = NBT.getBoolean("multi");
 
 		tank.readFromNBT(NBT);
+
+		stage = NBT.getInteger("stage");
 	}
 
 	@Override
@@ -638,6 +640,8 @@ MultiBlockTile, BreakAction {
 			NBT.setBoolean("multi", hasMultiBlock);
 
 		tank.writeToNBT(NBT);
+
+		NBT.setInteger("stage", stage);
 	}
 
 	@Override

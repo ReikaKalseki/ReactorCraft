@@ -46,7 +46,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
@@ -94,6 +93,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 				if (ReikaWorldHelper.isSubmerged(iba, x, y, z)) {
 					return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x0077ff, 15) : 15;
 				}
+			}
+		}
+		else if (te instanceof TileEntityToroidMagnet) {
+			TileEntityToroidMagnet tile = (TileEntityToroidMagnet)te;
+			if (tile.isActive()) {
+				return ModList.COLORLIGHT.isLoaded() ? ReikaColorAPI.getPackedIntForColoredLight(0x0077ff, 15) : 15;
 			}
 		}
 		return 0;
@@ -216,46 +221,46 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 		if (r == ReactorTiles.COOLANT && is != null && is.stackSize == 1) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(x, y, z);
 			switch(te.getLiquidState()) {
-			case EMPTY:
-				if (is.getItem() == Items.water_bucket) {
-					te.setLiquidState(LiquidStates.WATER);
-					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-					return true;
-				}
-				else if (is.getItem() == ReactorItems.BUCKET.getItemInstance()) {
-					te.setLiquidState(LiquidStates.HEAVY);
-					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-					return true;
-				}
-				else if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
-					te.setLiquidState(LiquidStates.SODIUM);
-					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
-					return true;
-				}
-				break;
-			case WATER:
-				if (is.getItem() == Items.bucket) {
-					te.setLiquidState(LiquidStates.EMPTY);
-					ep.setCurrentItemOrArmor(0, new ItemStack(Items.water_bucket));
-					return true;
-				}
-				break;
-			case HEAVY:
-				if (is.getItem() == Items.bucket) {
-					te.setLiquidState(LiquidStates.EMPTY);
-					ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
-					return true;
-				}
-				break;
-			case SODIUM:
-				if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan)) {
-					te.setLiquidState(LiquidStates.EMPTY);
-					ep.setCurrentItemOrArmor(0, ReactorStacks.nacan);
-					return true;
-				}
+				case EMPTY:
+					if (is.getItem() == Items.water_bucket) {
+						te.setLiquidState(LiquidStates.WATER);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+						return true;
+					}
+					else if (is.getItem() == ReactorItems.BUCKET.getItemInstance()) {
+						te.setLiquidState(LiquidStates.HEAVY);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+						return true;
+					}
+					else if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
+						te.setLiquidState(LiquidStates.SODIUM);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
+						return true;
+					}
+					break;
+				case WATER:
+					if (is.getItem() == Items.bucket) {
+						te.setLiquidState(LiquidStates.EMPTY);
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.water_bucket));
+						return true;
+					}
+					break;
+				case HEAVY:
+					if (is.getItem() == Items.bucket) {
+						te.setLiquidState(LiquidStates.EMPTY);
+						ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+						return true;
+					}
+					break;
+				case SODIUM:
+					if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan)) {
+						te.setLiquidState(LiquidStates.EMPTY);
+						ep.setCurrentItemOrArmor(0, ReactorStacks.nacan);
+						return true;
+					}
 			}
 		}
 		if (r == ReactorTiles.SYNTHESIZER && is != null && is.stackSize == 1) {
@@ -489,7 +494,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (LegacyWailaHelper.cacheAndReturn(acc))
+		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!tip.isEmpty())
 			return tip;
 		TileEntity te = acc.getTileEntity();
 		if (te instanceof TileEntityReactorBase)

@@ -51,7 +51,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		if (!world.isRemote)
 			this.decayWaste();
 
-		this.feed();
+		if (!world.isRemote)
+			this.feed();
 
 		//this.fill();
 	}

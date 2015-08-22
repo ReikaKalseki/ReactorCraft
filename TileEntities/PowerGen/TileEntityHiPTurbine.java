@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Collections.RelativePositionList;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -201,22 +202,22 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	@Override
 	protected double getEfficiency() {
 		switch(this.getNumberStagesTotal()) {
-		case 1:
-			return 0.0125;
-		case 2:
-			return 0.025;
-		case 3:
-			return 0.075;
-		case 4:
-			return 0.125;
-		case 5:
-			return 0.25;
-		case 6:
-			return 0.5;
-		case 7:
-			return 1;
-		default:
-			return 0;
+			case 1:
+				return 0.0125;
+			case 2:
+				return 0.025;
+			case 3:
+				return 0.075;
+			case 4:
+				return 0.125;
+			case 5:
+				return 0.25;
+			case 6:
+				return 0.5;
+			case 7:
+				return 1;
+			default:
+				return 0;
 		}
 	}
 
@@ -301,8 +302,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			int s = te.getSteam();
 			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
-				ReactorType source = te.getSourceReactorType();
-				if (this.canRunOffOf(source)) {
+				Proportionality<ReactorType> source = te.getSourceReactorType();
+				if (this.canRunOffOf(source.getLargestCategory())) {
 					int rm = s/8+1;
 					if (steam < this.getMaxSteam()) {
 						int rm2 = Math.min(rm, this.getMaxSteam()-steam);

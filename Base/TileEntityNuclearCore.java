@@ -22,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -34,7 +33,6 @@ import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
@@ -45,10 +43,8 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Temperatured, Feedable,
+public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable,
 ChunkLoadingTile, BreakAction {
-
-	protected StepTimer tempTimer = new StepTimer(20);
 
 	protected int hydrogen = 0;
 	private int activeTimer = 0;
@@ -69,16 +65,18 @@ ChunkLoadingTile, BreakAction {
 			ReikaInventoryHelper.addToIInv(ReactorItems.FUEL.getStackOf(), this);
 		}
 
-		this.feed();
-		this.feedWaste(world, x, y, z);
+		if (!world.isRemote) {
+			this.feed();
+			this.feedWaste(world, x, y, z);
+		}
 
 		if (activeTimer > 0) {
 			activeTimer--;
 			this.onActivityChange(false);
 		}
 
-		tempTimer.update();
-		if (tempTimer.checkCap()) {
+		thermalTicker.update();
+		if (thermalTicker.checkCap()) {
 			this.updateTemperature(world, x, y, z);
 		}
 		//ReikaJavaLibrary.pConsole(temperature);
@@ -332,15 +330,7 @@ ChunkLoadingTile, BreakAction {
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				Block id = world.getBlock(dx, dy, dz);
-				int meta = world.getBlockMetadata(dx, dy, dz);/*
-				if (id == ReactorTiles.COOLANT.getBlock() && meta == ReactorTiles.COOLANT.getBlockMetadata()) {
-					TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(dx, dy, dz);
-					if (te.getLiquidState().isWater() && temperature >= 100 && ReikaRandomHelper.doWithChance(40)) {
-						te.setLiquidState(LiquidStates.EMPTY);
-						temperature -= 20;
-					}
-				}
-				 */
+				int meta = world.getBlockMetadata(dx, dy, dz);
 				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
 					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;

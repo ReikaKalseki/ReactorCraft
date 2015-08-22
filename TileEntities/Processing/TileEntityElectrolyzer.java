@@ -66,7 +66,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	private int omega;
 	private int torque;
 	private long power;
-	private int iotick;
+	private int iotick = 512;
 
 	public static final int SALTPOWER = 131072;
 
@@ -425,6 +425,8 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		NBT.setLong("pwr", power);
 
 		NBT.setInteger("temp", temperature);
+
+		NBT.setInteger("io", iotick);
 	}
 
 	@Override
@@ -440,6 +442,8 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		power = NBT.getLong("pwr");
 
 		temperature = NBT.getInteger("temp");
+
+		iotick = NBT.getInteger("io");
 	}
 
 	public boolean addHeavyWater(int amt) {
