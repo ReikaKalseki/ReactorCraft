@@ -309,4 +309,9 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		return 1;
 	}
 
+	@Override
+	public int getUpdatePacketRadius() {
+		return 96; //much larger visually
+	}
+
 }

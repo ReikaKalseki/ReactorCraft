@@ -333,220 +333,220 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 			return 10;
 		if (meta == 10) {
 			switch(side) {
-			case 0:
-				if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 12)
-					return 2;
-				if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 12)
-					return 3;
-				if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 12)
-					return 5;
-				if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 12)
-					return 4;
-				break;
-			case 1:
-				if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 9)
-					return 2;
-				if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 9)
-					return 3;
-				if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 9)
-					return 5;
-				if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 9)
-					return 4;
-
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+				case 0:
+					if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 12)
 						return 2;
-					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+					if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 12)
 						return 3;
-					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+					if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 12)
 						return 5;
-					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+					if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 12)
 						return 4;
-				}
-				break;
-			case 2:
-				if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
-					return 4;
-				if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
-					return 5;
-				if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
-					return 3;
-				if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
-					return 2;
-
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
-						return 3;
-					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+					break;
+				case 1:
+					if (world.getBlock(x+1, y, z+1) == this && world.getBlockMetadata(x+1, y, z+1) == 9)
 						return 2;
-				}
-				break;
-			case 3:
-				if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
-					return 5;
-				if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
-					return 4;
-				if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
-					return 2;
-				if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
-					return 3;
-
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
-						return 2;
-					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+					if (world.getBlock(x-1, y, z+1) == this && world.getBlockMetadata(x-1, y, z+1) == 9)
 						return 3;
-				}
-				break;
-			case 4:
-				if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
-					return 5;
-				if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
-					return 4;
-				if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
-					return 2;
-				if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
-					return 3;
+					if (world.getBlock(x+1, y, z-1) == this && world.getBlockMetadata(x+1, y, z-1) == 9)
+						return 5;
+					if (world.getBlock(x-1, y, z-1) == this && world.getBlockMetadata(x-1, y, z-1) == 9)
+						return 4;
 
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
-						return 2;
-					if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 2;
+						if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 3;
+						if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 5;
+						if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 4;
+					}
+					break;
+				case 2:
+					if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
+						return 4;
+					if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
+						return 5;
+					if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
 						return 3;
-				}
-				break;
-			case 5:
-				if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
-					return 4;
-				if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
-					return 5;
-				if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
-					return 3;
-				if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
-					return 2;
+					if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
+						return 2;
 
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
-						return 3;
-					if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 3;
+						if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 2;
+					}
+					break;
+				case 3:
+					if (world.getBlock(x+1, y+1, z) == this && world.getBlockMetadata(x+1, y+1, z) == 12)
+						return 5;
+					if (world.getBlock(x-1, y+1, z) == this && world.getBlockMetadata(x-1, y+1, z) == 12)
+						return 4;
+					if (world.getBlock(x+1, y-1, z) == this && world.getBlockMetadata(x+1, y-1, z) == 12)
 						return 2;
-				}
-				break;
+					if (world.getBlock(x-1, y-1, z) == this && world.getBlockMetadata(x-1, y-1, z) == 12)
+						return 3;
+
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 2;
+						if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 3;
+					}
+					break;
+				case 4:
+					if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
+						return 5;
+					if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
+						return 4;
+					if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
+						return 2;
+					if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
+						return 3;
+
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z+1) == did && world.getBlockMetadata(x+1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 2;
+						if (world.getBlock(x+1, y, z-1) == did && world.getBlockMetadata(x+1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 3;
+					}
+					break;
+				case 5:
+					if (world.getBlock(x, y+1, z+1) == this && world.getBlockMetadata(x, y+1, z+1) == 12)
+						return 4;
+					if (world.getBlock(x, y+1, z-1) == this && world.getBlockMetadata(x, y+1, z-1) == 12)
+						return 5;
+					if (world.getBlock(x, y-1, z+1) == this && world.getBlockMetadata(x, y-1, z+1) == 12)
+						return 3;
+					if (world.getBlock(x, y-1, z-1) == this && world.getBlockMetadata(x, y-1, z-1) == 12)
+						return 2;
+
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x-1, y, z+1) == did && world.getBlockMetadata(x-1, y, z+1) == dmeta && world.getBlock(x, y, z+1) == this)
+							return 3;
+						if (world.getBlock(x-1, y, z-1) == did && world.getBlockMetadata(x-1, y, z-1) == dmeta && world.getBlock(x, y, z-1) == this)
+							return 2;
+					}
+					break;
 			}
 		}
 		if (meta == 11) {
 			switch(side) {
-			case 0:
-				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
-					return 8;
-				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
-					return 7;
-				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
-					return 9;
-				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
-					return 6;
-				break;
-			case 1:
-				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 9)
-					return 8;
-				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 9)
-					return 7;
-				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 9)
-					return 9;
-				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 9)
-					return 6;
-
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta && world.getBlock(x-1, y, z) == Blocks.air)
+				case 0:
+					if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
 						return 8;
-					if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta && world.getBlock(x+1, y, z) == Blocks.air)
+					if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
 						return 7;
-					if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta && world.getBlock(x, y, z-1) == Blocks.air)
+					if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
 						return 9;
-					if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta && world.getBlock(x, y, z+1) == Blocks.air)
+					if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
 						return 6;
-				}
-				break;
-			case 2:
-				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
-					return 7;
-				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
-					return 8;
-				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
-					return 6;
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
-					return 9;
-
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+					break;
+				case 1:
+					if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 9)
+						return 8;
+					if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 9)
+						return 7;
+					if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 9)
 						return 9;
-				}
-				break;
-			case 3:
-				if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
-					return 8;
-				if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
-					return 7;
-				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
-					return 6;
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
-					return 9;
+					if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 9)
+						return 6;
 
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta && world.getBlock(x-1, y, z) == Blocks.air)
+							return 8;
+						if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta && world.getBlock(x+1, y, z) == Blocks.air)
+							return 7;
+						if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta && world.getBlock(x, y, z-1) == Blocks.air)
+							return 9;
+						if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta && world.getBlock(x, y, z+1) == Blocks.air)
+							return 6;
+					}
+					break;
+				case 2:
+					if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
+						return 7;
+					if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
+						return 8;
+					if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
+						return 6;
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 						return 9;
-				}
-				break;
-			case 4:
-				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
-					return 8;
-				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
-					return 7;
-				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
-					return 6;
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
-					return 9;
 
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x, y, z+1) == did && world.getBlockMetadata(x, y, z+1) == dmeta)
+							return 9;
+					}
+					break;
+				case 3:
+					if (world.getBlock(x+1, y, z) == this && world.getBlockMetadata(x+1, y, z) == 12)
+						return 8;
+					if (world.getBlock(x-1, y, z) == this && world.getBlockMetadata(x-1, y, z) == 12)
+						return 7;
+					if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
+						return 6;
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 						return 9;
-				}
-				break;
-			case 5:
-				if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
-					return 7;
-				if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
-					return 8;
-				if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
-					return 6;
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
-					return 9;
 
-				if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
-					Block did = ReactorTiles.MAGNETPIPE.getBlock();
-					int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
-					if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x, y, z-1) == did && world.getBlockMetadata(x, y, z-1) == dmeta)
+							return 9;
+					}
+					break;
+				case 4:
+					if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
+						return 8;
+					if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
+						return 7;
+					if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
+						return 6;
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
 						return 9;
-				}
-				break;
+
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x+1, y, z) == did && world.getBlockMetadata(x+1, y, z) == dmeta)
+							return 9;
+					}
+					break;
+				case 5:
+					if (world.getBlock(x, y, z+1) == this && world.getBlockMetadata(x, y, z+1) == 12)
+						return 7;
+					if (world.getBlock(x, y, z-1) == this && world.getBlockMetadata(x, y, z-1) == 12)
+						return 8;
+					if (world.getBlock(x, y+1, z) == this && world.getBlockMetadata(x, y+1, z) == 12)
+						return 6;
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 12)
+						return 9;
+
+					if (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 9) {
+						Block did = ReactorTiles.MAGNETPIPE.getBlock();
+						int dmeta = ReactorTiles.MAGNETPIPE.getBlockMetadata();
+						if (world.getBlock(x-1, y, z) == did && world.getBlockMetadata(x-1, y, z) == dmeta)
+							return 9;
+					}
+					break;
 			}
 		}
 		return this.getItemTextureIndex(meta, side);
@@ -578,9 +578,9 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, ReactorTiles.HEATER.getBlock()), x-6, y-6, z-6, x+6, y+6, z+6);
-		int mx = blocks.getMinX()+blocks.getSizeX()/2;
-		int my = blocks.getMinY()+blocks.getSizeY()/2-1;
-		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
+		int mx = blocks.getMidX();
+		int my = blocks.getMidY()-1;
+		int mz = blocks.getMidZ();
 		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.HEATER ? world.getTileEntity(mx, my, mz) : null;
 	}
 
