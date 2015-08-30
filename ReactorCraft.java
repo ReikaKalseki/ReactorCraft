@@ -271,6 +271,22 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
+		if (ModList.GENDUSTRY.isLoaded()) {
+			try {
+				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.WASTE.getItemInstance(), 10000);
+				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.FUEL.getItemInstance(), 2000);
+				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PLUTONIUM.getItemInstance(), 5000);
+				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PELLET.getItemInstance(), 1200);
+				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
+			}
+			catch (IncompatibleClassChangeError e) {
+				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+			}
+			catch (Exception e) {
+				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+			}
+		}
+
 		this.basicSetup(evt);
 		this.finishTiming();
 	}
@@ -420,22 +436,6 @@ public class ReactorCraft extends DragonAPIMod {
 				ReikaThaumHelper.addAspects(block, Aspect.SENSES, 1);
 
 				ReikaThaumHelper.addAspects(drop, Aspect.CRYSTAL, 2);
-			}
-		}
-
-		if (ModList.GENDUSTRY.isLoaded()) {
-			try {
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.WASTE.getItemInstance(), 10000);
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.FUEL.getItemInstance(), 2000);
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PLUTONIUM.getItemInstance(), 5000);
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PELLET.getItemInstance(), 1200);
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
-			}
-			catch (IncompatibleClassChangeError e) {
-				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
-			}
-			catch (Exception e) {
-				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
 			}
 		}
 
