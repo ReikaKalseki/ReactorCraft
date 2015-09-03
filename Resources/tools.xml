@@ -6,4 +6,10 @@
 	<remote>
 		The CPU remote is a way to control the CPU of a fission reactor at a distance, without having to enter the reactor itself.
 	</remote>
+	<geiger>
+		The geiger counter can detect radiation, and will click more intensely as radiation levels rise.
+	</geiger>
+	<cleaner>
+		The radiation cleaning tool sprays water over an area to wash away radioactive particles, slowly cleaning it of radiation.
+	</cleaner>
 </tools>

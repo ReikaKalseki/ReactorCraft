@@ -106,6 +106,8 @@ public enum ReactorBook implements HandbookEntry {
 	TOOLDESC("Tools", ""),
 	GOGGLES(ReactorItems.GOGGLES),
 	REMOTE(ReactorItems.REMOTE),
+	GEIGER(ReactorItems.GEIGER),
+	CLEANUP(ReactorItems.CLEANUP),
 
 	RESOURCEDESC("Resource Items", ""),
 	FLUORITE(ReactorItems.FLUORITE),
