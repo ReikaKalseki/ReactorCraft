@@ -89,7 +89,7 @@ ChunkLoadingTile {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		
+
 		if (alpha > 0)
 			alpha -= 8;
 
@@ -135,10 +135,11 @@ ChunkLoadingTile {
 			this.updateCharge(world, x, y, z);
 		}
 
-		reCheckTimer.update();
-		if (reCheckTimer.checkCap() && !world.isRemote) {
-			//hasNext =
-			this.checkCompleteness(world, x, y, z);
+		if (hasSolenoid) {
+			reCheckTimer.update();
+			if (reCheckTimer.checkCap() && !world.isRemote) {
+				hasNext = this.checkCompleteness(world, x, y, z);
+			}
 		}
 
 		//if (this.getTicksExisted() == 0)
@@ -348,7 +349,7 @@ ChunkLoadingTile {
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-	
+
 	}
 
 	@Override

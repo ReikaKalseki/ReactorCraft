@@ -52,6 +52,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
+import Reika.DragonAPI.Base.EnumOreBlock;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -604,9 +605,9 @@ public class ReactorCraft extends DragonAPIMod {
 			if (ore != ReactorOres.FLUORITE) {
 				OreDictionary.registerOre(ore.getDictionaryName(), ore.getOreBlock());
 				OreDictionary.registerOre(ore.getProductDictionaryName(), ore.getProduct());
-				ReactorBlocks.ORE.getBlockInstance().setHarvestLevel("pickaxe", ore.harvestLevel, ore.getBlockMetadata());
 			}
 		}
+		((EnumOreBlock)ReactorBlocks.ORE.getBlockInstance()).register();
 		Block b = ReactorBlocks.FLUORITEORE.getBlockInstance();
 		b.setHarvestLevel("pickaxe", ReactorOres.FLUORITE.harvestLevel);
 		OreDictionary.registerOre("dustQuicklime", ReactorStacks.lime.copy());

@@ -69,7 +69,7 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 				}
 				//ReikaJavaLibrary.pConsole(ReikaNuclearHelper.getDecayChanceFromHalflife(atom.getMCHalfLife()));
 				if (ReikaNuclearHelper.shouldDecay(atom, mult)) {
-					ReikaInventoryHelper.decrStack(i, inv);
+					ReikaInventoryHelper.decrStack(i, this, Math.max(1, inv[i].stackSize/2));
 					this.onDecayWaste(i);
 				}
 			}

@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
+import Reika.ReactorCraft.Registry.ReactorOres;
 
 public class BlockFluorite extends Block {
 
@@ -41,6 +42,11 @@ public class BlockFluorite extends Block {
 	public int tickRate(World world)
 	{
 		return 20;
+	}
+
+	@Override
+	public final int getHarvestLevel(int meta) {
+		return ReactorOres.FLUORITE.harvestLevel;
 	}
 
 	@Override

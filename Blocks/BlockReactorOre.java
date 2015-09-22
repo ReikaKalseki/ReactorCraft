@@ -11,7 +11,6 @@ package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -23,14 +22,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.EnumOreBlock;
+import Reika.DragonAPI.Interfaces.Registry.OreEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOres;
 
-public class BlockReactorOre extends Block {
+public class BlockReactorOre extends EnumOreBlock {
 
 	private IIcon[] icons = new IIcon[ReactorOres.oreList.length];
 
@@ -47,19 +47,12 @@ public class BlockReactorOre extends Block {
 	}
 
 	@Override
-	public final int getHarvestLevel(int meta) {
-		return ReactorOres.getOre(this, meta).harvestLevel;
-	}
-
-	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
 		//ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlock(), 1, metadata);
 		ReactorOres ore = ReactorOres.getOre(this, metadata);
 		li.addAll(ore.getOreDrop(metadata));
-		if (!ore.dropsSelf(metadata))
-			ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, this.droppedXP(ore));
 		return li;
 	}
 
@@ -68,15 +61,13 @@ public class BlockReactorOre extends Block {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
-	{
-		ReactorOres ore = ReactorOres.getOre(world, x, y, z);
-		boolean pitch = ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE;
-		boolean flag = super.removedByPlayer(world, player, x, y, z, harv);
-		if (pitch && flag && !player.capabilities.isCreativeMode) {
-			ReactorAchievements.MINEURANIUM.triggerAchievement(player);
+	protected void onHarvested(World world, int x, int y, int z, EntityPlayer ep) {
+		OreEnum ore = this.getOre(world, x, y, z);
+		if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
+			if (!ep.capabilities.isCreativeMode) {
+				ReactorAchievements.MINEURANIUM.triggerAchievement(ep);
+			}
 		}
-		return flag;
 	}
 
 	@Override
@@ -103,5 +94,10 @@ public class BlockReactorOre extends Block {
 	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity e)
 	{
 		return ReactorOres.getOre(world, x, y, z) != ReactorOres.ENDBLENDE || !(e instanceof EntityDragon);
+	}
+
+	@Override
+	public OreEnum getOre(int meta) {
+		return ReactorOres.getOre(this, meta);
 	}
 }

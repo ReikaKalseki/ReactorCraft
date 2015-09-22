@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -143,8 +142,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = Tamb-temperature;
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.air) != null) {
-			int diff = (1+dT/32);
+		if (dT != 0) {
+			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
+			int diff = (1+dT/d);
 			if (diff <= 1)
 				diff = dT/Math.abs(dT);
 			temperature += diff;

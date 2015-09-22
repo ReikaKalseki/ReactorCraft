@@ -54,7 +54,7 @@ public class PotionRadiation extends Potion implements PermaPotion {
 	@Override
 	public boolean isReady(int time, int amp)
 	{
-		return time%20 == 0;
+		return time%20 == 5;
 	}
 
 	@Override

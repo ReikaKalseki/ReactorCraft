@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -30,13 +31,16 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile, FusionReactorToroidPart {
+public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile, FusionReactorToroidPart,
+ToggleTile {
 
 	private HybridTank tank = new HybridTank("injector", 8000);
 
 	private ForgeDirection facing;
 
 	private boolean hasMultiBlock;
+
+	private boolean enabled = true;
 
 	public boolean hasMultiBlock() {
 		return hasMultiBlock;
@@ -65,6 +69,8 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		if (!hasMultiBlock)
 			return false;
 		if (tank.isEmpty())
+			return false;
+		if (!enabled)
 			return false;
 		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
 			return false;
@@ -164,6 +170,8 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		NBT.setInteger("face", this.getFacing().ordinal());
 
 		NBT.setBoolean("multi", hasMultiBlock);
+
+		NBT.setBoolean("t_enable", enabled);
 	}
 
 	@Override
@@ -175,11 +183,25 @@ public class TileEntityFusionInjector extends TileEntityReactorBase implements I
 		facing = dirs[NBT.getInteger("face")];
 
 		hasMultiBlock = NBT.getBoolean("multi");
+
+		if (NBT.hasKey("t_enable"))
+			enabled = NBT.getBoolean("t_enable");
 	}
 
 	@Override
 	public int getTextureState(ForgeDirection side) {
 		return side == this.getFacing() ? 0 : side.offsetY != 0 ? 2 : 2;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setEnabled(boolean enable) {
+		enabled = enable;
+		this.syncAllData(false);
 	}
 
 }

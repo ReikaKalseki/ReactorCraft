@@ -35,6 +35,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -53,7 +54,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector,
-MultiBlockTile, BreakAction {
+MultiBlockTile, BreakAction, ToggleTile {
 
 	protected int steam;
 
@@ -81,6 +82,8 @@ MultiBlockTile, BreakAction {
 	private BlockArray contact = new BlockArray();
 
 	private int damage;
+
+	private boolean enabled = true;
 
 	protected boolean hasMultiBlock = !this.needsMultiblock();
 	private boolean readyForMultiBlock = false;
@@ -439,7 +442,7 @@ MultiBlockTile, BreakAction {
 	}
 
 	protected boolean enabled(World world, int x, int y, int z) {
-		return true;
+		return enabled;
 	}
 
 	protected double getRadius() {
@@ -619,6 +622,9 @@ MultiBlockTile, BreakAction {
 		tank.readFromNBT(NBT);
 
 		stage = NBT.getInteger("stage");
+
+		if (NBT.hasKey("t_enable"))
+			enabled = NBT.getBoolean("t_enable");
 	}
 
 	@Override
@@ -642,6 +648,8 @@ MultiBlockTile, BreakAction {
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("stage", stage);
+
+		NBT.setBoolean("t_enable", enabled);
 	}
 
 	@Override
@@ -800,6 +808,17 @@ MultiBlockTile, BreakAction {
 
 	public final boolean canAcceptLubricant(int amt) {
 		return tank.canTakeIn(amt);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setEnabled(boolean enable) {
+		enabled = enable;
+		this.syncAllData(false);
 	}
 
 }

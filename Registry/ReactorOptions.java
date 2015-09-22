@@ -10,11 +10,13 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.config.Property;
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
+import Reika.DragonAPI.Interfaces.Configuration.BoundedConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
 import Reika.ReactorCraft.ReactorCraft;
 
-public enum ReactorOptions implements IntegerConfig, BooleanConfig {
+public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfig {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
@@ -104,6 +106,26 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig {
 
 	public static float getOreMultiplier() {
 		return MathHelper.clamp_float(OREDENSITY.getValue()/100F, 0.5F, 2F);
+	}
+
+	@Override
+	public boolean isValueValid(Property p) {
+		switch(this) {
+			case DISCRETE:
+				return p.getInt() > 0 && p.getInt() <= 100;
+			default:
+				return true;
+		}
+	}
+
+	@Override
+	public String getBoundsAsString() {
+		switch(this) {
+			case DISCRETE:
+				return "(1-100)";
+			default:
+				return "";
+		}
 	}
 
 }

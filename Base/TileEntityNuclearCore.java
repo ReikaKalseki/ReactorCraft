@@ -12,7 +12,6 @@ package Reika.ReactorCraft.Base;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -320,8 +319,10 @@ ChunkLoadingTile, BreakAction {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		int dT = temperature-Tamb;
 
-		if (dT != 0 && ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.air) != null)
-			temperature -= (1+dT/32);
+		if (dT != 0) {
+			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
+			temperature -= (1+dT/d);
+		}
 
 		if (dT > 0) {
 			for (int i = 2; i < 6; i++) {

@@ -266,7 +266,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 			return false;
 		if (this.isRedstoned(world, x, y, z))
 			return false;
-		return true;
+		return super.enabled(world, x, y, z);
 	}
 
 	private boolean isRedstoned(World world, int x, int y, int z) {

@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -83,6 +84,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 		this.updateCharge(world, x, y, z);
 
 		if (charge <= 0 && !world.isRemote) {
+			ReactorCraft.logger.debug("Melting magnetic pipe "+this+" with charge "+charge);
 			charge = 0;
 			if (fluid != null && fluid.getTemperature(world, x, y, z) > 5000) {
 				world.setBlock(x, y, z, Blocks.flowing_lava);

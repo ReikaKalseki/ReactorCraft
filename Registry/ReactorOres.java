@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Interfaces.Registry.OreEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -30,7 +31,7 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ExtraUtilsHandler;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 
-public enum ReactorOres {
+public enum ReactorOres implements OreEnum {
 
 	FLUORITE(		32, 60, 8, 	12, 0, 	0,	0.4F,	"ore.fluorite"),
 	PITCHBLENDE(	8, 	24, 16, 3, 	0,	1,	1F,		"ore.pitchblende"),
@@ -93,7 +94,7 @@ public enum ReactorOres {
 			return FLUORITE;
 		if (id != ReactorBlocks.ORE.getBlockInstance())
 			return null;
-		return oreList[meta];
+		return meta < oreList.length ? oreList[meta] : null;
 	}
 
 	public String getTextureName() {
@@ -268,5 +269,39 @@ public enum ReactorOres {
 	public boolean dropsSelf(int meta) {
 		List<ItemStack> li = this.getOreDrop(meta);
 		return li.size() == 1 && li.get(0).getItem() == Item.getItemFromBlock(ReactorBlocks.ORE.getBlockInstance()) && li.get(0).getItemDamage() == meta;
+	}
+
+	@Override
+	public int getHarvestLevel() {
+		return harvestLevel;
+	}
+
+	@Override
+	public float getXPDropped(World world, int x, int y, int z) {
+		return xpDropped;
+	}
+
+	@Override
+	public boolean dropsSelf(World world, int x, int y, int z) {
+		return this.dropsSelf(world.getBlockMetadata(x, y, z));
+	}
+
+	@Override
+	public String getHarvestTool() {
+		return "pickaxe";
+	}
+
+	@Override
+	public boolean enforceHarvestLevel() {
+		switch(this) {
+			case FLUORITE:
+			case PITCHBLENDE:
+			case ENDBLENDE:
+			case MAGNETITE:
+			case THORIUM:
+				return true;
+			default:
+				return false;
+		}
 	}
 }

@@ -494,8 +494,8 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> tip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!tip.isEmpty())
-			return tip;
+		//if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!tip.isEmpty())
+		//	return tip;
 		TileEntity te = acc.getTileEntity();
 		if (te instanceof TileEntityReactorBase)
 			((TileEntityBase)te).syncAllData(false);
