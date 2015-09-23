@@ -23,7 +23,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.ChromatiCraft.API.WorldRift;
+import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Instantiable.BasicTeleporter;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;

@@ -24,7 +24,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.ChromatiCraft.API.UnCopyableBlock;
+import Reika.ChromatiCraft.API.Interfaces.UnCopyableBlock;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
