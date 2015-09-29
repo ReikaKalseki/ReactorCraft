@@ -73,11 +73,13 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 			this.noInputMachine();
 		}
 
+		//this.animateWithTick(world, x, y, z);
+
 		if (DragonAPICore.debugtest) {
 			hasMultiBlock = true;
 			torque = MINTORQUE*8;
-			omega = 1024;
-			power = omega*torque;
+			omega = 4096;
+			power = (long)omega*(long)torque;
 		}
 
 		if (DragonAPICore.debugtest || hasMultiBlock && checkForToroids && this.arePowerReqsMet()) {
@@ -157,6 +159,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		NBT.setInteger("omg", omega);
 		NBT.setInteger("tq", torque);
 		NBT.setLong("pwr", power);
+
+		NBT.setFloat("phi", phi);
 	}
 
 	@Override
@@ -168,6 +172,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		omega = NBT.getInteger("omg");
 		torque = NBT.getInteger("tq");
 		power = NBT.getLong("pwr");
+
+		phi = NBT.getFloat("phi");
 	}
 
 	public void addToToroids() {
