@@ -16,6 +16,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -57,29 +58,29 @@ public class RenderGasCollector extends ReactorRenderBase
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 0;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 180;
-				break;
-			case 5:
-				var11 = 270;
-				break;
+				case 1:
+					var11 = 0;
+					break;
+				case 0:
+					var11 = 180;
+					break;
+				case 3:
+					var11 = 0;
+					break;
+				case 5:
+					var11 = 90;
+					break;
+				case 2:
+					var11 = 180;
+					break;
+				case 4:
+					var11 = 270;
+					break;
 			}
 
 			if (tile.getBlockMetadata() < 2) {
 				GL11.glRotatef(var11, 0, 0, 1);
-				if (tile.getBlockMetadata() == 1)
+				if (tile.getBlockMetadata() == 0)
 					GL11.glTranslated(0, -2, 0);
 			}
 			else {
@@ -113,8 +114,8 @@ public class RenderGasCollector extends ReactorRenderBase
 	}
 
 	private void renderTarget(TileEntityGasCollector tile, double par2, double par4, double par6) {
-		int[] xyz = tile.getTarget();
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xyz[0], xyz[1], xyz[2], xyz[0]+1, xyz[1]+1, xyz[2]+1).expand(0.03125, 0.03125, 0.03125);
+		WorldLocation loc = tile.getAdjacentLocation(tile.getReadDirection());
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(loc.xCoord, loc.yCoord, loc.zCoord, loc.xCoord+1, loc.yCoord+1, loc.zCoord+1).expand(0.03125, 0.03125, 0.03125);
 		ReikaAABBHelper.renderAABB(box, par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, tile.ticks, 0, 127, 255, true);
 	}
 

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<resource>
+	<fluorite>
+		El fluorite es un cristal que se genera naturalmente en la roca. El fluorite se manifiesta en diferentes colores, pero todos con fluorescencia (emiten luz) en presencia de neurones o radiacion, permitiendoles ser usados como contadores geiger rudimentarios. El fluorite tiene una larga concentracion de fluorine, que es util para hacer hydrofluoric acid durante el proceso de enriquecimiento del uranio.
+	</fluorite>
+	<fuel>
+		Los uranium fuel pellets son el combustible de un reactur de fision estandar. Son consumidos gradualmente, y terminan conviritendose en uranio cuando el componente de U235 se agota.
+	</fuel>
+	<depleted>
+		El depleted uranium no es util como combustible nuclear por su cuenta, pero puede ser convertido en plutonio, que si lo es.
+	</depleted>
+	<waste>
+		El nuclear waste es un subproducto extremadamente peligroso de la fision nuclear. Se acumula en los nucleos de los reactores y lo contaminan, por lo que debe ser extraido y ser correctamente procesado. Dejado a la intemperie en el mundo, su radioactividad envenenara los alrededores lentamente.
+	</waste>
+	<plutonium>
+		El plutonium es una alternativa artificial de combustible nuclear para el reactor de fision. El plutonium es extremadamente peligros y mas volatil que el uranium, y debe ser manejado con extremo cuidado.
+	</plutonium>
+	<thorium>
+		El thorium es otro combustible alternativo para el reactor.
+	</thorium>
+	<breederfuel>
+		Los breeder reactors requieren un tipo de combustible especial - uranio enriquecido estandar enterrado en una lamina de uranio agotado. Con el tiempo, los neutrones del reactor clo convertiran en plutonium.
+	</breederfuel>
+	<magnet>
+		Los magnets son usados para modificar el camino de las cosas cargadas electricamente, como el plasma, y son usados en gran numero en los reactores de fusion.
+	</magnet>
+	<pellet>
+		El raw uranium puede ser pulverizado y mezclado con grafito para crear fuel pellets. Estos pellets son el combustible de un High-Temperature Gas Reactor.
+	</pellet>
+	<oldpellet>
+		Como el combustible de uranio normal, los fuel pellets acaban agotandose y dejan de ser utiles.
+	</oldpellet>
+</resource>

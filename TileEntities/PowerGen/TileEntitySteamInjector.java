@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySteamInjector extends TileEntity implements IFluidHandler, PipeConnector {
 
-	private HybridTank tank = new HybridTank("injector", 1000);
+	private final HybridTank tank = new HybridTank("injector", 1000);
 
 	@Override
 	public boolean canUpdate() {
@@ -63,7 +63,7 @@ public class TileEntitySteamInjector extends TileEntity implements IFluidHandler
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("lubricant"));
+		return fluid.equals(FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override

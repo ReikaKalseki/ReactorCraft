@@ -17,6 +17,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
@@ -46,21 +47,21 @@ public class RenderGenerator extends ReactorRenderBase
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		switch(tile.getBlockMetadata()) {
-		case 0:
-			GL11.glRotatef(270, 0, 1, 0);
-			break;
-		case 1:
-			GL11.glRotatef(90, 0, 1, 0);
-			break;
-		case 2:
-			GL11.glRotatef(0, 0, 1, 0);
-			break;
-		case 3:
-			GL11.glRotatef(180, 0, 1, 0);
-			break;
+			case 0:
+				GL11.glRotatef(270, 0, 1, 0);
+				break;
+			case 1:
+				GL11.glRotatef(90, 0, 1, 0);
+				break;
+			case 2:
+				GL11.glRotatef(0, 0, 1, 0);
+				break;
+			case 3:
+				GL11.glRotatef(180, 0, 1, 0);
+				break;
 		}
 
-		if (tile.isInWorld()) {
+		if (tile.isInWorld() || StructureRenderer.isRenderingTiles()) {
 			if (tile.hasMultiBlock())
 				model.renderAll(tile, null, tile.phi, 0);
 			else {

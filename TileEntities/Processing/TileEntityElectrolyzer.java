@@ -51,10 +51,10 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	public static final int MAXTEMP = 1200;
 
-	private HybridTank tankL = new HybridTank("lighttank", this.getCapacity());
-	private HybridTank tankH = new HybridTank("heavytank", this.getCapacity());
+	private final HybridTank tankL = new HybridTank("lighttank", this.getCapacity());
+	private final HybridTank tankH = new HybridTank("heavytank", this.getCapacity());
 
-	private HybridTank input = new HybridTank("input", this.getCapacity()*2);
+	private final HybridTank input = new HybridTank("input", this.getCapacity()*2);
 
 	private StepTimer timer = new StepTimer(50);
 	private StepTimer tempTimer = new StepTimer(20);

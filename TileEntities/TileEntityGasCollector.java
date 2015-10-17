@@ -29,11 +29,9 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public class TileEntityGasCollector extends TileEntityReactorBase implements IFluidHandler {
 
-	private HybridTank tank = new HybridTank("co2collector", 1000);
+	private final HybridTank tank = new HybridTank("co2collector", 1000);
 
-	private int readx;
-	private int ready;
-	private int readz;
+	private ForgeDirection readDir = ForgeDirection.DOWN;
 
 	public int ticks = 512;
 
@@ -42,10 +40,10 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		if (ticks > 0)
 			ticks -= 8;
 
-		this.getIOSides(world, x, y, z, meta);
-		Block id = world.getBlock(readx, ready, readz);
+		readDir = dirs[meta].getOpposite();
+		Block id = this.getAdjacentLocation(readDir).getBlock();
 		if (id == Blocks.lit_furnace) {
-			TileEntityFurnace te = (TileEntityFurnace)world.getTileEntity(readx, ready, readz);
+			TileEntityFurnace te = (TileEntityFurnace)this.getAdjacentTileEntity(readDir);
 			ItemStack fuel = te.getStackInSlot(1);
 			if (fuel != null && te.isBurning() && te.currentItemBurnTime > 0) {
 				ItemMaterial mat = ItemMaterialController.instance.getMaterial(fuel);
@@ -56,48 +54,13 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		//ReikaJavaLibrary.pConsole(id+":"+tank, Side.SERVER);
 	}
 
-	public int[] getTarget() {
-		return new int[]{readx, ready, readz};
+	public ForgeDirection getReadDirection() {
+		return readDir;
 	}
 
 	public boolean hasFurnace() {
-		Block id = worldObj.getBlock(readx, ready, readz);
+		Block id = this.getAdjacentLocation(readDir).getBlock();
 		return id == Blocks.furnace || id == Blocks.lit_furnace;
-	}
-
-	private void getIOSides(World world, int x, int y, int z, int meta) {
-		switch(meta) {
-		case 5:
-			readx = x+1;
-			readz = z;
-			ready = y;
-			break;
-		case 3:
-			readx = x-1;
-			readz = z;
-			ready = y;
-			break;
-		case 2:
-			readz = z-1;
-			readx = x;
-			ready = y;
-			break;
-		case 4:
-			readz = z+1;
-			readx = x;
-			ready = y;
-			break;
-		case 0:
-			readx = x;
-			readz = z;
-			ready = y-1;
-			break;
-		case 1:
-			readx = x;
-			readz = z;
-			ready = y+1;
-			break;
-		}
 	}
 
 	@Override
@@ -122,7 +85,7 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP;
+		return from == readDir.getOpposite();
 	}
 
 	@Override
@@ -141,16 +104,14 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);

@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Auxiliary;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -240,9 +241,9 @@ public enum ReactorStructures {
 
 		for (int i = 0; i < 5; i++) {
 			for (int k = 0; k < 5; k++) {
-				boolean corner = (i == 0 || i == 4) && (k == 0 || k == 4);
-				boolean edge = i == 0 || i == 4 || k == 0 || k == 4;
 				for (int h = 0; h < 5; h++) {
+					boolean corner = (i == 0 || i == 4) && (k == 0 || k == 4) && (h == 0 || h == 4);
+					boolean edge = i == 0 || i == 4 || k == 0 || k == 4;
 					int m = corner ? 2 : edge ? 3 : 4;
 					array.setBlock(x+i, y+h, z+k, b, m);
 					if (h > 0 && !edge) {
@@ -262,6 +263,15 @@ public enum ReactorStructures {
 				boolean edge = i == 0 || i == 2 || k == 0 || k == 2;
 				int m = corner ? 2 : edge ? 3 : 4;
 				array.setBlock(x+1+i, y+5, z+1+k, b, m);
+			}
+		}
+
+		for (int i = 1; i <= 3; i++) {
+			for (int k = 1; k <= 3; k++) {
+				array.setBlock(x+i, y+k, z+0, b, 4);
+				array.setBlock(x+i, y+k, z+4, b, 4);
+				array.setBlock(x+0, y+k, z+i, b, 4);
+				array.setBlock(x+4, y+k, z+i, b, 4);
 			}
 		}
 
@@ -408,10 +418,21 @@ public enum ReactorStructures {
 			}
 		}
 
-		for (int i = 6; i <= 6; i++) {
-			array.setBlock(x-i, y+1, z-i, b, 1);
-			array.setBlock(x-i, y-1, z-i, b, 1);
-		}
+		array.setBlock(x-6, y+1, z-6, b, 1);
+		array.setBlock(x-6, y, z-6, b, 3);
+		array.setBlock(x-6, y-1, z-6, b, 1);
+
+		array.setBlock(x+6, y+1, z-6, b, 1);
+		array.setBlock(x+6, y, z-6, b, 3);
+		array.setBlock(x+6, y-1, z-6, b, 1);
+
+		array.setBlock(x-6, y+1, z+6, b, 1);
+		array.setBlock(x-6, y, z+6, b, 3);
+		array.setBlock(x-6, y-1, z+6, b, 1);
+
+		array.setBlock(x+6, y+1, z+6, b, 1);
+		array.setBlock(x+6, y, z+6, b, 3);
+		array.setBlock(x+6, y-1, z+6, b, 1);
 
 		for (int i = -5; i <= 5; i++) {
 			int d = Math.abs(i) >= 4 ? 7 : 8;
@@ -476,6 +497,10 @@ public enum ReactorStructures {
 		array.setBlock(array.getMidX(), 0, array.getMidZ(), ReactorTiles.SOLENOID.getBlock(), ReactorTiles.SOLENOID.getBlockMetadata());
 
 		return array;
+	}
+
+	public String getName() {
+		return StatCollector.translateToLocal("reactorstruct."+this.name().toLowerCase());
 	}
 
 }

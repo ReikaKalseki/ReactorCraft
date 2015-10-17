@@ -44,9 +44,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	public static final int ACID_PER_UNIT = 125;
 	public static final int ACID_PER_FLUORITE = 250;
 
-	private HybridTank output = new HybridTank("uprocout", 3000);
-	private HybridTank acid = new HybridTank("uprochf", 3000);
-	private HybridTank water = new HybridTank("uprocwater", 3000);
+	private final HybridTank output = new HybridTank("uprocout", 3000);
+	private final HybridTank acid = new HybridTank("uprochf", 3000);
+	private final HybridTank water = new HybridTank("uprocwater", 3000);
 
 	public int HF_timer;
 	public int UF6_timer;

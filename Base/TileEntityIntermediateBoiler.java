@@ -27,7 +27,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	protected StepTimer timer = new StepTimer(20);
 
-	protected HybridTank output = new HybridTank(this.getName().toLowerCase()+"out", this.getCapacity());
+	protected final HybridTank output = new HybridTank(this.getName().toLowerCase()+"out", this.getCapacity());
 
 	@Override
 	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {

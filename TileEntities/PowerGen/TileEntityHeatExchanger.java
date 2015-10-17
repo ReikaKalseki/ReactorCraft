@@ -52,7 +52,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	private int iotick;
 
-	private HybridTank output = new HybridTank("exchangerout", this.getCapacity());
+	private final HybridTank output = new HybridTank("exchangerout", this.getCapacity());
 
 	private StepTimer temp = new StepTimer(20);
 

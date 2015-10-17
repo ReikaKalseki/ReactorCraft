@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Entities.EntityDischarge;
@@ -92,18 +93,20 @@ public class BlockDuct extends BlockReactorTile {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
-		if (ReactorTiles.getTE(world, x, y, z) == ReactorTiles.MAGNETPIPE) {
-			TileEntityMagneticPipe te = (TileEntityMagneticPipe)world.getTileEntity(x, y, z);
-			int charge = te.getCharge();
-			if (charge > 0) {
-				double sx = te.getAimX();
-				double sy = te.getAimY();
-				double sz = te.getAimZ();
-				EntityDischarge ed = new EntityDischarge(world, sx, sy, sz, charge, e.posX, e.posY+e.getEyeHeight()/4, e.posZ);
-				te.onDischarge(-1, 1);
-				if (!world.isRemote)
-					world.spawnEntityInWorld(ed);
-				e.attackEntityFrom(DamageSource.generic, 1);
+		if (TileEntityTurbineCore.canDamageTurbine(e)) {
+			if (ReactorTiles.getTE(world, x, y, z) == ReactorTiles.MAGNETPIPE) {
+				TileEntityMagneticPipe te = (TileEntityMagneticPipe)world.getTileEntity(x, y, z);
+				int charge = te.getCharge();
+				if (charge > 0) {
+					double sx = te.getAimX();
+					double sy = te.getAimY();
+					double sz = te.getAimZ();
+					EntityDischarge ed = new EntityDischarge(world, sx, sy, sz, charge, e.posX, e.posY+e.getEyeHeight()/4, e.posZ);
+					te.onDischarge(-1, 1);
+					if (!world.isRemote)
+						world.spawnEntityInWorld(ed);
+					e.attackEntityFrom(DamageSource.generic, 1);
+				}
 			}
 		}
 	}

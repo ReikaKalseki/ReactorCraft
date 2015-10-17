@@ -435,7 +435,7 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, this.getDrops(world, x, y, z, meta, 0));
 	}
 
-	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+	protected boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
 		if (this instanceof BlockDuct)
 			return true;
 		return RotaryAux.canHarvestSteelMachine(ep);

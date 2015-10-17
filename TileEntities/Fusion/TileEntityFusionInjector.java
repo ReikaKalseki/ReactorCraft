@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -30,11 +31,14 @@ import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityFusionInjector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, MultiBlockTile, FusionReactorToroidPart,
 ToggleTile {
 
-	private HybridTank tank = new HybridTank("injector", 8000);
+	private final HybridTank tank = new HybridTank("injector", 8000);
 
 	private ForgeDirection facing;
 
@@ -103,7 +107,14 @@ ToggleTile {
 	}
 
 	public ForgeDirection getFacing() {
-		return facing != null ? facing : ForgeDirection.EAST;
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && this.shouldFlip())
+			return System.currentTimeMillis()%4000 >= 2000 ? ForgeDirection.NORTH : ForgeDirection.SOUTH;
+			return facing != null ? facing : ForgeDirection.EAST;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private boolean shouldFlip() {
+		return StructureRenderer.isRenderingTiles();
 	}
 
 	@Override

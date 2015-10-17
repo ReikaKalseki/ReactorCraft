@@ -106,7 +106,7 @@ ChunkLoadingTile {
 				e.resetEscapeTimer();
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
-				tank.removeLiquid(10);
+				tank.removeLiquid(1);
 
 				this.setActive();
 			}
@@ -121,8 +121,8 @@ ChunkLoadingTile {
 			TileEntity te = world.getTileEntity(x, y+2, z);
 			int amt = Math.min(tank.getRemainingSpace(), ((TileEntityPiping)te).getFluidLevel());
 			if (amt > 0) {
-				if (FluidRegistry.getFluid("liquid nitrogen").equals(((TileEntityPiping)te).getFluidType())) {
-					tank.addLiquid(amt, FluidRegistry.getFluid("liquid nitrogen"));
+				if (FluidRegistry.getFluid("rc liquid nitrogen").equals(((TileEntityPiping)te).getFluidType())) {
+					tank.addLiquid(amt, FluidRegistry.getFluid("rc liquid nitrogen"));
 					((TileEntityPiping)te).removeLiquid(amt);
 				}
 			}
@@ -322,7 +322,7 @@ ChunkLoadingTile {
 			return false;
 		if (!hasSolenoid)
 			return false;
-		if (charge <= 0)
+		if (charge <= 1000)
 			return false;
 		if (tank.isEmpty())
 			return false;

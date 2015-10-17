@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -80,6 +81,13 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 			torque = MINTORQUE*8;
 			omega = 4096;
 			power = (long)omega*(long)torque;
+		}
+
+		if (ReactorCraft.logger.shouldDebug()) {
+			if (world.isRemote)
+				ReactorCraft.logger.log("Clientside "+this+" receiving "+torque+" Nm @ "+omega+" rad/s. Phi="+phi);
+			else
+				ReactorCraft.logger.log("Serverside "+this+" receiving "+torque+" Nm @ "+omega+" rad/s.");
 		}
 
 		if (DragonAPICore.debugtest || hasMultiBlock && checkForToroids && this.arePowerReqsMet()) {

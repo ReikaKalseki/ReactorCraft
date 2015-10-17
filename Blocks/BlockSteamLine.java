@@ -76,7 +76,8 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 		return true;
 	}
 
-	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+	@Override
+	protected boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
 		return true;
 	}
 

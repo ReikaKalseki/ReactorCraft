@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<machines>
+	<processor>
+		<desc>
+			El uranium processor disuelve fluorite en agua para hacer hydrofluoric acid, y luego disuelve uranium virgen en el acido para hacer uranium hexafluoride gas. Este gas es usado en el proceso de enriquecimiento de uranio.
+		</desc>
+		<note>
+			No requiere potencia
+			Requiere un suministro de agua
+		</note>
+	</processor>
+	<centrifuge>
+		<desc>
+			La isotope centrifuge usa muy altas velocidades rotacionales para separar los diferentes isotopos del uranio, y produce una mezcla de polvo de uranio agotado y polvo de uranio enriquecido. El ultimo en menor abundancia debido a la rareza del U235.
+		</desc>
+		<note>
+			Velocidad minima: %d rad/s
+			Entrada de potencia: Debajo
+			Entrada de UF6: Arriba
+		</note>
+	</centrifuge>
+	<electrolyzer>
+		<desc>
+			El electrolyzer usa descaras electricas para descomponer materiales en sus constituyentes, tales como la sal en sodio y cloro, o el agua en hidrogeno y oxigeno. El  mas pesado de los productos se extrae de debajo, mientras que el mas ligero se extrae de arriba. Ten en cuenta que los solidos deben ser fundidos antes de que puedan ser procesados.
+		</desc>
+		<note>
+			Potencia para electrolizar sal: %dW
+			Entrada de potencia: Cualquier lado horizontal
+			Temperatura requerida para fundir sal: %dC
+		</note>
+	</electrolyzer>
+	<synthesizer>
+		<desc>
+			El synthesizer es usado para hacer ammonia, que es un fluido de trabajo mas efectivo que el agua en los reactores. Para hacerlo, requiere agua, ammonium chloride y quicklime.
+		</desc>
+		<note>
+			Temperatura de sintetizacion del ammonia: %dC
+		</note>
+	</synthesizer>
+	<tritizer>
+		<desc>
+			La neutron irradiation chamber convierte deuterio en tritio bombardeandolo con neutrones. Esta maquina se coloca en el nucleo del reactor, donde absorbera parte de los neutrones que lo golpean y convertira el deuterio almacenado.
+		</desc>
+		<note>
+			Entrad ade deuterio: Arriba
+			Salida de tritio: Debajo
+		</note>
+	</tritizer>
+	<condenser>
+		<desc>
+			El condenser colectara bloques de vapor y los vuelve a convertir en liquido reutilizable en el reactor nuclear. Debido a que la presion es extremadamente baja, este liquido debe ser re-presurizado antes de que pueda volver a ser usado. Mientras que no es terriblemente economico reciclar vapor basado en agua, el ammonia es lo suficientemente caro para que el sistema de recogida merezca la pena el coste.
+		</desc>
+		<note>
+			Salida de liquido: Arriba
+		</note>
+	</condenser>
+	<exchanger>
+		<desc>
+			El heat exchanger toma fluido caliente por la parte inferior y la enfria, transferiendo el calor del fluido a cualquier maquinaria adyacente, incluyendo los boilers estandar. Esta maquina requiere potencia para forzar el fluido a traves suyo, y el fluido puede ser retirado de los laterales.
+		</desc>
+		<note>
+			Entrada de potencia: Debajo
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+		</note>
+	</exchanger>
+	<boiler>
+		<desc>
+			El boiler absorbe calor de las maquinas adyacentes y lo usa para hacer hervir el liquido interno en vapor. Ten en cuenta que si el vapor no es extraido y permitido de acumular, el boiler perdera la capacidad de hervir mas liquido y fallara a la hora de retirar calor del reactor. Esto tiende a terminar en fusion del nucleo. Tambien, si la temperatura queda por encima de %dC cuando el boiler esta lleno de ammonia prendera fuego y explotara.
+		</desc>
+		<note>
+			Entrada de liquido: Debajo
+			Salida de vapor: Arriba
+		</note>
+	</boiler>
+	<pump>
+		<desc>
+			El pressurizer represuriza el agua o ammonia a baja presion para que pueda ser reutilizado en el reactor, completando el ciclo termodinamico. Ten en cuenta que es un compresor centrifugo. 
+		</desc>
+		<note>
+			Potencia minima: %dW
+			Par minimo: %d Nm
+			Entrada de liquido: Arriba
+			Salida de liquido: Lateral
+			Entrada de potencia: Debajo
+		</note>
+	</pump>
+	<grate>
+		<desc>
+			El steam grate toma vapor de las tuberias y lo libera al mundo. El vapor entonces subira hasta que golpee un bloque solido, donde se dispersara. Idealmente, el vapor debe ascender directamente hacia una turbina, para que su energia pueda ser extraida.
+		</desc>
+		<note>
+			Salida de vapor: Arriba
+			Salida maxima: 1 bloque por tick (20 bloques/s)
+		</note>
+	</grate>
+	<steamline>
+		<desc>
+			Las steam lines transporta el vapor desde el reactor hasta la turbina. Ten en cuena que la tuberia de vapor tiene una capacidad infinita, y destruirlo resulta en una perdia de gran cantidad de energia almacenada.
+		</desc>
+		<note>
+			Capacidad infinita
+		</note>
+	</steamline>
+	<turbinecore>
+		<desc>
+			La turbine extrae la energia del vapor, que se mueve a lo largo de esta. La turbina acelera gradualmente mientras recibe vapor, y su par es proporcional a la cantidad de vapor que la atraviesa. Ten en cuenta que las turbinas, especialmente si rotan rapidamente, son extremadamente fragiles. La turbina no girara si las aletas estan obstruidas.
+		</desc>
+		<note>
+			Velocidad maxima: %d rad/s
+			Par maximo: %d Nm
+			Riesgos: Rotura de cuchillas debido a la colision con objetos
+		</note>
+	</turbinecore>
+	<pebblebed>
+		<desc>
+			El pebble bed reactor core es la unidad de combustible para el pebble bed reactor. Llenalo con fuel peelets, y provocara fisiones expontaneas y generara calor. Este calor es preferiblemente transferido a un carbon dioxide heat exchanger.
+		</desc>
+		<note>
+
+		</note>
+	</pebblebed>
+	<co2heater>
+		<desc>
+			El CO2 Heat Exchanger absorbe calor de un pebble bed reactor y lo transiere al carbon dioxide que contiene. El carbon dixoide caliente puede ser retirado de la parte superior y alimentado en un heat exchanger. 
+		</desc>
+		<note>
+			Debe alcanzar 800C para emitir carbon dioxide caliente
+		</note>
+	</co2heater>
+	<fuel>
+		<desc>
+			El fuel core almacena combustible nuclear y es la fuente de todas las reacciones nucleares y generacion de calor. Cuando esta cargado, el nucleo periodicamente emite neutrones, que pueden impactar en otros fuel cores. Si esos cores tambien estan cargados, hay una posibilidad de que produzcan fision, liberando tres neutrones y un poco de calor, y consumen un poco de combustible. Tambien acumulan gradualmente residuos, que aplacara la habilidad de producir fision. Si el combustible del nucleo se calienta demasiado, empezara a humear, liberando gas hidrogeno, y termina por fundirse y liberar grandes cantidades de radiacion.
+		</desc>
+		<note>
+			Emision de neutrones: Cualquier direccion horizontal
+			Temperatura Maxima: %dC
+		</note>
+	</fuel>
+	<control>
+		<desc>
+			Los control rod te permiten manipular el ratio de una reaccion nuclear interceptando neutrones que podrian de otra manera activar mas eventos de fision. Los control rods pueden ser inesrtados o retraidos - estan insertados de normal - cuando se comandan con un reactor CPU. Tambien pueden ser soltados en caso de emergencia, evento llamado "SCRAM".
+		</desc>
+		<note>
+
+		</note>
+	</control>
+	<coolant>
+		<desc>
+			Las coolant cells absorben calor del reactor. Ten en cuenta que este calor es esencialmente desaprovechado, ya que no crea ninguna energia utilizable. Sin embargo, los coolant cells son vitales para distribuir el calor y estabilizar la temperatura de reactores grandes.
+		</desc>
+		<note>
+
+		</note>
+	</coolant>
+	<cpu>
+		<desc>
+			El reactor CPU puede ser usado para administrar la operacion de un reactor nuclear. Permite manipular cada control rod individualmente, o todos a la vez. Tambien siente la temperatura de los alrededores y activa el evento SCRAM si la temperatura se eleva demasiado, previniendo una fusion del nucleo. Ten en cuenta que, como en la vida misma, si la CPU pierde potencia por alguna razon, los control rods se extenderan todos, posiblemente parando la reaccion nuclear.
+		</desc>
+		<note>
+			Potencia por cada control rod: %dW
+		</note>
+	</cpu>
+	<breeder>
+		<desc>
+			El breeder reactor core se comporta como un fuel core normal, pero solo puede aceptar breeder reactor fuel, , y es el otro tipo de nucleo de reactor que puede ser usado en un breeder reactor. Se calientan de alguna manera mas rapido que los nucleos de uranio convencionales.
+		</desc>
+		<note>
+			Emision de neutrones: Cualquier direccion horizontal
+			Temperatura maxima: %dC
+		</note>
+	</breeder>
+	<sodiumboiler>
+		<desc>
+			El sodium heater, al igual que el steam boiler, acumula calor de los alrededores y calienta el liquido que contiene. Sin embargo, solo acepta molten sodium, y emitira hot molten sodium una vz que la temperatura llegu ea 300 grados. Este hot molten sodium es utilizable en un heat exchanger.
+		</desc>
+		<note>
+			Entrada de sodium: Debajo
+			Salida de hot sodium: Arriba
+		</note>
+	</sodiumboiler>
+	<heater>
+		<desc>
+			El hydrogen preheater usa el rayo del heat ray para calentar una mezcla de deuterio y tritio y convertirlo en plasma utilizable en el reactor de fusion. Ten en cuenta que debe ser contenido en una estructura multibloque calentadora, y debe estar en el camino del rayo de calor.
+		</desc>
+		<note>
+			Temperatura del plasma: %dC
+			Entrada de hidrogeno: Cualquier lado horizontal
+			Salida de plasma: Arriba
+		</note>
+	</heater>
+	<injector>
+		<desc>
+			El plasma injector inyecta el plasma de fusion en el reactor tokamak. Ten en cuenta que debe ser contendio dentro de una estructura multibloque adecuada.
+		</desc>
+		<note>
+
+		</note>
+	</injector>
+	<magnet>
+		<desc>
+			Los toroidal magnets son el principal componente del tokamak reactor, y contienen el plasma en un estrecho rayo en su centro. Para funcionar correctamente, deben ser colocados y rotados correctamente, y ser mantenidos muy frios. are the main component of the tokamak reactor, and contain the plasma into a narrow beam in their center. In order to function properly, they must be placed and rotated correctly, and kept very cold.
+		</desc>
+		<note>
+			No puede ser colocado en terreno plano debido a su gran volumen
+		</note>
+	</magnet>
+	<solenoid>
+		<desc>
+			El solenoid magnet es el otro componente principal del reactor tokamak. Dobla el plasma en un circulo, permitiendo ser contenido y alcanzar la densidad critica par que la fusion tenga lugar. Si este iman no es funcional, el plasma se dispara en direcciones aleatorias. El solenoid es otra estructura multibloque y necesita potencia para rotar. 
+		</desc>
+		<note>
+			Velocidad minima: %d rad/s
+			Par minimo: %d Nm
+			Velocidad minima: %d rad/s
+		</note>
+	</solenoid>
+	<absorber>
+		<desc>
+			Los neutron absorbers interceptan neutrones y convierten su energia cinetica en calor. Como un heat exchanger, este calor puede ser transmitido a maquinas adyacentes.
+		</desc>
+		<note>
+
+		</note>
+	</absorber>
+	<collector>
+		<desc>
+			El gas collector recolecta dioxido de carbono de un horno quemando carbon o madera. Este dioxido de carbono es usado como fluido de trabajo en los high-temperature gas reactors.
+		</desc>
+		<note>
+
+		</note>
+	</collector>
+	<gaspipe>
+		<desc>
+			Los gas ducts son usados para transportar gas, y estan hechos de arcilla para no reaccionar con los gases corrosivos como el hydrofluoric acid y el uranium hexafluoride.
+		</desc>
+		<note>
+
+		</note>
+	</gaspipe>
+	<magnetpipe>
+		<desc>
+			Las magnetic containment pipes son usadas para transportar gases extremadamente calientes. Usan campos magneticos para mantener el contenido alejado de las paredes, ya que de no ser asi la tuberia se fundiria. Ten en cuenta que una carga electrica debe ser aplicada a la tuberia para que funcione. 
+		</desc>
+		<note>
+			Requiere carga de un Van De Graaff
+		</note>
+	</magnetpipe>
+	<heavypump>
+		<desc>
+			La heavy water es un tipo especial de agua que contiene deuterio en vez de hidrogeno. El deuterio es mas denso que el hidrogeno y por ello la heavy water existe en diminutas cantidades en el fondo de grandes volumenes de agua. El proposito del heavy water extractoris es separar el heavy water del agua normal del fondo del oceano. Debido a la densidad natural del heavy water, esto solo puede ocurrir en un bioma oceano por debajo de y=45, y el extractor solo funcionara si tiene como minimo 16 bloques fuente de agua encima de si y si esta rodeado en otros tres lados por agua.
+		</desc>
+		<note>
+			Potencia minima: %dW
+			Par minimo: %d Nm
+		</note>
+	</heavypump>
+	<fluidextractor>
+		<desc>
+			El fluid extractor, cuando se sumerge en (y por lo menos esta en contacto en tres caras con) un fluido, puede centrifugar y obtener trazas de otro fluido que estuviese mezclado. Por ejemplo, la heavy water puede ser centrifugada en el fondo del oceano (por debajo ed y=%d y por lo menos con /dm de agua encima), o molten lithium puede ser extraida de la superficie de la lava.
+		</desc>
+		<note>
+			Potencia minima: %dW
+			Par minimo: %d Nm
+		</note>
+	</fluidextractor>
+	<wastecontainer>
+		<desc>
+			El fuel container agotado es el primer deshecho de la central nuclear. Cuando se coloca en su contenedor, el deshecho con vida media mas corta emite calor y neutrones mientras se degrada. Para mantenerlo frio, y proveer escudo de radiacion, tiene que estar sumergido bajo el agua.
+		</desc>
+		<note>
+
+		</note>
+	</wastecontainer>
+	<storage>
+		<desc>
+			El residuo nuclear con vida media larga no se degrada en el contenedor usado y debe ser colocado en un contenedor de deshechos, donde pue de ser almacenado de manera segura bajo tierra sin riesgo a que se sobrecaliente o a una fuga de radiacion. Ten en cuenta que estar en las proximidades de un contenedor cargado sigue siendo extremadamente peligroso. Deshechos con vidas medias mas cortas de seis primaveras no pueden ser almacenadas en esta maquina, ya que generan mucho calor.
+		</desc>
+		<note>
+
+		</note>
+	</storage>
+	<reflector>
+		<desc>
+			El neutron reflector tiene la posibilidad de reflejar neutrones en la direccion desde la que impactaron al reflector. Esto permite mayor eficiencia reutilizando una parte de los neutrones. Los neutrones no reflejados son absorbidos.
+		</desc>
+		<note>
+
+		</note>
+	</reflector>
+	<generator>
+		<desc>
+			El generator convierte potencia en el eje directamente del eje de la turbina en RF para su transporte o su uso en otros mods. Ten en cuenta que es una estructura multibloque y debe ser conectada directamente a la turbina. Tambien se consciente del extremo poder de generacion, que excede las capacidades de la mayoria de sistemas de transporte de RF.
+		</desc>
+		<note>
+			Salida de RF: Detras
+		</note>
+	</generator>
+	<bigturbine>
+		<desc>
+			La high-pressure turbine funciona con vapor directamente de las lineas gracias a un sistema interno de eyeccion, permitiendole funcionar mas eficientemente y generando mucha mas potencia. Debido al volumen muy superior de esta turbina, requiere mucho mas vapor para funcionar, y puede ser construido hasta en siete etapas en vez de cinco. Esta turbina tambien tiene una carcasa para prevenir deterioro. El liquido a baja presion puede ser recogido con reservoirs o tanques de BC debajo de la parte trasera de la turbina.
+		</desc>
+		<note>
+			Velocidad maxima: %d rad/s
+		</note>
+	</bigturbine>
+	<turbinemeter>
+		<desc>
+			La turbine dynamometer mide la velocidad de la turbina. Se coloca debajo del cuerpo de la turbina, y con la ayuda de un comparador de redstone, emite una fuerza de redstone correspondiente a una fraccion de la velocidad maxima de la turbina.
+		</desc>
+		<note>
+			Debe ser colocado debajo de la turbina con una linea de vision libre
+			Nivel de fuerza de redstone (Turbina normal): (Velocidad/%d)*15
+			Nivel de fuerza de redstone (Turbina high-pressure): (Velocidad/%d)*15
+		</note>
+	</turbinemeter>
+	<marker>
+		<desc>
+			El tokamak blueprint highligher proporciona una guia general de las diferentes partes de un reactor de fusion tikamak para ayudarte a colocar correctamente y rotar los diferentes componentes.
+		</desc>
+		<note>
+
+		</note>
+	</marker>
+	<flywheel>
+		<desc>
+			La turbine flywheel estabiliza la salida de potencia de una low-pressure turbine.
+		</desc>
+		<note>
+
+		</note>
+	</flywheel>
+	<diffuser>
+		<desc>
+			El steam diffuser toma vapor de alta temperatura caliente de un reactor boiler y lo expande y enfria a low-pressure steam convencional para usar en las turbinas de vapor convencionales, pensadas para ser usadas con coal boilers.
+		</desc>
+		<note>
+
+		</note>
+	</diffuser>
+</machines>

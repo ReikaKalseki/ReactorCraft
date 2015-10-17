@@ -29,6 +29,8 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 
 public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBase {
 
+	private long lastTickTime = -1;
+
 	protected void fill() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (this.getStackInSlot(i) == null) {
@@ -57,7 +59,8 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		this.decayWaste(1);
 	}
 
-	protected final void decayWaste(int mult) {
+	protected final void decayWaste(long mult) {
+		mult *= (1+this.getSkippedTicks());
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 				List<Isotopes> iso = WasteManager.getWasteList();
@@ -74,6 +77,17 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 				}
 			}
 		}
+	}
+
+	private int getSkippedTicks() { //compensate for lag + make decay effectively run even with MC closed
+		long time = System.currentTimeMillis();
+		long dur = time-lastTickTime;
+		int ticks = 0;
+		if (dur > 50) {
+			ticks = (int)(Math.min((dur/50)-1, Integer.MAX_VALUE));
+		}
+		lastTickTime = time;
+		return ticks;
 	}
 
 	protected void onDecayWaste(int i) {

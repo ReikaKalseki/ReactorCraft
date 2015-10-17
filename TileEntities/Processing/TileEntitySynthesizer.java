@@ -49,9 +49,9 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	private int temperature;
 
-	private HybridTank tank = new HybridTank("synthout", 24000);
+	private final HybridTank tank = new HybridTank("synthout", 24000);
 
-	private HybridTank water = new HybridTank("synthwater", 24000);
+	private final HybridTank water = new HybridTank("synthwater", 24000);
 
 	private StepTimer steptimer = new StepTimer(1800);
 	private StepTimer tempTimer = new StepTimer(20);

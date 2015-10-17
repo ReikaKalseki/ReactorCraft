@@ -35,6 +35,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
+import Reika.ChromatiCraft.API.CrystalPotionInterface;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -249,6 +250,7 @@ public class ReactorCraft extends DragonAPIMod {
 		this.registerOres();
 		ReactorTiles.loadMappings();
 		ReactorItems.loadMappings();
+		ReactorBlocks.loadMappings();
 
 		tabRctr.setIcon(ReactorTiles.MAGNET.getCraftedProduct());
 		tabRctrItems.setIcon(ReactorItems.WASTE.getStackOf());
@@ -396,14 +398,18 @@ public class ReactorCraft extends DragonAPIMod {
 
 		proxy.loadDonatorRender();
 
-		if (ModList.CHROMATICRAFT.isLoaded()) {
-			for (int i = 0; i < ReactorTiles.TEList.length; i++) {
-				ReactorTiles m = ReactorTiles.TEList[i];
-				if (m != ReactorTiles.PROCESSOR) {
+		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
+			ReactorTiles m = ReactorTiles.TEList[i];
+			if (m != ReactorTiles.PROCESSOR) {
+				if (ModList.CHROMATICRAFT.isLoaded()) {
 					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
-					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 				}
+				TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 			}
+		}
+
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			CrystalPotionInterface.addBadPotionForIgnore(radiation);
 		}
 
 		if (ModList.THAUMCRAFT.isLoaded()) {

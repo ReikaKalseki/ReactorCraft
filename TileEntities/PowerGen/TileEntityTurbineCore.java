@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,6 +40,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -134,6 +136,13 @@ MultiBlockTile, BreakAction, ToggleTile {
 			//}
 		}
 
+		if (ReactorCraft.logger.shouldDebug()) {
+			if (world.isRemote)
+				ReactorCraft.logger.log("Clientside "+this+" has "+steam+" steam, spinning @ "+omega+" rad/s. Phi="+phi);
+			else
+				ReactorCraft.logger.log("Serverside "+this+" has "+steam+" steam, spinning @ "+omega+" rad/s.");
+		}
+
 		thermalTicker.update();
 		soundTimer.update();
 
@@ -201,7 +210,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 			int dl = te.tank.getLevel()-tank.getLevel();
 			if (dl > 1) {
 				int rem = Math.min(dl/2, max);
-				tank.addLiquid(rem, FluidRegistry.getFluid("lubricant"));
+				tank.addLiquid(rem, FluidRegistry.getFluid("rc lubricant"));
 				te.tank.removeLiquid(rem);
 			}
 		}
@@ -501,7 +510,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 		}
 	}
 
-	private boolean canDamageTurbine(EntityLivingBase e) {
+	public static boolean canDamageTurbine(Entity e) {
 		if (e instanceof EntityPlayer) {
 			return !((EntityPlayer)e).capabilities.isCreativeMode;
 		}
@@ -751,7 +760,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 
 	@Override
 	public final boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == this.getSteamMovement().getOpposite() && fluid.equals(FluidRegistry.getFluid("lubricant"));
+		return from == this.getSteamMovement().getOpposite() && fluid.equals(FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override
@@ -797,13 +806,13 @@ MultiBlockTile, BreakAction, ToggleTile {
 		if (ReikaItemHelper.matchStacks(this.getMachine().getCraftedProduct(), is)) {
 			if (is.stackTagCompound != null) {
 				int lube = is.stackTagCompound.getInteger("lube");
-				tank.setContents(lube, FluidRegistry.getFluid("lubricant"));
+				tank.setContents(lube, FluidRegistry.getFluid("rc lubricant"));
 			}
 		}
 	}
 
 	public final void addLubricant(int amt) {
-		tank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+		tank.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public final boolean canAcceptLubricant(int amt) {

@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -247,6 +248,8 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(ReactorItems.CLEANUP.getStackOf(), " sp", "sbs", "ss ", 'b', Items.water_bucket, 's', ItemStacks.steelingot, 'p', ItemStacks.pipe);
 
 		GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
+
+		ItemRegistry.UPGRADE.addMetaBlastRecipe(2000, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', CraftingItems.FERROINGOT.getItem(), 'T', ItemStacks.tungsteningot);
 	}
 
 	private static void addMachines() {

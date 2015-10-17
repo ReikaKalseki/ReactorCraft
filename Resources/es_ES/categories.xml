@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<categories>
+	<intro>
+		Una introduccion a las reacciones nucleares, los reactores nucleares y su construccion.
+	</intro>
+	<procdesc>
+		Estas maquinas son usadas para procesar materiales existentes en otros necesarios para hacer funcionar los reactores.
+	</procdesc>
+	<gendesc>
+		Estas maquinas aprovechan la potencia del reactor nuclear, y trabajan junto a el para convertirla en potencia rotacional en el eje.
+	</gendesc>
+	<htgrdesc>
+		Estos son los componentes para un High-Temperature Gas Reactor (HTGR) (Reactor de gas a alta temperatura (RGAT)).
+	</htgrdesc>
+	<fissiondesc>
+		Estos son los componentes para un reactor de fision estandar de ebullicion de agua.
+	</fissiondesc>
+	<breederdesc>
+		Estos son los componentes de un reactor generador enfriado por sodio, o "liquid-metal fast breeder reactor" (LMFBR) (reactor generador rapido de metal liquido (RGRML)).
+	</breederdesc>
+	<fusiondesc>
+		Estos son los componentes de un reactor de fusion Tokamak.
+	</fusiondesc>
+	<accdesc>
+		Estas maquinas suelen ser requeridas junto con el actual reactor, para producir o transportar materiales o para complementar a los reactores.
+	</accdesc>
+	<tooldesc>
+		Estas herramientas son utiles para aquellos que trabajan en centrales nucleares.
+	</tooldesc>
+	<resourcedesc>
+		Estos items son cruciales en las operaciones de los reactores nucleares.
+	</resourcedesc>
+</categories>

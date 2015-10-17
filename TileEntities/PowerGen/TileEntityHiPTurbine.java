@@ -253,7 +253,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 					int rem = Math.min(lube, tank.getRemainingSpace());
 					if (rem > 0) {
 						te.remove(rem);
-						tank.addLiquid(rem, FluidRegistry.getFluid("lubricant"));
+						tank.addLiquid(rem, FluidRegistry.getFluid("rc lubricant"));
 					}
 				}
 			}
@@ -295,6 +295,12 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 		int dz = z+dir.offsetZ;
 
 		boolean flag = false;
+
+		if (DragonAPICore.debugtest) {
+			steam = 5000;
+			fluid = WorkingFluid.WATER;
+			return true;
+		}
 
 		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 		if (r == ReactorTiles.STEAMLINE) {

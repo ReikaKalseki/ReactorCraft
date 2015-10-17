@@ -54,7 +54,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	private StepTimer timer = new StepTimer(20);
 
-	private HybridTank tank = new HybridTank("heavypump", 8000);
+	private final HybridTank tank = new HybridTank("heavypump", 8000);
 
 	@Override
 	public int getIndex() {

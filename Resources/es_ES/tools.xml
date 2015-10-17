@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<tools>
+	<goggles>
+		Las Radiation Goggles permiten poder ver la radiacion, permitiendo evitarla facilmente y una potencial limpieza.
+	</goggles>
+	<remote>
+		El CPU remote es una manera de controlar la CPU de un reactor de fision a distancia, sin tener que entrar al reactor mismo.
+	</remote>
+	<geiger>
+		El geiger counter puede detectar radiacion, y hara click mas intensamente cuando los niveles de radiacion aumenten.
+	</geiger>
+	<cleaner>
+		La radiation cleaning tool pulveriza agua sobre un area para limpiar particulas radioactivas, limpiando lentamente la zona de la radiacion.
+	</cleaner>
+</tools>

@@ -123,26 +123,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 			((TileEntityTurbineCore)te).setLubricant(is);
 		}
 		if (m == ReactorTiles.COLLECTOR) {
-			switch(side) {
-				case 0:
-					te.setBlockMetadata(1);
-					break;
-				case 1:
-					te.setBlockMetadata(0);
-					break;
-				case 2:
-					te.setBlockMetadata(4);
-					break;
-				case 3:
-					te.setBlockMetadata(2);
-					break;
-				case 4:
-					te.setBlockMetadata(5);
-					break;
-				case 5:
-					te.setBlockMetadata(3);
-					break;
-			}
+			te.setBlockMetadata(side);
 			return true;
 		}
 		if (te instanceof Temperatured) {

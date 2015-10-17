@@ -31,7 +31,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	public static final long MINPOWER = 16384;
 	public static final int MINTORQUE = 1024;
 
-	private HybridTank output = new HybridTank("pumpout", this.getCapacity());
+	private final HybridTank output = new HybridTank("pumpout", this.getCapacity());
 
 	private int omega;
 	private int torque;

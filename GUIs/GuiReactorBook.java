@@ -19,11 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -33,6 +35,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorStructures;
 import Reika.ReactorCraft.Registry.CraftingItems;
+import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -78,10 +81,11 @@ public class GuiReactorBook extends GuiHandbook {
 		if (h == ReactorBook.STRUCTURES && subpage > 0) {
 			buttonList.add(new GuiButton(20, j+xSize-77, k+6, 20, 20, "3D"));
 			buttonList.add(new GuiButton(21, j+xSize-57, k+6, 20, 20, "2D"));
+			buttonList.add(new GuiButton(22, j+xSize-97, k+6, 20, 20, "N#"));
 
 			if (structureMode == 1) {
-				buttonList.add(new GuiButton(22, j+xSize-77, k+40, 20, 20, "+"));
-				buttonList.add(new GuiButton(23, j+xSize-57, k+40, 20, 20, "-"));
+				buttonList.add(new GuiButton(23, j+xSize-77, k+40, 20, 20, "+"));
+				buttonList.add(new GuiButton(24, j+xSize-57, k+40, 20, 20, "-"));
 			}
 		}
 	}
@@ -101,11 +105,17 @@ public class GuiReactorBook extends GuiHandbook {
 			return;
 		}
 		else if (b.id == 22) {
+			structureMode = 2;
+			this.initGui();
+			ReactorStructures.structureList[subpage-1].getRenderer().resetStepY();
+			return;
+		}
+		else if (b.id == 23) {
 			ReactorStructures.structureList[subpage-1].getRenderer().incrementStepY();
 			this.initGui();
 			return;
 		}
-		else if (b.id == 23) {
+		else if (b.id == 24) {
 			ReactorStructures.structureList[subpage-1].getRenderer().decrementStepY();
 			this.initGui();
 			return;
@@ -244,7 +254,7 @@ public class GuiReactorBook extends GuiHandbook {
 	}
 
 	@Override
-	protected void drawAuxGraphics(int posX, int posY) {
+	protected void drawAuxGraphics(int posX, int posY, float ptick) {
 		ReactorBook h = (ReactorBook)this.getEntry();
 		ReikaGuiAPI api = ReikaGuiAPI.instance;
 
@@ -255,6 +265,8 @@ public class GuiReactorBook extends GuiHandbook {
 			else {
 				ReactorStructures s = ReactorStructures.structureList[subpage-1];
 				StructureRenderer r = s.getRenderer();
+
+				fontRendererObj.drawString(s.getName(), posX+8, posY+16, 0x000000);
 
 				if (structureMode == 0) {
 
@@ -278,12 +290,33 @@ public class GuiReactorBook extends GuiHandbook {
 						r.rotate(0.75, 0, 0);
 					}
 
-					r.draw3D(posX, posY);
+					r.draw3D(posX, posY, ptick);
 				}
-				else {
+				else if (structureMode == 1) {
 					r.drawSlice(posX, posY);
 				}
+				else if (structureMode == 2) {
+					this.drawTally(s, posX, posY);
+				}
 			}
+		}
+	}
+
+	private void drawTally(ReactorStructures s, int j, int k) {
+		ItemHashMap<Integer> map = s.getStructure(worldObj, 0, 0, 0, ForgeDirection.EAST).tally();
+		int i = 0;
+		int n = 8;
+		for (ItemStack is : map.keySet()) {
+			int dx = j+10+(i/n)*50;
+			int dy = k+30+(i%n)*22;
+			ItemStack is2 = is.copy();
+			ReactorBlocks b = ReactorBlocks.getFromItem(is2);
+			if (b != null && b.isMachine()) {
+				is2 = ReactorTiles.getMachineFromIDandMetadata(b.getBlockInstance(), is2.getItemDamage()).getCraftedProduct();
+			}
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(itemRender, fontRendererObj, is2, dx, dy);
+			fontRendererObj.drawString(String.valueOf(map.get(is)), dx+20, dy+5, 0x000000);
+			i++;
 		}
 	}
 
@@ -302,7 +335,7 @@ public class GuiReactorBook extends GuiHandbook {
 		ReactorBook h = (ReactorBook)this.getEntry();
 		if (h.isParent())
 			return PageType.PLAIN;
-		if (h == ReactorBook.STRUCTURES)
+		if (h == ReactorBook.STRUCTURES && subpage > 0)
 			return PageType.SOLID;
 		if (subpage >= 1)
 			return PageType.PLAIN;

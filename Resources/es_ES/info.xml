@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<info>
+	<physics>
+		Las reacciones nucleares se agrupan en dos tipos principales, fision y fusion. Cada uno funciona segun la teoria de la relatividad de Einstein para generar energia a partir de la masa - E = mc^2. Esta energia es liberada como calor o un neutron acelerado. Debido a que el valor de c (la velocidad de la luz) es extremadamente grande - 300 millones de metros por segundo - la cantidad de energia liberada suee ser muy grande, aunque el consumo de masa sea diminuto.
+	</physics>
+	<fissioninfo>
+		En la fision nuclear, un atomo pesado, como el uranio o plutonio, es golpeado con un neutron extra. Esto lo desestabiliza, y el atomo se divide en dos otros, liberando gran cantidad de energia en el proceso. Esta reaccion tambien libera tres neutrones extra, que pueden impactar en tres atomos mas y activar una reaccion en cadena. Los dos atomos resultantes suelen ser productos de deshecho no deseados y peligrosos.
+	</fissioninfo>
+	<fusioninfo>
+		En la fusion nuclear, dos atomos ligeros, normalmente hidrojeno, son juntados forzados por calor extremo y presoines elevadisimas hasta que se unen. Parte de la masa es perdida en el proceso, liberando calor y acelerando un neutron. Este neutron lleva una gran cantidad de energia de la reaccion, y debe ser capturado para aprovechar esa energia. A diferencia de la fision, la fusion no puede crear una reaccion en cadena, y no produce deshechos, pero es mucho mas complicada de conseguir. La mayoria de los reactores utilizan dos isotopos  de hidrogeno, el deuterio y el tritio.
+	</fusioninfo>
+	<basics>
+		Las plantas de energia nuclear trabajan de la misma manera que la mayoria; la reaccion nuclear genera calor, que se usa para hervir agua y convertirla en vapor. Este vapor se mueve una turbina y genera potencia de rotacion en el eje. El combustible nuclear es conosumido lentamente comparfado con la mayoria de los demas combustibles, pero es dificil de producir y sus efectos suelen ser complejos de tratar.
+	</basics>
+	<enrichment>
+		El uranio viene en dos variedades principales, U235 y U238. Solo el U235 es util inmediatamente para la reaccion nuclear, pero representa menos del 1%% de todo el uranio, siendo el resto U238. Por esa razon, el uranio es 'enriquecido', donde la concentracion de U235 es incrementada a valores utilizables. El U238 restante, a veces denominado 'depleted uranium' (uranio agotado), puede ser bombardeado con neutrones para convertirlo en Pu239, una forma de plutonio tambien utilizable en reactores de fision, aunque con un mayor riesgo y peores sub-productos. El uranio agotado tambien puede ser utilizado para hacer objetos de alta densidad.
+	</enrichment>
+	<meltdown>
+	Si un reactor se calienta demasiado, empezara a hervir su refrigerante y a emitir grandes cantidades de humo y vapor. Aun mas caliente, puede causar que las moleculas de agua se dividan, produciendo una gran acumulacion de hidrogeno gas. Debido a que el hidrogeno es inflamable, suele terminar con una explosion que manda las piezas del reactor en todas direcciones. A parte, la estructura de acero del nucleo y el combustible se reblandecen, funden y mezclan en una mezcla similar a la lava llamada "corium", que es extremadamente densa y radioactiva. La fusion del nucleo libera una cantidad extrema de radiacion sobre un area bastante grande.
+	</meltdown>
+	<radiation>
+		La radioactividad es una propiedad peligrosa de los materiales radioactivos, ya que envenena severamente a los seres vivos. Niveles bajos de radioactividad no son letales inmediatamente, pero pueden acarrear efectos desagradables como mareos y nauseas. Mayores niveles de radioactividad, dejados atras por una fusion del nucleo, mata en muy poco tiempo. La radioactividad deja una marca distintiva en la tierra, matando plantas, hierba y a los animales por igual. La radiacion no pude ser limpiada manualmente, pero decae con el tiempo, y puede ser limpiada por la lluvia.
+	</radiation>
+	<structures>
+		Los reactores nucleares y sus partes suelen ser grandes, mucho mas grandes que el metro cubico en el que la mayoria de maquinas caben. A demas, suelen estar compuestos de partes individuales que solo toman sentido en una disposicion concreta.
+	</structures>
+</info>

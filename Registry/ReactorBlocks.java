@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -71,6 +73,8 @@ public enum ReactorBlocks implements BlockEnum {
 
 	public static final ReactorBlocks[] blockList = values();
 
+	private static final HashMap<Item, ReactorBlocks> itemMap = new HashMap();
+
 	private ReactorBlocks(Class <? extends Block> cl, Class<? extends ItemBlock> ib, String n, boolean m) {
 		blockClass = cl;
 		blockName = n;
@@ -87,25 +91,25 @@ public enum ReactorBlocks implements BlockEnum {
 	}
 
 	public static ReactorBlocks getFromItem(ItemStack is) {
-		return null;
+		return itemMap.get(is.getItem());
 	}
 
 	public Material getBlockMaterial() {
 		switch(this) {
-		case MATS:
-		case ORE:
-		case FLUORITE:
-		case FLUORITEORE:
-			return Material.rock;
-		case CORIUMFLOWING:
-			//case CORIUMSTILL:
-			return Material.lava;
-		case REACTOR:
-			return Material.iron;
-		case LAMP:
-			return Material.glass;
-		default:
-			return Material.iron;
+			case MATS:
+			case ORE:
+			case FLUORITE:
+			case FLUORITEORE:
+				return Material.rock;
+			case CORIUMFLOWING:
+				//case CORIUMSTILL:
+				return Material.lava;
+			case REACTOR:
+				return Material.iron;
+			case LAMP:
+				return Material.glass;
+			default:
+				return Material.iron;
 		}
 	}
 
@@ -137,18 +141,18 @@ public enum ReactorBlocks implements BlockEnum {
 	@Override
 	public String getMultiValuedName(int meta) {
 		switch(this) {
-		case MATS:
-			return MatBlocks.matList[meta].getName();
-		case ORE:
-			return ReactorOres.oreList[meta].oreName;
-		case FLUORITE:
-			return FluoriteTypes.colorList[meta].getBlockName();
-		case FLUORITEORE:
-			return FluoriteTypes.colorList[meta].getOreName();
-		case LAMP:
-			return FluoriteTypes.colorList[meta].getName()+" "+StatCollector.translateToLocal(this.getBasicName());
-		default:
-			return this.getBasicName();
+			case MATS:
+				return MatBlocks.matList[meta].getName();
+			case ORE:
+				return ReactorOres.oreList[meta].oreName;
+			case FLUORITE:
+				return FluoriteTypes.colorList[meta].getBlockName();
+			case FLUORITEORE:
+				return FluoriteTypes.colorList[meta].getOreName();
+			case LAMP:
+				return FluoriteTypes.colorList[meta].getName()+" "+StatCollector.translateToLocal(this.getBasicName());
+			default:
+				return this.getBasicName();
 		}
 	}
 
@@ -160,20 +164,20 @@ public enum ReactorBlocks implements BlockEnum {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
-		case REACTOR:
-		case MODELREACTOR:
-		case MACHINE:
-		case MODELMACHINE:
-			return ReactorTiles.getTilesOfBlock(this).size();
-		case MATS:
-			return MatBlocks.matList.length;
-		case ORE:
-			return ReactorOres.oreList.length;
-		case FLUORITE:
-		case FLUORITEORE:
-			return FluoriteTypes.colorList.length;
-		default:
-			return 1;
+			case REACTOR:
+			case MODELREACTOR:
+			case MACHINE:
+			case MODELMACHINE:
+				return ReactorTiles.getTilesOfBlock(this).size();
+			case MATS:
+				return MatBlocks.matList.length;
+			case ORE:
+				return ReactorOres.oreList.length;
+			case FLUORITE:
+			case FLUORITEORE:
+				return FluoriteTypes.colorList.length;
+			default:
+				return 1;
 		}
 	}
 
@@ -209,6 +213,18 @@ public enum ReactorBlocks implements BlockEnum {
 
 	public ItemStack getStackOfMetadata(int meta) {
 		return new ItemStack(this.getBlockInstance(), 1, meta);
+	}
+
+	public boolean isMachine() {
+		return BlockReactorTile.class.isAssignableFrom(blockClass);
+	}
+
+	public static void loadMappings() {
+		for (int i = 0; i < blockList.length; i++) {
+			ReactorBlocks r = blockList[i];
+			Block b = r.getBlockInstance();
+			itemMap.put(Item.getItemFromBlock(b), r);
+		}
 	}
 
 }

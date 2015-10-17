@@ -48,7 +48,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	public static final int MINSPEED = 262144; //much faster since doing it in one step
 
-	private HybridTank tank = new HybridTank("centri", 12000);
+	private final HybridTank tank = new HybridTank("centri", 12000);
 
 	private StepTimer timer = new StepTimer(900);
 

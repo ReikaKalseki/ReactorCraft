@@ -35,8 +35,8 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	public static final int CAPACITY = 1000;
 
-	private HybridTank input = new HybridTank("tritizerin", CAPACITY);
-	private HybridTank output = new HybridTank("tritizerout", CAPACITY);
+	private final HybridTank input = new HybridTank("tritizerin", CAPACITY);
+	private final HybridTank output = new HybridTank("tritizerout", CAPACITY);
 
 	@Override
 	public int getIndex() {
