@@ -122,7 +122,7 @@ public class ReactorCraft extends DragonAPIMod {
 	@Instance("ReactorCraft")
 	public static ReactorCraft instance = new ReactorCraft();
 
-	public static final ReactorConfig config = new ReactorConfig(instance, ReactorOptions.optionList, null, 1);
+	public static final ReactorConfig config = new ReactorConfig(instance, ReactorOptions.optionList, null);
 
 	public static final String packetChannel = "ReactorCraftData";
 

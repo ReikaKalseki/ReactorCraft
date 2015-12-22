@@ -25,8 +25,8 @@ public class ReactorConfig extends ControlledConfig {
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ReactorAchievements.class);
 	public DataElement<Integer>[] achievementIDs = new DataElement[entries.size()];
 
-	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
-		super(mod, option, id, cfg);
+	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
+		super(mod, option, id);
 
 		potionID = this.registerAdditionalOption("Other", "Radiation Effect ID", 140);
 
