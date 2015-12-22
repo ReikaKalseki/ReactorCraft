@@ -20,27 +20,24 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 
 public class ReactorConfig extends ControlledConfig {
 
-	private int potionID;
+	private DataElement<Integer> potionID;
 
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ReactorAchievements.class);
-	public int[] achievementIDs = new int[entries.size()];
+	public DataElement<Integer>[] achievementIDs = new DataElement[entries.size()];
 
 	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
 		super(mod, option, id, cfg);
-	}
 
-	@Override
-	protected void loadAdditionalData() {
-		potionID = config.get("Other", "Radiation Effect ID", 140).getInt();
+		potionID = this.registerAdditionalOption("Other", "Radiation Effect ID", 140);
 
 		for (int i = 0; i < entries.size(); i++) {
 			String name = entries.get(i);
-			achievementIDs[i] = config.get("Achievement IDs", name, 72000+i).getInt();
+			achievementIDs[i] = this.registerAdditionalOption("Achievement IDs", name, 72000+i);
 		}
 	}
 
 	public int getRadiationPotionID() {
-		return potionID;
+		return potionID.getData();
 	}
 
 }

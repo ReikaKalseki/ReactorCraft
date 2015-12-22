@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -71,7 +72,8 @@ ChunkLoadingTile, BreakAction {
 
 		if (activeTimer > 0) {
 			activeTimer--;
-			this.onActivityChange(false);
+			if (activeTimer == 0)
+				this.onActivityChange(false);
 		}
 
 		thermalTicker.update();
@@ -301,7 +303,7 @@ ChunkLoadingTile, BreakAction {
 		}
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 8, false);
 
-		double scatter = RadiationEffects.instance.contaminateArea(world, x, y, z, 32, 8, 2, true);
+		double scatter = RadiationEffects.instance.contaminateArea(world, x, y, z, 32, 8, 2, true, RadiationIntensity.LETHAL);
 		this.testAndDoHydrogenExplosion(world, x, y, z, scatter);
 	}
 
@@ -406,6 +408,26 @@ ChunkLoadingTile, BreakAction {
 				this.unload();
 			}
 		}
+	}
+
+	@Override
+	public final int getTextureState(ForgeDirection side) {
+		if (side.offsetY != 0)
+			return 4;
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		ReactorTiles src = this.getMachine();
+		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
+		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
+		if (r2 == src && r == src)
+			return 2;
+		else if (r2 == src)
+			return 1;
+		else if (r == src)
+			return 3;
+		return 0;
 	}
 
 }

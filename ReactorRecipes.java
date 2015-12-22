@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
@@ -178,7 +179,8 @@ public class ReactorRecipes {
 		}
 
 		ReikaRecipeHelper.addSmelting(ReactorStacks.calcite, ReactorStacks.lime, 0.2F);
-		ReikaRecipeHelper.addSmelting(ItemStacks.coaldust, CraftingItems.GRAPHITE.getItem(), 0);
+		//ReikaRecipeHelper.addSmelting(ItemStacks.coaldust, CraftingItems.GRAPHITE.getItem(), 0);
+		RecipesFrictionHeater.getRecipes().addCoreRecipe(ItemStacks.coaldust, CraftingItems.GRAPHITE.getItem(), 400, 100);
 
 		RecipesBlastFurnace.getRecipes().addRecipe(ReactorStacks.lime, 850, ReikaRecipeHelper.getShapelessRecipeFor(ReactorStacks.lime, new ItemStack(Items.egg)), 1, 0.1F);
 	}

@@ -260,7 +260,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 								return false;
 							}
 							else {
-								ReikaWorldHelper.dropBlockAt(world, x+i, y+j, z+k);
+								ReikaWorldHelper.dropBlockAt(world, x+i, y+j, z+k, ep);
 								world.setBlockToAir(x+i, y+j, z+k);
 							}
 						}

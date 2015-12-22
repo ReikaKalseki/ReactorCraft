@@ -234,7 +234,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return output.drain(resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? output.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -327,18 +327,18 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	private void getFacing(int meta) {
 		switch(meta) {
-		case 0:
-			facing = ForgeDirection.WEST;
-			break;
-		case 1:
-			facing = ForgeDirection.EAST;
-			break;
-		case 2:
-			facing = ForgeDirection.NORTH;
-			break;
-		case 3:
-			facing = ForgeDirection.SOUTH;
-			break;
+			case 0:
+				facing = ForgeDirection.WEST;
+				break;
+			case 1:
+				facing = ForgeDirection.EAST;
+				break;
+			case 2:
+				facing = ForgeDirection.NORTH;
+				break;
+			case 3:
+				facing = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 

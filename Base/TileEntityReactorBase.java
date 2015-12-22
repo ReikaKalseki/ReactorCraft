@@ -169,6 +169,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			if (r != null) {
 				TileEntityReactorBase te = (TileEntityReactorBase)world.getTileEntity(dx, dy, dz);
 				if (te instanceof Temperatured) {
+					int Tamb_loc = ReikaWorldHelper.getAmbientTemperatureAt(world, dx, dy, dz);
+
 					Temperatured tr = (Temperatured)te;
 					boolean flag = true;/*
 					if (src == ReactorTiles.COOLANT) {
@@ -179,7 +181,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						flag = true;
 					if (flag) {
 						int T = tr.getTemperature();
-						dT = T-temperature;
+						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
 						if (dT > 0) {
 							int newT = T-dT/4;
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);

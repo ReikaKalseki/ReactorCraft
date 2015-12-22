@@ -281,6 +281,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 		((TileEntitySteamLine)from).steam -= amt;
 		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
+		source = ((TileEntitySteamLine)from).source;
 	}
 
 	public Proportionality<ReactorType> getSourceReactorType() {

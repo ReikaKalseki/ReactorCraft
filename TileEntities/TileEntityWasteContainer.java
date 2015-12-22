@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -55,6 +56,11 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 			this.feed();
 
 		//this.fill();
+	}
+
+	@Override
+	protected boolean accountForOutGameTime() {
+		return false;
 	}
 
 	private void distributeHeat(World world, int x, int y, int z) {
@@ -118,7 +124,7 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 	public void onMeltdown(World world, int x, int y, int z) {
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 9, true);
-		RadiationEffects.instance.contaminateArea(world, x, y, z, 9, 4, 1.5, true);
+		RadiationEffects.instance.contaminateArea(world, x, y, z, 9, 4, 1.5, true, RadiationIntensity.LETHAL);
 		ReactorAchievements.WASTELEAK.triggerAchievement(this.getPlacer());
 	}
 

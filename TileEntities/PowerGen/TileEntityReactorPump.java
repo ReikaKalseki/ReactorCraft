@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -158,7 +159,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0;
+		return from.offsetY == 0 && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

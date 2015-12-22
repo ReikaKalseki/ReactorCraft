@@ -221,9 +221,9 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		int maxDrain = resource.amount;
-		if (from == ForgeDirection.DOWN)
+		if (from == ForgeDirection.DOWN && resource.getFluid() == tankH.getActualFluid())
 			return tankH.drain(maxDrain, doDrain);
-		if (from == ForgeDirection.UP)
+		if (from == ForgeDirection.UP && resource.getFluid() == tankL.getActualFluid())
 			return tankL.drain(maxDrain, doDrain);
 		return null;
 	}
@@ -505,6 +505,11 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public boolean canDischargeLongRange() {
 		return false;
 	}
 

@@ -12,15 +12,19 @@ package Reika.ReactorCraft.Registry;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Interfaces.Registry.OreEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -221,7 +225,11 @@ public enum ReactorOres implements OreEnum {
 			case PITCHBLENDE:
 				if ("Rainbow Forest".equals(biome.biomeName))
 					return true;
-				return biome == BiomeGenBase.river || biome == BiomeGenBase.ocean || biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore;
+				if (biome == BiomeGenBase.river || biome == BiomeGenBase.ocean || biome == BiomeGenBase.deepOcean || biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore)
+					return true;
+				if (BiomeDictionary.isBiomeOfType(biome, Type.OCEAN) || BiomeDictionary.isBiomeOfType(biome, Type.RIVER))
+					return true;
+				return false;
 			default:
 				return true;
 		}
@@ -303,5 +311,15 @@ public enum ReactorOres implements OreEnum {
 			default:
 				return false;
 		}
+	}
+
+	@Override
+	public TileEntity getTileEntity(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public int getRandomGeneratedYCoord(World world, int posX, int posZ, Random random) {
+		return minY+random.nextInt(maxY-minY+1);
 	}
 }

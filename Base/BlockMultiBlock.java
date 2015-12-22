@@ -51,11 +51,20 @@ public abstract class BlockMultiBlock extends Block implements Transducerable, U
 	}
 
 	@Override
+	public final float getBlockHardness(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		float ret = super.getBlockHardness(world, x, y, z);
+		if (meta >= 8)
+			ret *= 4;
+		return ret;
+	}
+
+	@Override
 	public final boolean canSilkHarvest() {
 		return false;
 	}
 
-	protected abstract void breakMultiBlock(World world, int x, int y, int z);
+	public abstract void breakMultiBlock(World world, int x, int y, int z);
 
 	@Override
 	public final void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack is) {

@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Base;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -60,7 +61,8 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	}
 
 	protected final void decayWaste(long mult) {
-		mult *= (1+this.getSkippedTicks());
+		if (this.accountForOutGameTime())
+			mult *= (1+this.getSkippedTicks());
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 				List<Isotopes> iso = WasteManager.getWasteList();
@@ -78,6 +80,8 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 			}
 		}
 	}
+
+	protected abstract boolean accountForOutGameTime();
 
 	private int getSkippedTicks() { //compensate for lag + make decay effectively run even with MC closed
 		long time = System.currentTimeMillis();
@@ -148,5 +152,19 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected final boolean isLongLivedWaste(Isotopes i) {
 		return i.getMCHalfLife() > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		lastTickTime = NBT.getLong("lasttime");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setLong("lasttime", lastTickTime);
 	}
 }

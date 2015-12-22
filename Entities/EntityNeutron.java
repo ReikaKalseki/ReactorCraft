@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -32,8 +33,9 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.API.NeutronShield;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -65,7 +67,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	{
 		if (ReikaRandomHelper.doWithChance(12.5)) {
 			if (e instanceof EntityLivingBase) {
-				RadiationEffects.instance.applyPulseEffects((EntityLivingBase)e);
+				RadiationEffects.instance.applyPulseEffects((EntityLivingBase)e, RadiationIntensity.MODERATE);
 				this.setDead();
 			}
 		}
@@ -83,8 +85,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		if (id != Blocks.air) {
 			if (id.hasTileEntity(meta)) {
 				TileEntity te = world.getTileEntity(x, y, z);
-				if (te instanceof ReactorCoreTE) {
-					return ((ReactorCoreTE)te).onNeutron(this, world, x, y, z);
+				if (te instanceof NeutronTile) {
+					return ((NeutronTile)te).onNeutron(this, world, x, y, z);
 				}
 				else if (te instanceof WorldRift) {
 					WorldLocation tgt = ((WorldRift)te).getLinkTarget();
@@ -101,11 +103,22 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					}
 				}
 			}
-			else if (id instanceof NeutronBlock) {
+
+			if (id instanceof NeutronBlock) {
 				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
 			}
 			else if (id instanceof NeutronShield) {
-				return ReikaRandomHelper.doWithChance(((NeutronShield)id).getAbsorptionChance(this.getType().name()));
+				NeutronShield ns = (NeutronShield)id;
+				String type = this.getType().name();
+				double c = Math.min(ns.getAbsorptionChance(type), RadiationShield.BEDINGOT.neutronAbsorbChance);
+				boolean flag = ReikaRandomHelper.doWithChance(c);
+				if (flag) {
+					double c2 = MathHelper.clamp_double(ns.getRadiationSpawnMultiplier(world, x, y, z, type), 0, 1);
+					if (ReikaRandomHelper.doWithChance(c2)) {
+						this.spawnRadiationChance(world, x, y, z);
+					}
+				}
+				return flag;
 			}
 
 			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
@@ -114,24 +127,28 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			}
 
 			RadiationShield rs = RadiationShield.getFrom(id, meta);
-			if (rs != null && ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance))
-				return true;
+			if (rs != null)
+				return ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance);
 
 			boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 256-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
 			if (flag) {
-				if (ReikaRandomHelper.doWithChance(2)) {
-					AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
-					List inbox = world.getEntitiesWithinAABB(EntityRadiation.class, box);
-					if (inbox.size() < 3)
-						RadiationEffects.instance.contaminateArea(world, x, y, z, 1, 1, 0, false);
-				}
+				this.spawnRadiationChance(world, x, y, z);
 				if (ReikaRandomHelper.doWithChance(20))
-					RadiationEffects.instance.transformBlock(world, x, y, z);
+					RadiationEffects.instance.transformBlock(world, x, y, z, RadiationIntensity.MODERATE);
 			}
 			return flag;
 		}
 
 		return rand.nextInt(1000) == 0;
+	}
+
+	private void spawnRadiationChance(World world, int x, int y, int z) {
+		if (ReikaRandomHelper.doWithChance(2)) {
+			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
+			List inbox = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+			if (inbox.size() < 3)
+				RadiationEffects.instance.contaminateArea(world, x, y, z, 1, 1, 0, false, RadiationIntensity.LOWLEVEL);
+		}
 	}
 
 	@Override

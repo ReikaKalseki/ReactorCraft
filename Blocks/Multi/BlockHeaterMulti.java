@@ -286,7 +286,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	}
 
 	@Override
-	protected void breakMultiBlock(World world, int x, int y, int z) {
+	public void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {

@@ -232,7 +232,7 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	protected void breakMultiBlock(World world, int x, int y, int z) {
+	public void breakMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);

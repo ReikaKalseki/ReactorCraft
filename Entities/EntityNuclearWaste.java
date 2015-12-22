@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 
 public final class EntityNuclearWaste extends EntityItem {
 
@@ -52,7 +53,7 @@ public final class EntityNuclearWaste extends EntityItem {
 				int ix = MathHelper.floor_double(posX);
 				int iy = MathHelper.floor_double(posY);
 				int iz = MathHelper.floor_double(posZ);
-				RadiationEffects.instance.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2, 0, false);
+				RadiationEffects.instance.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2, 0, false, RadiationIntensity.HIGHLEVEL);
 			}
 		}
 		timer++;
@@ -74,8 +75,8 @@ public final class EntityNuclearWaste extends EntityItem {
 		for (EntityLivingBase e : inbox) {
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= RANGE) {
-				if (!RadiationEffects.instance.hasHazmatSuit(e))
-					RadiationEffects.instance.applyEffects(e);
+				//if (!RadiationEffects.instance.hasHazmatSuit(e))
+				RadiationEffects.instance.applyEffects(e, RadiationIntensity.HIGHLEVEL);
 			}
 		}
 
@@ -88,7 +89,7 @@ public final class EntityNuclearWaste extends EntityItem {
 			AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(12, 8, 12);
 			List<EntityRadiation> near = world.getEntitiesWithinAABB(EntityRadiation.class, box);
 			if (near.size() < 32) {
-				RadiationEffects.instance.contaminateArea(world, ix, iy, iz, RANGE*4, 2, 0, false); //no LOS to simulate groundwater/air particulates
+				RadiationEffects.instance.contaminateArea(world, ix, iy, iz, RANGE*4, 2, 0, false, RadiationIntensity.HIGHLEVEL); //no LOS to simulate groundwater/air particulates
 			}
 		}
 	}

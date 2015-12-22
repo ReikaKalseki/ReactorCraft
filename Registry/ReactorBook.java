@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.ReactorCraft.Auxiliary.ReactorBookData;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -379,6 +380,22 @@ public enum ReactorBook implements HandbookEntry {
 	@Override
 	public boolean isConfigDisabled() {
 		return false;
+	}
+
+	public static int getScreen(ReactorTiles m, TileEntity te) {
+		for (int i = PROCDESC.ordinal(); i < TOOLDESC.ordinal(); i++) {
+			if (tabList[i].machine == m)
+				return tabList[i].getScreen();
+		}
+		return -1;
+	}
+
+	public static int getPage(ReactorTiles m, TileEntity te) {
+		for (int i = 0; i < tabList.length; i++) {
+			if (tabList[i].machine == m)
+				return tabList[i].getPage();
+		}
+		return -1;
 	}
 
 }

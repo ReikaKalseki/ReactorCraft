@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.Collections;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -184,6 +185,14 @@ public class ReactorControlLayout {
 
 	public boolean isEmpty() {
 		return controls.isEmpty();
+	}
+
+	public void writeToNBT(NBTTagCompound NBT) {
+		controls.writeToNBT(NBT);
+	}
+
+	public void readFromNBT(NBTTagCompound NBT) {
+		controls.readFromNBT(NBT);
 	}
 
 }

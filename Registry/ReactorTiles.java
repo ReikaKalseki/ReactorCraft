@@ -77,7 +77,7 @@ public enum ReactorTiles {
 	TURBINECORE("machine.turbine", 				ReactorBlocks.MODELREACTOR,		TileEntityTurbineCore.class, 	0, "RenderTurbine"),
 	CONDENSER("machine.condenser", 				ReactorBlocks.MODELREACTOR,		TileEntityCondenser.class, 		1, "RenderCondenser"),
 	STEAMLINE("machine.steamline", 				ReactorBlocks.LINE,				TileEntitySteamLine.class, 		2, "RenderWaterLine"),
-	FLUIDEXTRACTOR("machine.heavypump", 				ReactorBlocks.MODELMACHINE,		TileEntityHeavyPump.class, 		0, "RenderHeavyPump"),
+	FLUIDEXTRACTOR("machine.heavypump", 		ReactorBlocks.MODELMACHINE,		TileEntityHeavyPump.class, 		0, "RenderHeavyPump"),
 	CENTRIFUGE("machine.isocentrifuge", 		ReactorBlocks.MODELMACHINE,		TileEntityCentrifuge.class, 	1, "RenderCentrifuge"),
 	PROCESSOR("machine.processor", 				ReactorBlocks.MODELMACHINE,		TileEntityUProcessor.class, 	2, "RenderProcessor"),
 	WASTECONTAINER("machine.wastecontainer", 	ReactorBlocks.MACHINE,			TileEntityWasteContainer.class, 2),
@@ -226,6 +226,9 @@ public enum ReactorTiles {
 			case CO2HEATER:
 				return 4;
 			case PEBBLEBED:
+			case FUEL:
+			case BREEDER:
+			case TRITIZER:
 				return 5;
 			case INJECTOR:
 				return 3;
@@ -242,12 +245,12 @@ public enum ReactorTiles {
 
 	public boolean isEndTextured() {
 		switch(this) {
-			case FUEL:
+			//case FUEL:
 			case CONTROL:
 			case WASTECONTAINER:
 			case SYNTHESIZER:
-			case BREEDER:
-			case TRITIZER:
+				//case BREEDER:
+				//case TRITIZER:
 				return true;
 			default:
 				return false;

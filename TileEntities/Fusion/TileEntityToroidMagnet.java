@@ -29,7 +29,9 @@ import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorOptions;
@@ -43,7 +45,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
 public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile, FusionReactorToroidPart,
-ChunkLoadingTile {
+ChunkLoadingTile, NeutronTile {
 
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;
@@ -106,7 +108,7 @@ ChunkLoadingTile {
 				e.resetEscapeTimer();
 				e.setTarget(tg[0], tg[2]);
 				e.magnetOrdinal = this.getOrdinal();
-				tank.removeLiquid(1);
+				tank.removeLiquid(10);
 
 				this.setActive();
 			}
@@ -562,5 +564,15 @@ ChunkLoadingTile {
 
 	public boolean isActive() {
 		return isActive;
+	}
+
+	@Override
+	public boolean canDischargeLongRange() {
+		return true;
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 }

@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.GUIs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -45,6 +47,8 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class GuiReactorBook extends GuiHandbook {
 
@@ -290,7 +294,7 @@ public class GuiReactorBook extends GuiHandbook {
 						r.rotate(0.75, 0, 0);
 					}
 
-					r.draw3D(posX, posY, ptick);
+					r.draw3D(posX, posY, ptick, true);
 				}
 				else if (structureMode == 1) {
 					r.drawSlice(posX, posY);
@@ -306,13 +310,19 @@ public class GuiReactorBook extends GuiHandbook {
 		ItemHashMap<Integer> map = s.getStructure(worldObj, 0, 0, 0, ForgeDirection.EAST).tally();
 		int i = 0;
 		int n = 8;
-		for (ItemStack is : map.keySet()) {
+		List<ItemStack> c = new ArrayList(map.keySet());
+		Collections.sort(c, ReikaItemHelper.comparator);
+		for (ItemStack is : c) {
 			int dx = j+10+(i/n)*50;
 			int dy = k+30+(i%n)*22;
 			ItemStack is2 = is.copy();
 			ReactorBlocks b = ReactorBlocks.getFromItem(is2);
 			if (b != null && b.isMachine()) {
 				is2 = ReactorTiles.getMachineFromIDandMetadata(b.getBlockInstance(), is2.getItemDamage()).getCraftedProduct();
+			}
+			BlockRegistry b2 = BlockRegistry.getFromItem(is2);
+			if (b2 != null && b2.isMachine()) {
+				is2 = MachineRegistry.getMachineFromIDandMetadata(b2.getBlockInstance(), is2.getItemDamage()).getCraftedProduct();
 			}
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(itemRender, fontRendererObj, is2, dx, dy);
 			fontRendererObj.drawString(String.valueOf(map.get(is)), dx+20, dy+5, 0x000000);

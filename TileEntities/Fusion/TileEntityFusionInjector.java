@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fusion;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -24,6 +25,7 @@ import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityPlasma;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -213,6 +215,22 @@ ToggleTile {
 	public void setEnabled(boolean enable) {
 		enabled = enable;
 		this.syncAllData(false);
+	}
+
+	@Override
+	public void breakBlock() {
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = xCoord+dir.offsetX;
+				int dy = yCoord+dir.offsetY;
+				int dz = zCoord+dir.offsetZ;
+				Block b = worldObj.getBlock(dx, dy, dz);
+				if (b instanceof BlockMultiBlock) {
+					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				}
+			}
+		}
 	}
 
 }

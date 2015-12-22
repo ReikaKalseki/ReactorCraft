@@ -24,19 +24,22 @@ import Reika.DragonAPI.Base.InertEntity;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityRadiation extends InertEntity implements IEntityAdditionalSpawnData {
 
 	private int effectRange;
+	private RadiationIntensity intensity;
 
 	public EntityRadiation(World par1World) {
 		super(par1World);
 	}
 
-	public EntityRadiation(World world, int range) {
+	public EntityRadiation(World world, int range, RadiationIntensity ri) {
 		super(world);
 		effectRange = range;
+		intensity = ri;
 	}
 
 	@Override
@@ -47,11 +50,13 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound NBT) {
 		effectRange = NBT.getInteger("effrange");
+		intensity = RadiationIntensity.radiationList[NBT.getInteger("intensity")];
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound NBT) {
 		NBT.setInteger("effrange", effectRange);
+		NBT.setInteger("intensity", intensity.ordinal());
 	}
 
 	@Override
@@ -98,7 +103,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 		for (EntityLivingBase e : inbox) {
 			double dd = ReikaMathLibrary.py3d(e.posX-x, e.posY-y, e.posZ-z);
 			if (dd <= effectRange) {
-				RadiationEffects.instance.applyEffects(e);
+				RadiationEffects.instance.applyEffects(e, intensity);
 			}
 		}
 
@@ -107,7 +112,7 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 			int dx = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(x), effectRange);
 			int dy = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(y), effectRange);
 			int dz = ReikaRandomHelper.getRandomPlusMinus(MathHelper.floor_double(z), effectRange);
-			RadiationEffects.instance.transformBlock(world, dx, dy, dz);
+			RadiationEffects.instance.transformBlock(world, dx, dy, dz, intensity);
 		}
 	}
 
@@ -125,18 +130,20 @@ public class EntityRadiation extends InertEntity implements IEntityAdditionalSpa
 	@Override
 	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(effectRange);
+		data.writeInt(intensity.ordinal());
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		effectRange = data.readInt();
+		intensity = RadiationIntensity.radiationList[data.readInt()];
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource src, float par2)
 	{
 		if (src.isExplosion()) {
-			RadiationEffects.instance.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F, 0.5, true);
+			RadiationEffects.instance.contaminateArea(worldObj, this.getBlockX(), this.getBlockY(), this.getBlockZ(), effectRange, 0.65F, 0.5, true, intensity);
 			this.setDead();
 			return true;
 		}

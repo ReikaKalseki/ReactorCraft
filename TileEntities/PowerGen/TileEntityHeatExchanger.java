@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
@@ -145,9 +146,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, null))
-			return null;
-		return this.drain(from, resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -159,7 +158,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0;
+		return from.offsetY == 0 && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Base.ItemReactorMulti;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 
@@ -28,8 +29,7 @@ public class ItemPlutonium extends ItemReactorMulti {
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 			if (!ep.capabilities.isCreativeMode) {
-				if (!RadiationEffects.instance.hasHazmatSuit(ep)) {
-					ep.addPotionEffect(RadiationEffects.instance.getRadiationEffect(1200));
+				if (RadiationEffects.instance.applyEffects(ep, RadiationIntensity.MODERATE)) {
 					ReactorAchievements.PUPOISON.triggerAchievement(ep);
 				}
 			}

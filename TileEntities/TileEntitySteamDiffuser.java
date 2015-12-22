@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -38,16 +39,16 @@ public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine impl
 
 	public ForgeDirection getFacing() {
 		switch(this.getBlockMetadata()) {
-		case 0:
-			return ForgeDirection.WEST;
-		case 1:
-			return ForgeDirection.EAST;
-		case 2:
-			return ForgeDirection.NORTH;
-		case 3:
-			return ForgeDirection.SOUTH;
-		default:
-			return ForgeDirection.UNKNOWN;
+			case 0:
+				return ForgeDirection.WEST;
+			case 1:
+				return ForgeDirection.EAST;
+			case 2:
+				return ForgeDirection.NORTH;
+			case 3:
+				return ForgeDirection.SOUTH;
+			default:
+				return ForgeDirection.UNKNOWN;
 		}
 	}
 
@@ -116,7 +117,7 @@ public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return this.canDrain(from, null) ? tank.drain(resource.amount, doDrain) : null;
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -126,7 +127,7 @@ public class TileEntitySteamDiffuser extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == this.getFacing().getOpposite();
+		return from == this.getFacing().getOpposite() && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

@@ -60,22 +60,29 @@ public class RadiationEffects {
 			int x = MathHelper.floor_double(evt.creeper.posX);
 			int y = MathHelper.floor_double(evt.creeper.posY);
 			int z = MathHelper.floor_double(evt.creeper.posZ);
-			this.contaminateArea(world, x, y, z, 4, 3, 1.5, true);
+			this.contaminateArea(world, x, y, z, 4, 3, 1.5, true, RadiationIntensity.MODERATE);
 		}
 	}
 
-	public void applyEffects(EntityLivingBase e) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e))
-			e.addPotionEffect(this.getRadiationEffect(36000));
-		if (e instanceof EntityCreeper) {
-			EntityCreeper ec = (EntityCreeper)e;
-			ec.getEntityData().setBoolean("radioactive", true);
+	public boolean applyEffects(EntityLivingBase e, RadiationIntensity ri) {
+		if (ri.causesHarm()) {
+			if (!e.isPotionActive(ReactorCraft.radiation)) {
+				if (!this.isEntityImmuneToAll(e) && (!ri.isShieldable() || !this.hasHazmatSuit(e))) {
+					e.addPotionEffect(this.getRadiationEffect(ri));
+					return true;
+				}
+			}
+			if (e instanceof EntityCreeper) {
+				EntityCreeper ec = (EntityCreeper)e;
+				ec.getEntityData().setBoolean("radioactive", true);
+			}
 		}
+		return false;
 	}
 
-	public void applyPulseEffects(EntityLivingBase e) {
+	public void applyPulseEffects(EntityLivingBase e, RadiationIntensity ri) {
 		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e) && !this.hasHazmatSuit(e))
-			e.addPotionEffect(this.getRadiationEffect(20));
+			e.addPotionEffect(this.getRadiationEffect(20, ri));
 	}
 
 	public boolean isEntityImmuneToAll(EntityLivingBase e) {
@@ -96,9 +103,9 @@ public class RadiationEffects {
 		return true;
 	}
 
-	public double contaminateArea(World world, int x, int y, int z, int range, float density, double force, boolean los) {
+	public double contaminateArea(World world, int x, int y, int z, int range, float density, double force, boolean los, RadiationIntensity ri) {
 		double frac = 1;
-		int num = (int)(Math.sqrt(range)*density);
+		int num = Math.max(1, (int)(Math.sqrt(range)*density));
 		for (int i = 0; i < num; i++) {
 			int dx = ReikaRandomHelper.getRandomPlusMinus(x, range);
 			int dy = ReikaRandomHelper.getRandomPlusMinus(y, range);
@@ -111,7 +118,7 @@ public class RadiationEffects {
 			if (ReikaMathLibrary.py3d(dx-x, dy-y, dz-z) <= force) {
 				frac -= 1D/num;
 			}
-			EntityRadiation rad = new EntityRadiation(world, range);
+			EntityRadiation rad = new EntityRadiation(world, range, ri);
 			rad.setLocationAndAngles(dx+0.5, dy+0.5, dz+0.5, 0, 0);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(rad);
@@ -139,83 +146,87 @@ public class RadiationEffects {
 		return flag;
 	}
 
-	public void transformBlock(World world, int x, int y, int z) {
+	public void transformBlock(World world, int x, int y, int z, RadiationIntensity ri) {
+		if (world.isRemote)
+			return;
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		if (id == Blocks.air)
 			return;
-		if (world.isRemote)
-			return;
 		if (id == Blocks.deadbush)
 			return;
-		if (id == Blocks.leaves || id == Blocks.leaves2 || id.getMaterial() == Material.leaves || ModWoodList.isModLeaf(id, meta))
-			world.setBlockToAir(x, y, z);
-		if (id == Blocks.reeds) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
+
+		if (ri.isAtLeast(RadiationIntensity.HIGHLEVEL)) {
+			if (id == Blocks.leaves || id == Blocks.leaves2 || id.getMaterial() == Material.leaves || ModWoodList.isModLeaf(id, meta))
+				world.setBlockToAir(x, y, z);
+			if (id == Blocks.reeds) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.tallgrass)
+				world.setBlock(x, y, z, Blocks.deadbush);
+			if (id == Blocks.vine) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.waterlily) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.red_flower) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.yellow_flower) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.wheat) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.carrots) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.potatoes) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.cactus || id.getMaterial() == Material.cactus) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.pumpkin) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.pumpkin_stem) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.melon_block) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.melon_stem) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.sapling || id.getMaterial() == Material.plants)
+				world.setBlock(x, y, z, Blocks.deadbush);
+			if (id == Blocks.cocoa) {
+				id.dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
+			if (id == Blocks.mossy_cobblestone)
+				world.setBlock(x, y, z, Blocks.cobblestone);
+			if (id == Blocks.grass || id.getMaterial() == Material.grass)
+				world.setBlock(x, y, z, Blocks.dirt);
+			if (id == Blocks.monster_egg)
+				world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);
 		}
-		if (id == Blocks.tallgrass)
-			world.setBlock(x, y, z, Blocks.deadbush);
-		if (id == Blocks.vine) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.waterlily) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.red_flower) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.yellow_flower) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.wheat) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.carrots) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.potatoes) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.cactus || id.getMaterial() == Material.cactus) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.pumpkin) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.pumpkin_stem) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.melon_block) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.melon_stem) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.sapling || id.getMaterial() == Material.plants)
-			world.setBlock(x, y, z, Blocks.deadbush);
-		if (id == Blocks.cocoa) {
-			id.dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlockToAir(x, y, z);
-		}
-		if (id == Blocks.mossy_cobblestone)
-			world.setBlock(x, y, z, Blocks.cobblestone);
-		if (id == Blocks.grass || id.getMaterial() == Material.grass)
-			world.setBlock(x, y, z, Blocks.dirt);
-		if (id == Blocks.monster_egg)
-			world.setBlock(x, y, z, ReikaBlockHelper.getSilverfishImitatedBlock(meta), 0, 3);
+
 		if (id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) {
 			world.setBlock(x, y, z, id, meta+8, 3);
 			world.func_147479_m(x, y, z);
@@ -223,7 +234,7 @@ public class RadiationEffects {
 
 		TileEntity te = world.getTileEntity(x, y, z);
 
-		if (ModList.THAUMCRAFT.isLoaded()) {
+		if (ri.isAtLeast(RadiationIntensity.MODERATE) && ModList.THAUMCRAFT.isLoaded()) {
 			if (te instanceof INode) {
 				INode n = (INode)te;
 				n.addToContainer(Aspect.POISON, 10);
@@ -247,10 +258,42 @@ public class RadiationEffects {
 		}
 	}
 
-	public PotionEffect getRadiationEffect(int duration) {
-		PotionEffect pot = new PotionEffect(ReactorCraft.radiation.id, duration, 0);
+	public PotionEffect getRadiationEffect(RadiationIntensity ri) {
+		return this.getRadiationEffect(ri.potionDuration, ri);
+	}
+
+	private PotionEffect getRadiationEffect(int duration, RadiationIntensity ri) {
+		PotionEffect pot = new PotionEffect(ReactorCraft.radiation.id, duration, ri.ordinal());
 		pot.setCurativeItems(new ArrayList());
 		return pot;
+	}
+
+	public static enum RadiationIntensity {
+		BACKGROUND(0), //always
+		LOWLEVEL(100), //neutrons, waste containers
+		MODERATE(1200), //plutonium, creepers
+		HIGHLEVEL(6000), //waste
+		LETHAL(36000); //Meltdowns; Hazmat does not protect
+
+		public static final RadiationIntensity[] radiationList = values();
+
+		private final int potionDuration;
+
+		private RadiationIntensity(int t) {
+			potionDuration = t;
+		}
+
+		public boolean isShieldable() {
+			return this.ordinal() <= HIGHLEVEL.ordinal();
+		}
+
+		public boolean causesHarm() {
+			return this != BACKGROUND;
+		}
+
+		public boolean isAtLeast(RadiationIntensity ri) {
+			return this.ordinal() >= ri.ordinal();
+		}
 	}
 
 }

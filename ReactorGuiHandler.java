@@ -30,9 +30,11 @@ import Reika.ReactorCraft.GUIs.GuiNuclearCore;
 import Reika.ReactorCraft.GUIs.GuiPebbleBed;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.GUIs.GuiReactorBook;
+import Reika.ReactorCraft.GUIs.GuiReactorBookPage;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
+import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -56,29 +58,29 @@ public class ReactorGuiHandler implements IGuiHandler {
 			if (r != null) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				switch(r) {
-				case FUEL:
-				case BREEDER:
-				case THORIUM:
-					return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
-				case WASTECONTAINER:
-					return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
-				case PROCESSOR:
-					return new ContainerProcessor(player, (TileEntityUProcessor)te);
-				case CENTRIFUGE:
-					return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
-				case SYNTHESIZER:
-					return new ContainerSynthesizer(player, (TileEntitySynthesizer)te);
-				case ELECTROLYZER:
-					return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
-				case STORAGE:
-					return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
-				case PEBBLEBED:
-					return new ContainerPebbleBed(player, (TileEntityPebbleBed)te);
-				case CPU:
-					int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.REMOTE.getItemInstance(), player.inventory);
-					return new CoreContainer(player, te).setAlwaysInteractable().addSlotRelay(player.inventory, slot);
-				default:
-					return null;
+					case FUEL:
+					case BREEDER:
+					case THORIUM:
+						return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
+					case WASTECONTAINER:
+						return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
+					case PROCESSOR:
+						return new ContainerProcessor(player, (TileEntityUProcessor)te);
+					case CENTRIFUGE:
+						return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
+					case SYNTHESIZER:
+						return new ContainerSynthesizer(player, (TileEntitySynthesizer)te);
+					case ELECTROLYZER:
+						return new ContainerElectrolyzer(player, (TileEntityElectrolyzer)te);
+					case STORAGE:
+						return new ContainerWasteStorage(player, (TileEntityWasteStorage)te);
+					case PEBBLEBED:
+						return new ContainerPebbleBed(player, (TileEntityPebbleBed)te);
+					case CPU:
+						int slot = ReikaInventoryHelper.locateIDInInventory(ReactorItems.REMOTE.getItemInstance(), player.inventory);
+						return new CoreContainer(player, te).setAlwaysInteractable().addSlotRelay(player.inventory, slot);
+					default:
+						return null;
 				}
 			}
 		}
@@ -87,34 +89,42 @@ public class ReactorGuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+
 		if (ID == 10)
 			return new GuiReactorBook(player, world, 0, 0);
-		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		if (ID == 11) {
+			return new GuiReactorBook(player, world, ReactorBook.getScreen(r, te), ReactorBook.getPage(r, te));
+		}
+		if (ID == 12) {
+			return new GuiReactorBookPage(player, world, ReactorBook.getScreen(r, te), ReactorBook.getPage(r, te));
+		}
+
 		if (r != null) {
-			TileEntity te = world.getTileEntity(x, y, z);
 			switch(r) {
-			case FUEL:
-			case BREEDER:
-			case THORIUM:
-				return new GuiNuclearCore(player, (TileEntityNuclearCore)te);
-			case WASTECONTAINER:
-				return new GuiWasteContainer(player, (TileEntityWasteContainer)te);
-			case PROCESSOR:
-				return new GuiProcessor(player, (TileEntityUProcessor)te);
-			case CENTRIFUGE:
-				return new GuiCentrifuge(player, (TileEntityCentrifuge)te);
-			case SYNTHESIZER:
-				return new GuiSynthesizer(player, (TileEntitySynthesizer)te);
-			case ELECTROLYZER:
-				return new GuiElectrolyzer(player, (TileEntityElectrolyzer)te);
-			case STORAGE:
-				return new GuiWasteStorage(player, (TileEntityWasteStorage)te);
-			case PEBBLEBED:
-				return new GuiPebbleBed(player, (TileEntityPebbleBed)te);
-			case CPU:
-				return new GuiCPU(player, (TileEntityCPU)te);
-			default:
-				return null;
+				case FUEL:
+				case BREEDER:
+				case THORIUM:
+					return new GuiNuclearCore(player, (TileEntityNuclearCore)te);
+				case WASTECONTAINER:
+					return new GuiWasteContainer(player, (TileEntityWasteContainer)te);
+				case PROCESSOR:
+					return new GuiProcessor(player, (TileEntityUProcessor)te);
+				case CENTRIFUGE:
+					return new GuiCentrifuge(player, (TileEntityCentrifuge)te);
+				case SYNTHESIZER:
+					return new GuiSynthesizer(player, (TileEntitySynthesizer)te);
+				case ELECTROLYZER:
+					return new GuiElectrolyzer(player, (TileEntityElectrolyzer)te);
+				case STORAGE:
+					return new GuiWasteStorage(player, (TileEntityWasteStorage)te);
+				case PEBBLEBED:
+					return new GuiPebbleBed(player, (TileEntityPebbleBed)te);
+				case CPU:
+					return new GuiCPU(player, (TileEntityCPU)te);
+				default:
+					return null;
 			}
 		}
 		return null;

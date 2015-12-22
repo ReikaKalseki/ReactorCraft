@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -81,11 +82,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		int maxDrain = resource.amount;
-		if (this.canDrain(from, resource.getFluid()) && this.isValidFluid(resource.getFluid())) {
-			return tank.drain(maxDrain, doDrain);
-		}
-		return null;
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -99,7 +96,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP;
+		return from == ForgeDirection.UP && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

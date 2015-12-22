@@ -223,7 +223,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	protected void breakMultiBlock(World world, int x, int y, int z) {
+	public void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		Block gid = ReactorTiles.GENERATOR.getBlock();
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);

@@ -20,6 +20,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
@@ -37,6 +38,9 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+		dir = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, this, 7);
+		if (dir == null)
+			return false;
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
@@ -276,7 +280,7 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	protected void breakMultiBlock(World world, int x, int y, int z) {
+	public void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {

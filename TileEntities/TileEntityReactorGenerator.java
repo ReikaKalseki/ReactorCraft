@@ -13,6 +13,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -29,6 +30,8 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -39,7 +42,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource"})
-public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable {
+public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile {
 
 	private ForgeDirection facingDir;
 
@@ -86,28 +89,28 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			ForgeDirection write = this.getFacing().getOpposite();
 			TileEntity tile = this.getAdjacentTileEntity(write);
 			switch(mode) {
-			case RF:
-				if (tile instanceof IEnergyReceiver) {
-					IEnergyReceiver rc = (IEnergyReceiver)tile;
-					//if (rc.canConnectEnergy(this.getFacing())) {
-					int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
-					//}
-				}
-				else if (tile instanceof IEnergyHandler) {
-					IEnergyHandler rc = (IEnergyHandler)tile;
-					//if (rc.canConnectEnergy(this.getFacing())) {
-					int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
-					//}
-				}
-				break;
-			case EU:
-				if (tile instanceof IEnergySink) {
-					IEnergySink rc = (IEnergySink)tile;
-					if (rc.acceptsEnergyFrom(this, this.getFacing())) {
-						double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
+				case RF:
+					if (tile instanceof IEnergyReceiver) {
+						IEnergyReceiver rc = (IEnergyReceiver)tile;
+						//if (rc.canConnectEnergy(this.getFacing())) {
+						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
+						//}
 					}
-				}
-				break;
+					else if (tile instanceof IEnergyHandler) {
+						IEnergyHandler rc = (IEnergyHandler)tile;
+						//if (rc.canConnectEnergy(this.getFacing())) {
+						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
+						//}
+					}
+					break;
+				case EU:
+					if (tile instanceof IEnergySink) {
+						IEnergySink rc = (IEnergySink)tile;
+						if (rc.acceptsEnergyFrom(this, this.getFacing())) {
+							double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
+						}
+					}
+					break;
 			}
 		}
 	}
@@ -334,6 +337,22 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void breakBlock() {
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = xCoord+dir.offsetX;
+				int dy = yCoord+dir.offsetY;
+				int dz = zCoord+dir.offsetZ;
+				Block b = worldObj.getBlock(dx, dy, dz);
+				if (b instanceof BlockMultiBlock) {
+					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				}
+			}
+		}
 	}
 
 }

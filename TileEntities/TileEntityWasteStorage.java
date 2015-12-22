@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -64,6 +65,11 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	@Override
+	protected boolean accountForOutGameTime() {
+		return true;
+	}
+
+	@Override
 	protected void onDecayWaste(int i) {
 		super.onDecayWaste(i);
 		if (ReikaInventoryHelper.isEmpty(this))
@@ -78,7 +84,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 			if (!RadiationEffects.instance.hasHazmatSuit(e)) {
 				double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {
-					RadiationEffects.instance.applyEffects(e);
+					RadiationEffects.instance.applyEffects(e, RadiationIntensity.LOWLEVEL);
 				}
 			}
 		}

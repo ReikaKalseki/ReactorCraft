@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -178,7 +179,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return this.drain(from, resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -188,7 +189,7 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0;
+		return from.offsetY == 0 && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override
@@ -343,12 +344,12 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 		private int getSurfaceY(World world, int x, int y, int z) {
 			switch(world.provider.dimensionId) {
-			case 0:
-				return 10;
-			case -1:
-				return 31;
-			default:
-				return -1;
+				case 0:
+					return 10;
+				case -1:
+					return 31;
+				default:
+					return -1;
 			}
 		}
 

@@ -277,4 +277,21 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		NBT.setInteger("redsu", redstoneUpdate);
 	}
 
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		layout.writeToNBT(tag);
+		NBT.setTag("rods", tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		NBTTagCompound tag = NBT.getCompoundTag("rods");
+		layout.readFromNBT(tag);
+	}
+
 }

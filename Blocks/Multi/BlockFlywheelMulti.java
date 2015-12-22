@@ -105,7 +105,7 @@ public class BlockFlywheelMulti extends BlockMultiBlock {
 	}
 
 	@Override
-	protected void breakMultiBlock(World world, int x, int y, int z) {
+	public void breakMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		blocks.recursiveAddWithBoundsRanged(world, x+1, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);

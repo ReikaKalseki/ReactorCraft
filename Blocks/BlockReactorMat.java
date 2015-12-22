@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,7 +18,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Registry.MatBlocks;
 
 public class BlockReactorMat extends Block {
@@ -28,6 +33,16 @@ public class BlockReactorMat extends Block {
 		this.setHardness(1.5F);
 		this.setResistance(10F);
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
+		this.setTickRandomly(true);
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		if (world.getBlockMetadata(x, y, z) == MatBlocks.SLAG.ordinal()) {
+			if (ReikaRandomHelper.doWithChance(7.5)) {
+				RadiationEffects.instance.contaminateArea(world, x, y, z, 4, 0.5F, 0.05, false, RadiationIntensity.HIGHLEVEL);
+			}
+		}
 	}
 
 	@Override

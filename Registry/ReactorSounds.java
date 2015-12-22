@@ -63,7 +63,8 @@ public enum ReactorSounds implements SoundEnum {
 		return vol;
 	}
 
-	public float getModVolume() {
+	@Override
+	public float getModulatedVolume() {
 		if (!isVolumed)
 			return 1F;
 		else
@@ -81,7 +82,7 @@ public enum ReactorSounds implements SoundEnum {
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol*this.getModVolume(), pitch);
+		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {

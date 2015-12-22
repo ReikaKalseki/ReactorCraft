@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -19,6 +21,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
@@ -52,9 +55,50 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		}
 		//this.onNeutron(null, world, x, y, z);
 
+		if (!world.isRemote) {
+			this.feed();
+		}
+
 		thermalTicker.update();
 		if (thermalTicker.checkCap()) {
 			this.updateTemperature(world, x, y, z);
+		}
+	}
+
+	private void feed() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		Block id = world.getBlock(x, y-1, z);
+		int meta = world.getBlockMetadata(x, y-1, z);
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (tile instanceof TileEntityTritizer) {
+			int amt = ((TileEntityTritizer)tile).feedIn(input.getFluid(), false);
+			if (amt > 0) {
+				input.removeLiquid(amt);
+			}
+
+			amt = ((TileEntityTritizer)tile).feedIn(output.getFluid(), true);
+			if (amt > 0) {
+				output.removeLiquid(amt);
+			}
+		}
+	}
+
+	private int feedIn(FluidStack is, boolean out) {
+		if (is == null)
+			return 0;
+		HybridTank tank = out ? output : input;
+		Fluid f = is.getFluid();
+		if (Reactions.getReactionFrom(f) == null)
+			return 0;
+		else if (tank.getActualFluid() != null && tank.getActualFluid() != f)
+			return 0;
+		else {
+			int add = Math.min(tank.getRemainingSpace(), is.amount);
+			tank.addLiquid(add, f);
+			return add;
 		}
 	}
 
@@ -135,9 +179,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, resource.getFluid()))
-			return null;
-		return output.drain(resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? output.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -154,7 +196,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.DOWN;
+		return from == ForgeDirection.DOWN && ReikaFluidHelper.isFluidDrainableFromTank(fluid, output);
 	}
 
 	@Override
@@ -206,6 +248,26 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq != LiquidStates.EMPTY;
+	}
+
+	@Override
+	public final int getTextureState(ForgeDirection side) {
+		if (side.offsetY != 0)
+			return 4;
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		ReactorTiles src = this.getMachine();
+		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
+		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
+		if (r2 == src && r == src)
+			return 2;
+		else if (r2 == src)
+			return 1;
+		else if (r == src)
+			return 3;
+		return 0;
 	}
 
 }

@@ -23,6 +23,7 @@ import Reika.DragonAPI.Interfaces.PermaPotion;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class PotionRadiation extends Potion implements PermaPotion {
@@ -37,6 +38,12 @@ public class PotionRadiation extends Potion implements PermaPotion {
 	public void performEffect(EntityLivingBase e, int level) {
 		boolean p = e.worldObj.difficultySetting == EnumDifficulty.PEACEFUL;
 		int c = p ? 75 : 50;
+		if (level >= RadiationIntensity.HIGHLEVEL.ordinal()) {
+			c *= 1.1;
+		}
+		if (level >= RadiationIntensity.LETHAL.ordinal()) {
+			c *= 1.25;
+		}
 		if (ReikaRandomHelper.doWithChance(e.getHealth()/e.getMaxHealth()*c)) {
 			int amt = p ? 2 : 1;
 			e.attackEntityFrom(ReactorCraft.radiationDamage, amt);

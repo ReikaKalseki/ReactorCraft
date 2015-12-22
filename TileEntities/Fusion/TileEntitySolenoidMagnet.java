@@ -19,15 +19,18 @@ import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet.Aim;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
-public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver, MultiBlockTile {
+public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements ReactorPowerReceiver, MultiBlockTile, NeutronTile {
 
 	private boolean hasMultiBlock = false;
 	private boolean checkForToroids = true;
@@ -326,6 +329,27 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	@Override
 	public int getUpdatePacketRadius() {
 		return 96; //much larger visually
+	}
+
+	@Override
+	public void breakBlock() {
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = xCoord+dir.offsetX;
+				int dy = yCoord+dir.offsetY;
+				int dz = zCoord+dir.offsetZ;
+				Block b = worldObj.getBlock(dx, dy, dz);
+				if (b instanceof BlockMultiBlock) {
+					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 }

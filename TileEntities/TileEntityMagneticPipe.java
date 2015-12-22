@@ -188,4 +188,9 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 		return te instanceof WorldRift || this.isPlasmaAcceptingBlock(te);
 	}
 
+	@Override
+	public boolean canDischargeLongRange() {
+		return true;
+	}
+
 }

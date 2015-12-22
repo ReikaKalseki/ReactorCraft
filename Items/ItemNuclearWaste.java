@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Base.ItemReactorMulti;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
@@ -60,8 +61,7 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int p4, boolean p5) {
 		if (e instanceof EntityLivingBase) {
-			if (!RadiationEffects.instance.hasHazmatSuit((EntityLivingBase)e)) {
-				RadiationEffects.instance.applyEffects((EntityLivingBase)e);
+			if (RadiationEffects.instance.applyEffects((EntityLivingBase)e, RadiationIntensity.HIGHLEVEL)) {
 				if (e instanceof EntityPlayer) {
 					if (!((EntityPlayer)e).capabilities.isCreativeMode)
 						ReactorAchievements.HOLDWASTE.triggerAchievement((EntityPlayer)e);

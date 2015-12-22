@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -61,8 +62,7 @@ public class BlockReactorOre extends EnumOreBlock {
 	}
 
 	@Override
-	protected void onHarvested(World world, int x, int y, int z, EntityPlayer ep) {
-		OreEnum ore = this.getOre(world, x, y, z);
+	protected void onHarvested(World world, int x, int y, int z, Block b, int meta, OreEnum ore, EntityPlayer ep) {
 		if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
 			if (!ep.capabilities.isCreativeMode) {
 				ReactorAchievements.MINEURANIUM.triggerAchievement(ep);

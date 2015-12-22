@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -123,9 +124,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, null))
-			return null;
-		return this.drain(from, resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -137,7 +136,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	@Override
 	public final boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP;
+		return from == ForgeDirection.UP && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

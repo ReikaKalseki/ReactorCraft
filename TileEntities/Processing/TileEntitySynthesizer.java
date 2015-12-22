@@ -47,8 +47,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	public int timer;
 
-	private int temperature;
-
 	private final HybridTank tank = new HybridTank("synthout", 24000);
 
 	private final HybridTank water = new HybridTank("synthwater", 24000);
@@ -184,10 +182,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, resource.getFluid()))
-			return null;
-		int maxDrain = resource.amount;
-		return tank.drain(maxDrain, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override

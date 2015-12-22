@@ -9,11 +9,13 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -93,16 +95,16 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	private ForgeDirection setFacing(int meta) {
 		switch(meta) {
-		case 0:
-			return ForgeDirection.EAST;
-		case 1:
-			return ForgeDirection.WEST;
-		case 2:
-			return ForgeDirection.SOUTH;
-		case 3:
-			return ForgeDirection.NORTH;
-		default:
-			return null;
+			case 0:
+				return ForgeDirection.EAST;
+			case 1:
+				return ForgeDirection.WEST;
+			case 2:
+				return ForgeDirection.SOUTH;
+			case 3:
+				return ForgeDirection.NORTH;
+			default:
+				return null;
 		}
 	}
 
@@ -213,6 +215,22 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 		NBT.setBoolean("multi", hasMultiBlock);
 
 		NBT.setLong("pwr", power);
+	}
+
+	@Override
+	public void breakBlock() {
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = xCoord+dir.offsetX;
+				int dy = yCoord+dir.offsetY;
+				int dz = zCoord+dir.offsetZ;
+				Block b = worldObj.getBlock(dx, dy, dz);
+				if (b instanceof BlockMultiBlock) {
+					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				}
+			}
+		}
 	}
 
 }

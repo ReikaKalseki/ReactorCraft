@@ -29,6 +29,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -38,7 +40,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
-public class TileEntityHiPTurbine extends TileEntityTurbineCore {
+public class TileEntityHiPTurbine extends TileEntityTurbineCore implements MultiBlockTile {
 
 	public static final int GEN_OMEGA = 131072;
 	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM*131/20/24;
@@ -369,6 +371,22 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore {
 	@Override
 	protected float getTorqueFactor() {
 		return fluid.efficiency > 1 ? 1+(fluid.efficiency-1)*0.25F : fluid.efficiency;
+	}
+
+	@Override
+	public void breakBlock() {
+		if (!worldObj.isRemote) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = xCoord+dir.offsetX;
+				int dy = yCoord+dir.offsetY;
+				int dz = zCoord+dir.offsetZ;
+				Block b = worldObj.getBlock(dx, dy, dz);
+				if (b instanceof BlockMultiBlock) {
+					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				}
+			}
+		}
 	}
 
 }

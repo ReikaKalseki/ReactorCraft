@@ -124,7 +124,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 	@Override
 	public final int getTextureState(ForgeDirection side) {
 		if (side.offsetY != 0)
-			return 0;
+			return 4;
 		World world = worldObj;
 		int x = xCoord;
 		int y = yCoord;

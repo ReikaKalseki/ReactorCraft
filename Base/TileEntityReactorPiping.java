@@ -28,11 +28,12 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
-public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct {
+public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct, PumpablePipe {
 
 	protected Fluid fluid;
 	protected int level;
@@ -413,6 +414,25 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	@Override
 	public IIcon getOverlayIcon() {
 		return null;
+	}
+
+	@Override
+	public final boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
+		return p instanceof TileEntityReactorPiping && this.getMachine() == ((TileEntityReactorPiping)p).getMachine();
+	}
+
+	@Override
+	public final void transferFrom(PumpablePipe from, int amt) {
+		TileEntityReactorPiping te = (TileEntityReactorPiping)from;
+		this.setLevel(this.getFluidLevel()+amt);
+		this.setFluid(te.getFluidType());
+		te.setLevel(te.getFluidLevel()-amt);
+		if (te.getFluidLevel() == 0)
+			te.setFluid(null);
+	}
+
+	public final int getFluidLevel() {
+		return this.getLevel();
 	}
 
 }

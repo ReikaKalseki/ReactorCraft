@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
@@ -85,7 +86,7 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == readDir.getOpposite();
+		return from == readDir.getOpposite() && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override
