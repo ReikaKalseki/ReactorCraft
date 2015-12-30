@@ -99,7 +99,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		if (!hasMultiBlock || !this.arePowerReqsMet()) {
 			this.removeFromToroids();
 		}
-		if (hasMultiBlock && omega > MAX_SPEED) { //violently fail
+		if (hasMultiBlock && torque >= MINTORQUE && omega > MAX_SPEED) { //violently fail
 			world.setBlockToAir(x, y, z);
 			new FlyingBlocksExplosion(this, 16).doExplosion();
 		}
