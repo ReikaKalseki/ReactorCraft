@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks.Multi;
 
-import java.util.Arrays;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -18,8 +18,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
@@ -225,8 +227,8 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	public void breakMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		Block gid = ReactorTiles.GENERATOR.getBlock();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
+		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.GENERATOR));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
 			int meta = c.getBlockMetadata(world);
@@ -243,8 +245,8 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 	@Override
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		Block gid = ReactorTiles.GENERATOR.getBlock();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, gid), x-12, y-4, z-12, x+12, y+4, z+12);
+		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.GENERATOR));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-12, y-4, z-12, x+12, y+4, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
 			int meta = c.getBlockMetadata(world);

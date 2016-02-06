@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks.Multi;
 
-import java.util.Arrays;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,7 +19,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.SlicedBlockBlueprint;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
@@ -235,7 +237,8 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	public void breakMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
+		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.BIGTURBINE));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
 			Block b = c.getBlock(world);
@@ -256,7 +259,8 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, tid), x-12, y-12, z-12, x+12, y+12, z+12);
+		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.BIGTURBINE));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-12, y-12, z-12, x+12, y+12, z+12);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);
 			Block b = c.getBlock(world);

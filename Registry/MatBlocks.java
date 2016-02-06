@@ -10,7 +10,9 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 
 public enum MatBlocks {
 
@@ -43,6 +45,14 @@ public enum MatBlocks {
 
 	public ItemStack getStackOf(int size) {
 		return new ItemStack(ReactorBlocks.MATS.getBlockInstance(), size, this.ordinal());
+	}
+
+	public BlockKey getBlock() {
+		return new BlockKey(ReactorBlocks.MATS.getBlockInstance(), this.ordinal());
+	}
+
+	public IIcon getIcon() {
+		return ReactorBlocks.MATS.getBlockInstance().getIcon(0, this.ordinal());
 	}
 
 }

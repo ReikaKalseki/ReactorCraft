@@ -117,7 +117,7 @@ public class BlockCoriumFlowing extends BlockFluidClassic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		icon = new IIcon[]{iconRegister.registerIcon("ReactorCraft:mat_slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
+		icon = new IIcon[]{iconRegister.registerIcon("ReactorCraft:mat/slag"), iconRegister.registerIcon("ReactorCraft:slag_flow")};
 	}
 
 	@Override

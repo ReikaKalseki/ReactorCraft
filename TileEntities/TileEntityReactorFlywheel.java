@@ -190,10 +190,15 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 	@Override
 	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
 		int meta = this.getBlockMetadata();
-		if (meta < 3)
-			this.setBlockMetadata(meta+1);
-		else
-			this.setBlockMetadata(0);
+		if (this.hasMultiBlock()) {
+			this.setBlockMetadata((meta-meta%2)+(1-(meta%2)));
+		}
+		else {
+			if (meta < 3)
+				this.setBlockMetadata(meta+1);
+			else
+				this.setBlockMetadata(0);
+		}
 		return true;
 	}
 

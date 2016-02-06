@@ -19,6 +19,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
+import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.ReactorCraft;
@@ -35,6 +36,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamDiffuser;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
+import Reika.ReactorCraft.TileEntities.TileEntityWastePipe;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
@@ -68,7 +70,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public enum ReactorTiles {
+public enum ReactorTiles implements TileEnum {
 
 	FUEL("machine.fuel", 						ReactorBlocks.REACTOR,			TileEntityFuelRod.class, 		0),
 	CONTROL("machine.control", 					ReactorBlocks.MODELREACTOR,		TileEntityControlRod.class, 	6, "RenderControl"),
@@ -108,7 +110,8 @@ public enum ReactorTiles {
 	TURBINEMETER("machine.turbinemeter",		ReactorBlocks.MACHINE,			TileEntityTurbineMeter.class,	3),
 	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine"),
 	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser"),
-	THORIUM("machine.thorium",					ReactorBlocks.REACTOR,			TileEntityThoriumCore.class,	12);
+	THORIUM("machine.thorium",					ReactorBlocks.REACTOR,			TileEntityThoriumCore.class,	12),
+	WASTEPIPE("machine.wastepipe",				ReactorBlocks.DUCT,				TileEntityWastePipe.class,		2);
 
 	private final String name;
 	private final Class teClass;

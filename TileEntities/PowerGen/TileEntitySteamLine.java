@@ -141,7 +141,7 @@ public class TileEntitySteamLine extends TileEntityReactorBase implements Pumpab
 			boolean flag = ((TileEntitySteamDiffuser)this.getAdjacentTileEntity(dir)).getFacing().getOpposite() == dir;
 			return flag;
 		}
-		if (id == MachineRegistry.PIPEPUMP.getBlock() && meta == MachineRegistry.PIPEPUMP.getMachineMetadata()) {
+		if (id == MachineRegistry.PIPEPUMP.getBlock() && meta == MachineRegistry.PIPEPUMP.getBlockMetadata()) {
 			boolean flag = ((TileEntityPipePump)this.getAdjacentTileEntity(dir)).canConnectToPipeOnSide(dir);
 			return flag;
 		}

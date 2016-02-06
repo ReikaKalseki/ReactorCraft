@@ -169,7 +169,8 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 		EMPTY(null),
 		WATER(FluidRegistry.WATER),
 		HEAVY(FluidRegistry.getFluid("rc heavy water")),
-		SODIUM(FluidRegistry.getFluid("rc sodium"));
+		SODIUM(FluidRegistry.getFluid("rc sodium")),
+		LITHIUM(FluidRegistry.getFluid("rc lifbe"));
 
 		public static final LiquidStates[] list = values();
 

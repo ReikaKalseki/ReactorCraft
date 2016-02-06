@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockDuct extends BlockReactorTile {
 
-	private static final IIcon[][] pipeIcons = new IIcon[2][2];
+	private static final IIcon[][] pipeIcons = new IIcon[3][2];
 	private static IIcon glowIcon;
 
 	public BlockDuct(Material mat) {
@@ -121,9 +121,11 @@ public class BlockDuct extends BlockReactorTile {
 	public void registerBlockIcons(IIconRegister ico) {
 		pipeIcons[0][0] = Blocks.hardened_clay.getIcon(1, 0);
 		pipeIcons[1][0] = Blocks.gold_block.getIcon(0, 0);
+		pipeIcons[2][0] = ico.registerIcon("reactorcraft:mat/concrete");
 
 		pipeIcons[0][1] = Blocks.glass.getIcon(0, 0);
 		pipeIcons[1][1] = ico.registerIcon("rotarycraft:obsidiglass");
+		pipeIcons[2][1] = Blocks.leaves.getIcon(0, 1);
 
 		glowIcon = ico.registerIcon("reactorcraft:glowgold");
 	}

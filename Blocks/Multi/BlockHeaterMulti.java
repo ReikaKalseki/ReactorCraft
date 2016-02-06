@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Blocks.Multi;
 
-import java.util.Arrays;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,6 +23,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
@@ -42,7 +43,8 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, ReactorTiles.HEATER.getBlock()), x-6, y-6, z-6, x+6, y+6, z+6);
+		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.HEATER));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-6, y-6, z-6, x+6, y+6, z+6);
 		if (!this.checkCorners(world, x, y, z, blocks))
 			return false;
 		if (!this.checkEdges(world, x, y, z, blocks))
@@ -577,7 +579,8 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 	@Override
 	protected TileEntity getTileEntityForPosition(World world, int x, int y, int z) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
-		blocks.recursiveAddMultipleWithBounds(world, x, y, z, Arrays.asList(this, ReactorTiles.HEATER.getBlock()), x-6, y-6, z-6, x+6, y+6, z+6);
+		Set<BlockKey> li = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.HEATER));
+		blocks.recursiveAddMultipleWithBounds(world, x, y, z, li, x-6, y-6, z-6, x+6, y+6, z+6);
 		int mx = blocks.getMidX();
 		int my = blocks.getMidY()-1;
 		int mz = blocks.getMidZ();

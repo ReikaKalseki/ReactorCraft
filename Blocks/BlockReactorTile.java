@@ -40,6 +40,8 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Interfaces.MachineRegistryBlock;
+import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -74,7 +76,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider {
+public class BlockReactorTile extends BlockTEBase implements MachineRegistryBlock, IWailaDataProvider {
 
 	protected static final IIcon[][][] icons = new IIcon[ReactorTiles.TEList.length][6][16];
 
@@ -193,7 +195,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 	public IIcon getIcon(int s, int meta) {
 		//for drops, needs to be r.ordinal(), not metadata
 		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(this, meta);
-		return r != null ? icons[r.ordinal()][s][0] : icons[meta][s][0];
+		int top = 0;
+		if (r.getTextureStates() == 5)
+			top = 4;
+		else if (r.getTextureStates() == 4)
+			top = 0;
+		return r != null ? icons[r.ordinal()][s][s <= 1 ? top : 0] : icons[meta][s][0];
 	}
 
 	@Override
@@ -240,6 +247,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 							ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
 						return true;
 					}
+					else if (ReikaItemHelper.matchStacks(is, ReactorStacks.lifbecan)) {
+						te.setLiquidState(LiquidStates.LITHIUM);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
+						return true;
+					}
 					break;
 				case WATER:
 					if (is.getItem() == Items.bucket) {
@@ -259,6 +272,12 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 					if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan)) {
 						te.setLiquidState(LiquidStates.EMPTY);
 						ep.setCurrentItemOrArmor(0, ReactorStacks.nacan);
+						return true;
+					}
+				case LITHIUM:
+					if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan)) {
+						te.setLiquidState(LiquidStates.EMPTY);
+						ep.setCurrentItemOrArmor(0, ReactorStacks.lifbecan);
 						return true;
 					}
 			}
@@ -537,6 +556,11 @@ public class BlockReactorTile extends BlockTEBase implements IWailaDataProvider 
 	@ModDependent(ModList.WAILA)
 	public final NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
 		return tag;
+	}
+
+	@Override
+	public final TileEnum getMachine(IBlockAccess world, int x, int y, int z) {
+		return ReactorTiles.getTE(world, x, y, z);
 	}
 
 }

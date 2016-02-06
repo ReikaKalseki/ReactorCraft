@@ -80,7 +80,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 		for (int k = 0; k < FluoriteTypes.colorList.length; k++) {
 			icons[k] = ico.registerIcon(FluoriteTypes.colorList[k].getOreTextureName());
 		}
-		rainbowIcon = ico.registerIcon("ReactorCraft:fluorite_rainbow");
+		rainbowIcon = ico.registerIcon("ReactorCraft:ore/fluorite_rainbow");
 	}
 
 	@Override

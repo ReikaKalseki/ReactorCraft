@@ -47,6 +47,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 
 	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
 		super(world);
+		if (type == null)
+			Thread.dumpStack();
 		this.setLocationAndAngles(x+0.5, y+0.5, z+0.5, 0, 0);
 		motionX = f.offsetX*this.getSpeed();
 		motionY = f.offsetY*this.getSpeed();

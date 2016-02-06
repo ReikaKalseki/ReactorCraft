@@ -15,26 +15,21 @@ import Reika.DragonAPI.Instantiable.GUI.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
-import Reika.ReactorCraft.Container.ContainerSynthesizer;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.Container.ContainerThoriumCore;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 
-public class GuiSynthesizer extends ReactorGuiBase {
+public class GuiThoriumCore extends ReactorGuiBase {
 
-	private TileEntitySynthesizer tile;
+	private final TileEntityThoriumCore tile;
 
 	private TankDisplay input;
 	private TankDisplay output;
+	private TankDisplay waste;
 
-	public GuiSynthesizer(EntityPlayer ep, TileEntitySynthesizer te) {
-		super(new ContainerSynthesizer(ep, te), ep, te);
-		tile = te;
-		ySize = 175;
-		xSize = 176;
-	}
-
-	@Override
-	public String getGuiTexture() {
-		return "synthesizer";
+	public GuiThoriumCore(EntityPlayer player, TileEntityThoriumCore fuel) {
+		super(new ContainerThoriumCore(player, fuel), player, fuel);
+		ySize = 100;
+		tile = fuel;
 	}
 
 	@Override
@@ -45,8 +40,9 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int k = (height - ySize) / 2;
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
-		input = new TankDisplay(info[0], j+17, k+18, 16, 60);
-		output = new TankDisplay(info[1], j+134, k+18, 16, 60);
+		input = new TankDisplay(info[0], j+53, k+23, 16, 70);
+		output = new TankDisplay(info[1], j+80, k+23, 16, 70);
+		waste = new TankDisplay(info[2], j+107, k+23, 16, 70);
 	}
 
 	@Override
@@ -61,11 +57,14 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int x = ReikaGuiAPI.instance.getMouseRealX()-j;
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
-		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Water", x, y);
+		if (ReikaGuiAPI.instance.isMouseInBox(j+52, j+70, k+22, k+72)) {
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Fuel Salts", x, y);
 		}
-		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Ammonia", x, y);
+		if (ReikaGuiAPI.instance.isMouseInBox(j+79, j+97, k+22, k+72)) {
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Heated Fuel Salts", x, y);
+		}
+		if (ReikaGuiAPI.instance.isMouseInBox(j+106, j+128, k+22, k+72)) {
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Waste", x, y);
 		}
 	}
 
@@ -81,12 +80,16 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int i4 = tile.getAmmoniaScaled(60);
 		this.drawTexturedModalRect(j+134, k+78-i4, 224, 80-i4, 16, i4);
 		 */
-		int i6 = tile.getTimerScaled(24);
-		this.drawTexturedModalRect(j+103, k+26, 176, 92, i6, 34);
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
 		input.updateTank(info[0]).render(true);
 		output.updateTank(info[1]).render(true);
+		waste.updateTank(info[2]).render(true);
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "fuelpool";
 	}
 
 }

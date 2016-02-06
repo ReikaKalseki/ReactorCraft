@@ -102,7 +102,7 @@ public enum ReactorOres implements OreEnum {
 	}
 
 	public String getTextureName() {
-		return "ReactorCraft:"+this.name().toLowerCase();
+		return "ReactorCraft:ore/"+this.name().toLowerCase();
 	}
 
 	public String getDictionaryName() {

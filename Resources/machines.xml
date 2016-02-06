@@ -39,7 +39,7 @@
 	</synthesizer>
 	<tritizer>
 		<desc>
-			The neutron irradiation chamber converts deuterium to tritium by bombarding it with neutrons. This machine is placed in the core of a reactor, where it will absorb some neutrons that hit it and convert the stored tritium.
+			The neutron irradiation chamber converts deuterium to tritium by bombarding it with neutrons. This machine is placed in the core of a reactor, where it will absorb some neutrons that hit it and convert the stored deuterium.
 		</desc>
 		<note>
 			Deuterium Input: Top

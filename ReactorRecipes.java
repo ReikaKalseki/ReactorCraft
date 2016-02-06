@@ -135,7 +135,7 @@ public class ReactorRecipes {
 	private static void addCrafting() {
 		CraftingItems.TANK.addRecipe("OOO", "O O", "OOO", 'O', BlockRegistry.BLASTGLASS.getStackOf());
 		CraftingItems.CANISTER.addRecipe(" S ", "SCS", " S ", 'S', CraftingItems.ALLOY.getItem(), 'C', Blocks.chest);
-		CraftingItems.ROD.addRecipe("SAS", "SAS", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem());
+		CraftingItems.ROD.addRecipe("SAS", "ACA", "SAS", 'S', ItemStacks.steelingot, 'A', CraftingItems.ALLOY.getItem(), 'C', CraftingItems.GRAPHITE.getItem());
 		CraftingItems.MAGNETIC.addSizedRecipe(3, "SSS", 'S', CraftingItems.FERROINGOT.getItem());
 		CraftingItems.MAGNETCORE.addRecipe("CCC", "C C", "CCC", 'C', CraftingItems.MAGNETIC.getItem());
 		CraftingItems.HYSTERESISRING.addRecipe("CCC", "C C", "CCC", 'C', CraftingItems.HYSTERESIS.getItem());

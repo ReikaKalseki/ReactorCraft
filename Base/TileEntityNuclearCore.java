@@ -56,6 +56,11 @@ ChunkLoadingTile, BreakAction {
 	public static final int MELTDOWN = 1800;
 
 	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
@@ -223,7 +228,7 @@ ChunkLoadingTile, BreakAction {
 		return dir == ForgeDirection.DOWN;
 	}
 
-	protected final boolean checkPoisonedChance() {
+	protected boolean checkPoisonedChance() {
 		int count = 0;
 		for (int i = 4; i < 12; i++) {
 			ItemStack is = inv[i];
@@ -276,6 +281,8 @@ ChunkLoadingTile, BreakAction {
 				return NeutronType.FISSION;
 			case FUSION:
 				return NeutronType.FUSION;
+			case THORIUM:
+				return NeutronType.THORIUM;
 			default:
 				return null;
 		}

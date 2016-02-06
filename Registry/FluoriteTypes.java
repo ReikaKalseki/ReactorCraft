@@ -41,11 +41,11 @@ public enum FluoriteTypes {
 	}
 
 	public String getOreTextureName() {
-		return "ReactorCraft:fluorite_"+this.getColorName();
+		return "ReactorCraft:ore/fluorite_"+this.getColorName();
 	}
 
 	public String getBlockTextureName() {
-		return "ReactorCraft:floblock_"+this.getColorName();
+		return "ReactorCraft:mat/floblock_"+this.getColorName();
 	}
 
 	public String getColorName() {

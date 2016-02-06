@@ -16,6 +16,7 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
@@ -70,8 +71,12 @@ public class WasteManager {
 
 	public static ItemStack getRandomWasteItem() {
 		Isotopes atom = getRandomWaste();
-		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(wastes.indexOf(atom));
+		ItemStack is = getWaste(atom);
 		return is;
+	}
+
+	public static ItemStack getWaste(Isotopes atom) {
+		return ReactorItems.WASTE.getStackOfMetadata(wastes.indexOf(atom));
 	}
 
 	public static ItemStack getFullyRandomWasteItem() {
@@ -79,6 +84,15 @@ public class WasteManager {
 		Isotopes atom = wastes.get(i);
 		ItemStack is = ReactorItems.WASTE.getStackOfMetadata(i);
 		return is;
+	}
+
+	public static ChancedOutputList getOutputs() {
+		ChancedOutputList c = new ChancedOutputList();
+		for (Isotopes i : wastes) {
+			float ch = (float)(100F*yields.getWeight(i)/yields.getMaxWeight());
+			c.addItem(getWaste(i), ch);
+		}
+		return c;
 	}
 
 }

@@ -50,12 +50,12 @@ public class BlockReactorMat extends Block {
 		for (int i = 0; i < MatBlocks.matList.length; i++) {
 			if (MatBlocks.matList[i].isMultiSidedTexture()){
 				for (int j = 0; j < 6; j++) {
-					icons[i][j] = ico.registerIcon("ReactorCraft:mat_"+MatBlocks.matList[i].name().toLowerCase()+"_"+j);
+					icons[i][j] = ico.registerIcon("ReactorCraft:mat/"+MatBlocks.matList[i].name().toLowerCase()+"_"+j);
 				}
 			}
 			else {
 				for (int j = 0; j < 6; j++) {
-					icons[i][j] = ico.registerIcon("ReactorCraft:mat_"+MatBlocks.matList[i].name().toLowerCase());
+					icons[i][j] = ico.registerIcon("ReactorCraft:mat/"+MatBlocks.matList[i].name().toLowerCase());
 				}
 			}
 		}

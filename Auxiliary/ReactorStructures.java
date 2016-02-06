@@ -280,7 +280,7 @@ public enum ReactorStructures {
 
 		for (int i = 0; i < 5; i++) {
 			if (i != 2)
-				array.setBlock(x+i, y+2, z+2, MachineRegistry.PIPE.getBlock(), MachineRegistry.PIPE.getMachineMetadata());
+				array.setBlock(x+i, y+2, z+2, MachineRegistry.PIPE.getBlock(), MachineRegistry.PIPE.getBlockMetadata());
 		}
 
 		array.setBlock(x+2, y+2, z+3, b, 0);

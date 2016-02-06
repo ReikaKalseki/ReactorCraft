@@ -19,6 +19,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -67,7 +68,7 @@ public abstract class ReactorGuiBase extends GuiContainer {
 		int k = (height - ySize) / 2;
 
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, tile.getName(), xSize/2, 5, 4210752);
-		if (tile instanceof IInventory)
+		if (tile instanceof IInventory && !(tile instanceof InertIInv && ySize <= 100))
 			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
 
 		fontRendererObj.drawString("?", -10, ySize/2-4, 0xffffff);

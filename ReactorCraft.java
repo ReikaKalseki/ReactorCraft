@@ -72,6 +72,7 @@ import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.RadiationDamage;
+import Reika.ReactorCraft.Auxiliary.RadiationFluidEffect;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -98,6 +99,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -161,11 +163,12 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid PLASMA = new Fluid("rc fusion plasma").setDensity(-1).setViscosity(100).setGaseous(true).setTemperature(TileEntityFusionHeater.PLASMA_TEMP).setLuminosity(15);
 
 	public static final Fluid CORIUM = new Fluid("rc corium").setDensity(5000).setViscosity(8000).setTemperature(2173);
+	public static final Fluid WASTE = new Fluid("rc nuclear waste").setDensity(4000).setViscosity(12000).setTemperature(800);
 
 	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
 
-	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(600).setViscosity(800).setTemperature(800);
-	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(600).setViscosity(800).setTemperature(2000).setLuminosity(8);
+	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800).setTemperature(773);
+	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
 
@@ -398,6 +401,8 @@ public class ReactorCraft extends DragonAPIMod {
 
 		proxy.loadDonatorRender();
 
+		TileEntityReservoir.addFluidEffect("rc nuclear waste", new RadiationFluidEffect());
+
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			ReactorTiles m = ReactorTiles.TEList[i];
 			if (m != ReactorTiles.PROCESSOR) {
@@ -511,6 +516,7 @@ public class ReactorCraft extends DragonAPIMod {
 			CO2_hot.setIcons(co2);
 
 			CORIUM.setIcons(corium, corium2);
+			WASTE.setIcons(corium, corium2);
 
 			LI.setIcons(li);
 
@@ -560,6 +566,7 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(CO2_hot);
 
 		FluidRegistry.registerFluid(CORIUM);
+		FluidRegistry.registerFluid(WASTE);
 
 		FluidRegistry.registerFluid(LI);
 

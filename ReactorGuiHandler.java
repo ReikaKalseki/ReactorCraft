@@ -21,6 +21,7 @@ import Reika.ReactorCraft.Container.ContainerNuclearCore;
 import Reika.ReactorCraft.Container.ContainerPebbleBed;
 import Reika.ReactorCraft.Container.ContainerProcessor;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
+import Reika.ReactorCraft.Container.ContainerThoriumCore;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
 import Reika.ReactorCraft.Container.ContainerWasteStorage;
 import Reika.ReactorCraft.GUIs.GuiCPU;
@@ -32,6 +33,7 @@ import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.GUIs.GuiReactorBook;
 import Reika.ReactorCraft.GUIs.GuiReactorBookPage;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
+import Reika.ReactorCraft.GUIs.GuiThoriumCore;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
 import Reika.ReactorCraft.Registry.ReactorBook;
@@ -40,6 +42,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
@@ -60,8 +63,9 @@ public class ReactorGuiHandler implements IGuiHandler {
 				switch(r) {
 					case FUEL:
 					case BREEDER:
-					case THORIUM:
 						return new ContainerNuclearCore(player, (TileEntityNuclearCore)te);
+					case THORIUM:
+						return new ContainerThoriumCore(player, (TileEntityThoriumCore)te);
 					case WASTECONTAINER:
 						return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
 					case PROCESSOR:
@@ -105,8 +109,9 @@ public class ReactorGuiHandler implements IGuiHandler {
 			switch(r) {
 				case FUEL:
 				case BREEDER:
-				case THORIUM:
 					return new GuiNuclearCore(player, (TileEntityNuclearCore)te);
+				case THORIUM:
+					return new GuiThoriumCore(player, (TileEntityThoriumCore)te);
 				case WASTECONTAINER:
 					return new GuiWasteContainer(player, (TileEntityWasteContainer)te);
 				case PROCESSOR:

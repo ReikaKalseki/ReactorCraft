@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 public enum ReactorFuel {
 
 	URANIUM(ReactorItems.FUEL.getItemInstance(), 25, 3, 5, 20),
-	PLUTONIUM(ReactorItems.PLUTONIUM.getItemInstance(), 30, 4, 10, 30),
-	THORIUM(ReactorItems.THORIUM.getItemInstance(), 20, 3, 2, 15);
+	PLUTONIUM(ReactorItems.PLUTONIUM.getItemInstance(), 30, 4, 10, 30);
+	//THORIUM(ReactorItems.THORIUM.getItemInstance(), 20, 3, 2, 15);
 
 	private final Item fuel;
 	public final int fissionChance;
@@ -49,21 +49,23 @@ public enum ReactorFuel {
 		if (input == null)
 			return null;
 		switch(this) {
-		case PLUTONIUM:
-			if (input.getItemDamage() == ReactorItems.PLUTONIUM.getNumberMetadatas()-1)
-				return null;
-			else
-				return ReactorItems.PLUTONIUM.getStackOfMetadata(input.getItemDamage()+1);
-		case THORIUM:
-			if (input.getItemDamage() == ReactorItems.THORIUM.getNumberMetadatas()-1)
-				return null;
-			else
-				return ReactorItems.THORIUM.getStackOfMetadata(input.getItemDamage()+1);
-		case URANIUM:
-			if (input.getItemDamage() == ReactorItems.FUEL.getNumberMetadatas()-1)
-				return ReactorItems.DEPLETED.getStackOf();
-			else
-				return ReactorItems.FUEL.getStackOfMetadata(input.getItemDamage()+1);
+			case PLUTONIUM:
+				if (input.getItemDamage() == ReactorItems.PLUTONIUM.getNumberMetadatas()-1)
+					return null;
+				else
+					return ReactorItems.PLUTONIUM.getStackOfMetadata(input.getItemDamage()+1);
+				/*
+			case THORIUM:
+				if (input.getItemDamage() == ReactorItems.THORIUM.getNumberMetadatas()-1)
+					return null;
+				else
+					return ReactorItems.THORIUM.getStackOfMetadata(input.getItemDamage()+1);
+				 */
+			case URANIUM:
+				if (input.getItemDamage() == ReactorItems.FUEL.getNumberMetadatas()-1)
+					return ReactorItems.DEPLETED.getStackOf();
+				else
+					return ReactorItems.FUEL.getStackOfMetadata(input.getItemDamage()+1);
 		}
 		return null;
 	}

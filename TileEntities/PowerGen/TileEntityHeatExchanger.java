@@ -199,7 +199,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	//Add API to allow others to add fluids
 	protected static enum Exchange {
 		SODIUM("rc hotsodium", "rc sodium", ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
-		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR);
+		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
+		LIFBE("rc hot lifbe", "rc lithium", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;
