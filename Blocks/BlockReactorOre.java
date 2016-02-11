@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,6 +36,8 @@ public class BlockReactorOre extends EnumOreBlock {
 
 	private IIcon[] icons = new IIcon[ReactorOres.oreList.length];
 
+	private static final Random rand = new Random();
+
 	public BlockReactorOre(Material par2Material) {
 		super(par2Material);
 		this.setResistance(5);
@@ -53,7 +56,9 @@ public class BlockReactorOre extends EnumOreBlock {
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
 		//ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlock(), 1, metadata);
 		ReactorOres ore = ReactorOres.getOre(this, metadata);
-		li.addAll(ore.getOreDrop(metadata));
+		int n = ore.dropsSelf(world, x, y, z) ? 1 : 1+rand.nextInt(1+fortune);
+		for (int i = 0; i < n; i++)
+			li.addAll(ore.getOreDrop(metadata));
 		return li;
 	}
 
@@ -63,9 +68,12 @@ public class BlockReactorOre extends EnumOreBlock {
 
 	@Override
 	protected void onHarvested(World world, int x, int y, int z, Block b, int meta, OreEnum ore, EntityPlayer ep) {
-		if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
-			if (!ep.capabilities.isCreativeMode) {
+		if (!ep.capabilities.isCreativeMode) {
+			if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
 				ReactorAchievements.MINEURANIUM.triggerAchievement(ep);
+			}
+			else if (ore == ReactorOres.CADMIUM) {
+				ReactorAchievements.MINECADMIUM.triggerAchievement(ep);
 			}
 		}
 	}
