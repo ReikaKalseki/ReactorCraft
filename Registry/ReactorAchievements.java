@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public enum ReactorAchievements {
 
+	RECUSEBOOK(			1, 1,	ReactorItems.BOOK,												null,			false),
 	MINEURANIUM(		0, 0,	ReactorOres.PITCHBLENDE.getProduct(), 							null,			false), //mine block
 	MINECADMIUM(		0, 2,	ReactorOres.CADMIUM.getProduct(), 								null,			false), //mine block
 	PEBBLE(				0, -2,	ReactorItems.PELLET, 											MINEURANIUM,	false), //make pebble fuel

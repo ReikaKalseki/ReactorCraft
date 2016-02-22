@@ -200,12 +200,12 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return p == MachineRegistry.PIPE && side != ForgeDirection.UP;
+		return p.isStandardPipe() && side != ForgeDirection.UP;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorItemBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 
 public class ItemReactorBook extends ReactorItemBase {
 
@@ -26,6 +27,7 @@ public class ItemReactorBook extends ReactorItemBase {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer ep)
 	{
 		ep.openGui(ReactorCraft.instance, 10, world, 0, 0, 0);
+		ReactorAchievements.RECUSEBOOK.triggerAchievement(ep);
 		return itemstack;
 	}
 

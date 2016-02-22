@@ -307,12 +307,23 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 		}
 
 		private boolean isOceanFloor(World world, int x, int y, int z) {
-			for (int i = 1; i < MINDEPTH; i++) {
+			for (int i = 0; i < MINDEPTH; i++) {
 				int dy = y+i;
-				Block id = world.getBlock(x, dy, z);
-				int meta = world.getBlockMetadata(x, dy, z);
-				if ((id != Blocks.flowing_water && id != Blocks.water) || meta != 0) {
-					return false;
+				for (int a = -1; a <= 1; a += 2) {
+					for (int b = -1; b <= 1; b += 2) {
+						Block id = world.getBlock(x+a, dy, z+b);
+						int meta = world.getBlockMetadata(x+a, dy, z+b);
+						if ((id != Blocks.flowing_water && id != Blocks.water) || meta != 0) {
+							return false;
+						}
+					}
+				}
+				if (i >= 1) {
+					Block id = world.getBlock(x, dy, z);
+					int meta = world.getBlockMetadata(x, dy, z);
+					if ((id != Blocks.flowing_water && id != Blocks.water) || meta != 0) {
+						return false;
+					}
 				}
 			}
 			return true;
