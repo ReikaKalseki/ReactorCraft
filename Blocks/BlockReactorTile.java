@@ -196,7 +196,7 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 		//for drops, needs to be r.ordinal(), not metadata
 		ReactorTiles r = ReactorTiles.getMachineFromIDandMetadata(this, meta);
 		int top = 0;
-		if (r.getTextureStates() == 5)
+		if (r != ReactorTiles.COOLANT && r.getTextureStates() == 5)
 			top = 4;
 		else if (r.getTextureStates() == 4)
 			top = 0;
