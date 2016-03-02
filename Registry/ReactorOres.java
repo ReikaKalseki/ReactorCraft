@@ -159,6 +159,8 @@ public enum ReactorOres implements OreEnum {
 				return ReactorStacks.calcite.copy();
 			case MAGNETITE:
 				return ReactorStacks.lodestone.copy();
+			case THORIUM:
+				return ReactorStacks.thordust.copy();
 			default:
 				return ReactorItems.INGOTS.getStackOfMetadata(this.getProductMetadata());
 		}

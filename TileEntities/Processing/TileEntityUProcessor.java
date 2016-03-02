@@ -10,8 +10,11 @@
 package Reika.ReactorCraft.TileEntities.Processing;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -23,40 +26,118 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
 
-	public static final int ACID_PER_UNIT = 125;
-	public static final int ACID_PER_FLUORITE = 250;
-
 	private final HybridTank output = new HybridTank("uprocout", 3000);
-	private final HybridTank acid = new HybridTank("uprochf", 3000);
-	private final HybridTank water = new HybridTank("uprocwater", 3000);
+	private final HybridTank intermediate = new HybridTank("uprocmid", 3000);
+	private final HybridTank input = new HybridTank("uprocin", 3000);
 
-	public int HF_timer;
-	public int UF6_timer;
-
-	public static final int ACID_TIME = 80;
-	public static final int UF6_TIME = 400;
+	public int intermediate_timer;
+	public int output_timer;
 
 	private ForgeDirection facing;
 
-	private ParallelTicker timer = new ParallelTicker().addTicker("acid", ACID_TIME).addTicker("uf6", UF6_TIME);
+	private ParallelTicker timer = new ParallelTicker().addTicker("intermediate", 0).addTicker("output", 0);
+
+	public static enum Processes {
+		UF6("water", "rc hydrofluoric acid", "rc uranium hexafluoride", 250, 1000, 250, 125, 80, 400, "ingotUranium"),
+		LiFBe("rc lithium", "", "rc lifbe", 100, 500, 0, 0, 120, 600, ReactorStacks.emeralddust);
+
+		public final int intermediateTime;
+		public final int ouputTime;
+
+		public final Fluid inputFluid;
+		public final Fluid intermediateFluid;
+		public final Fluid outputFluid;
+
+		public final int inputFluidConsumed;
+		public final int outputFluidProduced;
+
+		public final int intermediateFluidProduced;
+		public final int intermediateFluidConsumed;
+
+		private final HashSet<KeyedItemStack> inputItem = new HashSet();
+
+		private static final HashMap<String, Processes> processMap = new HashMap();
+		private static final HashMap<String, Processes> processOutputMap = new HashMap();
+		public static final Processes[] list = values();
+
+		private Processes(String f, String f1, String f2, int incons, int outprod, int prod, int cons, int t1, int t2, String in) {
+			this(f, f1, f2, incons, outprod, prod, cons, t1, t2, new ArrayList(OreDictionary.getOres(in)));
+		}
+
+		private Processes(String f, String f1, String f2, int incons, int outprod, int prod, int cons, int t1, int t2, ItemStack in) {
+			this(f, f1, f2, incons, outprod, prod, cons, t1, t2, ReikaJavaLibrary.makeListFrom(in));
+		}
+
+		private Processes(String f, String f1, String f2, int incons, int outprod, int prod, int cons, int t1, int t2, Collection<ItemStack> in) {
+			inputFluid = FluidRegistry.getFluid(f);
+			intermediateFluid = FluidRegistry.getFluid(f1);
+			outputFluid = FluidRegistry.getFluid(f2);
+
+			intermediateTime = t1;
+			ouputTime = t2;
+
+			inputFluidConsumed = incons;
+			outputFluidProduced = outprod;
+
+			intermediateFluidProduced = prod;
+			intermediateFluidConsumed = cons;
+
+			if (f2.equals("rc uranium hexafluoride")) {
+				if (ModList.IC2.isLoaded()) {
+					ItemStack is = IC2Handler.getInstance().getPurifiedCrushedUranium();
+					if (is != null)
+						in.add(is);
+				}
+			}
+			for (ItemStack is : in) {
+				inputItem.add(new KeyedItemStack(is).setSimpleHash(true));
+			}
+		}
+
+		public boolean hasIntermediate() {
+			return intermediateFluid != null && intermediateFluidProduced > 0;
+		}
+
+		static {
+			for (int i = 0; i < list.length; i++) {
+				Processes p = list[i];
+				processMap.put(p.inputFluid.getName(), p);
+				processOutputMap.put(p.outputFluid.getName(), p);
+			}
+		}
+
+		public boolean isValidItem(ItemStack is) {
+			return inputItem.contains(new KeyedItemStack(is).setSimpleHash(true));
+		}
+
+		public List<ItemStack> getInputItemList() {
+			ArrayList li = new ArrayList();
+			for (KeyedItemStack ks : inputItem) {
+				li.add(ks.getItemStack());
+			}
+			return li;
+		}
+
+	}
 
 	@Override
 	public int getIndex() {
@@ -71,42 +152,58 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getFacing(meta);
-		this.getWaterBuckets();
-		if (this.canMakeAcid()) {
-			timer.updateTicker("acid");
-			if (timer.checkCap("acid"))
-				this.makeAcid();
+		this.getFluidContainers();
+		Processes p = this.getProcess();
+		if (p == null)
+			return;
+		timer.setCap("intermediate", p.intermediateTime);
+		timer.setCap("output", p.ouputTime);
+		if (p.hasIntermediate() && this.canRunIntermediate(p)) {
+			timer.updateTicker("intermediate");
+			if (timer.checkCap("intermediate"))
+				this.runIntermediate(p);
 		}
 		else {
-			timer.resetTicker("acid");
+			timer.resetTicker("intermediate");
 		}
 
-		if (this.canMakeUF6()) {
-			timer.updateTicker("uf6");
-			if (timer.checkCap("uf6"))
-				this.makeUF6();
+		if (this.canRunOutput(p)) {
+			timer.updateTicker("output");
+			if (timer.checkCap("output"))
+				this.runOutput(p);
 		}
 		else {
-			timer.resetTicker("uf6");
+			timer.resetTicker("output");
 		}
 
 		if (!world.isRemote) {
-			HF_timer = timer.getTickOf("acid");
-			UF6_timer = timer.getTickOf("uf6");
+			intermediate_timer = timer.getTickOf("intermediate");
+			output_timer = timer.getTickOf("output");
 		}
 	}
 
-	public boolean canMakeUF6() {
-		return this.hasUranium() && this.getHF() >= ACID_PER_UNIT && this.canAcceptMoreUF6(FluidContainerRegistry.BUCKET_VOLUME);
+	private Processes getProcess() {
+		Fluid f = input.getActualFluid();
+		if (f == null)
+			return null;
+		if (!this.hasFluorite())
+			return null;
+		Processes p = Processes.processMap.get(f.getName());
+		if (p == null)
+			return null;
+		if (!this.hasInputItem(p))
+			;//return null;
+		return p;
 	}
 
-	private boolean hasUranium() {
+	public boolean canRunOutput(Processes p) {
+		return this.hasInputItem(p) && (!p.hasIntermediate() || this.getIntermediate() >= p.intermediateFluidConsumed) && this.canAcceptMoreOutput(p.outputFluidProduced);
+	}
+
+	private boolean hasInputItem(Processes p) {
 		if (inv[2] == null)
 			return false;
-		if (ReikaItemHelper.matchStacks(inv[2], ReactorOres.PITCHBLENDE.getProduct()))
-			return true;
-		ArrayList<ItemStack> ingots = OreDictionary.getOres("ingotUranium");
-		return ReikaItemHelper.collectionContainsItemStack(ingots, inv[2]);
+		return p.isValidItem(inv[2]);
 	}
 
 	private boolean hasFluorite() {
@@ -118,74 +215,91 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		return ReikaItemHelper.collectionContainsItemStack(shards, inv[0]);
 	}
 
-	public boolean canMakeAcid() {
-		return this.getWater() > 0 && this.hasFluorite() && this.canAcceptMoreHF(ACID_PER_FLUORITE);
+	public boolean canRunIntermediate(Processes p) {
+		return this.getInput() > 0 && this.canAcceptMoreIntermediate(p.intermediateFluidProduced);
 	}
 
-	private void makeAcid() {
+	private void runIntermediate(Processes p) {
 		ReikaInventoryHelper.decrStack(0, inv);
-		this.addHF(ACID_PER_FLUORITE);
-		water.drain(ACID_PER_FLUORITE, true);
+		this.addIntermediate(p.intermediateFluidProduced, p.intermediateFluid);
+		input.drain(p.inputFluidConsumed, true);
 	}
 
-	private void makeUF6() {
+	private void runOutput(Processes p) {
 		ReikaInventoryHelper.decrStack(2, inv);
-		output.fill(FluidRegistry.getFluidStack("rc uranium hexafluoride", FluidContainerRegistry.BUCKET_VOLUME), true);
-		acid.drain(ACID_PER_UNIT, true);
+		if (!p.hasIntermediate())
+			ReikaInventoryHelper.decrStack(0, inv);
+		output.fill(new FluidStack(p.outputFluid, p.outputFluidProduced), true);
+		intermediate.drain(p.intermediateFluidConsumed, true);
 	}
 
-	public int getHFTimerScaled(int p) {
-		return (int)(p*timer.getPortionOfCap("acid"));
+	public int getIntermediateTimerScaled(int p) {
+		return (int)(p*timer.getPortionOfCap("intermediate"));
 	}
 
-	public int getUF6TimerScaled(int p) {
-		return (int)(p*timer.getPortionOfCap("uf6"));
+	public int getOutputTimerScaled(int p) {
+		return (int)(p*timer.getPortionOfCap("output"));
 	}
 
-	public int getWaterScaled(int p) {
-		return p*this.getWater()/water.getCapacity();
+	public int getInputScaled(int p) {
+		return p*this.getInput()/input.getCapacity();
 	}
 
-	public int getHFScaled(int p) {
-		return p*this.getHF()/acid.getCapacity();
+	public int getIntermediateScaled(int p) {
+		return p*this.getIntermediate()/intermediate.getCapacity();
 	}
 
-	public int getUF6Scaled(int p) {
-		return p*this.getUF6()/output.getCapacity();
+	public int getOutputScaled(int p) {
+		return p*this.getOutput()/output.getCapacity();
 	}
 
 	public int getCapacity() {
-		return water.getCapacity();
+		return input.getCapacity();
 	}
 
-	public int getWater() {
-		return water.getLevel();
+	public int getInput() {
+		return input.getLevel();
 	}
 
-	public int getHF() {
-		return acid.getLevel();
+	public int getIntermediate() {
+		return intermediate.getLevel();
 	}
 
-	public int getUF6() {
+	public int getOutput() {
 		return output.getLevel();
 	}
 
-	private void getWaterBuckets() {
-		if (inv[1] != null && inv[1].getItem() == Items.water_bucket && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
-			water.fill(FluidRegistry.getFluidStack("water", FluidContainerRegistry.BUCKET_VOLUME), true);
-			inv[1] = new ItemStack(Items.bucket);
+	public Fluid getInputFluid() {
+		return input.getActualFluid();
+	}
+
+	public Fluid getIntermediateFluid() {
+		return intermediate.getActualFluid();
+	}
+
+	public Fluid getOutputFluid() {
+		return output.getActualFluid();
+	}
+
+	private void getFluidContainers() {
+		if (inv[1] != null) {
+			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+			if (fs != null && Processes.processMap.get(fs.getFluid().getName()) != null && this.canAcceptMoreInput(fs.amount)) {
+				input.fill(fs.copy(), true);
+				inv[1] = FluidContainerRegistry.drainFluidContainer(inv[1]);
+			}
 		}
 	}
 
-	public boolean canAcceptMoreWater(int amt) {
-		return water.getFluid() == null || water.getFluid().amount+amt <= water.getCapacity();
+	public boolean canAcceptMoreInput(int amt) {
+		return input.getFluid() == null || input.getFluid().amount+amt <= input.getCapacity();
 	}
 
-	public boolean canAcceptMoreHF(int amt) {
-		return acid.getFluid() == null || acid.getFluid().amount+amt <= acid.getCapacity();
+	public boolean canAcceptMoreIntermediate(int amt) {
+		return intermediate.getFluid() == null || intermediate.getFluid().amount+amt <= intermediate.getCapacity();
 	}
 
-	public boolean canAcceptMoreUF6(int amt) {
+	public boolean canAcceptMoreOutput(int amt) {
 		return output.getFluid() == null || output.getFluid().amount+amt <= output.getCapacity();
 	}
 
@@ -201,30 +315,54 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		if (i == 2)
-			return this.isValidUranium(is);
-		if (is.getItem() == ReactorItems.FLUORITE.getItemInstance())
-			return i == 0;
-		if (is.getItem() == Items.water_bucket)
-			return i == 1;
+		switch (i) {
+			case 0:
+				return is.getItem() == ReactorItems.FLUORITE.getItemInstance();
+			case 1:
+				return this.getProcessByFluidItem(is) != null;
+			case 2:
+				return this.getProcessByMainItem(is) != null;
+		}
 		return false;
 	}
 
-	public static boolean isValidUranium(ItemStack is) {
-		if (ReikaItemHelper.matchStacks(is, ReactorOres.PITCHBLENDE.getProduct()))
-			return true;
-		if (ReikaItemHelper.matchStacks(is, IC2Handler.getInstance().getPurifiedCrushedUranium()))
-			return true;
-		if (ReikaItemHelper.collectionContainsItemStack(OreDictionary.getOres("ingotUranium"), is))
-			return true;
-		return false;
+	public static Processes getProcessByMainItem(ItemStack is) {
+		for (int i = 0; i < Processes.list.length; i++) {
+			Processes p = Processes.list[i];
+			if (p.isValidItem(is)) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public static Processes getProcessByFluidItem(ItemStack is) {
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		if (fs == null)
+			return null;
+		return Processes.processMap.get(fs.getFluid().getName());
+	}
+
+	public static Processes getProcessByFluidOutputItem(ItemStack is) {
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		if (fs == null)
+			return null;
+		return Processes.processOutputMap.get(fs.getFluid().getName());
+	}
+
+	public static Processes getProcessByInput(Fluid f) {
+		return Processes.processMap.get(f.getName());
+	}
+
+	public static Processes getProcessByOutput(Fluid f) {
+		return Processes.processOutputMap.get(f.getName());
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		if (!this.canFill(from, resource.getFluid()))
 			return 0;
-		return water.fill(resource, doFill);
+		return input.fill(resource, doFill);
 	}
 
 	@Override
@@ -249,11 +387,11 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{water.getInfo(), acid.getInfo(), output.getInfo()};
+		return new FluidTankInfo[]{input.getInfo(), intermediate.getInfo(), output.getInfo()};
 	}
 
-	public void addHF(int amt) {
-		int a = acid.fill(FluidRegistry.getFluidStack("rc hydrofluoric acid", amt), true);
+	public void addIntermediate(int amt, Fluid f) {
+		int a = intermediate.fill(new FluidStack(f, amt), true);
 	}
 
 	@Override
@@ -261,11 +399,11 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	{
 		super.readSyncTag(NBT);
 
-		UF6_timer = NBT.getInteger("uf6");
-		HF_timer = NBT.getInteger("hf");
+		output_timer = NBT.getInteger("uf6");
+		intermediate_timer = NBT.getInteger("hf");
 
-		water.readFromNBT(NBT);
-		acid.readFromNBT(NBT);
+		input.readFromNBT(NBT);
+		intermediate.readFromNBT(NBT);
 		output.readFromNBT(NBT);
 	}
 
@@ -274,30 +412,12 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	{
 		super.writeSyncTag(NBT);
 
-		NBT.setInteger("uf6", UF6_timer);
-		NBT.setInteger("hf", HF_timer);
+		NBT.setInteger("uf6", output_timer);
+		NBT.setInteger("hf", intermediate_timer);
 
-		water.writeToNBT(NBT);
-		acid.writeToNBT(NBT);
+		input.writeToNBT(NBT);
+		intermediate.writeToNBT(NBT);
 		output.writeToNBT(NBT);
-	}
-
-	public int getFluid(FluidStack liquid) {
-		if (liquid.getFluid().equals(FluidRegistry.WATER))
-			return this.getWater();
-		if (liquid.getFluid().equals(ReactorCraft.HF))
-			return this.getHF();
-		if (liquid.getFluid().equals(ReactorCraft.UF6))
-			return this.getUF6();
-		return 0;
-	}
-
-	public static boolean isUF6Ingredient(ItemStack is) {
-		if (is.getItem() == ReactorItems.FLUORITE.getItemInstance())
-			return true;
-		if (isValidUranium(is))
-			return true;
-		return false;
 	}
 
 	@Override
@@ -342,18 +462,4 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void setWater(int level) {
-		water.setContents(level, FluidRegistry.WATER);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void setHF(int level) {
-		acid.setContents(level, FluidRegistry.getFluid("rc hydrofluoric acid"));
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void setUF6(int level) {
-		output.setContents(level, FluidRegistry.getFluid("rc uranium hexafluoride"));
-	}
 }

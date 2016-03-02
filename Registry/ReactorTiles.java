@@ -232,6 +232,7 @@ public enum ReactorTiles implements TileEnum {
 			case FUEL:
 			case BREEDER:
 			case TRITIZER:
+			case THORIUM:
 				return 5;
 			case INJECTOR:
 				return 3;

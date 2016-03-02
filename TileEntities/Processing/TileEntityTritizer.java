@@ -91,7 +91,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 			return 0;
 		HybridTank tank = out ? output : input;
 		Fluid f = is.getFluid();
-		if (Reactions.getReactionFrom(f) == null)
+		if (!out && Reactions.getReactionFrom(f) == null)
 			return 0;
 		else if (tank.getActualFluid() != null && tank.getActualFluid() != f)
 			return 0;

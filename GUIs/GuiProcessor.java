@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.DragonAPI.Instantiable.GUI.TankDisplay;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -63,13 +64,16 @@ public class GuiProcessor extends ReactorGuiBase {
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+97, j+114, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Water", x, y);
+			Fluid f = tile.getInputFluid();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, f != null ? f.getLocalizedName() : "Empty", x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+115, j+132, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Hydrofluoric Acid", x, y);
+			Fluid f = tile.getIntermediateFluid();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, f != null ? f.getLocalizedName() : "Empty", x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Uranium Hexafluoride", x, y);
+			Fluid f = tile.getOutputFluid();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, f != null ? f.getLocalizedName() : "Empty", x, y);
 		}
 	}
 
@@ -91,10 +95,10 @@ public class GuiProcessor extends ReactorGuiBase {
 
 		FluidTankInfo[] info = tile.getTankInfo(null);
 
-		int i5 = tile.getHFTimerScaled(24);
+		int i5 = tile.getIntermediateTimerScaled(24);
 		this.drawTexturedModalRect(j+67, k+21, 176, 92, i5, 17);
 
-		int i6 = tile.getUF6TimerScaled(24);
+		int i6 = tile.getOutputTimerScaled(24);
 		this.drawTexturedModalRect(j+67, k+58, 176, 92, i6, 17);
 
 		water.updateTank(tile.getTankInfo(null)[0]);

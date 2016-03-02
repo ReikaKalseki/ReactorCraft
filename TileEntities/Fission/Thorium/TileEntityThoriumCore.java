@@ -49,7 +49,7 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 @Strippable(value={"buildcraft.api.transport.IPipeConnection"})
 public class TileEntityThoriumCore extends TileEntityNuclearCore implements InertIInv, IFluidHandler, PipeConnector, IPipeConnection {
 
-	private static final int CYCLE_AMOUNT = 25;
+	private static final int CYCLE_AMOUNT = 100;
 
 	private final HybridTank fuelTank = new HybridTank("thoriumfuel", 4000);
 	private final HybridTank fuelTankOut = new HybridTank("thoriumfuelout", 4000);
@@ -199,7 +199,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid == FluidRegistry.getFluid("rc lifbe");
+		return from == ForgeDirection.UP && fluid == FluidRegistry.getFluid("rc lifbe fuel");
 	}
 
 	@Override

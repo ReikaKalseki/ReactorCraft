@@ -14,22 +14,20 @@ import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor.Processes;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -37,8 +35,10 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 
 	public class UProcessorRecipe extends CachedRecipe {
 
-		public UProcessorRecipe() {
+		private final Processes process;
 
+		public UProcessorRecipe(Processes p) {
+			process = p;
 		}
 
 		@Override
@@ -56,14 +56,11 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 		public List<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			List<ItemStack> li = ReikaRecipeHelper.getMutableOreDictList("ingotUranium");
-			li.add(0, ReactorOres.PITCHBLENDE.getProduct());
-			if (ModList.IC2.isLoaded()) {
-				li.add(IC2Handler.getInstance().getPurifiedCrushedUranium());
-			}
+			List<ItemStack> li = process.getInputItemList();
 			int meta = (int)((System.nanoTime()/1000000000)%li.size());
 			ItemStack i = li.get(meta);
 			stacks.add(new PositionedStack(i, 39, 47));
+
 			meta = (int)((System.nanoTime()/1000000000)%FluoriteTypes.colorList.length);
 			ItemStack f = ReactorItems.FLUORITE.getStackOfMetadata(meta);
 			stacks.add(new PositionedStack(f, 39, 11));
@@ -101,18 +98,39 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (ReikaItemHelper.matchStacks(ReactorStacks.uf6can, result))
-			arecipes.add(new UProcessorRecipe());
+		Processes p = TileEntityUProcessor.getProcessByFluidOutputItem(result);
+		if (p != null) {
+			arecipes.add(new UProcessorRecipe(p));
+			return;
+		}
+
 		if (ReikaItemHelper.matchStacks(ReactorStacks.hfcan, result))
-			arecipes.add(new UProcessorRecipe());
+			arecipes.add(new UProcessorRecipe(Processes.UF6));
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (TileEntityUProcessor.isUF6Ingredient(ingredient))
-			arecipes.add(new UProcessorRecipe());
+		if (ingredient.getItem() == ReactorItems.FLUORITE.getItemInstance()) {
+			for (int i = 0; i < Processes.list.length; i++) {
+				arecipes.add(new UProcessorRecipe(Processes.list[i]));
+			}
+			return;
+		}
+
+		Processes p = TileEntityUProcessor.getProcessByMainItem(ingredient);
+		if (p != null) {
+			arecipes.add(new UProcessorRecipe(p));
+			return;
+		}
+
+		p = TileEntityUProcessor.getProcessByFluidItem(ingredient);
+		if (p != null) {
+			arecipes.add(new UProcessorRecipe(p));
+			return;
+		}
+
 		if (ReikaItemHelper.matchStacks(ReactorStacks.hfcan, ingredient))
-			arecipes.add(new UProcessorRecipe());
+			arecipes.add(new UProcessorRecipe(Processes.UF6));
 	}
 
 	@Override
@@ -124,9 +142,19 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		ReikaGuiAPI.instance.drawTexturedModalRect(93, 7, 208, 20, 16, 60);
-		ReikaGuiAPI.instance.drawTexturedModalRect(93+18, 7, 208-16, 20, 16, 60);
-		ReikaGuiAPI.instance.drawTexturedModalRect(93+36, 7, 208+16, 20, 16, 60);
+		UProcessorRecipe r = (UProcessorRecipe)arecipes.get(recipe);
+		Processes p = r.process;
+
+		ReikaTextureHelper.bindTerrainTexture();
+		Fluid f = p.inputFluid;
+		if (f != null)
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, f.getIcon(), 16, 60);
+		f = p.intermediateFluid;
+		if (f != null)
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+18, 7, f.getIcon(), 16, 60);
+		f = p.outputFluid;
+		if (f != null)
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+36, 7, f.getIcon(), 16, 60);
 	}
 
 }

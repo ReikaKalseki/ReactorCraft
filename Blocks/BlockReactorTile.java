@@ -344,15 +344,15 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 		}
 		if (r == ReactorTiles.PROCESSOR && is != null && is.getItem() == ReactorItems.CANISTER.getItemInstance() && is.stackSize == 1) {
 			TileEntityUProcessor te = (TileEntityUProcessor)world.getTileEntity(x, y, z);
-			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getUF6() >= FluidContainerRegistry.BUCKET_VOLUME) {
+			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getOutput() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
 				te.drain(null, FluidContainerRegistry.BUCKET_VOLUME, true);
 			}
-			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreHF(FluidContainerRegistry.BUCKET_VOLUME)) {
+			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreIntermediate(FluidContainerRegistry.BUCKET_VOLUME)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan.copy());
-				te.addHF(FluidContainerRegistry.BUCKET_VOLUME);
+				te.addIntermediate(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("rc hydrofluoric acid"));
 			}
 			return true;
 		}

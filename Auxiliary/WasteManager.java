@@ -24,11 +24,17 @@ public class WasteManager {
 
 	private static final ArrayList<Isotopes> wastes = new ArrayList<Isotopes>();
 	private static final WeightedRandom<Isotopes> yields = new WeightedRandom();
-	private static final Random r = new Random();
+	private static final WeightedRandom<Isotopes> thoriumYields = new WeightedRandom();
+	private static final Random rand = new Random();
 
 	private static void addWaste(Isotopes iso, double percent) {
 		wastes.add(iso);
 		yields.addEntry(iso, percent);
+	}
+
+	private static void addThoriumWaste(Isotopes iso, double percent) {
+		wastes.add(iso);
+		thoriumYields.addEntry(iso, percent);
 	}
 
 	static {
@@ -50,14 +56,39 @@ public class WasteManager {
 		addWaste(Isotopes.Gd155, 0.03);
 		addWaste(Isotopes.Sb125, 0.03);
 		addWaste(Isotopes.Sn126, 0.02);
+
+		addThoriumWaste(Isotopes.Cs137, 6.84);
+		//stable addThoriumWaste(Isotopes.Xe136, 6.67);
+		//stable addThoriumWaste(Isotopes.Mo95, 6.36);
+		//stable addThoriumWaste(Isotopes.Xe134, 6.30);
+		//stable addThoriumWaste(Isotopes.Nd143, 5.97);
+		//stable addThoriumWaste(Isotopes.Cs133, 5.95);
+		addThoriumWaste(Isotopes.I135, 5.03);
+		addThoriumWaste(Isotopes.Tc99, 4.92);
+		addThoriumWaste(Isotopes.Xe131, 3.60);
+		//stable addThoriumWaste(Isotopes.Nd145, 3.45);
+		//stable addThoriumWaste(Isotopes.Ru101, 3.17);
+		addThoriumWaste(Isotopes.Pm147, 1.74);
+		addThoriumWaste(Isotopes.Ru103,	1.57);
+		addThoriumWaste(Isotopes.Xe135, 1.23);
+		//stable addThoriumWaste(Isotopes.Kr83, 1.01);
+		addThoriumWaste(Isotopes.Pm149, 0.78);
+		addThoriumWaste(Isotopes.Rh105, 0.50);
+		//stable addThoriumWaste(Isotopes.I127, 0.46);
+		addThoriumWaste(Isotopes.Sm151, 0.32);
+		addThoriumWaste(Isotopes.Ru106, 0.25);
 	}
 
 	public static Isotopes getRandomWaste() {
 		return yields.getRandomEntry();
 	}
 
+	public static Isotopes getRandomThoriumWaste() {
+		return thoriumYields.getRandomEntry();
+	}
+
 	public static int getFullyRandomWaste() {
-		int i = r.nextInt(wastes.size());
+		int i = rand.nextInt(wastes.size());
 		return i;
 	}
 
@@ -71,6 +102,12 @@ public class WasteManager {
 
 	public static ItemStack getRandomWasteItem() {
 		Isotopes atom = getRandomWaste();
+		ItemStack is = getWaste(atom);
+		return is;
+	}
+
+	public static ItemStack getRandomThoriumWasteItem() {
+		Isotopes atom = getRandomThoriumWaste();
 		ItemStack is = getWaste(atom);
 		return is;
 	}
@@ -90,7 +127,18 @@ public class WasteManager {
 		ChancedOutputList c = new ChancedOutputList();
 		for (Isotopes i : wastes) {
 			float ch = (float)(100F*yields.getWeight(i)/yields.getMaxWeight());
-			c.addItem(getWaste(i), ch);
+			if (ch > 0)
+				c.addItem(getWaste(i), ch);
+		}
+		return c;
+	}
+
+	public static ChancedOutputList getThoriumOutputs() {
+		ChancedOutputList c = new ChancedOutputList();
+		for (Isotopes i : wastes) {
+			float ch = (float)(100F*thoriumYields.getWeight(i)/thoriumYields.getMaxWeight());
+			if (ch > 0)
+				c.addItem(getWaste(i), ch);
 		}
 		return c;
 	}

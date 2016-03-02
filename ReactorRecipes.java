@@ -16,13 +16,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
@@ -34,11 +37,14 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -61,11 +67,16 @@ public class ReactorRecipes {
 
 		RecipesGrinder.getRecipes().addRecipe(new ItemStack(Items.emerald), ReactorStacks.emeralddust);
 
+		RecipesCrystallizer.getRecipes().addRecipe(FluidRegistry.getFluid("rc nuclear waste"), 50, ReactorStacks.wastedust, RecipeLevel.CORE);
+		RecipesCentrifuge.getRecipes().addRecipe(ReactorStacks.wastedust, WasteManager.getThoriumOutputs(), null, RecipeLevel.CORE);
+
 		RecipesPulseFurnace.getRecipes().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 
 		RecipesCompactor.getRecipes().addRecipe(ReactorStacks.lodestone.copy(), ReactorItems.MAGNET.getCraftedProduct(2), 5000, 100);
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
+
+		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 20, 1, 100, new KeyedItemStack(ReactorItems.FLUORITE.getItemInstance()), new KeyedItemStack(ReactorStacks.thordust));
 	}
 
 	public static void addModInterface() {
@@ -298,6 +309,8 @@ public class ReactorRecipes {
 		ReactorTiles.FLYWHEEL.addCrafting("BBB", "SSS", "BBB", 'B', ItemStacks.steelblock, 'S', ItemStacks.shaftitem);
 
 		ReactorTiles.DIFFUSER.addCrafting("BBB", "DPD", "BBB", 'B', ItemStacks.basepanel, 'D', ItemStacks.diffuser, 'P', ItemStacks.pipe);
+
+		ReactorTiles.THORIUM.addCrafting("aSa", "PCP", "tPt", 't', ItemStacks.tungsteningot, 'a', ItemStacks.silumin, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 	}
 
 }

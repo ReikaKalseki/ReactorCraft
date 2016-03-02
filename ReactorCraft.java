@@ -168,6 +168,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
 
 	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800).setTemperature(773);
+	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850).setTemperature(773);
 	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
@@ -471,29 +472,30 @@ public class ReactorCraft extends DragonAPIMod {
 		logger.log("Loading Liquid Icons");
 
 		if (event.map.getTextureType() == 0) {
-			IIcon d2o = event.map.registerIcon("ReactorCraft:heavywater");
-			IIcon hf = event.map.registerIcon("ReactorCraft:hf");
-			IIcon uf6 = event.map.registerIcon("ReactorCraft:uf6");
+			IIcon d2o = event.map.registerIcon("ReactorCraft:fluid/heavywater");
+			IIcon hf = event.map.registerIcon("ReactorCraft:fluid/hf");
+			IIcon uf6 = event.map.registerIcon("ReactorCraft:fluid/uf6");
 
-			IIcon nh3 = event.map.registerIcon("ReactorCraft:ammonia");
-			IIcon na = event.map.registerIcon("ReactorCraft:sodium");
-			IIcon nahot = event.map.registerIcon("ReactorCraft:sodiumhot");
-			IIcon cl = event.map.registerIcon("ReactorCraft:chlorine");
-			IIcon o = event.map.registerIcon("ReactorCraft:oxygen");
+			IIcon nh3 = event.map.registerIcon("ReactorCraft:fluid/ammonia");
+			IIcon na = event.map.registerIcon("ReactorCraft:fluid/sodium");
+			IIcon nahot = event.map.registerIcon("ReactorCraft:fluid/sodiumhot");
+			IIcon cl = event.map.registerIcon("ReactorCraft:fluid/chlorine");
+			IIcon o = event.map.registerIcon("ReactorCraft:fluid/oxygen");
 
-			IIcon h2 = event.map.registerIcon("ReactorCraft:deuterium");
-			IIcon h3 = event.map.registerIcon("ReactorCraft:tritium");
-			IIcon plasma = event.map.registerIcon("ReactorCraft:plasma");
+			IIcon h2 = event.map.registerIcon("ReactorCraft:fluid/deuterium");
+			IIcon h3 = event.map.registerIcon("ReactorCraft:fluid/tritium");
+			IIcon plasma = event.map.registerIcon("ReactorCraft:fluid/plasma");
 
-			IIcon co2 = event.map.registerIcon("ReactorCraft:co2");
+			IIcon co2 = event.map.registerIcon("ReactorCraft:fluid/co2");
 
-			IIcon corium = event.map.registerIcon("ReactorCraft:slag_flow");
-			IIcon corium2 = event.map.registerIcon("ReactorCraft:slag_flow");
+			IIcon corium = event.map.registerIcon("ReactorCraft:fluid/slag_flow");
+			IIcon corium2 = event.map.registerIcon("ReactorCraft:fluid/slag_flow");
 
-			IIcon li = event.map.registerIcon("ReactorCraft:lithium");
+			IIcon li = event.map.registerIcon("ReactorCraft:fluid/lithium");
 
-			IIcon lifbe = event.map.registerIcon("ReactorCraft:lifbe");
-			IIcon lifbe_hot = event.map.registerIcon("ReactorCraft:lifbe_hot");
+			IIcon lifbe = event.map.registerIcon("ReactorCraft:fluid/lifbe");
+			IIcon lifbe_fuel = event.map.registerIcon("ReactorCraft:fluid/lifbe_fuel");
+			IIcon lifbe_hot = event.map.registerIcon("ReactorCraft:fluid/lifbe_hot");
 
 			D2O.setIcons(d2o);
 			HF.setIcons(hf);
@@ -521,6 +523,7 @@ public class ReactorCraft extends DragonAPIMod {
 			LI.setIcons(li);
 
 			LIFBe.setIcons(lifbe);
+			LIFBe_fuel.setIcons(lifbe_fuel);
 			LIFBe_hot.setIcons(lifbe_hot);
 		}
 	}
@@ -572,6 +575,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidRegistry.registerFluid(LIFBe);
 		FluidRegistry.registerFluid(LIFBe_hot);
+		FluidRegistry.registerFluid(LIFBe_fuel);
 	}
 
 	private static void addLiquidContainers() {
@@ -596,6 +600,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(LIFBe, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.lifbecan, ReactorStacks.emptycan);
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(LIFBe_hot, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.hotlifbecan, ReactorStacks.emptycan);
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(LIFBe_fuel, FluidContainerRegistry.BUCKET_VOLUME), ReactorStacks.lifbefuelcan, ReactorStacks.emptycan);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {
