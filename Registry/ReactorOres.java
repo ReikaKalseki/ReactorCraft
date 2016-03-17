@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Registry;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -102,7 +103,7 @@ public enum ReactorOres implements OreEnum {
 	}
 
 	public String getTextureName() {
-		return "ReactorCraft:ore/"+this.name().toLowerCase();
+		return "ReactorCraft:ore/"+this.name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public String getDictionaryName() {
@@ -191,7 +192,7 @@ public enum ReactorOres implements OreEnum {
 			case ENDBLENDE:
 				return StatCollector.translateToLocal("item.uranium");
 			default:
-				return StatCollector.translateToLocal("item."+this.name().toLowerCase());
+				return StatCollector.translateToLocal("item."+this.name().toLowerCase(Locale.ENGLISH));
 		}
 	}
 

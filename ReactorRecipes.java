@@ -44,11 +44,11 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ReactorRecipes {

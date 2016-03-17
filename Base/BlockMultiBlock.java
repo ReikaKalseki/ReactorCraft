@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Base;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -125,7 +126,7 @@ public abstract class BlockMultiBlock extends Block implements Transducerable, U
 	}
 
 	public final String getName(int meta) {
-		return StatCollector.translateToLocal("multiblock."+this.getIconBaseName().toLowerCase()+"."+(meta&7));
+		return StatCollector.translateToLocal("multiblock."+this.getIconBaseName().toLowerCase(Locale.ENGLISH)+"."+(meta&7));
 	}
 
 	public abstract int getItemTextureIndex(int meta, int side);

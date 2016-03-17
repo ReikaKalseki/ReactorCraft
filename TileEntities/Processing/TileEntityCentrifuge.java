@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
-import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -151,8 +150,6 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 				//ReikaInventoryHelper.addOrSetStack(ReactorStacks.thordust.copy(), inv, 0);
 			}
 		}
-
-		ReactorAchievements.UF6.triggerAchievement(this.getPlacer());
 	}
 
 	public boolean canMake() {

@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Registry;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -104,36 +105,36 @@ public enum ReactorItems implements ItemEnum {
 	}
 
 	public String getLiquidIconName() {
-		return this.name().toLowerCase();
+		return this.name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public boolean isHazmat() {
 		switch(this) {
-		case HAZHELMET:
-		case HAZCHEST:
-		case HAZLEGS:
-		case HAZBOOTS:
-			return true;
-		default:
-			return false;
+			case HAZHELMET:
+			case HAZCHEST:
+			case HAZLEGS:
+			case HAZBOOTS:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean hasMetadataSprites() {
 		switch(this) {
-		case FUEL:
-		case PLUTONIUM:
-		case THORIUM:
-		case PELLET:
-		case WASTE:
-		case BREEDERFUEL:
-		case CLEANUP:
-		case MAGNET:
-		case GEIGER:
-		case REMOTE:
-			return false;
-		default:
-			return true;
+			case FUEL:
+			case PLUTONIUM:
+			case THORIUM:
+			case PELLET:
+			case WASTE:
+			case BREEDERFUEL:
+			case CLEANUP:
+			case MAGNET:
+			case GEIGER:
+			case REMOTE:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -155,92 +156,92 @@ public enum ReactorItems implements ItemEnum {
 	@Override
 	public String getMultiValuedName(int meta) {
 		switch(this) {
-		case FUEL:
-		case PLUTONIUM:
-		case THORIUM:
-		case PELLET:
-			if (meta == 0)
-				return this.getBasicName()+" (Fresh)";
-			else
-				return this.getBasicName()+" ("+(meta*100/this.getNumberMetadatas())+"% Depleted)";
-		case PLACER:
-			return ReactorTiles.TEList[meta].getName();
-		case RAW:
-			return StatCollector.translateToLocal(ReactorNames.rawNames[meta]);
-		case FLUORITE:
-			return FluoriteTypes.colorList[meta].getItemName();
-		case INGOTS:
-			return ReactorOres.oreList[meta+1].getProductName();
-		case CANISTER:
-			return StatCollector.translateToLocal(ReactorNames.canNames[meta]);
-		case CRAFTING:
-			return CraftingItems.partList[meta].itemName;
-		case BREEDERFUEL:
-			return this.getBasicName()+" ("+(meta*5)+"% Converted)";
-		case CLEANUP:
-			return this.getBasicName()+" ("+meta+" kJ)";
-		case MAGNET:
-			double num = ReikaMathLibrary.intpow2(4, meta)/1000D;
-			return this.getBasicName()+String.format(" (%.3f %sT)", ReikaMathLibrary.getThousandBase(num), ReikaEngLibrary.getSIPrefix(num));
-		default:
-			return this.getBasicName();
+			case FUEL:
+			case PLUTONIUM:
+			case THORIUM:
+			case PELLET:
+				if (meta == 0)
+					return this.getBasicName()+" (Fresh)";
+				else
+					return this.getBasicName()+" ("+(meta*100/this.getNumberMetadatas())+"% Depleted)";
+			case PLACER:
+				return ReactorTiles.TEList[meta].getName();
+			case RAW:
+				return StatCollector.translateToLocal(ReactorNames.rawNames[meta]);
+			case FLUORITE:
+				return FluoriteTypes.colorList[meta].getItemName();
+			case INGOTS:
+				return ReactorOres.oreList[meta+1].getProductName();
+			case CANISTER:
+				return StatCollector.translateToLocal(ReactorNames.canNames[meta]);
+			case CRAFTING:
+				return CraftingItems.partList[meta].itemName;
+			case BREEDERFUEL:
+				return this.getBasicName()+" ("+(meta*5)+"% Converted)";
+			case CLEANUP:
+				return this.getBasicName()+" ("+meta+" kJ)";
+			case MAGNET:
+				double num = ReikaMathLibrary.intpow2(4, meta)/1000D;
+				return this.getBasicName()+String.format(" (%.3f %sT)", ReikaMathLibrary.getThousandBase(num), ReikaEngLibrary.getSIPrefix(num));
+			default:
+				return this.getBasicName();
 		}
 	}
 
 	@Override
 	public boolean hasMultiValuedName() {
 		switch(this) {
-		case FUEL:
-		case PLUTONIUM:
-		case THORIUM:
-		case PELLET:
-		case PLACER:
-		case RAW:
-		case FLUORITE:
-		case INGOTS:
-		case CANISTER:
-		case CRAFTING:
-		case BREEDERFUEL:
-		case CLEANUP:
-		case MAGNET:
-			return true;
-		default:
-			return false;
+			case FUEL:
+			case PLUTONIUM:
+			case THORIUM:
+			case PELLET:
+			case PLACER:
+			case RAW:
+			case FLUORITE:
+			case INGOTS:
+			case CANISTER:
+			case CRAFTING:
+			case BREEDERFUEL:
+			case CLEANUP:
+			case MAGNET:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
-		case FUEL:
-		case PLUTONIUM:
-			return 100;
-		case THORIUM:
-			return 40;
-		case PELLET:
-			return 25;
-		case PLACER:
-			return ReactorTiles.TEList.length;
-		case RAW:
-			return ReactorNames.rawNames.length;
-		case FLUORITE:
-			return FluoriteTypes.colorList.length;
-		case INGOTS:
-			return ReactorOres.oreList.length-3;
-		case CANISTER:
-			return ReactorNames.canNames.length;
-		case CRAFTING:
-			return CraftingItems.partList.length;
-		case WASTE:
-			return WasteManager.getNumberWastes();
-		case BREEDERFUEL:
-			return 20;
-		case CLEANUP:
-			return ItemRegistry.STRONGCOIL.getNumberMetadatas();
-		case MAGNET:
-			return 8;
-		default:
-			return 1;
+			case FUEL:
+			case PLUTONIUM:
+				return 100;
+			case THORIUM:
+				return 40;
+			case PELLET:
+				return 25;
+			case PLACER:
+				return ReactorTiles.TEList.length;
+			case RAW:
+				return ReactorNames.rawNames.length;
+			case FLUORITE:
+				return FluoriteTypes.colorList.length;
+			case INGOTS:
+				return ReactorOres.oreList.length-3;
+			case CANISTER:
+				return ReactorNames.canNames.length;
+			case CRAFTING:
+				return CraftingItems.partList.length;
+			case WASTE:
+				return WasteManager.getNumberWastes();
+			case BREEDERFUEL:
+				return 20;
+			case CLEANUP:
+				return ItemRegistry.STRONGCOIL.getNumberMetadatas();
+			case MAGNET:
+				return 8;
+			default:
+				return 1;
 		}
 	}
 
@@ -280,16 +281,16 @@ public enum ReactorItems implements ItemEnum {
 
 	public boolean isAvailableInCreative(ItemStack item) {
 		switch(this) {
-		case INGOTS:
-			return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
-		case FUEL:
-		case THORIUM:
-		case PLUTONIUM:
-		case BREEDERFUEL:
-		case PELLET:
-			return item.getItemDamage() == 0;
-		default:
-			return true;
+			case INGOTS:
+				return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
+			case FUEL:
+			case THORIUM:
+			case PLUTONIUM:
+			case BREEDERFUEL:
+			case PELLET:
+				return item.getItemDamage() == 0;
+			default:
+				return true;
 		}
 	}
 

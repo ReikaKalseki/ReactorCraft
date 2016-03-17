@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.Locale;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,7 +30,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	protected StepTimer timer = new StepTimer(20);
 
-	protected final HybridTank output = new HybridTank(this.getName().toLowerCase()+"out", this.getCapacity());
+	protected final HybridTank output = new HybridTank(this.getName().toLowerCase(Locale.ENGLISH)+"out", this.getCapacity());
 
 	@Override
 	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {

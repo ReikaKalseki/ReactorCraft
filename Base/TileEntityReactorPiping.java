@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Base;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -68,7 +69,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		if (te == null)
 			return false;
 		if (te instanceof IFluidHandler) {
-			String name = te.getClass().getSimpleName().toLowerCase();
+			String name = te.getClass().getSimpleName().toLowerCase(Locale.ENGLISH);
 			return !name.contains("conduit") && !name.contains("pipe");
 		}
 		return false;

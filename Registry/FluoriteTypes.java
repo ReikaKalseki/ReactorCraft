@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -49,7 +50,7 @@ public enum FluoriteTypes {
 	}
 
 	public String getColorName() {
-		return this.name().toLowerCase();
+		return this.name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public static FluoriteTypes getRandomColor() {

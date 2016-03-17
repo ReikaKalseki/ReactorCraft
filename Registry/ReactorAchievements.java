@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -112,7 +114,7 @@ public enum ReactorAchievements {
 			ReactorAchievements a = list[i];
 			String id = a.name();
 			Achievement dep = a.hasDependency() ? a.dependency.get() : null;
-			Achievement ach = new Achievement(id, a.name().toLowerCase(), a.xPosition, a.yPosition, a.iconItem, dep);
+			Achievement ach = new Achievement(id, a.name().toLowerCase(Locale.ENGLISH), a.xPosition, a.yPosition, a.iconItem, dep);
 			id = ach.statId;
 			//ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));
 			//if (StatList.getOneShotStat(id) != null)

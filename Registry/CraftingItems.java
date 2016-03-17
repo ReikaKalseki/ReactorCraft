@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -43,7 +45,7 @@ public enum CraftingItems {
 	public static final CraftingItems[] partList = values();
 
 	private CraftingItems() {
-		itemName = StatCollector.translateToLocal("crafting."+this.name().toLowerCase());
+		itemName = StatCollector.translateToLocal("crafting."+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
 	public ItemStack getItem() {

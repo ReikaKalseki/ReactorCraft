@@ -136,4 +136,9 @@ public enum ReactorSounds implements SoundEnum {
 	public boolean attenuate() {
 		return true;
 	}
+
+	@Override
+	public boolean preload() {
+		return false;
+	}
 }

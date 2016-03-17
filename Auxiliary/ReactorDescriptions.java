@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Auxiliary;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
@@ -138,15 +139,15 @@ public final class ReactorDescriptions {
 
 		for (int i = 0; i < parenttabs.size(); i++) {
 			ReactorBook h = parenttabs.get(i);
-			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase());
+			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase(Locale.ENGLISH));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < machinetabs.size(); i++) {
 			ReactorBook h = machinetabs.get(i);
 			ReactorTiles m = h.getMachine();
-			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase()+DESC_SUFFIX);
-			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase()+NOTE_SUFFIX);
+			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 			desc = String.format(desc, machineData.get(m));
 			aux = String.format(aux, machineNotes.get(m));
 
@@ -164,19 +165,19 @@ public final class ReactorDescriptions {
 
 		for (int i = 0; i < tooltabs.length; i++) {
 			ReactorBook h = tooltabs[i];
-			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase());
+			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase(Locale.ENGLISH));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < resourcetabs.length; i++) {
 			ReactorBook h = resourcetabs[i];
-			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase());
+			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase(Locale.ENGLISH));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < infotabs.length; i++) {
 			ReactorBook h = infotabs[i];
-			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase());
+			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}

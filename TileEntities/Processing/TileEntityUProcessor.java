@@ -37,6 +37,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -186,10 +187,10 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		Fluid f = input.getActualFluid();
 		if (f == null)
 			return null;
-		if (!this.hasFluorite())
-			return null;
 		Processes p = Processes.processMap.get(f.getName());
 		if (p == null)
+			return null;
+		if (p.hasIntermediate() && !this.hasFluorite())
 			return null;
 		if (!this.hasInputItem(p))
 			;//return null;
@@ -231,6 +232,9 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 			ReikaInventoryHelper.decrStack(0, inv);
 		output.fill(new FluidStack(p.outputFluid, p.outputFluidProduced), true);
 		intermediate.drain(p.intermediateFluidConsumed, true);
+		if (p == Processes.UF6) {
+			ReactorAchievements.UF6.triggerAchievement(this.getPlacer());
+		}
 	}
 
 	public int getIntermediateTimerScaled(int p) {

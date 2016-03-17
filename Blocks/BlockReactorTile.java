@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -134,20 +135,20 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 					for (int k = 0; k < r.getTextureStates(); k++) {
 						if (r.hasSidedTextures()) {
 							for (int j = 0; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j+"_#"+k);
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_"+j+"_#"+k);
 							}
 						}
 						else if (r.isEndTextured()) {
 							for (int j = 0; j < 2; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top"+"_#"+k);
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top"+"_#"+k);
 							}
 							for (int j = 2; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_#"+k);
 							}
 						}
 						else {
 							for (int j = 0; j < 6; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_#"+k);
+								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_#"+k);
 							}
 						}
 					}
@@ -155,20 +156,20 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 				else {
 					if (r.hasSidedTextures()) {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_"+j);
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_"+j);
 						}
 					}
 					else if (r.isEndTextured()) {
 						for (int j = 0; j < 2; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase()+"_top");
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top");
 						}
 						for (int j = 2; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH));
 						}
 					}
 					else {
 						for (int j = 0; j < 6; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase());
+							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH));
 						}
 					}
 				}

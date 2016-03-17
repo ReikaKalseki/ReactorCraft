@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -36,7 +38,7 @@ public enum WorkingFluid {
 	}
 
 	public Fluid getLowPressureFluid() {
-		return FluidRegistry.getFluid("rc lowp"+this.name().toLowerCase());
+		return FluidRegistry.getFluid("rc lowp"+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
 	public static WorkingFluid getFromNBT(NBTTagCompound NBT) {

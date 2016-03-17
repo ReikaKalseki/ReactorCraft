@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -500,7 +502,7 @@ public enum ReactorStructures {
 	}
 
 	public String getName() {
-		return StatCollector.translateToLocal("reactorstruct."+this.name().toLowerCase());
+		return StatCollector.translateToLocal("reactorstruct."+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
 }
