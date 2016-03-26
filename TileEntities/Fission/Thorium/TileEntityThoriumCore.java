@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Fission.Thorium;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -29,9 +30,10 @@ import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
-import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -50,6 +52,7 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 public class TileEntityThoriumCore extends TileEntityNuclearCore implements InertIInv, IFluidHandler, PipeConnector, IPipeConnection {
 
 	private static final int CYCLE_AMOUNT = 100;
+	public static final int FUEL_DUMP_TEMPERATURE = 1100;
 
 	private final HybridTank fuelTank = new HybridTank("thoriumfuel", 4000);
 	private final HybridTank fuelTankOut = new HybridTank("thoriumfuelout", 4000);
@@ -65,7 +68,10 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
-			ReikaInventoryHelper.addToIInv(ReactorItems.THORIUM.getStackOf(), this);
+			fuelTank.addLiquid(100, ReactorCraft.LIFBe_fuel);
+			wasteTank.empty();
+
+			temperature = 400;
 		}
 
 		timer2.update();
@@ -89,6 +95,76 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 				 */
 			}
 		}
+
+		if (!world.isRemote)
+			this.feedFluid();
+	}
+
+	private void feedFluid() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (tile instanceof TileEntityThoriumCore) {
+			int amt = ((TileEntityThoriumCore)tile).feedFluidIn(fuelTank.getFluid(), 0);
+			if (amt > 0) {
+				fuelTank.removeLiquid(amt);
+			}
+
+			amt = ((TileEntityThoriumCore)tile).feedFluidIn(fuelTankOut.getFluid(), 1);
+			if (amt > 0) {
+				fuelTankOut.removeLiquid(amt);
+			}
+
+			amt = ((TileEntityThoriumCore)tile).feedFluidIn(fuelTankOut.getFluid(), 2);
+			if (amt > 0) {
+				wasteTank.removeLiquid(amt);
+			}
+		}
+	}
+
+	private int feedFluidIn(FluidStack is, int tankType) {
+		if (is == null)
+			return 0;
+		HybridTank tank = null;
+		switch(tankType) {
+			case 0:
+				tank = fuelTank;
+				break;
+			case 1:
+				tank = fuelTankOut;
+				break;
+			case 2:
+				tank = wasteTank;
+				break;
+		}
+		if (tank == null)
+			return 0;
+		Fluid f = is.getFluid();
+		if (tank.getActualFluid() != null && tank.getActualFluid() != f)
+			return 0;
+		else {
+			int add = Math.min(tank.getRemainingSpace(), is.amount);
+			tank.addLiquid(add, f);
+			return add;
+		}
+	}
+
+	int dumpFuel(TileEntityFuelDump te, int max) {
+		/*
+		int n = MathHelper.ceiling_double_int(fuelTank.getLevel()/1000D);
+		for (int i = 0; i < n; i++) {
+			world.setBlock(x, y-1-i, z, ReactorBlocks.THORIUM.getBlockInstance());
+		}
+		fuelTank.empty();
+		 */
+		int amt = Math.min(max, fuelTank.getLevel());
+		if (amt > 0) {
+			fuelTank.removeLiquid(amt);
+			ReactorAchievements.THORIUMDUMP.triggerAchievement(this.getPlacer());
+		}
+		return amt;
 	}
 
 	@Override
@@ -133,7 +209,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 		return 25-20*Math.sqrt((temperature-this.getMinTemperature())/(double)(this.getMaxTemperature()-this.getMinTemperature()));
 	}
 
-	private boolean hasFuel() {
+	public boolean hasFuel() {
 		return fuelTank.getLevel() >= CYCLE_AMOUNT;
 	}
 

@@ -45,6 +45,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntitySodiumHeater;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityFuelDump;
 import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
@@ -111,7 +112,8 @@ public enum ReactorTiles implements TileEnum {
 	BIGTURBINE("machine.bigturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityHiPTurbine.class,		7, "RenderBigTurbine"),
 	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser"),
 	THORIUM("machine.thorium",					ReactorBlocks.REACTOR,			TileEntityThoriumCore.class,	12),
-	WASTEPIPE("machine.wastepipe",				ReactorBlocks.DUCT,				TileEntityWastePipe.class,		2);
+	WASTEPIPE("machine.wastepipe",				ReactorBlocks.DUCT,				TileEntityWastePipe.class,		2),
+	FUELDUMP("machine.fueldump",				ReactorBlocks.REACTOR,			TileEntityFuelDump.class,		13);
 
 	private final String name;
 	private final Class teClass;
@@ -253,11 +255,21 @@ public enum ReactorTiles implements TileEnum {
 			case CONTROL:
 			case WASTECONTAINER:
 			case SYNTHESIZER:
+			case FUELDUMP:
 				//case BREEDER:
 				//case TRITIZER:
 				return true;
 			default:
 				return false;
+		}
+	}
+
+	public boolean isTopSameTextureAsBottom() {
+		switch(this) {
+			case FUELDUMP:
+				return false;
+			default:
+				return true;
 		}
 	}
 

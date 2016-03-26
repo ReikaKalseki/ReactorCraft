@@ -52,7 +52,8 @@ public enum ReactorAchievements {
 	MELTPIPE(			-4, 2,	ReactorTiles.MAGNETPIPE,										PLASMA,			false), //s/e
 	FUSION(				-6, 0,	ReactorTiles.MAGNET, 											PLASMA,			true), //fusion event
 	FIFTYGW(			-6, 2,	MachineRegistry.DYNAMOMETER.getCraftedProduct(),				FUSION,			true), //per reactor
-	PEBBLEFAIL(			0,	-4,	ReactorItems.OLDPELLET,											PEBBLE,			true);
+	PEBBLEFAIL(			0,	-4,	ReactorItems.OLDPELLET,											PEBBLE,			true),
+	THORIUMDUMP(		4, 2,	ReactorBlocks.THORIUM.getBlockInstance(),						FISSION,		true),
 	;
 
 	public static final ReactorAchievements[] list = values();

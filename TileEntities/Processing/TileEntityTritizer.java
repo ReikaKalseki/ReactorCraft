@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -70,8 +69,6 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		Block id = world.getBlock(x, y-1, z);
-		int meta = world.getBlockMetadata(x, y-1, z);
 		TileEntity tile = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile instanceof TileEntityTritizer) {
 			int amt = ((TileEntityTritizer)tile).feedIn(input.getFluid(), false);

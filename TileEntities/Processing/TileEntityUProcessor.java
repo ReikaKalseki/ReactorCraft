@@ -34,7 +34,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
-import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -228,8 +227,10 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	private void runOutput(Processes p) {
 		ReikaInventoryHelper.decrStack(2, inv);
-		if (!p.hasIntermediate())
+		if (!p.hasIntermediate()) {
 			ReikaInventoryHelper.decrStack(0, inv);
+			input.drain(p.inputFluidConsumed, true);
+		}
 		output.fill(new FluidStack(p.outputFluid, p.outputFluidProduced), true);
 		intermediate.drain(p.intermediateFluidConsumed, true);
 		if (p == Processes.UF6) {
@@ -381,12 +382,22 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.WATER) || fluid.equals(ReactorCraft.HF);
+		for (int i = 0; i < Processes.list.length; i++) {
+			if (Processes.list[i].inputFluid.equals(fluid))
+				return true;
+			if (Processes.list[i].intermediateFluid != null && Processes.list[i].intermediateFluid.equals(fluid))
+				return true;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(ReactorCraft.UF6);
+		for (int i = 0; i < Processes.list.length; i++) {
+			if (Processes.list[i].outputFluid.equals(fluid))
+				return true;
+		}
+		return false;
 	}
 
 	@Override

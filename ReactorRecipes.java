@@ -19,7 +19,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -76,7 +76,7 @@ public class ReactorRecipes {
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
-		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 20, 1, 100, new KeyedItemStack(ReactorItems.FLUORITE.getItemInstance()), new KeyedItemStack(ReactorStacks.thordust));
+		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 20, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
 	}
 
 	public static void addModInterface() {
@@ -311,6 +311,7 @@ public class ReactorRecipes {
 		ReactorTiles.DIFFUSER.addCrafting("BBB", "DPD", "BBB", 'B', ItemStacks.basepanel, 'D', ItemStacks.diffuser, 'P', ItemStacks.pipe);
 
 		ReactorTiles.THORIUM.addCrafting("aSa", "PCP", "tPt", 't', ItemStacks.tungsteningot, 'a', ItemStacks.silumin, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
+		ReactorTiles.FUELDUMP.addCrafting("pIp", "BPB", "pbp", 'b', Blocks.iron_bars, 'p', ItemStacks.pipe, 'P', ItemStacks.bedpipe, 'B', ItemStacks.basepanel, 'I', ItemStacks.impeller);
 	}
 
 }

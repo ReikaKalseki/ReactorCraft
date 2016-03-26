@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -61,19 +62,20 @@ public class GuiCPU extends ReactorGuiBase {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
+		PacketTarget pt = new PacketTarget.ServerTarget();
 		switch(button.id) {
-		case 0:
-		case 1:
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile);
-			break;
-		case 2:
-			if (layout.getMinY() < offsetY)
-				offsetY--;
-			break;
-		case 3:
-			if (layout.getMaxY() > offsetY)
-				offsetY++;
-			break;
+			case 0:
+			case 1:
+				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile, pt);
+				break;
+			case 2:
+				if (layout.getMinY() < offsetY)
+					offsetY--;
+				break;
+			case 3:
+				if (layout.getMaxY() > offsetY)
+					offsetY++;
+				break;
 		}
 		this.updateScreen();
 	}
@@ -121,7 +123,7 @@ public class GuiCPU extends ReactorGuiBase {
 		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(tile.worldObj, a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod);
+			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), tile, new PacketTarget.ServerTarget());
 			Minecraft.getMinecraft().thePlayer.playSound("random.click", 0.5F, 0.9F);
 		}
 	}

@@ -123,6 +123,7 @@ public enum ReactorOres implements OreEnum {
 			case MAGNETITE:
 				return "gem"+ReikaStringParser.capFirstChar(this.name());
 			case AMMONIUM:
+			case THORIUM:
 				return "dust"+ReikaStringParser.capFirstChar(this.name());
 			default:
 				return "ingot"+ReikaStringParser.capFirstChar(this.name());

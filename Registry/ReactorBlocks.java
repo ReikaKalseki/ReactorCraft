@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.Instantiable.MetadataItemBlock;
 import Reika.DragonAPI.Interfaces.Registry.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.ReactorCraft.ReactorCraft;
@@ -30,6 +31,7 @@ import Reika.ReactorCraft.Blocks.BlockReactorTile;
 import Reika.ReactorCraft.Blocks.BlockReactorTileModelled;
 import Reika.ReactorCraft.Blocks.BlockSteam;
 import Reika.ReactorCraft.Blocks.BlockSteamLine;
+import Reika.ReactorCraft.Blocks.BlockThoriumFuel;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp;
 import Reika.ReactorCraft.Blocks.Multi.BlockFlywheelMulti;
 import Reika.ReactorCraft.Blocks.Multi.BlockGeneratorMulti;
@@ -48,7 +50,6 @@ public enum ReactorBlocks implements BlockEnum {
 	REACTOR(		BlockReactorTile.class, 									"Reactor", 					false),
 	MATS(			BlockReactorMat.class, 			ItemBlockReactorMat.class, 	"Reactor Materials", 		false),
 	CORIUMFLOWING(	BlockCoriumFlowing.class, 									"Molten Corium (Flowing)", 	false),
-	//CORIUMSTILL(	BlockCorium.class, 											"Molten Corium", 			false),
 	MODELREACTOR(	BlockReactorTileModelled.class, 							"ReactorModelled", 			true),
 	MACHINE(		BlockReactorTile.class, 									"Machine", 					false),
 	MODELMACHINE(	BlockReactorTileModelled.class, 							"MachineModelled", 			true),
@@ -64,7 +65,8 @@ public enum ReactorBlocks implements BlockEnum {
 	GENERATORMULTI(	BlockGeneratorMulti.class,		ItemBlockMultiBlock.class,	"multiblock.generator",		false),
 	TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false),
 	FLYWHEELMULTI(	BlockFlywheelMulti.class,		ItemBlockMultiBlock.class,	"multiblock.flywheel",		false),
-	LAMP(			BlockTritiumLamp.class,			ItemBlockLampMulti.class,	"reactor.lamp",				false);
+	LAMP(			BlockTritiumLamp.class,			ItemBlockLampMulti.class,	"reactor.lamp",				false),
+	THORIUM(		BlockThoriumFuel.class, 		MetadataItemBlock.class,	"Thorium Fuel", 			false);
 
 	private Class blockClass;
 	private String blockName;
@@ -103,6 +105,7 @@ public enum ReactorBlocks implements BlockEnum {
 				return Material.rock;
 			case CORIUMFLOWING:
 				//case CORIUMSTILL:
+			case THORIUM:
 				return Material.lava;
 			case REACTOR:
 				return Material.iron;

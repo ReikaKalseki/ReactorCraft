@@ -140,7 +140,12 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 						}
 						else if (r.isEndTextured()) {
 							for (int j = 0; j < 2; j++) {
-								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top"+"_#"+k);
+								String s = "ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top"+"_#"+k;
+								if (j == 0 && !r.isTopSameTextureAsBottom()) {
+									s = "ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_bottom"+"_#"+k;
+								}
+								icons[i][j][k] = ico.registerIcon(s);
+
 							}
 							for (int j = 2; j < 6; j++) {
 								icons[i][j][k] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_#"+k);
@@ -161,7 +166,11 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 					}
 					else if (r.isEndTextured()) {
 						for (int j = 0; j < 2; j++) {
-							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top");
+							String s = "ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_top";
+							if (j == 0 && !r.isTopSameTextureAsBottom()) {
+								s = "ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH)+"_bottom";
+							}
+							icons[i][j][0] = ico.registerIcon(s);
 						}
 						for (int j = 2; j < 6; j++) {
 							icons[i][j][0] = ico.registerIcon("ReactorCraft:"+r.name().toLowerCase(Locale.ENGLISH));

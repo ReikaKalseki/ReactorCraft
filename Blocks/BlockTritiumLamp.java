@@ -25,6 +25,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.TritiumLampRenderer;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -150,6 +151,10 @@ public class BlockTritiumLamp extends Block {
 
 		private int ticks;
 
+		private long createdTime;
+
+		public static final long LIFESPAN = (long)(ReikaTimeHelper.YEAR.getMinecraftDuration()*98.4);
+
 		@Override
 		public boolean canUpdate() {
 			return true;
@@ -160,6 +165,12 @@ public class BlockTritiumLamp extends Block {
 			if (ticks == 0 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= FluoriteTypes.colorList.length) {
 				this.onCreate();
 			}
+			if (!worldObj.isRemote) {
+				if (worldObj.getTotalWorldTime()-createdTime >= LIFESPAN) {
+					this.onBreak();
+					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, worldObj.getBlockMetadata(xCoord, yCoord, zCoord)%FluoriteTypes.colorList.length, 3);
+				}
+			}
 			ticks++;
 		}
 
@@ -169,6 +180,7 @@ public class BlockTritiumLamp extends Block {
 
 			//ReikaJavaLibrary.pConsole("NBT write: "+this+" % "+FMLCommonHandler.instance().getEffectiveSide()+"/"+blocks);
 			blocks.writeToNBT("blocks", NBT);
+			NBT.setLong("created", createdTime);
 		}
 
 		@Override
@@ -176,6 +188,7 @@ public class BlockTritiumLamp extends Block {
 			super.readFromNBT(NBT);
 
 			blocks.readFromNBT("blocks", NBT);
+			createdTime = NBT.getLong("created");
 			//ReikaJavaLibrary.pConsole("NBT read: "+this+" % "+blocks);
 		}
 
@@ -225,21 +238,27 @@ public class BlockTritiumLamp extends Block {
 
 		private void onCreate() {
 			if (!worldObj.isRemote) {
-				int r = 16;
-				for (int i = -r; i <= r; i++) {
-					for (int j = -r; j <= r; j++) {
-						for (int k = -r; k <= r; k++) {
-							if (ReikaMathLibrary.py3d(i, j, k) <= r) {
-								int x = xCoord+i;
-								int y = yCoord+j;
-								int z = zCoord+k;
-								if (worldObj.getBlock(x, y, z).isAir(worldObj, x, y, z)) {
-									worldObj.setBlock(x, y, z, BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
-									worldObj.markBlockForUpdate(x, y, z);
-									blocks.addBlockCoordinate(x, y, z);
-								}
-								else {
 
+				if (createdTime == 0)
+					createdTime = worldObj.getTotalWorldTime();
+
+				if (worldObj.getTotalWorldTime()-createdTime < LIFESPAN) {
+					int r = 16;
+					for (int i = -r; i <= r; i++) {
+						for (int j = -r; j <= r; j++) {
+							for (int k = -r; k <= r; k++) {
+								if (ReikaMathLibrary.py3d(i, j, k) <= r) {
+									int x = xCoord+i;
+									int y = yCoord+j;
+									int z = zCoord+k;
+									if (worldObj.getBlock(x, y, z).isAir(worldObj, x, y, z)) {
+										worldObj.setBlock(x, y, z, BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
+										worldObj.markBlockForUpdate(x, y, z);
+										blocks.addBlockCoordinate(x, y, z);
+									}
+									else {
+
+									}
 								}
 							}
 						}
@@ -247,6 +266,11 @@ public class BlockTritiumLamp extends Block {
 				}
 				//ReikaJavaLibrary.pConsole("Create: "+this+" % "+blocks);
 			}
+		}
+
+		@Override
+		public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+			return oldBlock != newBlock || oldMeta%FluoriteTypes.colorList.length != newMeta%FluoriteTypes.colorList.length;
 		}
 
 	}

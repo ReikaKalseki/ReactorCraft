@@ -167,9 +167,9 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
 
-	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800).setTemperature(773);
-	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850).setTemperature(773);
-	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800).setTemperature(1273).setLuminosity(8);
+	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800*3).setTemperature(773);
+	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850*3).setTemperature(773);
+	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800*3).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
 
@@ -352,15 +352,15 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
-		SensitiveItemRegistry.instance.registerItem(ReactorItems.FUEL.getItemInstance());
-		SensitiveItemRegistry.instance.registerItem(ReactorItems.BREEDERFUEL.getItemInstance());
-		SensitiveItemRegistry.instance.registerItem(ReactorItems.PLUTONIUM.getItemInstance());
-		SensitiveItemRegistry.instance.registerItem(ReactorItems.THORIUM.getItemInstance());
-		SensitiveItemRegistry.instance.registerItem(ReactorItems.PELLET.getItemInstance());
-		SensitiveItemRegistry.instance.registerItem(ReactorStacks.fueldust);
-		SensitiveItemRegistry.instance.registerItem(ReactorStacks.thordust);
-		SensitiveItemRegistry.instance.registerItem(CraftingItems.ALLOY.getItem());
-		SensitiveItemRegistry.instance.registerItem(CraftingItems.FERROINGOT.getItem());
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.FUEL.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.BREEDERFUEL.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PLUTONIUM.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.THORIUM.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PELLET.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.fueldust, true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.thordust, true);
+		SensitiveItemRegistry.instance.registerItem(this, CraftingItems.ALLOY.getItem(), false);
+		SensitiveItemRegistry.instance.registerItem(this, CraftingItems.FERROINGOT.getItem(), false);
 
 		SensitiveFluidRegistry.instance.registerFluid("rc fusion plasma");
 		SensitiveFluidRegistry.instance.registerFluid("rc deuterium");
@@ -376,6 +376,10 @@ public class ReactorCraft extends DragonAPIMod {
 		SensitiveFluidRegistry.instance.registerFluid("rc co2");
 		SensitiveFluidRegistry.instance.registerFluid("rc hot co2");
 		SensitiveFluidRegistry.instance.registerFluid("rc corium");
+		SensitiveFluidRegistry.instance.registerFluid("rc lithium");
+		SensitiveFluidRegistry.instance.registerFluid("rc lifbe");
+		SensitiveFluidRegistry.instance.registerFluid("rc lifbe fuel");
+		SensitiveFluidRegistry.instance.registerFluid("rc hot lifbe");
 
 		this.finishTiming();
 	}

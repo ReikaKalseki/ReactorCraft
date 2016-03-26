@@ -22,6 +22,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@Deprecated
 public class BlockCorium extends BlockStaticLiquid {
 
 	private IIcon[] icon;
