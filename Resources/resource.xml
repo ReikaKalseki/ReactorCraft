@@ -15,9 +15,6 @@
 	<plutonium>
 		Plutonium is an alternate, artificial fuel for nuclear fission reactors. Plutonium is extremely dangerous and more volatile than uranium, and must be used and handled with extreme care.
 	</plutonium>
-	<thorium>
-		Thorium is another alternate reactor fuel.
-	</thorium>
 	<breederfuel>
 		Breeder reactors require a special kind of fuel - standard enriched uranium wrapped in a layer of depleted uranium. Over time, the reactor's neutrons will convert this into plutonium.
 	</breederfuel>

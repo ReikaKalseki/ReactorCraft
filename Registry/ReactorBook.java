@@ -85,6 +85,10 @@ public enum ReactorBook implements HandbookEntry {
 	BREEDERCORE(ReactorTiles.BREEDER),
 	SODIUMHEATER(ReactorTiles.SODIUMBOILER),
 
+	THORIUMDESC("Thorium Reactor Components", ""),
+	THORIUM(ReactorTiles.THORIUM),
+	FUELDUMP(ReactorTiles.FUELDUMP),
+
 	FUSIONDESC("Fusion Reactor Components", ""),
 	FUSIONHEATER(ReactorTiles.HEATER),
 	FUSIONINJECTOR(ReactorTiles.INJECTOR),
@@ -117,8 +121,8 @@ public enum ReactorBook implements HandbookEntry {
 	DEPLETED(ReactorItems.DEPLETED),
 	WASTE(ReactorItems.WASTE),
 	PLUTONIUM(ReactorItems.PLUTONIUM),
-	THORIUM(ReactorItems.THORIUM),
 	BREEDERFUEL(ReactorItems.BREEDERFUEL),
+	//THORIUMFUEL(ReactorItems.THORIUM),
 	MAGNET(ReactorItems.MAGNET),
 	PELLET(ReactorItems.PELLET),
 	OLDPELLET(ReactorItems.OLDPELLET);

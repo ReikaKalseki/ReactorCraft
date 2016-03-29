@@ -28,6 +28,7 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityFuelRod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fission.Breeder.TileEntityBreederCore;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
@@ -228,5 +229,6 @@ public final class ReactorDescriptions {
 		addData(ReactorTiles.FLUIDEXTRACTOR, TileEntityHeavyPump.HeavyWaterExtraction.MAXY, TileEntityHeavyPump.HeavyWaterExtraction.MINDEPTH);
 		addNotes(ReactorTiles.FLUIDEXTRACTOR, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
 		addNotes(ReactorTiles.TURBINEMETER, TileEntityTurbineCore.GEN_OMEGA, TileEntityHiPTurbine.GEN_OMEGA);
+		addData(ReactorTiles.FUELDUMP, TileEntityThoriumCore.FUEL_DUMP_TEMPERATURE);
 	}
 }

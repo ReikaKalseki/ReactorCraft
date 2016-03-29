@@ -339,4 +339,20 @@
 
 		</note>
 	</diffuser>
+	<thorium>
+		<desc>
+			Thorium reactor cores use molten thorium fuel salts to generate electricity. Rather unique compared to other fission reactors, they are not self-sufficient and require neutron flux in order to start. Additionally, the temperature-dependent neutron fertility means that as the temperature rises, they become less reactive, as a natural safeguard. The thorium fuel cycle also produces less waste than that of uranium.
+		</desc>
+		<note>
+
+		</note>
+	</thorium>
+	<fueldump>
+		<desc>
+			In the event of exceeding a critical temperature of %dC, a thorium reactor will trigger an emergency fuel dump in order to avoid a meltdown. This can cause a radiation leak, and is to be avoided if possible.
+		</desc>
+		<note>
+
+		</note>
+	</fueldump>
 </machines>
