@@ -300,7 +300,7 @@ public class ReactorRecipes {
 		ReactorTiles.COLLECTOR.addCrafting(" p ", "SpS", "PpP", 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 		ReactorTiles.REFLECTOR.addCrafting("GGG", "GSG", "GGG", 'G', CraftingItems.GRAPHITE.getItem(), 'S', ItemStacks.steelblock);
 
-		if (PowerTypes.RF.exists() || PowerTypes.EU.exists())
+		if (PowerTypes.RF.isLoaded() || PowerTypes.EU.isLoaded())
 			ReactorTiles.GENERATOR.addCrafting("RGR", "GFG", "RGR", 'G', CraftingItems.WIRE.getItem(), 'R', Items.redstone, 'F', CraftingItems.MAGNETCORE.getItem());
 
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Blocks.redstone_torch);
@@ -312,6 +312,8 @@ public class ReactorRecipes {
 
 		ReactorTiles.THORIUM.addCrafting("aSa", "PCP", "tPt", 't', ItemStacks.tungsteningot, 'a', ItemStacks.silumin, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
 		ReactorTiles.FUELDUMP.addCrafting("pIp", "BPB", "pbp", 'b', Blocks.iron_bars, 'p', ItemStacks.pipe, 'P', ItemStacks.bedpipe, 'B', ItemStacks.basepanel, 'I', ItemStacks.impeller);
+
+		ReactorTiles.WASTEPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CbC", "CGC", "CbC", 'C', MatBlocks.CONCRETE.getStackOf(), 'b', Blocks.iron_bars, 'G', Blocks.glass);
 	}
 
 }

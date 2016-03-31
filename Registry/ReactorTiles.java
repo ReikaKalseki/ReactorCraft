@@ -181,7 +181,7 @@ public enum ReactorTiles implements TileEnum {
 
 	public boolean isAvailableInCreativeInventory() {
 		if (this == GENERATOR)
-			return PowerTypes.RF.exists();
+			return PowerTypes.RF.isLoaded();
 		return true;
 	}
 

@@ -117,7 +117,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 				fuelTankOut.removeLiquid(amt);
 			}
 
-			amt = ((TileEntityThoriumCore)tile).feedFluidIn(fuelTankOut.getFluid(), 2);
+			amt = ((TileEntityThoriumCore)tile).feedFluidIn(wasteTank.getFluid(), 2);
 			if (amt > 0) {
 				wasteTank.removeLiquid(amt);
 			}
@@ -296,7 +296,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m.isStandardPipe();
+		return m.isStandardPipe() || m == MachineRegistry.FUELLINE;
 	}
 
 	@Override

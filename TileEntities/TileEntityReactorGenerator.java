@@ -254,7 +254,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		}
 
 		public boolean exists() {
-			return type.exists();
+			return type.isLoaded();
 		}
 	}
 
