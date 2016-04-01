@@ -18,12 +18,15 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
 public class TileEntityWastePipe extends TileEntityReactorPiping implements NeutronTile {
 
@@ -74,6 +77,15 @@ public class TileEntityWastePipe extends TileEntityReactorPiping implements Neut
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
+	}
+
+	@Override
+	protected boolean isInteractableTile(TileEntity te) {
+		return te instanceof WorldRift || this.isWasteAcceptingBlock(te);
+	}
+
+	private boolean isWasteAcceptingBlock(TileEntity te) {
+		return te instanceof TileEntityWastePipe || te instanceof TileEntityThoriumCore || te instanceof TileEntityCrystallizer;
 	}
 
 }

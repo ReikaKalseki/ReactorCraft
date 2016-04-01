@@ -33,8 +33,10 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityWastePipe;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -181,7 +183,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (e.getType().canTriggerFission() && ReikaRandomHelper.doWithChance(this.getNeutronInteractionChance())) {
+			if (e.getType().canTriggerFission() && e.getType() != NeutronType.BREEDER && ReikaRandomHelper.doWithChance(this.getNeutronInteractionChance())) {
 				if (this.checkPoisonedChance())
 					return true;
 				if (ReikaRandomHelper.doWithChance(this.getNeutronChance()) && this.hasFuel()) {
@@ -260,7 +262,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		if (this.canDrain(from, resource.getFluid())) {
-			return from.offsetY == 0 ? wasteTank.drain(resource.amount, doDrain) : fuelTankOut.drain(resource.amount, doDrain);
+			return from.offsetY == 0 ? this.isWastePipe(from) ? wasteTank.drain(resource.amount, doDrain) : null : fuelTankOut.drain(resource.amount, doDrain);
 		}
 		return null;
 	}
@@ -268,9 +270,13 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		if (this.canDrain(from, null)) {
-			return from.offsetY == 0 ? wasteTank.drain(maxDrain, doDrain) : fuelTankOut.drain(maxDrain, doDrain);
+			return from.offsetY == 0 ? this.isWastePipe(from) ? wasteTank.drain(maxDrain, doDrain) : null : fuelTankOut.drain(maxDrain, doDrain);
 		}
 		return null;
+	}
+
+	private boolean isWastePipe(ForgeDirection from) {
+		return this.getAdjacentTileEntity(from) instanceof TileEntityWastePipe;
 	}
 
 	@Override
