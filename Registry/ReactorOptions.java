@@ -14,9 +14,10 @@ import net.minecraftforge.common.config.Property;
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
 import Reika.DragonAPI.Interfaces.Configuration.BoundedConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
+import Reika.DragonAPI.Interfaces.Configuration.UserSpecificConfig;
 import Reika.ReactorCraft.ReactorCraft;
 
-public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfig {
+public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfig, UserSpecificConfig {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
@@ -125,6 +126,16 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 				return "(1-100)";
 			default:
 				return "";
+		}
+	}
+
+	@Override
+	public boolean isUserSpecific() {
+		switch(this) {
+			case VISIBLENEUTRONS:
+				return true;
+			default:
+				return false;
 		}
 	}
 

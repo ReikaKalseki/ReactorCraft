@@ -34,8 +34,8 @@ import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 
 public class ItemRadiationCleaner extends ItemReactorTool implements ChargeableTool {
 
-	private static final int CAPACITY = 4000;
-	private static final int WATER_PER_TICK = 5;
+	private static final int CAPACITY = 32000;
+	private static final int WATER_PER_TICK = 25;
 	private static final int TICK_PER_KJ = 5;
 
 	public ItemRadiationCleaner(int tex) {

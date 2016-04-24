@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -22,6 +23,7 @@ import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -99,6 +101,11 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 	public void applyEntityCollision(Entity e) {
 		int dmg = e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(Potion.fireResistance) ? 4 : Integer.MAX_VALUE;
 		e.attackEntityFrom(ReactorCraft.fusionDamage, dmg);
+		if (e instanceof EntityPlayer) {
+			if (e.isDead || ((EntityLivingBase)e).getHealth() <= 0) {
+				ReactorAchievements.PLASMADIE.triggerAchievement((EntityPlayer)e);
+			}
+		}
 	}
 
 	@Override

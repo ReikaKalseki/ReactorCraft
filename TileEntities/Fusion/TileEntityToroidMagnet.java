@@ -559,7 +559,7 @@ ChunkLoadingTile, NeutronTile {
 
 	@Override
 	public Collection<ChunkCoordIntPair> getChunksToLoad() {
-		return ChunkManager.instance.getChunkSquare(xCoord, yCoord, 2);
+		return ChunkManager.instance.getChunkSquare(xCoord, zCoord, 2);
 	}
 
 	public boolean isActive() {

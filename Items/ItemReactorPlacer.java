@@ -219,7 +219,7 @@ public class ItemReactorPlacer extends Item implements ISize {
 		if (ReactorTiles.TEList[is.getItemDamage()] == ReactorTiles.TURBINECORE) {
 			int meta = RotaryAux.get4SidedMetadataFromPlayerLook(ep);
 			BlockArray contact = new BlockArray();
-			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
+			//AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
 			int r = 3;
 			switch(meta) {
 				case 2:

@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -72,6 +73,7 @@ import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.RadiationDamage;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationFluidEffect;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
@@ -656,6 +658,16 @@ public class ReactorCraft extends DragonAPIMod {
 	public void noTelepose(TeleposeEvent evt) {
 		if (!this.isMovable(evt.getInitialTile()) || !this.isMovable(evt.getFinalTile()))
 			evt.setCanceled(true);
+	}
+
+	@SubscribeEvent
+	@ModDependent(ModList.IC2)
+	public void radiationProtection(LivingHurtEvent evt) {
+		if (evt.source.damageType.contains("radiation")) {
+			if (RadiationEffects.instance.hasHazmatSuit(evt.entityLiving)) {
+				evt.setCanceled(true);
+			}
+		}
 	}
 
 	private boolean isMovable(TileEntity te) {

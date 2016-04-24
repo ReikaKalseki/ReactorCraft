@@ -149,9 +149,9 @@ public enum ReactorBlocks implements BlockEnum {
 			case ORE:
 				return ReactorOres.oreList[meta].oreName;
 			case FLUORITE:
-				return FluoriteTypes.colorList[meta].getBlockName();
+				return FluoriteTypes.colorList[meta%8].getBlockName();
 			case FLUORITEORE:
-				return FluoriteTypes.colorList[meta].getOreName();
+				return FluoriteTypes.colorList[meta%8].getOreName();
 			case LAMP:
 				return FluoriteTypes.colorList[meta].getName()+" "+StatCollector.translateToLocal(this.getBasicName());
 			default:

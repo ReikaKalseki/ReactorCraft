@@ -33,6 +33,7 @@ public class GuiCentrifuge extends ReactorGuiBase {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+		super.drawGuiContainerForegroundLayer(par1, par2);
 		ReikaTextureHelper.bindFontTexture();
 
 		int j = (width - xSize) / 2;

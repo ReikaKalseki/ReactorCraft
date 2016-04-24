@@ -48,7 +48,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 	}
 
 	private int getMetaDropped(int metadata) {
-		return ReactorOptions.RAINBOW.getState() ? rand.nextInt(FluoriteTypes.colorList.length) : metadata;
+		return ReactorOptions.RAINBOW.getState() ? rand.nextInt(FluoriteTypes.colorList.length) : metadata%8;
 	}
 
 	private int getNumberDrops(int fortune) {
@@ -71,7 +71,7 @@ public class BlockFluoriteOre extends BlockFluorite {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition tgt, World world, int x, int y, int z)
 	{
-		int meta = world.getBlockMetadata(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z)%8;
 		return new ItemStack(ReactorBlocks.FLUORITEORE.getBlockInstance(), 1, meta);
 	}
 

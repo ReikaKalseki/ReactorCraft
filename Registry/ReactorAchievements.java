@@ -54,6 +54,7 @@ public enum ReactorAchievements {
 	FIFTYGW(			-6, 2,	MachineRegistry.DYNAMOMETER.getCraftedProduct(),				FUSION,			true), //per reactor
 	PEBBLEFAIL(			0,	-4,	ReactorItems.OLDPELLET,											PEBBLE,			true),
 	THORIUMDUMP(		4, 2,	ReactorBlocks.THORIUM.getBlockInstance(),						FISSION,		true),
+	PLASMADIE(			-4, -4,	new ItemStack(Items.skull, 1, 1),								ESCAPE,			false),
 	;
 
 	public static final ReactorAchievements[] list = values();

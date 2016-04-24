@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 /** Reactor core blocks only. */
-public interface Temperatured {
+public interface Temperatured extends ThermalTile {
 
 	public abstract int getTemperature();
 

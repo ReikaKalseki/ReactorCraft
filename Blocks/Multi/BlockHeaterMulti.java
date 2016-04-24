@@ -89,7 +89,8 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 						int dy = blocks.getMinY()+j;
 						int dz = blocks.getMinZ()+k;
 						if (block == null) {
-							if (MachineRegistry.getMachine(blocks.world, dx, dy, dz) != MachineRegistry.PIPE)
+							MachineRegistry m = MachineRegistry.getMachine(blocks.world, dx, dy, dz);
+							if (m == null || !m.isStandardPipe())
 								return false;
 						}
 						else {
@@ -108,7 +109,7 @@ public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent
 									if (meta == 0)
 										lens++;
 								}
-								else if (MachineRegistry.getMachineFromIDandMetadata(id, meta) == MachineRegistry.PIPE) {
+								else if (MachineRegistry.getMachineFromIDandMetadata(id, meta) != null && MachineRegistry.getMachineFromIDandMetadata(id, meta).isStandardPipe()) {
 									if (j != 2)
 										return false;
 								}

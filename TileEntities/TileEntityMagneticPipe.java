@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -101,6 +102,21 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
+			TileEntity te = world.getTileEntity(dx, dy, dz);
+
+			if (te instanceof WorldRift) {
+				WorldLocation loc = ((WorldRift)te).getLinkTarget();
+				if (loc != null) {
+					te = ((WorldRift)te).getTileEntityFrom(dir);
+					if (te == null)
+						continue;
+					dx = te.xCoord;
+					dy = te.yCoord;
+					dz = te.zCoord;
+					world = te.worldObj;
+				}
+			}
+
 			ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 			if (r == ReactorTiles.MAGNETPIPE) {
 				TileEntityMagneticPipe tile = (TileEntityMagneticPipe)world.getTileEntity(dx, dy, dz);

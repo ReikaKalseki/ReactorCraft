@@ -81,7 +81,7 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	private boolean canMake() {
-		return this.hasMultiBlock() && temperature >= PLASMA_TEMP && !h2.isEmpty() && !h3.isEmpty() && tank.canTakeIn(100);
+		return this.hasMultiBlock() && temperature >= PLASMA_TEMP && h2.getLevel() >= 50 && h3.getLevel() >= 50 && tank.canTakeIn(100);
 	}
 
 	private void make() {
