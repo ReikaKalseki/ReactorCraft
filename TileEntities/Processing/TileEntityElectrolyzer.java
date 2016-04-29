@@ -513,4 +513,14 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		return false;
 	}
 
+	@Override
+	public float getMultiplier() {
+		return 0.5F;
+	}
+
+	@Override
+	public void resetAmbientTemperatureTimer() {
+		tempTimer.reset();
+	}
+
 }

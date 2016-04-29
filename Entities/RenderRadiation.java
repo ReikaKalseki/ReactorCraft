@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -35,6 +34,7 @@ public class RenderRadiation extends Render {
 		ItemStack helmet = cam.inventory.armorInventory[3];
 		if (helmet != null && helmet.getItem() == ReactorItems.GOGGLES.getItemInstance()) {
 			GL11.glPushMatrix();
+			GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 			GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 			Tessellator v5 = Tessellator.instance;
 			float var16 = 1.0F;
@@ -69,14 +69,8 @@ public class RenderRadiation extends Render {
 			v5.draw();
 			//ReikaJavaLibrary.pConsole(er.getRange());
 
-			GL11.glTranslated(0.5, 0.5, 0);
-			GL11.glScaled(1D/size, 1D/size, 1);
-			ReikaRenderHelper.enableLighting();
 			//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopAttrib();
 			GL11.glPopMatrix();
 		}
 	}

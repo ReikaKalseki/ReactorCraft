@@ -328,4 +328,14 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		return side.offsetY == 0 ? Flow.INPUT : Flow.OUTPUT;
 	}
 
+	@Override
+	public float getMultiplier() {
+		return 1;
+	}
+
+	@Override
+	public void resetAmbientTemperatureTimer() {
+		tempTimer.reset();
+	}
+
 }
