@@ -190,7 +190,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 		if (p == null)
 			return null;
 		if (p.hasIntermediate() && !this.hasFluorite())
-			return null;
+			;//return null;
 		if (!this.hasInputItem(p))
 			;//return null;
 		return p;

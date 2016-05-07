@@ -9,7 +9,7 @@
 	<geiger>
 		The geiger counter can detect radiation, and will click more intensely as radiation levels rise.
 	</geiger>
-	<cleaner>
+	<cleanup>
 		The radiation cleaning tool sprays water over an area to wash away radioactive particles, slowly cleaning it of radiation.
-	</cleaner>
+	</cleanup>
 </tools>

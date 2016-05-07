@@ -46,27 +46,19 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	private NeutronType type;
 
 	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
-		super(world);
+		super(world, x, y, z, f);
 		if (type == null)
 			Thread.dumpStack();
-		this.setLocationAndAngles(x+0.5, y+0.5, z+0.5, 0, 0);
-		motionX = f.offsetX*this.getSpeed();
-		motionY = f.offsetY*this.getSpeed();
-		motionZ = f.offsetZ*this.getSpeed();
-		oldBlockX = x;
-		oldBlockY = y;
-		oldBlockZ = z;
 		height = 1;
 		this.type = type;
 	}
 
-	public EntityNeutron(World par1World) {
-		super(par1World);
+	public EntityNeutron(World world) {
+		super(world);
 	}
 
 	@Override
-	public void applyEntityCollision(Entity e)
-	{
+	public void applyEntityCollision(Entity e) {
 		if (ReikaRandomHelper.doWithChance(12.5)) {
 			if (e instanceof EntityLivingBase) {
 				RadiationEffects.instance.applyPulseEffects((EntityLivingBase)e, RadiationIntensity.MODERATE);
@@ -76,11 +68,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public boolean onEnterBlock(World world, int x, int y, int z) {
-		oldBlockX = x;
-		oldBlockY = y;
-		oldBlockZ = z;
-
+	protected boolean onEnterBlock(World world, int x, int y, int z) {
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
@@ -239,6 +227,16 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound NBT) {
 		NBT.setInteger("ntype", this.getType().ordinal());
+	}
+
+	@Override
+	public boolean canInteractWithSpawnLocation() {
+		return false;
+	}
+
+	@Override
+	public boolean despawnOverDistance() {
+		return false;
 	}
 
 }

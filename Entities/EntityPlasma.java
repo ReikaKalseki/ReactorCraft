@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -25,16 +23,11 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpawnData, CustomFanEntity {
+public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 
 	private int targetX;
 	private int targetZ;
-
-	private double originX;
-	private double originY;
-	private double originZ;
 
 	public int magnetOrdinal = -1;
 
@@ -48,9 +41,6 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 
 	public EntityPlasma(World world, double x, double y, double z, String placer) {
 		super(world);
-		originX = x;
-		originY = y;
-		originZ = z;
 		this.setPosition(x, y, z);
 
 		placerOfInjector = placer;
@@ -115,35 +105,15 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 		if (!worldObj.isRemote && !this.hasEscapedSeverely() && rand.nextInt(this.hasEscaped() ? 48 : 12) == 0)
 			this.checkFusion();
 		motionY = 0;
-		posY = originY;
+		if (this.getSpawnLocation() != null)
+			posY = this.getSpawnLocation().yCoord;
 
 		escapeTicks++;
-
-		if (this.getDistanceFromSpawn() > 100)
-			this.setDead();
-	}
-
-	private double getDistanceFromSpawn() {
-		return Math.abs(originX-posX)+Math.abs(originY-posY)+Math.abs(originZ-posZ);
 	}
 
 	@Override
 	public double getHitboxSize() {
 		return 0.5;
-	}
-
-	@Override
-	public void writeSpawnData(ByteBuf data) {
-		data.writeDouble(originX);
-		data.writeDouble(originY);
-		data.writeDouble(originZ);
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf data) {
-		originX = data.readDouble();
-		originY = data.readDouble();
-		originZ = data.readDouble();
 	}
 
 	@Override
@@ -171,6 +141,21 @@ public class EntityPlasma extends ParticleEntity implements IEntityAdditionalSpa
 
 	public boolean hasEscapedSeverely() {
 		return escapeTicks >= 12; //was 8
+	}
+
+	@Override
+	public boolean canInteractWithSpawnLocation() {
+		return false;
+	}
+
+	@Override
+	public boolean despawnOverDistance() {
+		return false;
+	}
+
+	@Override
+	protected double getDespawnDistance() {
+		return 100;
 	}
 
 }
