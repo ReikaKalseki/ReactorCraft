@@ -89,7 +89,7 @@ ToggleTile {
 	}
 
 	private void createPlasma(World world, int x, int y, int z) {
-		EntityPlasma e = new EntityPlasma(world, x+0.5, y+0.5, z+0.5, placer);
+		EntityPlasma e = new EntityPlasma(world, x, y, z, placer);
 		e.setTarget(x+this.getFacing().offsetX, z+this.getFacing().offsetZ);
 		if (!world.isRemote)
 			world.spawnEntityInWorld(e);

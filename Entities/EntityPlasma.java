@@ -18,6 +18,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ParticleEntity;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -39,9 +40,8 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 		super(world);
 	}
 
-	public EntityPlasma(World world, double x, double y, double z, String placer) {
-		super(world);
-		this.setPosition(x, y, z);
+	public EntityPlasma(World world, int x, int y, int z, String placer) {
+		super(world, x, y, z);
 
 		placerOfInjector = placer;
 	}
@@ -74,7 +74,7 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 	}
 
 	private void checkFusion() {
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(1, 1, 1);
+		AxisAlignedBB box = ReikaAABBHelper.getEntityCenteredAABB(this, 1);
 		List<EntityPlasma> li = worldObj.getEntitiesWithinAABB(EntityPlasma.class, box);
 		if (li.size() >= this.getFusionThreshold() && !li.get(0).hasEscaped() && !li.get(li.size()-1).hasEscaped()) {
 			EntityFusion fus = new EntityFusion(worldObj, posX, posY, posZ, placerOfInjector);
