@@ -12,6 +12,4 @@ package Reika.ReactorCraft.Auxiliary;
 
 public interface ReactorCoreTE extends ReactorBlock, Temperatured, NeutronTile {
 
-
-
 }

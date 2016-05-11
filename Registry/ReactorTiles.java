@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
 import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
@@ -393,6 +394,10 @@ public enum ReactorTiles implements TileEnum {
 
 	public boolean isMultiblock() {
 		return MultiBlockTile.class.isAssignableFrom(teClass);
+	}
+
+	public boolean isReactorCore() {
+		return ReactorCoreTE.class.isAssignableFrom(teClass);
 	}
 
 
