@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
-import java.awt.Color;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -25,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ReactorControlLayout {
 
-	private final TileEntityCPU controller;
+	private WorldLocation controller;
 
 	private final TileEntityCache<TileEntityControlRod> controls = new TileEntityCache();
 	private int minX = Integer.MAX_VALUE;
@@ -36,7 +35,7 @@ public class ReactorControlLayout {
 	private int maxZ = Integer.MIN_VALUE;
 
 	public ReactorControlLayout(TileEntityCPU cpu) {
-		controller = cpu;
+		controller = new WorldLocation(cpu);
 	}
 
 	public int getSizeX() {
@@ -52,22 +51,19 @@ public class ReactorControlLayout {
 	}
 
 	public void addControlRod(TileEntityControlRod rod) {
-		int x = this.getXPosition(rod);
-		int y = this.getYPosition(rod);
-		int z = this.getZPosition(rod);
-		if (minX > x)
-			minX = x;
-		if (maxX < x)
-			maxX = x;
-		if (minY > y)
-			minY = y;
-		if (maxY < y)
-			maxY = y;
-		if (minZ > z)
-			minZ = z;
-		if (maxZ < z)
-			maxZ = z;
-		controls.put(new WorldLocation(rod.worldObj, x, y, z), rod);
+		if (minX > rod.xCoord)
+			minX = rod.xCoord;
+		if (maxX < rod.xCoord)
+			maxX = rod.xCoord;
+		if (minY > rod.yCoord)
+			minY = rod.yCoord;
+		if (maxY < rod.yCoord)
+			maxY = rod.yCoord;
+		if (minZ > rod.zCoord)
+			minZ = rod.zCoord;
+		if (maxZ < rod.zCoord)
+			maxZ = rod.zCoord;
+		controls.put(rod);
 	}
 
 	public boolean hasControlRodAtRelativePosition(World world, int x, int y, int z) {
@@ -79,59 +75,47 @@ public class ReactorControlLayout {
 	}
 
 	public TileEntityControlRod getControlRodAtRelativePosition(World world, int x, int y, int z) {
-		return controls.get(new WorldLocation(world, x, y, z));
+		return controls.get(new WorldLocation(world, x+controller.xCoord, y+controller.yCoord, z+controller.zCoord));
 	}
 
 	public TileEntityControlRod getControlRodAtAbsolutePosition(World world, int x, int y, int z) {
-		return controls.get(new WorldLocation(world, x-controller.xCoord, y-controller.yCoord, z-controller.zCoord));
-	}
-
-	private int getXPosition(TileEntityControlRod rod) {
-		return rod.xCoord-controller.xCoord;
-	}
-
-	private int getYPosition(TileEntityControlRod rod) {
-		return rod.yCoord-controller.yCoord;
-	}
-
-	private int getZPosition(TileEntityControlRod rod) {
-		return rod.zCoord-controller.zCoord;
+		return controls.get(new WorldLocation(world, x, y, z));
 	}
 
 	public int getMinX() {
-		return minX;
+		return minX-controller.xCoord;
 	}
 
 	public int getMaxX() {
-		return maxX;
+		return maxX-controller.xCoord;
 	}
 
 	public int getMinY() {
-		return minY;
+		return minY-controller.yCoord;
 	}
 
 	public int getMaxY() {
-		return maxY;
+		return maxY-controller.yCoord;
 	}
 
 	public int getMinZ() {
-		return minZ;
+		return minZ-controller.zCoord;
 	}
 
 	public int getMaxZ() {
-		return maxZ;
+		return maxZ-controller.zCoord;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Color getDisplayColorAtRelativePosition(World world, int x, int y, int z) {
+	public int getDisplayColorAtRelativePosition(World world, int x, int y, int z) {
 		TileEntityControlRod rod = this.getControlRodAtRelativePosition(world, x, y, z);
 		if (rod != null) {
-			if (controller.getPower() >= this.getMinPower())
-				return rod.isActive() ? Color.GREEN : Color.RED;
+			if (((TileEntityCPU)controller.getTileEntity()).getPower() >= this.getMinPower())
+				return rod.isActive() ? 0x00ff00 : 0xff0000;
 			else
-				return Color.GRAY;
+				return 0xa0a0a0;
 		}
-		return Color.DARK_GRAY;
+		return 0x6a6a6a;
 	}
 
 	public long getMinPower() {
@@ -162,7 +146,12 @@ public class ReactorControlLayout {
 
 	public void clear() {
 		controls.clear();
-		maxX = minX = maxZ = minZ = 0;
+		minX = Integer.MAX_VALUE;
+		minY = Integer.MAX_VALUE;
+		minZ = Integer.MAX_VALUE;
+		maxX = Integer.MIN_VALUE;
+		maxY = Integer.MIN_VALUE;
+		maxZ = Integer.MIN_VALUE;
 	}
 
 	public int getNumberRods() {
@@ -189,10 +178,24 @@ public class ReactorControlLayout {
 
 	public void writeToNBT(NBTTagCompound NBT) {
 		controls.writeToNBT(NBT);
+		controller.writeToNBT("control", NBT);
+		NBT.setInteger("maxx", maxX);
+		NBT.setInteger("maxy", maxY);
+		NBT.setInteger("maxz", maxZ);
+		NBT.setInteger("minx", minX);
+		NBT.setInteger("miny", minY);
+		NBT.setInteger("minz", minZ);
 	}
 
 	public void readFromNBT(NBTTagCompound NBT) {
 		controls.readFromNBT(NBT);
+		controller = WorldLocation.readFromNBT("control", NBT);
+		maxX = NBT.getInteger("maxx");
+		maxY = NBT.getInteger("maxy");
+		maxZ = NBT.getInteger("maxz");
+		minX = NBT.getInteger("minx");
+		minY = NBT.getInteger("miny");
+		minZ = NBT.getInteger("minz");
 	}
 
 }

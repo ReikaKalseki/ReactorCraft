@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.ReactorCraft.GUIs;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -92,6 +90,7 @@ public class GuiCPU extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
+		layout = tile.getLayout();
 		int r = BUTTON_SIZE;
 		int s = BUTTON_SPACE;
 		int ox = 1+xSize/2-s/2-1;
@@ -99,10 +98,10 @@ public class GuiCPU extends ReactorGuiBase {
 		for (int a = layout.getMinX(); a <= layout.getMaxX(); a++) {
 			for (int b = layout.getMinZ(); b <= layout.getMaxZ(); b++) {
 				if (a != 0 || b != 0) {
-					Color c = layout.getDisplayColorAtRelativePosition(tile.worldObj, a, offsetY, b);
+					int c = layout.getDisplayColorAtRelativePosition(tile.worldObj, a, offsetY, b);
 					int x = ox+a*s;
 					int y = oy+b*s;
-					this.drawRect(x, y, x+r, y+r, c.getRGB());
+					this.drawRect(x, y, x+r, y+r, 0xff000000 | c);
 				}
 			}
 		}
@@ -123,7 +122,7 @@ public class GuiCPU extends ReactorGuiBase {
 		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(tile.worldObj, a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), tile, new PacketTarget.ServerTarget());
+			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod, new PacketTarget.ServerTarget());
 			Minecraft.getMinecraft().thePlayer.playSound("random.click", 0.5F, 0.9F);
 		}
 	}

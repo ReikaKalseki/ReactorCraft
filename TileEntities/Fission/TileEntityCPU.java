@@ -20,11 +20,13 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Event.ScramEvent;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -33,9 +35,9 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
-public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured, ReactorBlock {
+public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured, ReactorBlock, NeutronTile {
 
-	private final ReactorControlLayout layout = new ReactorControlLayout(this);
+	private ReactorControlLayout layout;
 	private final BlockArray reactor = new BlockArray();
 
 	public static final int POWERPERROD = 1024;
@@ -51,24 +53,27 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		thermalTicker.update();
 		if (thermalTicker.checkCap())
 			this.updateTemperature(world, x, y, z);
-		if (reactor.isEmpty()) {
-			layout.clear();
-			int r = 12;
-			Block id = ReactorBlocks.REACTOR.getBlockInstance();
-			Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
-			for (int i = 2; i < 6; i++)
-				reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y-4, z-r, x+r, y+4, z+r, id, id2);
-			for (int i = 0; i < reactor.getSize(); i++) {
-				Coordinate c = reactor.getNthBlock(i);
-				int dx = c.xCoord;
-				int dy = c.yCoord;
-				int dz = c.zCoord;
-				Block idx = world.getBlock(dx, dy, dz);
-				int metax = world.getBlockMetadata(dx, dy, dz);
-				if (idx == ReactorTiles.CONTROL.getBlock() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {
-					TileEntityControlRod rod = (TileEntityControlRod)world.getTileEntity(dx, dy, dz);
-					layout.addControlRod(rod);
+		if (!world.isRemote) {
+			if (reactor.isEmpty()) {
+				layout.clear();
+				int r = 12;
+				Block id = ReactorBlocks.REACTOR.getBlockInstance();
+				Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
+				for (int i = 2; i < 6; i++)
+					reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y-4, z-r, x+r, y+4, z+r, id, id2);
+				for (int i = 0; i < reactor.getSize(); i++) {
+					Coordinate c = reactor.getNthBlock(i);
+					int dx = c.xCoord;
+					int dy = c.yCoord;
+					int dz = c.zCoord;
+					Block idx = world.getBlock(dx, dy, dz);
+					int metax = world.getBlockMetadata(dx, dy, dz);
+					if (idx == ReactorTiles.CONTROL.getBlock() && metax == ReactorTiles.CONTROL.getBlockMetadata()) {
+						TileEntityControlRod rod = (TileEntityControlRod)world.getTileEntity(dx, dy, dz);
+						layout.addControlRod(rod);
+					}
 				}
+				this.syncAllData(true);
 			}
 		}
 
@@ -109,6 +114,11 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			}
 		}
 
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		layout = new ReactorControlLayout(this);
 	}
 
 	public void SCRAM() {
@@ -266,6 +276,9 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		power = NBT.getLong("pwr");
 
 		redstoneUpdate = NBT.getInteger("redsu");
+
+		if (layout != null)
+			layout.readFromNBT(NBT);
 	}
 
 	@Override
@@ -278,6 +291,9 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		NBT.setLong("pwr", power);
 
 		NBT.setInteger("redsu", redstoneUpdate);
+
+		if (layout != null)
+			layout.writeToNBT(NBT);
 	}
 
 	@Override
@@ -285,7 +301,6 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		super.writeToNBT(NBT);
 
 		NBTTagCompound tag = new NBTTagCompound();
-		layout.writeToNBT(tag);
 		NBT.setTag("rods", tag);
 	}
 
@@ -294,7 +309,11 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		super.readFromNBT(NBT);
 
 		NBTTagCompound tag = NBT.getCompoundTag("rods");
-		layout.readFromNBT(tag);
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 }

@@ -126,7 +126,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
+		return this.canDrain(from, resource.getFluid()) ? output.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override

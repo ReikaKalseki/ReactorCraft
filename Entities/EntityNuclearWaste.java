@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
@@ -50,10 +51,14 @@ public final class EntityNuclearWaste extends EntityItem {
 			posY = Math.max(posY, 0);
 
 			if (timer%256 == 0) {
-				int ix = MathHelper.floor_double(posX);
-				int iy = MathHelper.floor_double(posY);
-				int iz = MathHelper.floor_double(posZ);
-				RadiationEffects.instance.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2, 0, false, RadiationIntensity.HIGHLEVEL);
+				AxisAlignedBB box = ReikaAABBHelper.getEntityCenteredAABB(this, RANGE);
+				List<EntityRadiation> li = worldObj.getEntitiesWithinAABB(EntityRadiation.class, box);
+				if (li.size() < 100) {
+					int ix = MathHelper.floor_double(posX);
+					int iy = MathHelper.floor_double(posY);
+					int iz = MathHelper.floor_double(posZ);
+					RadiationEffects.instance.contaminateArea(worldObj, ix, iy, iz, RANGE*4, 2, 0, false, RadiationIntensity.HIGHLEVEL);
+				}
 			}
 		}
 		timer++;

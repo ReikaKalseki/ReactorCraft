@@ -71,8 +71,8 @@ ChunkLoadingTile, BreakAction {
 		}
 
 		if (!world.isRemote) {
-			this.feed();
 			this.feedWaste(world, x, y, z);
+			this.feed();
 		}
 
 		if (activeTimer > 0) {

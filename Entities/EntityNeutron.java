@@ -239,4 +239,9 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		return false;
 	}
 
+	@Override
+	public double getRenderRangeSquared() {
+		return 4096D;
+	}
+
 }

@@ -106,7 +106,7 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 			this.checkFusion();
 		motionY = 0;
 		if (this.getSpawnLocation() != null)
-			posY = this.getSpawnLocation().yCoord;
+			posY = this.getSpawnLocation().yCoord+0.5;
 
 		escapeTicks++;
 	}
@@ -156,6 +156,11 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 	@Override
 	protected double getDespawnDistance() {
 		return 100;
+	}
+
+	@Override
+	public double getRenderRangeSquared() {
+		return Double.POSITIVE_INFINITY;
 	}
 
 }
