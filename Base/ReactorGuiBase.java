@@ -68,10 +68,14 @@ public abstract class ReactorGuiBase extends GuiContainer {
 		int k = (height - ySize) / 2;
 
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, tile.getName(), xSize/2, 5, 4210752);
-		if (tile instanceof IInventory && !(tile instanceof InertIInv && ySize <= 100))
+		if (tile instanceof IInventory && !(tile instanceof InertIInv && ySize <= 100) && this.showInventoryLabel())
 			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
 
 		fontRendererObj.drawString("?", -10, ySize/2-4, 0xffffff);
+	}
+
+	protected boolean showInventoryLabel() {
+		return true;
 	}
 
 	@Override

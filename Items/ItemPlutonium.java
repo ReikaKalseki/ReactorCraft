@@ -15,10 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
-import Reika.ReactorCraft.Base.ItemReactorMulti;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 
-public class ItemPlutonium extends ItemReactorMulti {
+public class ItemPlutonium extends ItemReactorFuel {
 
 	public ItemPlutonium(int tex) {
 		super(tex);

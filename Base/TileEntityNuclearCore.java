@@ -122,7 +122,7 @@ ChunkLoadingTile, BreakAction {
 		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (te instanceof TileEntityNuclearCore) {
 			for (int i = 4; i < 12; i++) {
-				if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
+				if (inv[i] != null) {
 					for (int k = 4; k < 12; k++) {
 						if (((TileEntityNuclearCore) te).inv[k] == null) {
 							((TileEntityNuclearCore) te).inv[k] = inv[i];
@@ -213,6 +213,16 @@ ChunkLoadingTile, BreakAction {
 			ItemStack is = inv[3].copy();
 			inv[3] = null;
 			return is;
+		}
+	}
+
+	protected final void tryPushSpentFuel(int slot) {
+		for (int i = 4; i < 12; i++) {
+			if (inv[i] == null) {
+				inv[i] = inv[slot];
+				inv[slot] = null;
+				return;
+			}
 		}
 	}
 

@@ -400,5 +400,9 @@ public enum ReactorTiles implements TileEnum {
 		return ReactorCoreTE.class.isAssignableFrom(teClass);
 	}
 
+	public ItemStack getCraftedProduct(TileEntity te) {
+		return this.getCraftedProduct();
+	}
+
 
 }

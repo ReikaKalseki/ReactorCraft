@@ -105,6 +105,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 						int dmg = inv[slot].getItemDamage();
 						if (dmg == ReactorItems.BREEDERFUEL.getNumberMetadatas()-1) {
 							inv[slot] = ReactorItems.PLUTONIUM.getStackOf();
+							this.tryPushSpentFuel(slot);
 							ReactorAchievements.PLUTONIUM.triggerAchievement(this.getPlacer());
 						}
 						else {

@@ -108,7 +108,6 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	@Override
 	public boolean leaksRadiation() {
 		return false;
-
 	}
 
 	@Override

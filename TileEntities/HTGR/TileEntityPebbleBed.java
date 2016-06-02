@@ -46,6 +46,8 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	private int damage = 0;
 
+	private int cycleCooldown = 0;
+
 	@Override
 	public int getSizeInventory() {
 		return 47;
@@ -77,6 +79,10 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 		if (damage > 0 && rand.nextInt(800) == 0) {
 			damage--;
+		}
+
+		if (cycleCooldown > 0) {
+			cycleCooldown--;
 		}
 	}
 
@@ -234,7 +240,13 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 
 	@Override
 	public boolean canRemoveItem(int slot, ItemStack is) {
-		return is.getItem() == ReactorItems.OLDPELLET.getItemInstance();
+		if (is.getItem() == ReactorItems.OLDPELLET.getItemInstance())
+			return true;
+		if (slot == 0 && cycleCooldown == 0 && this.getTileEntityAge()%80 < 40) {
+			cycleCooldown = 10;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

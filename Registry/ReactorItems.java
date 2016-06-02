@@ -34,6 +34,7 @@ import Reika.ReactorCraft.Items.ItemRadiationCleaner;
 import Reika.ReactorCraft.Items.ItemRadiationGoggles;
 import Reika.ReactorCraft.Items.ItemReactorBasic;
 import Reika.ReactorCraft.Items.ItemReactorBook;
+import Reika.ReactorCraft.Items.ItemReactorFuel;
 import Reika.ReactorCraft.Items.ItemReactorPlacer;
 import Reika.ReactorCraft.Items.ItemRemoteControl;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -41,7 +42,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 public enum ReactorItems implements ItemEnum {
 
 	WASTE(0,		"item.waste", 			ItemNuclearWaste.class),
-	FUEL(1,			"item.fuel",			ItemReactorMulti.class),
+	FUEL(1,			"item.fuel",			ItemReactorFuel.class),
 	DEPLETED(2, 	"item.depleted",		ItemReactorBasic.class),
 	PLACER(-1,		"Part Placer",			ItemReactorPlacer.class),
 	BUCKET(3,		"item.heavybucket", 	ItemHeavyBucket.class),
@@ -52,12 +53,12 @@ public enum ReactorItems implements ItemEnum {
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
 	CRAFTING(144,	"Crafting item", 		ItemReactorMulti.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
-	THORIUM(97,		"item.thorium",			ItemReactorMulti.class),
-	BREEDERFUEL(98,	"item.breeder",			ItemReactorMulti.class),
+	THORIUM(97,		"item.thorium",			ItemReactorFuel.class),
+	BREEDERFUEL(98,	"item.breeder",			ItemReactorFuel.class),
 	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
 	MAGNET(100,		"item.magnet",			ItemReactorMulti.class),
 	REMOTE(101,		"item.remotecpu",		ItemRemoteControl.class),
-	PELLET(102,		"item.pellet",			ItemReactorMulti.class),
+	PELLET(102,		"item.pellet",			ItemReactorFuel.class),
 	OLDPELLET(103,	"item.depletedpellet",	ItemReactorBasic.class),
 	BOOK(104,		"item.reactorbook",		ItemReactorBook.class),
 	HAZHELMET(112,	"item.hazhelmet",		ItemHazmatSuit.class),

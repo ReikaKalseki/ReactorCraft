@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -24,6 +25,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -116,6 +118,11 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return ReikaAABBHelper.getBlockAABB(this).expand(0.5, 0.5, 0.5);
 	}
 
 }

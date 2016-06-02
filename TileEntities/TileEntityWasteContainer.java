@@ -22,14 +22,16 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Base.TileEntityWasteUnit;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
-public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE, Feedable {
+public class TileEntityWasteContainer extends TileEntityWasteUnit implements TemperatureTE, Feedable, NeutronTile {
 
 	public static final int WIDTH = 9;
 	public static final int HEIGHT = 3;
@@ -223,6 +225,11 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 
 	public void setTemperature(int temp) {
 
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 }

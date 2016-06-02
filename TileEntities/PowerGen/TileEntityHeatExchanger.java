@@ -367,6 +367,10 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 		tank.readFromNBT(NBT);
 		output.readFromNBT(NBT);
+
+		omega = NBT.getInteger("speed");
+		torque = NBT.getInteger("trq");
+		power = NBT.getLong("pwr");
 	}
 
 	@Override
@@ -376,6 +380,10 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 		tank.writeToNBT(NBT);
 		output.writeToNBT(NBT);
+
+		NBT.setInteger("speed", omega);
+		NBT.setInteger("trq", torque);
+		NBT.setLong("pwr", power);
 	}
 
 	@Override

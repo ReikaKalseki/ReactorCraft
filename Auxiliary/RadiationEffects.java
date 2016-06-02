@@ -31,8 +31,10 @@ import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Event.CreeperExplodeEvent;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
@@ -70,6 +72,11 @@ public class RadiationEffects {
 				if (!this.isEntityImmuneToAll(e) && (!ri.isShieldable() || !this.hasHazmatSuit(e))) {
 					e.addPotionEffect(this.getRadiationEffect(ri));
 					return true;
+				}
+			}
+			if (ReikaEntityHelper.isEntityWearingPoweredArmor(e)) {
+				for (int i = 1; i < 4; i++) {
+					ReikaItemHelper.dechargeItem(e.getEquipmentInSlot(i));
 				}
 			}
 			if (e instanceof EntityCreeper) {

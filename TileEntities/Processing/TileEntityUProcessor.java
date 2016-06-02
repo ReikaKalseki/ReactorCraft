@@ -103,7 +103,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 			if (f2.equals("rc uranium hexafluoride")) {
 				if (ModList.IC2.isLoaded()) {
-					ItemStack is = IC2Handler.getInstance().getPurifiedCrushedUranium();
+					ItemStack is = IC2Handler.IC2Stacks.PURECRUSHEDU.getItem();
 					if (is != null)
 						in.add(is);
 				}
@@ -216,7 +216,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public boolean canRunIntermediate(Processes p) {
-		return this.getInput() > 0 && this.canAcceptMoreIntermediate(p.intermediateFluidProduced);
+		return this.getInput() > 0 && this.canAcceptMoreIntermediate(p.intermediateFluidProduced) && this.hasFluorite();
 	}
 
 	private void runIntermediate(Processes p) {

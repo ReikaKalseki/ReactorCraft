@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
@@ -135,7 +134,7 @@ public class ClientProxy extends CommonProxy {
 	public void loadDonatorRender() {
 		Collection<Donator> donators = new ArrayList();
 		donators.addAll(DonatorController.instance.getReikasDonators());
-		donators.addAll(PatreonController.instance.getModPatrons(DragonAPIInit.instance));
+		donators.addAll(PatreonController.instance.getModPatrons("Reika"));
 		for (Donator s : donators) {
 			if (s.ingameName != null)
 				PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorToroidRender.instance);

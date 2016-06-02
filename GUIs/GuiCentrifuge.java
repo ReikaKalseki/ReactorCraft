@@ -43,6 +43,11 @@ public class GuiCentrifuge extends ReactorGuiBase {
 	}
 
 	@Override
+	protected boolean showInventoryLabel() {
+		return false;
+	}
+
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
