@@ -289,10 +289,10 @@ public class ReactorCraft extends DragonAPIMod {
 				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
 			}
 			catch (IncompatibleClassChangeError e) {
-				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika. "+e.toString());
 			}
 			catch (Exception e) {
-				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika. "+e.toString());
 			}
 		}
 
