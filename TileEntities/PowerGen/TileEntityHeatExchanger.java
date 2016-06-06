@@ -23,20 +23,18 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
+import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
-import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine implements TemperatureTE, ReactorPowerReceiver {
+public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implements TemperatureTE {
 
 	public static final int CAPACITY = 2000;
 
@@ -46,12 +44,6 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	public static final int MINPOWER = 8192;
 	public static final int MINSPEED = 512;
-
-	private long power;
-	private int omega;
-	private int torque;
-
-	private int iotick;
 
 	private final HybridTank output = new HybridTank("exchangerout", this.getCapacity());
 
@@ -69,9 +61,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
-			this.noInputMachine();
-		}
+		super.updateEntity(world, x, y, z, meta);
 
 		Exchange e = this.getExchange();
 
@@ -132,16 +122,10 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	private boolean canCool(Exchange e) {
 		if (e == null)
 			return false;
-		if (power < MINPOWER || omega < MINSPEED)
+		if (!this.sufficientPower())
 			return false;
 
 		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
-	}
-
-	@Override
-	protected void animateWithTick(World world, int x, int y, int z) {
-		if (iotick > 0)
-			iotick -= 8;
 	}
 
 	@Override
@@ -300,59 +284,8 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	}
 
 	@Override
-	public int getOmega() {
-		return omega;
-	}
-
-	@Override
-	public int getTorque() {
-		return torque;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
-	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
 	public boolean canReadFrom(ForgeDirection dir) {
 		return dir == ForgeDirection.DOWN;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return true;
-	}
-
-	@Override
-	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
 	}
 
 	@Override
@@ -365,12 +298,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	{
 		super.readSyncTag(NBT);
 
-		tank.readFromNBT(NBT);
 		output.readFromNBT(NBT);
-
-		omega = NBT.getInteger("speed");
-		torque = NBT.getInteger("trq");
-		power = NBT.getLong("pwr");
 	}
 
 	@Override
@@ -378,12 +306,7 @@ public class TileEntityHeatExchanger extends TileEntityTankedReactorMachine impl
 	{
 		super.writeSyncTag(NBT);
 
-		tank.writeToNBT(NBT);
 		output.writeToNBT(NBT);
-
-		NBT.setInteger("speed", omega);
-		NBT.setInteger("trq", torque);
-		NBT.setLong("pwr", power);
 	}
 
 	@Override

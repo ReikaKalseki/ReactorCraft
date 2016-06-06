@@ -314,6 +314,9 @@ public class ReactorRecipes {
 		ReactorTiles.FUELDUMP.addCrafting("pIp", "BPB", "pbp", 'b', Blocks.iron_bars, 'p', ItemStacks.pipe, 'P', ItemStacks.bedpipe, 'B', ItemStacks.basepanel, 'I', ItemStacks.impeller);
 
 		ReactorTiles.WASTEPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CbC", "CGC", "CbC", 'C', MatBlocks.CONCRETE.getStackOf(), 'b', Blocks.iron_bars, 'G', Blocks.glass);
+
+		ReactorTiles.SOLARTOP.addCrafting("aPa", "tct", "sPs", 'a', CraftingItems.ALLOY.getItem(), 't', ItemStacks.tungsteningot, 'c', ItemStacks.condenser, 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
+		ReactorTiles.SOLAR.addCrafting("sPs", "pEp", "sPs", 'p', ItemStacks.pipe, 'E', ReactorTiles.EXCHANGER.getCraftedProduct(), 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 	}
 
 }

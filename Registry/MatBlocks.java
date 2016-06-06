@@ -10,9 +10,13 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.ReactorCraft.ReactorCraft;
 
 public enum MatBlocks {
 
@@ -22,11 +26,17 @@ public enum MatBlocks {
 	SCRUBBER("block.scrubber");
 
 	private String name;
+	public final Class tileClass;
 
 	public static final MatBlocks[] matList = values();
 
 	private MatBlocks(String n) {
+		this(n, null);
+	}
+
+	private MatBlocks(String n, Class<? extends TileEntity> c) {
 		name = n;
+		tileClass = c;
 	}
 
 	public String getName() {
@@ -53,6 +63,17 @@ public enum MatBlocks {
 
 	public IIcon getIcon() {
 		return ReactorBlocks.MATS.getBlockInstance().getIcon(0, this.ordinal());
+	}
+
+	public TileEntity createTile(World world) {
+		if (tileClass == null)
+			return null;
+		try {
+			return (TileEntity)tileClass.newInstance();
+		}
+		catch (Exception e) {
+			throw new RegistrationException(ReactorCraft.instance, "Could not create TileEntity for MatBlock "+this+"!", e);
+		}
 	}
 
 }

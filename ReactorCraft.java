@@ -174,6 +174,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800*3).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
+	public static IIcon solarFlare;
 
 	public static Achievement[] achievements;
 
@@ -531,6 +532,8 @@ public class ReactorCraft extends DragonAPIMod {
 			LIFBe.setIcons(lifbe);
 			LIFBe_fuel.setIcons(lifbe_fuel);
 			LIFBe_hot.setIcons(lifbe_hot);
+
+			solarFlare = event.map.registerIcon("ReactorCraft:solarflare");
 		}
 	}
 

@@ -15,6 +15,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -29,8 +30,8 @@ public class BlockReactorMat extends Block {
 
 	private IIcon[][] icons = new IIcon[16][6];
 
-	public BlockReactorMat(Material par2Material) {
-		super(par2Material);
+	public BlockReactorMat(Material mat) {
+		super(mat);
 		this.setHardness(1.5F);
 		this.setResistance(10F);
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctr);
@@ -44,6 +45,16 @@ public class BlockReactorMat extends Block {
 				RadiationEffects.instance.contaminateArea(world, x, y, z, 4, 0.5F, 0.05, false, RadiationIntensity.HIGHLEVEL);
 			}
 		}
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, int meta) {
+		return MatBlocks.matList[meta].createTile(world);
+	}
+
+	@Override
+	public boolean hasTileEntity(int meta) {
+		return MatBlocks.matList[meta].tileClass != null;
 	}
 
 	@Override

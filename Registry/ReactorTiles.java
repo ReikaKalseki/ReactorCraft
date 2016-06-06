@@ -34,6 +34,7 @@ import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityNeutronReflector;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
+import Reika.ReactorCraft.TileEntities.TileEntitySolarTop;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamDiffuser;
 import Reika.ReactorCraft.TileEntities.TileEntityTurbineMeter;
 import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
@@ -59,6 +60,7 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySolarExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamGrate;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
@@ -114,7 +116,9 @@ public enum ReactorTiles implements TileEnum {
 	DIFFUSER("machine.steamdiffuser",			ReactorBlocks.MODELMACHINE,		TileEntitySteamDiffuser.class,	10, "RenderSteamDiffuser"),
 	THORIUM("machine.thorium",					ReactorBlocks.REACTOR,			TileEntityThoriumCore.class,	12),
 	WASTEPIPE("machine.wastepipe",				ReactorBlocks.DUCT,				TileEntityWastePipe.class,		2),
-	FUELDUMP("machine.fueldump",				ReactorBlocks.REACTOR,			TileEntityFuelDump.class,		13);
+	FUELDUMP("machine.fueldump",				ReactorBlocks.REACTOR,			TileEntityFuelDump.class,		13),
+	SOLAR("machine.solarexchange",				ReactorBlocks.MODELMACHINE,		TileEntitySolarExchanger.class,	11, "RenderSolarExchanger"),
+	SOLARTOP("machine.solartop",				ReactorBlocks.MODELMACHINE,		TileEntitySolarTop.class,		12, "RenderSolarTop");
 
 	private final String name;
 	private final Class teClass;
@@ -297,6 +301,7 @@ public enum ReactorTiles implements TileEnum {
 			case GASPIPE:
 			case MAGNETPIPE:
 			case COLLECTOR:
+			case SOLARTOP:
 				return true;
 			default:
 				return false;

@@ -19,25 +19,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
+import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityReactorPump extends TileEntityTankedReactorMachine implements ReactorPowerReceiver {
+public class TileEntityReactorPump extends TankedReactorPowerReceiver {
 
 	public static final long MINPOWER = 16384;
 	public static final int MINTORQUE = 1024;
 
 	private final HybridTank output = new HybridTank("pumpout", this.getCapacity());
-
-	private int omega;
-	private int torque;
-	private long power;
-	private int iotick = 512;
 
 	@Override
 	public int getIndex() {
@@ -46,9 +39,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!PowerTransferHelper.checkPowerFrom(this, ForgeDirection.DOWN)) {
-			this.noInputMachine();
-		}
+		super.updateEntity(world, x, y, z, meta);
 
 		if (this.canConvert())
 			this.convertFluids();
@@ -58,7 +49,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	}
 
 	private boolean canConvert() {
-		if (power < MINPOWER || torque < MINTORQUE)
+		if (!this.sufficientPower())
 			return false;
 		if (tank.isEmpty())
 			return false;
@@ -115,10 +106,10 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		if (power > 0) {
+		super.animateWithTick(world, x, y, z);
+		if (this.getPower() > 0) {
 			phi += 15F;
 		}
-		iotick -= 8;
 	}
 
 	@Override
@@ -126,12 +117,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	{
 		super.readSyncTag(NBT);
 
-		tank.readFromNBT(NBT);
 		output.readFromNBT(NBT);
-
-		omega = NBT.getInteger("speed");
-		torque = NBT.getInteger("trq");
-		power = NBT.getLong("pwr");
 	}
 
 	@Override
@@ -139,12 +125,7 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	{
 		super.writeSyncTag(NBT);
 
-		tank.writeToNBT(NBT);
 		output.writeToNBT(NBT);
-
-		NBT.setInteger("speed", omega);
-		NBT.setInteger("trq", torque);
-		NBT.setLong("pwr", power);
 	}
 
 	@Override
@@ -197,59 +178,8 @@ public class TileEntityReactorPump extends TileEntityTankedReactorMachine implem
 	}
 
 	@Override
-	public int getOmega() {
-		return omega;
-	}
-
-	@Override
-	public int getTorque() {
-		return torque;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
-	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
 	public boolean canReadFrom(ForgeDirection dir) {
 		return dir == ForgeDirection.DOWN;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return true;
-	}
-
-	@Override
-	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
 	}
 
 	@Override
