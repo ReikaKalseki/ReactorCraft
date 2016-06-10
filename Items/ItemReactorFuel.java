@@ -17,6 +17,13 @@ public class ItemReactorFuel extends ItemReactorMulti {
 	public ItemReactorFuel(int tex) {
 		super(tex);
 		this.setMaxDamage(this.getDataValues());
+		this.setNoRepair();
+	}
+
+	@Override
+	public boolean isDamageable()
+	{
+		return true;
 	}
 
 }

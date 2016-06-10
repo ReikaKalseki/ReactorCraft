@@ -322,8 +322,8 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 			TileEntitySodiumHeater te = (TileEntitySodiumHeater)world.getTileEntity(x, y, z);
 			if (te.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= te.getCapacity()) {
 				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nacan)) {
-					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("sodium"))) {
-						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("sodium"));
+					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("rc sodium"))) {
+						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("rc sodium"));
 						if (!ep.capabilities.isCreativeMode)
 							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					}
@@ -343,8 +343,8 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 					return true;
 				}
 				if (ReikaItemHelper.matchStacks(is, ReactorStacks.nh3can)) {
-					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("ammonia"))) {
-						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("ammonia"));
+					if (te.getLevel() <= 0 || te.getContainedFluid().equals(FluidRegistry.getFluid("rc ammonia"))) {
+						te.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.getFluid("rc ammonia"));
 						if (!ep.capabilities.isCreativeMode)
 							ep.setCurrentItemOrArmor(0, ReactorStacks.emptycan);
 					}

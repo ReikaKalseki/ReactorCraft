@@ -67,13 +67,13 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 		if (r == this.getMachine()) {
 			TileEntityIntermediateBoiler te = (TileEntityIntermediateBoiler)world.getTileEntity(x, y+1, z);
 			if (!te.tank.isFull() && !tank.isEmpty()) {
-				int amt = Math.min(100, te.tank.getCapacity()-te.tank.getLevel());
+				int amt = Math.min(tank.getLevel(), Math.min(100, te.tank.getCapacity()-te.tank.getLevel()));
 				te.tank.addLiquid(amt, tank.getActualFluid());
 				tank.removeLiquid(amt);
 			}
 
 			if (!te.output.isFull() && !output.isEmpty()) {
-				int amt = Math.min(100, te.output.getCapacity()-te.output.getLevel());
+				int amt = Math.min(output.getLevel(), Math.min(100, te.output.getCapacity()-te.output.getLevel()));
 				te.output.addLiquid(amt, output.getActualFluid());
 				output.removeLiquid(amt);
 			}

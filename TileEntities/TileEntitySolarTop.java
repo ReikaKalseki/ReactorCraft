@@ -11,6 +11,7 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarReceiver;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 
 
 public class TileEntitySolarTop extends TileEntityReactorBase implements TemperatureTE, SodiumSolarReceiver {
@@ -21,7 +22,7 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public boolean isActive() {
-		return ReactorTiles.getTE(worldObj, xCoord, yCoord+1, zCoord) == this.getMachine();
+		return ReactorTiles.getTE(worldObj, xCoord, yCoord+1, zCoord) == this.getMachine() && this.getAdjacentTileEntity(ForgeDirection.DOWN) instanceof TileEntitySolar;
 	}
 
 	@Override
