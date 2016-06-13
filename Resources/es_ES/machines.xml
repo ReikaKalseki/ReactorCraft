@@ -133,7 +133,7 @@
 			El fuel core almacena combustible nuclear y es la fuente de todas las reacciones nucleares y generacion de calor. Cuando esta cargado, el nucleo periodicamente emite neutrones, que pueden impactar en otros fuel cores. Si esos cores tambien estan cargados, hay una posibilidad de que produzcan fision, liberando tres neutrones y un poco de calor, y consumen un poco de combustible. Tambien acumulan gradualmente residuos, que aplacara la habilidad de producir fision. Si el combustible del nucleo se calienta demasiado, empezara a humear, liberando gas hidrogeno, y termina por fundirse y liberar grandes cantidades de radiacion.
 		</desc>
 		<note>
-			Emision de neutrones: Cualquier direccion horizontal
+			Emission de neutrones: Cualquier direccion horizontal
 			Temperatura Maxima: %dC
 		</note>
 	</fuel>
@@ -166,7 +166,7 @@
 			El breeder reactor core se comporta como un fuel core normal, pero solo puede aceptar breeder reactor fuel, , y es el otro tipo de nucleo de reactor que puede ser usado en un breeder reactor. Se calientan de alguna manera mas rapido que los nucleos de uranio convencionales.
 		</desc>
 		<note>
-			Emision de neutrones: Cualquier direccion horizontal
+			Emission de neutrones: Cualquier direccion horizontal
 			Temperatura maxima: %dC
 		</note>
 	</breeder>
