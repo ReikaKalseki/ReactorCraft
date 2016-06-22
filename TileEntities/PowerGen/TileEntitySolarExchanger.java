@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2016
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import net.minecraft.world.World;
@@ -8,6 +17,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarOutput;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
@@ -37,6 +47,11 @@ public class TileEntitySolarExchanger extends TankedReactorPowerReceiver impleme
 	}
 
 	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p);
+	}
+
+	@Override
 	public int getCapacity() {
 		return 1000;
 	}
@@ -49,6 +64,11 @@ public class TileEntitySolarExchanger extends TankedReactorPowerReceiver impleme
 	@Override
 	public Fluid getInputFluid() {
 		return null;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? Flow.OUTPUT : Flow.NONE;
 	}
 
 	@Override

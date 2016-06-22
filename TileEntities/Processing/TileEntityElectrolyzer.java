@@ -100,7 +100,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		if (iotick > 0)
 			iotick -= 8;
 
-		if (!PowerTransferHelper.checkPowerFromAllSides(this, false)) {
+		if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
 			this.noInputMachine();
 		}
 
@@ -126,12 +126,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	private boolean hasSalt() {
-		for (int i = 0; i < inv.length; i++) {
-			ItemStack is = inv[i];
-			if (this.isSalt(is))
-				return true;
-		}
-		return false;
+		return this.isSalt(inv[0]);
 	}
 
 	private boolean canMakeSodium() {
@@ -159,9 +154,10 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	private void makeHydrogen() {
 		input.removeLiquid(100);
 		tankH.addLiquid(50, FluidRegistry.getFluid("rc oxygen"));
-		tankL.addLiquid(100, this.getHydrogenIsotope());
+		tankL.addLiquid(100, FluidRegistry.getFluid("rc deuterium"));
 	}
 
+	@Deprecated
 	private Fluid getHydrogenIsotope() {
 		return FluidRegistry.getFluid("rc deuterium");
 	}
@@ -269,7 +265,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public boolean canReadFrom(ForgeDirection dir) {
-		return dir.offsetY == 0;
+		return true;
 	}
 
 	@Override

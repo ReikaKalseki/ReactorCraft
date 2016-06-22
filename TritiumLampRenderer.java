@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
-public class TritiumLampRenderer implements ISimpleBlockRenderingHandler {
+public class TritiumLampRenderer implements ISBRH {
 
 	public final int renderID;
 
