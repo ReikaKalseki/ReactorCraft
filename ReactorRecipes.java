@@ -19,6 +19,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -88,6 +89,10 @@ public class ReactorRecipes {
 				GameRegistry.addShapelessRecipe(is, ReactorStacks.lodestone);
 			}
 		}
+
+		GameRegistry.addRecipe(new ShapelessFluidInputRecipe(MatBlocks.CONCRETE.getStackOf(4), Blocks.clay, Blocks.sand, Blocks.gravel, FluidRegistry.WATER));
+		if (FluidRegistry.getFluid("oil") != null)
+			GameRegistry.addRecipe(new ShapelessFluidInputRecipe(MatBlocks.CONCRETE.getStackOf(6), Blocks.sand, Blocks.gravel, FluidRegistry.getFluid("oil")));
 	}
 
 	public static void addRecipes() {

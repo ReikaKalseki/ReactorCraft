@@ -20,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.Achievement;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -327,6 +328,14 @@ public class ReactorCraft extends DragonAPIMod {
 		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 			ItemStack is = FluoriteTypes.colorList[i].getStorageBlock();
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
+		}
+
+		for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
+			FluoriteTypes f = FluoriteTypes.colorList[i];
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setInteger("value", f.getCorrespondingDyeType().getWoolMeta());
+			f.getItem().writeToNBT(tag);
+			FMLInterModComms.sendMessage(ModList.MINEFACTORY.modLabel, "addLaserPreferredOre", tag);
 		}
 
 		PackModificationTracker.instance.addMod(this, config);
