@@ -18,6 +18,9 @@
 	<breederdesc>
 		These are the components to a sodium-cooled breeder reactor, or "liquid-metal fast breeder reactor" (LMFBR).
 	</breederdesc>
+	<thoriumdesc>
+		These are the components to a liquid-fueled thorium reactor. These are fission reactors, but they are markedly different from other designs.
+	</thoriumdesc>
 	<fusiondesc>
 		These are the components to a Tokamak fusion reactor.
 	</fusiondesc>

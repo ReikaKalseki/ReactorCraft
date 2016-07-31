@@ -153,7 +153,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public boolean canMake() {
-		return this.getUF6() > UF6_PER_DUST && this.hasInventorySpace();
+		return this.getUF6() >= UF6_PER_DUST && this.hasInventorySpace();
 	}
 
 	private boolean hasInventorySpace() {

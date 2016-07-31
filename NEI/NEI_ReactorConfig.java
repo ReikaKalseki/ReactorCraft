@@ -11,6 +11,7 @@ package Reika.ReactorCraft.NEI;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -61,7 +62,7 @@ public class NEI_ReactorConfig implements IConfigureNEI {
 	}
 
 	private void hideBlock(Block b) {
-		API.hideItem(new ItemStack(b));
+		API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
 	@Override

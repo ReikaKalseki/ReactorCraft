@@ -46,8 +46,8 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	private boolean isFuel(ItemStack is) {
 		if (is.getItem() == ReactorItems.FUEL.getItemInstance())
 			return true;
-		if (is.getItem() == ReactorItems.THORIUM.getItemInstance())
-			return true;
+		//if (is.getItem() == ReactorItems.THORIUM.getItemInstance())
+		//	return true;
 		if (is.getItem() == ReactorItems.PLUTONIUM.getItemInstance())
 			return true;
 		return false;

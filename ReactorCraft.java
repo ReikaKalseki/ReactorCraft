@@ -288,7 +288,7 @@ public class ReactorCraft extends DragonAPIMod {
 				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.FUEL.getItemInstance(), 2000);
 				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PLUTONIUM.getItemInstance(), 5000);
 				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.PELLET.getItemInstance(), 1200);
-				GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
+				//GendustryAPI.Registries.getMutagenRegistry().add(ReactorItems.THORIUM.getItemInstance(), 2000);
 			}
 			catch (IncompatibleClassChangeError e) {
 				logger.logError("Could not add Gendustry integration. Check your versions; if you are up-to-date with both mods, notify Reika. "+e.toString());
@@ -338,6 +338,8 @@ public class ReactorCraft extends DragonAPIMod {
 			FMLInterModComms.sendMessage(ModList.MINEFACTORY.modLabel, "addLaserPreferredOre", tag);
 		}
 
+		FMLInterModComms.sendMessage("Randomod", "blacklist", this.getModContainer().getModId());
+
 		PackModificationTracker.instance.addMod(this, config);
 
 		//TickRegistry.instance.registerTickHandler(new VolcanicGasController(), Side.SERVER);
@@ -359,7 +361,7 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaEEHelper.blacklistEntry(ReactorItems.BREEDERFUEL);
 		ReikaEEHelper.blacklistEntry(ReactorItems.PELLET);
 		ReikaEEHelper.blacklistEntry(ReactorItems.PLUTONIUM);
-		ReikaEEHelper.blacklistEntry(ReactorItems.THORIUM);
+		//ReikaEEHelper.blacklistEntry(ReactorItems.THORIUM);
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
@@ -367,7 +369,7 @@ public class ReactorCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.FUEL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.BREEDERFUEL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PLUTONIUM.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.THORIUM.getItemInstance(), true);
+		//SensitiveItemRegistry.instance.registerItem(this, ReactorItems.THORIUM.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PELLET.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.fueldust, true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.thordust, true);

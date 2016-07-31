@@ -108,6 +108,9 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 		if (this.getSpawnLocation() != null)
 			posY = this.getSpawnLocation().yCoord+0.5;
 
+		if (ticksExisted > 300 && this.hasEscapedSeverely())
+			this.setDead();
+
 		escapeTicks++;
 	}
 
@@ -150,7 +153,7 @@ public class EntityPlasma extends ParticleEntity implements CustomFanEntity {
 
 	@Override
 	public boolean despawnOverDistance() {
-		return false;
+		return true;
 	}
 
 	@Override

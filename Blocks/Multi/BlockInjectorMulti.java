@@ -21,11 +21,13 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 
-public class BlockInjectorMulti extends BlockMultiBlock {
+public class BlockInjectorMulti extends BlockMultiBlock implements NeutronBlock {
 
 	public BlockInjectorMulti(Material par2Material) {
 		super(par2Material);
@@ -500,6 +502,11 @@ public class BlockInjectorMulti extends BlockMultiBlock {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 }

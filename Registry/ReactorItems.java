@@ -53,7 +53,7 @@ public enum ReactorItems implements ItemEnum {
 	GOGGLES(64,		"item.goggles",			ItemRadiationGoggles.class),
 	CRAFTING(144,	"Crafting item", 		ItemReactorMulti.class),
 	PLUTONIUM(96,	"item.plutonium",		ItemPlutonium.class),
-	THORIUM(97,		"item.thorium",			ItemReactorFuel.class),
+	//THORIUM(97,		"item.thorium",			ItemReactorFuel.class),
 	BREEDERFUEL(98,	"item.breeder",			ItemReactorFuel.class),
 	CLEANUP(99,		"item.cleaner",			ItemRadiationCleaner.class),
 	MAGNET(100,		"item.magnet",			ItemReactorMulti.class),
@@ -125,7 +125,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 			case FUEL:
 			case PLUTONIUM:
-			case THORIUM:
+				//case THORIUM:
 			case PELLET:
 			case WASTE:
 			case BREEDERFUEL:
@@ -159,7 +159,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 			case FUEL:
 			case PLUTONIUM:
-			case THORIUM:
+				//case THORIUM:
 			case PELLET:
 				if (meta == 0)
 					return this.getBasicName()+" (Fresh)";
@@ -194,7 +194,7 @@ public enum ReactorItems implements ItemEnum {
 		switch(this) {
 			case FUEL:
 			case PLUTONIUM:
-			case THORIUM:
+				//case THORIUM:
 			case PELLET:
 			case PLACER:
 			case RAW:
@@ -217,8 +217,8 @@ public enum ReactorItems implements ItemEnum {
 			case FUEL:
 			case PLUTONIUM:
 				return 100;
-			case THORIUM:
-				return 40;
+				//case THORIUM:
+				//	return 40;
 			case PELLET:
 				return 25;
 			case PLACER:
@@ -285,7 +285,7 @@ public enum ReactorItems implements ItemEnum {
 			case INGOTS:
 				return item.getItemDamage() != ReactorOres.ENDBLENDE.getProductMetadata();
 			case FUEL:
-			case THORIUM:
+				//case THORIUM:
 			case PLUTONIUM:
 			case BREEDERFUEL:
 			case PELLET:

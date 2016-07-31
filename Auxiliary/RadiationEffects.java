@@ -75,7 +75,7 @@ public class RadiationEffects {
 				}
 			}
 			if (ReikaEntityHelper.isEntityWearingPoweredArmor(e)) {
-				for (int i = 1; i < 4; i++) {
+				for (int i = 1; i <= 4; i++) {
 					ReikaItemHelper.dechargeItem(e.getEquipmentInSlot(i));
 				}
 			}
