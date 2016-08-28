@@ -217,7 +217,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	protected boolean checkPoisonedChance() {
-		return ReikaRandomHelper.doWithChance(0.75*Math.pow(wasteTank.getLevel()/(double)wasteTank.getCapacity(), 1.6));
+		return ReikaRandomHelper.doWithChance(0.875*Math.pow(wasteTank.getLevel()/(double)wasteTank.getCapacity(), 1.6));
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return fuelTank.fill(resource, doFill);
+		return this.canFill(from, resource.getFluid()) ? fuelTank.fill(resource, doFill) : 0;
 	}
 
 	@Override

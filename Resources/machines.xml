@@ -355,4 +355,45 @@
 			Placed below the fuel column, and will trigger automatically to perform a dump
 		</note>
 	</fueldump>
+	<solartop>
+		<desc>
+			The %s allows you to use molten sodium instead of water in the solar tower, which greatly increases its power output and efficiency.
+		</desc>
+		<note>
+			Two units must be stacked on top of the tower to function
+		</note>
+	</solartop>
+	<solar>
+		<desc>
+			The %s allows you to get hot molten sodium out of a solar plant instead of direct shaft power. Though this is more complex, the power output is substantially larger.
+		</desc>
+		<note>
+			Placed below the tower column
+			Requires %dW at %d rad/s
+		</note>
+	</solar>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
 </machines>

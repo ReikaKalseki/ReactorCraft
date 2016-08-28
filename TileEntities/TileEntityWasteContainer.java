@@ -224,7 +224,12 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	@Override

@@ -209,10 +209,11 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	private boolean hasFluorite() {
 		if (inv[0] == null)
 			return false;
-		if (inv[0].getItem() == ReactorItems.FLUORITE.getItemInstance())
-			return true;
-		ArrayList<ItemStack> shards = OreDictionary.getOres("gemFluorite");
-		return ReikaItemHelper.collectionContainsItemStack(shards, inv[0]);
+		return this.isFluorite(inv[0]);
+	}
+
+	private boolean isFluorite(ItemStack is) {
+		return ReactorItems.FLUORITE.matchWith(is) || ReikaItemHelper.isInOreTag(is, "gemFluorite");
 	}
 
 	public boolean canRunIntermediate(Processes p) {
@@ -322,7 +323,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		switch (i) {
 			case 0:
-				return is.getItem() == ReactorItems.FLUORITE.getItemInstance();
+				return this.isFluorite(is);
 			case 1:
 				return this.getProcessByFluidItem(is) != null;
 			case 2:

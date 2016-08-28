@@ -68,6 +68,8 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 	protected boolean isInteractableTile(TileEntity te) {
 		if (te == null)
 			return false;
+		if (te.getClass() == this.getClass())
+			return true;
 		if (te instanceof IFluidHandler) {
 			String name = te.getClass().getSimpleName().toLowerCase(Locale.ENGLISH);
 			return !name.contains("conduit") && !name.contains("pipe");
@@ -254,6 +256,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 					}
 				}
 
+				if (!this.isInteractableTile(te))
+					continue;
+
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;
 					Fluid f = tp.getFluidType();
@@ -338,6 +343,9 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 						world = te.worldObj;
 					}
 				}
+
+				if (!this.isInteractableTile(te))
+					continue;
 
 				if (te instanceof TileEntityReactorPiping) {
 					TileEntityReactorPiping tp = (TileEntityReactorPiping)te;

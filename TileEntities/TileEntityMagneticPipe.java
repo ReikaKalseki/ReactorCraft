@@ -201,7 +201,7 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 
 	@Override
 	protected boolean isInteractableTile(TileEntity te) {
-		return te instanceof WorldRift || this.isPlasmaAcceptingBlock(te);
+		return (te instanceof WorldRift || this.isPlasmaAcceptingBlock(te)) && super.isInteractableTile(te);
 	}
 
 	@Override

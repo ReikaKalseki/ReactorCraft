@@ -75,7 +75,7 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public void setTemperature(int temp) {
-		//temperature = temp;
+		temperature = temp;
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public void addTemperature(int temp) {
-
+		temperature += temp;
 	}
 
 	@Override
@@ -106,6 +106,11 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public boolean allowExternalHeating() {
 		return false;
 	}
 

@@ -54,7 +54,7 @@ public class BlockCoriumFlowing extends BlockFluidClassic {
 		if (blockId != Blocks.air) {
 			blockId.dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 		}
-		//world.setBlock(i, j, k, this, l, 3);
+		world.setBlock(i, j, k, this, l, 3);
 		if (ReikaRandomHelper.doWithChance(0.02))
 			RadiationEffects.instance.contaminateArea(world, i, j+ReikaRandomHelper.getSafeRandomInt(3), k, 8, 1, 0, false, RadiationIntensity.LETHAL);
 		if (ReikaRandomHelper.doWithChance(0.1))

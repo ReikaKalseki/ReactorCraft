@@ -223,8 +223,13 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 		return false;
 	}
 
-	public void setTemperature(int temp) {
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
 	}
 
 	@Override

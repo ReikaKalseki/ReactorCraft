@@ -505,6 +505,11 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
+
+	@Override
 	public boolean canDischargeLongRange() {
 		return false;
 	}

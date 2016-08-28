@@ -334,8 +334,12 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		return true;
 	}
 
-	public void setTemperature(int temp) {
+	public boolean allowExternalHeating() {
+		return false;
+	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
 	}
 
 	@Override

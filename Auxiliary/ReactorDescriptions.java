@@ -34,6 +34,7 @@ import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityReactorPump;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySolarExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
@@ -230,5 +231,8 @@ public final class ReactorDescriptions {
 		addNotes(ReactorTiles.FLUIDEXTRACTOR, TileEntityHeavyPump.MINPOWER, TileEntityHeavyPump.MINTORQUE);
 		addNotes(ReactorTiles.TURBINEMETER, TileEntityTurbineCore.GEN_OMEGA, TileEntityHiPTurbine.GEN_OMEGA);
 		addData(ReactorTiles.FUELDUMP, TileEntityThoriumCore.FUEL_DUMP_TEMPERATURE);
+		addData(ReactorTiles.SOLARTOP, ReactorTiles.SOLARTOP.getName());
+		addData(ReactorTiles.SOLAR, ReactorTiles.SOLAR.getName());
+		addNotes(ReactorTiles.SOLAR, TileEntitySolarExchanger.MINPOWER, TileEntitySolarExchanger.MINSPEED);
 	}
 }
