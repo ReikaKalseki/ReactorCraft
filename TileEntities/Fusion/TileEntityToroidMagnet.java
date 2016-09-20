@@ -220,9 +220,14 @@ ChunkLoadingTile, NeutronTile {
 		else if (r == ReactorTiles.INJECTOR) {
 			dx += a.xOffset;
 			dz += a.zOffset;
-			TileEntityToroidMagnet te = (TileEntityToroidMagnet)worldObj.getTileEntity(dx, yCoord, dz);
-			if (te != null) {
-				hasSolenoid = te.hasSolenoid;
+			TileEntity te = worldObj.getTileEntity(dx, yCoord, dz);
+			while (te instanceof TileEntityFusionInjector) {
+				dx += a.xOffset;
+				dz += a.zOffset;
+				te = worldObj.getTileEntity(dx, yCoord, dz);
+			}
+			if (te instanceof TileEntityToroidMagnet) {
+				hasSolenoid = ((TileEntityToroidMagnet)te).hasSolenoid;
 			}
 		}
 	}
