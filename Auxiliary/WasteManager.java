@@ -124,7 +124,7 @@ public class WasteManager {
 	}
 
 	public static ChancedOutputList getOutputs() {
-		ChancedOutputList c = new ChancedOutputList();
+		ChancedOutputList c = new ChancedOutputList(false);
 		for (Isotopes i : wastes) {
 			float ch = (float)(100F*yields.getWeight(i)/yields.getMaxWeight());
 			if (ch > 0)
@@ -134,7 +134,7 @@ public class WasteManager {
 	}
 
 	public static ChancedOutputList getThoriumOutputs() {
-		ChancedOutputList c = new ChancedOutputList();
+		ChancedOutputList c = new ChancedOutputList(false);
 		for (Isotopes i : wastes) {
 			float ch = (float)(100F*thoriumYields.getWeight(i)/thoriumYields.getMaxWeight());
 			if (ch > 0)

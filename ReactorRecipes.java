@@ -77,7 +77,7 @@ public class ReactorRecipes {
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
-		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 20, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
+		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
 	}
 
 	public static void addModInterface() {

@@ -284,7 +284,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection dir) {
-		return mode == Modes.EU && dir == this.getFacing().getOpposite();
+		return mode == Modes.EU;// && dir == this.getFacing().getOpposite();
 	}
 
 	@Override
