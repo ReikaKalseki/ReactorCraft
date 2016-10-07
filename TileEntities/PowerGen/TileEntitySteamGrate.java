@@ -57,7 +57,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 	private boolean canMakeSteam(World world, int x, int y, int z) {
 		if (steam <= 0)
 			return false;
-		if (world.isBlockIndirectlyGettingPowered(x, y, z) != requireRedstone)
+		if (this.hasRedstoneSignal() != requireRedstone)
 			return false;
 		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
@@ -69,16 +69,16 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 
 	private ForgeDirection getFacing(int meta) {
 		switch(meta) {
-		case 0:
-			return ForgeDirection.EAST;
-		case 1:
-			return ForgeDirection.WEST;
-		case 2:
-			return ForgeDirection.SOUTH;
-		case 3:
-			return ForgeDirection.NORTH;
-		default:
-			return ForgeDirection.UNKNOWN;
+			case 0:
+				return ForgeDirection.EAST;
+			case 1:
+				return ForgeDirection.WEST;
+			case 2:
+				return ForgeDirection.SOUTH;
+			case 3:
+				return ForgeDirection.NORTH;
+			default:
+				return ForgeDirection.UNKNOWN;
 		}
 	}
 

@@ -83,6 +83,7 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
+		super.onNeighborBlockChange(world, x, y, z, id);
 		TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}

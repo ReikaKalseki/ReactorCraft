@@ -80,7 +80,7 @@ ToggleTile, NeutronTile {
 			return false;
 		if (!enabled)
 			return false;
-		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if (this.hasRedstoneSignal())
 			return false;
 		return true;
 	}

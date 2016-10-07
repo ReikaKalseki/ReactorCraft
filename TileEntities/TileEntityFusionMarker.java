@@ -35,7 +35,7 @@ public class TileEntityFusionMarker extends TileEntityReactorBase {
 	}
 
 	public boolean renderLines() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return this.hasRedstoneSignal();
 	}
 
 	public ArrayList<Aim> getAimPoints() {
