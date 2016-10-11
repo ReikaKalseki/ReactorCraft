@@ -24,6 +24,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorBookData;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
@@ -50,6 +51,7 @@ public enum ReactorBook implements HandbookEntry {
 	ENRICHMENT("Uranium Enrichment", ReactorTiles.CENTRIFUGE),
 	MELTDOWN("Meltdowns", MatBlocks.SLAG.getStackOf()),
 	RADIATION("Radiation", ReactorItems.WASTE),
+	SHIELDING("Shielding", ItemStacks.steelblock),
 	STRUCTURES("Structures", ReactorBlocks.HEATERMULTI.getStackOfMetadata(11)),
 
 	//--------------------PROCESSING---------------//

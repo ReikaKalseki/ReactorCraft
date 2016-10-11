@@ -21,6 +21,7 @@ import Reika.DragonAPI.Instantiable.Event.Client.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
@@ -234,5 +235,7 @@ public final class ReactorDescriptions {
 		addData(ReactorTiles.SOLARTOP, ReactorTiles.SOLARTOP.getName());
 		addData(ReactorTiles.SOLAR, ReactorTiles.SOLAR.getName());
 		addNotes(ReactorTiles.SOLAR, TileEntitySolarExchanger.MINPOWER, TileEntitySolarExchanger.MINSPEED);
+
+		addData(ReactorBook.SHIELDING, RadiationShield.getDataAsString());
 	}
 }

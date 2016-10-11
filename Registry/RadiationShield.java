@@ -18,19 +18,22 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 
 
 public enum RadiationShield {
 
-	STEEL(90, 95, new BlockKey(ItemStacks.steelblock)),
-	CONCRETE(60, 70, new BlockKey(ReactorBlocks.MATS.getBlockInstance(), MatBlocks.CONCRETE.ordinal())),
-	WATER(30, 10, new BlockKey(Blocks.water), new BlockKey(Blocks.flowing_water)),
-	BEDINGOT(97.5, 100, new BlockKey(ItemStacks.bedingotblock)),
-	LEAD(75, 50, "blockLead"),
-	OBSIDIAN(50, 80, new BlockKey(Blocks.obsidian));
+	STEEL("Steel", 90, 95, new BlockKey(ItemStacks.steelblock)),
+	CONCRETE("Concrete", 60, 70, new BlockKey(ReactorBlocks.MATS.getBlockInstance(), MatBlocks.CONCRETE.ordinal())),
+	WATER("Water", 30, 10, new BlockKey(Blocks.water), new BlockKey(Blocks.flowing_water)),
+	BEDINGOT("Bedrock Ingot", 97.5, 100, new BlockKey(ItemStacks.bedingotblock)),
+	LEAD("Lead", 75, 50, "blockLead"),
+	OBSIDIAN("Obsidian", 50, 80, new BlockKey(Blocks.obsidian)),
+	BLASTGLASS("Blast Glass", 80, 20, new BlockKey(BlockRegistry.BLASTGLASS.getBlockInstance()));
 
 	public final double neutronAbsorbChance;
 	public final double radiationDeflectChance;
+	public final String displayName;
 
 	private final ArrayList<BlockKey> blocks = new ArrayList();
 
@@ -38,7 +41,8 @@ public enum RadiationShield {
 
 	public static final RadiationShield[] shieldList = values();
 
-	private RadiationShield(double n, double r, BlockKey... bks) {
+	private RadiationShield(String s, double n, double r, BlockKey... bks) {
+		displayName = s;
 		neutronAbsorbChance = n;
 		radiationDeflectChance = r;
 
@@ -48,8 +52,8 @@ public enum RadiationShield {
 		}
 	}
 
-	private RadiationShield(double n, double r, String... ores) {
-		this(n, r, getBlockKeysForOreDicts(ores));
+	private RadiationShield(String s, double n, double r, String... ores) {
+		this(s, n, r, getBlockKeysForOreDicts(ores));
 	}
 
 	private static BlockKey[] getBlockKeysForOreDicts(String[] ores) {
@@ -77,6 +81,16 @@ public enum RadiationShield {
 			for (BlockKey bk : rs.blocks)
 				blockMap.put(bk, rs);
 		}
+	}
+
+	public static String getDataAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < shieldList.length; i++) {
+			RadiationShield type = shieldList[i];
+			sb.append(type.displayName+": "+type.neutronAbsorbChance+"% neutron absorption, "+type.radiationDeflectChance+" radiation containment");
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 
 }
