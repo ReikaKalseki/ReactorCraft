@@ -133,6 +133,8 @@ public class GuiReactorBook extends GuiHandbook {
 		if (h == ReactorBook.STRUCTURES) {
 			return ReactorStructures.structureList.length;
 		}
+		if (h == ReactorBook.SHIELDING)
+			return 1;
 		return h.isMachine() ? 1 : 0;
 	}
 

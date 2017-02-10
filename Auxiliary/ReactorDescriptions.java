@@ -236,6 +236,6 @@ public final class ReactorDescriptions {
 		addData(ReactorTiles.SOLAR, ReactorTiles.SOLAR.getName());
 		addNotes(ReactorTiles.SOLAR, TileEntitySolarExchanger.MINPOWER, TileEntitySolarExchanger.MINSPEED);
 
-		addData(ReactorBook.SHIELDING, RadiationShield.getDataAsString());
+		notes.put(ReactorBook.SHIELDING, RadiationShield.getDataAsString());
 	}
 }

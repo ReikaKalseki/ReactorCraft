@@ -36,14 +36,12 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	}
 
 	@Override
-	public int getEntityLifespan(ItemStack itemStack, World world)
-	{
+	public int getEntityLifespan(ItemStack itemStack, World world) {
 		return Integer.MAX_VALUE;
 	}
 
 	@Override
-	public boolean hasCustomEntity(ItemStack stack)
-	{
+	public boolean hasCustomEntity(ItemStack stack) {
 		return true;
 	}
 

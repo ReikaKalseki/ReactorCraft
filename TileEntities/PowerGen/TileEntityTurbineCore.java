@@ -521,6 +521,8 @@ MultiBlockTile, BreakAction, ToggleTile {
 			return false;
 		if (name.equalsIgnoreCase("EntityBallLightning"))
 			return false;
+		if (name.equalsIgnoreCase("EntityGlowCloud"))
+			return false;
 		return true;
 	}
 

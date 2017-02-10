@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -724,6 +725,11 @@ public class ReactorCraft extends DragonAPIMod {
 	@Override
 	public ModLogger getModLogger() {
 		return logger;
+	}
+
+	@Override
+	public File getConfigFolder() {
+		return config.getConfigFolder();
 	}
 
 }

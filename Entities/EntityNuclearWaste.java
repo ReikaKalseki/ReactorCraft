@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -97,6 +98,11 @@ public final class EntityNuclearWaste extends EntityItem {
 				RadiationEffects.instance.contaminateArea(world, ix, iy, iz, RANGE*4, 2, 0, false, RadiationIntensity.HIGHLEVEL); //no LOS to simulate groundwater/air particulates
 			}
 		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource src, float dmg) {
+		return false;
 	}
 
 	@Override

@@ -22,8 +22,7 @@
 		Radioactivity is a dangerous property of many nuclear materials, as it will severely poison living things. Low-level radioactivity is not immediately lethal, but it can bring about unpleasant effects such as dizziness and nausea. Higher levels of radioactivity, such as those left behind after a nuclear meltdown, will kill in fairly short order. Radioactivity leaves a distinctive mark on the land, killing plants, grass, and and animals alike. Radiation cannot be cleaned manually, but will gradually decay over time, and can be washed away by rain.
 	</radiation>
 	<shielding>
-		Most reactors fire out high-energy neutrons that can harm or kill living things, and to this end it is almost universally advisable to shield such a reactor. Additionally, should a meltdown occur, proper shielding can limit both structural damage and the spread of lethal levels of radiation. Only a few block types are effective in this regard:
-		%s
+		Most reactors fire out high-energy neutrons that can harm or kill living things, and to this end it is almost universally advisable to shield such a reactor. Additionally, should a meltdown occur, proper shielding can limit both structural damage and the spread of lethal levels of radiation. Only a few block types are effective in this regard.
 	</shielding>
 	<structures>
 		Nuclear reactors and their parts are often large, far larger than the cubic meter in which most machines will fit. Additionally, they are often comprised of many individual parts which only form a coherent whole in a specific arrangement.

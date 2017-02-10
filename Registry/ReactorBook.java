@@ -311,7 +311,7 @@ public enum ReactorBook implements HandbookEntry {
 
 	@Override
 	public boolean hasSubpages() {
-		return this.isMachine() || this == STRUCTURES;
+		return this.isMachine() || this == STRUCTURES || this == SHIELDING;
 	}
 
 	public String getTabImageFile() {

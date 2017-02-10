@@ -86,7 +86,7 @@ public class ReactorRecipes {
 		ArrayList<ItemStack> li = OreDictionary.getOres(ReactorOres.MAGNETITE.getProductDictionaryName());
 		for(ItemStack is : li) {
 			if (is.getItem() != ReactorStacks.lodestone.getItem()) {
-				GameRegistry.addShapelessRecipe(is, ReactorStacks.lodestone);
+				GameRegistry.addShapelessRecipe(is.copy(), ReactorStacks.lodestone);
 			}
 		}
 
