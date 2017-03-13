@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -113,6 +114,7 @@ public class RadiationEffects {
 	public double contaminateArea(World world, int x, int y, int z, int range, float density, double force, boolean los, RadiationIntensity ri) {
 		double frac = 1;
 		int num = Math.max(1, (int)(Math.sqrt(range)*density));
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(range, range, range);
 		for (int i = 0; i < num; i++) {
 			int dx = ReikaRandomHelper.getRandomPlusMinus(x, range);
 			int dy = ReikaRandomHelper.getRandomPlusMinus(y, range);

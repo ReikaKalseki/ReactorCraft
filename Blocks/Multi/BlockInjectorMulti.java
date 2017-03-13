@@ -104,6 +104,12 @@ public class BlockInjectorMulti extends BlockMultiBlock implements NeutronBlock 
 			if (b != this || meta != 1)
 				return false;
 		}
+		for (int i = 0; i <= 8; i++) {
+			Block b = world.getBlock(x+dir.offsetX*i-left.offsetX, y-1, z+dir.offsetZ*i-left.offsetZ);
+			int meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y-1, z+dir.offsetZ*i-left.offsetZ);
+			if (b != this || meta != 1)
+				return false;
+		}
 
 
 

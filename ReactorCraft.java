@@ -122,7 +122,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod( modid = "ReactorCraft", name="ReactorCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
+@Mod( modid = "ReactorCraft", name="ReactorCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
 public class ReactorCraft extends DragonAPIMod {
 
 	@Instance("ReactorCraft")

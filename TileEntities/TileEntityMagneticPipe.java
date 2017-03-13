@@ -26,8 +26,10 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockDuct;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
@@ -36,7 +38,7 @@ import Reika.RotaryCraft.API.Interfaces.Shockable;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 
-public class TileEntityMagneticPipe extends TileEntityReactorPiping implements Shockable {
+public class TileEntityMagneticPipe extends TileEntityReactorPiping implements Shockable, NeutronTile {
 
 	private int charge;
 
@@ -207,6 +209,11 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	@Override
 	public boolean canDischargeLongRange() {
 		return true;
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 
 }

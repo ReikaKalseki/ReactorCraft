@@ -46,8 +46,7 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	}
 
 	@Override
-	public Entity createEntity(World world, Entity location, ItemStack itemstack)
-	{
+	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
 		EntityNuclearWaste ei = new EntityNuclearWaste(world, location.posX, location.posY, location.posZ, itemstack);
 		ei.motionX = location.motionX;
 		ei.motionY = location.motionY;
