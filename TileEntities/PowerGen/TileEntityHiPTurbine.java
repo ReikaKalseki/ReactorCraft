@@ -353,16 +353,14 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		fluid.saveToNBT(NBT);
@@ -387,6 +385,16 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 				}
 			}
 		}
+	}
+
+	@Override
+	protected int getLubricantCapacity() {
+		return 128000;
+	}
+
+	@Override
+	protected boolean canCollideCheck() {
+		return false;
 	}
 
 }

@@ -77,7 +77,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 
 	private boolean ammonia;
 
-	protected final HybridTank tank = new HybridTank("turbine", 64000);
+	protected final HybridTank tank = new HybridTank("turbine", this.getLubricantCapacity());
 
 	private Interference inter = null;
 
@@ -92,6 +92,10 @@ MultiBlockTile, BreakAction, ToggleTile {
 
 	public final void markForMulti() {
 		readyForMultiBlock = true;
+	}
+
+	protected int getLubricantCapacity() {
+		return 64000;
 	}
 
 	public void setHasMultiBlock(boolean has) {
@@ -151,7 +155,8 @@ MultiBlockTile, BreakAction, ToggleTile {
 		this.distributeLubricant(world, x, y, z, meta);
 		this.readSurroundings(world, x, y, z, meta);
 		this.followHead(world, x, y, z, meta);
-		this.enviroTest(world, x, y, z, meta);
+		if (this.canCollideCheck())
+			this.enviroTest(world, x, y, z, meta);
 
 		readyForMultiBlock = false;
 
@@ -281,6 +286,22 @@ MultiBlockTile, BreakAction, ToggleTile {
 				writey = y;
 				writez = z+1;
 				break;
+			case 4:
+				readx = x;
+				ready = y-1;
+				readz = z;
+				writex = x;
+				writey = y+1;
+				writez = z;
+				break;
+			case 5:
+				readx = x;
+				ready = y+1;
+				readz = z;
+				writex = x;
+				writey = y-1;
+				writez = z;
+				break;
 		}
 	}
 
@@ -395,6 +416,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 		return box;
 	}
 
+	/** Return true if turbine is to accelerate */
 	protected boolean intakeSteam(World world, int x, int y, int z, int meta) {
 		Block id = world.getBlock(x, y-1, z);
 		int meta2 = world.getBlockMetadata(x, y-1, z);
@@ -421,25 +443,27 @@ MultiBlockTile, BreakAction, ToggleTile {
 	}
 
 	private void readSurroundings(World world, int x, int y, int z, int meta) {
-		contact.clear();
-		if (contact.isEmpty()) {
-			this.fillSurroundings(world, x, y, z, meta);
-		}
-		inter = null;
-		for (int i = 0; i < contact.getSize(); i++) {
-			Coordinate c = contact.getNthBlock(i);
-			if (ReikaMathLibrary.py3d(x-c.xCoord, y-c.yCoord, z-c.zCoord) <= this.getRadius()) {
-				Block id2 = c.getBlock(world);
-				int meta2 = c.getBlockMetadata(world);
-				if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !c.equals(x, y, z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
-					phi = 0;
-					omega = 0;
-					if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
-						inter = Interference.JAM;
-				}
-				else if (id2 instanceof BlockLiquid || id2 instanceof BlockFluidBase) {
-					if (inter == null || inter.maxSpeed > Interference.FLUID.maxSpeed)
-						inter = Interference.FLUID;
+		if (this.canCollideCheck()) {
+			contact.clear();
+			if (contact.isEmpty()) {
+				this.fillSurroundings(world, x, y, z, meta);
+			}
+			inter = null;
+			for (int i = 0; i < contact.getSize(); i++) {
+				Coordinate c = contact.getNthBlock(i);
+				if (ReikaMathLibrary.py3d(x-c.xCoord, y-c.yCoord, z-c.zCoord) <= this.getRadius()) {
+					Block id2 = c.getBlock(world);
+					int meta2 = c.getBlockMetadata(world);
+					if (!ReikaWorldHelper.softBlocks(world, c.xCoord, c.yCoord, c.zCoord) && !c.equals(x, y, z) && id2 != ReactorBlocks.TURBINEMULTI.getBlockInstance()) {
+						phi = 0;
+						omega = 0;
+						if (inter == null || inter.maxSpeed > Interference.JAM.maxSpeed)
+							inter = Interference.JAM;
+					}
+					else if (id2 instanceof BlockLiquid || id2 instanceof BlockFluidBase) {
+						if (inter == null || inter.maxSpeed > Interference.FLUID.maxSpeed)
+							inter = Interference.FLUID;
+					}
 				}
 			}
 		}
@@ -448,6 +472,10 @@ MultiBlockTile, BreakAction, ToggleTile {
 			if (!world.isRemote)
 				this.updateSpeed(accel);
 		}
+	}
+
+	protected boolean canCollideCheck() {
+		return true;
 	}
 
 	protected boolean enabled(World world, int x, int y, int z) {
@@ -721,8 +749,12 @@ MultiBlockTile, BreakAction, ToggleTile {
 	@Override
 	public final boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
 		int meta = this.getBlockMetadata();
-		this.setBlockMetadata(meta < 3 ? meta+1 : 0);
+		this.setBlockMetadata(meta < (this.canOrientVertically() ? 5 : 3) ? meta+1 : 0);
 		return true;
+	}
+
+	protected boolean canOrientVertically() {
+		return false;
 	}
 
 	@Override
