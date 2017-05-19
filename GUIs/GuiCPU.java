@@ -60,7 +60,7 @@ public class GuiCPU extends ReactorGuiBase {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		PacketTarget pt = new PacketTarget.ServerTarget();
+		PacketTarget pt = PacketTarget.server;
 		switch(button.id) {
 			case 0:
 			case 1:
@@ -122,7 +122,7 @@ public class GuiCPU extends ReactorGuiBase {
 		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(tile.worldObj, a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod, new PacketTarget.ServerTarget());
+			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod, PacketTarget.server);
 			Minecraft.getMinecraft().thePlayer.playSound("random.click", 0.5F, 0.9F);
 		}
 	}

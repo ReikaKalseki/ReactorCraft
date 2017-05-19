@@ -93,23 +93,30 @@ public class ModelTurbine extends RotaryModelBase
 		GL11.glRotatef(-phi, 0, 0, 1);
 		GL11.glTranslated(0, -vo, 0);
 
-		GL11.glTranslated(0, 0, dd);
+		if (this.renderTwoStages())
+			GL11.glTranslated(0, 0, dd);
 
 		this.renderBlades(te, damage, vo, phi);
 
-		GL11.glTranslated(0, 0, -dd*2);
+		if (this.renderTwoStages()) {
+			GL11.glTranslated(0, 0, -dd*2);
 
-		GL11.glTranslated(0, vo, 0);
-		GL11.glScaled(sc, sc, 1);
-		GL11.glTranslated(0, -vo, 0);
+			GL11.glTranslated(0, vo, 0);
+			GL11.glScaled(sc, sc, 1);
+			GL11.glTranslated(0, -vo, 0);
 
-		this.renderBlades(te, damage, vo, phi);
+			this.renderBlades(te, damage, vo, phi);
 
-		GL11.glTranslated(0, vo, 0);
-		GL11.glScaled(1D/sc, 1D/sc, 1);
-		GL11.glTranslated(0, -vo, 0);
+			GL11.glTranslated(0, vo, 0);
+			GL11.glScaled(1D/sc, 1D/sc, 1);
+			GL11.glTranslated(0, -vo, 0);
 
-		GL11.glTranslated(0, 0, dd);
+			GL11.glTranslated(0, 0, dd);
+		}
+	}
+
+	protected boolean renderTwoStages() {
+		return true;
 	}
 
 	private void renderBlades(TileEntity te, int damage, double vo, float phi) {
@@ -128,76 +135,76 @@ public class ModelTurbine extends RotaryModelBase
 
 	public int getBladeLength() {
 		switch(stage) {
-		case 0:
-			return 16;
-		case 1:
-			return 24;
-		case 2:
-			return 28;
-		case 3:
-			return 33;
-		case 4:
-			return 40;
+			case 0:
+				return 16;
+			case 1:
+				return 24;
+			case 2:
+				return 28;
+			case 3:
+				return 33;
+			case 4:
+				return 40;
 		}
 		return 4;
 	}
 
 	public int getAngularSeparation() {
 		switch(stage) {
-		case 0:
-			return 8;
-		case 1:
-			return 5;
-		case 2:
-			return 8;
-		case 3:
-			return 8;
-		case 4:
-			return 8;
-		case 5:
-			return 9;
-		case 6:
-			return 10;
+			case 0:
+				return 8;
+			case 1:
+				return 5;
+			case 2:
+				return 8;
+			case 3:
+				return 8;
+			case 4:
+				return 8;
+			case 5:
+				return 9;
+			case 6:
+				return 10;
 		}
 		return 10;
 	}
 
 	public int getBladeTwist() {
 		switch(stage) {
-		case 0:
-			return 10;
-		case 1:
-			return 15;
-		case 2:
-			return 20;
-		case 3:
-			return 30;
-		case 4:
-			return 45;
-		case 5:
-			return 45;
-		case 6:
-			return 50;
+			case 0:
+				return 10;
+			case 1:
+				return 15;
+			case 2:
+				return 20;
+			case 3:
+				return 30;
+			case 4:
+				return 45;
+			case 5:
+				return 45;
+			case 6:
+				return 50;
 		}
 		return 10;
 	}
 
 	public int getBladeWidth() {
 		switch(stage) {
-		case 0:
-			return 2;
-		case 1:
-			return 2;
-		case 2:
-			return 2;
-		case 3:
-			return 3;
-		case 4:
-			return 4;
-		case 5:
-			return 6;
-		case 6:
-			return 8;
+			case 0:
+				return 2;
+			case 1:
+				return 2;
+			case 2:
+				return 2;
+			case 3:
+				return 3;
+			case 4:
+				return 4;
+			case 5:
+				return 6;
+			case 6:
+				return 8;
 		}
 		return 2;
 	}

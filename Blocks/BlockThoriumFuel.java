@@ -79,7 +79,7 @@ public class BlockThoriumFuel extends BlockFluidFinite {
 			;//this.tryAggressiveSpread(world, x, y, z, rand);
 
 		if (ReikaRandomHelper.doWithChance(0.005))
-			RadiationEffects.instance.contaminateArea(world, x, y+ReikaRandomHelper.getSafeRandomInt(2), z, 2, 0.25F, 0, false, RadiationIntensity.MODERATE);
+			RadiationEffects.instance.contaminateArea(world, x, y+rand.nextInt(2), z, 2, 0.25F, 0, false, RadiationIntensity.MODERATE);
 	}
 
 	private void tryAggressiveSpread(World world, int x, int y, int z, Random rand) {

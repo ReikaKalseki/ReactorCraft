@@ -85,6 +85,12 @@ public enum ReactorSounds implements SoundEnum {
 		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
 	}
 
+	public void playSound(World world, double x, double y, double z, float vol, float pitch, boolean attenuate) {
+		if (world.isRemote)
+			return;
+		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, attenuate);
+	}
+
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
 		this.playSound(world, x+0.5, y+0.5, z+0.5, vol, pitch);
 	}

@@ -1,6 +1,16 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2017
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
 import net.minecraft.world.World;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 
 
@@ -26,7 +36,7 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected double getEfficiency() {
-		return 0.8+0.2*this.getNumberStagesTotal()/(this.getMaxStage()+1);
+		return Math.pow(this.getNumberStagesTotal()/(this.getMaxStage()+1), 0.8);
 	}
 
 	@Override
@@ -77,6 +87,11 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 	@Override
 	protected boolean canOrientVertically() {
 		return true;
+	}
+
+	@Override
+	public int getIndex() {
+		return ReactorTiles.MINITURBINE.ordinal();
 	}
 
 }

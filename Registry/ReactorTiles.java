@@ -56,6 +56,7 @@ import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityCO2Heater;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCentrifugalTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityCondenser;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHeatExchanger;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
@@ -118,7 +119,8 @@ public enum ReactorTiles implements TileEnum {
 	WASTEPIPE("machine.wastepipe",				ReactorBlocks.DUCT,				TileEntityWastePipe.class,		2),
 	FUELDUMP("machine.fueldump",				ReactorBlocks.REACTOR,			TileEntityFuelDump.class,		13),
 	SOLAR("machine.solarexchange",				ReactorBlocks.MODELMACHINE,		TileEntitySolarExchanger.class,	11, "RenderSolarExchanger"),
-	SOLARTOP("machine.solartop",				ReactorBlocks.MODELMACHINE,		TileEntitySolarTop.class,		12, "RenderSolarTop");
+	SOLARTOP("machine.solartop",				ReactorBlocks.MODELMACHINE,		TileEntitySolarTop.class,		12, "RenderSolarTop"),
+	MINITURBINE("machine.miniturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityCentrifugalTurbine.class,	8, "RenderMiniTurbine");
 
 	private final String name;
 	private final Class teClass;

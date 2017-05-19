@@ -44,6 +44,7 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -310,12 +311,19 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 				return true;
 			}
 		}
-		if (r == ReactorTiles.FLUIDEXTRACTOR && is != null && is.getItem() == Items.bucket && is.stackSize == 1) {
+		if (r == ReactorTiles.FLUIDEXTRACTOR && is != null && is.stackSize == 1) {
 			TileEntityHeavyPump te = (TileEntityHeavyPump)world.getTileEntity(x, y, z);
 			if (te.hasABucket()) {
-				te.subtractBucket();
-				ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
-				return true;
+				if (is.getItem() == Items.bucket && te.getFluid() == FluidRegistry.getFluid("rc heavy water")) {
+					te.subtractBucket();
+					ep.setCurrentItemOrArmor(0, ReactorItems.BUCKET.getStackOf());
+					return true;
+				}
+				else if (ReikaItemHelper.matchStacks(is, ReactorStacks.emptycan) && te.getFluid() == FluidRegistry.getFluid("rc lithium")) {
+					te.subtractBucket();
+					ep.setCurrentItemOrArmor(0, ReactorStacks.lican.copy());
+					return true;
+				}
 			}
 		}
 		if (r == ReactorTiles.SODIUMBOILER && is != null && is.stackSize == 1) {
@@ -356,7 +364,7 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 			TileEntityUProcessor te = (TileEntityUProcessor)world.getTileEntity(x, y, z);
 			if (is.getItemDamage() == ReactorStacks.emptycan.getItemDamage() && te.getOutput() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				if (!ep.capabilities.isCreativeMode)
-					ep.setCurrentItemOrArmor(0, ReactorStacks.uf6can.copy());
+					ep.setCurrentItemOrArmor(0, /*te.getOutputFluid() == FluidRegistry.getFluid("rc uranium hexafluoride") ? ReactorStacks.uf6can.copy() : ReactorStacks.lifbecan.copy()*/ReikaFluidHelper.getAllContainersFor(te.getOutputFluid()).get(0));
 				te.drain(null, FluidContainerRegistry.BUCKET_VOLUME, true);
 			}
 			else if (is.getItemDamage() == ReactorStacks.hfcan.getItemDamage() && te.canAcceptMoreIntermediate(FluidContainerRegistry.BUCKET_VOLUME)) {

@@ -371,4 +371,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 	}
 
+	public Fluid getFluid() {
+		return tank.getActualFluid();
+	}
+
 }

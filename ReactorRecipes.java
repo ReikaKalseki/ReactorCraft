@@ -267,7 +267,7 @@ public class ReactorRecipes {
 
 		GameRegistry.addRecipe(ReactorItems.IRONFINDER.getStackOf(), "L L", "S S", "SSS", 'S', ItemStacks.steelingot, 'L', ReactorStacks.lodestone);
 
-		ItemRegistry.UPGRADE.addMetaBlastRecipe(2000, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', CraftingItems.FERROINGOT.getItem(), 'T', ItemStacks.tungsteningot);
+		ItemRegistry.UPGRADE.addMetaBlastRecipe(1980, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', CraftingItems.FERROINGOT.getItem(), 'T', ItemStacks.tungsteningot);
 	}
 
 	private static void addMachines() {
