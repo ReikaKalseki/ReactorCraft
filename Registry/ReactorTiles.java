@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
@@ -29,6 +30,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.TileEntities.TileEntityFusionMarker;
 import Reika.ReactorCraft.TileEntities.TileEntityGasCollector;
 import Reika.ReactorCraft.TileEntities.TileEntityGasDuct;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityHeavyPump;
 import Reika.ReactorCraft.TileEntities.TileEntityMagneticPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityNeutronReflector;
@@ -120,7 +122,8 @@ public enum ReactorTiles implements TileEnum {
 	FUELDUMP("machine.fueldump",				ReactorBlocks.REACTOR,			TileEntityFuelDump.class,		13),
 	SOLAR("machine.solarexchange",				ReactorBlocks.MODELMACHINE,		TileEntitySolarExchanger.class,	11, "RenderSolarExchanger"),
 	SOLARTOP("machine.solartop",				ReactorBlocks.MODELMACHINE,		TileEntitySolarTop.class,		12, "RenderSolarTop"),
-	MINITURBINE("machine.miniturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityCentrifugalTurbine.class,	8, "RenderMiniTurbine");
+	MINITURBINE("machine.miniturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityCentrifugalTurbine.class,	8, "RenderMiniTurbine"),
+	HEATPIPE("machine.heatpipe", 				ReactorBlocks.LINE,				TileEntityHeatPipe.class, 		3, "RenderWaterLine");
 
 	private final String name;
 	private final Class teClass;
@@ -346,6 +349,15 @@ public enum ReactorTiles implements TileEnum {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), RecipeLevel.CORE, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			}
+		}
+	}
+
+	public void addSizedOreCrafting(int num, Object... obj) {
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj), RecipeLevel.CORE);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj));
 			}
 		}
 	}

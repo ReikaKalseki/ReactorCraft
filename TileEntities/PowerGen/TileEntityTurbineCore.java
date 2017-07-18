@@ -764,7 +764,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 
 	@Override
 	public final boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE;
+		return m == MachineRegistry.HOSE || m == MachineRegistry.BEDPIPE;
 	}
 
 	@Override

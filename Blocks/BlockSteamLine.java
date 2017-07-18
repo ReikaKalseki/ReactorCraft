@@ -13,13 +13,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
+import Reika.ReactorCraft.Base.TileEntityLine;
 
 public class BlockSteamLine extends BlockReactorTileModelled {
 
@@ -84,13 +85,13 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
 		super.onNeighborBlockChange(world, x, y, z, id);
-		TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(x, y, z);
+		TileEntityLine te = (TileEntityLine)world.getTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntitySteamLine te = (TileEntitySteamLine)world.getTileEntity(x, y, z);
+		TileEntityLine te = (TileEntityLine)world.getTileEntity(x, y, z);
 		te.addToAdjacentConnections(world, x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
@@ -104,8 +105,13 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	}
 
 	@Override
-	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-	{
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
+		TileEntityLine te = (TileEntityLine)world.getTileEntity(x, y, z);
+		te.onEntityCollided(e);
 	}
 }

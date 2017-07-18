@@ -9,8 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -160,6 +162,11 @@ public class ReactorControlLayout {
 
 	public Collection<TileEntityControlRod> getAllRods() {
 		return Collections.unmodifiableCollection(controls.values());
+	}
+
+	public TileEntityControlRod getRandomRod(Random rand) {
+		ArrayList<TileEntityControlRod> li = new ArrayList(controls.values());
+		return li.get(rand.nextInt(li.size()));
 	}
 
 	public int countLoweredRods() {

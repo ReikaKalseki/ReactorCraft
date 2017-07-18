@@ -10,7 +10,6 @@
 package Reika.ReactorCraft.Renders;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 
@@ -20,6 +19,8 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
+import Reika.ReactorCraft.Base.TileEntityLine;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
 
 public class RenderWaterLine extends ReactorRenderBase {
@@ -27,7 +28,8 @@ public class RenderWaterLine extends ReactorRenderBase {
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityWaterLineAt(TileEntitySteamLine tile, double par2, double par4, double par6, float par8)
+	@Deprecated
+	private void renderTileEntityWaterLineAt(TileEntitySteamLine tile, double par2, double par4, double par6, float par8)
 	{
 		this.bindTextureByName("/Reika/ReactorCraft/Textures/TileEntity/waterline.png");
 
@@ -55,15 +57,15 @@ public class RenderWaterLine extends ReactorRenderBase {
 	{
 		//if (this.isValidMachineRenderpass((TileEntityReactorBase)tile))
 		//	this.renderTileEntityWaterLineAt((TileEntitySteamLine)tile, par2, par4, par6, par8);
-		TileEntitySteamLine te = (TileEntitySteamLine)tile;
+		TileEntityLine te = (TileEntityLine)tile;
 		if (!tile.hasWorldObj()) {
 			ReikaTextureHelper.bindTerrainTexture();
 			this.renderBlock(te, par2, par4, par6);
 		}
 	}
 
-	private void renderBlock(TileEntitySteamLine te, double par2, double par4, double par6) {
-		IIcon ico = Blocks.wool.getIcon(0, 7);//Blocks.stone.getIcon(0, 0);
+	private void renderBlock(TileEntityLine te, double par2, double par4, double par6) {
+		IIcon ico = te.getTexture();
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
@@ -73,7 +75,14 @@ public class RenderWaterLine extends ReactorRenderBase {
 
 		float f = 1F;//0.15F;
 		double s = 0.375;
-		GL11.glColor4f(f, f, f, 1);
+		float r = 1;
+		float g = 1;
+		float b = 1;
+		if (te instanceof TileEntityHeatPipe) {
+			g = 0.65F;
+			b = 0.3F;
+		}
+		GL11.glColor4f(r, g, b, 1);
 		GL11.glScaled(s, s, s);
 		for (int i = 0; i < 7; i++) {
 			double d1 = 0;
@@ -113,8 +122,8 @@ public class RenderWaterLine extends ReactorRenderBase {
 			v5.addVertexWithUV(0, 0, 0, u, v);
 			v5.draw();
 
-			f = 0.1F;
-			GL11.glColor4f(f, f, f, 1);
+			f = 0.375F;
+			GL11.glColor4f(f*r, f*g, f*b, 1);
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
 			v5.addVertexWithUV(1, 1, 0, u, dv);
@@ -131,8 +140,8 @@ public class RenderWaterLine extends ReactorRenderBase {
 			v5.addVertexWithUV(0, 1, 0, u, dv);
 			v5.draw();
 
-			f = 0.25F;
-			GL11.glColor4f(f, f, f, 1);
+			f = 0.625F;
+			GL11.glColor4f(f*r, f*g, f*b, 1);
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
 			v5.addVertexWithUV(0, 1, 1, u, dv);

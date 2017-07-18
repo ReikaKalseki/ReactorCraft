@@ -110,6 +110,7 @@
 			Max Speed: %d rad/s
 			Max Torque: %d Nm
 			Risks: Blade breakage due to collisions with objects
+			Turbines require lubrication
 		</note>
 	</turbinecore>
 	<pebblebed>

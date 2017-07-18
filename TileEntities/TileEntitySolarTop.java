@@ -116,8 +116,10 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public void tick(int mirrorCount, float totalBrightness) {
-		if (!worldObj.isRemote && this.getTicksExisted()%8 == 0)
-			temperature += (0.0625*7*mirrorCount*totalBrightness);
+		if (!worldObj.isRemote) {
+			temperature += (0.0625*2*mirrorCount*totalBrightness);
+			temperature = Math.min(temperature, MAXTEMP);
+		}
 	}
 
 }

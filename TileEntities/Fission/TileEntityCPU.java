@@ -54,6 +54,10 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		if (thermalTicker.checkCap())
 			this.updateTemperature(world, x, y, z);
 		if (!world.isRemote) {
+
+			if (world.getTotalWorldTime()%64 == 0)
+				reactor.clear();
+
 			if (reactor.isEmpty()) {
 				layout.clear();
 				int r = 12;
@@ -77,9 +81,6 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			}
 		}
 
-		if (world.getTotalWorldTime()%64 == 0)
-			reactor.clear();
-
 		//TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		//if (te instanceof TileEntityCPU) {
 		//	power = ((TileEntityCPU)te).power;
@@ -100,7 +101,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			this.SCRAM();
 
 		if (layout.getNumberRods() > 0) {
-			if (temperature > this.getMaxTemperature() && power >= this.getMinPower()*4) {
+			if ((temperature > this.getMaxTemperature() || layout.getRandomRod(rand).getTemperature() > this.getMaxTemperature()) && power >= this.getMinPower()*4) {
 				ReactorAchievements.SCRAM.triggerAchievement(this.getPlacer());
 				this.SCRAM();
 			}

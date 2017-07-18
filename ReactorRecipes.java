@@ -322,6 +322,10 @@ public class ReactorRecipes {
 
 		ReactorTiles.SOLARTOP.addCrafting("aPa", "tct", "sPs", 'a', CraftingItems.ALLOY.getItem(), 't', ItemStacks.tungsteningot, 'c', ItemStacks.condenser, 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 		ReactorTiles.SOLAR.addCrafting("sPs", "pEp", "sPs", 'p', ItemStacks.pipe, 'E', ReactorTiles.EXCHANGER.getCraftedProduct(), 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
+
+		ReactorTiles.HEATPIPE.addSizedCrafting(8, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', Items.gold_ingot);
+		if (ReikaItemHelper.oreItemExists("ingotCopper"))
+			ReactorTiles.HEATPIPE.addSizedOreCrafting(4, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', "ingotCopper");
 	}
 
 }
