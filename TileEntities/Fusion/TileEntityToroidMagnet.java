@@ -329,7 +329,7 @@ ChunkLoadingTile, NeutronTile {
 			return false;
 		if (!hasSolenoid)
 			return false;
-		if (charge <= 1000)
+		if (charge <= 2500/*1000*/)
 			return false;
 		if (tank.isEmpty())
 			return false;
