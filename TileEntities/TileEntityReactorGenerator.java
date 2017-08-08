@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2016
+ * Copyright 2017
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -137,9 +137,15 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 		if (r != null && r.isTurbine()) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getTileEntity(dx, dy, dz);
-			power = te.getPower();
-			omegain = te.getOmega();
-			torquein = te.getTorque();
+			if (te.getSteamMovement() == this.getFacing().getOpposite()) {
+				power = te.getPower();
+				omegain = te.getOmega();
+				torquein = te.getTorque();
+			}
+			else {
+				omegain = torquein = 0;
+				power = 0;
+			}
 		}
 		else {
 			omegain = torquein = 0;
