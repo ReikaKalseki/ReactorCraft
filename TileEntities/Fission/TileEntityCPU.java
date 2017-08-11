@@ -9,17 +9,22 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Fission;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
@@ -39,6 +44,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 
 	private ReactorControlLayout layout;
 	private final BlockArray reactor = new BlockArray();
+	private final ArrayList<TemperatureMonitor> temperatureChecks = new ArrayList();
 
 	public static final int POWERPERROD = 1024;
 
@@ -101,7 +107,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 			this.SCRAM();
 
 		if (layout.getNumberRods() > 0) {
-			if ((temperature > this.getMaxTemperature() || layout.getRandomRod(rand).getTemperature() > this.getMaxTemperature()) && power >= this.getMinPower()*4) {
+			if ((temperature > this.getMaxTemperature() || (!temperatureChecks.isEmpty() && temperatureChecks.get(rand.nextInt(temperatureChecks.size())).getTemperature(this) > this.getMaxTemperature())) && power >= this.getMinPower()*4) {
 				ReactorAchievements.SCRAM.triggerAchievement(this.getPlacer());
 				this.SCRAM();
 			}
@@ -268,8 +274,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		omega = NBT.getInteger("speed");
@@ -283,8 +288,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("speed", omega);
@@ -301,20 +305,73 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		NBTTagCompound tag = new NBTTagCompound();
-		NBT.setTag("rods", tag);
+		NBTTagList li = new NBTTagList();
+		for (TemperatureMonitor m : temperatureChecks) {
+			li.appendTag(m.writeToNBT());
+		}
+		NBT.setTag("checks", li);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		NBTTagCompound tag = NBT.getCompoundTag("rods");
+		temperatureChecks.clear();
+		NBTTagList li = NBT.getTagList("checks", NBTTypes.COMPOUND.ID);
+		for (Object o : li.tagList) {
+			NBTTagCompound tag = (NBTTagCompound)o;
+			temperatureChecks.add(TemperatureMonitor.readFromNBT(tag));
+		}
 	}
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
+	}
+
+	public void addTemperatureCheck(LinkableReactorCore te) {
+		temperatureChecks.add(new TemperatureMonitor(te));
+		te.link(this);
+	}
+
+	public void removeTemperatureCheck(LinkableReactorCore te) {
+		temperatureChecks.remove(new TemperatureMonitor(te));
+	}
+
+	private static class TemperatureMonitor {
+
+		private final Coordinate location;
+
+		private TemperatureMonitor(LinkableReactorCore te) {
+			location = new Coordinate((TileEntity)te);
+		}
+
+		private TemperatureMonitor(Coordinate c) {
+			location = c;
+		}
+
+		public NBTTagCompound writeToNBT() {
+			return location.writeToTag();
+		}
+
+		public static TemperatureMonitor readFromNBT(NBTTagCompound tag) {
+			return new TemperatureMonitor(Coordinate.readTag(tag));
+		}
+
+		public int getTemperature(TileEntityCPU te) {
+			return ((LinkableReactorCore)location.getTileEntity(te.worldObj)).getTemperature();
+		}
+
+		@Override
+		public int hashCode() {
+			return location.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return o instanceof TemperatureMonitor && ((TemperatureMonitor)o).location.equals(location);
+		}
+
 	}
 
 }

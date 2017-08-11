@@ -10,18 +10,19 @@
 package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityControlRod extends TileEntityReactorBase implements ReactorCoreTE, Temperatured {
+public class TileEntityControlRod extends TileEntityReactorBase implements LinkableReactorCore {
 
 	private boolean lowered = true;
 	private Motions motion;
@@ -30,6 +31,12 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 	private static final int MAXOFFSET = 20;
 
 	private int rodOffset = MINOFFSET;
+
+	private Coordinate CPU;
+
+	public void link(TileEntityCPU te) {
+		CPU = new Coordinate(te);
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -115,6 +122,9 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 			NBT.setInteger("motion", motion.ordinal());
 
 		NBT.setInteger("rodoffset", rodOffset);
+
+		if (CPU != null)
+			CPU.writeToNBT("cpu", NBT);
 	}
 
 	@Override
@@ -128,6 +138,8 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 			motion = Motions.values()[NBT.getInteger("motion")];
 
 		rodOffset = NBT.getInteger("rodoffset");
+
+		CPU = Coordinate.readFromNBT("cpu", NBT);
 	}
 
 	@Override
@@ -151,6 +163,17 @@ public class TileEntityControlRod extends TileEntityReactorBase implements React
 
 	public int getRodPosition() {
 		return rodOffset;
+	}
+
+	@Override
+	public void breakBlock() {
+		if (CPU != null) {
+			TileEntity te = CPU.getTileEntity(worldObj);
+			if (te instanceof TileEntityCPU) {
+				((TileEntityCPU)te).getLayout().removeControlRod(this);
+				((TileEntityCPU)te).removeTemperatureCheck(this);
+			}
+		}
 	}
 
 	private static enum Motions {

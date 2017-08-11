@@ -21,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -30,9 +30,9 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
+import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
@@ -42,9 +42,9 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 
-public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements ReactorCoreTE, Feedable,
-ChunkLoadingTile, BreakAction {
+public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements LinkableReactorCore, Feedable, ChunkLoadingTile {
 
 	protected int hydrogen = 0;
 	private int activeTimer = 0;
@@ -54,6 +54,12 @@ ChunkLoadingTile, BreakAction {
 	public static final int CLADDING = 800;
 	public static final int HYDROGEN = 1400;
 	public static final int MELTDOWN = 1800;
+
+	private Coordinate CPU;
+
+	public void link(TileEntityCPU te) {
+		CPU = new Coordinate(te);
+	}
 
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
@@ -398,24 +404,33 @@ ChunkLoadingTile, BreakAction {
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		hydrogen = NBT.getInteger("h2");
+
+		CPU = Coordinate.readFromNBT("cpu", NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("h2", hydrogen);
+
+		if (CPU != null)
+			CPU.writeToNBT("cpu", NBT);
 	}
 
 	public final void breakBlock() {
 		if (!worldObj.isRemote)
 			this.unload();
+		if (CPU != null) {
+			TileEntity te = CPU.getTileEntity(worldObj);
+			if (te instanceof TileEntityCPU) {
+				((TileEntityCPU)te).removeTemperatureCheck(this);
+			}
+		}
 	}
 
 	@Override

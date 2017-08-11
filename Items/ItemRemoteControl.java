@@ -21,8 +21,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -61,14 +64,18 @@ public class ItemRemoteControl extends ReactorItemBase implements ChargeableTool
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
-		Block id = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		if (id == ReactorTiles.CPU.getBlock() && meta == ReactorTiles.CPU.getBlockMetadata()) {
-			TileEntity te = world.getTileEntity(x, y, z);
+		ReactorTiles r = ReactorTiles.getTE(world, x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (r == ReactorTiles.CPU) {
 			if (te != null) {
 				this.setLinkedCPU(is, te);
+				ReikaChatHelper.sendChatToPlayer(ep, "Linking to "+ReactorTiles.CPU.getName()+" at "+new Coordinate(te));
 				return true;
 			}
+		}
+		else if (r != null && r.isLinkableReactorCore() && this.getLinkedCPU(is) != null) {
+			((TileEntityCPU)this.getLinkedCPU(is)).addTemperatureCheck((LinkableReactorCore)te);
+			ReikaChatHelper.sendChatToPlayer(ep, "Linking "+r.getName()+" to "+ReactorTiles.CPU.getName()+" at "+new Coordinate(this.getLinkedCPU(is)));
 		}
 		return false;
 	}

@@ -24,6 +24,7 @@ import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
@@ -417,6 +418,10 @@ public enum ReactorTiles implements TileEnum {
 
 	public boolean isReactorCore() {
 		return ReactorCoreTE.class.isAssignableFrom(teClass);
+	}
+
+	public boolean isLinkableReactorCore() {
+		return LinkableReactorCore.class.isAssignableFrom(teClass);
 	}
 
 	public ItemStack getCraftedProduct(TileEntity te) {

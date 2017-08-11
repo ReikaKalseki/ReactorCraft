@@ -53,6 +53,11 @@ public class ReactorControlLayout {
 	}
 
 	public void addControlRod(TileEntityControlRod rod) {
+		controls.put(rod);
+		this.updateLimit(rod);
+	}
+
+	private void updateLimit(TileEntityControlRod rod) {
 		if (minX > rod.xCoord)
 			minX = rod.xCoord;
 		if (maxX < rod.xCoord)
@@ -65,7 +70,24 @@ public class ReactorControlLayout {
 			minZ = rod.zCoord;
 		if (maxZ < rod.zCoord)
 			maxZ = rod.zCoord;
-		controls.put(rod);
+	}
+
+	public void removeControlRod(TileEntityControlRod rod) {
+		controls.remove(rod);
+		if (minX == rod.xCoord || maxX == rod.xCoord || minY == rod.yCoord || maxY == rod.yCoord || minZ == rod.zCoord || maxZ == rod.zCoord)
+			this.recalcLimits();
+	}
+
+	private void recalcLimits() {
+		minX = Integer.MAX_VALUE;
+		minY = Integer.MAX_VALUE;
+		minZ = Integer.MAX_VALUE;
+		maxX = Integer.MIN_VALUE;
+		maxY = Integer.MIN_VALUE;
+		maxZ = Integer.MIN_VALUE;
+		for (TileEntityControlRod te : controls.values()) {
+			this.updateLimit(te);
+		}
 	}
 
 	public boolean hasControlRodAtRelativePosition(World world, int x, int y, int z) {
