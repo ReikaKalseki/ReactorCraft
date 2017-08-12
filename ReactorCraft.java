@@ -73,6 +73,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
+import Reika.ReactorCraft.Auxiliary.PoisonGasDamage;
 import Reika.ReactorCraft.Auxiliary.PotionRadiation;
 import Reika.ReactorCraft.Auxiliary.RadiationDamage;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
@@ -146,7 +147,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
 	public static final Fluid D2O = new Fluid("rc heavy water").setDensity(1100).setViscosity(1050);
-	public static final Fluid HF = new Fluid("rc hydrofluoric acid").setDensity(-1).setViscosity(10).setGaseous(true);
+	public static final Fluid HF = new Fluid("rc hydrofluoric acid").setDensity(115).setViscosity(10).setGaseous(true);
 	public static final Fluid UF6 = new Fluid("rc uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
 	public static final Fluid NH3 = new Fluid("rc ammonia").setDensity(682).setViscosity(600);
@@ -182,6 +183,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static final RadiationDamage radiationDamage = new RadiationDamage();
 	public static final CustomStringDamageSource fusionDamage = new CustomStringDamageSource("jumped in a Fusion Reactor");
+	public static final PoisonGasDamage gasDamage = new PoisonGasDamage();
 
 	@SidedProxy(clientSide="Reika.ReactorCraft.ClientProxy", serverSide="Reika.ReactorCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -260,6 +262,10 @@ public class ReactorCraft extends DragonAPIMod {
 		ReactorTiles.loadMappings();
 		ReactorItems.loadMappings();
 		ReactorBlocks.loadMappings();
+
+		CORIUM.setBlock(ReactorBlocks.CORIUMFLOWING.getBlockInstance());
+		HF.setBlock(ReactorBlocks.HF.getBlockInstance());
+		CL.setBlock(ReactorBlocks.CHLORINE.getBlockInstance());
 
 		tabRctr.setIcon(ReactorTiles.MAGNET.getCraftedProduct());
 		tabRctrItems.setIcon(ReactorItems.WASTE.getStackOf());

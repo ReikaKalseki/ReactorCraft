@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Instantiable.MetadataItemBlock;
 import Reika.DragonAPI.Interfaces.Registry.BlockEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
@@ -25,6 +26,7 @@ import Reika.ReactorCraft.Blocks.BlockCoriumFlowing;
 import Reika.ReactorCraft.Blocks.BlockDuct;
 import Reika.ReactorCraft.Blocks.BlockFluorite;
 import Reika.ReactorCraft.Blocks.BlockFluoriteOre;
+import Reika.ReactorCraft.Blocks.BlockPoisonGas;
 import Reika.ReactorCraft.Blocks.BlockReactorMat;
 import Reika.ReactorCraft.Blocks.BlockReactorOre;
 import Reika.ReactorCraft.Blocks.BlockReactorTile;
@@ -66,7 +68,9 @@ public enum ReactorBlocks implements BlockEnum {
 	TURBINEMULTI(	BlockTurbineMulti.class,		ItemBlockMultiBlock.class,	"multiblock.turbine",		false),
 	FLYWHEELMULTI(	BlockFlywheelMulti.class,		ItemBlockMultiBlock.class,	"multiblock.flywheel",		false),
 	LAMP(			BlockTritiumLamp.class,			ItemBlockLampMulti.class,	"reactor.lamp",				false),
-	THORIUM(		BlockThoriumFuel.class, 		MetadataItemBlock.class,	"Thorium Fuel", 			false);
+	THORIUM(		BlockThoriumFuel.class, 		MetadataItemBlock.class,	"Thorium Fuel", 			false),
+	CHLORINE(		BlockPoisonGas.class,										"Chlorine Gas",				false),
+	HF(				BlockPoisonGas.class,										"Fluorine Gas",				false);
 
 	private Class blockClass;
 	private String blockName;
@@ -75,6 +79,7 @@ public enum ReactorBlocks implements BlockEnum {
 
 	public static final ReactorBlocks[] blockList = values();
 
+	private static final HashMap<Block, ReactorBlocks> blockMap = new HashMap();
 	private static final HashMap<Item, ReactorBlocks> itemMap = new HashMap();
 
 	private ReactorBlocks(Class <? extends Block> cl, Class<? extends ItemBlock> ib, String n, boolean m) {
@@ -96,6 +101,10 @@ public enum ReactorBlocks implements BlockEnum {
 		return itemMap.get(is.getItem());
 	}
 
+	public static ReactorBlocks getBlock(Block b) {
+		return blockMap.get(b);
+	}
+
 	public Material getBlockMaterial() {
 		switch(this) {
 			case MATS:
@@ -106,6 +115,8 @@ public enum ReactorBlocks implements BlockEnum {
 			case CORIUMFLOWING:
 				//case CORIUMSTILL:
 			case THORIUM:
+			case CHLORINE:
+			case HF:
 				return Material.lava;
 			case REACTOR:
 				return Material.iron;
@@ -118,12 +129,24 @@ public enum ReactorBlocks implements BlockEnum {
 
 	@Override
 	public Class[] getConstructorParamTypes() {
+		if (blockClass == BlockPoisonGas.class)
+			return new Class[]{Fluid.class, Material.class};
 		return new Class[]{Material.class};
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
+		if (blockClass == BlockPoisonGas.class)
+			return new Object[]{this.getFluid(), this.getBlockMaterial()};
 		return new Object[]{this.getBlockMaterial()};
+	}
+
+	private Fluid getFluid() {
+		if (this == HF)
+			return ReactorCraft.HF;
+		if (this == CHLORINE)
+			return ReactorCraft.CL;
+		return null;
 	}
 
 	@Override
@@ -226,6 +249,7 @@ public enum ReactorBlocks implements BlockEnum {
 		for (int i = 0; i < blockList.length; i++) {
 			ReactorBlocks r = blockList[i];
 			Block b = r.getBlockInstance();
+			blockMap.put(b, r);
 			itemMap.put(Item.getItemFromBlock(b), r);
 		}
 	}
