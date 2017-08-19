@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -148,13 +149,13 @@ public class UProcessorHandler extends TemplateRecipeHandler {
 		ReikaTextureHelper.bindTerrainTexture();
 		Fluid f = p.inputFluid;
 		if (f != null)
-			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, f.getIcon(), 16, 60);
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, ReikaLiquidRenderer.getFluidIconSafe(f), 16, 60);
 		f = p.intermediateFluid;
 		if (f != null)
-			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+18, 7, f.getIcon(), 16, 60);
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+18, 7, ReikaLiquidRenderer.getFluidIconSafe(f), 16, 60);
 		f = p.outputFluid;
 		if (f != null)
-			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+36, 7, f.getIcon(), 16, 60);
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93+36, 7, ReikaLiquidRenderer.getFluidIconSafe(f), 16, 60);
 	}
 
 }

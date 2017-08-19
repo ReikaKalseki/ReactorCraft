@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -125,11 +126,11 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 		Fluid o2 = er.lightOut;
 
 		ReikaTextureHelper.bindTerrainTexture();
-		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, o1.getIcon(), 16, 60);
-		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(129, 7, o2.getIcon(), 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, ReikaLiquidRenderer.getFluidIconSafe(o1), 16, 60);
+		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(129, 7, ReikaLiquidRenderer.getFluidIconSafe(o2), 16, 60);
 
 		if (er.input != null) {
-			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(12, 7, er.input.getIcon(), 16, 60);
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(12, 7, ReikaLiquidRenderer.getFluidIconSafe(er.input), 16, 60);
 		}
 	}
 
