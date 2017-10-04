@@ -283,7 +283,7 @@
 	</storage>
 	<reflector>
 		<desc>
-			El neutron reflector tiene la posibilidad de reflejar neutrones en la direccion desde la que impactaron al reflector. Esto permite mayor eficiencia reutilizando una parte de los neutrones. Los neutrones no reflejados son absorbidos.
+			El neutron reflector tiene la posibilidad de reflejar neutrones en la direccion desde la que impactaron al reflector. Esto permite mayor eficiencia reutilizando una parte de los neutrones. Los neutrones no reflejados tienen la posibilidad de ser absorbidos.
 		</desc>
 		<note>
 
