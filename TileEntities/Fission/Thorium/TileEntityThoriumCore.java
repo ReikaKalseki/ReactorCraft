@@ -183,7 +183,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (e.getType().canTriggerFission() && e.getType() != NeutronType.BREEDER && ReikaRandomHelper.doWithChance(this.getNeutronInteractionChance())) {
+			if (e.getType().canTriggerFission() && ReikaRandomHelper.doWithChance(e.getNeutronSpeed().getInteractionMultiplier()) && e.getType() != NeutronType.BREEDER && ReikaRandomHelper.doWithChance(this.getNeutronInteractionChance())) {
 				if (this.checkPoisonedChance())
 					return true;
 				if (ReikaRandomHelper.doWithChance(this.getNeutronChance()) && this.hasFuel()) {
@@ -307,7 +307,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry m, ForgeDirection side) {
-		return side.offsetY == 0 ? false : m.isStandardPipe();
+		return side == ForgeDirection.UP ? m == MachineRegistry.FUELLINE : m.isStandardPipe();
 	}
 
 	@Override

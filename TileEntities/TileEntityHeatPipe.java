@@ -19,13 +19,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityLine;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
 
@@ -92,10 +92,11 @@ public class TileEntityHeatPipe extends TileEntityLine {
 					}*/
 					ts.setTemperature(ts.getTemperature()+diff2);
 					temperature -= diff;
+					/*
 					if (ts instanceof TileEntityReactorBoiler && ts.getTemperature() > 300) {
 						ReikaSoundHelper.playSoundAtBlock(world, te.xCoord, te.yCoord, te.zCoord, "random.fizz", 1, 1);
 						world.setBlock(te.xCoord, te.yCoord, te.zCoord, Blocks.flowing_lava);
-					}
+					}*/
 				}
 				else if (te instanceof TemperatureTE) {
 					TemperatureTE ts = (TemperatureTE)te;
@@ -135,7 +136,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 
 	@Override
 	protected boolean canConnectToMachine(Block id, int meta, ForgeDirection dir, TileEntity te) {
-		return te instanceof TemperatureTE || te instanceof Temperatured;
+		return (te instanceof TemperatureTE || te instanceof Temperatured) && !(te instanceof TileEntityReactorBase && ((TileEntityReactorBase)te).getMachine().getReactorType() == ReactorType.HTGR);
 	}
 
 	@Override

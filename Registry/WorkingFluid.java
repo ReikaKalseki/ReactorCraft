@@ -52,6 +52,7 @@ public enum WorkingFluid {
 		NBT.setInteger("workingfluid", this.ordinal());
 	}
 
+	/*
 	public static boolean isWorkingFluid(Fluid f) {
 		for (int i = 0; i < list.length; i++) {
 			Fluid fl = list[i].getFluid();
@@ -59,6 +60,19 @@ public enum WorkingFluid {
 				return true;
 		}
 		return false;
+	}*/
+
+	public static WorkingFluid getWorkingFluid(Fluid f) {
+		if (f == null)
+			return null;
+		if (f.equals(FluidRegistry.getFluid("rc heavy water")))
+			return WATER;
+		for (int i = 0; i < list.length; i++) {
+			Fluid fl = list[i].getFluid();
+			if (f.equals(fl))
+				return list[i];
+		}
+		return null;
 	}
 
 }

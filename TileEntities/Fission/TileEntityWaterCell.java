@@ -135,6 +135,8 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 			storedEnergy += ReikaNuclearHelper.getUraniumFissionNeutronE(); //3.8kJ per neutron (kinetic energy)
 			return true;
 		}*/
+		if (this.getLiquidState() == LiquidStates.HEAVY)
+			e.moderate();
 		return false;
 	}
 

@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronSpeed;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -59,10 +60,8 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 
 		if (tank.getLevel() >= WATER_PER_STEAM && temperature > 100 && this.canBoilTankLiquid()) {
 			steam++;
-			if (tank.getActualFluid().equals(FluidRegistry.WATER))
-				fluid = WorkingFluid.WATER;
-			else if (tank.getActualFluid().equals(FluidRegistry.getFluid("rc ammonia"))) {
-				fluid = WorkingFluid.AMMONIA;
+			fluid = WorkingFluid.getWorkingFluid(tank.getActualFluid());
+			if (fluid == WorkingFluid.AMMONIA) {
 				ReactorAchievements.AMMONIA.triggerAchievement(this.getPlacer());
 			}
 			tank.removeLiquid(WATER_PER_STEAM);
@@ -137,7 +136,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 	}
 
 	private boolean canBoilTankLiquid() {
-		if (!WorkingFluid.isWorkingFluid(tank.getActualFluid()))
+		if (WorkingFluid.getWorkingFluid(tank.getActualFluid()) == null)
 			return false;
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
 		if (temperature < Tamb+50)
@@ -162,7 +161,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return WorkingFluid.isWorkingFluid(f);
+		return WorkingFluid.getWorkingFluid(f) != null;
 	}
 
 	@Override
@@ -171,16 +170,14 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		fluid = WorkingFluid.getFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		fluid.saveToNBT(NBT);
@@ -205,7 +202,17 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		NeutronType type = e.getType();
-		return !tank.isEmpty() && ReikaRandomHelper.doWithChance(type.getBoilerAbsorptionChance());
+		if (!tank.isEmpty()) {
+			if (tank.getActualFluid() == FluidRegistry.getFluid("rc heavy water")) {
+				e.moderate();
+			}
+			else {
+				if (e.getNeutronSpeed() == NeutronSpeed.FAST && rand.nextInt(10) == 0)
+					return true;
+			}
+			return ReikaRandomHelper.doWithChance(type.getBoilerAbsorptionChance());
+		}
+		return false;
 	}
 
 	@Override

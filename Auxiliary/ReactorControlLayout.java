@@ -134,7 +134,7 @@ public class ReactorControlLayout {
 	public int getDisplayColorAtRelativePosition(World world, int x, int y, int z) {
 		TileEntityControlRod rod = this.getControlRodAtRelativePosition(world, x, y, z);
 		if (rod != null) {
-			if (((TileEntityCPU)controller.getTileEntity()).getPower() >= this.getMinPower())
+			if (((TileEntityCPU)controller.getTileEntity(world)).getPower() >= this.getMinPower())
 				return rod.isActive() ? 0x00ff00 : 0xff0000;
 			else
 				return 0xa0a0a0;

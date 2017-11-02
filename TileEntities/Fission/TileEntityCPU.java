@@ -103,7 +103,7 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 		if (world.isRemote)
 			return;
 
-		if (power < this.getMinPower())
+		if (power < this.getMinPower() && this.getTicksExisted() > 20)
 			this.SCRAM();
 
 		if (layout.getNumberRods() > 0) {

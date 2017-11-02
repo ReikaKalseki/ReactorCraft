@@ -19,7 +19,6 @@ import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Base.TileEntityTankedReactorMachine;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -120,16 +119,14 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
@@ -137,7 +134,7 @@ public class TileEntityCondenser extends TileEntityTankedReactorMachine {
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return WorkingFluid.isWorkingFluid(f);
+		return false;//WorkingFluid.getWorkingFluid(f) != null;
 	}
 
 	@Override

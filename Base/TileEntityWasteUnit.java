@@ -83,12 +83,12 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	protected abstract boolean accountForOutGameTime();
 
-	private int getSkippedTicks() { //compensate for lag + make decay effectively run even with MC closed
+	private long getSkippedTicks() { //compensate for lag + make decay effectively run even with MC closed
 		long time = System.currentTimeMillis();
 		long dur = time-lastTickTime;
-		int ticks = 0;
+		long ticks = 0;
 		if (dur > 50) {
-			ticks = (int)(Math.min((dur/50)-1, Integer.MAX_VALUE));
+			ticks = (dur/50)-1;
 		}
 		lastTickTime = time;
 		return ticks;

@@ -140,6 +140,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		}
 		else
 			phi = 0;
+
+		phi = phi%360;
 	}
 
 	private float getMaxRenderSpeed() {

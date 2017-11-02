@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronSpeed;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 
 public class RenderNeutron extends Render
@@ -29,15 +30,14 @@ public class RenderNeutron extends Render
 		shadowOpaque = 0.75F;
 	}
 
-	public void renderTheNeutron(EntityNeutron par1EntityNeutron, double par2, double par4, double par6, float par8, float par9)
-	{
+	public void renderTheNeutron(EntityNeutron e, double par2, double par4, double par6, float par8, float par9) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		Tessellator v5 = Tessellator.instance;
 		float var16 = 0.25F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		int var19 = par1EntityNeutron.getBrightnessForRender(par9);
+		int var19 = e.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
 		int var21 = var19 / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
@@ -52,7 +52,7 @@ public class RenderNeutron extends Render
 
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
-		v5.setColorOpaque(0, 0, 128);
+		v5.setColorOpaque(0, 0, e.getNeutronSpeed() == NeutronSpeed.FAST ? 0x22aaff : 0x0000aa);
 		v5.addVertex(0.0F - var17, 0.0F - var18, 0.0D);
 		v5.addVertex(var16 - var17, 0.0F - var18, 0.0D);
 		v5.addVertex(var16 - var17, var16 - var18, 0.0D);

@@ -31,7 +31,8 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	CHUNKLOADING("Fission Cores Chunkload When Active", true),
 	OREDENSITY("Ore Density Percentage", 100),
 	DISCRETE("Ore Discretization", 1),
-	DYECRAFT("Allow Fluorite Recoloring", false);
+	DYECRAFT("Allow Fluorite Recoloring", false),
+	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false);
 
 	private String label;
 	private boolean defaultState;

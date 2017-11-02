@@ -37,6 +37,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -542,16 +543,7 @@ MultiBlockTile, BreakAction, ToggleTile {
 		if (e instanceof EntityPlayer) {
 			return !((EntityPlayer)e).capabilities.isCreativeMode;
 		}
-		String name = e.getClass().getSimpleName();
-		if (name.equalsIgnoreCase("EntityTFMobileFirefly"))
-			return false;
-		if (name.equalsIgnoreCase("EntityWisp"))
-			return false;
-		if (name.equalsIgnoreCase("EntityBallLightning"))
-			return false;
-		if (name.equalsIgnoreCase("EntityGlowCloud"))
-			return false;
-		return true;
+		return ReikaEntityHelper.isSolidEntity(e);
 	}
 
 	protected void breakTurbine() {

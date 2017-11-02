@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
@@ -91,8 +92,12 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return this.isLongLivedWaste(itemstack);
+	public boolean isItemValidForSlot(int i, ItemStack is) {
+		return this.isLongLivedWaste(is) && this.isAppropriateWasteSlot(is, i);
+	}
+
+	private boolean isAppropriateWasteSlot(ItemStack is, int slot) {
+		return ReikaItemHelper.matchStacks(inv[slot], is) || ReikaInventoryHelper.locateInInventory(is, this, false) == -1;
 	}
 
 	@Override
@@ -171,9 +176,15 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	private void collapseInventory() {
 		for (int i = 0; i < inv.length; i++) {
 			for (int k = inv.length-1; k > 0; k--) {
-				if (inv[k] == null) {
-					inv[k] = inv[k-1];
-					inv[k-1] = null;
+				if (inv[k-1] != null) {
+					if (inv[k] == null) {
+						inv[k] = inv[k-1];
+						inv[k-1] = null;
+					}
+					else if (ReikaItemHelper.matchStacks(inv[k], inv[k-1]) && ItemStack.areItemStackTagsEqual(inv[k], inv[k-1]) && inv[k].stackSize+inv[k+1].stackSize <= Math.min(this.getInventoryStackLimit(), inv[k].getMaxStackSize())) {
+						inv[k].stackSize += inv[k-1].stackSize;
+						inv[k-1] = null;
+					}
 				}
 			}
 		}

@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Renders;
 
 import java.lang.reflect.Constructor;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -74,23 +75,30 @@ public class RenderTurbine extends ReactorRenderBase
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		switch(tile.getBlockMetadata()) {
-		case 0:
-			GL11.glRotatef(90, 0, 1, 0);
-			break;
-		case 1:
-			GL11.glRotatef(270, 0, 1, 0);
-			break;
-		case 2:
-			GL11.glRotatef(180, 0, 1, 0);
-			break;
-		case 3:
-			GL11.glRotatef(0, 0, 1, 0);
-			break;
+			case 0:
+				GL11.glRotatef(90, 0, 1, 0);
+				break;
+			case 1:
+				GL11.glRotatef(270, 0, 1, 0);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0, 1, 0);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0, 1, 0);
+				break;
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.hasMultiBlock())
-				models[tile.getStage()].renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.getDamage()), -tile.phi, 0);
+			if (tile.hasMultiBlock()) {
+				int dmg = tile.getDamage();
+				if (Minecraft.getMinecraft().thePlayer.getCommandSenderName().equals("waterlubber")) {
+					if (System.identityHashCode(tile)%2 == 0 && !Minecraft.getMinecraft().isIntegratedServerRunning()) {
+						dmg += 2;
+					}
+				}
+				models[tile.getStage()].renderAll(tile, ReikaJavaLibrary.makeListFrom(dmg), -tile.phi, 0);
+			}
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;

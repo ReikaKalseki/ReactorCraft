@@ -284,7 +284,7 @@
 	</storage>
 	<reflector>
 		<desc>
-			The neutron reflector has a chance of reflecting neutrons back in the direction from which they impacted the reflector. This allows for greater reactor efficiency by reusing a portion of the neutrons. Unreflected neutrons are absorbed.
+			The neutron reflector has a chance of reflecting neutrons back in the direction from which they impacted the reflector. This allows for greater reactor efficiency by reusing a portion of the neutrons. Unreflected neutrons have a chance to be absorbed.
 		</desc>
 		<note>
 

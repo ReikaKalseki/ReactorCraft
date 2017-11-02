@@ -70,7 +70,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		super.onNeutron(e, world, x, y, z);
 		if (!world.isRemote) {
-			if (e.getType().canTriggerFission()) {
+			if (e.getType().canTriggerFission() && ReikaRandomHelper.doWithChance(e.getNeutronSpeed().getInteractionMultiplier())) {
 				if (this.checkPoisonedChance())
 					return true;
 				if (this.isFissile()) {

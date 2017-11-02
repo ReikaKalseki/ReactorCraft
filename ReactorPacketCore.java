@@ -145,6 +145,7 @@ public class ReactorPacketCore implements PacketHandler {
 				case NBT:
 					break;
 				case STRINGINT:
+				case STRINGINTLOC:
 					stringdata = packet.readString();
 					control = inputStream.readInt();
 					pack = ReactorPackets.getEnum(control);

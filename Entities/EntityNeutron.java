@@ -39,18 +39,21 @@ import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {
 
 	private NeutronType type;
+	private NeutronSpeed speed;
 
 	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
 		super(world, x, y, z, f);
-		if (type == null)
-			Thread.dumpStack();
 		height = 1;
 		this.type = type;
+		speed = type.getCreationSpeed();
+		if (speed == null)
+			Thread.dumpStack();
 	}
 
 	public EntityNeutron(World world) {
@@ -120,13 +123,16 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			if (rs != null)
 				return ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance);
 
-			boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 255-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
-			if (flag) {
-				this.spawnRadiationChance(world, x, y, z);
-				if (ReikaRandomHelper.doWithChance(20))
-					RadiationEffects.instance.transformBlock(world, x, y, z, RadiationIntensity.MODERATE);
+			if (ReikaRandomHelper.doWithChance(speed.getIrradiatedAbsorptionChance())) {
+				boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 255-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
+				if (flag) {
+					this.spawnRadiationChance(world, x, y, z);
+					if (ReikaRandomHelper.doWithChance(20))
+						RadiationEffects.instance.transformBlock(world, x, y, z, RadiationIntensity.MODERATE);
+				}
+				return flag;
 			}
-			return flag;
+			return false;
 		}
 
 		return rand.nextInt(1000) == 0;
@@ -151,6 +157,10 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 
 	}
 
+	public void moderate() {
+		speed = NeutronSpeed.THERMAL;
+	}
+
 	@Override
 	public double getHitboxSize() {
 		return 0.1;
@@ -169,10 +179,15 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		type = NeutronType.neutronList[data.readInt()];
+		speed = type.getCreationSpeed();
 	}
 
 	public NeutronType getType() {
 		return type != null ? type : NeutronType.NULL;
+	}
+
+	public NeutronSpeed getNeutronSpeed() {
+		return speed;
 	}
 
 	public static enum NeutronType {
@@ -217,16 +232,66 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		public boolean canTriggerFission() {
 			return this.isFissionType() || (this == WASTE && ReikaRandomHelper.doWithChance(40));
 		}
+
+		public NeutronSpeed getCreationSpeed() {
+			if (!ReactorOptions.FASTNEUTRONS.getState())
+				return NeutronSpeed.THERMAL;
+			switch(this) {
+				case DECAY:
+				case FUSION:
+				case NULL:
+				case WASTE:
+				default:
+					return NeutronSpeed.THERMAL;
+				case BREEDER:
+				case FISSION:
+				case THORIUM:
+					return NeutronSpeed.FAST;
+			}
+		}
+	}
+
+	public static enum NeutronSpeed {
+		THERMAL(),
+		FAST();
+
+		public static final NeutronSpeed[] speedList = values();
+
+		public float getInteractionMultiplier() {
+			if (this == THERMAL)
+				return 1;
+			if (this == FAST)
+				return 0.6F;
+			return 0;
+		}
+
+		public double getIrradiatedAbsorptionChance() {
+			if (this == THERMAL)
+				return 100;
+			if (this == FAST)
+				return 40;
+			return 100;
+		}
+
+		public float getWasteConversionMultiplier() {
+			if (this == THERMAL)
+				return 1;
+			if (this == FAST)
+				return 2.2F;
+			return 0;
+		}
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound NBT) {
 		type = NeutronType.neutronList[NBT.getInteger("ntype")];
+		speed = NeutronSpeed.speedList[NBT.getInteger("nspeed")];
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound NBT) {
 		NBT.setInteger("ntype", this.getType().ordinal());
+		NBT.setInteger("nspeed", this.getNeutronSpeed().ordinal());
 	}
 
 	@Override

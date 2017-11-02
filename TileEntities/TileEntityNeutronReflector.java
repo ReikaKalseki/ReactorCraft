@@ -20,6 +20,7 @@ public class TileEntityNeutronReflector extends TileEntityReactorBase implements
 
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		e.moderate();
 		if (rand.nextInt(4) == 0) {
 			e.motionX = -e.motionX;
 			e.motionZ = -e.motionZ;

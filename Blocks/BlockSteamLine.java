@@ -20,9 +20,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Base.TileEntityLine;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 
-public class BlockSteamLine extends BlockReactorTileModelled {
+public class BlockSteamLine extends BlockReactorTileModelled implements NeutronBlock {
 
 	public BlockSteamLine(Material par3Material) {
 		super(par3Material);
@@ -113,5 +115,10 @@ public class BlockSteamLine extends BlockReactorTileModelled {
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
 		TileEntityLine te = (TileEntityLine)world.getTileEntity(x, y, z);
 		te.onEntityCollided(e);
+	}
+
+	@Override
+	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
+		return false;
 	}
 }

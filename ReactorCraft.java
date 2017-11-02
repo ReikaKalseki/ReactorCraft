@@ -66,6 +66,7 @@ import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
@@ -369,6 +370,10 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaEEHelper.blacklistEntry(ReactorItems.PELLET);
 		ReikaEEHelper.blacklistEntry(ReactorItems.PLUTONIUM);
 		//ReikaEEHelper.blacklistEntry(ReactorItems.THORIUM);
+
+		if (ModList.APPENG.isLoaded()) {
+			MESystemReader.registerMESystemEffect(RadiationEffects.instance.createMESystemEffect());
+		}
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");

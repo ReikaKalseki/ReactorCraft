@@ -25,6 +25,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
@@ -38,12 +39,15 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ItemInSystemEffect;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.MESystemEffect;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import appeng.api.networking.IGrid;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RadiationEffects {
@@ -303,6 +307,20 @@ public class RadiationEffects {
 		public boolean isAtLeast(RadiationIntensity ri) {
 			return this.ordinal() >= ri.ordinal();
 		}
+	}
+
+	public MESystemEffect createMESystemEffect() {
+		return new ItemInSystemEffect(ReactorItems.WASTE.getStackOfMetadata(OreDictionary.WILDCARD_VALUE)) {
+
+			@Override
+			public int getTickFrequency() {
+				return 1500;
+			}
+
+			@Override
+			protected void doEffect(IGrid grid, long amt) {
+
+			}};
 	}
 
 }
