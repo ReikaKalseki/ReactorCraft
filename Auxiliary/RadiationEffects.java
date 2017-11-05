@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -25,6 +26,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
@@ -32,8 +34,10 @@ import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Instantiable.Event.CreeperExplodeEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -43,11 +47,17 @@ import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ItemInSystemEffec
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.MESystemEffect;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridBlock;
+import appeng.api.networking.IGridNode;
+import appeng.api.util.DimensionalCoord;
+import appeng.api.util.IReadOnlyCollection;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RadiationEffects {
@@ -314,12 +324,28 @@ public class RadiationEffects {
 
 			@Override
 			public int getTickFrequency() {
-				return 1500;
+				return 2400;
 			}
 
 			@Override
 			protected void doEffect(IGrid grid, long amt) {
+				IReadOnlyCollection<IGridNode> c = grid.getNodes();
+				HashSet<WorldLocation> locations = new HashSet();
+				for (IGridNode ign : c) {
+					IGridBlock igb = ign.getGridBlock();
+					if (igb != null && igb.isWorldAccessible()) {
+						DimensionalCoord loc = igb.getLocation();
+						locations.add(new WorldLocation(loc.getWorld(), loc.x, loc.y, loc.z));
+					}
+				}
+				WorldLocation loc = ReikaJavaLibrary.getRandomCollectionEntry(rand, locations);
+				this.leakRadiation(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
+			}
 
+			protected void leakRadiation(World world, int x, int y, int z) {
+				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[rand.nextInt(6)];
+				if (!world.isRemote)
+					world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, dir, NeutronType.WASTE));
 			}};
 	}
 

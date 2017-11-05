@@ -428,5 +428,14 @@ public enum ReactorTiles implements TileEnum {
 		return this.getCraftedProduct();
 	}
 
+	public boolean allowTickAcceleration() {
+		switch(this) {
+			case PROCESSOR:
+				return true;
+			default:
+				return false;
+		}
+	}
+
 
 }

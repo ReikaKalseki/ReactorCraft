@@ -168,7 +168,7 @@ public class ReactorRecipes {
 		//GameRegistry.addRecipe(new ShapelessOreRecipe(CraftingItems.ALLOY.getItem(), "ingotCadmium", "ingotIndium", "ingotSilver"));
 		ItemStack is = ReikaItemHelper.getSizedItemStack(CraftingItems.ALLOY.getItem(), 3);
 		ShapelessOreRecipe slr = new ShapelessOreRecipe(is, "ingotCadmium", "ingotIndium", "ingotSilver");
-		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(is, 1500, slr, 1, 0.8F); //1450
+		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(is, 1600, slr, 1, 0.8F); //1450
 
 		//CraftingItems.FERROINGOT.addShapelessRecipe(ItemStacks.steelingot, Items.iron_ingot, ReactorStacks.lodestone);
 		is = ReikaItemHelper.getSizedItemStack(CraftingItems.FERROINGOT.getItem(), 1);
