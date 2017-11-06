@@ -187,6 +187,8 @@ public class ModelGenerator extends RotaryModelBase
 		Shape7c.setTextureSize(512, 512);
 		Shape7c.mirror = true;
 		this.setRotation(Shape7c, 0F, 0F, 0.7853982F);
+
+		this.setCompilable(false);
 	}
 
 	@Override

@@ -63,7 +63,7 @@ public class RenderTurbineWheel extends ReactorRenderBase {
 
 		if (tile.isInWorld()) {
 			if (tile.hasMultiBlock())
-				model.renderAll(tile, null, tile.phi, 0);
+				model.renderAll(tile, null, tile.phi);
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				Tessellator v5 = Tessellator.instance;
@@ -119,7 +119,7 @@ public class RenderTurbineWheel extends ReactorRenderBase {
 			double c = 0;
 			GL11.glTranslated(a, b, c);
 			GL11.glScaled(sc, sc, sc);
-			model.renderAll(tile, null, -tile.phi, 0);
+			model.renderAll(tile, null, -tile.phi);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
 			GL11.glTranslated(-a, -b, -c);
 			GL11.glRotatef(-180, 0, 1, 0);

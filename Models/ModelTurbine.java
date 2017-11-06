@@ -17,6 +17,8 @@ package Reika.ReactorCraft.Models;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
@@ -32,6 +34,8 @@ public class ModelTurbine extends RotaryModelBase
 
 	protected final int stage;
 
+	private int compiledList = -1;
+
 	public ModelTurbine(int stage)
 	{
 		textureWidth = 128;
@@ -42,6 +46,8 @@ public class ModelTurbine extends RotaryModelBase
 		shaft1a = new LODModelPart(this, 0, 106);
 		blade = new LODModelPart(this, 0, 0);
 		this.init();
+
+		this.setCompilable(false);
 	}
 
 	private void init() {
@@ -75,28 +81,44 @@ public class ModelTurbine extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
-	{
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
 		double vo = 0.9375;
-		double sep = 10;
-		double dd = 0.25;
-		double sc = this.getScaleFactor();
 
 		int damage = li != null ? (Integer)li.get(0) : 0;
 
+		GL11.glPushMatrix();
 		GL11.glTranslated(0, vo, 0);
 		GL11.glRotatef(phi, 0, 0, 1);
 		GL11.glTranslated(0, -vo, 0);
+
+		if (false && damage == 0) {
+			if (compiledList == -1 || GuiScreen.isCtrlKeyDown()) {
+				compiledList = GLAllocation.generateDisplayLists(1);
+				GL11.glNewList(compiledList, GL11.GL_COMPILE);
+				this.renderModelDirect(te, 0, vo);
+				GL11.glEndList();
+			}
+			GL11.glCallList(compiledList);
+		}
+		else {
+			this.renderModelDirect(te, damage, vo);
+		}
+
+		GL11.glPopMatrix();
+	}
+
+	private void renderModelDirect(TileEntity te, int damage, double vo) {
+		//double sep = 10;
+		double dd = 0.25;
+		double sc = this.getScaleFactor();
+
 		shaft1.render(te, f5);
 		shaft1a.render(te, f5);
-		GL11.glTranslated(0, vo, 0);
-		GL11.glRotatef(-phi, 0, 0, 1);
-		GL11.glTranslated(0, -vo, 0);
 
 		if (this.renderTwoStages())
 			GL11.glTranslated(0, 0, dd);
 
-		this.renderBlades(te, damage, vo, phi);
+		this.renderBlades(te, damage, vo, 0);
 
 		if (this.renderTwoStages()) {
 			GL11.glTranslated(0, 0, -dd*2);
@@ -105,7 +127,7 @@ public class ModelTurbine extends RotaryModelBase
 			GL11.glScaled(sc, sc, 1);
 			GL11.glTranslated(0, -vo, 0);
 
-			this.renderBlades(te, damage, vo, phi);
+			this.renderBlades(te, damage, vo, 0);
 
 			GL11.glTranslated(0, vo, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1);
@@ -121,15 +143,13 @@ public class ModelTurbine extends RotaryModelBase
 
 	private void renderBlades(TileEntity te, int damage, double vo, float phi) {
 		for (int i = 0; i < 360; i += this.getAngularSeparation()*(damage+1)) {
+			GL11.glPushMatrix();
 			GL11.glTranslated(0, vo, 0);
 			GL11.glRotatef(i+phi, 0, 0, 1);
 			GL11.glTranslated(0, -vo, 0);
 			GL11.glRotatef(-this.getBladeTwist(), 0, 1, 0);
 			blade.render(te, f5);
-			GL11.glRotatef(this.getBladeTwist(), 0, 1, 0);
-			GL11.glTranslated(0, vo, 0);
-			GL11.glRotatef(-i-phi, 0, 0, 1);
-			GL11.glTranslated(0, -vo, 0);
+			GL11.glPopMatrix();
 		}
 	}
 

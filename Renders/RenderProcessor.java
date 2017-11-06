@@ -66,7 +66,7 @@ public class RenderProcessor extends ReactorRenderBase
 
 		GL11.glRotatef(var13, 0, 1, 0);
 
-		var14.renderAll(tile, null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

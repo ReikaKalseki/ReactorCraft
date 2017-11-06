@@ -97,7 +97,7 @@ public class RenderTurbine extends ReactorRenderBase
 						dmg += 2;
 					}
 				}
-				models[tile.getStage()].renderAll(tile, ReikaJavaLibrary.makeListFrom(dmg), -tile.phi, 0);
+				models[tile.getStage()].renderAll(tile, dmg > 0 ? ReikaJavaLibrary.makeListFrom(dmg) : null, -tile.phi, 0);
 			}
 			else {
 				GL11.glTranslated(-0.5, -0.5, -0.5);
@@ -148,7 +148,7 @@ public class RenderTurbine extends ReactorRenderBase
 			double dx = iof ? 0.3 : 0.1;
 			GL11.glScaled(sc, sc, sc);
 			GL11.glTranslated(-dx, dy, 0);
-			models[0].renderAll(tile, null, -tile.phi, 0);
+			models[0].renderAll(tile, null, -tile.phi);
 			GL11.glTranslated(dx, -dy, 0);
 			GL11.glScaled(1D/sc, 1D/sc, 1D/sc);
 		}

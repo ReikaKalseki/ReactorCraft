@@ -404,6 +404,8 @@ public class ModelFlywheel extends RotaryModelBase
 		Shape4p.setTextureSize(256, 256);
 		Shape4p.mirror = true;
 		this.setRotation(Shape4p, 0F, 0F, 0F);
+
+		this.setCompilable(false);
 	}
 
 	@Override
