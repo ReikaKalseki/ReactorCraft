@@ -30,6 +30,8 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
+import Reika.ElectriCraft.Auxiliary.WrappedSource.WrappableWireSource;
+import Reika.ElectriCraft.Network.WireNetwork;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -41,14 +43,17 @@ import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource"})
-public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile {
+@Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.Auxiliary.WrappedSource.WrappableWireSource"})
+public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile, WrappableWireSource {
 
 	private ForgeDirection facingDir;
 
 	private long power;
 	private int torquein;
 	private int omegain;
+
+	private int lasttorquein;
+	private int lastomegain;
 
 	private Modes mode = Modes.RF;
 
@@ -74,6 +79,9 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (world.getWorldTime()%128 == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
+
+		lastomegain = omegain;
+		lasttorquein = torquein;
 
 		if (hasMultiblock || DragonAPICore.debugtest)
 			this.getPower(world, x, y, z, meta);
@@ -110,6 +118,8 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 							double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
 						}
 					}
+					break;
+				case ELC: //handled by ELC logic
 					break;
 			}
 		}
@@ -207,11 +217,15 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		return mode == Modes.RF ? (int)this.getGenUnits() : 0;
+		return this.getMode() == Modes.RF ? (int)this.getGenUnits() : 0;
 	}
 
 	public double getGenUnits() {
-		return power*mode.ratio;
+		return power*this.getMode().ratio;
+	}
+
+	public String getGeneratedOutputForDisplay() {
+		return this.getName()+" generating "+mode.getDisplay(this);
 	}
 
 	@Override
@@ -245,7 +259,8 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	public static enum Modes {
 		RF("Redstone Flux", 1D/ReikaRFHelper.getWattsPerRF(), PowerTypes.RF),
-		EU("EU", 1D/ReikaEUHelper.getWattsPerEU(), PowerTypes.EU);
+		EU("EU", 1D/ReikaEUHelper.getWattsPerEU(), PowerTypes.EU),
+		ELC("ElectriCraft", 1, PowerTypes.ELECTRICRAFT);
 
 		public final String name;
 		private final double ratio;
@@ -257,6 +272,18 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			name = s;
 			ratio = r;
 			type = p;
+		}
+
+		public String getDisplay(TileEntityReactorGenerator te) {
+			if (this == ELC) {
+				return this.getELCDisplay(te);
+			}
+			return String.format("%.3f %s/t.", te.power*ratio, this.name());
+		}
+
+		@ModDependent(ModList.ELECTRICRAFT)
+		private String getELCDisplay(TileEntityReactorGenerator te) {
+			return te.getTorque()/WireNetwork.TORQUE_PER_AMP+"A @ "+te.getOmega()*WireNetwork.TORQUE_PER_AMP+"V";
 		}
 
 		public boolean exists() {
@@ -278,10 +305,6 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 		} while (!m.exists());
 		mode = m;
 		return mode;
-	}
-
-	public String getUnitSymbol() {
-		return mode.name();
 	}
 
 	public Modes getMode() {
@@ -359,6 +382,46 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean canConnectToSide(ForgeDirection dir) {
+		return dir == this.getFacing().getOpposite();
+	}
+
+	@Override
+	public boolean isFunctional() {
+		return hasMultiblock && this.getMode() == Modes.ELC;
+	}
+
+	@Override
+	public int getOmega() {
+		return omegain;
+	}
+
+	@Override
+	public int getTorque() {
+		return torquein;
+	}
+
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public int getIORenderAlpha() {
+		return 0;
+	}
+
+	@Override
+	public void setIORenderAlpha(int io) {
+
+	}
+
+	@Override
+	public boolean hasPowerStatusChangedSinceLastTick() {
+		return lastomegain != omegain || lasttorquein != torquein;
 	}
 
 }
