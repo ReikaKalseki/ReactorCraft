@@ -30,7 +30,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
-import Reika.ElectriCraft.Auxiliary.WrappedSource.WrappableWireSource;
+import Reika.ElectriCraft.API.WrappableWireSource;
 import Reika.ElectriCraft.Network.WireNetwork;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
@@ -43,7 +43,7 @@ import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.Auxiliary.WrappedSource.WrappableWireSource"})
+@Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.API.WrappableWireSource"})
 public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile, WrappableWireSource {
 
 	private ForgeDirection facingDir;

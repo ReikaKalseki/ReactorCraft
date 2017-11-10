@@ -82,9 +82,6 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 				}
 			}
 		}
-
-		if (this.getLiquidState() == LiquidStates.HEAVY)
-			ReactorAchievements.CANDU.triggerAchievement(this.getPlacer());
 	}
 
 	private boolean canIntakeFluid(Fluid f) {
@@ -104,7 +101,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 			TileEntity te = this.getAdjacentTileEntity(dir);
 			if (te instanceof Temperatured) {
 				Temperatured tr = (Temperatured)te;
-				if (tr.canDumpHeatInto(internalLiquid)) {
+				if (internalLiquid != LiquidStates.HEAVY && tr.canDumpHeatInto(internalLiquid)) {
 					int t = tr.getTemperature();
 					int dt = t-this.getTemperature();
 					if (dt > 0) {
@@ -135,8 +132,10 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 			storedEnergy += ReikaNuclearHelper.getUraniumFissionNeutronE(); //3.8kJ per neutron (kinetic energy)
 			return true;
 		}*/
-		if (this.getLiquidState() == LiquidStates.HEAVY)
+		if (this.getLiquidState() == LiquidStates.HEAVY) {
 			e.moderate();
+			ReactorAchievements.CANDU.triggerAchievement(this.getPlacer());
+		}
 		return false;
 	}
 
