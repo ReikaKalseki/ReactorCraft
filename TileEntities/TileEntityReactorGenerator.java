@@ -77,7 +77,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (world.getWorldTime()%128 == 0)
+		if ((world.getWorldTime()&127) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		lastomegain = omegain;

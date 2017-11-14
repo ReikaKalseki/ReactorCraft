@@ -81,7 +81,7 @@ public class BlockSteam extends Block {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int maxh = 256;
 		if (y > maxh || ClearSteamCommand.clearSteam()) {
-			world.setBlockToAir(x, y, z);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			return;
 		}
 		int meta = world.getBlockMetadata(x, y, z);
@@ -92,21 +92,21 @@ public class BlockSteam extends Block {
 	private void directionalMovement(World world, int x, int y, int z, Random rand, int meta) {
 		ForgeDirection dir;
 		switch(meta-4) {
-		case 0:
-			dir = ForgeDirection.EAST;
-			break;
-		case 1:
-			dir = ForgeDirection.WEST;
-			break;
-		case 2:
-			dir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			dir = ForgeDirection.NORTH;
-			break;
-		default:
-			dir = ForgeDirection.UP;
-			break;
+			case 0:
+				dir = ForgeDirection.EAST;
+				break;
+			case 1:
+				dir = ForgeDirection.WEST;
+				break;
+			case 2:
+				dir = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				dir = ForgeDirection.NORTH;
+				break;
+			default:
+				dir = ForgeDirection.UP;
+				break;
 		}
 
 		int dx = x+dir.offsetX;
@@ -114,7 +114,7 @@ public class BlockSteam extends Block {
 		int dz = z+dir.offsetZ;
 
 		if (this.canMoveInto(world, dx, dy, dz)) {
-			world.setBlockToAir(x, y, z);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			world.setBlock(dx, dy, dz, this, meta, 3);
 		}
 		else
@@ -125,34 +125,42 @@ public class BlockSteam extends Block {
 
 	private void defaultMovement(World world, int x, int y, int z, Random rand, int meta) {
 		if (world.getBlock(x, y+1, z) == ReactorBlocks.MATS.getBlockInstance() && world.getBlockMetadata(x, y+1, z) == MatBlocks.SCRUBBER.ordinal()) {
-			world.setBlockToAir(x, y, z);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			return;
 		}
 		if (ReactorTiles.getTE(world, x, y+1, z) == ReactorTiles.TURBINECORE) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x, y+1, z);
 			ForgeDirection dir = te.getSteamMovement();
-			int dx = x+dir.offsetX;
+			int d = te.getNumberStagesTotal()-te.getStage();
+			int dx = x+dir.offsetX*d;
 			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
+			int dz = z+dir.offsetZ*d;
 			if (this.canMoveInto(world, dx, dy, dz)) {
-				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 3);
-				world.setBlockToAir(x, y, z);
+				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 2);
+				world.setBlock(x, y, z, Blocks.air, 0, 2);
+				world.markBlockForUpdate(dx, dy, dz);
 			}
-			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz) == 11) {
-				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
-					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, this, this.getTransmittedMetadata(meta, dir), 3);
-					world.setBlockToAir(x, y, z);
+			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz)%8 == 3) {
+				dx = te.xCoord+dir.offsetX*(1+d);
+				dy = te.yCoord+3;
+				dz = te.zCoord+dir.offsetZ*(1+d);
+				if (this.canMoveInto(world, dx, dy, dz)) {
+					world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 2);
+					world.setBlock(x, y, z, Blocks.air, 0, 2);
+					world.markBlockForUpdate(dx, dy, dz);
+				}
+				else {
+					world.setBlock(x, y, z, Blocks.air, 0, 2);
 				}
 			}
 			else {
-				world.setBlockToAir(x, y, z);
+				world.setBlock(x, y, z, Blocks.air, 0, 2);
 			}
 			world.markBlockForUpdate(x, y, z);
-			world.markBlockForUpdate(dx, dy, dz);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
 			world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
 			return;
-		}
+		}/*
 		else if (ReactorTiles.getTE(world, x+1, y, z) == ReactorTiles.TURBINECORE) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x+1, y, z);
 			ForgeDirection dir = te.getSteamMovement();
@@ -161,12 +169,12 @@ public class BlockSteam extends Block {
 			int dz = z+dir.offsetZ;
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 3);
-				world.setBlockToAir(x, y, z);
+				world.setBlock(x, y, z);
 			}
 			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz) == 11) {
 				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, this, this.getTransmittedMetadata(meta, dir), 3);
-					world.setBlockToAir(x, y, z);
+					world.setBlock(x, y, z);
 				}
 			}
 			world.markBlockForUpdate(x, y, z);
@@ -183,12 +191,12 @@ public class BlockSteam extends Block {
 			int dz = z+dir.offsetZ;
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 3);
-				world.setBlockToAir(x, y, z);
+				world.setBlock(x, y, z);
 			}
 			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz) == 11) {
 				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, this, this.getTransmittedMetadata(meta, dir), 3);
-					world.setBlockToAir(x, y, z);
+					world.setBlock(x, y, z);
 				}
 			}
 			world.markBlockForUpdate(x, y, z);
@@ -205,12 +213,12 @@ public class BlockSteam extends Block {
 			int dz = z+dir.offsetZ;
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 3);
-				world.setBlockToAir(x, y, z);
+				world.setBlock(x, y, z);
 			}
 			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz) == 11) {
 				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, this, this.getTransmittedMetadata(meta, dir), 3);
-					world.setBlockToAir(x, y, z);
+					world.setBlock(x, y, z);
 				}
 			}
 			world.markBlockForUpdate(x, y, z);
@@ -227,12 +235,12 @@ public class BlockSteam extends Block {
 			int dz = z+dir.offsetZ;
 			if (this.canMoveInto(world, dx, dy, dz)) {
 				world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir), 3);
-				world.setBlockToAir(x, y, z);
+				world.setBlock(x, y, z);
 			}
 			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.GENERATORMULTI.getBlockInstance() && world.getBlockMetadata(dx, dy, dz) == 3) {
 				if (this.canMoveInto(world, te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2)) {
 					world.setBlock(te.xCoord+dir.offsetX*2, te.yCoord+3, te.zCoord+dir.offsetZ*2, this, this.getTransmittedMetadata(meta, dir), 3);
-					world.setBlockToAir(x, y, z);
+					world.setBlock(x, y, z);
 				}
 			}
 			world.markBlockForUpdate(x, y, z);
@@ -240,12 +248,12 @@ public class BlockSteam extends Block {
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
 			world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
 			return;
-		}
+		}*/
 		else if (this.canMoveInto(world, x, y+1, z)) {
 			//ReikaJavaLibrary.pConsole(meta+":"+this.getTransmittedMetadata(meta, ForgeDirection.UP), Side.SERVER);
 			if (((meta&1) != 0) || ReikaRandomHelper.doWithChance(80))
-				world.setBlock(x, y+1, z, this, this.getTransmittedMetadata(meta, ForgeDirection.UP), 3);
-			world.setBlockToAir(x, y, z);
+				world.setBlock(x, y+1, z, this, this.getTransmittedMetadata(meta, ForgeDirection.UP), 2);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			world.markBlockForUpdate(x, y, z);
 			world.markBlockForUpdate(x, y+1, z);
 			//ReikaJavaLibrary.pConsole(x+","+y+","+z+">>"+x+","+(y+1)+","+z);
@@ -260,8 +268,8 @@ public class BlockSteam extends Block {
 				int dy = y+dir[i].offsetY;
 				int dz = z+dir[i].offsetZ;
 				if (this.canMoveInto(world, dx, dy, dz)) {
-					world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir[i]), 3);
-					world.setBlockToAir(x, y, z);
+					world.setBlock(dx, dy, dz, this, this.getTransmittedMetadata(meta, dir[i]), 2);
+					world.setBlock(x, y, z, Blocks.air, 0, 2);
 					//ReikaJavaLibrary.pConsole(x+","+y+","+z+"->"+dx+","+dy+","+dz);
 					world.markBlockForUpdate(x, y, z);
 					world.markBlockForUpdate(dx, dy, dz);

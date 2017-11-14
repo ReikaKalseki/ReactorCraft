@@ -34,7 +34,7 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 
 	@Override
 	public int getNumberTextures() {
-		return 12;
+		return 13;
 	}
 
 	@Override

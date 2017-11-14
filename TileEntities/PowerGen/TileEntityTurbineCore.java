@@ -38,8 +38,10 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -434,6 +436,27 @@ MultiBlockTile, BreakAction, ToggleTile {
 					ammonia = false;
 				}
 				canAccel = true;
+			}
+		}
+		if (canAccel && world.isRemote) {
+			ForgeDirection dir = this.getSteamMovement();
+			for (int i = 0; i < this.getNumberStagesTotal(); i++) {
+				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
+				double r = te.getRadius()*2.4-2;
+				for (int n = 0; n < 2; n++) {
+					double v = ReikaRandomHelper.getRandomBetween(0.03125, 0.25);
+					double dx = x+0.5+dir.offsetX*i;
+					double dy = y+0.5;
+					double dz = z+0.5+dir.offsetZ*i;
+					dy = ReikaRandomHelper.getRandomPlusMinus(dy, r);
+					if (dir.offsetX != 0) {
+						dz = ReikaRandomHelper.getRandomPlusMinus(dz, r);
+					}
+					else if (dir.offsetZ != 0) {
+						dx = ReikaRandomHelper.getRandomPlusMinus(dx, r);
+					}
+					ReikaParticleHelper.CLOUD.spawnAt(world, dx, dy, dz, dir.offsetX*v, 0, dir.offsetZ*v);
+				}
 			}
 		}
 		return canAccel;
