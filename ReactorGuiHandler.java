@@ -39,8 +39,6 @@ import Reika.ReactorCraft.GUIs.GuiWasteStorage;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.TileEntityWasteContainer;
-import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;
 import Reika.ReactorCraft.TileEntities.HTGR.TileEntityPebbleBed;
@@ -48,6 +46,8 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteContainer;
+import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ReactorGuiHandler implements IGuiHandler {

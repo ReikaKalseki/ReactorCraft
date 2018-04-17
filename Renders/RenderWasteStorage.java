@@ -18,7 +18,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelWasteStorage;
-import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
+import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
 
 public class RenderWasteStorage extends ReactorRenderBase
 {

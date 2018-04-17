@@ -12,7 +12,7 @@ package Reika.ReactorCraft.GUIs;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerWasteStorage;
-import Reika.ReactorCraft.TileEntities.TileEntityWasteStorage;
+import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
 
 public class GuiWasteStorage extends ReactorGuiBase {
 

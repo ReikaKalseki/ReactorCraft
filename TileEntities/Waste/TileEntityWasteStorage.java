@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.ReactorCraft.TileEntities;
+package Reika.ReactorCraft.TileEntities.Waste;
 
 import java.util.List;
 
@@ -97,7 +97,15 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	private boolean isAppropriateWasteSlot(ItemStack is, int slot) {
-		return ReikaItemHelper.matchStacks(inv[slot], is) || ReikaInventoryHelper.locateInInventory(is, this, false) == -1;
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack in = inv[i];
+			if (ReikaItemHelper.matchStacks(is, in)) {
+				if (in.stackSize+is.stackSize <= Math.min(this.getInventoryStackLimit(), is.getMaxStackSize())) {
+					return i == slot;
+				}
+			}
+		}
+		return inv[slot] == null;
 	}
 
 	@Override
