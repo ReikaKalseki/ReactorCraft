@@ -11,18 +11,22 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class WasteManager {
 
 	private static final ArrayList<Isotopes> wastes = new ArrayList<Isotopes>();
+	private static final ArrayList<Isotopes> thoriumWastes = new ArrayList<Isotopes>();
 	private static final WeightedRandom<Isotopes> yields = new WeightedRandom();
 	private static final WeightedRandom<Isotopes> thoriumYields = new WeightedRandom();
 	private static final Random rand = new Random();
@@ -33,7 +37,7 @@ public class WasteManager {
 	}
 
 	private static void addThoriumWaste(Isotopes iso, double percent) {
-		wastes.add(iso);
+		thoriumWastes.add(iso);
 		thoriumYields.addEntry(iso, percent);
 	}
 
@@ -113,7 +117,11 @@ public class WasteManager {
 	}
 
 	public static ItemStack getWaste(Isotopes atom) {
-		return ReactorItems.WASTE.getStackOfMetadata(wastes.indexOf(atom));
+		return ReactorItems.WASTE.getStackOfMetadata(/*wastes.indexOf(atom)*/atom.ordinal());
+	}
+
+	public static ItemStack getWaste(ElementGroup g) {
+		return ReactorItems.WASTE.getStackOfMetadata(1000+g.ordinal());
 	}
 
 	public static ItemStack getFullyRandomWasteItem() {
@@ -133,12 +141,56 @@ public class WasteManager {
 		return c;
 	}
 
-	public static ChancedOutputList getThoriumOutputs() {
+	private static HashMap<ElementGroup, Float> getChancesByGroup() {
+		HashMap<ElementGroup, Float> chances = new HashMap();
+		float total = 0;
+		for (Isotopes i : thoriumWastes) {
+			Float get = chances.get(i.group);
+			if (get == null)
+				get = 0F;
+			float ch = (float)(100F*thoriumYields.getWeight(i)/thoriumYields.getTotalWeight());
+			get += ch;
+			total += ch;
+			chances.put(i.group, get);
+		}
+		for (Entry<ElementGroup, Float> e : chances.entrySet()) {
+			e.setValue(e.getValue()/total);
+		}
+		return chances;
+	}
+
+	public static ChancedOutputList getThoriumOutputs(boolean splitByElementType) {
 		ChancedOutputList c = new ChancedOutputList(false);
-		for (Isotopes i : wastes) {
-			float ch = (float)(100F*thoriumYields.getWeight(i)/thoriumYields.getMaxWeight());
-			if (ch > 0)
-				c.addItem(getWaste(i), ch);
+		if (splitByElementType) {
+			HashMap<ElementGroup, Float> map = getChancesByGroup();
+			for (Entry<ElementGroup, Float> e : map.entrySet()) {
+				if (e.getValue() > 0) {
+					c.addItem(getWaste(e.getKey()), 100*e.getValue());
+				}
+			}
+		}
+		else {
+			for (Isotopes i : thoriumWastes) {
+				float ch = (float)(100F*thoriumYields.getWeight(i)/thoriumYields.getTotalWeight());
+				if (ch > 0)
+					c.addItem(getWaste(i), ch);
+			}
+		}
+		return c;
+	}
+
+	public static ChancedOutputList getThoriumGroupOutputs(ElementGroup g) {
+		ChancedOutputList c = new ChancedOutputList(false);
+		float f = 1F/getChancesByGroup().get(g);
+		for (Isotopes i : thoriumWastes) {
+			if (i.group == g) {
+				float ch = (float)(100F*f*thoriumYields.getWeight(i)/thoriumYields.getTotalWeight());
+				if (ch > 0) {
+					ItemStack is = getWaste(i);
+					//ReikaJavaLibrary.pConsole("Adding "+i.getDisplayName()+" to "+g.displayName+" with chance "+ch+" = "+is);
+					c.addItem(is, ch);
+				}
+			}
 		}
 		return c;
 	}

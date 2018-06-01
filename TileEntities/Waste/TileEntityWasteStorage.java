@@ -23,7 +23,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -92,8 +91,8 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return this.isLongLivedWaste(is) && this.isAppropriateWasteSlot(is, i);
+	protected boolean isValidSlot(int i, ItemStack is) {
+		return this.isAppropriateWasteSlot(is, i);
 	}
 
 	private boolean isAppropriateWasteSlot(ItemStack is, int slot) {
@@ -130,7 +129,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 
 	@Override
 	public boolean isValidIsotope(Isotopes i) {
-		return i.getMCHalfLife() > ReikaTimeHelper.YEAR.getMinecraftDuration();
+		return this.isLongLivedWaste(i);//i.getMCHalfLife() > ReikaTimeHelper.YEAR.getMinecraftDuration();
 	}
 
 	@Override

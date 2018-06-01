@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
@@ -69,7 +70,11 @@ public class ReactorRecipes {
 		RecipesGrinder.getRecipes().addRecipe(new ItemStack(Items.emerald), ReactorStacks.emeralddust);
 
 		RecipesCrystallizer.getRecipes().addRecipe(FluidRegistry.getFluid("rc nuclear waste"), 50, ReactorStacks.wastedust, RecipeLevel.CORE);
-		RecipesCentrifuge.getRecipes().addRecipe(ReactorStacks.wastedust, WasteManager.getThoriumOutputs(), null, RecipeLevel.CORE);
+
+		RecipesCentrifuge.getRecipes().addRecipe(ReactorStacks.wastedust, WasteManager.getThoriumOutputs(true), null, RecipeLevel.CORE);
+		for (ElementGroup g : ElementGroup.values()) {
+			RecipesCentrifuge.getRecipes().addRecipe(WasteManager.getWaste(g), WasteManager.getThoriumGroupOutputs(g), null, RecipeLevel.CORE);
+		}
 
 		RecipesPulseFurnace.getRecipes().addSmelting(CraftingItems.CARBIDEFLAKES.getItem(), CraftingItems.CARBIDE.getItem());
 

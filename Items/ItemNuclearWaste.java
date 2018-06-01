@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
+import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -69,19 +70,28 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean adv) {
-		List<Isotopes> iso = WasteManager.getWasteList();
-		Isotopes atom = iso.get(is.getItemDamage());
-		li.add(atom.getDisplayName());
-		li.add("Half Life: "+atom.getHalfLifeAsDisplay());
+		if (is.getItemDamage() >= 1000) {
+			ElementGroup g = ElementGroup.values()[is.getItemDamage()-1000];
+			li.add("Mixed Waste: "+g.displayName);
+		}
+		else {
+			//List<Isotopes> iso = WasteManager.getWasteList();
+			Isotopes atom = Isotopes.getIsotope(is.getItemDamage());//iso.get(is.getItemDamage());
+			li.add(atom.getDisplayName());
+			li.add("Half Life: "+atom.getHalfLifeAsDisplay());
+		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item ID, CreativeTabs cr, List li)
-	{
+	public void getSubItems(Item ID, CreativeTabs cr, List li) {
 		List<Isotopes> waste = WasteManager.getWasteList();
 		for (int i = 0; i < waste.size(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
+			li.add(item);
+		}
+		for (ElementGroup g : ElementGroup.values()) {
+			ItemStack item = new ItemStack(ID, 1, 1000+g.ordinal());
 			li.add(item);
 		}
 	}
@@ -89,6 +99,11 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ReactorItems.WASTE.getBasicName();
+	}
+
+	@Override
+	public int getTextureOffset(ItemStack is) {
+		return is.getItemDamage() >= 1000 ? 14 : 0;
 	}
 
 }

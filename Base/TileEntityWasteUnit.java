@@ -105,8 +105,12 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack.getItem() == ReactorItems.WASTE.getItemInstance();
+	public final boolean isItemValidForSlot(int i, ItemStack is) {
+		return is.getItem() == ReactorItems.WASTE.getItemInstance() && is.getItemDamage() < 1000 && this.isValidIsotope(Isotopes.getIsotope(is.getItemDamage())) && this.isValidSlot(i, is);
+	}
+
+	protected boolean isValidSlot(int i, ItemStack is) {
+		return true;
 	}
 
 	@Override
