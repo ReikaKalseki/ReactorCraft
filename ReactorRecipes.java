@@ -19,6 +19,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -83,7 +84,9 @@ public class ReactorRecipes {
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
 		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
-		TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
+
+		if (ModList.IC2.isLoaded())
+			TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
 	}
 
 	public static void addModInterface() {
