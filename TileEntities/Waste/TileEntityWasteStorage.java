@@ -188,7 +188,7 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 						inv[k] = inv[k-1];
 						inv[k-1] = null;
 					}
-					else if (ReikaItemHelper.matchStacks(inv[k], inv[k-1]) && ItemStack.areItemStackTagsEqual(inv[k], inv[k-1]) && inv[k].stackSize+inv[k+1].stackSize <= Math.min(this.getInventoryStackLimit(), inv[k].getMaxStackSize())) {
+					else if (ReikaItemHelper.matchStacks(inv[k], inv[k-1]) && ItemStack.areItemStackTagsEqual(inv[k], inv[k-1]) && inv[k].stackSize+inv[k-1].stackSize <= Math.min(this.getInventoryStackLimit(), inv[k].getMaxStackSize())) {
 						inv[k].stackSize += inv[k-1].stackSize;
 						inv[k-1] = null;
 					}

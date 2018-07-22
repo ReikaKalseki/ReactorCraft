@@ -85,9 +85,8 @@ public class ItemNuclearWaste extends ItemReactorMulti {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item ID, CreativeTabs cr, List li) {
-		List<Isotopes> waste = WasteManager.getWasteList();
-		for (int i = 0; i < waste.size(); i++) {
-			ItemStack item = new ItemStack(ID, 1, i);
+		for (Isotopes iso : WasteManager.getWasteList()) {
+			ItemStack item = new ItemStack(ID, 1, iso.ordinal());
 			li.add(item);
 		}
 		for (ElementGroup g : ElementGroup.values()) {

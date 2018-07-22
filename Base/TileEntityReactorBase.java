@@ -252,7 +252,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
-	protected final Visibility getOCNetworkVisibility() {
+	public final Visibility getOCNetworkVisibility() {
 		return this.getMachine().isPipe() || this.getMachine() == ReactorTiles.REFLECTOR ? Visibility.Neighbors : Visibility.Network;
 	}
 
