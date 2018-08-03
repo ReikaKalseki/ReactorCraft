@@ -40,11 +40,14 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public final class ReactorDescriptions {
 
-	private static String PARENT = getParent();
+	private static String PARENT = getParent(true);
 	public static final String DESC_SUFFIX = ":desc";
 	public static final String NOTE_SUFFIX = ":note";
 
@@ -57,14 +60,25 @@ public final class ReactorDescriptions {
 
 	private static ArrayList<ReactorBook> categories = new ArrayList<ReactorBook>();
 
-	private static final boolean mustLoad = !ReikaObfuscationHelper.isDeObfEnvironment();
-	private static final XMLInterface parents = new XMLInterface(ReactorCraft.class, PARENT+"categories.xml", mustLoad);
-	private static final XMLInterface machines = new XMLInterface(ReactorCraft.class, PARENT+"machines.xml", mustLoad);
-	private static final XMLInterface tools = new XMLInterface(ReactorCraft.class, PARENT+"tools.xml", mustLoad);
-	private static final XMLInterface resources = new XMLInterface(ReactorCraft.class, PARENT+"resource.xml", mustLoad);
-	private static final XMLInterface infos = new XMLInterface(ReactorCraft.class, PARENT+"info.xml", mustLoad);
+	private static final XMLInterface parents = loadData("categories");
+	private static final XMLInterface machines = loadData("machines");
+	private static final XMLInterface tools = loadData("tools");
+	private static final XMLInterface resources = loadData("resource");
+	private static final XMLInterface infos = loadData("info");
 
-	private static String getParent() {
+	private static XMLInterface loadData(String name) {
+		XMLInterface xml = new XMLInterface(ReactorCraft.class, PARENT+name+".xml", !ReikaObfuscationHelper.isDeObfEnvironment());
+		xml.setFallback(getParent(false)+name+".xml");
+		xml.init();
+		return xml;
+	}
+
+	private static String getParent(boolean locale) {
+		return locale && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? getLocalizedParent() : "Resources/";
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static String getLocalizedParent() {
 		Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
 		String lang = language.getLanguageCode();
 		if (hasLocalizedFor(language) && !"en_US".equals(lang))
@@ -113,7 +127,7 @@ public final class ReactorDescriptions {
 	}
 
 	public static void reload() {
-		PARENT = getParent();
+		PARENT = getParent(true);
 
 		data.clear();
 		loadNumericalData();

@@ -27,6 +27,8 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.CondensedOres.API.CondensedOreAPI;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Registry.OreEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
@@ -34,6 +36,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ExtraUtilsHandler;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 
 public enum ReactorOres implements OreEnum {
@@ -247,10 +250,14 @@ public enum ReactorOres implements OreEnum {
 			return false;
 		if (id == ExtraUtilsHandler.getInstance().darkID)
 			return true;
-		return this.isValidBiome(world.getBiomeGenForCoords(chunkX, chunkZ)) || id == ReikaTwilightHelper.getDimensionID();
+		return this.isValidBiome(world.getBiomeGenForCoords(chunkX << 4, chunkZ << 4)) || id == ReikaTwilightHelper.getDimensionID();
 	}
 
 	private boolean shouldGen() {
+		if (ReactorCraft.config.isOreGenEnabled(this))
+			return true;
+		if (ModList.CONDENSEDORES.isLoaded() && CondensedOreAPI.instance.doesBlockGenerate(this.getBlock(), this.getBlockMetadata()))
+			return false;
 		return shouldGen || !this.hasEquivalents();
 	}
 
