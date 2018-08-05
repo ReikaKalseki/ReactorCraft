@@ -26,14 +26,15 @@ import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 public final class EntityNuclearWaste extends EntityItem {
 
 	public static final int RANGE = 6;
+	public static final int RADIATION_INTERVAL = 10*60*20;
+	public static final int RADIATION_DELAY = 3*60*20;
 	private int timer = 0;
 
 	public EntityNuclearWaste(World par1World) {
 		super(par1World);
 	}
 
-	public EntityNuclearWaste(World world, double x, double y, double z, ItemStack is)
-	{
+	public EntityNuclearWaste(World world, double x, double y, double z, ItemStack is) {
 		super(world, x, y, z, is);
 	}
 
@@ -90,8 +91,8 @@ public final class EntityNuclearWaste extends EntityItem {
 		int iy = MathHelper.floor_double(y);
 		int iz = MathHelper.floor_double(z);
 
-		//Contaminate the area slightly every 10 min left in the world
-		if (timer%12000 == 0 && timer >= 18000) {
+		//Contaminate the area slightly every 10 min left in the world, after the first 3 minutes
+		if ((timer-RADIATION_DELAY)%RADIATION_INTERVAL == 0 && timer >= RADIATION_DELAY) {
 			AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(12, 8, 12);
 			List<EntityRadiation> near = world.getEntitiesWithinAABB(EntityRadiation.class, box);
 			if (near.size() < 32) {
