@@ -87,7 +87,6 @@ import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
-import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -385,8 +384,7 @@ public class ReactorCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PELLET.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.fueldust, true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.thordust, true);
-		SensitiveItemRegistry.instance.registerItem(this, CraftingItems.ALLOY.getItem(), false);
-		SensitiveItemRegistry.instance.registerItem(this, CraftingItems.FERROINGOT.getItem(), false);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.CRAFTING.getItemInstance(), false);
 
 		SensitiveFluidRegistry.instance.registerFluid("rc fusion plasma");
 		SensitiveFluidRegistry.instance.registerFluid("rc deuterium");

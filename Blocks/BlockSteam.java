@@ -153,6 +153,25 @@ public class BlockSteam extends Block {
 					world.setBlock(x, y, z, Blocks.air, 0, 2);
 				}
 			}
+			else if (world.getBlock(dx, dy, dz) == ReactorBlocks.FLYWHEELMULTI.getBlockInstance()) {
+				int ddx = ReikaRandomHelper.getRandomPlusMinus(dx, 1+3*Math.abs(dir.offsetZ));
+				int ddz = ReikaRandomHelper.getRandomPlusMinus(dz, 1+3*Math.abs(dir.offsetX)); //only move on Z if was moving along X
+				if ((meta&4) != 0) {
+					int i = 0;
+					while (i <= 20 && !this.canMoveInto(world, dx, dy, dz)) {
+						ddx = ReikaRandomHelper.getRandomPlusMinus(dx, 1+3*Math.abs(dir.offsetZ));
+						ddz = ReikaRandomHelper.getRandomPlusMinus(dz, 1+3*Math.abs(dir.offsetX));
+					}
+				}
+				if (this.canMoveInto(world, ddx, dy, ddz)) {
+					world.setBlock(ddx, dy, ddz, this, this.getTransmittedMetadata(meta, dir), 2);
+					world.setBlock(x, y, z, Blocks.air, 0, 2);
+					world.markBlockForUpdate(ddx, dy, ddz);
+				}
+				else {
+					world.setBlock(x, y, z, Blocks.air, 0, 2);
+				}
+			}
 			else {
 				world.setBlock(x, y, z, Blocks.air, 0, 2);
 			}
