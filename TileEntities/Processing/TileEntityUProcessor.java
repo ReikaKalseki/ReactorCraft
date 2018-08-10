@@ -58,7 +58,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	public static enum Processes {
 		UF6("water", "rc hydrofluoric acid", "rc uranium hexafluoride", 250, 1000, 250, 125, 80, 400, "ingotUranium"),
-		LiFBe("rc lithium", "", "rc lifbe", 100, 500, 0, 0, 120, 600, ReactorStacks.emeralddust);
+		LiFBe("rc lithium", "rc hydrofluoric acid", "rc lifbe", 100, 500, 250, 1500, 120, 600, ReactorStacks.emeralddust);
 
 		public final int intermediateTime;
 		public final int ouputTime;

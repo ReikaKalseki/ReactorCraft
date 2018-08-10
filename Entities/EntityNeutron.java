@@ -86,7 +86,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					if (tgt != null) {
 						//this.setPosition(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5);
 						if (rand.nextInt(2) == 0) {
-							this.setDead();
+							//this.setDead(); //negates need for shielding
 						}
 						else {
 							this.setLocationAndAngles(tgt.xCoord+0.5, tgt.yCoord+0.5, tgt.zCoord+0.5, 0, 0);
