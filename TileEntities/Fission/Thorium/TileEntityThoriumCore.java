@@ -102,6 +102,11 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 			this.feedFluid();
 	}
 
+	@Override
+	protected int getWarningTemperature() {
+		return 750;
+	}
+
 	private void feedFluid() {
 		World world = worldObj;
 		int x = xCoord;

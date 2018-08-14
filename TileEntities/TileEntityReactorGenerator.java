@@ -13,6 +13,9 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
+
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -38,13 +41,17 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
+import Reika.RotaryCraft.API.Power.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.API.WrappableWireSource"})
-public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile, WrappableWireSource {
+public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile,
+WrappableWireSource, PowerSourceTracker {
 
 	private ForgeDirection facingDir;
 
@@ -138,15 +145,8 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	}
 
 	private void getPower(World world, int x, int y, int z, int meta) {
-		int len = this.getGeneratorLength();
-		int dx = x+this.getFacing().offsetX*len;
-		int dy = y+this.getFacing().offsetY*len;
-		int dz = z+this.getFacing().offsetZ*len;
-
-		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-
-		if (r != null && r.isTurbine()) {
-			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getTileEntity(dx, dy, dz);
+		TileEntityTurbineCore te = this.getTurbine(world, x, y, z);
+		if (te != null) {
 			if (te.getSteamMovement() == this.getFacing().getOpposite()) {
 				power = te.getPower();
 				omegain = te.getOmega();
@@ -161,6 +161,16 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 			omegain = torquein = 0;
 			power = 0;
 		}
+	}
+
+	private TileEntityTurbineCore getTurbine(World world, int x, int y, int z) {
+		int len = this.getGeneratorLength();
+		int dx = x+this.getFacing().offsetX*len;
+		int dy = y+this.getFacing().offsetY*len;
+		int dz = z+this.getFacing().offsetZ*len;
+
+		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+		return r != null && r.isTurbine() ? (TileEntityTurbineCore)this.getTileEntity(dx, dy, dz) : null;
 	}
 
 	public ForgeDirection getFacing() {
@@ -401,7 +411,7 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 
 	@Override
 	public int getTorque() {
-		return torquein;
+		return Math.min(torquein, TileEntityReactorFlywheel.MAXTORQUE); //clamp for the same reason
 	}
 
 	@Override
@@ -422,6 +432,58 @@ public class TileEntityReactorGenerator extends TileEntityReactorBase implements
 	@Override
 	public boolean hasPowerStatusChangedSinceLastTick() {
 		return lastomegain != omegain || lasttorquein != torquein;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
+		PowerSourceList p = new PowerSourceList();
+		if (power > 0) {
+			TileEntityTurbineCore te = this.getTurbine(worldObj, xCoord, yCoord, zCoord);
+			if (te != null) {
+				p.addSource(te);
+			}
+		}
+		return p;
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(this.getFacing().getOpposite()));
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
+	}
+
+	@Override
+	public int getX() {
+		return xCoord;
+	}
+
+	@Override
+	public int getY() {
+		return yCoord;
+	}
+
+	@Override
+	public int getZ() {
+		return zCoord;
+	}
+
+	@Override
+	public int getIoOffsetX() {
+		return 0;
+	}
+
+	@Override
+	public int getIoOffsetY() {
+		return 0;
+	}
+
+	@Override
+	public int getIoOffsetZ() {
+		return 0;
 	}
 
 }

@@ -43,7 +43,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class TileEntityHiPTurbine extends TileEntityTurbineCore implements MultiBlockTile {
 
 	public static final int GEN_OMEGA = 131072;
-	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM*131/20/24;
+	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM * 131 / 20 / 24 * 6/10;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
@@ -154,9 +154,9 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = (int)(this.getRadius());
 			if (!world.isRemote) {
-				for (int dy = 2; dy < 5; dy++) {
-					int ty = y-th-dy;
-					for (int d = 0; d <= 1; d++) {
+				for (int d = 0; d <= 1; d++) {
+					for (int dy = 2; dy < 5; dy++) {
+						int ty = y-th-dy;
 						for (int i = -th; i <= th; i++) {
 							int tx = x+dir.offsetX*i+s.offsetX*d;
 							int tz = z+dir.offsetZ*i+s.offsetZ*d;
@@ -168,10 +168,12 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 							if (m == MachineRegistry.RESERVOIR) {
 								TileEntity te = this.getTileEntity(tx, ty, tz);
 								((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
+								break;
 							}
 							else if (world.getBlock(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
 								TileEntity te = this.getTileEntity(tx, ty, tz);
 								((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
+								break;
 							}
 							int py = ty+1+rand.nextInt(th*2);
 							if (ReikaMathLibrary.py3d(dir.offsetX*i, py-y, dir.offsetZ*i) < th)

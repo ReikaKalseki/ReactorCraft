@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -51,15 +52,18 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
+import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTurbineCore extends TileEntityReactorBase implements ShaftPowerEmitter, Screwdriverable, IFluidHandler, PipeConnector,
-MultiBlockTile, BreakAction, ToggleTile {
+MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 
 	protected int steam;
 
@@ -877,6 +881,55 @@ MultiBlockTile, BreakAction, ToggleTile {
 	public void setEnabled(boolean enable) {
 		enabled = enable;
 		this.syncAllData(false);
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
+		PowerSourceList p = new PowerSourceList();
+		if (omega > 0) {
+			p.addSource(this);
+		}
+		return p;
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(this.getSteamMovement()));
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
+	}
+
+	@Override
+	public int getX() {
+		return xCoord;
+	}
+
+	@Override
+	public int getY() {
+		return yCoord;
+	}
+
+	@Override
+	public int getZ() {
+		return zCoord;
+	}
+
+	@Override
+	public int getIoOffsetX() {
+		return 0;
+	}
+
+	@Override
+	public int getIoOffsetY() {
+		return 0;
+	}
+
+	@Override
+	public int getIoOffsetZ() {
+		return 0;
 	}
 
 }

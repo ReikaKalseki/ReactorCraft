@@ -97,11 +97,15 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 9, 0.0625);
 		}
-		else if (temperature > 500 && ReikaRandomHelper.doWithChance(20)) {
+		else if (temperature > this.getWarningTemperature() && ReikaRandomHelper.doWithChance(20)) {
 			if (rand.nextInt(20) == 0)
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}
+	}
+
+	protected int getWarningTemperature() {
+		return 500;
 	}
 
 	private void onActivityChange(boolean active) {
