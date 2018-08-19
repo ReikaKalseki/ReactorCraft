@@ -161,6 +161,7 @@ public class BlockSteam extends Block {
 					while (i <= 20 && !this.canMoveInto(world, dx, dy, dz)) {
 						ddx = ReikaRandomHelper.getRandomPlusMinus(dx, 1+3*Math.abs(dir.offsetZ));
 						ddz = ReikaRandomHelper.getRandomPlusMinus(dz, 1+3*Math.abs(dir.offsetX));
+						i++;
 					}
 				}
 				if (this.canMoveInto(world, ddx, dy, ddz)) {

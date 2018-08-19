@@ -46,6 +46,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	public static final int FLUID_PER_RESERVOIR = TileEntityReactorBoiler.WATER_PER_STEAM * 131 / 20 / 24 * 6/10;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
+	private int dripBuffer;
 
 	private RelativePositionList getInjectors() {
 		RelativePositionList injectors = new RelativePositionList();
@@ -144,12 +145,15 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	@Override
 	protected void copyDataFrom(TileEntityTurbineCore tile) {
 		super.copyDataFrom(tile);
-		fluid = ((TileEntityHiPTurbine)tile).fluid;
+		TileEntityHiPTurbine te = (TileEntityHiPTurbine)tile;
+		fluid = te.fluid;
+		dripBuffer = te.dripBuffer;
+		te.dripBuffer = 0;
 	}
 
 	@Override
 	protected void dumpSteam(World world, int x, int y, int z, int meta) {
-		if (this.dumpLiquid(world, x, y, z, meta)) {
+		if (dripBuffer > 0 && this.dumpLiquid(world, x, y, z, meta)) {
 			ForgeDirection s = this.getSteamMovement();
 			ForgeDirection dir = ReikaDirectionHelper.getLeftBy90(s);
 			int th = (int)(this.getRadius());
@@ -168,18 +172,24 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 							if (m == MachineRegistry.RESERVOIR) {
 								TileEntity te = this.getTileEntity(tx, ty, tz);
 								((TileEntityReservoir)te).addLiquid(fs.amount, fs.getFluid());
+								dripBuffer -= fs.amount;
 								break;
 							}
 							else if (world.getBlock(tx, ty, tz) == BCMachineHandler.getInstance().tankID) {
 								TileEntity te = this.getTileEntity(tx, ty, tz);
 								((IFluidHandler)te).fill(ForgeDirection.UP, fs, true);
+								dripBuffer -= fs.amount;
 								break;
 							}
 							int py = ty+1+rand.nextInt(th*2);
 							if (ReikaMathLibrary.py3d(dir.offsetX*i, py-y, dir.offsetZ*i) < th)
 								ReikaParticleHelper.DRIPWATER.spawnAroundBlock(world, x+dir.offsetX*i, py, z+dir.offsetZ*i, 5);
 						}
+						if (dripBuffer <= 0)
+							break;
 					}
+					if (dripBuffer <= 0)
+						break;
 				}
 			}
 			int n = ConfigRegistry.SPRINKLER.getValue()*12;
@@ -303,6 +313,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		if (DragonAPICore.debugtest) {
 			steam = 5000;
 			fluid = WorkingFluid.WATER;
+			dripBuffer = 5000;
 			return true;
 		}
 
@@ -320,6 +331,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 						steam += rm2;
 						fluid = te.getWorkingFluid();
 						te.removeSteam(rm2);
+						dripBuffer += rm2*1000;
 					}
 					flag = s > rm+32;
 				}
@@ -359,6 +371,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		super.readSyncTag(NBT);
 
 		fluid = WorkingFluid.getFromNBT(NBT);
+		dripBuffer = NBT.getInteger("dripb");
 	}
 
 	@Override
@@ -366,6 +379,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		super.writeSyncTag(NBT);
 
 		fluid.saveToNBT(NBT);
+		NBT.setInteger("dripb", dripBuffer);
 	}
 
 	@Override

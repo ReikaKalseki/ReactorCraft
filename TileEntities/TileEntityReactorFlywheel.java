@@ -18,6 +18,7 @@ import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
@@ -37,6 +38,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;
 	public static final int MAXTORQUE = 12750;
+	public static final int MAXTORQUE_AMMONIA = 12750*2;
 
 	public boolean hasMultiBlock() {
 		return hasMultiBlock;
@@ -73,7 +75,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 			//torque = te.getTorque();
 			//ReikaJavaLibrary.pConsole(torque+"/"+te.getTorque()+":"+omega+"/"+te.getOmega(), Side.SERVER);
 			omega = te.getOmega();
-			torque = Math.min(te.getTorque(), te.isAmmonia() ? MAXTORQUE*2 : MAXTORQUE);
+			torque = te instanceof TileEntityHiPTurbine ? te.getTorque() : Math.min(te.getTorque(), te.isAmmonia() ? MAXTORQUE_AMMONIA : MAXTORQUE);
 		}
 		else {
 			if (omega > 0)

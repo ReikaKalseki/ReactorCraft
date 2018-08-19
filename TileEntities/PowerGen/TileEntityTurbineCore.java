@@ -611,6 +611,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		omega = tile.omega;
 		phi = tile.phi;
 		steam = tile.steam;
+		ammonia = tile.ammonia;
 	}
 
 	@Override
@@ -673,6 +674,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		inter = Interference.get(NBT.getInteger("blocked"));
 
 		damage = NBT.getInteger("dmg");
+		ammonia = NBT.getBoolean("ammonia");
 
 		if (this.needsMultiblock() && NBT.hasKey("multi"))
 			hasMultiBlock = NBT.getBoolean("multi");
@@ -694,6 +696,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		NBT.setInteger("steamlevel", steam);
 
 		NBT.setInteger("dmg", damage);
+		NBT.setBoolean("ammonia", ammonia);
 
 		if (inter != null)
 			NBT.setInteger("blocked", inter.ordinal());
