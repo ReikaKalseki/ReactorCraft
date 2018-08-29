@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<intro>
+		对于核反应及核反应的原理设计的介绍。
+	</intro>
+	<procdesc>
+		这些机器用于将现有材料加工成反应堆所需要的材料。
+	</procdesc>
+	<gendesc>
+		这些机器用于将反应堆产生的能量转化为轴功率。
+	</gendesc>
+	<htgrdesc>
+		这些是高温气体反应器（HTGR）的组成部分。
+	</htgrdesc>
+	<fissiondesc>
+		这些是标准蒸汽裂变反应堆的组成部分。
+	</fissiondesc>
+	<breederdesc>
+		这些是钠冷增殖反应堆或“液态金属快中子增殖反应堆”（LMFBR）的组成部分。
+	</breederdesc>
+	<thoriumdesc>
+		这些是液体燃料钍反应堆的组成部分。这些依旧是裂变反应堆，但它们与其他反应堆的设计明显不同。
+	</thoriumdesc>
+	<fusiondesc>
+		这些是托卡马克聚变反应堆的组成部分。
+	</fusiondesc>
+	<accdesc>
+		这些机器常常需要放置在反应堆旁边，生产或运输材料或以其他方式完成反应堆的所需工序。
+	</accdesc>
+	<tooldesc>
+		这些工具对那些使用核反应堆的人来说是十分有用的。
+	</tooldesc>
+	<resourcedesc>
+		这些项目在核反应堆的运行中至关重要。
+	</resourcedesc>
+</categories>
