@@ -40,6 +40,7 @@ import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.RotaryCraft.API.Interfaces.EMPControl;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -51,7 +52,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.API.WrappableWireSource"})
 public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile,
-WrappableWireSource, PowerSourceTracker {
+WrappableWireSource, PowerSourceTracker, EMPControl {
 
 	private ForgeDirection facingDir;
 
@@ -484,6 +485,11 @@ WrappableWireSource, PowerSourceTracker {
 	@Override
 	public int getIoOffsetZ() {
 		return 0;
+	}
+
+	@Override
+	public void onHitWithEMP(TileEntity te) {
+		this.fail(worldObj, xCoord, yCoord, zCoord);
 	}
 
 }

@@ -43,8 +43,9 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
+import Reika.RotaryCraft.API.Interfaces.EMPControl;
 
-public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements LinkableReactorCore, Feedable, ChunkLoadingTile {
+public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactorBase implements LinkableReactorCore, Feedable, ChunkLoadingTile, EMPControl {
 
 	protected int hydrogen = 0;
 	private int activeTimer = 0;
@@ -464,6 +465,11 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		else if (r == src)
 			return 3;
 		return 0;
+	}
+
+	@Override
+	public final void onHitWithEMP(TileEntity te) {
+		temperature += 500;
 	}
 
 }

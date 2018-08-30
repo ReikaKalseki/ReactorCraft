@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <info>
 	<physics>
 		Las reacciones nucleares se agrupan en dos tipos principales, fision y fusion. Cada uno funciona segun la teoria de la relatividad de Einstein para generar energia a partir de la masa - E = mc^2. Esta energia es liberada como calor o un neutron acelerado. Debido a que el valor de c (la velocidad de la luz) es extremadamente grande - 300 millones de metros por segundo - la cantidad de energia liberada suee ser muy grande, aunque el consumo de masa sea diminuto.

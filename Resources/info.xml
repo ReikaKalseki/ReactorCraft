@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <info>
 	<physics>
 		Nuclear reactions fall into two main types, fission and fusion. Each of these works off of Einstein's theory of relativity to generate energy from mass - E = mc^2. This energy is released as heat or as a speeding neutron. Because the value of c (the speed of light) is extremely large - 300 million meters per second - the amount of energy released is often very large, even though the mass consumption is tiny.
