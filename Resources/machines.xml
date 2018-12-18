@@ -301,10 +301,12 @@
 	</reflector>
 	<generator>
 		<desc>
-			The generator convers shaft power directly from a turbine into RF power for ease of transport or use in other mods. Note that it is a multiblock that must be directly connected to the turbine. Also be aware that the extreme power supply this generator provides exceeds the capacities of many RF transport systems.
+			The generator convers shaft power directly from a turbine into other forms of power for ease of transport or use in other mods. Note that it is a multiblock that must be directly connected to the turbine. Also be aware that the extreme power supply this generator provides exceeds the capacities of many transport systems.
 		</desc>
 		<note>
-			RF Output: Back
+			Converted Output: Back
+			
+			Can be mode-switched with the screwdriver
 		</note>
 	</generator>
 	<bigturbine>

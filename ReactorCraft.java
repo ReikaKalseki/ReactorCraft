@@ -46,11 +46,12 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.IDCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
-import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.RetroGenController;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
@@ -141,8 +142,6 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
-	private boolean isLocked = false;
-
 	public static Item[] items = new Item[ReactorItems.itemList.length];
 	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
 
@@ -189,7 +188,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static CommonProxy proxy;
 
 	public final boolean isLocked() {
-		return isLocked || RotaryCraft.instance.isLocked();
+		return !ModLockController.instance.verify(this) || RotaryCraft.instance.isLocked();
 	}
 
 	private final boolean checkForLock() {
@@ -234,22 +233,6 @@ public class ReactorCraft extends DragonAPIMod {
 		config.initProps(evt);
 		proxy.registerSounds();
 
-		isLocked = this.checkForLock();
-		if (this.isLocked()) {
-			ReikaJavaLibrary.pConsole("");
-			ReikaJavaLibrary.pConsole("\t========================================= REACTORCRAFT ===============================================");
-			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of ReactorCraft.");
-			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
-			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
-			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
-			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
-			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
-			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the ReactorCraft content, and then reload the game. All functionality");
-			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
-			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
-			ReikaJavaLibrary.pConsole("");
-		}
-
 		logger = new ModLogger(instance, false);
 		if (DragonOptions.FILELOG.getState())
 			logger.setOutput("**_Loading_Log.log");
@@ -284,7 +267,7 @@ public class ReactorCraft extends DragonAPIMod {
 			ReactorAchievements.registerAchievements();
 		}
 
-		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
+		IDCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID()).setPotionName("Radiation Sickness");
 
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
@@ -313,6 +296,26 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
+
+		ModLockController.instance.registerMod(this);
+		if (this.checkForLock()) {
+			ModLockController.instance.unverify(this);
+		}
+		if (this.isLocked()) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= REACTORCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of ReactorCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the ReactorCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
+
 		if (this.isLocked() && !RotaryCraft.instance.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
 		if (!this.isLocked()) {

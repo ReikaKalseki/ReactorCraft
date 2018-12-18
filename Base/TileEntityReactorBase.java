@@ -136,6 +136,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	protected void updateTemperature(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+
+		if (world.provider.dimensionId != -1)
+			Tamb = Math.min(Tamb, 95);
+
 		int dT = Tamb-temperature;
 		if (dT != 0) {
 			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;

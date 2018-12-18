@@ -25,6 +25,7 @@ import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -85,7 +86,7 @@ public class ReactorRecipes {
 
 		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
 
-		if (ModList.IC2.isLoaded())
+		if (ModList.IC2.isLoaded() && !IC2Handler.getInstance().isIC2Classic())
 			TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
 	}
 
@@ -332,9 +333,9 @@ public class ReactorRecipes {
 		ReactorTiles.SOLARTOP.addCrafting("aPa", "tct", "sPs", 'a', CraftingItems.ALLOY.getItem(), 't', ItemStacks.tungsteningot, 'c', ItemStacks.condenser, 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 		ReactorTiles.SOLAR.addCrafting("sPs", "pEp", "sPs", 'p', ItemStacks.pipe, 'E', ReactorTiles.EXCHANGER.getCraftedProduct(), 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 
-		ReactorTiles.HEATPIPE.addSizedCrafting(8, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', Items.gold_ingot);
+		ReactorTiles.HEATPIPE.addSizedCrafting(6, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', Items.gold_ingot);
 		if (ReikaItemHelper.oreItemExists("ingotCopper"))
-			ReactorTiles.HEATPIPE.addSizedOreCrafting(4, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', "ingotCopper");
+			ReactorTiles.HEATPIPE.addSizedOreCrafting(3, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', "ingotCopper");
 	}
 
 }
