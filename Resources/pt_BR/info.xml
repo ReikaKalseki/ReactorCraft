@@ -1,0 +1,30 @@
+﻿<?xml version="1.0"?>
+<info>
+	<physics>
+		Existem dois tipos de reações nucleares, fissão e fusão. Cada uma delas tiradas da teoria da relatividade de Einstein para gerar energia a partir da massa - E = mc^2. Essa energia é liberada como calor ou como um neutron em alta velocidade. Devido ao valor de c (a velocidade da luz) ser extremamente grande - 300 milhões de metros por segundo - a quantidade de energia liberada também é muito grande, mesmo que o consumo de massa seja minúsculo.
+	</physics>
+	<fissioninfo>
+		Na fissão nuclear, um átomo pesado, como urânio ou plutônio, é atingido com um neutron extra. Isso o desestabiliza e o átomo logo se divide em dois outros, liberando uma grande quantidade de energia no processo. Essa reação também libera mais três neutrons, que podem atingir outros três átomos e iniciar uma reação em cadeia. Os dois átomos resultantes são, geralmente, indesejados e são considerados lixo radioativo.
+	</fissioninfo>
+	<fusioninfo>
+		Na fusão nuclear, dois átomos leves, geralmente hidrogênio, são expostos à uma grande temperatura e pressão até que eles se unam. alguma massa é perdida no processo, liberando calor e acelerando neutrons. Esses neutrons carregam uma grande quantidade de energia dessa reação e precisam ser capturados para obtermos essa energia. Diferente de fissão, fusão não cria uma reação em cadeia e não produz lixo, mas é muito mais difícil de se alcançar. A maioria dos reatores de fusão artificiais usam dois isótopos de hidrogênio, deutério e trítio.
+	</fusioninfo>
+	<basics>
+		Usinas nucleares funcionam fundamentalmente da mesma maneira que outras usinas; a reação nuclear gera calor, que é usado para ferver água. O vapor resultante gira uma turbina e gera potência de eixo. Combustível nuclear é consumido de maneira mais lenta que outros, porém é bem mais difícil de se produzir e os seus pós-efeitos são, quase sempre, difíceis de se resolver.
+	</basics>
+	<enrichment>
+		Urânio vem em duas variedades, U235 e U238. Apenas o U235 é útil como combustível nuclear, mas ele faz parte de apenas 1%% de todo urânio encontrado, sendo o restante U238. Por essa rasão, urânio é 'enriquecido', onde a concentração de U235 é aumentada para níveis aceitáveis. O U238 restante, algumas vezes chamado 'urânio esgotado', pode ser bombardeado com neutrons para convertê-lo em Pu239, uma forma de plutônio também utilizado em reatores de fissão, mesmo com maior risco e com produtos radioativos piores. Urânio esgotado também é usado para fazer objetos de alta densidade.
+	</enrichment>
+	<meltdown>
+	Se um reator fica muito quente, ele começa a ferver o seu líquido refrigerante e a emitir grandes quantidades de fumaça e vapor. Se o aquecimento continuar, vai fazer as molécolas de água de dividirem, resultando em um grande acúmulo de gás hidrogênio. E, como este gás é inflamável, pode resultar em uma explosão que joga partes do reator em todas as direções. E ainda, o combustível e a estrutura de aço do núcleo de combustível em si, por derreter, se misturam em um fluido como lava chamado "cório", que é intensamente radioativo. Colapsos como este espalham radiação extrema sobre uma grande área.
+	</meltdown>
+	<radiation>
+		Radioatividade é uma propriedade perigosa de muitos materiais nucleares, já que envenena severamente seres vivos. Baixos níveis de radioatividade não é letal, mas pode trazer efeitos desconfortáveis, como vômito e nausea. Altos níveis de radioatividade, como esses deixados após um colapso nuclear, matam quase que instantaneamente. Radioatividade deixa uma marca distintiva na terra, matando plantas, grama e animais. Radiação não pode ser limpa manualmente, porém se desfaz gradualmente com o tempo e pode ser lavada pela chuva.
+	</radiation>
+	<shielding>
+		A maioria dos reatores atiram neutrons altamente energizados que podem adoecer ou matar coisas vivas. Por isso é quase universalmente aconselhável proteger esse tipo de reator. Além disso, caso ocorra um colapso, uma proteção pode limitar tanto os danos estruturais quanto a liberação de níveis letais de radiação. Apenas alguns tipos de blocos são efetivos nisso.
+	</shielding>
+	<structures>
+		Reatores nucleares e suas partes são, quase sempre, grandes, muito maior que o metro quadrado onde a maioria das máquinas vai caber. E ainda, eles são compostos de muitas partes individuais que somente formam um todo coerente em um arranjo específico.
+	</structures>
+</info>

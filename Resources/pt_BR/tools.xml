@@ -1,0 +1,15 @@
+﻿<?xml version="1.0"?>
+<tools>
+	<goggles>
+		Óculos de Radiação permitem que a radiação se torne visível, permitindo evitá-la ou até a potencial limpeza.
+	</goggles>
+	<remote>
+		O Controle Remoto de CPU de Reator é a maneira de controlar o CPU de um reator de fissão a distância, sem ter que entrar no reator em si.
+	</remote>
+	<geiger>
+		O Contador Geiger detecta radiação e apitam mais intensamente conforme os níveis de radiação aumentam.
+	</geiger>
+	<cleanup>
+		O Emansipador de Radiação borrifa água em uma área para remover partículas radioativas, limpando-a assim da radiação.
+	</cleanup>
+</tools>

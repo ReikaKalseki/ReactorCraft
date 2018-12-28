@@ -1,0 +1,400 @@
+﻿<?xml version="1.0"?>
+<machines>
+	<processor>
+		<desc>
+			O processador de urânio dissolve fluorita em água para fazer o ácido fluorídrico e depois dissolve o urânio bruto no ácido para fazer gás de hexafluoreto de urânio (UF6). Este gás é utilizado no processo de enriquecimento de urânio.
+		</desc>
+		<note>
+			Não requer energia
+			Requer uma fonte de água
+		</note>
+	</processor>
+	<centrifuge>
+		<desc>
+			A centrífuga isótopos utiliza uma velocidade de rotação muito elevada para separar os diferentes isótopos do urânio, o que produz uma mistura de pó de urânio esgotado e pó de urânio enriquecido. Este último é muito menos comum devido à raridade de U235.
+		</desc>
+		<note>
+			Velocidade Mínima: %d rad/s
+			Entrada de energia: Por baixo
+			Entrada de UF6: Por cima
+		</note>
+	</centrifuge>
+	<electrolyzer>
+		<desc>
+			O eletrolizador usa descargas elétricas para decompor os materiais em seus constituintes, tais como sal em sódio e cloro, ou água em hidrogênio e oxigênio. Os produtos pesados são inseridos por baixo, enquanto os leves, por cima. Note que os sólidos devem ser derretidos antes de serem capazes de ser processados.
+		</desc>
+		<note>
+			Energia para eletrolizar sal: %dW
+			Entrada de energia: Qualquer lado horizontal
+			Temperatura necessária para derreter sal: %d°C
+		</note>
+	</electrolyzer>
+	<synthesizer>
+		<desc>
+			O sintetizador é usado para fazer de amônia, que é um fluido de trabalho mais eficiente do que água em reatores que a usam. Para fazer isto, ele necessita de água, cloreto de amônia e a cal.
+		</desc>
+		<note>
+			Temperatura para sintetizar amônia: %dC
+		</note>
+	</synthesizer>
+	<tritizer>
+		<desc>
+			A câmara de irradiação de neutrons converte deutério e trítio, bombardeando-os com neutrons. Esta máquina é colocada no núcleo de um reator, onde irá absorver alguns neutrons que o atingirem e converter o deutério armazenado.
+		</desc>
+		<note>
+			Entrada de deutério: Por cima
+			Saída de trítio: Por baixo
+		</note>
+	</tritizer>
+	<condenser>
+		<desc>
+			O condensador recoleta blocos de vapor e os converte novamente em líquido para reutilização no reator nuclear. Visto que sua pressão é extremamente baixa, este líquido deve ser repressurizado antes de poder ser utilizado. Embora possa não ser muito econômico recuperar o vapor à base de água, amônia é suficientemente cara de modo que a recuperação vale o custo.
+		</desc>
+		<note>
+			Saída de líquidos: Por cima
+		</note>
+	</condenser>
+	<exchanger>
+		<desc>
+			O permutador de calor recebe fluido quente na parte superior e o resfria, transferindo o calor do fluido para qualquer tipo de equipamento adjacente, incluindo as caldeiras padrão. Esta máquina requer energia para mover o fluido, que pode ser tirado pelos lados.
+		</desc>
+		<note>
+			Entrada de energia: Por baixo
+			Energia necessária: %dW
+			Velocidade necessária: %d rad/s
+		</note>
+	</exchanger>
+	<boiler>
+		<desc>
+			A caldeira absorve o calor das máquinas vizinhas e o usa para ferver o seu líquido interno em vapor. Note que, se o vapor não for retirado e acumular, a caldeira acabará perdendo a capacidade de ferver mais líquido e não conseguirá afastar o calor do reator. Isso geralmente resulta em um colapso. Além disso, se a temperatura sobir acima de %d°C quando a caldeira estiver cheia de amônia, ela se incendeia e explode.
+		</desc>
+		<note>
+			Entrada de líquido: Por baixo:
+			Saída de vapor: Por cima
+		</note>
+	</boiler>
+	<pump>
+		<desc>
+			O pressurizador repressuriza a água de baixa pressão ou de amónia de modo que ela possa ser reutilizada no reator, completando assim o ciclo termodinâmico. Note que este é um pressurizador centrífugo.
+		</desc>
+		<note>
+			Potência mínima: %dW
+			Torque Mínimo: %d Nm
+			Entrada líquida: Por cima
+			Saída líquida: Pelas laterais
+			Entrada de energia: Por baixo
+		</note>
+	</pump>
+	<grate>
+		<desc>
+			A grade de vapor recebe vapor a partir de dutos de vapor e o libera no ar. O vapor vai, em seguida, subir até atingir um bloqueio, onde ele irá se espalhar. Idealmente, o vapor deve subir diretamente para uma turbina de modo a que a sua energia possa ser extraída.
+		</desc>
+		<note>
+			Saída de Vapor: Por cima
+			Saída Máxima: 1 bloco por tick (20 blocos/s)
+		</note>
+	</grate>
+	<steamline>
+		<desc>
+			Os dutos de vapor transportam vapor para longe do reator, para uma turbina, etc. Note que o duto de vapor tem uma infinita capacidade e, assim, quebrar, pode resultar numa perda de uma grande quantidade de energia armazenada.
+		</desc>
+		<note>
+			Capacidade infinita
+		</note>
+	</steamline>
+	<turbinecore>
+		<desc>
+			A turbina extrai a energia do vapor, o qual se move ao longo do seu comprimento. A turbina acelera gradualmente à medida que recebe vapor, e o seu torque será proporcional à quantidade de vapor que flui através de si. Note que as turbinas, especialmente se girando rapidamente, são muito frágeis. A turbina não girará se suas lâminas estiverem obstruídas.
+		</desc>
+		<note>
+			Velocidade máxima: %d rad/s
+			Torque máximo: %d Nm
+			Riscos: A lâmina se quebra devido a colisões com objetos
+			Turbinas requerem lubrificação
+		</note>
+	</turbinecore>
+	<pebblebed>
+		<desc>
+			O núcleo de reator com seixo é o tanque de combustível em um reator com seixo. Carregue-o com pastilhas de combustível e ele irá sofrer fissão espontânea, e gerar calor. Este calor é melhor transferido para um permutador de calor de dióxido de carbono (CO2).
+		</desc>
+		<note>
+
+		</note>
+	</pebblebed>
+	<co2heater>
+		<desc>
+			O Permutador de calor de CO2 absorve calor de um reator com seixo e transfere para o dióxido de carbono em seu interior. O dióxido de carbono pode ser, então, retirado quente pelo topo e se usado em um permutador de calor.
+		</desc>
+		<note>
+			Deve atingir 800°C para emitir dióxido de carbono quente
+		</note>
+	</co2heater>
+	<fuel>
+		<desc>
+			O núcleo de combustível armazena combustível nuclear e é a fonte de todas as reações nucleares e geração de calor. Quando carregado, o núcleo emite nêutrons, o que afeta outros núcleos de combustível. Se esses núcleos também são carregados, há uma chance de que eles entrem em fissão, liberando mais três nêutrons e um pouco de calor, e consumindo algum combustível. Eles também acumulam resíduos, o que dificulta a sua capacidade de sofrer fissões. Se o núcleo de combustível fica muito quente, ele começa a fumegar, liberando gás hidrogênio, e acaba derretendo e liberando grandes quantidades de radiação.
+		</desc>
+		<note>
+			Emissão de Neutrons: Qualquer direção horizontal
+			Temperatura máxima: %d°C
+		</note>
+	</fuel>
+	<control>
+		<desc>
+			A haste de controle permite que você manipule a velocidade de uma reação nuclear, interceptando nêutrons que, de outra forma, poderiam provocar mais eventos de fissão. Barras de controle podem ser recolhidas ou inseridas - elas ficam inseridas por padrão - quando comandadas por um CPU de reator. Elas também podem ser deixadas no lugar, no caso de uma emergência, o chamado evento "SCRAM".
+		</desc>
+		<note>
+
+		</note>
+	</control>
+	<coolant>
+		<desc>
+			As células de refrigeração afastam o calor do reator. Note que este calor é essencialmente desperdiçado, uma vez que não cria qualquer tipo de vapor ou de energia útil. No entanto, as células de refrigeração são vitais para a distribuição de calor e estabilizar a temperatura de reatores maiores.
+		</desc>
+		<note>
+
+		</note>
+	</coolant>
+	<cpu>
+		<desc>
+			Um CPU de reator pode ser usado para gerenciar a operação de um reator nuclear. Ele permite que você manipule cada haste de controle individualmente, ou todas de uma vez. Ele também sente a temperatura dos arredores e desencadea um SCRAM se a temperatura fica muito alta, impedindo um colapso. Note que tanto quanto em um reator real, se o CPU ficar sem energia, por qualquer motivo, as hastes de controle irão todas cair no lugar, provavelmente parando a reação nuclear.
+		</desc>
+		<note>
+			Energia por haste de controle: %dW
+		</note>
+	</cpu>
+	<breeder>
+		<desc>
+			O núcleo do reator alimentador se comporta quase como o núcleo de combustível normal, mas apenas aceita combustível de reator alimentador, e é o único tipo de núcleo de reator que pode ser utilizado num reator alimentador. Eles aquecem um pouco mais rápido do que os núcleos normais alimentados com urânio.
+		</desc>
+		<note>
+			Emissão de Neutrons: Qualquer direção horizontal
+			Temperatura máxima: %d°C
+		</note>
+	</breeder>
+	<sodiumboiler>
+		<desc>
+			A caldeira de sódio, semelhante a uma caldeira de vapor, acumula calor do ambiente e aquece o líquido bombeado através dela. No entanto, ela só aceita sódio derretido e expele sódio derretido quente, uma vez que sua temperatura chegue a 300 graus. Este sódio derretido quente é utilizável em um permutador de calor.
+		</desc>
+		<note>
+			Entrada de Sódio: Por baixo
+			Saída de Sódio Quente: Por cima
+		</note>
+	</sodiumboiler>
+	<heater>
+		<desc>
+			O Pré-aquecedor de hidrogênio usa o feixe de um Raio de Calor para aquecer a mistura de deutério e trítio, tranformando-o em um plasma que é usado no reator de fusão. Note que ele tem que ser contido em uma unidade aquecedora própria que é uma estrutura multibloco, e deve ESTAR no caminho do feixe do Raio de Calor.
+		</desc>
+		<note>
+			Temperatura do Plasma: %dC
+			Entrada de Hidrogênio: Qualquer direção horizontal
+			Saída do Plasma: Por cima
+		</note>
+	</heater>
+	<injector>
+		<desc>
+			O injetor de plasma o injeta no reator tokamak. Note que ele deve ser contido em uma estrutura multibloco própria.
+		</desc>
+		<note>
+
+		</note>
+	</injector>
+	<magnet>
+		<desc>
+			O Anel-Ímã Toroid é o componente principal de um reator tokamak, e contêm o plasma em um feixe curvo em seu centro. Para que funcionem propriamente, eles precisam ser colocados e rotacionados corretamente. Eles também devem ser mantidos muito gelados.
+		</desc>
+		<note>
+			Não podem ser colocados no chão reto, devido ao seu formato e tamanho.
+		</note>
+	</magnet>
+	<solenoid>
+		<desc>
+			O Ímã Solenoid é outro componente principal do reator tokamak. Ele curva o feixe de plasma em um círculo, permitindo-o ser contido para alcançar a densidade crítica para a fusão acontecer. Se este ímã não estiver funcional, o feixe de plasma será lançado em uma direção aleatória. O Solenoid é outra grande estrutura multibloco, e requer potência de eixo para girar.
+		</desc>
+		<note>
+			Velocidade Mínima: %d rad/s
+			Torque Mínimo: %d Nm
+			Velocidade Máxima: %d rad/s
+		</note>
+	</solenoid>
+	<absorber>
+		<desc>
+			Absorvedores de Neutrons interceptam neutrons e transformam sua energia cinética em calor. Assim como no permutador, esse calor pode ser transferido para máquinas adjacentes.
+		</desc>
+		<note>
+
+		</note>
+	</absorber>
+	<collector>
+		<desc>
+			O Coletor de Gás coleta dióxido de carbono de uma fornalha que estiver queimando carvão ou madeira. Esse dióxido de carbono é usado como fluido de trabalho em um Reator a Gás de Alta Temperatura.
+		</desc>
+		<note>
+
+		</note>
+	</collector>
+	<gaspipe>
+		<desc>
+			Dutos de Gás são usado para transportar gás, e são feitos de argila para que não sejam corroídos por gases corrosivos, como Ácido Hidrosulfúrico e Hexafluoreto de Urânio.
+		</desc>
+		<note>
+
+		</note>
+	</gaspipe>
+	<magnetpipe>
+		<desc>
+			Dutos de Contenção Magnética são usados para transportar gases extremamente quentes. Eles usam um campo magnético para manter o seu conteúdo longe das bordas, visto que, no caso contrário, o duto poderia derreter. Note que uma carga elétrica deve ser aplicada ao duto para ele funcionar.
+		</desc>
+		<note>
+			Requer uma carga de um gerador Van De Graaff.
+		</note>
+	</magnetpipe>
+	<heavypump>
+		<desc>
+			Água pesada é um tipo especial de água que contém deutério, ao invés de hidrogênio. Deutério é mais denso que hidrogênio, por isso, água pesada existe em pequenas quantidades no fundo de grandes massas de água. O propósito do Extrator de Água Pesada é separar a água pesada da água normal perto do fundo do oceano. Devido à densidade natural da água pesada, isso só ocorre em um bioma de oceano, abaixo do y = 45, e o extrator só vai funcionar se tiver ao menos 16 blocos de água acima dele e se estiver com mais três outros lados cercados de água.
+		</desc>
+		<note>
+			Poder Mínimo: %dW
+			Torque Mínimo: %d Nm
+		</note>
+	</heavypump>
+	<fluidextractor>
+		<desc>
+			The fluid extractor, when submerged in (and has at least three sides in contact with) a fluid, can centrifuge it and obtain trace quantities of another fluid that was mixed in. For example, heavy water can be centrifuged out of the bottom of oceans (below y=%d and with at least %dm of water above), or molten lithium can be skimmed off the surface of lava.
+		</desc>
+		<note>
+			Minimum Power: %dW
+			Minimum Torque: %d Nm
+		</note>
+	</fluidextractor>
+	<wastecontainer>
+		<desc>
+			Contêiner de Combustível Radioativo é a primeira unidade para armazenagem de lixo nuclear. Quando colocado nesse contêiner, o lixo nuclear mais radioativo e com o menor tempo de vida vai apodrecer e generar calor e neutrons, no processo. Para manter o contêiner frio e providenciar proteção contra radiação, ele deve ficar submerso de baixo d'água.
+		</desc>
+		<note>
+
+		</note>
+	</wastecontainer>
+	<storage>
+		<desc>
+			O lixo nuclear de longa vida que não for apodrecer no Contêiner de Combustível Radioativo deve ser colocado em um Tambor de Armazenamento de Lixo Nuclear, onde ele pode ser armazenado com segurança debaixo da terra por tempo indefinido sem risco de superaquecimento ou de um vazamento de radiação. Note que aproximar-se de um tambor cheio ainda é extremamente perigoso. Lixo com tempo de vida menor que seis anos não pode ser armazenado com segurança desse tambor, visto que eles geram muito calor.
+		</desc>
+		<note>
+
+		</note>
+	</storage>
+	<reflector>
+		<desc>
+			O Refletor de Neutrons tem a chance de refletir neutros de volta na direção que ele atinge o refletor. Isso permite ao reator uma grande eficiencia ao reusar uma porção dos neutrons. Neutrons não refletidos são absorvidos.
+		</desc>
+		<note>
+
+		</note>
+	</reflector>
+	<generator>
+		<desc>
+			O Gerador converte potência de eixo diretamente de uma turbina para RF, para facilitar o seu transporte ou outros usos. Note que ele é uma estrutura multibloco que deve estar diretamente conectado à uma turbina. Também esteja ciente que a quantidade extrema de energia que esse gerador provê excede a capacidade de transporte de muitos sistemas de RF.
+		</desc>
+		<note>
+			Saída de RF: Por trás
+		</note>
+	</generator>
+	<bigturbine>
+		<desc>
+			A Turbina de Alta Pressão funciona usando o vapor diretamente dos dutos de vapor graças a um sistema interno de injeção de vapor, permitindo-a funcionar de maneira mais eficiente e gerar mais poder. Devido ao grande tamanho desta turbina, ela requer muito mais vapor para operar, e pode ser contuída em sete estágios, ao invés de cinco. Esta turbina também possui uma proteção contra danos. Um líquido de baixa pressão pode ser coletado com reservatórios ou com tanques BuildCraft, se colocados logo abaixo da parte da frente da turbina.
+		</desc>
+		<note>
+			Velocidade Máxima: %d rad/s
+		</note>
+	</bigturbine>
+	<turbinemeter>
+		<desc>
+			O Dinamômetro de Turbina mede a velocidade de uma turbina. Ele é colocado abaixo do corpo de uma turbina e, com a ajuda de um comparador, envia um sinal de redstone de acordo com a velocidade da turbina, como uma fração de sua velocidade máxima.
+		</desc>
+		<note>
+			Deve ser colocado abaixo de uma turbina com uma clara visão acima.
+			Nível do Sinal de Redstone (Turbina Normal): (Velocidade/%d)*15
+			Nível do Sinal de Redstone (Turbina de Alta Pressão): (Velocidade/%d)*15
+		</note>
+	</turbinemeter>
+	<marker>
+		<desc>
+			O Guia de Construção Tokamak cria linhas de contorno das várias partes de um reator de fusão tokamak para ajudar com o correto posicionamento e rotação de seus vários componentes.
+		</desc>
+		<note>
+
+		</note>
+	</marker>
+	<flywheel>
+		<desc>
+			A Roda de Turbina a saída de poder de uma turbina de baixa pressão.
+		</desc>
+		<note>
+
+		</note>
+	</flywheel>
+	<diffuser>
+		<desc>
+			O Difusor de Vapor pega vapor quente de alta pressão de uma caldeira de um reator e o expande, esfriando-o para um vapor de baixa pressão mais convencional, para usar em turbinas a vapor convencionais. Ele foi desenhado para ser usado em caldeiras à carvão.
+		</desc>
+		<note>
+
+		</note>
+	</diffuser>
+	<thorium>
+		<desc>
+			O Núcleo de Combustível Tório usa sais de tório derretido para gerar eletricidade. Sendo únicos, se comparados com outros reatores de fissão, eles não são auto-suficientes e precisam de um fluxo de neutrons para 'ligar'. E ainda, a fertilidade de neutrons dependente da temperatura significa que, à medida que a temperatura aumenta, ele se torna menos reativo, como uma proteção natural. O cíclo do combustível tório também produz menos lixo que o de urânio.
+		</desc>
+		<note>
+
+		</note>
+	</thorium>
+	<fueldump>
+		<desc>
+			No caso de exceder a temperatura crítica de %d°C, um reator movido à tório inicia uma descarga de combustível para evitar um colapso. Isso pode causar um vazamento de radiação e, portanto, deve ser evitado, se possível.
+		</desc>
+		<note>
+			Colocado abaixo da coluna de combustível, será acionado automaticamente
+		</note>
+	</fueldump>
+	<solartop>
+		<desc>
+			Esses %s lhe permitem usar sódio derretido, ao invés de água, na torre solar, o que aumenta grandemente sua eficiência e saída de energia.
+		</desc>
+		<note>
+			Duas unidades devem ser colocadas no topo da torre para funcionar
+		</note>
+	</solartop>
+	<solar>
+		<desc>
+			Esse %s lhe permite conseguir sódio derretido quente da planta solar, ao invés de potência de eixo diretamente. Mesmo sendo mais complexo, a saída de energia é substancialmente maior.
+		</desc>
+		<note>
+			Colocado abaixo da coluna da torre
+			Requer %dW à %d rad/s
+		</note>
+	</solar>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+</machines>

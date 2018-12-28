@@ -1,0 +1,30 @@
+﻿<?xml version="1.0"?>
+<resource>
+	<fluorite>
+		Fluorita é um cristal que aparece naturalmente na rocha. Fluorita vem em várias cores, mas todas vão fluorescer (emitir luz) na presença de neutrons ou radiação, permitindo que sejam usados como um Pseudo-Contador Geiger. Fluorita tem uma grande concentração de fluor, que é útil para fazer Ácido Hidrosulfurico durante o processo de enriquecimento do urânio.
+	</fluorite>
+	<fuel>
+		Pastilhas de Urânio são o combustível para um reator de fissão padrão. Eles são lentamente consumidos e, eventualmente, se tornarão urânio esgotado quando o componente U235 presente neles se esgotar.
+	</fuel>
+	<depleted>
+		Urânio Esgotado não é útil como combustível nuclear por si só, mas pode ser convertido em plutônio, que o é.
+	</depleted>
+	<waste>
+		Lixo Nuclear é o extremamente perigoso resultado de uma fissão nuclear. Ele se acumula nos núcleos de combustível, poluindo o reator. Por isso ele deve ser removido e propriamente armazenado. Se segurado com as mãos ou deixado no mundo, sua radioatividade gradualmente envenena os arredores.
+	</waste>
+	<plutonium>
+		Plutônio é uma alternativa, combustível artificial para reatores de fissão nuclear. Plutônio é extremamente perigoso e mais volátil que urânio. Por isso deve ser usado e manuzeado com extremo cuidado.
+	</plutonium>
+	<breederfuel>
+		Reatores alimentadores precisam de um tipo especial de combustível - Urânio enriquecido em uma camada de urânio esgotado. Com o tempo, os neutrons do reator convertem isso em plutônio.
+	</breederfuel>
+	<magnet>
+		Ímãs são usado para alterar o caminho de coisas eletricamente carregadas, como plasma, e são usados em grandes quantidades em reatores de fusão.
+	</magnet>
+	<pellet>
+		Urânio Bruto pode ser triturado e misturado com grafite para criar pastilhas de combustível. As pastilhas resultantes são o combustível de um reator à gás de alta temperatura.
+	</pellet>
+	<oldpellet>
+		Assim como o combustível normal de urânio, pastilhas de urânio também se esgotam e deixam de ser úteis.
+	</oldpellet>
+</resource>
