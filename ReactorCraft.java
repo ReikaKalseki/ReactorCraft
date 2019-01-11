@@ -232,6 +232,7 @@ public class ReactorCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		proxy.registerSounds();
+		ModLockController.instance.registerMod(this);
 
 		logger = new ModLogger(instance, false);
 		if (DragonOptions.FILELOG.getState())
@@ -297,7 +298,6 @@ public class ReactorCraft extends DragonAPIMod {
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
 
-		ModLockController.instance.registerMod(this);
 		if (this.checkForLock()) {
 			ModLockController.instance.unverify(this);
 		}

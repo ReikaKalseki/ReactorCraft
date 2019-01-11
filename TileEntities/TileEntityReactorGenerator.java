@@ -412,7 +412,10 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 
 	@Override
 	public int getTorque() {
-		return Math.min(torquein, TileEntityReactorFlywheel.MAXTORQUE); //clamp for the same reason
+		TileEntityTurbineCore te = this.getTurbine(worldObj, xCoord, yCoord, zCoord);
+		if (te == null)
+			return 0;
+		return Math.min(torquein, TileEntityReactorFlywheel.clampTorque(te)); //clamp for the same reason
 	}
 
 	@Override
