@@ -12,6 +12,7 @@ package Reika.ReactorCraft.Base;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 

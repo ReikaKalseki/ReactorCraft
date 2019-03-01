@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
 import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp;
 import Reika.ReactorCraft.Registry.FluoriteTypes;

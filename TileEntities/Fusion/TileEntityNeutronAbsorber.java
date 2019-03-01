@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;

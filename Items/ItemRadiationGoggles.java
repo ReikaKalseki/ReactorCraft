@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Items;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+
 import Reika.ReactorCraft.Base.ItemReactorTool;
 
 public class ItemRadiationGoggles extends ItemReactorTool {

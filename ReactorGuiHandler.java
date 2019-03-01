@@ -12,6 +12,7 @@ package Reika.ReactorCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
@@ -48,6 +49,7 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ReactorGuiHandler implements IGuiHandler {

@@ -11,12 +11,12 @@ package Reika.ReactorCraft.NEI;
 
 import java.awt.Rectangle;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
@@ -28,6 +28,7 @@ import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 

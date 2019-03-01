@@ -10,20 +10,10 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
+import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
-import Reika.DragonAPI.Interfaces.Registry.OreType;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.ReactorCraft.Items.ItemIronFinder;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -32,6 +22,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MimicryHandler;
+import Reika.ReactorCraft.API.MagneticOreOverride;
+import Reika.ReactorCraft.Items.ItemIronFinder;
+import Reika.ReactorCraft.Registry.ReactorItems;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 
 public class IronFinderOverlay {
@@ -67,151 +69,148 @@ public class IronFinderOverlay {
 				GL11.glPushMatrix();
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				MultiMap<OreType, Coordinate> map = ItemIronFinder.getOreNearby(ep, 8);
-				for (OreType ore : map.keySet()) {
-					Collection<Coordinate> li = map.get(ore);
-					for (Coordinate c : li) {
-						if (c != null) {
-							//ReikaJavaLibrary.pConsole(e+": "+c);
-							double dx = c.xCoord+0.5-ep.posX;
-							double dy = c.yCoord+0.5-ep.posY;
-							double dz = c.zCoord+0.5-ep.posZ;
+				Set<Coordinate> map = ItemIronFinder.getOreNearby(ep, 8);
+				for (Coordinate c : map) {
+					//ReikaJavaLibrary.pConsole(e+": "+c);
+					double dx = c.xCoord+0.5-ep.posX;
+					double dy = c.yCoord+0.5-ep.posY;
+					double dz = c.zCoord+0.5-ep.posZ;
 
-							Block b = c.getBlock(ep.worldObj);
-							IIcon[] icons = new IIcon[]{b.getIcon(1, c.getBlockMetadata(ep.worldObj))};
-							if (ore == ModOreList.MIMICHITE) {
-								//something to render the entire texture?
-								icons = new IIcon[]{icons[0], this.getMimichiteOreOverlay(b)};
-							}
+					Block b = c.getBlock(ep.worldObj);
+					IIcon[] icons = new IIcon[]{b.getIcon(1, c.getBlockMetadata(ep.worldObj))};
+					if (ModList.MIMICRY.isLoaded() && b == MimicryHandler.getInstance().oreID) {
+						icons = new IIcon[]{icons[0], this.getMimichiteOreOverlay(b)};
+					}
+					else if (b instanceof MagneticOreOverride) {
+						icons = ((MagneticOreOverride)b).getRenderIcons(ep.worldObj, c.xCoord, c.yCoord, c.zCoord);
+					}
 
-							double dl = ReikaMathLibrary.py3d(dx, 0, dz);
-							double arel = -Math.toDegrees(Math.atan2(dx, dz));
-							double prel = 90-Math.toDegrees(Math.atan2(dy, dl));
-							if (arel < 0)
-								arel += 360;
-							//ReikaJavaLibrary.pConsole(arel, c.zCoord == 1184 && c.xCoord == -1047);
-							//ReikaJavaLibrary.pConsole(prel, c.zCoord == 1184 && c.xCoord == -1047);
-							double phi = arel-yaw;
-							double theta = prel-pitch;
-							if (phi < 0)
-								phi += 360;
-							//ReikaJavaLibrary.pConsole(phi, c.zCoord == 1184 && c.xCoord == -1047);
-							//ReikaJavaLibrary.pConsole(theta, c.zCoord == 1184 && c.xCoord == -1047);
-							int cy = h+(int)(h*2*Math.sin(Math.toRadians(theta)));
-							if (phi >= 180 && 360-fov > phi) {
-								int cx = 10;
-								v5.startDrawing(GL11.GL_TRIANGLE_STRIP);
-								v5.setColorRGBA_I(0xffffff, 96);
-								v5.setBrightness(240);
-								v5.addVertex(cx+10, cy+10, 0);
-								v5.addVertex(cx+10, cy-10, 0);
-								v5.addVertex(cx, cy, 0);
-								v5.draw();
+					double dl = ReikaMathLibrary.py3d(dx, 0, dz);
+					double arel = -Math.toDegrees(Math.atan2(dx, dz));
+					double prel = 90-Math.toDegrees(Math.atan2(dy, dl));
+					if (arel < 0)
+						arel += 360;
+					//ReikaJavaLibrary.pConsole(arel, c.zCoord == 1184 && c.xCoord == -1047);
+					//ReikaJavaLibrary.pConsole(prel, c.zCoord == 1184 && c.xCoord == -1047);
+					double phi = arel-yaw;
+					double theta = prel-pitch;
+					if (phi < 0)
+						phi += 360;
+					//ReikaJavaLibrary.pConsole(phi, c.zCoord == 1184 && c.xCoord == -1047);
+					//ReikaJavaLibrary.pConsole(theta, c.zCoord == 1184 && c.xCoord == -1047);
+					int cy = h+(int)(h*2*Math.sin(Math.toRadians(theta)));
+					if (phi >= 180 && 360-fov > phi) {
+						int cx = 10;
+						v5.startDrawing(GL11.GL_TRIANGLE_STRIP);
+						v5.setColorRGBA_I(0xffffff, 96);
+						v5.setBrightness(240);
+						v5.addVertex(cx+10, cy+10, 0);
+						v5.addVertex(cx+10, cy-10, 0);
+						v5.addVertex(cx, cy, 0);
+						v5.draw();
 
-								v5.startDrawing(GL11.GL_LINE_LOOP);
-								v5.setColorOpaque_I(0xffffff);
-								v5.setBrightness(240);
-								v5.addVertex(cx, cy, 0);
-								v5.addVertex(cx+10, cy-10, 0);
-								v5.addVertex(cx+10, cy+10, 0);
-								v5.draw();
-								//left.add(e);
+						v5.startDrawing(GL11.GL_LINE_LOOP);
+						v5.setColorOpaque_I(0xffffff);
+						v5.setBrightness(240);
+						v5.addVertex(cx, cy, 0);
+						v5.addVertex(cx+10, cy-10, 0);
+						v5.addVertex(cx+10, cy+10, 0);
+						v5.draw();
+						//left.add(e);
 
-								for (IIcon ico : icons) {
-									float u = ico.getMinU();
-									float v = ico.getMinV();
-									float du = ico.getMaxU();
-									float dv = ico.getMaxV();
-									ReikaTextureHelper.bindTerrainTexture();
-									GL11.glEnable(GL11.GL_TEXTURE_2D);
-									v5.startDrawingQuads();
-									v5.setColorOpaque_I(0xffffff);
-									v5.setBrightness(240);
-									v5.addVertexWithUV(cx+10, cy+8, 0, u, dv);
-									v5.addVertexWithUV(cx+26, cy+8, 0, du, dv);
-									v5.addVertexWithUV(cx+26, cy-8, 0, du, v);
-									v5.addVertexWithUV(cx+10, cy-8, 0, u, v);
-									v5.draw();
-									GL11.glDisable(GL11.GL_TEXTURE_2D);
-								}
-							}
-							else if (phi < 180 && phi > fov) {
-								int cx = evt.resolution.getScaledWidth()-10;
-								v5.startDrawing(GL11.GL_TRIANGLE_STRIP);
-								v5.setColorRGBA_I(0xffffff, 96);
-								v5.setBrightness(240);
-								v5.addVertex(cx, cy, 0);
-								v5.addVertex(cx-10, cy-10, 0);
-								v5.addVertex(cx-10, cy+10, 0);
-								v5.draw();
+						for (IIcon ico : icons) {
+							float u = ico.getMinU();
+							float v = ico.getMinV();
+							float du = ico.getMaxU();
+							float dv = ico.getMaxV();
+							ReikaTextureHelper.bindTerrainTexture();
+							GL11.glEnable(GL11.GL_TEXTURE_2D);
+							v5.startDrawingQuads();
+							v5.setColorOpaque_I(0xffffff);
+							v5.setBrightness(240);
+							v5.addVertexWithUV(cx+10, cy+8, 0, u, dv);
+							v5.addVertexWithUV(cx+26, cy+8, 0, du, dv);
+							v5.addVertexWithUV(cx+26, cy-8, 0, du, v);
+							v5.addVertexWithUV(cx+10, cy-8, 0, u, v);
+							v5.draw();
+							GL11.glDisable(GL11.GL_TEXTURE_2D);
+						}
+					}
+					else if (phi < 180 && phi > fov) {
+						int cx = evt.resolution.getScaledWidth()-10;
+						v5.startDrawing(GL11.GL_TRIANGLE_STRIP);
+						v5.setColorRGBA_I(0xffffff, 96);
+						v5.setBrightness(240);
+						v5.addVertex(cx, cy, 0);
+						v5.addVertex(cx-10, cy-10, 0);
+						v5.addVertex(cx-10, cy+10, 0);
+						v5.draw();
 
-								v5.startDrawing(GL11.GL_LINE_LOOP);
-								v5.setColorOpaque_I(0xffffff);
-								v5.setBrightness(240);
-								v5.addVertex(cx, cy, 0);
-								v5.addVertex(cx-10, cy-10, 0);
-								v5.addVertex(cx-10, cy+10, 0);
-								v5.draw();
-								//right.add(e);
+						v5.startDrawing(GL11.GL_LINE_LOOP);
+						v5.setColorOpaque_I(0xffffff);
+						v5.setBrightness(240);
+						v5.addVertex(cx, cy, 0);
+						v5.addVertex(cx-10, cy-10, 0);
+						v5.addVertex(cx-10, cy+10, 0);
+						v5.draw();
+						//right.add(e);
 
-								for (IIcon ico : icons) {
-									float u = ico.getMinU();
-									float v = ico.getMinV();
-									float du = ico.getMaxU();
-									float dv = ico.getMaxV();
-									ReikaTextureHelper.bindTerrainTexture();
-									GL11.glEnable(GL11.GL_TEXTURE_2D);
-									v5.startDrawingQuads();
-									v5.setColorOpaque_I(0xffffff);
-									v5.setBrightness(240);
-									v5.addVertexWithUV(cx-26, cy+8, 0, u, dv);
-									v5.addVertexWithUV(cx-10, cy+8, 0, du, dv);
-									v5.addVertexWithUV(cx-10, cy-8, 0, du, v);
-									v5.addVertexWithUV(cx-26, cy-8, 0, u, v);
-									v5.draw();
-									GL11.glDisable(GL11.GL_TEXTURE_2D);
-								}
-							}
-							else {
-								v5.startDrawingQuads();
-								v5.setColorRGBA_I(0xffffff, 32);
-								v5.setBrightness(240);
-								int w = evt.resolution.getScaledWidth()/2;
-								int cx = (int)(w+1*w*Math.sin(Math.toRadians(phi)));
-								//ReikaJavaLibrary.pConsole(cx, c.zCoord == 1184 && c.xCoord == -1047);
-								v5.addVertex(cx-8, cy+8, 0);
-								v5.addVertex(cx+8, cy+8, 0);
-								v5.addVertex(cx+8, cy-8, 0);
-								v5.addVertex(cx-8, cy-8, 0);
-								v5.draw();
+						for (IIcon ico : icons) {
+							float u = ico.getMinU();
+							float v = ico.getMinV();
+							float du = ico.getMaxU();
+							float dv = ico.getMaxV();
+							ReikaTextureHelper.bindTerrainTexture();
+							GL11.glEnable(GL11.GL_TEXTURE_2D);
+							v5.startDrawingQuads();
+							v5.setColorOpaque_I(0xffffff);
+							v5.setBrightness(240);
+							v5.addVertexWithUV(cx-26, cy+8, 0, u, dv);
+							v5.addVertexWithUV(cx-10, cy+8, 0, du, dv);
+							v5.addVertexWithUV(cx-10, cy-8, 0, du, v);
+							v5.addVertexWithUV(cx-26, cy-8, 0, u, v);
+							v5.draw();
+							GL11.glDisable(GL11.GL_TEXTURE_2D);
+						}
+					}
+					else {
+						v5.startDrawingQuads();
+						v5.setColorRGBA_I(0xffffff, 32);
+						v5.setBrightness(240);
+						int w = evt.resolution.getScaledWidth()/2;
+						int cx = (int)(w+1*w*Math.sin(Math.toRadians(phi)));
+						//ReikaJavaLibrary.pConsole(cx, c.zCoord == 1184 && c.xCoord == -1047);
+						v5.addVertex(cx-8, cy+8, 0);
+						v5.addVertex(cx+8, cy+8, 0);
+						v5.addVertex(cx+8, cy-8, 0);
+						v5.addVertex(cx-8, cy-8, 0);
+						v5.draw();
 
-								v5.startDrawing(GL11.GL_LINE_LOOP);
-								v5.setColorOpaque_I(0xffffff);
-								v5.setBrightness(240);
-								v5.addVertex(cx-8, cy+8, 0);
-								v5.addVertex(cx+8, cy+8, 0);
-								v5.addVertex(cx+8, cy-8, 0);
-								v5.addVertex(cx-8, cy-8, 0);
-								v5.draw();
+						v5.startDrawing(GL11.GL_LINE_LOOP);
+						v5.setColorOpaque_I(0xffffff);
+						v5.setBrightness(240);
+						v5.addVertex(cx-8, cy+8, 0);
+						v5.addVertex(cx+8, cy+8, 0);
+						v5.addVertex(cx+8, cy-8, 0);
+						v5.addVertex(cx-8, cy-8, 0);
+						v5.draw();
 
-								for (IIcon ico : icons) {
-									float u = ico.getMinU();
-									float v = ico.getMinV();
-									float du = ico.getMaxU();
-									float dv = ico.getMaxV();
-									ReikaTextureHelper.bindTerrainTexture();
-									GL11.glEnable(GL11.GL_TEXTURE_2D);
-									v5.startDrawingQuads();
-									v5.setColorOpaque_I(0xffffff);
-									v5.setBrightness(240);
-									v5.addVertexWithUV(cx-8, cy+8, 0, u, dv);
-									v5.addVertexWithUV(cx+8, cy+8, 0, du, dv);
-									v5.addVertexWithUV(cx+8, cy-8, 0, du, v);
-									v5.addVertexWithUV(cx-8, cy-8, 0, u, v);
-									v5.draw();
-									GL11.glDisable(GL11.GL_TEXTURE_2D);
-								}
-							}
+						for (IIcon ico : icons) {
+							float u = ico.getMinU();
+							float v = ico.getMinV();
+							float du = ico.getMaxU();
+							float dv = ico.getMaxV();
+							ReikaTextureHelper.bindTerrainTexture();
+							GL11.glEnable(GL11.GL_TEXTURE_2D);
+							v5.startDrawingQuads();
+							v5.setColorOpaque_I(0xffffff);
+							v5.setBrightness(240);
+							v5.addVertexWithUV(cx-8, cy+8, 0, u, dv);
+							v5.addVertexWithUV(cx+8, cy+8, 0, du, dv);
+							v5.addVertexWithUV(cx+8, cy-8, 0, du, v);
+							v5.addVertexWithUV(cx-8, cy-8, 0, u, v);
+							v5.draw();
+							GL11.glDisable(GL11.GL_TEXTURE_2D);
 						}
 					}
 				}

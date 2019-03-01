@@ -12,11 +12,11 @@ package Reika.ReactorCraft.Base;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import li.cil.oc.api.network.Visibility;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
@@ -43,6 +43,8 @@ import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
+import li.cil.oc.api.network.Visibility;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.ISpecialArmor;
+
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.ReactorCraft.ClientProxy;
 import Reika.ReactorCraft.ReactorCraft;

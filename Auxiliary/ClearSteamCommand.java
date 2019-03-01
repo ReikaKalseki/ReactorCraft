@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import net.minecraft.command.ICommandSender;
+
 import Reika.DragonAPI.Command.DragonCommandBase;
 
 public class ClearSteamCommand extends DragonCommandBase {

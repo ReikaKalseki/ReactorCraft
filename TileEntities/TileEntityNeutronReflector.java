@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.TileEntities;
 
 import net.minecraft.world.World;
+
 import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;

@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import net.minecraft.world.World;
+
 import Reika.ReactorCraft.Entities.EntityNeutron;
 
 public interface NeutronBlock {

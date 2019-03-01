@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.config.Property;
+
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
 import Reika.DragonAPI.Interfaces.Configuration.BoundedConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;

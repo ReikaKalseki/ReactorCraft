@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.entity.Entity;
+
 import Reika.DragonAPI.Interfaces.Registry.EntityEnum;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;

@@ -11,13 +11,21 @@ package Reika.ReactorCraft.Items;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.PlayerMap;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -25,12 +33,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.ReactorCraft.API.MagneticOreOverride;
 import Reika.ReactorCraft.Base.ReactorItemBase;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 public class ItemIronFinder extends ReactorItemBase {
 
@@ -91,18 +93,17 @@ public class ItemIronFinder extends ReactorItemBase {
 			e.getEntityData().setLong("ironfinder", world.getTotalWorldTime());
 	}
 
-	public static MultiMap<OreType, Coordinate> getOreNearby(EntityPlayer ep, int range) {
+	public static Set<Coordinate> getOreNearby(EntityPlayer ep, int range) {
 		OreCollection c = cache.get(ep);
 		if (c == null || System.currentTimeMillis()-c.time >= 500) {
 			c = new OreCollection(ep, findOreNearby(ep, range));
 			cache.put(ep, c);
 		}
-		c.locations.lock();
-		return c.locations;
+		return Collections.unmodifiableSet(c.locations);
 	}
 
-	private static MultiMap<OreType, Coordinate> findOreNearby(EntityPlayer ep, int range) {
-		MultiMap<OreType, Coordinate> m = new MultiMap();
+	private static HashSet<Coordinate> findOreNearby(EntityPlayer ep, int range) {
+		HashSet<Coordinate> m = new HashSet();
 		World world = ep.worldObj;
 		int x = MathHelper.floor_double(ep.posX);
 		int y = MathHelper.floor_double(ep.posY+ep.getEyeHeight());
@@ -117,13 +118,13 @@ public class ItemIronFinder extends ReactorItemBase {
 					Block b = world.getBlock(dx, dy, dz);
 					if (b instanceof MagneticOreOverride) {
 						if (((MagneticOreOverride)b).showOnHUD(world, dx, dy, dz))
-							m.addValue(((MagneticOreOverride)b).getOreType(world, dx, dy, dz), new Coordinate(dx, dy, dz));
+							m.add(new Coordinate(dx, dy, dz));
 					}
 					OreType ore = ReikaOreHelper.getFromVanillaOre(b);
 					if (ore == null)
 						ore = ModOreList.getModOreFromOre(b, world.getBlockMetadata(dx, dy, dz));
 					if (ores.contains(ore))
-						m.addValue(ore, new Coordinate(dx, dy, dz));
+						m.add(new Coordinate(dx, dy, dz));
 				}
 			}
 		}
@@ -133,10 +134,10 @@ public class ItemIronFinder extends ReactorItemBase {
 	private static class OreCollection {
 
 		public final long time;
-		public final MultiMap<OreType, Coordinate> locations;
+		public final HashSet<Coordinate> locations;
 		public final String player;
 
-		private OreCollection(EntityPlayer ep, MultiMap<OreType, Coordinate> c) {
+		private OreCollection(EntityPlayer ep, HashSet<Coordinate> c) {
 			locations = c;
 			player = ep.getCommandSenderName();
 			time = System.currentTimeMillis();
