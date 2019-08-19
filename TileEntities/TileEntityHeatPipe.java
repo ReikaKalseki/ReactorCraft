@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -33,6 +33,10 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 public class TileEntityHeatPipe extends TileEntityLine {
 
 	private int temperature;
+
+	public int getTemperature() {
+		return temperature;
+	}
 
 	@Override
 	public IIcon getTexture() {
@@ -81,7 +85,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 				if (te instanceof Temperatured) {
 					Temperatured ts = (Temperatured)te;
 					int diff = temperature-ts.getTemperature();
-					if (diff <= 0 && !(te instanceof ReactorBlock))
+					if (diff == 0 && !(te instanceof ReactorBlock))
 						return;
 					//ReikaJavaLibrary.pConsole(ts+" > "+diff+" @ "+temperature);
 					diff = diff/4;
@@ -102,9 +106,9 @@ public class TileEntityHeatPipe extends TileEntityLine {
 				else if (te instanceof TemperatureTE) {
 					TemperatureTE ts = (TemperatureTE)te;
 					int diff = temperature-ts.getTemperature();
-					if (diff <= 0)
+					if (diff == 0)
 						return;
-					diff = Math.max(1, diff/4);
+					diff = (int)(Math.signum(diff)*Math.max(1, Math.abs(diff)/4));
 					ts.addTemperature(diff);
 					temperature -= diff;
 				}

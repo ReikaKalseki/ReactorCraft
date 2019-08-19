@@ -33,7 +33,6 @@
 			The electrolyzer uses electrical discharges to decompose materials into their constituents, such as salt into sodium and chlorine or water into hydrogen and oxygen. The heavier of the products is drawn from the bottom, while the lighter is drawn from the top. Note that solids must be melted down before they are able to be processed.
 		</desc>
 		<note>
-			Power to electrolyze salt: %dW
 			Power Input: Any horizontal side
 			Required temperature to melt salt: %dC
 		</note>

@@ -117,7 +117,7 @@ public class ItemIronFinder extends ReactorItemBase {
 					int dz = z+k;
 					Block b = world.getBlock(dx, dy, dz);
 					if (b instanceof MagneticOreOverride) {
-						if (((MagneticOreOverride)b).showOnHUD(world, dx, dy, dz))
+						if (((MagneticOreOverride)b).showOnHUD(world, dx, dy, dz, ep))
 							m.add(new Coordinate(dx, dy, dz));
 					}
 					OreType ore = ReikaOreHelper.getFromVanillaOre(b);

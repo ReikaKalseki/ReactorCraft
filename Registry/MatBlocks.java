@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,7 +24,9 @@ public enum MatBlocks {
 	CONCRETE("block.concrete"),
 	SLAG("block.slag"),
 	CALCITE("block.calcite"),
-	SCRUBBER("block.scrubber");
+	SCRUBBER("block.scrubber"),
+	LODESTONE("block.lodestone"),
+	GRAPHITE("block.graphite");
 
 	private String name;
 	public final Class tileClass;
@@ -75,6 +77,10 @@ public enum MatBlocks {
 		catch (Exception e) {
 			throw new RegistrationException(ReactorCraft.instance, "Could not create TileEntity for MatBlock "+this+"!", e);
 		}
+	}
+
+	public boolean hasTile() {
+		return tileClass != null;
 	}
 
 }

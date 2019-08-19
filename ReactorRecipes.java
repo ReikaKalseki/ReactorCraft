@@ -16,11 +16,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -39,6 +42,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -63,6 +67,8 @@ public class ReactorRecipes {
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 9), ReactorItems.DEPLETED.getStackOf());
 		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 9), ReactorItems.OLDPELLET.getStackOf());
 		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
+
+		GameRegistry.addShapedRecipe(Upgrades.LODESTONE.getStack(), "php", "mcm", "php", 'p', ItemStacks.basepanel, 'm', ReactorItems.MAGNET.getStackOfMetadata(3), 'h', ReactorBlocks.SOLENOIDMULTI.getStackOfMetadata(4), 'c', CraftingItems.MAGNETCORE.getItem());
 
 		RecipesGrinder.getRecipes().addRecipe(ReactorOres.PITCHBLENDE.getProduct(), CraftingItems.UDUST.getItem());
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.PITCHBLENDE), CraftingItems.UDUST.getItem());
@@ -236,6 +242,9 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.calcite, 9), MatBlocks.CALCITE.getStackOf());
 
+		GameRegistry.addRecipe(MatBlocks.GRAPHITE.getStackOf(), "CCC", "CCC", "CCC", 'C', CraftingItems.GRAPHITE.getItem());
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(CraftingItems.GRAPHITE.getItem(), 9), MatBlocks.GRAPHITE.getStackOf());
+
 		GameRegistry.addRecipe(MatBlocks.SCRUBBER.getStackOf(), "IWI", "WPW", "IWI", 'I', Blocks.iron_bars, 'W', Blocks.wool, 'P', ItemStacks.pipe);
 
 		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(4), Blocks.clay, Blocks.sand, Blocks.gravel, Items.water_bucket);
@@ -338,6 +347,62 @@ public class ReactorRecipes {
 		ReactorTiles.HEATPIPE.addSizedCrafting(6, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', Items.gold_ingot);
 		if (ReikaItemHelper.oreItemExists("ingotCopper"))
 			ReactorTiles.HEATPIPE.addSizedOreCrafting(3, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', "ingotCopper");
+	}
+
+	public static void loadCustomRecipeFiles() {
+		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, "electrolyzer");
+		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
+		crl.addFieldLookup("reactorcraft_stack", ReactorStacks.class);
+		crl.load();
+		for (LuaBlock lb : crl.getEntries()) {
+			Exception e = null;
+			boolean flag = false;
+			try {
+				flag = addCustomElectrolyzerRecipe(lb, crl);
+			}
+			catch (Exception ex) {
+				e = ex;
+				flag = false;
+			}
+			if (flag) {
+				ReactorCraft.logger.log("Loaded custom electrolyzer recipe '"+lb.getString("type")+"'");
+			}
+			else {
+				ReactorCraft.logger.logError("Could not load custom electrolyzer recipe '"+lb.getString("type")+"'");
+				if (e != null)
+					e.printStackTrace();
+			}
+		}
+	}
+
+	private static boolean addCustomElectrolyzerRecipe(LuaBlock lb, CustomRecipeList crl) {
+		String n = lb.getString("type");
+		if (n == null)
+			throw new IllegalArgumentException("Custom recipes require a specified name!");
+		LuaBlock fluidIn = lb.getChild("fluid_in");
+		LuaBlock itemIn = lb.getChild("item_in");
+		LuaBlock fluidUp = lb.getChild("fluid_out_up");
+		LuaBlock fluidDown = lb.getChild("fluid_out_down");
+		Fluid in = fluidIn != null ? FluidRegistry.getFluid(fluidIn.getString("type")) : null;
+		int amt = fluidIn != null ? fluidIn.getInt("amount") : 0;
+		ItemMatch item = null;
+		boolean cata = false;
+		if (itemIn != null) {
+			item = new ItemMatch(crl.parseItemCollection(itemIn.getChild("items").getDataValues(), false));
+			cata = itemIn.getBoolean("is_catalyst");
+		}
+		Fluid out1 = fluidUp != null ? FluidRegistry.getFluid(fluidUp.getString("type")) : null;
+		int amt1 = fluidUp != null ? fluidUp.getInt("amount") : 0;
+		Fluid out2 = fluidDown != null ? FluidRegistry.getFluid(fluidDown.getString("type")) : null;
+		int amt2 = fluidDown != null ? fluidDown.getInt("amount") : 0;
+		if (in == null && item == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' has no ingredients!");
+		}
+		if (out1 == null && out2 == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' has no products!");
+		}
+		TileEntityElectrolyzer.addRecipe(n, in, amt, item, cata, out1, amt1, out2, amt2, lb.getInt("temperature"));
+		return true;
 	}
 
 }

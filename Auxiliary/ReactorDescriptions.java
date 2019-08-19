@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -231,7 +231,7 @@ public final class ReactorDescriptions {
 
 	private static void loadNumericalData() {
 		addNotes(ReactorTiles.CENTRIFUGE, TileEntityCentrifuge.MINSPEED);
-		addNotes(ReactorTiles.ELECTROLYZER, TileEntityElectrolyzer.SALTPOWER, TileEntityElectrolyzer.SALT_MELT);
+		addNotes(ReactorTiles.ELECTROLYZER, /*TileEntityElectrolyzer.SALTPOWER, */TileEntityElectrolyzer.SALT_MELT);
 		addNotes(ReactorTiles.SYNTHESIZER, TileEntitySynthesizer.AMMONIATEMP);
 		addNotes(ReactorTiles.TURBINECORE, TileEntityTurbineCore.GEN_OMEGA, TileEntityTurbineCore.TORQUE_CAP);
 		addNotes(ReactorTiles.BIGTURBINE, TileEntityHiPTurbine.GEN_OMEGA);

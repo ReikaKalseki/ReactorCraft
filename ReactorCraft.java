@@ -155,6 +155,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(1100);
 	public static final Fluid CL = new Fluid("rc chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 	public static final Fluid O = new Fluid("rc oxygen").setDensity(138).setViscosity(20).setGaseous(true);
+	public static final Fluid Oliq = new Fluid("rc liquid oxygen").setDensity(1141).setViscosity(195).setGaseous(false).setTemperature(90);
 
 	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
@@ -418,8 +419,10 @@ public class ReactorCraft extends DragonAPIMod {
 	public void postload(FMLPostInitializationEvent evt) {
 		this.startTiming(LoadPhase.POSTLOAD);
 
-		if (!this.isLocked())
+		if (!this.isLocked()) {
 			ReactorRecipes.addModInterface();
+			ReactorRecipes.loadCustomRecipeFiles();
+		}
 
 		//for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 		//	FluoriteTypes fl = FluoriteTypes.colorList[i];
@@ -538,6 +541,7 @@ public class ReactorCraft extends DragonAPIMod {
 			NA.setIcons(na);
 			CL.setIcons(cl);
 			O.setIcons(o);
+			Oliq.setIcons(o);
 
 			H2.setIcons(h2);
 			H3.setIcons(h3);
@@ -591,6 +595,7 @@ public class ReactorCraft extends DragonAPIMod {
 		FluidRegistry.registerFluid(NA);
 		FluidRegistry.registerFluid(CL);
 		FluidRegistry.registerFluid(O);
+		FluidRegistry.registerFluid(Oliq);
 
 		FluidRegistry.registerFluid(H2);
 		FluidRegistry.registerFluid(H3);

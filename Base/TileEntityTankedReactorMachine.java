@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -78,7 +78,7 @@ public abstract class TileEntityTankedReactorMachine extends TileEntityReactorBa
 	}
 
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
-		return type == PipeType.FLUID ? (this.canReceiveFrom(side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
+		return type == PipeType.FLUID ? (this.getFlowForSide(side) != Flow.NONE ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -32,6 +32,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
@@ -251,6 +252,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		if (this instanceof TileEntitySteamLine) {
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;
 			String s = String.format("%s contains %d m^3 of steam.", this.getTEName(), sl.getSteam());
+			li.add(s);
+		}
+		if (this instanceof TileEntityHeatPipe) {
+			TileEntityHeatPipe hp = (TileEntityHeatPipe)this;
+			String s = String.format("%s at %dC.", this.getTEName(), hp.getTemperature());
 			li.add(s);
 		}
 		return li;
