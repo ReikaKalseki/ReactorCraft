@@ -122,7 +122,7 @@ public class BlockReactorMat extends Block implements NeutronBlock {
 		MatBlocks m = MatBlocks.matList[world.getBlockMetadata(x, y, z)];
 		if (m == MatBlocks.SCRUBBER)
 			return 0;
-		return super.getLightOpacity(world, x, y, z);
+		return 255;
 	}
 
 	@Override

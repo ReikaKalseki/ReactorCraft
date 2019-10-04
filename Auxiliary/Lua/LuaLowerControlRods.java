@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaLowerControlRods extends LuaMethod {
 
 	public LuaLowerControlRods() {
@@ -23,7 +21,7 @@ public class LuaLowerControlRods extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		((TileEntityCPU)te).lowerAllRods();
 		return null;
 	}

@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetSteam extends LuaMethod {
 
 	public LuaGetSteam() {
@@ -23,7 +21,7 @@ public class LuaGetSteam extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((SteamTile)te).getSteam()};
 	}
 

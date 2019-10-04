@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.BlockSteam;
@@ -22,8 +22,6 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
-
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 
 public class TileEntitySteamGrate extends TileEntityReactorBase implements Screwdriverable, SteamTile {
 
@@ -61,11 +59,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 			return false;
 		if (this.hasRedstoneSignal() != requireRedstone)
 			return false;
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (ig.getSoundVolReductionAmount() > 1)
-				return false;
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+			return false;
 		return ((BlockSteam)ReactorBlocks.STEAM.getBlockInstance()).canMoveInto(world, x, y+1, z);
 	}
 

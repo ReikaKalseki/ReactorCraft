@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.ReactorCraft;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
@@ -28,6 +29,9 @@ public class ReactorConfig extends ControlledConfig {
 
 	public DataElement<Integer>[] achievementIDs = new DataElement[entries.size()];
 	private DataElement<Boolean>[] ores = new DataElement[entries.size()];
+	private DataElement<Integer[]> heavyWaterDimensions;
+
+	private HashSet<Integer> heavyWaterDimensionSet;
 
 	public ReactorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
 		super(mod, option, id);
@@ -43,6 +47,18 @@ public class ReactorConfig extends ControlledConfig {
 			String name = oreEntries.get(i);
 			ores[i] = this.registerAdditionalOption("Ore Control", name, true);
 		}
+
+		heavyWaterDimensions = this.registerAdditionalOption("Other Options", "Heavy Water Dimensions (Empty for All)", new Integer[0]);
+	}
+
+	public boolean isDimensionValidForHeavyWater(int dim) {
+		if (heavyWaterDimensionSet == null) {
+			heavyWaterDimensionSet = new HashSet();
+			for (int val : heavyWaterDimensions.getData()) {
+				heavyWaterDimensionSet.add(val);
+			}
+		}
+		return heavyWaterDimensionSet.isEmpty() || heavyWaterDimensionSet.contains(dim);
 	}
 
 	public int getRadiationPotionID() {

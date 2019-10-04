@@ -600,7 +600,9 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	public static void addRecipe(String name, Fluid in, int amt, ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2, int temp) {
-		Electrolysis c = EnumHelper.addEnum(Electrolysis.class, name.toUpperCase(), new Class[]{Fluid.class, int.class, ItemMatch.class, boolean.class, Fluid.class, int.class, Fluid.class, int.class, int.class}, new Object[]{name, in, amt, item, cata, out1, amt1, out2, amt2, temp});
+		Class[] types = new Class[]{Fluid.class, int.class, ItemMatch.class, boolean.class, Fluid.class, int.class, Fluid.class, int.class, int.class};
+		Object[] args = new Object[]{in, amt, item, cata, out1, amt1, out2, amt2, temp};
+		Electrolysis c = EnumHelper.addEnum(Electrolysis.class, name.toUpperCase(), types, args);
 		Electrolysis.recipes = Electrolysis.values();
 	}
 

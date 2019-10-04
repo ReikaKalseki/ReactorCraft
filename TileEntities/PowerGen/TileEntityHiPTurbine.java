@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,8 +27,8 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -39,8 +39,6 @@ import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
-
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 
 public class TileEntityHiPTurbine extends TileEntityTurbineCore implements MultiBlockTile {
 
@@ -207,11 +205,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	}
 
 	private boolean dumpLiquid(World world, int x, int y, int z, int meta) {
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (ig.getSoundVolReductionAmount() > 1)
-				return false;
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+			return false;
 		return this.getStage() == this.getNumberStagesTotal()-1;
 	}
 

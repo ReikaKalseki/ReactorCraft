@@ -72,6 +72,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -85,7 +86,6 @@ import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
-import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
@@ -434,7 +434,7 @@ public class ReactorCraft extends DragonAPIMod {
 			BlockColorInterface.addGPRBlockColor(r.getBlock(), r.getBlockMetadata(), 200, 200, 200);
 		}
 
-		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
+		LuaMethod.registerMethods("Reika.ReactorCraft.Auxiliary.Lua");
 
 		proxy.loadDonatorRender();
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -304,7 +305,11 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 		@Override
 		protected boolean canPerform(World world, int x, int y, int z) {
-			return y < MAXY && ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && this.isOceanFloor(world, x, y, z);
+			return this.isValidWorld(world) && y < MAXY && ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && this.isOceanFloor(world, x, y, z);
+		}
+
+		private boolean isValidWorld(World world) {
+			return ReactorCraft.config.isDimensionValidForHeavyWater(world.provider.dimensionId);
 		}
 
 		private boolean isOceanFloor(World world, int x, int y, int z) {

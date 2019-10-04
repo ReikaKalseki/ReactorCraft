@@ -17,8 +17,6 @@ import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaReactorCheckFuel extends LuaMethod {
 
 	public LuaReactorCheckFuel() {
@@ -26,7 +24,7 @@ public class LuaReactorCheckFuel extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
 		ReactorTiles r = tile.getMachine();
 		int fuel = 0;
