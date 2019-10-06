@@ -153,7 +153,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "sss", "SsS", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.WIRE.getItem(), 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', CraftingItems.WIRE.getItem(), 'S', ItemStacks.steelingot);
-		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool.asItemStack(), 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
 
 		id = ReactorBlocks.TURBINEMULTI.getBlockInstance();
 		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sss", "sss", 's', ItemStacks.prop);
