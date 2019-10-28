@@ -29,7 +29,7 @@ public class ReactorConfig extends ControlledConfig {
 
 	public DataElement<Integer>[] achievementIDs = new DataElement[entries.size()];
 	private DataElement<Boolean>[] ores = new DataElement[entries.size()];
-	private DataElement<Integer[]> heavyWaterDimensions;
+	private DataElement<int[]> heavyWaterDimensions;
 
 	private HashSet<Integer> heavyWaterDimensionSet;
 
@@ -48,7 +48,7 @@ public class ReactorConfig extends ControlledConfig {
 			ores[i] = this.registerAdditionalOption("Ore Control", name, true);
 		}
 
-		heavyWaterDimensions = this.registerAdditionalOption("Other Options", "Heavy Water Dimensions (Empty for All)", new Integer[0]);
+		heavyWaterDimensions = this.registerAdditionalOption("Other Options", "Heavy Water Dimensions (Empty for All)", new int[0]);
 	}
 
 	public boolean isDimensionValidForHeavyWater(int dim) {
