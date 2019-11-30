@@ -245,6 +245,9 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(MatBlocks.GRAPHITE.getStackOf(), "CCC", "CCC", "CCC", 'C', CraftingItems.GRAPHITE.getItem());
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(CraftingItems.GRAPHITE.getItem(), 9), MatBlocks.GRAPHITE.getStackOf());
 
+		GameRegistry.addRecipe(MatBlocks.LODESTONE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.lodestone);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.lodestone, 9), MatBlocks.LODESTONE.getStackOf());
+
 		GameRegistry.addRecipe(MatBlocks.SCRUBBER.getStackOf(), "IWI", "WPW", "IWI", 'I', Blocks.iron_bars, 'W', Blocks.wool, 'P', ItemStacks.pipe);
 
 		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(4), Blocks.clay, Blocks.sand, Blocks.gravel, Items.water_bucket);
