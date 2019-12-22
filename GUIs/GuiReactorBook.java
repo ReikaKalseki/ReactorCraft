@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -345,6 +345,8 @@ public class GuiReactorBook extends GuiHandbook {
 	@Override
 	protected PageType getGuiLayout() {
 		ReactorBook h = (ReactorBook)this.getEntry();
+		if (this.isOnTOC())
+			return PageType.TOC;
 		if (h.isParent())
 			return PageType.PLAIN;
 		if (h == ReactorBook.STRUCTURES && subpage > 0)
