@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +40,6 @@ import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -419,8 +417,6 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 	@Override
 	public final void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory)
-			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntitySolenoidMagnet) {
 			((TileEntitySolenoidMagnet) te).removeFromToroids();
 			Block id = world.getBlock(x, y-1, z);
@@ -428,9 +424,6 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 				BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockInstance();
 				b.breakMultiBlock(world, x, y-1, z);
 			}
-		}
-		if (te instanceof BreakAction) {
-			((BreakAction)te).breakBlock();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

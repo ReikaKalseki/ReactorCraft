@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,6 +28,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.Power.BasicPowerHandler;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -35,11 +36,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ReactorPowerReceiver, PipeConnector {
 
-	private int torque;
-	private int omega;
-	private long power;
-	private int iotick;
-
+	private final BasicPowerHandler powerHandler = new BasicPowerHandler();
 	public int split; //timer
 
 	/** "In the range of 100000 rpm" -> 10.5k rad/s <br>
@@ -62,6 +59,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
+		int omega = powerHandler.getOmega();
 		if (omega >= 262144) {
 			phi += 40;
 		}
@@ -83,7 +81,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 		else if (omega > 0) {
 			phi += 5;
 		}
-		iotick -= 8;
+		powerHandler.derementIOTick(8);
 	}
 
 	@Override
@@ -94,7 +92,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 			this.noInputMachine();
 		}
 
-		if (power > 0 && omega >= MINSPEED) {
+		if (powerHandler.getPower() > 0 && powerHandler.getOmega() >= MINSPEED) {
 			if (this.canMake()) {
 				timer.update();
 				if (timer.checkCap()) {
@@ -112,6 +110,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	private int setTimer() {
+		int omega = powerHandler.getOmega();
 		if (omega >= 67108864) {
 			return 8;
 		}
@@ -194,42 +193,42 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public int getOmega() {
-		return omega;
+		return powerHandler.getOmega();
 	}
 
 	@Override
 	public int getTorque() {
-		return torque;
+		return powerHandler.getTorque();
 	}
 
 	@Override
 	public long getPower() {
-		return power;
+		return powerHandler.getPower();
 	}
 
 	@Override
 	public int getIORenderAlpha() {
-		return iotick;
+		return powerHandler.getIORenderAlpha();
 	}
 
 	@Override
 	public void setIORenderAlpha(int io) {
-		iotick = io;
+		powerHandler.setIORenderAlpha(io);
 	}
 
 	@Override
 	public void setOmega(int omega) {
-		this.omega = omega;
+		powerHandler.setOmega(omega);
 	}
 
 	@Override
 	public void setTorque(int torque) {
-		this.torque = torque;
+		powerHandler.setTorque(torque);
 	}
 
 	@Override
 	public void setPower(long power) {
-		this.power = power;
+		powerHandler.setPower(power);
 	}
 
 	@Override
@@ -244,8 +243,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
+		powerHandler.noInputMachine();
 	}
 
 	@Override
@@ -279,29 +277,23 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		split = NBT.getInteger("time");
 
-		omega = NBT.getInteger("omg");
-		torque = NBT.getInteger("tq");
-		power = NBT.getLong("pwr");
+		powerHandler.readFromNBT(NBT);
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("time", split);
 
-		NBT.setInteger("omg", omega);
-		NBT.setInteger("tq", torque);
-		NBT.setLong("pwr", power);
+		powerHandler.writeToNBT(NBT);
 
 		tank.writeToNBT(NBT);
 	}
