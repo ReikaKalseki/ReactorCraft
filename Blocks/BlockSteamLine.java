@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,10 +13,13 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -24,6 +27,11 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSteamLine extends BlockReactorTileModelled implements NeutronBlock {
 
@@ -121,5 +129,20 @@ public class BlockSteamLine extends BlockReactorTileModelled implements NeutronB
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getMixedBrightnessForBlock(IBlockAccess iba, int x, int y, int z) {
+		if (ReactorTiles.getTE(iba, x, y, z) == ReactorTiles.HEATPIPE) {
+			TileEntityHeatPipe te = (TileEntityHeatPipe)iba.getTileEntity(x, y, z);
+			float f = te.getBrightness();
+			World world = Minecraft.getMinecraft().theWorld;
+			int i1 = world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, x, y, z);
+			int l = Math.max(this.getLightValue(iba, x, y, z), Math.round(15*f));
+			int j1 = Math.max(l, world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z));
+			return i1 << 20 | j1 << 4;
+		}
+		return super.getMixedBrightnessForBlock(iba, x, y, z);
 	}
 }

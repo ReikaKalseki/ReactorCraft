@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,6 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Rendering.WorldPipingRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
@@ -57,8 +58,10 @@ public class SteamLineRenderer extends WorldPipingRenderer {
 		float g = 1;
 		float b = 1;
 		if (te instanceof TileEntityHeatPipe) {
-			g = 0.65F;
-			b = 0.3F;
+			int clr = ((TileEntityHeatPipe)te).getRenderColor();
+			r = ReikaColorAPI.getRed(clr)/255F;
+			g = ReikaColorAPI.getGreen(clr)/255F;
+			b = ReikaColorAPI.getBlue(clr)/255F;
 		}
 		else if (te instanceof TileEntitySteamLine) {
 			r = g = b = 0.5F;

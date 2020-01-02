@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -33,6 +34,11 @@ public class TileEntityHeatPipe extends TileEntityLine {
 	private static final double HEAT_CAPACITY = ReikaThermoHelper.COPPER_HEAT*ReikaEngLibrary.rhoiron;
 
 	private double heatEnergy;
+
+	private float renderBrightness;
+	private float lastBrightness;
+	private float brightnessDeltaSinceUpdate;
+	private int lastUpdateTime;
 
 	@Override
 	public IIcon getTexture() {
@@ -52,7 +58,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 			this.balanceHeat(world, x, y, z);
 
 			if (this.getTicksExisted()%32 == 0) {
-				;//this.ventHeat(world, x, y, z);
+				this.ventHeat(world, x, y, z);
 			}
 		}
 	}
@@ -61,9 +67,10 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		double temp = getTemperatureForPipe(this, false);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temp >= Tamb) {
-			temp -= (temp-Tamb)/24D;
+			temp -= (temp-Tamb)/96D;
 			heatEnergy = HEAT_CAPACITY*temp;
 		}
+		temperature = (int)temp;
 	}
 
 	public double getNetHeatEnergy() {
@@ -148,6 +155,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		super.readSyncTag(NBT);
 
 		heatEnergy = NBT.getDouble("heat");
+		this.updateBrightness();
 	}
 
 	@Override
@@ -155,6 +163,17 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		super.writeSyncTag(NBT);
 
 		NBT.setDouble("heat", heatEnergy);
+	}
+
+	private void updateBrightness() {
+		float f = this.computeBrightness();
+		brightnessDeltaSinceUpdate += Math.abs(f-lastBrightness);
+		renderBrightness = f;
+		if (worldObj != null && (brightnessDeltaSinceUpdate >= 0.2 || this.getTicksExisted()-lastUpdateTime > 40)) {
+			this.triggerBlockUpdate();
+			brightnessDeltaSinceUpdate = 0;
+			lastUpdateTime = this.getTicksExisted();
+		}
 	}
 
 	@Override
@@ -170,6 +189,22 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		if (temperature >= 100) {
 			e.attackEntityFrom(DamageSource.inFire, temperature/100);
 		}
+	}
+
+	public int getRenderColor() {
+		int base = 0xFFA64D;
+		float f = this.getBrightness();
+		return f <= 0 ? base : ReikaColorAPI.mixColors(0xff3030, base, f);
+	}
+
+	private float computeBrightness() {
+		if (temperature < 250)
+			return 0;
+		return Math.min(1, (temperature-250)/1500F);
+	}
+
+	public float getBrightness() {
+		return renderBrightness;
 	}
 
 }
