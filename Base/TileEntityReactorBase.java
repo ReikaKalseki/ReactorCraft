@@ -258,7 +258,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		}
 		if (this instanceof TileEntityHeatPipe) {
 			TileEntityHeatPipe hp = (TileEntityHeatPipe)this;
-			String s = String.format("%s at %dC.", this.getTEName(), hp.getTemperature());
+			double e = hp.getNetHeatEnergy();
+			String s = String.format("%s contains %.3f%sJ of heat energy.", this.getTEName(), ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
 			li.add(s);
 		}
 		return li;
