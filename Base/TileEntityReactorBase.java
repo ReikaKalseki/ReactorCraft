@@ -25,6 +25,8 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.ReactorCraft;
@@ -271,5 +273,24 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	public boolean allowExternalHeating() {
+		return this.getMachine().getReactorType() != ReactorType.HTGR;
+	}
+
+	public boolean allowHeatExtraction() {
+		return true;
+	}
+
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	public double heatEnergyPerDegree() {
+		double base = ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
+		if (this.getMachine().isReactorCore())
+			base *= 50;
+		return base;
 	}
 }

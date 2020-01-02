@@ -20,22 +20,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
 import Reika.ReactorCraft.Base.TileEntityLine;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.Registry.ReactorType;
+import Reika.RotaryCraft.Auxiliary.Interfaces.HeatConduction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
 
 public class TileEntityHeatPipe extends TileEntityLine {
 
-	private int temperature;
+	private static final double HEAT_CAPACITY = ReikaThermoHelper.COPPER_HEAT*0.125*ReikaEngLibrary.rhoiron*0.4;
+
+	private double heatEnergy;
 
 	public int getTemperature() {
-		return temperature;
+		return this.convertToTemp(heatEnergy, this);
 	}
 
 	@Override
@@ -55,15 +58,34 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		this.balanceHeat(world, x, y, z);
 
 		if (this.getTicksExisted()%32 == 0) {
-			int tdiff = (int)Math.signum(temperature-ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z));
-			temperature -= tdiff;
+			this.ventHeat(world, x, y, z);
 		}
+	}
+
+	private void ventHeat(World world, int x, int y, int z) {
+		int temp = convertToTemp(heatEnergy, this);
+		int tdiff = (int)Math.signum(temp-ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z));
+		temp -= tdiff;
+		heatEnergy = this.convertToHeat(temp, this);
+	}
+
+	public static double convertToHeat(int temp, TileEntity te) {
+		if (te instanceof TileEntityHeatPipe) {
+
+		}
+		else {
+			HeatConduction hc = (HeatConduction)te;
+			return hc.heatEnergyPerDegree()*hc.getTemperature();
+		}
+	}
+
+	public static int convertToTemp(int heat, TileEntityHeatPipe te) {
+
 	}
 
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
-		if (temperature == 0)
-			temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+
 	}
 
 	private void balanceHeat(World world, int x, int y, int z) {
@@ -117,31 +139,34 @@ public class TileEntityHeatPipe extends TileEntityLine {
 	}
 
 	private void balanceWith(TileEntityHeatPipe ts) {
-		int diff = ts.temperature-temperature;
+		int diff = ts.heatEnergy-heatEnergy;
 		if (diff <= 0)
 			return;
 		diff = Math.max(1, diff/2); //no loss over distance
-		ts.temperature -= diff;
-		temperature += diff;
+		ts.heatEnergy -= diff;
+		heatEnergy += diff;
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
-		temperature = NBT.getInteger("temp");
+		heatEnergy = NBT.getInteger("heat");
 	}
 
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
-		NBT.setInteger("temp", temperature);
+		NBT.setInteger("heat", heatEnergy);
 	}
 
 	@Override
 	protected boolean canConnectToMachine(Block id, int meta, ForgeDirection dir, TileEntity te) {
-		return (te instanceof TemperatureTE || te instanceof Temperatured) && !(te instanceof TileEntityReactorBase && ((TileEntityReactorBase)te).getMachine().getReactorType() == ReactorType.HTGR);
+		if (!(te instanceof HeatConduction))
+			return false;
+		HeatConduction h = (HeatConduction)te;
+		return h.allowExternalHeating() || h.allowHeatExtraction();
 	}
 
 	@Override
