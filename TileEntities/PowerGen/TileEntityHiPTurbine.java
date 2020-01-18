@@ -321,7 +321,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
 				Proportionality<ReactorType> source = te.getSourceReactorType();
-				if (this.canRunOffOf(source.getLargestCategory())) {
+				s = this.getEffectiveUsable(s, source);
+				if (s > 0) {
 					int rm = s/8+1;
 					if (steam < this.getMaxSteam()) {
 						int rm2 = Math.min(rm, this.getMaxSteam()-steam);
@@ -330,7 +331,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 						te.removeSteam(rm2);
 						dripBuffer += rm2*1000;
 					}
-					flag = s > rm+32;
+					flag = s > rm+32 && steam >= this.getMaxSteam()/4;
 				}
 			}
 		}
@@ -346,8 +347,12 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		return flag;
 	}
 
-	private boolean canRunOffOf(ReactorType source) {
-		return source != ReactorType.HTGR;
+	private int getEffectiveUsable(int s, Proportionality<ReactorType> source) {
+		float ret = 0;
+		for (ReactorType r : source.getElements()) {
+			ret += source.getFraction(r)*s*r.getHPTurbineMultiplier();
+		}
+		return (int)ret;
 	}
 
 	private int getMaxSteam() {
@@ -381,7 +386,15 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 
 	@Override
 	protected float getTorqueFactor() {
-		return fluid.efficiency > 1 ? 1+(fluid.efficiency-1)*0.25F : fluid.efficiency;
+		float base = super.getTorqueFactor();
+		if (steam < this.getMaxSteam()/2) {
+			float f = steam/(float)this.getMaxSteam(); //stops at 0.5, aka the peak of cos
+			base *= ReikaMathLibrary.cosInterpolation(0, 1, f, 0, 1);
+		}
+		if (fluid.efficiency > 1) {
+			base *= 1+(fluid.efficiency-1)*0.25F;
+		}
+		return base;
 	}
 
 	@Override

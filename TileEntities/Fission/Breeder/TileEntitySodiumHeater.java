@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityIntermediateBoiler;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
@@ -61,7 +62,7 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 
 	@Override
 	protected Fluid getOutputFluid() {
-		return FluidRegistry.getFluid("rc hotsodium");
+		return ReactorCraft.NA_hot;
 	}
 
 	@Override

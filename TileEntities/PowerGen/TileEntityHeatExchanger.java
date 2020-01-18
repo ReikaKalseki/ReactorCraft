@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -190,10 +191,11 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 
 	//Add API to allow others to add fluids
 	protected static enum Exchange {
-		SODIUM("rc hotsodium", "rc sodium", ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
+		SODIUM(ReactorCraft.NA_hot, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
 		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
 		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM),
-		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, null);
+		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, null),
+		SOLARSODIUM(ReactorCraft.NA_warm, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT*3/4, 400, ReactorType.SOLAR);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;
@@ -208,9 +210,17 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 			this(from, to, 1, c, max, t);
 		}
 
+		private Exchange(Fluid from, Fluid to, double c, int max, ReactorType t) {
+			this(from, to, 1, c, max, t);
+		}
+
 		private Exchange(String from, String to, int r, double c, int max, ReactorType t) {
-			coldFluid = FluidRegistry.getFluid(to);
-			hotFluid = FluidRegistry.getFluid(from);
+			this(FluidRegistry.getFluid(from), FluidRegistry.getFluid(to), r, c, max, t);
+		}
+
+		private Exchange(Fluid from, Fluid to, int r, double c, int max, ReactorType t) {
+			coldFluid = to;
+			hotFluid = from;
 			heatCapacity = c;
 			maxTemperature = max;
 			type = t;
@@ -351,6 +361,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		return true;
 	}
 
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}

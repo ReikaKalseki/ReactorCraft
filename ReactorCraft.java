@@ -11,6 +11,9 @@ package Reika.ReactorCraft;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 import net.bdew.gendustry.api.GendustryAPI;
@@ -144,8 +147,9 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
-	public static Item[] items = new Item[ReactorItems.itemList.length];
-	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
+	public static final Item[] items = new Item[ReactorItems.itemList.length];
+	public static final Block[] blocks = new Block[ReactorBlocks.blockList.length];
+	private static final Collection<Fluid> fluids = new ArrayList();
 
 	public static final Fluid D2O = new Fluid("rc heavy water").setDensity(1100).setViscosity(1050);
 	public static final Fluid HF = new Fluid("rc hydrofluoric acid").setDensity(115).setViscosity(10).setGaseous(true);
@@ -160,6 +164,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
 	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000).setLuminosity(8);
+	public static final Fluid NA_warm = new Fluid("rc warmsodium").setDensity(864).setViscosity(650).setTemperature(800).setLuminosity(6);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
@@ -392,24 +397,10 @@ public class ReactorCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.thordust, true);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.CRAFTING.getItemInstance(), false);
 
-		SensitiveFluidRegistry.instance.registerFluid("rc fusion plasma");
-		SensitiveFluidRegistry.instance.registerFluid("rc deuterium");
-		SensitiveFluidRegistry.instance.registerFluid("rc tritium");
-		SensitiveFluidRegistry.instance.registerFluid("rc hydrofluoric acid");
-		SensitiveFluidRegistry.instance.registerFluid("rc uranium hexafluoride");
-		SensitiveFluidRegistry.instance.registerFluid("rc sodium");
-		SensitiveFluidRegistry.instance.registerFluid("rc chlorine");
-		SensitiveFluidRegistry.instance.registerFluid("rc oxygen");
-		SensitiveFluidRegistry.instance.registerFluid("rc lowpammonia");
-		SensitiveFluidRegistry.instance.registerFluid("rc lowpwater");
-		SensitiveFluidRegistry.instance.registerFluid("rc hotsodium");
-		SensitiveFluidRegistry.instance.registerFluid("rc co2");
-		SensitiveFluidRegistry.instance.registerFluid("rc hot co2");
-		SensitiveFluidRegistry.instance.registerFluid("rc corium");
-		SensitiveFluidRegistry.instance.registerFluid("rc lithium");
-		SensitiveFluidRegistry.instance.registerFluid("rc lifbe");
-		SensitiveFluidRegistry.instance.registerFluid("rc lifbe fuel");
-		SensitiveFluidRegistry.instance.registerFluid("rc hot lifbe");
+		for (Fluid f : getFluids()) {
+			if (f != D2O && f != NH3 && f != CORIUM && f != WASTE)
+				SensitiveFluidRegistry.instance.registerFluid(f);
+		}
 
 		this.finishTiming();
 	}
@@ -550,6 +541,7 @@ public class ReactorCraft extends DragonAPIMod {
 			NH3_lo.setIcons(nh3);
 			H2O_lo.setIcons(Blocks.water.getIcon(1, 0));
 			NA_hot.setIcons(nahot);
+			NA_warm.setIcons(nahot);
 
 			CO2.setIcons(co2);
 			CO2_hot.setIcons(co2);
@@ -565,6 +557,10 @@ public class ReactorCraft extends DragonAPIMod {
 
 			solarFlare = event.map.registerIcon("ReactorCraft:solarflare");
 		}
+	}
+
+	public static Collection<Fluid> getFluids() {
+		return Collections.unmodifiableCollection(fluids);
 	}
 
 	private static void addItems() {
@@ -587,35 +583,41 @@ public class ReactorCraft extends DragonAPIMod {
 
 	private static void addLiquids() {
 		logger.log("Loading And Registering Liquids");
-		FluidRegistry.registerFluid(D2O);
-		FluidRegistry.registerFluid(HF);
-		FluidRegistry.registerFluid(UF6);
+		addFluid(D2O);
+		addFluid(HF);
+		addFluid(UF6);
 
-		FluidRegistry.registerFluid(NH3);
-		FluidRegistry.registerFluid(NA);
-		FluidRegistry.registerFluid(CL);
-		FluidRegistry.registerFluid(O);
-		FluidRegistry.registerFluid(Oliq);
+		addFluid(NH3);
+		addFluid(NA);
+		addFluid(CL);
+		addFluid(O);
+		addFluid(Oliq);
 
-		FluidRegistry.registerFluid(H2);
-		FluidRegistry.registerFluid(H3);
-		FluidRegistry.registerFluid(PLASMA);
+		addFluid(H2);
+		addFluid(H3);
+		addFluid(PLASMA);
 
-		FluidRegistry.registerFluid(NH3_lo);
-		FluidRegistry.registerFluid(H2O_lo);
-		FluidRegistry.registerFluid(NA_hot);
+		addFluid(NH3_lo);
+		addFluid(H2O_lo);
+		addFluid(NA_hot);
+		addFluid(NA_warm);
 
-		FluidRegistry.registerFluid(CO2);
-		FluidRegistry.registerFluid(CO2_hot);
+		addFluid(CO2);
+		addFluid(CO2_hot);
 
-		FluidRegistry.registerFluid(CORIUM);
-		FluidRegistry.registerFluid(WASTE);
+		addFluid(CORIUM);
+		addFluid(WASTE);
 
-		FluidRegistry.registerFluid(LI);
+		addFluid(LI);
 
-		FluidRegistry.registerFluid(LIFBe);
-		FluidRegistry.registerFluid(LIFBe_hot);
-		FluidRegistry.registerFluid(LIFBe_fuel);
+		addFluid(LIFBe);
+		addFluid(LIFBe_hot);
+		addFluid(LIFBe_fuel);
+	}
+
+	private static void addFluid(Fluid f) {
+		fluids.add(f);
+		FluidRegistry.registerFluid(f);
 	}
 
 	private static void addLiquidContainers() {
