@@ -321,7 +321,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
 				Proportionality<ReactorType> source = te.getSourceReactorType();
-				s = this.getEffectiveUsable(s, source);
+				s = source != null ? this.getEffectiveUsable(s, source) : 0;
 				if (s > 0) {
 					int rm = s/8+1;
 					if (steam < this.getMaxSteam()) {
@@ -350,7 +350,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	private int getEffectiveUsable(int s, Proportionality<ReactorType> source) {
 		float ret = 0;
 		for (ReactorType r : source.getElements()) {
-			ret += source.getFraction(r)*s*r.getHPTurbineMultiplier();
+			if (r != null)
+				ret += source.getFraction(r)*s*r.getHPTurbineMultiplier();
 		}
 		return (int)ret;
 	}
