@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,9 +10,13 @@
 package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
@@ -53,8 +57,17 @@ public class GuiCentrifuge extends ReactorGuiBase {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-		int i4 = tile.getUF6Scaled(60);
-		this.drawTexturedModalRect(j+80, k+78-i4, 224, 80-i4, 16, i4);
+		int i4 = tile.getFluidScaled(60);
+
+		Fluid f = tile.getFluid();
+		if (f != null) {
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
+			ReikaTextureHelper.bindTerrainTexture();
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(j+80, k+78-i4, ico, 16, i4);
+		}
+		String i = "/Reika/ReactorCraft/Textures/GUI/"+this.getGuiTexture()+".png";
+		ReikaTextureHelper.bindTexture(ReactorCraft.class, i);
+		ReikaGuiAPI.instance.drawTexturedModalRect(j+80, k+18, 223, 83, 16, 60);
 
 		int i5 = tile.getProcessingScaled(48);
 		this.drawTexturedModalRect(j+104, k+18, 216, 84, 4, i5);
