@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -211,7 +211,9 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	private double getNeutronInteractionChance() {
-		return ReikaMathLibrary.cosInterpolation(this.getMinTemperature(), this.getMaxTemperature(), temperature);
+		int midT = (this.getMinTemperature()+this.getMaxTemperature())/2;
+		double f = temperature <= midT ? 0.5 : 0.75;
+		return (1-f)+f*ReikaMathLibrary.cosInterpolation(this.getMinTemperature(), this.getMaxTemperature(), temperature);
 	}
 
 	private double getNeutronChance() {
