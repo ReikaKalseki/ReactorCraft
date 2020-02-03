@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -400,7 +400,11 @@ public enum ReactorTiles implements TileEnum {
 			case PEBBLEBED:
 				return ReactorType.HTGR;
 			case THORIUM:
+			case FUELDUMP:
 				return ReactorType.THORIUM;
+			case SOLAR:
+			case SOLARTOP:
+				return ReactorType.SOLAR;
 			default:
 				return null;
 		}

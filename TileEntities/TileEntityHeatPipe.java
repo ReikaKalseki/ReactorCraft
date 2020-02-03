@@ -20,12 +20,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityLine;
+import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
+import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HeatConduction;
 
 
@@ -34,6 +39,8 @@ public class TileEntityHeatPipe extends TileEntityLine {
 	private static final double HEAT_CAPACITY = ReikaThermoHelper.COPPER_HEAT*ReikaEngLibrary.rhoiron;
 
 	private double heatEnergy;
+
+	private Proportionality<ReactorType> reactorTypes = new Proportionality();
 
 	private float renderBrightness;
 	private float lastBrightness;
@@ -128,6 +135,28 @@ public class TileEntityHeatPipe extends TileEntityLine {
 					int put = this.getTemperatureForHeat(theirheat+diff, hc);
 					hc.setTemperature(put+hc.getAmbientTemperature());
 					heatEnergy -= diff;
+					if (diff < 0) {
+						ReactorType type = null;
+						if (te instanceof TileEntityNuclearBoiler) {
+							TileEntityNuclearBoiler tb = (TileEntityNuclearBoiler)te;
+							type = tb.getReactorType();
+						}
+						else if (te instanceof TileEntityReactorBase) {
+							TileEntityReactorBase tr = (TileEntityReactorBase)te;
+							type = tr.getMachine().getReactorType();
+						}
+						ReactorCoreTE rc = (ReactorCoreTE)te;
+						if (type != null)
+							reactorTypes.addValue(type, diff);
+					}
+					else if (diff > 0) {
+						if (te instanceof TileEntityNuclearBoiler) {
+							TileEntityNuclearBoiler tb = (TileEntityNuclearBoiler)te;
+							ReactorType type = reactorTypes.getLargestCategory();
+							if (type != null)
+								tb.setReactorType(type);
+						}
+					}
 					/*
 					if (diff > 0)
 						ReikaJavaLibrary.pConsole("Taking "+diff+" heat from pipe to put into "+te+" at new temp "+put+" ["+ourtemp+" -> "+theirtemp+"]");
@@ -148,6 +177,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		diff = diff/2; //no loss over distance
 		ts.heatEnergy -= diff;
 		heatEnergy += diff;
+		reactorTypes = ts.reactorTypes;
 	}
 
 	@Override

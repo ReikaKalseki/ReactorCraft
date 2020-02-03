@@ -290,7 +290,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	public double heatEnergyPerDegree() {
 		double base = ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
-		if (this.getMachine().isReactorCore())
+		if (this.getMachine().isReactorCore() || this.getMachine() == ReactorTiles.EXCHANGER)
 			base *= 50;
 		return base;
 	}
