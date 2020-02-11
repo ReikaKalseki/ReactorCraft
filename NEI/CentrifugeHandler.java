@@ -102,7 +102,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadTransferRects() {
-		transferRects.add(new RecipeTransferRect(new Rectangle(59, 8, 70, 60), "recentri"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(59, 8, 40, 60), "recentri"));
 	}
 
 	@Override
