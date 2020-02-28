@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -70,7 +70,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
+		if (!world.isRemote && this.isFissile() && rand.nextInt(this.getDecayNeutronChance()) == 0)
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
 
 		if (DragonAPICore.debugtest) {
@@ -104,6 +104,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}
+	}
+
+	protected int getDecayNeutronChance() {
+		return 20;
 	}
 
 	protected int getWarningTemperature() {
@@ -352,6 +356,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 
 		if (dT != 0) {
 			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
+			d = this.getAmbientHeatLossFactor(world, x, y, z, d);
 			temperature -= (1+dT/d);
 		}
 
@@ -392,6 +397,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		else if (hydrogen > 0) {
 			hydrogen--;
 		}
+	}
+
+	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base) {
+		return base;
 	}
 
 	@Override

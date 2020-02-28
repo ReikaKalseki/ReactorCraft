@@ -101,7 +101,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 		if (powerHandler.getPower() > 0 && powerHandler.getOmega() >= MINSPEED && !tank.isEmpty()) {
 			Centrifuging recipe = recipes.get(tank.getActualFluid());
-			if (recipe != null && this.hasInventorySpace(recipe)) {
+			if (recipe != null && tank.getLevel() >= recipe.fluidAmount && this.hasInventorySpace(recipe)) {
 				timer.update(recipe.speedFactor);
 				if (timer.checkCap()) {
 					if (!world.isRemote)
@@ -152,7 +152,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	private void make(Centrifuging recipe) {
 		tank.removeLiquid(recipe.fluidAmount);
-		if (ReikaRandomHelper.doWithChance(recipe.chanceOfAOverB)) {
+		if (ReikaRandomHelper.doWithPercentChance(recipe.chanceOfAOverB)) {
 			ReikaInventoryHelper.addOrSetStack(recipe.getOutputA(), inv, 0);
 		}
 		else if (recipe.outputB != null) {

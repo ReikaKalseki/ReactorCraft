@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -235,7 +235,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		}
 
 		public NeutronSpeed getCreationSpeed() {
-			if (!ReactorOptions.FASTNEUTRONS.getState())
+			if (!ReactorOptions.FASTNEUTRONS.getState() || true)
 				return NeutronSpeed.THERMAL;
 			switch(this) {
 				case DECAY:
