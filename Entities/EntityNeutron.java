@@ -235,7 +235,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		}
 
 		public NeutronSpeed getCreationSpeed() {
-			if (!ReactorOptions.FASTNEUTRONS.getState() || true)
+			if (!ReactorOptions.FASTNEUTRONS.getState())
 				return NeutronSpeed.THERMAL;
 			switch(this) {
 				case DECAY:
