@@ -32,4 +32,33 @@ public enum ReactorType {
 				return 1;
 		}
 	}
+
+	public float getControlCPUHeatEfficiency() {
+		switch(this) {
+			case HTGR:
+			case SOLAR:
+			case FUSION:
+				return this.getTypeMismatchHeatEfficiency();
+			default:
+				return 1;
+		}
+	}
+
+	/** For conducting heat to other reactor types. */
+	public float getTypeMismatchHeatEfficiency() {
+		switch(this) {
+			case FISSION:
+				return 1;
+			case HTGR:
+				return 0.0625F;
+			case SOLAR:
+			case FUSION:
+				return 0;
+			case THORIUM:
+				return 0.25F;
+			default:
+				return 0.5F;
+
+		}
+	}
 }

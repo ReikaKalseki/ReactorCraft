@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,7 +27,11 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
-
+	/*
+	private int getSameCoreHeatConductionFraction() {
+		return 12;
+	}
+	 */
 	@Override
 	public int getIndex() {
 		return ReactorTiles.FUEL.ordinal();

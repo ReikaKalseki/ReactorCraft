@@ -295,8 +295,9 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++) {
 			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(ReactorOptions.VERTNEUTRONS.getState()), this.getNeutronType()));
+		}
 	}
 
 	protected final NeutronType getNeutronType() {
@@ -370,20 +371,20 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				Block id = world.getBlock(dx, dy, dz);
-				int meta = world.getBlockMetadata(dx, dy, dz);
-				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+				if (r == this.getMachine()) {
 					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
-						temperature -= dTemp/16;
-						te.temperature += dTemp/16;
+						int d = this.getSameCoreHeatConductionFraction();
+						temperature -= dTemp/d;
+						te.temperature += dTemp/d*this.getHeatConductionEfficiency(r);
 					}
 				}
 			}
 		}
 
-		if (temperature >= 500) {
+		if (temperature >= this.getWarningTemperature()+100) {
 			ReactorAchievements.HOTCORE.triggerAchievement(this.getPlacer());
 		}
 
@@ -401,6 +402,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		else if (hydrogen > 0) {
 			hydrogen--;
 		}
+	}
+
+	private int getSameCoreHeatConductionFraction() {
+		return 16;
 	}
 
 	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base, int Tamb) {

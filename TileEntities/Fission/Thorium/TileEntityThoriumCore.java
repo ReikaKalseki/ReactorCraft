@@ -37,6 +37,7 @@ import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWastePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -72,7 +73,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
-			fuelTank.addLiquid(100, ReactorCraft.LIFBe_fuel_preheat);
+			fuelTank.addLiquid(100, ReactorCraft.LIFBe_fuel);
 			if (fuelTankOut.getLevel() >= fuelTankOut.getCapacity()/2)
 				fuelTankOut.empty();
 			wasteTank.empty();
@@ -142,12 +143,43 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	protected int getWarningTemperature() {
-		return 750;
+		return 900;
 	}
 
 	@Override
 	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base, int Tamb) {
 		return Tamb < temperature ? base*4 : base/2;
+	}
+
+	@Override
+	protected float getHeatConductionThroughput(ReactorTiles other) {
+		//if (this.getRestingTemperature(worldObj, xCoord, yCoord, zCoord) > 100) {
+		if (other.getReactorType() != ReactorType.THORIUM)
+			return 0.25F;
+		//}
+		return super.getHeatConductionThroughput(other);
+	}
+
+	private int getSameCoreHeatConductionFraction() {
+		return 4;
+	}
+
+	@Override
+	protected int getHeatConductionFraction(ReactorTiles other) {
+		return other.getReactorType() == ReactorType.FISSION ? 2 : super.getHeatConductionFraction(other);
+	}
+
+	@Override
+	protected float getHeatConductionEfficiency(ReactorTiles other) {
+		boolean rest = temperature-this.getRestingTemperature(worldObj, xCoord, yCoord, zCoord) < 50;
+		switch(other) {
+			case BOILER:
+				return rest ? 0.125F : 0.75F;
+			case FUEL:
+				return rest ? 0.2F : 1F;
+			default:
+				return super.getHeatConductionEfficiency(other);
+		}
 	}
 
 	private void feedFluid() {
@@ -237,7 +269,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 				if (ReikaRandomHelper.doWithChance(this.getNeutronChance()) && this.hasFuel()) {
 					fuelTank.removeLiquid(CYCLE_AMOUNT);
 					fuelTankOut.addLiquid(CYCLE_AMOUNT, FluidRegistry.getFluid("rc hot lifbe"));
-					temperature += 60;
+					temperature += 50;
 					this.spawnNeutronBurst(world, x, y, z);
 
 					if (ReikaRandomHelper.doWithChance(5)) {

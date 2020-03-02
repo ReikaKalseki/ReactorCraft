@@ -186,21 +186,61 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					if (flag) {
 						int T = tr.getTemperature();
 						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
+						float f = te.getHeatConductionThroughput(this.getMachine());
+						//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+f);
+						dT *= f;
 						if (dT > 0) {
-							int newT = T-dT/4;
+							int d = this.getHeatConductionFraction(te.getMachine());
+							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+d);
+							int newT = T-dT/d;
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
-							temperature += dT/4;
+							float e = te.getHeatConductionEfficiency(this.getMachine());
+							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+e);
+							temperature += dT/d*e;
 							tr.setTemperature(newT);
 						}
 					}
 				}
+				/*
 				if (r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
 					if (src.getReactorType() != ReactorType.HTGR && temperature > Tamb) {
 						temperature -= Math.max(1, (temperature-Tamb)/2);
 					}
 				}
+				 */
 			}
 		}
+	}
+
+	/** For transferring heat FROM that reactor block. */
+	protected int getHeatConductionFraction(ReactorTiles other) {
+		return 4;
+	}
+
+	/** For transferring heat TO that reactor block. */
+	protected float getHeatConductionThroughput(ReactorTiles other) {
+		return 1;
+	}
+
+	/** For transferring heat TO that reactor block. */
+	protected float getHeatConductionEfficiency(ReactorTiles other) {
+		if (other == ReactorTiles.CONTROL || other == ReactorTiles.CPU)
+			return this.getControlCPUHeatEfficiency();
+		ReactorType r1 = this.getMachine().getReactorType();
+		ReactorType r2 = other.getReactorType();
+		if (r1 == r2)
+			return 1;
+		if (r1 == null || r2 == null) //one tile is not even a reactor
+			return 0;
+		return this.getMachine().getReactorType().getTypeMismatchHeatEfficiency();
+	}
+
+	protected float getControlCPUHeatEfficiency() {
+		return 1;
+	}
+
+	protected float getTypeMismatchEfficiency() {
+		return 0.5F;
 	}
 
 	public ForgeDirection getRandomDirection(boolean allowVertical) {
