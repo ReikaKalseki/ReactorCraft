@@ -348,15 +348,19 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		}
 	}
 
+	protected int getRestingTemperature(World world, int x, int y, int z) {
+		return ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+	}
+
 	@Override
 	protected void updateTemperature(World world, int x, int y, int z) {
 		super.updateTemperature(world, x, y, z);
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		int Tamb = this.getRestingTemperature(world, x, y, z);
 		int dT = temperature-Tamb;
 
 		if (dT != 0) {
 			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
-			d = this.getAmbientHeatLossFactor(world, x, y, z, d);
+			d = this.getAmbientHeatLossFactor(world, x, y, z, d, Tamb);
 			temperature -= (1+dT/d);
 		}
 
@@ -399,7 +403,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		}
 	}
 
-	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base) {
+	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base, int Tamb) {
 		return base;
 	}
 

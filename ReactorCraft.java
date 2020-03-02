@@ -180,7 +180,8 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
 
 	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800*3).setTemperature(773);
-	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850*3).setTemperature(773);
+	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850*3).setTemperature(473);
+	public static final Fluid LIFBe_fuel_preheat = new Fluid("rc lifbe fuel preheat").setDensity(6700).setViscosity(850*5/2).setTemperature(673);
 	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800*3).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
@@ -553,6 +554,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 			LIFBe.setIcons(lifbe);
 			LIFBe_fuel.setIcons(lifbe_fuel);
+			LIFBe_fuel_preheat.setIcons(lifbe_fuel);
 			LIFBe_hot.setIcons(lifbe_hot);
 
 			solarFlare = event.map.registerIcon("ReactorCraft:solarflare");
@@ -613,6 +615,7 @@ public class ReactorCraft extends DragonAPIMod {
 		addFluid(LIFBe);
 		addFluid(LIFBe_hot);
 		addFluid(LIFBe_fuel);
+		addFluid(LIFBe_fuel_preheat);
 	}
 
 	private static void addFluid(Fluid f) {

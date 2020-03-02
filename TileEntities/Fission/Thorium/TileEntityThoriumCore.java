@@ -72,7 +72,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
-			fuelTank.addLiquid(100, ReactorCraft.LIFBe_fuel);
+			fuelTank.addLiquid(100, ReactorCraft.LIFBe_fuel_preheat);
 			if (fuelTankOut.getLevel() >= fuelTankOut.getCapacity()/2)
 				fuelTankOut.empty();
 			wasteTank.empty();
@@ -81,6 +81,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 		}
 
 		if (!world.isRemote) {
+
 			timer2.update();
 			if (timer2.checkCap()) {
 				for (int i = 2; i < 6; i++) {
@@ -110,6 +111,11 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 			this.feedFluid();
 	}
 
+	@Override
+	protected int getRestingTemperature(World world, int x, int y, int z) {
+		return fuelTank.getActualFluid() == ReactorCraft.LIFBe_fuel_preheat ? 250 : super.getRestingTemperature(world, x, y, z);
+	}
+
 	private void balanceLiquidsWith(TileEntityThoriumCore te) {
 		this.balanceTanks(wasteTank, te.wasteTank);
 		this.balanceTanks(fuelTank, te.fuelTank);
@@ -117,6 +123,8 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	private void balanceTanks(HybridTank from, HybridTank to) {
+		if (to.getActualFluid() != null && to.getActualFluid() != from.getActualFluid())
+			return;
 		int dl = from.getLevel()-to.getLevel();
 		if (dl > 1) {
 			int amt = Math.min(from.getLevel()/4, Math.max(1, dl/8+1));
@@ -138,8 +146,8 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	@Override
-	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base) {
-		return base*4;
+	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base, int Tamb) {
+		return Tamb < temperature ? base*4 : base/2;
 	}
 
 	private void feedFluid() {
@@ -323,7 +331,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid == FluidRegistry.getFluid("rc lifbe fuel");
+		return from == ForgeDirection.UP && (fluid == ReactorCraft.LIFBe_fuel || fluid == ReactorCraft.LIFBe_fuel_preheat);
 	}
 
 	@Override
