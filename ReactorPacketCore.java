@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -177,7 +177,7 @@ public class ReactorPacketCore implements PacketHandler {
 			switch (pack) {
 				case CPU:
 					if (control == ReactorPackets.CPU.getMinValue()) {
-						((TileEntityControlRod)te).toggle(true);
+						((TileEntityControlRod)te).toggle(true, true);
 					}
 					else if (control == ReactorPackets.CPU.getMinValue()+1) {
 						TileEntityCPU cpu = (TileEntityCPU)te;

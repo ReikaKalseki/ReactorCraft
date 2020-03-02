@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -69,13 +69,29 @@ public class TileEntityControlRod extends TileEntityReactorBase implements Linka
 		return ReactorTiles.CONTROL.ordinal();
 	}
 
-	public void toggle(boolean sound) {
+	public void toggle(boolean sound, boolean spread) {
 		if (lowered) {
 			motion = Motions.RAISING;
 		}
 		else {
 			motion = Motions.LOWERING;
 		}
+
+		if (spread) {
+			TileEntity te = this.getAdjacentTileEntity(ForgeDirection.UP);
+			while (te instanceof TileEntityControlRod) {
+				TileEntityControlRod tc = (TileEntityControlRod)te;
+				tc.toggle(false, false);
+				te = tc.getAdjacentTileEntity(ForgeDirection.UP);
+			}
+			te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+			while (te instanceof TileEntityControlRod) {
+				TileEntityControlRod tc = (TileEntityControlRod)te;
+				tc.toggle(false, false);
+				te = tc.getAdjacentTileEntity(ForgeDirection.DOWN);
+			}
+		}
+
 		if (sound)
 			ReactorSounds.CONTROL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.3F);
 	}

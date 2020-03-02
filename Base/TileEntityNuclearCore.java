@@ -71,7 +71,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote && this.isFissile() && rand.nextInt(this.getDecayNeutronChance()) == 0)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(false), NeutronType.DECAY));
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
@@ -296,7 +296,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		if (world.isRemote)
 			return;
 		for (int i = 0; i < 3; i++)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), this.getNeutronType()));
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(ReactorOptions.VERTNEUTRONS.getState()), this.getNeutronType()));
 	}
 
 	protected final NeutronType getNeutronType() {

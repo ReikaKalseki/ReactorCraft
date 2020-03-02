@@ -203,8 +203,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		}
 	}
 
-	public ForgeDirection getRandomDirection() {
-		int r = 2+rand.nextInt(4);
+	public ForgeDirection getRandomDirection(boolean allowVertical) {
+		int r = allowVertical ? rand.nextInt(6) : 2+rand.nextInt(4);
 		return dirs[r];
 	}
 
