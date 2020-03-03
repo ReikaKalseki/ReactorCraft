@@ -22,7 +22,7 @@ import codechicken.nei.api.IConfigureNEI;
 
 public class NEI_ReactorConfig implements IConfigureNEI {
 
-	private static final NH3Handler ammonia = new NH3Handler();
+	private static final SynthesizerHandler ammonia = new SynthesizerHandler();
 	private static final UProcessorHandler UProcessor = new UProcessorHandler();
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
 	private static final ElectrolyzerHandler electrolyzer = new ElectrolyzerHandler();

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -63,10 +63,14 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Water", x, y);
+			String in = tile.getInputFluid();
+			if (in != null)
+				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, in, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Ammonia", x, y);
+			String out = tile.getOutputFluid();
+			if (out != null)
+				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, out, x, y);
 		}
 	}
 

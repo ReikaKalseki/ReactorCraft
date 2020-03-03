@@ -39,7 +39,7 @@
 	</electrolyzer>
 	<synthesizer>
 		<desc>
-			The synthesizer is used to make ammonia, which is a more effective working fluid in reactors than water. To do this, it requires water, ammonium chloride, and quicklime.
+			The synthesizer is primarily used to make ammonia, which is a more effective working fluid in reactors than water. To do this, it requires water, ammonium chloride, and quicklime. It can also process a few other fluids.
 		</desc>
 		<note>
 			Ammonia Synthesis Temperature: %dC

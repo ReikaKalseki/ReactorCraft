@@ -43,6 +43,7 @@ import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -353,7 +354,12 @@ public class ReactorRecipes {
 	}
 
 	public static void loadCustomRecipeFiles() {
-		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, "electrolyzer");
+		loadRecipeFile("electrolyzer");
+		loadRecipeFile("synthesizer");
+	}
+
+	private static void loadRecipeFile(String id) {
+		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, id);
 		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
 		crl.addFieldLookup("reactorcraft_stack", ReactorStacks.class);
 		crl.load();
@@ -361,21 +367,58 @@ public class ReactorRecipes {
 			Exception e = null;
 			boolean flag = false;
 			try {
-				flag = addCustomElectrolyzerRecipe(lb, crl);
+				switch(id) {
+					case "electrolyzer":
+						flag = addCustomElectrolyzerRecipe(lb, crl);
+						break;
+					case "synthesizer":
+						flag = addCustomSynthesizerRecipe(lb, crl);
+						break;
+				}
 			}
 			catch (Exception ex) {
 				e = ex;
 				flag = false;
 			}
 			if (flag) {
-				ReactorCraft.logger.log("Loaded custom electrolyzer recipe '"+lb.getString("type")+"'");
+				ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+lb.getString("type")+"'");
 			}
 			else {
-				ReactorCraft.logger.logError("Could not load custom electrolyzer recipe '"+lb.getString("type")+"'");
+				ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+lb.getString("type")+"'");
 				if (e != null)
 					e.printStackTrace();
 			}
 		}
+	}
+
+	private static boolean addCustomSynthesizerRecipe(LuaBlock lb, CustomRecipeList crl) {
+		String n = lb.getString("type");
+		if (n == null)
+			throw new IllegalArgumentException("Custom recipes require a specified name!");
+		LuaBlock fluidIn = lb.getChild("fluid_in");
+		LuaBlock fluidOut = lb.getChild("fluid_out");
+		if (fluidIn == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' missing an input fluid!");
+		}
+		if (fluidOut == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' missing an output fluid!");
+		}
+		LuaBlock itemIn1 = lb.getChild("item_in");
+		LuaBlock itemIn2 = lb.getChild("item_in_2");
+		Fluid in = FluidRegistry.getFluid(fluidIn.getString("type"));
+		int amtin = fluidIn.getInt("amount");
+		Fluid out = FluidRegistry.getFluid(fluidOut.getString("type"));
+		int amtout = fluidOut.getInt("amount");
+		ItemMatch item1 = null;
+		ItemMatch item2 = null;
+		if (itemIn1 != null) {
+			item1 = new ItemMatch(crl.parseItemCollection(itemIn1.getChild("items").getDataValues(), false));
+		}
+		if (itemIn2 != null) {
+			item2 = new ItemMatch(crl.parseItemCollection(itemIn2.getChild("items").getDataValues(), false));
+		}
+		TileEntitySynthesizer.addRecipe(n, in, out, amtin, amtout, lb.getInt("min_temperature"), lb.getInt("base_time"), lb.getInt("temp_curve"), item1, item2);
+		return true;
 	}
 
 	private static boolean addCustomElectrolyzerRecipe(LuaBlock lb, CustomRecipeList crl) {

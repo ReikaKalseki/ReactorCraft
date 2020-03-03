@@ -1,15 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -24,13 +25,15 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -39,6 +42,9 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine, PipeConnector {
 
 	private static final int WATER_PER_AMMONIA = 250;
@@ -46,14 +52,94 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	public static final int AMMONIATEMP = 220;
 	private static final int MAXTEMP = 1000;
 
+	private static final HashMap<Fluid, FluidSynthesis> fluidMap = new HashMap();
+
 	public int timer;
+	private FluidSynthesis recipe;
 
 	private final HybridTank tank = new HybridTank("synthout", 24000);
-
 	private final HybridTank water = new HybridTank("synthwater", 24000);
 
 	private StepTimer steptimer = new StepTimer(1800);
 	private StepTimer tempTimer = new StepTimer(20);
+
+	public static enum FluidSynthesis {
+		AMMONIA(FluidRegistry.WATER, ReactorCraft.NH3, WATER_PER_AMMONIA, AMMONIA_PER_STEP, AMMONIATEMP, 50, 0, constructItemMatch("dustQuicklime", ReactorStacks.lime), constructItemMatch("dustAmmonium", ReactorStacks.ammonium)),
+		HOTLIFBE(ReactorCraft.LIFBe_fuel, ReactorCraft.LIFBe_fuel_preheat, 50, 50, 350, 100, 5);
+
+		public final Fluid input;
+		public final Fluid output;
+		public final int fluidConsumed;
+		public final int fluidProduced;
+		public final int minTemp;
+		public final int baseDuration;
+		private final int temperatureSpeedCurve;
+		private final ItemMatch itemA;
+		private final ItemMatch itemB;
+
+		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc) {
+			this(in, out, amtin, amtout, temp, time, tc, null);
+		}
+
+		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, ItemMatch is) {
+			this(in, out, amtin, amtout, temp, time, tc, is, null);
+		}
+
+		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, ItemMatch a, ItemMatch b) {
+			input = in;
+			output = out;
+			fluidConsumed = amtin;
+			fluidProduced = amtout;
+			minTemp = temp;
+			baseDuration = time;
+			temperatureSpeedCurve = tc;
+			itemA = a;
+			itemB = b;
+			if (fluidMap.containsKey(input))
+				throw new IllegalArgumentException("Fluid "+input.getName()+" already mapped to a recipe!");
+			fluidMap.put(input, this);
+		}
+
+		@SideOnly(Side.CLIENT)
+		public ItemStack getAForDisplay() {
+			return itemA != null ? itemA.getCycledItem() : null;
+		}
+
+		@SideOnly(Side.CLIENT)
+		public ItemStack getBForDisplay() {
+			return itemB != null ? itemB.getCycledItem() : null;
+		}
+
+		public boolean usesItem(ItemStack item) {
+			return (itemA != null && itemA.match(item)) || (itemB != null && itemB.match(item));
+		}
+
+		private static ItemMatch constructItemMatch(ItemStack is) {
+			return new ItemMatch(is);
+		}
+
+		private static ItemMatch constructItemMatch(String ore) {
+			return constructItemMatch(ore, null);
+		}
+
+		private static ItemMatch constructItemMatch(String ore, ItemStack is) {
+			ItemMatch ret = new ItemMatch(ore);
+			if (is != null) {
+				ret.addItem(new KeyedItemStack(is).setIgnoreMetadata(false).setIgnoreNBT(true).setSized(false).setSimpleHash(true));
+			}
+			return ret;
+		}
+
+		public int getDuration(int temperature) {
+			return Math.max(5, baseDuration-temperatureSpeedCurve*(temperature-minTemp)/100);
+		}
+	}
+
+	public static void addRecipe(String name, Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int curve, ItemMatch a, ItemMatch b) {
+		Class[] types = new Class[]{Fluid.class, Fluid.class, int.class, int.class, int.class, int.class, int.class, ItemMatch.class, ItemMatch.class};
+		Object[] args = new Object[]{in, out, amtin, amtout, temp, time, curve, a, b};
+		FluidSynthesis c = EnumHelper.addEnum(FluidSynthesis.class, name.toUpperCase(), types, args);
+	}
 
 	@Override
 	public int getIndex() {
@@ -62,12 +148,14 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		steptimer.setCap(50);
 		this.getWaterBuckets();
-		if (this.getWater() > 0 && this.hasAmmonium() && this.hasQuicklime() && this.canMakeAmmonia(AMMONIA_PER_STEP)) {
+		recipe = this.getRecipe();
+		if (recipe != null)
+			steptimer.setCap(recipe.getDuration(temperature));
+		if (recipe != null && water.getLevel() >= recipe.fluidConsumed && temperature >= recipe.minTemp && tank.canTakeIn(recipe.output, recipe.fluidProduced)) {
 			steptimer.update();
 			if (steptimer.checkCap())
-				this.makeAmmonia();
+				this.make();
 		}
 		else
 			steptimer.reset();
@@ -77,6 +165,19 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z, meta);
 		}
+	}
+
+	private FluidSynthesis getRecipe() {
+		if (water.isEmpty())
+			return null;
+		FluidSynthesis fr = fluidMap.get(water.getActualFluid());
+		if (fr == null)
+			return null;
+		if (!ReikaItemHelper.matchStacks(inv[1], fr.itemA)) //handles null
+			return null;
+		if (!ReikaItemHelper.matchStacks(inv[2], fr.itemB))
+			return null;
+		return fr;
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -120,41 +221,17 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		}
 	}
 
-	private boolean canMakeAmmonia(int amt) {
-		return temperature >= AMMONIATEMP && (tank.isEmpty() || tank.getLevel()+amt < tank.getCapacity());
-	}
-
-	private void makeAmmonia() {
-		ReikaInventoryHelper.decrStack(1, inv);
-		ReikaInventoryHelper.decrStack(2, inv);
-		water.removeLiquid(WATER_PER_AMMONIA);
-		tank.addLiquid(AMMONIA_PER_STEP, FluidRegistry.getFluid("rc ammonia"));
-	}
-
-	private boolean hasQuicklime() {
-		if (inv[1] == null)
-			return false;
-		if (ReikaItemHelper.matchStacks(inv[1], ReactorStacks.lime))
-			return true;
-		ArrayList<ItemStack> lime = OreDictionary.getOres("dustQuicklime");
-		return ReikaItemHelper.collectionContainsItemStack(lime, inv[1]);
-	}
-
-	private boolean hasAmmonium() {
-		if (inv[2] == null)
-			return false;
-		if (ReikaItemHelper.matchStacks(inv[2], ReactorStacks.ammonium))
-			return true;
-		ArrayList<ItemStack> dust = OreDictionary.getOres("dustAmmonium");
-		return ReikaItemHelper.collectionContainsItemStack(dust, inv[2]);
-	}
-
-	private int getWater() {
-		return water.getLevel();
+	private void make() {
+		if (recipe.itemA != null)
+			ReikaInventoryHelper.decrStack(1, inv);
+		if (recipe.itemB != null)
+			ReikaInventoryHelper.decrStack(2, inv);
+		water.removeLiquid(recipe.fluidConsumed);
+		tank.addLiquid(recipe.fluidProduced, recipe.output);
 	}
 
 	public int getWaterScaled(int px) {
-		return this.getWater()*px/water.getCapacity();
+		return water.getLevel()*px/water.getCapacity();
 	}
 
 	public int getAmmoniaScaled(int px) {
@@ -166,14 +243,10 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	private void getWaterBuckets() {
-		if (inv[0] != null && inv[0].getItem() == Items.water_bucket && this.canAcceptMoreWater(FluidContainerRegistry.BUCKET_VOLUME)) {
-			water.fill(FluidRegistry.getFluidStack("water", FluidContainerRegistry.BUCKET_VOLUME), true);
+		if (inv[0] != null && inv[0].stackSize == 1 && inv[0].getItem() == Items.water_bucket && water.canTakeIn(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME)) {
+			water.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.WATER);
 			inv[0] = new ItemStack(Items.bucket);
 		}
-	}
-
-	public boolean canAcceptMoreWater(int amt) {
-		return water.getFluid() == null || water.getFluid().amount+amt <= water.getCapacity();
 	}
 
 	@Override
@@ -205,7 +278,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.WATER);
+		return fluidMap.get(fluid) != null;
 	}
 
 	@Override
@@ -227,14 +300,22 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
 			return is.getItem() == Items.water_bucket;
-		if (i == 1)
-			return ReikaItemHelper.matchStacks(is, ReactorStacks.lime);
-		if (i == 2)
-			return ReikaItemHelper.matchStacks(is, ReactorStacks.ammonium);
+		for (FluidSynthesis rec : FluidSynthesis.values()) {
+			if (rec.itemA != null && rec.itemA.match(is))
+				return i == 1;
+			else if (rec.itemB != null && rec.itemB.match(is))
+				return i == 2;
+		}
 		return false;
 	}
 
+	public String getInputFluid() {
+		return water.isEmpty() ? null : water.getActualFluid().getLocalizedName();
+	}
 
+	public String getOutputFluid() {
+		return tank.isEmpty() ? null : tank.getActualFluid().getLocalizedName();
+	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
@@ -288,14 +369,6 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		return true;
 	}
 
-	public static boolean isAmmoniaIngredient(ItemStack is) {
-		if (ReikaItemHelper.matchStacks(is, ReactorStacks.ammonium))
-			return true;
-		if (ReikaItemHelper.matchStacks(is, ReactorStacks.lime))
-			return true;
-		return false;
-	}
-
 	public boolean addWater(int amt) {
 		if (water.canTakeIn(amt)) {
 			water.addLiquid(amt, FluidRegistry.WATER);
@@ -316,7 +389,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m.isStandardPipe();
+		return m.isStandardPipe() || m == MachineRegistry.FUELLINE;
 	}
 
 	@Override
