@@ -154,12 +154,14 @@ public class GuiReactorBook extends GuiHandbook {
 			case 6:
 				return ReactorBook.BREEDERDESC.getScreen();
 			case 7:
-				return ReactorBook.FUSIONDESC.getScreen();
+				return ReactorBook.THORIUMDESC.getScreen();
 			case 8:
-				return ReactorBook.ACCDESC.getScreen();
+				return ReactorBook.FUSIONDESC.getScreen();
 			case 9:
-				return ReactorBook.TOOLDESC.getScreen();
+				return ReactorBook.ACCDESC.getScreen();
 			case 10:
+				return ReactorBook.TOOLDESC.getScreen();
+			case 11:
 				return ReactorBook.RESOURCEDESC.getScreen();
 		}
 		return 0;

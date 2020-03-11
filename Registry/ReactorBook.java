@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,6 +39,7 @@ public enum ReactorBook implements HandbookEntry {
 	HTGRS("HTGR", ReactorTiles.PEBBLEBED.getCraftedProduct()),
 	FISSION("Fission", ReactorTiles.FUEL.getCraftedProduct()),
 	BREEDER("Breeder", ReactorTiles.BREEDER.getCraftedProduct()),
+	THORIUMSEC("Thorium", ReactorTiles.THORIUM.getCraftedProduct()),
 	FUSION("Fusion", ReactorTiles.MAGNET.getCraftedProduct()),
 	ACC("Accessory", ReactorTiles.MAGNETPIPE.getCraftedProduct()),
 	TOOLS("Tools", ReactorItems.GOGGLES.getStackOf()),

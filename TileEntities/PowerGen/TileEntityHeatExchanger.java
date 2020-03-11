@@ -134,7 +134,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		if (!this.sufficientPower())
 			return false;
 
-		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT*e.expansionRatio && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
+		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && output.getRemainingSpace() >= COOL_AMOUNT*e.expansionRatio && this.canCoolFluid(tank.getActualFluid());
 	}
 
 	@Override
