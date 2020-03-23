@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,11 +11,13 @@ package Reika.ReactorCraft.Base;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import Reika.ChromatiCraft.API.Interfaces.Accelerator;
+import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI;
+import Reika.ChromatiCraft.API.CrystalElementAccessor;
+import Reika.ChromatiCraft.API.CrystalElementAccessor.CrystalElementProxy;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
@@ -45,14 +47,14 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	public abstract boolean isValidIsotope(Isotopes i);
 
 	protected final int getAccelerationFactor(World world, int x, int y, int z) {
-		int mult = 1;
-		for (int i = 0; i < 6; i++) {
-			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
-			if (te instanceof Accelerator) {
-				mult *= ReikaMathLibrary.logbase2(((Accelerator)te).getAccelerationFactor());
-			}
+		if (!ModList.CHROMATICRAFT.isLoaded()) {
+			return 1;
 		}
-		return mult;
+		CrystalElementProxy e = CrystalElementAccessor.getByEnum("LIGHTBLUE");
+		int tier = AdjacencyUpgradeAPI.getAdjacentUpgradeTier(world, x, y, z, e);
+		if (tier <= 0)
+			return 1;
+		return ReikaMathLibrary.logbase2((long)AdjacencyUpgradeAPI.getFactor(e, tier));
 	}
 
 	protected final void decayWaste() {

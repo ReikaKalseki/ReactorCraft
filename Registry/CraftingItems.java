@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -73,6 +73,20 @@ public enum CraftingItems {
 
 	public void addShapelessOreRecipe(Object... o) {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(this.getItem(), o));
+	}
+
+	public boolean isGating() {
+		switch(this) {
+			case WIRE:
+			case COOLANT:
+			case UDUST:
+			case FABRIC:
+			case HYSTERESIS:
+			case HYSTERESISRING:
+				return false;
+			default:
+				return true;
+		}
 	}
 
 }
