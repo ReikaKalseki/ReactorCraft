@@ -19,6 +19,7 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorFuel;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityFuelRod extends TileEntityNuclearCore {
@@ -108,5 +109,10 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq.isWater();
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.FISSION;
 	}
 }

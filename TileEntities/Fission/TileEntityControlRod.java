@@ -21,6 +21,7 @@ import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityControlRod extends TileEntityReactorBase implements LinkableReactorCore {
@@ -191,6 +192,11 @@ public class TileEntityControlRod extends TileEntityReactorBase implements Linka
 				((TileEntityCPU)te).removeTemperatureCheck(this);
 			}
 		}
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.FISSION;
 	}
 
 	private static enum Motions {

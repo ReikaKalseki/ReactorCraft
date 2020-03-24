@@ -417,4 +417,9 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 		wasteTank.writeToNBT(NBT);
 	}
 
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.THORIUM;
+	}
+
 }
