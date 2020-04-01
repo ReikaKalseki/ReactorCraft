@@ -99,7 +99,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			}
 
 			if (id instanceof NeutronBlock) {
-				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
+				if (((NeutronBlock)id).onNeutron(this, world, x, y, z))
+					return true;
 			}
 			else if (id instanceof NeutronShield) {
 				NeutronShield ns = (NeutronShield)id;
@@ -111,8 +112,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					if (ReikaRandomHelper.doWithChance(c2)) {
 						this.spawnRadiationChance(world, x, y, z);
 					}
+					return true;
 				}
-				return flag;
 			}
 
 			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
@@ -121,8 +122,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			}
 
 			RadiationShield rs = RadiationShield.getFrom(id, meta);
-			if (rs != null)
-				return ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance);
+			if (rs != null && ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance))
+				return true;
 
 			if (ReikaRandomHelper.doWithChance(speed.getIrradiatedAbsorptionChance())) {
 				boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 255-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
@@ -130,8 +131,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					this.spawnRadiationChance(world, x, y, z);
 					if (ReikaRandomHelper.doWithChance(20))
 						RadiationEffects.instance.transformBlock(world, x, y, z, RadiationIntensity.MODERATE);
+					return true;
 				}
-				return flag;
 			}
 			return false;
 		}
