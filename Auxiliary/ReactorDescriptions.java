@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,10 +90,16 @@ public final class ReactorDescriptions {
 		return "Resources/";
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
-		Object o = ReactorCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml");
-		return o != null;
+		try (InputStream o = ReactorCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml")) {
+			return o != null;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static String getTOC() {
