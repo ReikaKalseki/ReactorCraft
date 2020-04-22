@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Base.TileEntityIntermediateBoiler;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
@@ -66,6 +67,11 @@ public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 4, true);
 		for (int i = 0; i < 4; i++)
 			ReikaItemHelper.dropItem(world, x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), ItemStacks.scrap);
+	}
+
+	@Override
+	protected ReactorType getDefaultReactorType() {
+		return ReactorType.HTGR;
 	}
 
 }

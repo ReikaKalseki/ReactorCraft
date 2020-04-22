@@ -21,6 +21,7 @@ import Reika.ReactorCraft.Base.TileEntityIntermediateBoiler;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
@@ -78,6 +79,11 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		NeutronType type = e.getType();
 		return !tank.isEmpty() && ReikaRandomHelper.doWithChance(type.getSodiumBoilerAbsorptionChance());
+	}
+
+	@Override
+	protected ReactorType getDefaultReactorType() {
+		return ReactorType.BREEDER;
 	}
 
 }

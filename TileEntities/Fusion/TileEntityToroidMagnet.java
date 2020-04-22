@@ -590,9 +590,11 @@ ChunkLoadingTile, NeutronTile, NonIFluidTank {
 	}
 
 	@Override
-	public int addFluid(Fluid fluid, int amount, boolean simulate) {
+	public int addFluid(Fluid fluid, int amount, boolean doFill) {
+		if (fluid != RotaryCraft.nitrogenFluid)
+			return 0;
 		int add = tank.canTakeIn(fluid, 1) ? Math.min(tank.getRemainingSpace(), amount) : 0;
-		if (!simulate && add > 0) {
+		if (doFill && add > 0) {
 			tank.addLiquid(add, fluid);
 		}
 		return add;

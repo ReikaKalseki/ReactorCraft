@@ -21,6 +21,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -32,6 +33,7 @@ import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TypedReactorCoreTE;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
@@ -184,6 +186,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					if (tr instanceof TileEntityNuclearCore)
 						flag = true;
 					if (flag) {
+						if (this instanceof TileEntityReactorBoiler && tr instanceof TypedReactorCoreTE) {
+							((TileEntityReactorBoiler)this).setReactorType(((TypedReactorCoreTE)tr).getReactorType());
+						}
 						int T = tr.getTemperature();
 						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
 						float f = te.getHeatConductionThroughput(this.getMachine());
@@ -223,11 +228,12 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	/** For transferring heat TO that reactor block. */
-	protected float getHeatConductionEfficiency(ReactorTiles other) {
-		if (other == ReactorTiles.CONTROL || other == ReactorTiles.CPU)
+	protected float getHeatConductionEfficiency(TileEntityReactorBase other) {
+		ReactorTiles r0 = other.getMachine();
+		if (r0 == ReactorTiles.CONTROL || r0 == ReactorTiles.CPU)
 			return this.getControlCPUHeatEfficiency();
 		ReactorType r1 = this.getMachine().getReactorType();
-		ReactorType r2 = other.getReactorType();
+		ReactorType r2 = r0.getReactorType();
 		if (r1 == r2)
 			return 1;
 		if (r1 == null || r2 == null) //one tile is not even a reactor
@@ -294,6 +300,13 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		if (this instanceof TileEntitySteamLine) {
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;
 			String s = String.format("%s contains %d m^3 of steam.", this.getTEName(), sl.getSteam());
+			li.add(s);
+			Proportionality<ReactorType> types = sl.getSourceReactorType();
+			s = "Reactor source types: ";
+			for (ReactorType r : types.getElements()) {
+				double frac = types.getFraction(r);
+				s += r+": "+frac*100+"%%";
+			}
 			li.add(s);
 		}
 		if (this instanceof TileEntityHeatPipe) {

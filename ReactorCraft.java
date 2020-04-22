@@ -91,6 +91,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
+import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
@@ -434,6 +435,8 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		LuaMethod.registerMethods("Reika.ReactorCraft.Auxiliary.Lua");
+
+		EntityNeutron.initTransparencyBlocks();
 
 		proxy.loadDonatorRender();
 

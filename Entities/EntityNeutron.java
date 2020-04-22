@@ -24,6 +24,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Instantiable.BasicTeleporter;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -40,6 +41,7 @@ import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 
@@ -47,6 +49,14 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 
 	private NeutronType type;
 	private NeutronSpeed speed;
+
+	private static Block botaniaPlatform;
+	private static Block ttPlatform;
+
+	public static void initTransparencyBlocks() {
+		botaniaPlatform = ModList.BOTANIA.isLoaded() ? GameRegistry.findBlock(ModList.BOTANIA.modLabel, "platform") : null;
+		ttPlatform = ModList.THAUMICTINKER.isLoaded() ? GameRegistry.findBlock(ModList.THAUMICTINKER.modLabel, "platform") : null;
+	}
 
 	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
 		super(world, x, y, z, f);
@@ -76,7 +86,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (id != Blocks.air) {
+		if (!this.isNeutronTransparent(id)) {
 			if (id.hasTileEntity(meta)) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof NeutronTile) {
@@ -138,6 +148,10 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		}
 
 		return rand.nextInt(1000) == 0;
+	}
+
+	private boolean isNeutronTransparent(Block id) {
+		return id == Blocks.air || id == botaniaPlatform || id == ttPlatform;
 	}
 
 	private void spawnRadiationChance(World world, int x, int y, int z) {
