@@ -25,9 +25,9 @@ import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.Auxiliary.ReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
-import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HeatConduction;
@@ -136,13 +136,9 @@ public class TileEntityHeatPipe extends TileEntityLine {
 					heatEnergy -= diff;
 					if (diff < 0) {
 						ReactorType type = null;
-						if (te instanceof TileEntityNuclearBoiler) {
-							TileEntityNuclearBoiler tb = (TileEntityNuclearBoiler)te;
+						if (te instanceof ReactorTyped) {
+							ReactorTyped tb = (ReactorTyped)te;
 							type = tb.getReactorType();
-						}
-						else if (te instanceof TileEntityReactorBase) {
-							TileEntityReactorBase tr = (TileEntityReactorBase)te;
-							type = tr.getMachine().getReactorType();
 						}
 						if (type != null)
 							reactorTypes.addValue(type, diff);

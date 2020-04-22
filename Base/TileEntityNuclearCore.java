@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
@@ -43,6 +44,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
 
@@ -295,24 +297,19 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
+		NeutronType n = this.getNeutronType();
+		if (n == null) {
+			ReactorCraft.logger.logError("Reactor core "+this+" has no neutron type and thus a null or invalid reactor type, but is still spawning neutrons!");
+			return;
+		}
 		for (int i = 0; i < 3; i++) {
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(ReactorOptions.VERTNEUTRONS.getState()), this.getNeutronType()));
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(ReactorOptions.VERTNEUTRONS.getState()), n));
 		}
 	}
 
 	protected final NeutronType getNeutronType() {
-		switch(this.getMachine().getReactorType()) {
-			case BREEDER:
-				return NeutronType.BREEDER;
-			case FISSION:
-				return NeutronType.FISSION;
-			case FUSION:
-				return NeutronType.FUSION;
-			case THORIUM:
-				return NeutronType.THORIUM;
-			default:
-				return null;
-		}
+		ReactorType r = this.getReactorType();
+		return r != null ? r.getNeutronType() : null;
 	}
 
 	@Override
@@ -378,7 +375,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 					if (dTemp > 0) {
 						int d = this.getSameCoreHeatConductionFraction();
 						temperature -= dTemp/d;
-						te.temperature += dTemp/d*this.getHeatConductionEfficiency(r);
+						te.temperature += dTemp/d*this.getHeatConductionEfficiency(te);
 					}
 				}
 			}

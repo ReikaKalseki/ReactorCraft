@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
+import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
+
 public enum ReactorType {
 
 	FISSION(),
@@ -59,6 +61,21 @@ public enum ReactorType {
 			default:
 				return 0.5F;
 
+		}
+	}
+
+	public NeutronType getNeutronType() {
+		switch(this) {
+			case BREEDER:
+				return NeutronType.BREEDER;
+			case FISSION:
+				return NeutronType.FISSION;
+			case FUSION:
+				return NeutronType.FUSION;
+			case THORIUM:
+				return NeutronType.THORIUM;
+			default:
+				return null;
 		}
 	}
 }

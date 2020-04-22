@@ -377,7 +377,7 @@ public enum ReactorTiles implements TileEnum {
 	public boolean isPipe() {
 		return this == GASPIPE || this == MAGNETPIPE;
 	}
-
+	/*
 	public ReactorType getReactorType() {
 		switch (this) {
 			case ABSORBER:
@@ -408,7 +408,7 @@ public enum ReactorTiles implements TileEnum {
 			default:
 				return null;
 		}
-	}
+	}*/
 
 	public boolean isTurbine() {
 		return TileEntityTurbineCore.class.isAssignableFrom(teClass);

@@ -32,7 +32,9 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
+import Reika.ReactorCraft.Auxiliary.ReactorTyped;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Auxiliary.TypedReactorCoreTE;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -191,15 +193,15 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 						}
 						int T = tr.getTemperature();
 						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
-						float f = te.getHeatConductionThroughput(this.getMachine());
+						float f = te.getHeatThroughput(this);
 						//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+f);
 						dT *= f;
 						if (dT > 0) {
-							int d = this.getHeatConductionFraction(te.getMachine());
+							int d = this.getHeatFraction(te);
 							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+d);
 							int newT = T-dT/d;
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
-							float e = te.getHeatConductionEfficiency(this.getMachine());
+							float e = te.getHeatEfficiency(this);
 							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+e);
 							temperature += dT/d*e;
 							tr.setTemperature(newT);
@@ -217,28 +219,40 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 		}
 	}
 
+	private int getHeatFraction(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionFraction((TemperaturedReactorTyped)other) : 4;
+	}
+
+	private float getHeatThroughput(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionThroughput((TemperaturedReactorTyped)other) : 1;
+	}
+
+	private float getHeatEfficiency(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionEfficiency((TemperaturedReactorTyped)other) : 0;
+	}
+
 	/** For transferring heat FROM that reactor block. */
-	protected int getHeatConductionFraction(ReactorTiles other) {
+	protected int getHeatConductionFraction(TemperaturedReactorTyped other) {
 		return 4;
 	}
 
 	/** For transferring heat TO that reactor block. */
-	protected float getHeatConductionThroughput(ReactorTiles other) {
+	protected float getHeatConductionThroughput(TemperaturedReactorTyped other) {
 		return 1;
 	}
 
 	/** For transferring heat TO that reactor block. */
-	protected float getHeatConductionEfficiency(TileEntityReactorBase other) {
+	protected float getHeatConductionEfficiency(TemperaturedReactorTyped other) {
 		ReactorTiles r0 = other.getMachine();
 		if (r0 == ReactorTiles.CONTROL || r0 == ReactorTiles.CPU)
 			return this.getControlCPUHeatEfficiency();
-		ReactorType r1 = this.getMachine().getReactorType();
-		ReactorType r2 = r0.getReactorType();
+		ReactorType r1 = this instanceof ReactorTyped ? ((ReactorTyped)this).getReactorType() : null;
+		ReactorType r2 = other.getReactorType();
 		if (r1 == r2)
 			return 1;
 		if (r1 == null || r2 == null) //one tile is not even a reactor
 			return 0;
-		return this.getMachine().getReactorType().getTypeMismatchHeatEfficiency();
+		return r1.getTypeMismatchHeatEfficiency();
 	}
 
 	protected float getControlCPUHeatEfficiency() {
@@ -330,7 +344,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	public boolean allowExternalHeating() {
-		return this.getMachine().getReactorType() != ReactorType.HTGR;
+		if (this instanceof ReactorTyped) {
+			ReactorType r = ((ReactorTyped)this).getReactorType();
+			return r != ReactorType.HTGR && r != ReactorType.FUSION;
+		}
+		return true;
 	}
 
 	public boolean allowHeatExtraction() {

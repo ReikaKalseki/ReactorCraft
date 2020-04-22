@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
@@ -152,7 +153,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	@Override
-	protected float getHeatConductionThroughput(ReactorTiles other) {
+	protected float getHeatConductionThroughput(TemperaturedReactorTyped other) {
 		//if (this.getRestingTemperature(worldObj, xCoord, yCoord, zCoord) > 100) {
 		if (other.getReactorType() != ReactorType.THORIUM)
 			return 0.25F;
@@ -165,14 +166,14 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	@Override
-	protected int getHeatConductionFraction(ReactorTiles other) {
+	protected int getHeatConductionFraction(TemperaturedReactorTyped other) {
 		return other.getReactorType() == ReactorType.FISSION ? 2 : super.getHeatConductionFraction(other);
 	}
 
 	@Override
-	protected float getHeatConductionEfficiency(ReactorTiles other) {
+	protected float getHeatConductionEfficiency(TemperaturedReactorTyped other) {
 		boolean rest = temperature-this.getRestingTemperature(worldObj, xCoord, yCoord, zCoord) < 50;
-		switch(other) {
+		switch(other.getMachine()) {
 			case BOILER:
 				return rest ? 0.125F : 0.75F;
 			case FUEL:
