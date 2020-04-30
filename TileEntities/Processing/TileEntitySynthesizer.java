@@ -261,12 +261,12 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		return this.canDrain(from, null) ? tank.drain(maxDrain, doDrain) : null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("rc ammonia"));
+		return true;//fluid.equals(FluidRegistry.getFluid("rc ammonia"));
 	}
 
 	@Override
