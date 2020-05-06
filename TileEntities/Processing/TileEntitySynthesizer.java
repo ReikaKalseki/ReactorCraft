@@ -28,8 +28,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
-import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -64,7 +63,7 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	private StepTimer tempTimer = new StepTimer(20);
 
 	public static enum FluidSynthesis {
-		AMMONIA(FluidRegistry.WATER, ReactorCraft.NH3, WATER_PER_AMMONIA, AMMONIA_PER_STEP, AMMONIATEMP, 50, 0, constructItemMatch("dustQuicklime", ReactorStacks.lime), constructItemMatch("dustAmmonium", ReactorStacks.ammonium)),
+		AMMONIA(FluidRegistry.WATER, ReactorCraft.NH3, WATER_PER_AMMONIA, AMMONIA_PER_STEP, AMMONIATEMP, 50, 0, constructItemMatch("dustQuicklime", ReactorStacks.lime, 1), constructItemMatch("dustAmmonium", ReactorStacks.ammonium, 1)),
 		HOTLIFBE(ReactorCraft.LIFBe_fuel, ReactorCraft.LIFBe_fuel_preheat, 50, 50, 350, 100, 5);
 
 		public final Fluid input;
@@ -74,18 +73,18 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		public final int minTemp;
 		public final int baseDuration;
 		private final int temperatureSpeedCurve;
-		private final ItemMatch itemA;
-		private final ItemMatch itemB;
+		private final FlexibleIngredient itemA;
+		private final FlexibleIngredient itemB;
 
 		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc) {
 			this(in, out, amtin, amtout, temp, time, tc, null);
 		}
 
-		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, ItemMatch is) {
+		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, FlexibleIngredient is) {
 			this(in, out, amtin, amtout, temp, time, tc, is, null);
 		}
 
-		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, ItemMatch a, ItemMatch b) {
+		private FluidSynthesis(Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int tc, FlexibleIngredient a, FlexibleIngredient b) {
 			input = in;
 			output = out;
 			fluidConsumed = amtin;
@@ -102,31 +101,30 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 		@SideOnly(Side.CLIENT)
 		public ItemStack getAForDisplay() {
-			return itemA != null ? itemA.getCycledItem() : null;
+			return itemA != null ? itemA.getItemForDisplay() : null;
 		}
 
 		@SideOnly(Side.CLIENT)
 		public ItemStack getBForDisplay() {
-			return itemB != null ? itemB.getCycledItem() : null;
+			return itemB != null ? itemB.getItemForDisplay() : null;
 		}
 
 		public boolean usesItem(ItemStack item) {
 			return (itemA != null && itemA.match(item)) || (itemB != null && itemB.match(item));
 		}
 
-		private static ItemMatch constructItemMatch(ItemStack is) {
-			return new ItemMatch(is);
+		private static FlexibleIngredient constructItemMatch(ItemStack is) {
+			return new FlexibleIngredient(is, 100, is.stackSize);
 		}
 
-		private static ItemMatch constructItemMatch(String ore) {
-			return constructItemMatch(ore, null);
+		private static FlexibleIngredient constructItemMatch(String ore, int amt) {
+			return constructItemMatch(ore, null, amt);
 		}
 
-		private static ItemMatch constructItemMatch(String ore, ItemStack is) {
-			ItemMatch ret = new ItemMatch(ore);
-			if (is != null) {
-				ret.addItem(new KeyedItemStack(is).setIgnoreMetadata(false).setIgnoreNBT(true).setSized(false).setSimpleHash(true));
-			}
+		private static FlexibleIngredient constructItemMatch(String ore, ItemStack is, int amt) {
+			FlexibleIngredient ret = new FlexibleIngredient(ore, 100, amt);
+			if (is != null)
+				ret.addItem(is);
 			return ret;
 		}
 
@@ -135,8 +133,8 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 		}
 	}
 
-	public static void addRecipe(String name, Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int curve, ItemMatch a, ItemMatch b) {
-		Class[] types = new Class[]{Fluid.class, Fluid.class, int.class, int.class, int.class, int.class, int.class, ItemMatch.class, ItemMatch.class};
+	public static void addRecipe(String name, Fluid in, Fluid out, int amtin, int amtout, int temp, int time, int curve, FlexibleIngredient a, FlexibleIngredient b) {
+		Class[] types = new Class[]{Fluid.class, Fluid.class, int.class, int.class, int.class, int.class, int.class, FlexibleIngredient.class, FlexibleIngredient.class};
 		Object[] args = new Object[]{in, out, amtin, amtout, temp, time, curve, a, b};
 		FluidSynthesis c = EnumHelper.addEnum(FluidSynthesis.class, name.toUpperCase(), types, args);
 	}

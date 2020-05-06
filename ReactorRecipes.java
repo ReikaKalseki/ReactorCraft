@@ -24,6 +24,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -409,14 +410,8 @@ public class ReactorRecipes {
 		int amtin = fluidIn.getInt("amount");
 		Fluid out = FluidRegistry.getFluid(fluidOut.getString("type"));
 		int amtout = fluidOut.getInt("amount");
-		ItemMatch item1 = null;
-		ItemMatch item2 = null;
-		if (itemIn1 != null) {
-			item1 = new ItemMatch(crl.parseItemCollection(itemIn1.getChild("items").getDataValues(), false));
-		}
-		if (itemIn2 != null) {
-			item2 = new ItemMatch(crl.parseItemCollection(itemIn2.getChild("items").getDataValues(), false));
-		}
+		FlexibleIngredient item1 = FlexibleIngredient.parseLua(crl, itemIn1, false);
+		FlexibleIngredient item2 = FlexibleIngredient.parseLua(crl, itemIn2, false);
 		TileEntitySynthesizer.addRecipe(n, in, out, amtin, amtout, lb.getInt("min_temperature"), lb.getInt("base_time"), lb.getInt("temp_curve"), item1, item2);
 		return true;
 	}
