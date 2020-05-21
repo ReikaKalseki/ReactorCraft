@@ -59,6 +59,10 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	private final BasicPowerHandler powerHandler = new BasicPowerHandler();
 	public int split; //timer
 
+	public TileEntityCentrifuge() {
+		ReikaJavaLibrary.initClass(Centrifuging.class);
+	}
+
 	@Override
 	public int getIndex() {
 		return ReactorTiles.CENTRIFUGE.ordinal();
@@ -373,6 +377,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public static Centrifuging getRecipe(Fluid f) {
+		ReikaJavaLibrary.initClass(Centrifuging.class);
 		return recipes.get(f);
 	}
 

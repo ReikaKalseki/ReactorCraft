@@ -28,6 +28,7 @@ import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
@@ -94,7 +95,7 @@ public class ReactorRecipes {
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
-		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
+		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch("dustThorium"));
 
 		if (ModList.IC2.isLoaded() && !IC2Handler.getInstance().isIC2Classic())
 			TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
@@ -367,13 +368,18 @@ public class ReactorRecipes {
 		for (LuaBlock lb : crl.getEntries()) {
 			Exception e = null;
 			boolean flag = false;
+			String n = lb.getString("type");
 			try {
+				if (n == null)
+					throw new IllegalArgumentException("Custom recipes require a specified name!");
+				if (!ReikaStringParser.isValidVariableName(n))
+					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
 				switch(id) {
 					case "electrolyzer":
-						flag = addCustomElectrolyzerRecipe(lb, crl);
+						flag = addCustomElectrolyzerRecipe(n, lb, crl);
 						break;
 					case "synthesizer":
-						flag = addCustomSynthesizerRecipe(lb, crl);
+						flag = addCustomSynthesizerRecipe(n, lb, crl);
 						break;
 				}
 			}
@@ -382,20 +388,17 @@ public class ReactorRecipes {
 				flag = false;
 			}
 			if (flag) {
-				ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+lb.getString("type")+"'");
+				ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+n+"'");
 			}
 			else {
-				ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+lb.getString("type")+"'");
+				ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+n+"'");
 				if (e != null)
 					e.printStackTrace();
 			}
 		}
 	}
 
-	private static boolean addCustomSynthesizerRecipe(LuaBlock lb, CustomRecipeList crl) {
-		String n = lb.getString("type");
-		if (n == null)
-			throw new IllegalArgumentException("Custom recipes require a specified name!");
+	private static boolean addCustomSynthesizerRecipe(String n, LuaBlock lb, CustomRecipeList crl) {
 		LuaBlock fluidIn = lb.getChild("fluid_in");
 		LuaBlock fluidOut = lb.getChild("fluid_out");
 		if (fluidIn == null) {
@@ -416,10 +419,7 @@ public class ReactorRecipes {
 		return true;
 	}
 
-	private static boolean addCustomElectrolyzerRecipe(LuaBlock lb, CustomRecipeList crl) {
-		String n = lb.getString("type");
-		if (n == null)
-			throw new IllegalArgumentException("Custom recipes require a specified name!");
+	private static boolean addCustomElectrolyzerRecipe(String n, LuaBlock lb, CustomRecipeList crl) {
 		LuaBlock fluidIn = lb.getChild("fluid_in");
 		LuaBlock itemIn = lb.getChild("item_in");
 		LuaBlock fluidUp = lb.getChild("fluid_out_up");

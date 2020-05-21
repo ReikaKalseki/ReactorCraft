@@ -63,7 +63,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		if (!world.isRemote) {
 			this.balanceHeat(world, x, y, z);
 
-			if (this.getTicksExisted()%32 == 0) {
+			if (this.getTicksExisted()%32 == 0 && false) {
 				this.ventHeat(world, x, y, z);
 			}
 		}
@@ -128,10 +128,12 @@ public class TileEntityHeatPipe extends TileEntityLine {
 				boolean intake = theirheat > ourheat;
 				boolean valid = intake ? hc.allowHeatExtraction() && ourtemp < theirtemp : hc.allowExternalHeating() && ourtemp > theirtemp;
 				//ReikaJavaLibrary.pConsole(our+" vs "+heat+" > "+valid, Side.SERVER);
+				//ReikaJavaLibrary.pConsole("our "+ourheat+", their "+theirheat+" (Ts = "+theirtemp+", "+ourtemp+")", Side.SERVER, valid && !intake);
 				if (valid) {
 					double diff = ourheat-theirheat; // >0 if applying heat
 					diff /= 4;
-					int put = this.getTemperatureForHeat(theirheat+diff, hc);
+					int put = this.getTemperatureForHeat(diff, hc);
+					//ReikaJavaLibrary.pConsole("Adding "+put+" to "+hc, Side.SERVER, !intake);
 					hc.setTemperature(put+hc.getAmbientTemperature());
 					heatEnergy -= diff;
 					if (diff < 0) {
