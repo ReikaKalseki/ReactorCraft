@@ -28,14 +28,15 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.PebbleBedArrangement;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable, ReactorBlock, BreakAction {
+public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements TemperaturedReactorTyped, Feedable, ReactorBlock, BreakAction {
 
 	protected StepTimer tempTimer = new StepTimer(20);
 
@@ -378,6 +379,11 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("dmg", damage);
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.HTGR;
 	}
 
 }

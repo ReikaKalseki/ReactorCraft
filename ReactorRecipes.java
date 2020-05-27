@@ -58,6 +58,8 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
@@ -153,7 +155,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 5), "SSS", "WPW", "SSS", 'W', CraftingItems.WIRE.getItem(), 'P', CraftingItems.MAGNETIC.getItem(), 'S', CraftingItems.FERROINGOT.getItem());
 
 		id = ReactorBlocks.GENERATORMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "sss", "SsS", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "scs", "SsS", 'c', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE), 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.WIRE.getItem(), 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', CraftingItems.WIRE.getItem(), 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
@@ -164,7 +166,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bPb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel);
 
 		id = ReactorBlocks.FLYWHEELMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sSs", "sss", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sSs", "SCS", "sSs", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock, 'C', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "SSS", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "sss", "sSs", "sss", 's', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
@@ -304,7 +306,7 @@ public class ReactorRecipes {
 		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', CraftingItems.TURBCORE.getItem());
 		ReactorTiles.STEAMLINE.addSizedCrafting(3, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', ItemStacks.pipe);
 		ReactorTiles.FLUIDEXTRACTOR.addCrafting("PpP", "GIG", "PSP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Blocks.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
-		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit16);
+		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 		ReactorTiles.PROCESSOR.addCrafting("POP", "OMO", 'O', CraftingItems.TANK.getItem(), 'M', ItemStacks.mixer, 'P', ItemStacks.pipe);
 		ReactorTiles.WASTECONTAINER.addCrafting("SCS", "CcC", "SCS", 'S', ItemStacks.steelingot, 'C', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'c', Blocks.chest);
 		ReactorTiles.BOILER.addCrafting("SPS", "PrP", "SPS", 'r', MachineRegistry.RESERVOIR.getCraftedProduct(), 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
@@ -322,7 +324,7 @@ public class ReactorRecipes {
 		ReactorTiles.CPU.addCrafting("SCS", "CGC", "SCS", 'S', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', ItemStacks.gearunit);
 		ReactorTiles.MAGNETPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Items.gold_ingot, 'G', BlockRegistry.BLASTGLASS.getStackOf());
 		ReactorTiles.MAGNET.addCrafting("MCM", "CHC", "MCM", 'H', CraftingItems.HYSTERESISRING.getItem(), 'M', CraftingItems.MAGNETCORE.getItem(), 'C', CraftingItems.COOLANT.getItem());
-		ReactorTiles.SOLENOID.addCrafting("SPS", "MCM", "IGI", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'M', CraftingItems.MAGNETIC.getItem(), 'C', CraftingItems.MAGNETCORE.getItem(), 'I', CraftingItems.FERROINGOT.getItem(), 'G', ItemStacks.gearunit16);
+		ReactorTiles.SOLENOID.addCrafting("SPS", "MCM", "IGI", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'M', CraftingItems.MAGNETIC.getItem(), 'C', CraftingItems.MAGNETCORE.getItem(), 'I', CraftingItems.FERROINGOT.getItem(), 'G', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT16));
 		ReactorTiles.HEATER.addCrafting("MPM", "P P", "MPM", 'M', CraftingItems.FERROINGOT.getItem(), 'P', BlockRegistry.BLASTGLASS.getStackOf());
 		ReactorTiles.INJECTOR.addCrafting("PMP", "M M", "PMP", 'P', ReactorTiles.MAGNETPIPE.getCraftedProduct(), 'M', CraftingItems.MAGNETIC.getItem());
 		ReactorTiles.ABSORBER.addCrafting(" P ", "PCP", " P ", 'C', ItemStacks.steelblock, 'P', ReactorItems.DEPLETED.getStackOf());

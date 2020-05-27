@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,13 +22,14 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoiler {
+public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoiler implements TemperaturedReactorTyped {
 
 	protected StepTimer timer = new StepTimer(20);
 
