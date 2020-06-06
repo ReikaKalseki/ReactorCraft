@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTIO;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -151,6 +153,22 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		NBT.setInteger("energy", steam);
 
 		fluid.saveToNBT(NBT);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		source.readFromNBT(NBT.getCompoundTag("sources"), (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		source.writeToNBT(tag, (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+		NBT.setTag("sources", tag);
 	}
 
 	public WorkingFluid getWorkingFluid() {
