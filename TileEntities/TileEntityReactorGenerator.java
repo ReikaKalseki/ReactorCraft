@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -34,6 +34,7 @@ import Reika.ElectriCraft.Network.WireNetwork;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
@@ -105,6 +106,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 		if (power > 0) {
 			ForgeDirection write = this.getFacing().getOpposite();
 			TileEntity tile = this.getAdjacentTileEntity(write);
+			ReactorSounds rs = null;
 			switch(mode) {
 				case RF:
 					if (tile instanceof IEnergyReceiver) {
@@ -119,6 +121,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
 						//}
 					}
+					rs = ReactorSounds.GENERATOR_RF;
 					break;
 				case EU:
 					if (tile instanceof IEnergySink) {
@@ -127,9 +130,14 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 							double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
 						}
 					}
+					rs = ReactorSounds.GENERATOR_EU;
 					break;
 				case ELC: //handled by ELC logic
+					rs = ReactorSounds.GENERATOR_ELC;
 					break;
+			}
+			if (rs != null) {
+				rs.playSoundAtBlock(this, 2, 1);
 			}
 		}
 	}

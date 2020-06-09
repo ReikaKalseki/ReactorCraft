@@ -31,6 +31,9 @@ public enum ReactorSounds implements SoundEnum {
 	TURBINE("#turbine-vol"),
 	FUSION("fusion"),
 	CONTROL("control"),
+	GENERATOR_RF("#gen_rf"),
+	GENERATOR_EU("#gen_eu"),
+	GENERATOR_ELC("#gen_elc"),
 	SCRAM("scram");
 
 	public static final ReactorSounds[] soundList = values();
@@ -104,6 +107,10 @@ public enum ReactorSounds implements SoundEnum {
 
 	public void playSoundAtBlock(TileEntity te) {
 		this.playSoundAtBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	public void playSoundAtBlock(TileEntity te, float v, float p) {
+		this.playSoundAtBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord, v, p);
 	}
 
 	public void playSoundAtBlock(WorldLocation loc) {
