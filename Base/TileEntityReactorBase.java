@@ -188,9 +188,6 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					if (tr instanceof TileEntityNuclearCore)
 						flag = true;
 					if (flag) {
-						if (this instanceof TileEntityReactorBoiler && tr instanceof TypedReactorCoreTE) {
-							((TileEntityReactorBoiler)this).setReactorType(((TypedReactorCoreTE)tr).getReactorType());
-						}
 						int T = tr.getTemperature();
 						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
 						float f = te.getHeatThroughput(this);
@@ -203,8 +200,12 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
 							float e = te.getHeatEfficiency(this);
 							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+e);
-							temperature += dT/d*e;
+							double add = dT/d*e;
+							temperature += add;
 							tr.setTemperature(newT);
+							if (this instanceof TileEntityReactorBoiler && !(tr instanceof TileEntityReactorBoiler) && tr instanceof TypedReactorCoreTE) {
+								((TileEntityReactorBoiler)this).setReactorType(((TypedReactorCoreTE)tr).getReactorType(), add);
+							}
 						}
 					}
 				}

@@ -78,11 +78,14 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		if (r == ReactorTiles.BOILER) {
 			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y-1, z);
-			if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
+			if (te.getTileEntityAge() > 5 && this.canTakeInWorkingFluid(te.getWorkingFluid())) {
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
 				steam += s;
-				source.addValue(te.getReactorType(), s);
+				for (ReactorType rt : te.getReactorTypeSet()) {
+					double f = te.getReactorTypeFraction(rt);
+					source.addValue(rt, s*f);
+				}
 			}
 		}
 	}

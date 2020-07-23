@@ -101,12 +101,12 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 
 		@SideOnly(Side.CLIENT)
 		public ItemStack getAForDisplay() {
-			return itemA != null ? itemA.getItemForDisplay() : null;
+			return itemA != null ? itemA.getItemForDisplay(true) : null;
 		}
 
 		@SideOnly(Side.CLIENT)
 		public ItemStack getBForDisplay() {
-			return itemB != null ? itemB.getItemForDisplay() : null;
+			return itemB != null ? itemB.getItemForDisplay(true) : null;
 		}
 
 		public boolean usesItem(ItemStack item) {

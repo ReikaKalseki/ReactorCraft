@@ -98,7 +98,8 @@ public class IronFinderOverlay {
 						phi += 360;
 					//ReikaJavaLibrary.pConsole(phi, c.zCoord == 1184 && c.xCoord == -1047);
 					//ReikaJavaLibrary.pConsole(theta, c.zCoord == 1184 && c.xCoord == -1047);
-					int cy = h+(int)(h*2*Math.sin(Math.toRadians(theta)));
+					double dfv = Minecraft.getMinecraft().gameSettings.fovSetting/70F;
+					int cy = h+(int)(h*2*Math.sin(Math.toRadians(theta)))+(int)(dfv*20);
 					if (phi >= 180 && 360-fov > phi) {
 						int cx = 10;
 						v5.startDrawing(GL11.GL_TRIANGLE_STRIP);
@@ -177,7 +178,8 @@ public class IronFinderOverlay {
 						v5.startDrawingQuads();
 						v5.setColorRGBA_I(0xffffff, 32);
 						v5.setBrightness(240);
-						int w = evt.resolution.getScaledWidth()/2;
+						double w = evt.resolution.getScaledWidth()/2D;
+						w *= dfv;
 						int cx = (int)(w+1*w*Math.sin(Math.toRadians(phi)));
 						//ReikaJavaLibrary.pConsole(cx, c.zCoord == 1184 && c.xCoord == -1047);
 						v5.addVertex(cx-8, cy+8, 0);

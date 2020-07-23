@@ -148,9 +148,7 @@ public class TileEntityHeatPipe extends TileEntityLine {
 					else if (diff > 0) {
 						if (te instanceof TileEntityNuclearBoiler) {
 							TileEntityNuclearBoiler tb = (TileEntityNuclearBoiler)te;
-							ReactorType type = reactorTypes.getLargestCategory();
-							if (type != null)
-								tb.setReactorType(type);
+							tb.setReactorTypes(reactorTypes);
 						}
 					}
 					/*

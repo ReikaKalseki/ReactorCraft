@@ -90,8 +90,9 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 				int dT = temperature - te.getTemperature();
 				if (dT > 0) {
 					temperature -= dT/4;
-					te.setTemperature(te.getTemperature()+dT/4);
-					te.setReactorType(e != null ? e.type : null);
+					int add = dT/4;
+					te.setTemperature(te.getTemperature()+add);
+					te.setReactorType(e != null ? e.type : ReactorType.NULL, add);
 				}
 			}
 		}
