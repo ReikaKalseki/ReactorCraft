@@ -358,14 +358,13 @@ public class ReactorRecipes {
 	}
 
 	public static void loadCustomRecipeFiles() {
+		CustomRecipeList.addFieldLookup("reactorcraft_stack", ReactorStacks.class);
 		loadRecipeFile("electrolyzer");
 		loadRecipeFile("synthesizer");
 	}
 
 	private static void loadRecipeFile(String id) {
 		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, id);
-		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
-		crl.addFieldLookup("reactorcraft_stack", ReactorStacks.class);
 		crl.load();
 		for (LuaBlock lb : crl.getEntries()) {
 			Exception e = null;
