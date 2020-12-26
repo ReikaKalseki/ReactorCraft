@@ -31,7 +31,7 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements TypedReactorCoreTE {
 
 	protected int steam;
-	protected Proportionality<ReactorType> type;
+	protected Proportionality<ReactorType> type = new Proportionality();
 
 	protected TileEntityNuclearBoiler() {
 		this.setReactorType(this.getDefaultReactorType(), 1);

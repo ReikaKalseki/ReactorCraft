@@ -318,7 +318,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		if (r == ReactorTiles.STEAMLINE) {
 			TileEntitySteamLine te = (TileEntitySteamLine)this.getAdjacentTileEntity(dir);
 			int s = te.getSteam();
-			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
+			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam()+" from "+s, Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
 				Proportionality<ReactorType> source = te.getSourceReactorType();
 				s = source != null ? this.getEffectiveUsable(s, source) : 0;
@@ -330,8 +330,10 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 						fluid = te.getWorkingFluid();
 						te.removeSteam(rm2);
 						dripBuffer += rm2*1000;
+						//ReikaJavaLibrary.pConsole("Took in "+rm2+" of "+s+" available", Side.SERVER);
 					}
-					flag = s > rm+32 && steam >= this.getMaxSteam()/4;
+					flag = s > rm+32 && steam >= this.getMaxSteam()/15;
+					//ReikaJavaLibrary.pConsole("Has "+steam+"/"+this.getMaxSteam()+", s/rm = "+s+"/"+rm, Side.SERVER);
 				}
 			}
 		}
