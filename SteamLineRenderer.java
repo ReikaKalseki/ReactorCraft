@@ -20,7 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Rendering.WorldPipingRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;

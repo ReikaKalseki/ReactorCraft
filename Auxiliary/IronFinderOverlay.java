@@ -25,9 +25,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MimicryHandler;
 import Reika.ReactorCraft.API.MagneticOreOverride;
 import Reika.ReactorCraft.Items.ItemIronFinder;

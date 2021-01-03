@@ -15,9 +15,9 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 
 public enum FluoriteTypes {
 

@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronSpeed;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 

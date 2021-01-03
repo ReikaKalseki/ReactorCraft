@@ -28,8 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;

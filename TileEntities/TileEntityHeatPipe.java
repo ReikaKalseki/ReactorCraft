@@ -21,9 +21,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.ReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityLine;

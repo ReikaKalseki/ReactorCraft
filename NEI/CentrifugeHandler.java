@@ -22,10 +22,10 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;

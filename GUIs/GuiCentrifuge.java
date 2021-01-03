@@ -13,9 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerCentrifuge;

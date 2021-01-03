@@ -26,7 +26,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 

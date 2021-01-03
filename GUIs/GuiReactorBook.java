@@ -28,10 +28,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;

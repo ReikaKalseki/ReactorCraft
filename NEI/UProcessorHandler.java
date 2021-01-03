@@ -18,10 +18,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiProcessor;
