@@ -36,8 +36,6 @@ public enum ReactorSounds implements SoundEnum {
 	GENERATOR_ELC("#gen_elc"),
 	SCRAM("scram");
 
-	public static final ReactorSounds[] soundList = values();
-
 	public static final String PREFIX = "Reika/ReactorCraft/";
 	public static final String SOUND_FOLDER = "Sounds/";
 	private static final String SOUND_PREFIX = "Reika.ReactorCraft.Sounds.";
@@ -88,13 +86,13 @@ public enum ReactorSounds implements SoundEnum {
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
+		ReikaSoundHelper.playSound(this, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
 	}
 
 	public void playSound(World world, double x, double y, double z, float vol, float pitch, boolean attenuate) {
 		if (world.isRemote)
 			return;
-		ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, attenuate);
+		ReikaSoundHelper.playSound(this, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, attenuate);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
@@ -121,7 +119,7 @@ public enum ReactorSounds implements SoundEnum {
 		if (world.isRemote)
 			return;
 		//ReikaSoundHelper.playSound(this, ReactorCraft.packetChannel, te.worldObj, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, false);
-		ReikaPacketHelper.sendSoundPacket(ReactorCraft.packetChannel, this, world, x, y, z, vol, pitch, false, broadcast);
+		ReikaPacketHelper.sendSoundPacket(this, world, x, y, z, vol, pitch, false, broadcast);
 	}
 
 	public String getName() {
@@ -134,15 +132,6 @@ public enum ReactorSounds implements SoundEnum {
 
 	public URL getURL() {
 		return ReactorCraft.class.getResource(SOUND_DIR+name+SOUND_EXT);
-	}
-
-	public static ReactorSounds getSoundByName(String name) {
-		for (int i = 0; i < soundList.length; i++) {
-			if (soundList[i].name().equals(name))
-				return soundList[i];
-		}
-		ReactorCraft.logger.logError("\""+name+"\" does not correspond to a registered sound!");
-		return null;
 	}
 
 	@Override

@@ -22,9 +22,7 @@ import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.Registry.ReactorPackets;
-import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 
@@ -57,15 +55,6 @@ public class ReactorPacketCore implements PacketHandler {
 				case FULLSOUND:
 					break;
 				case SOUND:
-					control = inputStream.readInt();
-					ReactorSounds s = ReactorSounds.soundList[control];
-					double sx = inputStream.readDouble();
-					double sy = inputStream.readDouble();
-					double sz = inputStream.readDouble();
-					float v = inputStream.readFloat();
-					float p = inputStream.readFloat();
-					boolean att = inputStream.readBoolean();
-					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p, att);
 					return;
 				case STRING:
 					stringdata = packet.readString();

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,7 +21,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
-import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.ReactorCraft.Auxiliary.DonatorToroidRender;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
@@ -34,7 +33,6 @@ import Reika.ReactorCraft.Entities.RenderNeutron;
 import Reika.ReactorCraft.Entities.RenderPlasma;
 import Reika.ReactorCraft.Entities.RenderRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -44,7 +42,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 public class ClientProxy extends CommonProxy {
 
 	public static final ItemSpriteSheetRenderer[] items = {
-		new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png"),
+			new ItemSpriteSheetRenderer(ReactorCraft.instance, ReactorCraft.class, "Textures/Items/items1.png"),
 	};
 
 	private static final ReactorItemRenderer reactor = new ReactorItemRenderer();
@@ -77,7 +75,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerSounds() {
-		new SoundLoader(ReactorSounds.soundList).register();
+		sounds.register();
 	}
 
 	@Override
