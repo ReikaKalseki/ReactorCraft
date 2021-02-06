@@ -28,6 +28,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -162,6 +163,16 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 			amount = amt;
 			input = FluidRegistry.getFluid(in);
 			output = FluidRegistry.getFluid(out);
+		}
+
+		private void onPerform(TileEntityTritizer te) {
+			switch(this) {
+				case D20:
+					ReactorAchievements.HEAVYWATER.triggerAchievement(te.getPlacer());
+					break;
+				default:
+					break;
+			}
 		}
 
 		public static Reactions getReactionFrom(Fluid in) {

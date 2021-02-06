@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -161,9 +162,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	}
 
 	private void harvest(Extraction e, World world, int x, int y, int z) {
-		if (e instanceof HeavyWaterExtraction)
-			ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
 		tank.fill(new FluidStack(e.output, e.getExtractedAmount(world, x, y, z)), true);
+		e.onHarvest(world, x, y, z, this.getPlacer());
 	}
 
 	@Override
@@ -288,6 +288,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 			output = f;
 		}
 
+		protected void onHarvest(World world, int x, int y, int z, EntityPlayer placer) {
+
+		}
+
 		protected abstract boolean canPerform(World world, int x, int y, int z);
 
 		protected abstract int getExtractedAmount(World world, int x, int y, int z);
@@ -310,6 +314,11 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 		private boolean isValidWorld(World world) {
 			return ReactorCraft.config.isDimensionValidForHeavyWater(world.provider.dimensionId);
+		}
+
+		@Override
+		protected void onHarvest(World world, int x, int y, int z, EntityPlayer placer) {
+			ReactorAchievements.HEAVYWATER.triggerAchievement(placer);
 		}
 
 		private boolean isOceanFloor(World world, int x, int y, int z) {

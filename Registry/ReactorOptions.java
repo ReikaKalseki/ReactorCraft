@@ -36,7 +36,9 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	DYECRAFT("Allow Fluorite Recoloring", false),
 	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false),
 	VERTNEUTRONS("Fission Neutrons Can Move Vertically", false),
-	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F);
+	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F),
+	RADIOORE("Make Pitchblende Weakly Radioactive", false),
+	;
 
 	private String label;
 	private boolean defaultState;

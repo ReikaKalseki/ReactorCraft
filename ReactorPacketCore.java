@@ -22,6 +22,7 @@ import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Registry.ReactorPackets;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
@@ -164,19 +165,19 @@ public class ReactorPacketCore implements PacketHandler {
 		TileEntity te = world.getTileEntity(x, y, z);
 		try {
 			switch (pack) {
-				case CPU:
-					if (control == ReactorPackets.CPU.getMinValue()) {
-						((TileEntityControlRod)te).toggle(true, true);
-					}
-					else if (control == ReactorPackets.CPU.getMinValue()+1) {
-						TileEntityCPU cpu = (TileEntityCPU)te;
-						cpu.raiseAllRods();
-					}
-					else if (control == ReactorPackets.CPU.getMinValue()+2) {
-						TileEntityCPU cpu = (TileEntityCPU)te;
-						cpu.lowerAllRods();
-					}
+				case CPUTOGGLE:
+					((TileEntityControlRod)te).toggle(true, true);
 					break;
+				case CPURAISE:
+					((TileEntityCPU)te).raiseAllRods();
+					break;
+				case CPULOWER:
+					((TileEntityCPU)te).lowerAllRods();
+					break;
+				case ORERADIATION: {
+					RadiationEffects.instance.doOreIrradiation(world, x, y, z);
+					break;
+				}
 			}
 		}
 		catch (Exception e) {

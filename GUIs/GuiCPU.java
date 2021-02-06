@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -64,8 +64,10 @@ public class GuiCPU extends ReactorGuiBase {
 		PacketTarget pt = PacketTarget.server;
 		switch(button.id) {
 			case 0:
+				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPURAISE.ordinal(), tile, pt);
+				break;
 			case 1:
-				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue()+1+button.id, tile, pt);
+				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPULOWER.ordinal(), tile, pt);
 				break;
 			case 2:
 				if (layout.getMinY() < offsetY)
@@ -123,7 +125,7 @@ public class GuiCPU extends ReactorGuiBase {
 		TileEntityControlRod rod = layout.getControlRodAtRelativePosition(tile.worldObj, a, offsetY, b);
 		//ReikaJavaLibrary.pConsole(a+", "+b+": "+rod);
 		if (rod != null) {
-			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPU.getMinValue(), rod, PacketTarget.server);
+			ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.CPUTOGGLE.ordinal(), rod, PacketTarget.server);
 			Minecraft.getMinecraft().thePlayer.playSound("random.click", 0.5F, 0.9F);
 		}
 	}

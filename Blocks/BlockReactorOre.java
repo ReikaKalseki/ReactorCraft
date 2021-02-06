@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,12 +26,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Base.EnumOreBlock;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.Registry.OreEnum;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
+import Reika.ReactorCraft.Registry.ReactorPackets;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockReactorOre extends EnumOreBlock {
 
@@ -52,8 +59,18 @@ public class BlockReactorOre extends EnumOreBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
-	{
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if (ReactorOptions.RADIOORE.getState()) {
+			ReactorOres ore = ReactorOres.getOre(this, world.getBlockMetadata(x, y, z));
+			if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
+				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.ORERADIATION.ordinal(), x, y, z, PacketTarget.server);
+			}
+		}
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> li = new ArrayList<ItemStack>();
 		//ItemStack is = new ItemStack(ReactorBlocks.ORE.getBlock(), 1, metadata);
 		ReactorOres ore = ReactorOres.getOre(this, metadata);

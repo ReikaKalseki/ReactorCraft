@@ -11,6 +11,7 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Instantiable.Event.CreeperExplodeEvent;
@@ -68,6 +70,8 @@ public class RadiationEffects {
 	private static final Random rand = new Random();
 
 	public static final RadiationEffects instance = new RadiationEffects();
+
+	private final RayTracer tracer = new RayTracer(0, 0, 0, 0, 0, 0);
 
 	private RadiationEffects() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -292,6 +296,21 @@ public class RadiationEffects {
 		PotionEffect pot = new PotionEffect(ReactorCraft.radiation.id, duration, ri.ordinal());
 		pot.setCurativeItems(new ArrayList());
 		return pot;
+	}
+
+	public void doOreIrradiation(World world, int x, int y, int z) {
+		int r = 9;
+		for (EntityPlayer ep : ((List<EntityPlayer>)world.playerEntities)) {
+			double dd = ep.getDistanceSq(x+0.5, y+0.5, z+0.5);
+			if (dd <= r*r) {
+				tracer.setOrigins(x+0.5, y+0.5, z+0.5, ep.posX, ep.posY+ep.height/2, ep.posZ);
+				if (tracer.isClearLineOfSight(world)) {
+					int dur = (int)(200/Math.max(1, Math.sqrt(dd)));
+					PotionEffect e = this.getRadiationEffect(dur, RadiationIntensity.LOWLEVEL);
+					ep.addPotionEffect(e);
+				}
+			}
+		}
 	}
 
 	public static enum RadiationIntensity implements RadiationLevel {
