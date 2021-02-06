@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -82,10 +82,10 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(r, r, r);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
-			if (!RadiationEffects.instance.hasHazmatSuit(e)) {
+			if (!RadiationIntensity.MODERATE.hasSufficientShielding(e)) {
 				double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {
-					RadiationEffects.instance.applyEffects(e, RadiationIntensity.LOWLEVEL);
+					RadiationEffects.instance.applyEffects(e, RadiationIntensity.MODERATE);
 				}
 			}
 		}

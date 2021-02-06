@@ -74,8 +74,12 @@ public class RadiationHandler {
 
 		public String name();
 		public int ordinal();
-		public boolean isShieldable();
+
+		/** Whether this radiation level is even harmful */
 		public boolean causesHarm();
+
+		/** Whether an entity is sufficiently armored to be immune to this radiation level */
+		public boolean hasSufficientShielding(EntityLivingBase e);
 
 	}
 

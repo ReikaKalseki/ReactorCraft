@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -53,6 +54,7 @@ import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridBlock;
@@ -91,7 +93,7 @@ public class RadiationEffects {
 	public boolean applyEffects(EntityLivingBase e, RadiationIntensity ri) {
 		if (ri.causesHarm()) {
 			if (!e.isPotionActive(ReactorCraft.radiation)) {
-				if (!this.isEntityImmuneToAll(e) && (!ri.isShieldable() || !this.hasHazmatSuit(e))) {
+				if (!this.isEntityImmuneToAll(e) && !ri.hasSufficientShielding(e)) {
 					e.addPotionEffect(this.getRadiationEffect(ri));
 					return true;
 				}
@@ -110,7 +112,7 @@ public class RadiationEffects {
 	}
 
 	public void applyPulseEffects(EntityLivingBase e, RadiationIntensity ri) {
-		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e) && !this.hasHazmatSuit(e))
+		if (!e.isPotionActive(ReactorCraft.radiation) && !this.isEntityImmuneToAll(e) && !ri.hasSufficientShielding(e))
 			e.addPotionEffect(this.getRadiationEffect(20, ri));
 	}
 
@@ -119,6 +121,7 @@ public class RadiationEffects {
 	}
 
 	public boolean hasHazmatSuit(EntityLivingBase e) {
+		/*
 		for (int i = 1; i < 5; i++) {
 			ItemStack is = e.getEquipmentInSlot(i);
 			if (is == null)
@@ -130,6 +133,13 @@ public class RadiationEffects {
 				return false;
 		}
 		return true;
+		 */
+		return ReikaEntityHelper.isEntityWearingFullSuitOf(e, (ItemStack is) -> this.isValidHazmatItem(is));
+	}
+
+	private boolean isValidHazmatItem(ItemStack is) {
+		ReactorItems ri = ReactorItems.getEntry(is);
+		return ri != null && ri.isHazmat();
 	}
 
 	public double contaminateArea(World world, int x, int y, int z, int range, float density, double force, boolean los, RadiationIntensity ri) {
@@ -301,13 +311,24 @@ public class RadiationEffects {
 	public void doOreIrradiation(World world, int x, int y, int z) {
 		int r = 9;
 		for (EntityPlayer ep : ((List<EntityPlayer>)world.playerEntities)) {
+			if (RadiationIntensity.LOWLEVEL.hasSufficientShielding(ep))
+				continue;
 			double dd = ep.getDistanceSq(x+0.5, y+0.5, z+0.5);
 			if (dd <= r*r) {
-				tracer.setOrigins(x+0.5, y+0.5, z+0.5, ep.posX, ep.posY+ep.height/2, ep.posZ);
-				if (tracer.isClearLineOfSight(world)) {
-					int dur = (int)(200/Math.max(1, Math.sqrt(dd)));
-					PotionEffect e = this.getRadiationEffect(dur, RadiationIntensity.LOWLEVEL);
-					ep.addPotionEffect(e);
+				for (double dx = 0; dx <= 1; dx += 1) {
+					for (double dy = 0; dy <= 1; dy += 1) {
+						for (double dz = 0; dz <= 1; dz += 1) {
+							for (double dh = 0; dh <= ep.height; dh += ep.height/2) {
+								tracer.setOrigins(x+dx, y+dy, z+dz, ep.posX, ep.posY+dh, ep.posZ);
+								if (tracer.isClearLineOfSight(world)) {
+									int dur = (int)(200/Math.max(1, Math.sqrt(dd)));
+									PotionEffect e = this.getRadiationEffect(dur, RadiationIntensity.LOWLEVEL);
+									ep.addPotionEffect(e);
+									return;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -315,8 +336,8 @@ public class RadiationEffects {
 
 	public static enum RadiationIntensity implements RadiationLevel {
 		BACKGROUND(0), //always
-		LOWLEVEL(100), //neutrons, waste containers
-		MODERATE(1200), //plutonium, creepers
+		LOWLEVEL(100), //neutrons
+		MODERATE(1200), //plutonium, creepers, waste containers
 		HIGHLEVEL(6000), //waste
 		LETHAL(36000); //Meltdowns; Hazmat does not protect
 
@@ -328,16 +349,32 @@ public class RadiationEffects {
 			potionDuration = t;
 		}
 
-		public boolean isShieldable() {
-			return this.ordinal() <= HIGHLEVEL.ordinal();
-		}
-
 		public boolean causesHarm() {
 			return this != BACKGROUND;
 		}
 
 		public boolean isAtLeast(RadiationIntensity ri) {
 			return this.ordinal() >= ri.ordinal();
+		}
+
+		public boolean hasSufficientShielding(EntityLivingBase e) {
+			switch(this) {
+				case BACKGROUND:
+					return true;
+				case LETHAL:
+					return false;
+				case HIGHLEVEL:
+					return instance.hasHazmatSuit(e);
+				case MODERATE: {
+					Function<ItemStack, Boolean> func = (ItemStack is) -> instance.isValidHazmatItem(is) || ItemBedrockArmor.isValidBedrockArmorItem(is);
+					return ReikaEntityHelper.isEntityWearingFullSuitOf(e, func);
+				}
+				case LOWLEVEL: {
+					Function<ItemStack, Boolean> func = (ItemStack is) -> instance.isValidHazmatItem(is) || ItemBedrockArmor.isValidBedrockArmorItem(is) || ReikaItemHelper.isDenseArmor(is);
+					return ReikaEntityHelper.isEntityWearingFullSuitOf(e, func);
+				}
+			}
+			return false;
 		}
 	}
 
