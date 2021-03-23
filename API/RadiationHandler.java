@@ -20,6 +20,8 @@ public class RadiationHandler {
 	private static Class intensityClass;
 	private static RadiationLevel[] intensities;
 
+	private static Class entityClass;
+
 	public static boolean hasHazmatSuit(EntityLivingBase e) {
 		try {
 			return (boolean)hasSuit.invoke(instance, e);
@@ -70,6 +72,10 @@ public class RadiationHandler {
 		return intensities[intensities.length-1];
 	}
 
+	public static Class getRadiationClass() {
+		return entityClass;
+	}
+
 	public static interface RadiationLevel {
 
 		public String name();
@@ -102,6 +108,8 @@ public class RadiationHandler {
 			applyToBlock.setAccessible(true);
 			fillArea = radiationHandler.getDeclaredMethod("contaminateArea", World.class, int.class, int.class, int.class, int.class, float.class, double.class, boolean.class, intensityClass);
 			fillArea.setAccessible(true);
+
+			entityClass = Class.forName("Reika.ReactorCraft.Entities.EntityRadiation");
 		}
 		catch (Exception e) {
 			ReikaJavaLibrary.pConsole("Could not read ReC class!");

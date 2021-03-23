@@ -11,7 +11,6 @@ package Reika.ReactorCraft.Auxiliary;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -308,24 +307,20 @@ public class RadiationEffects {
 		return pot;
 	}
 
-	public void doOreIrradiation(World world, int x, int y, int z) {
+	public void doOreIrradiation(World world, int x, int y, int z, EntityPlayer ep) {
 		int r = 9;
-		for (EntityPlayer ep : ((List<EntityPlayer>)world.playerEntities)) {
-			if (RadiationIntensity.LOWLEVEL.hasSufficientShielding(ep))
-				continue;
-			double dd = ep.getDistanceSq(x+0.5, y+0.5, z+0.5);
-			if (dd <= r*r) {
-				for (double dx = 0; dx <= 1; dx += 1) {
-					for (double dy = 0; dy <= 1; dy += 1) {
-						for (double dz = 0; dz <= 1; dz += 1) {
-							for (double dh = 0; dh <= ep.height; dh += ep.height/2) {
-								tracer.setOrigins(x+dx, y+dy, z+dz, ep.posX, ep.posY+dh, ep.posZ);
-								if (tracer.isClearLineOfSight(world)) {
-									int dur = (int)(200/Math.max(1, Math.sqrt(dd)));
-									PotionEffect e = this.getRadiationEffect(dur, RadiationIntensity.LOWLEVEL);
-									ep.addPotionEffect(e);
-									return;
-								}
+		double dd = ep.getDistanceSq(x+0.5, y+0.5, z+0.5);
+		if (dd <= r*r) {
+			for (double dx = 0; dx <= 1; dx += 1) {
+				for (double dy = 0; dy <= 1; dy += 1) {
+					for (double dz = 0; dz <= 1; dz += 1) {
+						for (double dh = 0; dh <= ep.height; dh += ep.height/2) {
+							tracer.setOrigins(x+dx, y+dy, z+dz, ep.posX, ep.posY+dh, ep.posZ);
+							if (tracer.isClearLineOfSight(world)) {
+								int dur = (int)(200/Math.max(1, Math.sqrt(dd)));
+								PotionEffect e = this.getRadiationEffect(dur, RadiationIntensity.LOWLEVEL);
+								ep.addPotionEffect(e);
+								return;
 							}
 						}
 					}

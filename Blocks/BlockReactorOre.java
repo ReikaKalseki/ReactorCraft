@@ -14,6 +14,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
@@ -31,6 +32,7 @@ import Reika.DragonAPI.Interfaces.Registry.OreEnum;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOptions;
@@ -63,7 +65,7 @@ public class BlockReactorOre extends EnumOreBlock {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if (ReactorOptions.RADIOORE.getState()) {
 			ReactorOres ore = ReactorOres.getOre(this, world.getBlockMetadata(x, y, z));
-			if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
+			if (ore.isRadioactive() && !RadiationIntensity.LOWLEVEL.hasSufficientShielding(Minecraft.getMinecraft().thePlayer)) {
 				ReikaPacketHelper.sendUpdatePacket(ReactorCraft.packetChannel, ReactorPackets.ORERADIATION.ordinal(), x, y, z, PacketTarget.server);
 			}
 		}
@@ -87,7 +89,7 @@ public class BlockReactorOre extends EnumOreBlock {
 	@Override
 	protected void onHarvested(World world, int x, int y, int z, Block b, int meta, OreEnum ore, EntityPlayer ep) {
 		if (!ep.capabilities.isCreativeMode) {
-			if (ore == ReactorOres.PITCHBLENDE || ore == ReactorOres.ENDBLENDE) {
+			if (((ReactorOres)ore).isUranium()) {
 				ReactorAchievements.MINEURANIUM.triggerAchievement(ep);
 			}
 			else if (ore == ReactorOres.CADMIUM) {

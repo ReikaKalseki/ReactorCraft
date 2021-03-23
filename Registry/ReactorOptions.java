@@ -37,7 +37,7 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false),
 	VERTNEUTRONS("Fission Neutrons Can Move Vertically", false),
 	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F),
-	RADIOORE("Make Pitchblende Weakly Radioactive", false),
+	RADIOORE("Make Fuel Ores Weakly Radioactive", false),
 	;
 
 	private String label;

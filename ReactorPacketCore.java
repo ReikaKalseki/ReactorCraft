@@ -175,7 +175,7 @@ public class ReactorPacketCore implements PacketHandler {
 					((TileEntityCPU)te).lowerAllRods();
 					break;
 				case ORERADIATION: {
-					RadiationEffects.instance.doOreIrradiation(world, x, y, z);
+					RadiationEffects.instance.doOreIrradiation(world, x, y, z, ep);
 					break;
 				}
 			}

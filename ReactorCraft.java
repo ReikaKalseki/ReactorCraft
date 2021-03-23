@@ -282,6 +282,9 @@ public class ReactorCraft extends DragonAPIMod {
 		IDCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID()).setPotionName("Radiation Sickness");
 
+		OreDictionary.registerOre("depletedUranium", ReactorItems.DEPLETED.getItemInstance());
+		OreDictionary.registerOre("depletedUranium", ReactorItems.OLDPELLET.getItemInstance());
+
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
 		if (ModList.GENDUSTRY.isLoaded()) {

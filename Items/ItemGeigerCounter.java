@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaEntityHelper.EntityDistanceComparator;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.ItemReactorTool;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -37,14 +39,19 @@ public class ItemGeigerCounter extends ItemReactorTool implements ChargeableTool
 	public void onUpdate(ItemStack is, World world, Entity e, int slot, boolean currentHeld) {
 		if (currentHeld && is.getItemDamage() > 0) {
 			int r = 20;
-			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(e.posX, e.posY, e.posZ, e.posX, e.posY, e.posZ).expand(r, r, r);
-			List<EntityRadiation> li = world.getEntitiesWithinAABB(EntityRadiation.class, box);
-			if (!li.isEmpty()) {
+			if (e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(ReactorCraft.radiation))
+				r = -1;
+			AxisAlignedBB box = r >= 0 ? AxisAlignedBB.getBoundingBox(e.posX, e.posY, e.posZ, e.posX, e.posY, e.posZ).expand(r, r, r) : null;
+			List<EntityRadiation> li = box == null ? null : world.getEntitiesWithinAABB(EntityRadiation.class, box);
+			if (li == null) {
+				e.playSound("random.click", 2, 2F);
+			}
+			else if (!li.isEmpty()) {
 				Collections.sort(li, new EntityDistanceComparator(e.posX, e.posY, e.posZ));
 				EntityRadiation er = li.get(0);
 				double dist = ReikaMathLibrary.py3d(e.posX-er.posX, e.posY-er.posY, e.posZ-er.posZ);
 				if (itemRand.nextDouble()*r*16 > dist*dist) {
-					float vol = dist > 1 ? 1 : 2-(float)dist;
+					//float vol = dist > 1 ? 1 : 2-(float)dist;
 					e.playSound("random.click", 1, 2F);
 				}
 			}
