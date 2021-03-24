@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public enum ReactorSounds implements SoundEnum {
 
@@ -135,6 +136,7 @@ public enum ReactorSounds implements SoundEnum {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}

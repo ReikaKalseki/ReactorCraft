@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<intro>
+		Um introdução às reações nucleares, reatores e seus designs.
+	</intro>
+	<procdesc>
+		Essas máquinas são usadas para processar materiais existentes naqueles necessários para fazer reatores funcionais.
+	</procdesc>
+	<gendesc>
+		Essas máquinas captam o poder de um reator nuclear e trabalham juntas para convertê-lo em potência de eixo usável.
+	</gendesc>
+	<htgrdesc>
+		Esses são os componentes de um Reator à Gás de Alta Temperatura (RGAT).
+	</htgrdesc>
+	<fissiondesc>
+		Esses são os componentes de um Reator de Fissão padrão que usa água fervente.
+	</fissiondesc>
+	<breederdesc>
+		Esses são os componentes de um Reator Alimentador à base de sódio, ou "Reator Alimentador Rápido de Metal Líquido" (RARML).
+	</breederdesc>
+	<thoriumdesc>
+		Esses são os componentes de um reator de tório à líquido. Estes são reatores de fissão, mas eles são notoriamente diferentes de outros designs.
+	</thoriumdesc>
+	<fusiondesc>
+		Esses são os componentes de um Reator de Fusão Tokamak.
+	</fusiondesc>
+	<accdesc>
+		Essas máquinas são frequentemente requeridas para um reator produzir ou transportar materiais, ou também para ajudar os reatores.
+	</accdesc>
+	<tooldesc>
+		Essas ferramentas são úteis para aqueles que trabalham com reatores nucleares.
+	</tooldesc>
+	<resourcedesc>
+		Esses itens são cruciais na operação de reatores nucleares.
+	</resourcedesc>
+</categories>
