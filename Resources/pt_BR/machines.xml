@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <machines>
 	<processor>
 		<desc>
@@ -24,7 +33,6 @@
 			O eletrolizador usa descargas elétricas para decompor os materiais em seus constituintes, tais como sal em sódio e cloro, ou água em hidrogênio e oxigênio. Os produtos pesados são inseridos por baixo, enquanto os leves, por cima. Note que os sólidos devem ser derretidos antes de serem capazes de ser processados.
 		</desc>
 		<note>
-			Energia para eletrolizar sal: %dW
 			Entrada de energia: Qualquer lado horizontal
 			Temperatura necessária para derreter sal: %d°C
 		</note>
@@ -259,7 +267,7 @@
 	</heavypump>
 	<fluidextractor>
 		<desc>
-			The fluid extractor, when submerged in (and has at least three sides in contact with) a fluid, can centrifuge it and obtain trace quantities of another fluid that was mixed in. For example, heavy water can be centrifuged out of the bottom of oceans (below y=%d and with at least %dm of water above), or molten lithium can be skimmed off the surface of lava.
+			O extrator de fluido, quando submerso em (e tendo pelo menos três lados em contato com) um fluido, pode centrifugá-lo para obter vestígios de outro fluido que foi misturado. Por exemplo, água pesada pode ser centrifugada do fundo dos oceanos (abaixo de y=%d e com pelo menos %dm de água acima), ou o lítio derretido pode ser retirado da superfície da lava.
 		</desc>
 		<note>
 			Minimum Power: %dW
@@ -296,6 +304,8 @@
 		</desc>
 		<note>
 			Saída de RF: Por trás
+			
+			Pode ter seus modos alterados com uma chave de fenda
 		</note>
 	</generator>
 	<bigturbine>
