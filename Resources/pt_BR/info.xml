@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <info>
 	<physics>
 		Existem dois tipos de reações nucleares, fissão e fusão. Cada uma delas tiradas da teoria da relatividade de Einstein para gerar energia a partir da massa - E = mc^2. Essa energia é liberada como calor ou como um neutron em alta velocidade. Devido ao valor de c (a velocidade da luz) ser extremamente grande - 300 milhões de metros por segundo - a quantidade de energia liberada também é muito grande, mesmo que o consumo de massa seja minúsculo.
