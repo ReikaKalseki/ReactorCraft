@@ -11,9 +11,10 @@ package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import Reika.DragonAPI.Instantiable.GUI.TankDisplay;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerThoriumCore;
 import Reika.ReactorCraft.TileEntities.Fission.Thorium.TileEntityThoriumCore;

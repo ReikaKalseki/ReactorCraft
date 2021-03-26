@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,23 +11,22 @@ package Reika.ReactorCraft.NEI;
 
 import java.awt.Rectangle;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.ReactorCraft.ReactorCraft;
-import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.GUIs.GuiElectrolyzer;
-import Reika.ReactorCraft.Registry.ReactorItems;
-import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer.Electrolysis;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -35,24 +34,10 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 
 	public class ElectrolyzerRecipe extends CachedRecipe {
 
-		private Fluid input;
-		private ItemStack itemIn;
+		private final Electrolysis recipe;
 
-		private Fluid lightOut;
-		private Fluid heavyOut;
-
-		public ElectrolyzerRecipe(Fluid in) {
-			input = in;
-
-			heavyOut = FluidRegistry.getFluid("rc oxygen");
-			lightOut = FluidRegistry.getFluid("rc deuterium");
-		}
-
-		public ElectrolyzerRecipe(ItemStack in) {
-			itemIn = in;
-
-			heavyOut = FluidRegistry.getFluid("rc sodium");
-			lightOut = FluidRegistry.getFluid("rc chlorine");
+		public ElectrolyzerRecipe(Electrolysis in) {
+			recipe = in;
 		}
 
 		@Override
@@ -61,9 +46,8 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 		}
 
 		@Override
-		public PositionedStack getIngredient()
-		{
-			return itemIn != null ? new PositionedStack(itemIn, 39, 30) : null;
+		public PositionedStack getIngredient() {
+			return recipe.hasItemRequirement() ? new PositionedStack(recipe.getItemListForDisplay(), 39, 30) : null;
 		}
 	}
 
@@ -103,8 +87,8 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("recelect")) {
-			arecipes.add(new ElectrolyzerRecipe(ItemStacks.salt));
-			arecipes.add(new ElectrolyzerRecipe(FluidRegistry.getFluid("rc heavy water")));
+			for (Electrolysis e : Electrolysis.getRecipes())
+				arecipes.add(new ElectrolyzerRecipe(e));
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}
@@ -122,37 +106,58 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 	{
 		//ReikaGuiAPI.instance.drawTexturedModalRect(75, 7, 224, 20, 16, 60);
 		ElectrolyzerRecipe er = (ElectrolyzerRecipe)arecipes.get(recipe);
-		Fluid o1 = er.heavyOut;
-		Fluid o2 = er.lightOut;
+		Fluid o1 = er.recipe.lowerOutput != null ? er.recipe.lowerOutput.getFluid() : null;
+		Fluid o2 = er.recipe.upperOutput != null ? er.recipe.upperOutput.getFluid() : null;
 
 		ReikaTextureHelper.bindTerrainTexture();
-		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, ReikaLiquidRenderer.getFluidIconSafe(o1), 16, 60);
-		ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(129, 7, ReikaLiquidRenderer.getFluidIconSafe(o2), 16, 60);
+		if (o1 != null)
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(93, 7, ReikaLiquidRenderer.getFluidIconSafe(o1), 16, 60);
+		if (o2 != null)
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(129, 7, ReikaLiquidRenderer.getFluidIconSafe(o2), 16, 60);
 
-		if (er.input != null) {
-			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(12, 7, ReikaLiquidRenderer.getFluidIconSafe(er.input), 16, 60);
+		if (er.recipe.requiredFluid != null) {
+			ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(12, 7, ReikaLiquidRenderer.getFluidIconSafe(er.recipe.requiredFluid.getFluid()), 16, 60);
+		}
+
+		if (er.recipe.consumeItem) {
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, "(Use)", 48, 51, 0x000000);
+		}
+		else {
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, "(Cat)", 48, 51, 0x000000);
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (ReikaItemHelper.matchStacks(ReactorStacks.nacan, result) || ReikaItemHelper.matchStacks(ReactorStacks.clcan, result))
-			arecipes.add(new ElectrolyzerRecipe(ItemStacks.salt));
-		if (ReikaItemHelper.matchStacks(ReactorStacks.h2can, result) || ReikaItemHelper.matchStacks(ReactorStacks.ocan, result))
-			arecipes.add(new ElectrolyzerRecipe(FluidRegistry.getFluid("rc heavy water")));
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
+		if (fs != null) {
+			for (Electrolysis e : Electrolysis.getRecipes()) {
+				if (e.makes(fs.getFluid())) {
+					arecipes.add(new ElectrolyzerRecipe(e));
+				}
+			}
+		}
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (TileEntityElectrolyzer.isSalt(ingredient))
-			arecipes.add(new ElectrolyzerRecipe(ingredient));
-		if (ReikaItemHelper.matchStacks(ingredient, ReactorItems.BUCKET.getStackOfMetadata(0)))
-			arecipes.add(new ElectrolyzerRecipe(FluidRegistry.getFluid("rc heavy water")));
+		for (Electrolysis e : Electrolysis.getRecipes()) {
+			if (e.uses(ingredient)) {
+				arecipes.add(new ElectrolyzerRecipe(e));
+			}
+		}
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+		if (fs != null) {
+			for (Electrolysis e : Electrolysis.getRecipes()) {
+				if (e.uses(fs.getFluid())) {
+					arecipes.add(new ElectrolyzerRecipe(e));
+				}
+			}
+		}
 	}
 
 	@Override
-	public Class<? extends GuiContainer> getGuiClass()
-	{
+	public Class<? extends GuiContainer> getGuiClass() {
 		return GuiElectrolyzer.class;
 	}
 

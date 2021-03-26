@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,25 +17,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class ReactorItemBase extends Item implements IndexedItemSprites {
 
-	private int index;
+	private final int texture;
 
 	public ReactorItemBase(int tex) {
-		index = tex;
+		texture = tex;
 		this.setCreativeTab(ReactorCraft.instance.isLocked() ? null : ReactorCraft.tabRctrItems);
 	}
 
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
-		return index+this.getTextureOffset(is);
+		return texture+this.getTextureOffset(is);
 	}
 
 	public int getTextureOffset(ItemStack is) {

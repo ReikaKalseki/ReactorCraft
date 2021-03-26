@@ -12,15 +12,17 @@ package Reika.ReactorCraft.NEI;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
 public class NEI_ReactorConfig implements IConfigureNEI {
 
-	private static final NH3Handler ammonia = new NH3Handler();
+	private static final SynthesizerHandler ammonia = new SynthesizerHandler();
 	private static final UProcessorHandler UProcessor = new UProcessorHandler();
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
 	private static final ElectrolyzerHandler electrolyzer = new ElectrolyzerHandler();

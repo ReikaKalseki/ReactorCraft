@@ -1,15 +1,14 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
@@ -27,8 +27,8 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
@@ -205,11 +205,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	}
 
 	private boolean dumpLiquid(World world, int x, int y, int z, int meta) {
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (ig.getSoundVolReductionAmount() > 1)
-				return false;
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x+this.getSteamMovement().offsetX, y, z+this.getSteamMovement().offsetZ, blockType, false))
+			return false;
 		return this.getStage() == this.getNumberStagesTotal()-1;
 	}
 
@@ -321,10 +318,11 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		if (r == ReactorTiles.STEAMLINE) {
 			TileEntitySteamLine te = (TileEntitySteamLine)this.getAdjacentTileEntity(dir);
 			int s = te.getSteam();
-			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam(), Side.SERVER);
+			//ReikaJavaLibrary.pConsole(steam+"/"+this.getMaxSteam()+" from "+s, Side.SERVER);
 			if (s > 8 && this.canTakeIn(te.getWorkingFluid())) {
 				Proportionality<ReactorType> source = te.getSourceReactorType();
-				if (this.canRunOffOf(source.getLargestCategory())) {
+				s = source != null ? this.getEffectiveUsable(s, source) : 0;
+				if (s > 0) {
 					int rm = s/8+1;
 					if (steam < this.getMaxSteam()) {
 						int rm2 = Math.min(rm, this.getMaxSteam()-steam);
@@ -332,8 +330,10 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 						fluid = te.getWorkingFluid();
 						te.removeSteam(rm2);
 						dripBuffer += rm2*1000;
+						//ReikaJavaLibrary.pConsole("Took in "+rm2+" of "+s+" available", Side.SERVER);
 					}
-					flag = s > rm+32;
+					flag = s > rm+32 && steam >= this.getMaxSteam()/15;
+					//ReikaJavaLibrary.pConsole("Has "+steam+"/"+this.getMaxSteam()+", s/rm = "+s+"/"+rm, Side.SERVER);
 				}
 			}
 		}
@@ -349,8 +349,13 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 		return flag;
 	}
 
-	private boolean canRunOffOf(ReactorType source) {
-		return source != ReactorType.HTGR;
+	private int getEffectiveUsable(int s, Proportionality<ReactorType> source) {
+		float ret = 0;
+		for (ReactorType r : source.getElements()) {
+			if (r != null)
+				ret += source.getFraction(r)*s*r.getHPTurbineMultiplier();
+		}
+		return (int)ret;
 	}
 
 	private int getMaxSteam() {
@@ -384,7 +389,15 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 
 	@Override
 	protected float getTorqueFactor() {
-		return fluid.efficiency > 1 ? 1+(fluid.efficiency-1)*0.25F : fluid.efficiency;
+		float base = super.getTorqueFactor();
+		if (steam < this.getMaxSteam()/2) {
+			float f = steam/(float)this.getMaxSteam(); //stops at 0.5, aka the peak of cos
+			base *= ReikaMathLibrary.cosInterpolation(0, 1, f, 0, 1);
+		}
+		if (fluid.efficiency > 1) {
+			base *= 1+(fluid.efficiency-1)*0.25F;
+		}
+		return base;
 	}
 
 	@Override

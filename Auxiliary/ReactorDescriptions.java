@@ -1,14 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraftforge.common.MinecraftForge;
+
 import Reika.DragonAPI.Instantiable.Event.Client.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -40,6 +43,7 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -86,10 +90,16 @@ public final class ReactorDescriptions {
 		return "Resources/";
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
-		Object o = ReactorCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml");
-		return o != null;
+		try (InputStream o = ReactorCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml")) {
+			return o != null;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static String getTOC() {
@@ -229,7 +239,7 @@ public final class ReactorDescriptions {
 
 	private static void loadNumericalData() {
 		addNotes(ReactorTiles.CENTRIFUGE, TileEntityCentrifuge.MINSPEED);
-		addNotes(ReactorTiles.ELECTROLYZER, TileEntityElectrolyzer.SALTPOWER, TileEntityElectrolyzer.SALT_MELT);
+		addNotes(ReactorTiles.ELECTROLYZER, /*TileEntityElectrolyzer.SALTPOWER, */TileEntityElectrolyzer.SALT_MELT);
 		addNotes(ReactorTiles.SYNTHESIZER, TileEntitySynthesizer.AMMONIATEMP);
 		addNotes(ReactorTiles.TURBINECORE, TileEntityTurbineCore.GEN_OMEGA, TileEntityTurbineCore.TORQUE_CAP);
 		addNotes(ReactorTiles.BIGTURBINE, TileEntityHiPTurbine.GEN_OMEGA);

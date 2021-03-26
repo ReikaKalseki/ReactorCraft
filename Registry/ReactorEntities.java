@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Registry;
 
 import net.minecraft.entity.Entity;
+
 import Reika.DragonAPI.Interfaces.Registry.EntityEnum;
 import Reika.ReactorCraft.Entities.EntityFusion;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -61,6 +62,11 @@ public enum ReactorEntities implements EntityEnum {
 	@Override
 	public boolean sendsVelocityUpdates() {
 		return true;
+	}
+
+	@Override
+	public boolean hasGlobalID() {
+		return false;
 	}
 
 	@Override

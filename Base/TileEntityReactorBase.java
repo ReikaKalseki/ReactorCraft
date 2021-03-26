@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,26 +12,33 @@ package Reika.ReactorCraft.Base;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import li.cil.oc.api.network.Visibility;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorRenderList;
+import Reika.ReactorCraft.Auxiliary.ReactorTyped;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
+import Reika.ReactorCraft.Auxiliary.TypedReactorCoreTE;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
+import Reika.ReactorCraft.TileEntities.TileEntityHeatPipe;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
@@ -43,6 +50,8 @@ import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+
+import li.cil.oc.api.network.Visibility;
 
 public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
 
@@ -136,6 +145,10 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	protected void updateTemperature(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+
+		if (world.provider.dimensionId != -1)
+			Tamb = Math.min(Tamb, 95);
+
 		int dT = Tamb-temperature;
 		if (dT != 0) {
 			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
@@ -177,25 +190,82 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 					if (flag) {
 						int T = tr.getTemperature();
 						dT = (T-temperature)-Math.max(0, (Tamb-Tamb_loc)); //if Tamb here is > Tamb there, subtract that difference to avoid exploits
+						float f = te.getHeatThroughput(this);
+						//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+f);
+						dT *= f;
 						if (dT > 0) {
-							int newT = T-dT/4;
+							int d = this.getHeatFraction(te);
+							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+d);
+							int newT = T-dT/d;
 							//ReikaJavaLibrary.pConsole(temperature+":"+T+" "+this.getTEName()+":"+te.getTEName()+"->"+(temperature+dT/4D)+":"+newT, this instanceof TileEntityWaterCell && FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER);
-							temperature += dT/4;
+							float e = te.getHeatEfficiency(this);
+							//ReikaJavaLibrary.pConsole(te.getMachine()+" > "+this.getMachine()+" = "+e);
+							double add = dT/d*e;
+							temperature += add;
 							tr.setTemperature(newT);
+							if (this instanceof TileEntityReactorBoiler && !(tr instanceof TileEntityReactorBoiler) && tr instanceof TypedReactorCoreTE) {
+								((TileEntityReactorBoiler)this).setReactorType(((TypedReactorCoreTE)tr).getReactorType(), add);
+							}
 						}
 					}
 				}
+				/*
 				if (r == ReactorTiles.CO2HEATER || r == ReactorTiles.PEBBLEBED) {
 					if (src.getReactorType() != ReactorType.HTGR && temperature > Tamb) {
 						temperature -= Math.max(1, (temperature-Tamb)/2);
 					}
 				}
+				 */
 			}
 		}
 	}
 
-	public ForgeDirection getRandomDirection() {
-		int r = 2+rand.nextInt(4);
+	private int getHeatFraction(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionFraction((TemperaturedReactorTyped)other) : 4;
+	}
+
+	private float getHeatThroughput(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionThroughput((TemperaturedReactorTyped)other) : 1;
+	}
+
+	private float getHeatEfficiency(TileEntityReactorBase other) {
+		return other instanceof TemperaturedReactorTyped ? this.getHeatConductionEfficiency((TemperaturedReactorTyped)other) : 0;
+	}
+
+	/** For transferring heat FROM that reactor block. */
+	protected int getHeatConductionFraction(TemperaturedReactorTyped other) {
+		return 4;
+	}
+
+	/** For transferring heat TO that reactor block. */
+	protected float getHeatConductionThroughput(TemperaturedReactorTyped other) {
+		return 1;
+	}
+
+	/** For transferring heat TO that reactor block. */
+	protected float getHeatConductionEfficiency(TemperaturedReactorTyped other) {
+		ReactorTiles r0 = other.getMachine();
+		if (r0 == ReactorTiles.CONTROL || r0 == ReactorTiles.CPU)
+			return this.getControlCPUHeatEfficiency();
+		ReactorType r1 = this instanceof ReactorTyped ? ((ReactorTyped)this).getReactorType() : null;
+		ReactorType r2 = other.getReactorType();
+		if (r1 == r2)
+			return 1;
+		if (r1 == null || r2 == null) //one tile is not even a reactor
+			return 0;
+		return r1.getTypeMismatchHeatEfficiency();
+	}
+
+	protected float getControlCPUHeatEfficiency() {
+		return 1;
+	}
+
+	protected float getTypeMismatchEfficiency() {
+		return 0.5F;
+	}
+
+	public ForgeDirection getRandomDirection(boolean allowVertical) {
+		int r = allowVertical ? rand.nextInt(6) : 2+rand.nextInt(4);
 		return dirs[r];
 	}
 
@@ -246,6 +316,18 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			TileEntitySteamLine sl = (TileEntitySteamLine)this;
 			String s = String.format("%s contains %d m^3 of steam.", this.getTEName(), sl.getSteam());
 			li.add(s);
+			Proportionality<ReactorType> types = sl.getSourceReactorType();
+			li.add( "Reactor source types: ");
+			for (ReactorType r : types.getElements()) {
+				double frac = types.getFraction(r);
+				li.add("  "+r+": "+frac*100+"%%");
+			}
+		}
+		if (this instanceof TileEntityHeatPipe) {
+			TileEntityHeatPipe hp = (TileEntityHeatPipe)this;
+			double e = hp.getNetHeatEnergy();
+			String s = String.format("%s contains %.3f%sJ of heat energy.", this.getTEName(), ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
+			li.add(s);
 		}
 		return li;
 	}
@@ -253,11 +335,34 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
 	public final Visibility getOCNetworkVisibility() {
-		return this.getMachine().isPipe() || this.getMachine() == ReactorTiles.REFLECTOR ? Visibility.Neighbors : Visibility.Network;
+		return this.getMachine().isPipe() || this.getMachine() == ReactorTiles.REFLECTOR ? Visibility.None : Visibility.Network;
 	}
 
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	public boolean allowExternalHeating() {
+		if (this instanceof ReactorTyped) {
+			ReactorType r = ((ReactorTyped)this).getReactorType();
+			return r != ReactorType.HTGR && r != ReactorType.FUSION;
+		}
+		return true;
+	}
+
+	public boolean allowHeatExtraction() {
+		return true;
+	}
+
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	public double heatEnergyPerDegree() {
+		double base = ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
+		if (this.getMachine().isReactorCore() || this.getMachine() == ReactorTiles.EXCHANGER)
+			base *= 50;
+		return base;
 	}
 }

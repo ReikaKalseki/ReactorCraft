@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,40 +11,50 @@ package Reika.ReactorCraft.Items;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import Reika.ChromatiCraft.Registry.ChromaItems;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.PlayerMap;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.ReactorCraft.API.MagneticOreOverride;
 import Reika.ReactorCraft.Base.ReactorItemBase;
 
 public class ItemIronFinder extends ReactorItemBase {
 
 	private static final PlayerMap<OreCollection> cache = new PlayerMap();
 
-	private static final OreType[] ores = {
-		ReikaOreHelper.IRON,
-		ReikaOreHelper.REDSTONE,
-		ModOreList.NICKEL,
-		ModOreList.COBALT,
-		ModOreList.CERTUSQUARTZ,
-		ModOreList.NIKOLITE,
-		ModOreList.MAGNETITE,
-		ModOreList.NETHERIRON,
-		ModOreList.NETHERREDSTONE,
-		ModOreList.NETHERNICKEL,
-		ModOreList.NETHERNIKOLITE,
-		ModOreList.TESLATITE
-	};
+	private static final HashSet<OreType> ores = new HashSet(ReikaJavaLibrary.makeListFrom(
+			ReikaOreHelper.IRON,
+			ReikaOreHelper.REDSTONE,
+			ModOreList.NICKEL,
+			ModOreList.COBALT,
+			ModOreList.CERTUSQUARTZ,
+			ModOreList.NIKOLITE,
+			ModOreList.MAGNETITE,
+			ModOreList.NETHERIRON,
+			ModOreList.NETHERREDSTONE,
+			ModOreList.NETHERNICKEL,
+			ModOreList.NETHERNIKOLITE,
+			ModOreList.TESLATITE,
+			ModOreList.SILICON,
+			ModOreList.DILITHIUM,
+			ModOreList.MIMICHITE
+			));
 
 	public ItemIronFinder(int tex) {
 		super(tex);
@@ -71,66 +81,50 @@ public class ItemIronFinder extends ReactorItemBase {
 	}
 
 	@Override
-	public void onUpdate(ItemStack is, World world, Entity e, int par4, boolean isHeld) {/*
-		if (isHeld && (e.ticksExisted&15) == 0) {
-			int x = MathHelper.floor_double(e.posX);
-			int y = MathHelper.floor_double(e.posY);
-			int z = MathHelper.floor_double(e.posZ);
-
-int r = 6;
-BlockArray iron = getIronOreNearby(world, x, y, z, r);
-			ReikaChatHelper.clearChat();
-			if (iron.isEmpty()) {
-				ReikaChatHelper.write("No iron within "+r+"m.");
-			}
-			else {
-				StringBuilder sb = new StringBuilder();
-				sb.append(iron.getSize()+" iron within "+r+"m:\n");
-				for (int i = 0; i < iron.getSize(); i++) {
-					int[] xyz = iron.getNthBlock(i);
-					sb.append("  ");
-					sb.append(Arrays.toString(xyz));
-					if (i%3 == 0)
-						sb.append("\n");
-					else
-						sb.append(", ");
-				}
-				ReikaChatHelper.write(sb.toString());
-			}
-		}*/
+	public void onUpdate(ItemStack is, World world, Entity e, int slot, boolean selected) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			this.tickAuraPouch(is, world, e, slot, selected);
+		}
 	}
 
-	public static MultiMap<OreType, Coordinate> getOreNearby(EntityPlayer ep, int range) {
+	@ModDependent(ModList.CHROMATICRAFT)
+	private void tickAuraPouch(ItemStack is, World world, Entity e, int slot, boolean selected) {
+		if (e instanceof EntityPlayer && ChromaItems.AURAPOUCH.matchWith(((EntityPlayer)e).inventory.mainInventory[slot]) && world.getTotalWorldTime()%8 == 0)
+			e.getEntityData().setLong("ironfinder", world.getTotalWorldTime());
+	}
+
+	public static Set<Coordinate> getOreNearby(EntityPlayer ep, int range) {
 		OreCollection c = cache.get(ep);
 		if (c == null || System.currentTimeMillis()-c.time >= 500) {
-			c = new OreCollection(ep, findOreNearby(ep, range, ores));
+			c = new OreCollection(ep, findOreNearby(ep, range));
 			cache.put(ep, c);
 		}
-		return c.locations;
+		return Collections.unmodifiableSet(c.locations);
 	}
 
-	private static MultiMap<OreType, Coordinate> findOreNearby(EntityPlayer ep, int range, OreType... ores) {
-		MultiMap<OreType, Coordinate> m = new MultiMap();
-		for (int o = 0; o < ores.length; o++) {
-			OreType ore = ores[o];
-			if (ore.existsInGame()) {
-				World world = ep.worldObj;
-				int x = MathHelper.floor_double(ep.posX);
-				int y = MathHelper.floor_double(ep.posY+ep.getEyeHeight());
-				int z = MathHelper.floor_double(ep.posZ);
-				Collection<Coordinate> c = new ArrayList();
-				for (int i = -range; i <= range; i++) {
-					for (int j = -range; j <= range; j++) {
-						for (int k = -range; k <= range; k++) {
-							int dx = x+i;
-							int dy = y+j;
-							int dz = z+k;
-							ItemStack block = ReikaBlockHelper.getWorldBlockAsItemStack(world, dx, dy, dz);
-							if (ReikaItemHelper.collectionContainsItemStack(ore.getAllOreBlocks(), block)) {
-								m.addValue(ore, new Coordinate(dx, dy, dz));
-							}
-						}
+	private static HashSet<Coordinate> findOreNearby(EntityPlayer ep, int range) {
+		HashSet<Coordinate> m = new HashSet();
+		World world = ep.worldObj;
+		int x = MathHelper.floor_double(ep.posX);
+		int y = MathHelper.floor_double(ep.posY+ep.getEyeHeight());
+		int z = MathHelper.floor_double(ep.posZ);
+		Collection<Coordinate> c = new ArrayList();
+		for (int i = -range; i <= range; i++) {
+			for (int j = -range; j <= range; j++) {
+				for (int k = -range; k <= range; k++) {
+					int dx = x+i;
+					int dy = y+j;
+					int dz = z+k;
+					Block b = world.getBlock(dx, dy, dz);
+					if (b instanceof MagneticOreOverride) {
+						if (((MagneticOreOverride)b).showOnHUD(world, dx, dy, dz, ep))
+							m.add(new Coordinate(dx, dy, dz));
 					}
+					OreType ore = ReikaOreHelper.getFromVanillaOre(b);
+					if (ore == null)
+						ore = ModOreList.getModOreFromOre(b, world.getBlockMetadata(dx, dy, dz));
+					if (ores.contains(ore))
+						m.add(new Coordinate(dx, dy, dz));
 				}
 			}
 		}
@@ -140,10 +134,10 @@ BlockArray iron = getIronOreNearby(world, x, y, z, r);
 	private static class OreCollection {
 
 		public final long time;
-		public final MultiMap<OreType, Coordinate> locations;
+		public final HashSet<Coordinate> locations;
 		public final String player;
 
-		private OreCollection(EntityPlayer ep, MultiMap<OreType, Coordinate> c) {
+		private OreCollection(EntityPlayer ep, HashSet<Coordinate> c) {
 			locations = c;
 			player = ep.getCommandSenderName();
 			time = System.currentTimeMillis();

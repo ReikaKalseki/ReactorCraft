@@ -10,7 +10,9 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.GUI.RegistryEnumCreativeTab;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

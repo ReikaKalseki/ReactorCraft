@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Auxiliary;
 
 import net.minecraft.entity.EntityLivingBase;
+
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir.FluidEffect;
 

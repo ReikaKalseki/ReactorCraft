@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -46,10 +47,10 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		if (rand.nextInt(20) == 0)
 			this.sickenMobs(world, x, y, z);
 
-		this.decayWaste(this.getAccelerationFactor(world, x, y, z));
-
-		if (!world.isRemote)
+		if (!world.isRemote) {
+			this.decayWaste();
 			this.feed();
+		}
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) > 100) {
 			if (this.hasWaste()) {
@@ -81,10 +82,10 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(r, r, r);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
-			if (!RadiationEffects.instance.hasHazmatSuit(e)) {
+			if (!RadiationIntensity.MODERATE.hasSufficientShielding(e)) {
 				double dd = ReikaMathLibrary.py3d(e.posX-x-0.5, e.posY-y-0.5, e.posZ-z-0.5);
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, e.posX, e.posY, e.posZ, dd)) {
-					RadiationEffects.instance.applyEffects(e, RadiationIntensity.LOWLEVEL);
+					RadiationEffects.instance.applyEffects(e, RadiationIntensity.MODERATE);
 				}
 			}
 		}
@@ -219,6 +220,16 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 			inv[inv.length-1] = null;
 			return is;
 		}
+	}
+
+	@Override
+	protected boolean canBeAccelerated() {
+		return true;
+	}
+
+	@Override
+	protected double getBaseDecayRate() {
+		return 1.75;
 	}
 
 }

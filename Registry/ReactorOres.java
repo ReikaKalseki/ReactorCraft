@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,6 +27,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.CondensedOres.API.CondensedOreAPI;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Registry.OreEnum;
@@ -303,6 +304,14 @@ public enum ReactorOres implements OreEnum {
 	@Override
 	public boolean dropsSelf(World world, int x, int y, int z) {
 		return this.dropsSelf(world.getBlockMetadata(x, y, z));
+	}
+
+	public boolean isUranium() {
+		return this == PITCHBLENDE || this == ENDBLENDE;
+	}
+
+	public boolean isRadioactive() {
+		return this == THORIUM || this.isUranium();
 	}
 
 	@Override

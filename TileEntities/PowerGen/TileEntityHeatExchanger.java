@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,11 +18,13 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -32,12 +34,14 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implements TemperatureTE {
 
 	public static final int CAPACITY = 2000;
 
+	public static final int MINTEMP = -140;
 	public static final int MAXTEMP = 1500;
 
 	public static final int COOL_AMOUNT = 100;
@@ -86,8 +90,9 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 				int dT = temperature - te.getTemperature();
 				if (dT > 0) {
 					temperature -= dT/4;
-					te.setTemperature(te.getTemperature()+dT/4);
-					te.setReactorType(e != null ? e.type : null);
+					int add = dT/4;
+					te.setTemperature(te.getTemperature()+add);
+					te.setReactorType(e != null ? e.type : ReactorType.NULL, add);
 				}
 			}
 		}
@@ -95,9 +100,14 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 
 	private void cool(Exchange e) {
 		tank.removeLiquid(COOL_AMOUNT);
-		output.addLiquid(COOL_AMOUNT, e.coldFluid);
+		output.addLiquid(COOL_AMOUNT*e.expansionRatio, e.coldFluid);
 		double c = e.heatCapacity;
 		temperature += c*COOL_AMOUNT;
+
+		if (temperature > MAXTEMP)
+			temperature = MAXTEMP;
+		if (temperature < MINTEMP)
+			temperature = MINTEMP;
 	}
 
 	private Exchange getExchange() {
@@ -125,7 +135,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		if (!this.sufficientPower())
 			return false;
 
-		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && !output.isFull() && this.canCoolFluid(tank.getActualFluid());
+		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && output.getRemainingSpace() >= COOL_AMOUNT*e.expansionRatio && this.canCoolFluid(tank.getActualFluid());
 	}
 
 	@Override
@@ -182,24 +192,40 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 
 	//Add API to allow others to add fluids
 	protected static enum Exchange {
-		SODIUM("rc hotsodium", "rc sodium", ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
+		SODIUM(ReactorCraft.NA_hot, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
 		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
-		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM);
+		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM),
+		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, null),
+		SOLARSODIUM(ReactorCraft.NA_warm, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT*0.625F, 400, ReactorType.SOLAR);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;
 		public final double heatCapacity;
 		public final int maxTemperature;
+		public final int expansionRatio;
 		public final ReactorType type;
 
 		public static final Exchange[] list = values();
 
 		private Exchange(String from, String to, double c, int max, ReactorType t) {
-			coldFluid = FluidRegistry.getFluid(to);
-			hotFluid = FluidRegistry.getFluid(from);
+			this(from, to, 1, c, max, t);
+		}
+
+		private Exchange(Fluid from, Fluid to, double c, int max, ReactorType t) {
+			this(from, to, 1, c, max, t);
+		}
+
+		private Exchange(String from, String to, int r, double c, int max, ReactorType t) {
+			this(FluidRegistry.getFluid(from), FluidRegistry.getFluid(to), r, c, max, t);
+		}
+
+		private Exchange(Fluid from, Fluid to, int r, double c, int max, ReactorType t) {
+			coldFluid = to;
+			hotFluid = from;
 			heatCapacity = c;
 			maxTemperature = max;
 			type = t;
+			expansionRatio = r;
 		}
 	}
 
@@ -246,6 +272,8 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 			temperature++;
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
+		if (temperature < MINTEMP)
+			temperature = MINTEMP;
 		if (temperature > 100) {
 			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 			if (side != null)
@@ -334,6 +362,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		return true;
 	}
 
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}

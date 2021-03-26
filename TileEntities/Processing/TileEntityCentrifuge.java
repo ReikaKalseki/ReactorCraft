@@ -1,32 +1,39 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.Power.BasicPowerHandler;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -34,25 +41,27 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase implements IFluidHandler, ReactorPowerReceiver, PipeConnector {
 
-	private int torque;
-	private int omega;
-	private long power;
-	private int iotick;
-
-	public int split; //timer
-
 	/** "In the range of 100000 rpm" -> 10.5k rad/s <br>
 	 * http://science.howstuffworks.com/uranium-centrifuge.htm */
 	//public static final int REAL_SPEED = 16384;
 
 	public static final int MINSPEED = 262144; //much faster since doing it in one step
 
+	public static final int UF6_PER_DUST = 50;
+	public static final int FUEL_CHANCE = 9;
+
+	private static final HashMap<Fluid, Centrifuging> recipes = new HashMap();
+
 	private final HybridTank tank = new HybridTank("centri", 12000);
 
 	private StepTimer timer = new StepTimer(900);
 
-	public static final int UF6_PER_DUST = 50;
-	public static final int FUEL_CHANCE = 9;
+	private final BasicPowerHandler powerHandler = new BasicPowerHandler();
+	public int split; //timer
+
+	public TileEntityCentrifuge() {
+		ReikaJavaLibrary.initClass(Centrifuging.class);
+	}
 
 	@Override
 	public int getIndex() {
@@ -61,6 +70,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
+		int omega = powerHandler.getOmega();
 		if (omega >= 262144) {
 			phi += 40;
 		}
@@ -82,7 +92,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 		else if (omega > 0) {
 			phi += 5;
 		}
-		iotick -= 8;
+		powerHandler.decrementIOTick(8);
 	}
 
 	@Override
@@ -93,13 +103,17 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 			this.noInputMachine();
 		}
 
-		if (power > 0 && omega >= MINSPEED) {
-			if (this.canMake()) {
-				timer.update();
+		if (powerHandler.getPower() > 0 && powerHandler.getOmega() >= MINSPEED && !tank.isEmpty()) {
+			Centrifuging recipe = recipes.get(tank.getActualFluid());
+			if (recipe != null && tank.getLevel() >= recipe.fluidAmount && this.hasInventorySpace(recipe)) {
+				timer.update(recipe.speedFactor);
 				if (timer.checkCap()) {
 					if (!world.isRemote)
-						this.make();
+						this.make(recipe);
 				}
+			}
+			else {
+				timer.reset();
 			}
 		}
 		else {
@@ -111,6 +125,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	private int setTimer() {
+		int omega = powerHandler.getOmega();
 		if (omega >= 67108864) {
 			return 8;
 		}
@@ -139,24 +154,21 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 			return 900;
 	}
 
-	private void make() {
-		tank.drain(UF6_PER_DUST, true);
-		if (ReikaRandomHelper.doWithChance(FUEL_CHANCE)) {
-			ReikaInventoryHelper.addOrSetStack(ReactorStacks.fueldust.copy(), inv, 0);
+	private void make(Centrifuging recipe) {
+		tank.removeLiquid(recipe.fluidAmount);
+		if (ReikaRandomHelper.doWithPercentChance(recipe.chanceOfAOverB)) {
+			ReikaInventoryHelper.addOrSetStack(recipe.getOutputA(), inv, 0);
 		}
-		else {
-			ReikaInventoryHelper.addOrSetStack(ReactorStacks.depdust.copy(), inv, 1);
-			if (ReikaRandomHelper.doWithChance(20)) {
-				//ReikaInventoryHelper.addOrSetStack(ReactorStacks.thordust.copy(), inv, 0);
-			}
+		else if (recipe.outputB != null) {
+			ReikaInventoryHelper.addOrSetStack(recipe.getOutputB(), inv, 1);
 		}
 	}
 
-	public boolean canMake() {
-		return this.getUF6() >= UF6_PER_DUST && this.hasInventorySpace();
-	}
-
-	private boolean hasInventorySpace() {
+	private boolean hasInventorySpace(Centrifuging recipe) {
+		if (inv[0] != null && !ReikaItemHelper.matchStacks(inv[0], recipe.outputA))
+			return false;
+		if (inv[1] != null && recipe.outputB != null && !ReikaItemHelper.matchStacks(inv[1], recipe.outputB))
+			return false;
 		if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize())
 			return false;
 		if (inv[1] != null && inv[1].stackSize >= inv[1].getMaxStackSize())
@@ -168,12 +180,8 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 		return (int)(p*split/(float)timer.getCap());
 	}
 
-	public int getUF6() {
-		return tank.getFluid() != null ? tank.getFluid().amount : 0;
-	}
-
-	public int getUF6Scaled(int p) {
-		return p*this.getUF6()/tank.getCapacity();
+	public int getFluidScaled(int p) {
+		return p*tank.getLevel()/tank.getCapacity();
 	}
 
 	@Override
@@ -188,47 +196,47 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return ReikaItemHelper.matchStacks(itemstack, ReactorStacks.fueldust);
+		return false;
 	}
 
 	@Override
 	public int getOmega() {
-		return omega;
+		return powerHandler.getOmega();
 	}
 
 	@Override
 	public int getTorque() {
-		return torque;
+		return powerHandler.getTorque();
 	}
 
 	@Override
 	public long getPower() {
-		return power;
+		return powerHandler.getPower();
 	}
 
 	@Override
 	public int getIORenderAlpha() {
-		return iotick;
+		return powerHandler.getIORenderAlpha();
 	}
 
 	@Override
 	public void setIORenderAlpha(int io) {
-		iotick = io;
+		powerHandler.setIORenderAlpha(io);
 	}
 
 	@Override
 	public void setOmega(int omega) {
-		this.omega = omega;
+		powerHandler.setOmega(omega);
 	}
 
 	@Override
 	public void setTorque(int torque) {
-		this.torque = torque;
+		powerHandler.setTorque(torque);
 	}
 
 	@Override
 	public void setPower(long power) {
-		this.power = power;
+		powerHandler.setPower(power);
 	}
 
 	@Override
@@ -243,8 +251,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
+		powerHandler.noInputMachine();
 	}
 
 	@Override
@@ -264,7 +271,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("rc uranium hexafluoride"));
+		return from == ForgeDirection.UP && recipes.containsKey(fluid);
 	}
 
 	@Override
@@ -278,29 +285,23 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		split = NBT.getInteger("time");
 
-		omega = NBT.getInteger("omg");
-		torque = NBT.getInteger("tq");
-		power = NBT.getLong("pwr");
+		powerHandler.readFromNBT(NBT);
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("time", split);
 
-		NBT.setInteger("omg", omega);
-		NBT.setInteger("tq", torque);
-		NBT.setLong("pwr", power);
+		powerHandler.writeToNBT(NBT);
 
 		tank.writeToNBT(NBT);
 	}
@@ -310,7 +311,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public void addUF6(int amt) {
-		tank.fill(FluidRegistry.getFluidStack("rc uranium hexafluoride", amt), true);
+		tank.addLiquid(amt, ReactorCraft.UF6);
 	}
 
 	public void removeFluid(int volume) {
@@ -360,5 +361,69 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	@Override
 	public long getMinPower() {
 		return 1;
+	}
+
+	public int getUF6() {
+		return tank.getActualFluid() == ReactorCraft.UF6 ? tank.getLevel() : 0;
+	}
+
+	public Fluid getFluid() {
+		return tank.getActualFluid();
+	}
+
+	public static Collection<Centrifuging> getRecipes() {
+		ReikaJavaLibrary.initClass(Centrifuging.class);
+		return Collections.unmodifiableCollection(recipes.values());
+	}
+
+	public static Centrifuging getRecipe(Fluid f) {
+		ReikaJavaLibrary.initClass(Centrifuging.class);
+		return recipes.get(f);
+	}
+
+	public static enum Centrifuging {
+
+		UF6(ReactorCraft.UF6, UF6_PER_DUST, ReactorStacks.fueldust, ReactorStacks.depdust, FUEL_CHANCE);
+
+		public final Fluid input;
+		public final int fluidAmount;
+		private final ItemStack outputA;
+		private final ItemStack outputB;
+		public final float chanceOfAOverB; //percentage
+
+		public final int minSpeed;
+		public final int speedFactor;
+
+		private Centrifuging(Fluid f, int amt, ItemStack a, ItemStack b, float c) {
+			this(f, amt, a, b, c, MINSPEED, 1);
+		}
+
+		private Centrifuging(Fluid f, int amt, ItemStack a, ItemStack b, float c, int ms, int sf) {
+			input = f;
+			fluidAmount = amt;
+			outputA = a;
+			outputB = b;
+			chanceOfAOverB = c;
+
+			minSpeed = ms;
+			speedFactor = sf;
+
+			if (recipes.containsKey(f))
+				throw new IllegalArgumentException("Fluid "+f.getName()+" already registered to a recipe!");
+			recipes.put(f, this);
+		}
+
+		public ItemStack getOutputA() {
+			return outputA.copy();
+		}
+
+		public ItemStack getOutputB() {
+			return outputB != null ? outputB.copy() : null;
+		}
+
+		public boolean produces(ItemStack result) {
+			return ReikaItemHelper.matchStacks(outputA, result) || (outputB != null && ReikaItemHelper.matchStacks(outputB, result));
+		}
+
 	}
 }

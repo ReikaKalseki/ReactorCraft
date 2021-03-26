@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,8 +16,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOres;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,10 +31,20 @@ public class ItemBlockReactorOre extends ItemBlock {
 		this.setMaxDamage(0);
 	}
 
+	/*
+	@Override
+	public void onUpdate(ItemStack is, World world, Entity e, int slot, boolean flag) {
+		if (e instanceof EntityPlayer && ReactorOptions.RADIOORE.getState() && ReactorOres.oreList[is.getItemDamage()].isUranium()) {
+			EntityPlayer ep = (EntityPlayer)e;
+			if (!ep.capabilities.isCreativeMode) {
+				RadiationEffects.instance.applyEffects(ep, RadiationIntensity.LOWLEVEL);
+			}
+		}
+	}
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item ID, CreativeTabs cr, List li)
-	{
+	public void getSubItems(Item ID, CreativeTabs cr, List li) {
 		for (int i = 1; i < this.getDataValues(); i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
 			li.add(item);

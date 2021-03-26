@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,6 +17,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.ISpecialArmor;
+
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.ReactorCraft.ClientProxy;
 import Reika.ReactorCraft.ReactorCraft;
@@ -24,7 +25,7 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 
 public class ItemHazmatSuit extends ItemArmor implements IndexedItemSprites, ISpecialArmor {
 
-	private int sprite;
+	private final int sprite;
 
 	public ItemHazmatSuit(int ind, int render, int type) {
 		super(ReactorCraft.HAZ, ReactorCraft.proxy.hazmat, type);

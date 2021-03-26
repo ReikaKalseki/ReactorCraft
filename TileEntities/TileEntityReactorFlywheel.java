@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -37,8 +38,8 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;
-	public static final int MAXTORQUE = 12750;
-	public static final int MAXTORQUE_AMMONIA = 12750*2;
+	private static final int MAXTORQUE = 12750;
+	private static final int MAXTORQUE_AMMONIA = 12750*2;
 
 	public boolean hasMultiBlock() {
 		return hasMultiBlock;
@@ -75,7 +76,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 			//torque = te.getTorque();
 			//ReikaJavaLibrary.pConsole(torque+"/"+te.getTorque()+":"+omega+"/"+te.getOmega(), Side.SERVER);
 			omega = te.getOmega();
-			torque = te instanceof TileEntityHiPTurbine ? te.getTorque() : Math.min(te.getTorque(), te.isAmmonia() ? MAXTORQUE_AMMONIA : MAXTORQUE);
+			torque = TileEntityReactorFlywheel.clampTorque(te);
 		}
 		else {
 			if (omega > 0)
@@ -93,6 +94,10 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 			rec.setTorque(this.getTorque());
 			rec.setPower(this.getPower());
 		}
+	}
+
+	public static int clampTorque(TileEntityTurbineCore te) {
+		return te instanceof TileEntityHiPTurbine ? te.getTorque() : Math.min(te.getTorque(), te.isAmmonia() ? MAXTORQUE_AMMONIA : MAXTORQUE);
 	}
 
 	private ForgeDirection setFacing(int meta) {

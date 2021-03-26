@@ -1,15 +1,13 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.Entities;
-
-import io.netty.buffer.ByteBuf;
 
 import java.util.List;
 
@@ -24,7 +22,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.ParticleEntity;
 import Reika.DragonAPI.Instantiable.BasicTeleporter;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -40,12 +40,23 @@ import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.RadiationShield;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorOptions;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 
 public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSpawnData {
 
 	private NeutronType type;
 	private NeutronSpeed speed;
+
+	private static Block botaniaPlatform;
+	private static Block ttPlatform;
+
+	public static void initTransparencyBlocks() {
+		botaniaPlatform = ModList.BOTANIA.isLoaded() ? GameRegistry.findBlock(ModList.BOTANIA.modLabel, "platform") : null;
+		ttPlatform = ModList.THAUMICTINKER.isLoaded() ? GameRegistry.findBlock(ModList.THAUMICTINKER.modLabel, "platform") : null;
+	}
 
 	public EntityNeutron(World world, int x, int y, int z, ForgeDirection f, NeutronType type) {
 		super(world, x, y, z, f);
@@ -75,7 +86,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (id != Blocks.air) {
+		if (!this.isNeutronTransparent(id)) {
 			if (id.hasTileEntity(meta)) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof NeutronTile) {
@@ -98,7 +109,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			}
 
 			if (id instanceof NeutronBlock) {
-				return ((NeutronBlock)id).onNeutron(this, world, x, y, z);
+				if (((NeutronBlock)id).onNeutron(this, world, x, y, z))
+					return true;
 			}
 			else if (id instanceof NeutronShield) {
 				NeutronShield ns = (NeutronShield)id;
@@ -110,8 +122,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					if (ReikaRandomHelper.doWithChance(c2)) {
 						this.spawnRadiationChance(world, x, y, z);
 					}
+					return true;
 				}
-				return flag;
 			}
 
 			if ((id == ReactorBlocks.FLUORITE.getBlockInstance() || id == ReactorBlocks.FLUORITEORE.getBlockInstance()) && meta < FluoriteTypes.colorList.length) {
@@ -120,8 +132,8 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			}
 
 			RadiationShield rs = RadiationShield.getFrom(id, meta);
-			if (rs != null)
-				return ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance);
+			if (rs != null && ReikaRandomHelper.doWithChance(rs.neutronAbsorbChance))
+				return true;
 
 			if (ReikaRandomHelper.doWithChance(speed.getIrradiatedAbsorptionChance())) {
 				boolean flag = id.isOpaqueCube() ? (rand.nextBoolean() && id.getExplosionResistance(null, world, x, y, z, x, y, z) >= 12) || ReikaRandomHelper.getSafeRandomInt((int)(24 - id.getExplosionResistance(null, world, x, y, z, x, y, z))) == 0 : 255-id.getLightOpacity(world, x, y, z) == 0 ? ReikaRandomHelper.getSafeRandomInt(id.getLightOpacity(world, x, y, z)) > 0 : rand.nextInt(1000) == 0;
@@ -129,13 +141,17 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 					this.spawnRadiationChance(world, x, y, z);
 					if (ReikaRandomHelper.doWithChance(20))
 						RadiationEffects.instance.transformBlock(world, x, y, z, RadiationIntensity.MODERATE);
+					return true;
 				}
-				return flag;
 			}
 			return false;
 		}
 
 		return rand.nextInt(1000) == 0;
+	}
+
+	private boolean isNeutronTransparent(Block id) {
+		return id == Blocks.air || id == botaniaPlatform || id == ttPlatform;
 	}
 
 	private void spawnRadiationChance(World world, int x, int y, int z) {

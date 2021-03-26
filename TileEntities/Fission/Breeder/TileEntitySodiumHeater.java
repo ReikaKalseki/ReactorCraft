@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,13 +12,16 @@ package Reika.ReactorCraft.TileEntities.Fission.Breeder;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TileEntityIntermediateBoiler;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
@@ -60,7 +63,7 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 
 	@Override
 	protected Fluid getOutputFluid() {
-		return FluidRegistry.getFluid("rc hotsodium");
+		return ReactorCraft.NA_hot;
 	}
 
 	@Override
@@ -76,6 +79,11 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		NeutronType type = e.getType();
 		return !tank.isEmpty() && ReikaRandomHelper.doWithChance(type.getSodiumBoilerAbsorptionChance());
+	}
+
+	@Override
+	protected ReactorType getDefaultReactorType() {
+		return ReactorType.BREEDER;
 	}
 
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,17 +11,19 @@ package Reika.ReactorCraft.TileEntities.Fusion;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TypedReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements Temperatured, ReactorCoreTE {
+public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements Temperatured, TypedReactorCoreTE {
 
 	private StepTimer tempTimer = new StepTimer(20);
 
@@ -77,6 +79,11 @@ public class TileEntityNeutronAbsorber extends TileEntityReactorBase implements 
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq != LiquidStates.EMPTY;
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.FUSION;
 	}
 
 }

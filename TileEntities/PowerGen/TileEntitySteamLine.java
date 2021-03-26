@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,8 +16,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTIO;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -75,11 +78,14 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		if (r == ReactorTiles.BOILER) {
 			TileEntityReactorBoiler te = (TileEntityReactorBoiler)world.getTileEntity(x, y-1, z);
-			if (this.canTakeInWorkingFluid(te.getWorkingFluid())) {
+			if (te.getTileEntityAge() > 5 && this.canTakeInWorkingFluid(te.getWorkingFluid())) {
 				fluid = te.getWorkingFluid();
 				int s = te.removeSteam();
 				steam += s;
-				source.addValue(te.getReactorType(), s);
+				for (ReactorType rt : te.getReactorTypeSet()) {
+					double f = te.getReactorTypeFraction(rt);
+					source.addValue(rt, s*f);
+				}
 			}
 		}
 	}
@@ -121,7 +127,7 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 			steam += dS/2+1;
 			te.steam -= dS/2+1;
 			fluid = te.fluid;
-			source = te.source;
+			this.addSources(te.source);
 		}
 	}
 
@@ -152,6 +158,22 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		fluid.saveToNBT(NBT);
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		source.readFromNBT(NBT.getCompoundTag("sources"), (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		source.writeToNBT(tag, (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+		NBT.setTag("sources", tag);
+	}
+
 	public WorkingFluid getWorkingFluid() {
 		return fluid;
 	}
@@ -175,7 +197,13 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		((TileEntitySteamLine)from).steam -= amt;
 		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
-		source = ((TileEntitySteamLine)from).source;
+		this.addSources(((TileEntitySteamLine)from).source);
+	}
+
+	private void addSources(Proportionality<ReactorType> p) {
+		for (ReactorType r : p.getElements()) {
+			source.addValue(r, p.getValue(r));
+		}
 	}
 
 	public Proportionality<ReactorType> getSourceReactorType() {

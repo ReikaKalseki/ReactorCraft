@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,7 +19,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.AbstractSearch.PropagationCondition;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -29,18 +31,18 @@ import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
 import Reika.ReactorCraft.Auxiliary.ReactorControlLayout;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Event.ScramEvent;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
-import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 
-public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, Temperatured, ReactorBlock, NeutronTile {
+public class TileEntityCPU extends TileEntityReactorBase implements ReactorPowerReceiver, TemperaturedReactorTyped, ReactorBlock, NeutronTile {
 
 	private ReactorControlLayout layout;
 	private final BlockArray reactor = new BlockArray();
@@ -54,23 +56,28 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 
 	private int redstoneUpdate = 200;
 
+	private final PropagationCondition reactorBlocks = new PropagationCondition() {
+
+		@Override
+		public boolean isValidLocation(World world, int x, int y, int z, Coordinate from) {
+			return world.getTileEntity(x, y, z) instanceof ReactorBlock;
+		}
+
+	};
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
 		if (thermalTicker.checkCap())
 			this.updateTemperature(world, x, y, z);
 		if (!world.isRemote) {
-
 			if (world.getTotalWorldTime()%64 == 0)
 				reactor.clear();
 
 			if (reactor.isEmpty()) {
 				layout.clear();
 				int r = 12;
-				Block id = ReactorBlocks.REACTOR.getBlockInstance();
-				Block id2 = ReactorBlocks.MODELREACTOR.getBlockInstance();
-				for (int i = 2; i < 6; i++)
-					reactor.recursiveMultiAddWithBounds(world, x+dirs[i].offsetX, y, z+dirs[i].offsetZ, x-r, y-4, z-r, x+r, y+4, z+r, id, id2);
+				reactor.recursiveAddCallbackWithBounds(world, x, y, z, x-r, y-4, z-r, x+r, y+4, z+r, reactorBlocks);
 				for (int i = 0; i < reactor.getSize(); i++) {
 					Coordinate c = reactor.getNthBlock(i);
 					int dx = c.xCoord;
@@ -336,6 +343,11 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 
 	public void removeTemperatureCheck(LinkableReactorCore te) {
 		temperatureChecks.remove(new TemperatureMonitor(te));
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.FISSION;
 	}
 
 	private static class TemperatureMonitor {

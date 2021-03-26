@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
@@ -216,11 +217,6 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	@Override
 	public int getTextureState(ForgeDirection side) {
 		return 0;
-	}
-
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
 	}
 
 	@Override

@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.ReactorCraft.Auxiliary;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer.PlayerRotationData;
 import Reika.DragonAPI.Interfaces.PlayerRenderObj;

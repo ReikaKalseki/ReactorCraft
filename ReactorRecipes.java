@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,15 +16,22 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Instantiable.Recipe.FluidInputRecipe.ShapelessFluidInputRecipe;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -37,6 +44,8 @@ import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -49,17 +58,22 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ReactorRecipes {
 
 	private static void addRCInterface() {
-		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 7), ReactorItems.DEPLETED.getStackOf());
-		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 7), ReactorItems.OLDPELLET.getStackOf());
+		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(3, 9), ReactorItems.DEPLETED.getStackOf());
+		GameRegistry.addShapelessRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 9), ReactorItems.OLDPELLET.getStackOf());
 		GameRegistry.addShapelessRecipe(FluoriteTypes.WHITE.getItem(), ItemStacks.getModOreIngot(ModOreList.FLUORITE));
+
+		GameRegistry.addShapedRecipe(Upgrades.LODESTONE.getStack(), "php", "mcm", "php", 'p', ItemStacks.basepanel, 'm', ReactorItems.MAGNET.getStackOfMetadata(3), 'h', ReactorBlocks.SOLENOIDMULTI.getStackOfMetadata(4), 'c', CraftingItems.MAGNETCORE.getItem());
 
 		RecipesGrinder.getRecipes().addRecipe(ReactorOres.PITCHBLENDE.getProduct(), CraftingItems.UDUST.getItem());
 		RecipesGrinder.getRecipes().addRecipe(ItemStacks.getModOreIngot(ModOreList.PITCHBLENDE), CraftingItems.UDUST.getItem());
@@ -83,9 +97,9 @@ public class ReactorRecipes {
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
-		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch(ReactorItems.FLUORITE.getItemInstance()), new ItemMatch("dustThorium"));
+		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch("dustThorium"));
 
-		if (ModList.IC2.isLoaded())
+		if (ModList.IC2.isLoaded() && !IC2Handler.getInstance().isIC2Classic())
 			TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
 	}
 
@@ -141,7 +155,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 5), "SSS", "WPW", "SSS", 'W', CraftingItems.WIRE.getItem(), 'P', CraftingItems.MAGNETIC.getItem(), 'S', CraftingItems.FERROINGOT.getItem());
 
 		id = ReactorBlocks.GENERATORMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "sss", "SsS", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SsS", "scs", "SsS", 'c', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE), 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "SSS", "SBS", "SSS", 'S', CraftingItems.WIRE.getItem(), 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SSS", "MMM", "SSS", 'M', CraftingItems.WIRE.getItem(), 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
@@ -152,7 +166,7 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bPb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel);
 
 		id = ReactorBlocks.FLYWHEELMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sSs", "sss", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sSs", "SCS", "sSs", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock, 'C', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "SSS", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "sss", "sSs", "sss", 's', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
@@ -233,6 +247,12 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(MatBlocks.CALCITE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.calcite);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.calcite, 9), MatBlocks.CALCITE.getStackOf());
 
+		GameRegistry.addRecipe(MatBlocks.GRAPHITE.getStackOf(), "CCC", "CCC", "CCC", 'C', CraftingItems.GRAPHITE.getItem());
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(CraftingItems.GRAPHITE.getItem(), 9), MatBlocks.GRAPHITE.getStackOf());
+
+		GameRegistry.addRecipe(MatBlocks.LODESTONE.getStackOf(), "CCC", "CCC", "CCC", 'C', ReactorStacks.lodestone);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ReactorStacks.lodestone, 9), MatBlocks.LODESTONE.getStackOf());
+
 		GameRegistry.addRecipe(MatBlocks.SCRUBBER.getStackOf(), "IWI", "WPW", "IWI", 'I', Blocks.iron_bars, 'W', Blocks.wool, 'P', ItemStacks.pipe);
 
 		GameRegistry.addShapelessRecipe(MatBlocks.CONCRETE.getStackOf(4), Blocks.clay, Blocks.sand, Blocks.gravel, Items.water_bucket);
@@ -286,7 +306,7 @@ public class ReactorRecipes {
 		ReactorTiles.TURBINECORE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', CraftingItems.TURBCORE.getItem());
 		ReactorTiles.STEAMLINE.addSizedCrafting(3, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', ItemStacks.pipe);
 		ReactorTiles.FLUIDEXTRACTOR.addCrafting("PpP", "GIG", "PSP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'G', Blocks.glass, 'I', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
-		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit16);
+		ReactorTiles.CENTRIFUGE.addCrafting("SPS", "B B", "PGP", 'B', ItemStacks.bedingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 		ReactorTiles.PROCESSOR.addCrafting("POP", "OMO", 'O', CraftingItems.TANK.getItem(), 'M', ItemStacks.mixer, 'P', ItemStacks.pipe);
 		ReactorTiles.WASTECONTAINER.addCrafting("SCS", "CcC", "SCS", 'S', ItemStacks.steelingot, 'C', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'c', Blocks.chest);
 		ReactorTiles.BOILER.addCrafting("SPS", "PrP", "SPS", 'r', MachineRegistry.RESERVOIR.getCraftedProduct(), 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
@@ -304,7 +324,7 @@ public class ReactorRecipes {
 		ReactorTiles.CPU.addCrafting("SCS", "CGC", "SCS", 'S', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', ItemStacks.gearunit);
 		ReactorTiles.MAGNETPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Items.gold_ingot, 'G', BlockRegistry.BLASTGLASS.getStackOf());
 		ReactorTiles.MAGNET.addCrafting("MCM", "CHC", "MCM", 'H', CraftingItems.HYSTERESISRING.getItem(), 'M', CraftingItems.MAGNETCORE.getItem(), 'C', CraftingItems.COOLANT.getItem());
-		ReactorTiles.SOLENOID.addCrafting("SPS", "MCM", "IGI", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'M', CraftingItems.MAGNETIC.getItem(), 'C', CraftingItems.MAGNETCORE.getItem(), 'I', CraftingItems.FERROINGOT.getItem(), 'G', ItemStacks.gearunit16);
+		ReactorTiles.SOLENOID.addCrafting("SPS", "MCM", "IGI", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'M', CraftingItems.MAGNETIC.getItem(), 'C', CraftingItems.MAGNETCORE.getItem(), 'I', CraftingItems.FERROINGOT.getItem(), 'G', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT16));
 		ReactorTiles.HEATER.addCrafting("MPM", "P P", "MPM", 'M', CraftingItems.FERROINGOT.getItem(), 'P', BlockRegistry.BLASTGLASS.getStackOf());
 		ReactorTiles.INJECTOR.addCrafting("PMP", "M M", "PMP", 'P', ReactorTiles.MAGNETPIPE.getCraftedProduct(), 'M', CraftingItems.MAGNETIC.getItem());
 		ReactorTiles.ABSORBER.addCrafting(" P ", "PCP", " P ", 'C', ItemStacks.steelblock, 'P', ReactorItems.DEPLETED.getStackOf());
@@ -320,7 +340,7 @@ public class ReactorRecipes {
 		ReactorTiles.MARKER.addCrafting("F", "R", 'F', FluoriteTypes.BLUE.getItem(), 'R', Blocks.redstone_torch);
 		ReactorTiles.TURBINEMETER.addCrafting("SrS", "PGP", "PCP", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'G', Blocks.glowstone, 'r', Items.redstone, 'S', ItemStacks.steelingot);
 		ReactorTiles.BIGTURBINE.addCrafting("BBB", "BCB", "BBB", 'B', ItemStacks.prop, 'C', ReactorTiles.TURBINECORE.getCraftedProduct());
-		ReactorTiles.FLYWHEEL.addCrafting("BBB", "SSS", "BBB", 'B', ItemStacks.steelblock, 'S', ItemStacks.shaftitem);
+		ReactorTiles.FLYWHEEL.addCrafting("BBB", "STS", "BBB", 'B', ItemStacks.steelblock, 'S', ItemStacks.shaftitem, 'T', GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE));
 
 		ReactorTiles.DIFFUSER.addCrafting("BBB", "DPD", "BBB", 'B', ItemStacks.basepanel, 'D', ItemStacks.diffuser, 'P', ItemStacks.pipe);
 
@@ -332,9 +352,99 @@ public class ReactorRecipes {
 		ReactorTiles.SOLARTOP.addCrafting("aPa", "tct", "sPs", 'a', CraftingItems.ALLOY.getItem(), 't', ItemStacks.tungsteningot, 'c', ItemStacks.condenser, 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 		ReactorTiles.SOLAR.addCrafting("sPs", "pEp", "sPs", 'p', ItemStacks.pipe, 'E', ReactorTiles.EXCHANGER.getCraftedProduct(), 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
 
-		ReactorTiles.HEATPIPE.addSizedCrafting(8, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', Items.gold_ingot);
+		ReactorTiles.HEATPIPE.addSizedCrafting(6, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', Items.gold_ingot);
 		if (ReikaItemHelper.oreItemExists("ingotCopper"))
-			ReactorTiles.HEATPIPE.addSizedOreCrafting(4, "NPN", "NPN", "NPN", 'N', Blocks.wool, 'P', "ingotCopper");
+			ReactorTiles.HEATPIPE.addSizedOreCrafting(3, " NP", "NPN", "PN ", 'N', Blocks.wool, 'P', "ingotCopper");
+	}
+
+	public static void loadCustomRecipeFiles() {
+		CustomRecipeList.addFieldLookup("reactorcraft_stack", ReactorStacks.class);
+		loadRecipeFile("electrolyzer");
+		loadRecipeFile("synthesizer");
+	}
+
+	private static void loadRecipeFile(String id) {
+		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, id);
+		crl.load();
+		for (LuaBlock lb : crl.getEntries()) {
+			Exception e = null;
+			boolean flag = false;
+			String n = lb.getString("type");
+			try {
+				if (LuaBlock.isErrorCode(n))
+					throw new IllegalArgumentException("Custom recipes require a specified name!");
+				if (!ReikaStringParser.isValidVariableName(n))
+					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
+				switch(id) {
+					case "electrolyzer":
+						flag = addCustomElectrolyzerRecipe(n, lb, crl);
+						break;
+					case "synthesizer":
+						flag = addCustomSynthesizerRecipe(n, lb, crl);
+						break;
+				}
+			}
+			catch (Exception ex) {
+				e = ex;
+				flag = false;
+			}
+			if (flag) {
+				ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+n+"'");
+			}
+			else {
+				ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+n+"'");
+				if (e != null)
+					e.printStackTrace();
+			}
+		}
+	}
+
+	private static boolean addCustomSynthesizerRecipe(String n, LuaBlock lb, CustomRecipeList crl) {
+		LuaBlock fluidIn = lb.getChild("fluid_in");
+		LuaBlock fluidOut = lb.getChild("fluid_out");
+		if (fluidIn == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' missing an input fluid!");
+		}
+		if (fluidOut == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' missing an output fluid!");
+		}
+		LuaBlock itemIn1 = lb.getChild("item_in");
+		LuaBlock itemIn2 = lb.getChild("item_in_2");
+		Fluid in = FluidRegistry.getFluid(fluidIn.getString("type"));
+		int amtin = fluidIn.getInt("amount");
+		Fluid out = FluidRegistry.getFluid(fluidOut.getString("type"));
+		int amtout = fluidOut.getInt("amount");
+		FlexibleIngredient item1 = FlexibleIngredient.parseLua(crl, itemIn1, false);
+		FlexibleIngredient item2 = FlexibleIngredient.parseLua(crl, itemIn2, false);
+		TileEntitySynthesizer.addRecipe(n, in, out, amtin, amtout, lb.getInt("min_temperature"), lb.getInt("base_time"), lb.getInt("temp_curve"), item1, item2);
+		return true;
+	}
+
+	private static boolean addCustomElectrolyzerRecipe(String n, LuaBlock lb, CustomRecipeList crl) {
+		LuaBlock fluidIn = lb.getChild("fluid_in");
+		LuaBlock itemIn = lb.getChild("item_in");
+		LuaBlock fluidUp = lb.getChild("fluid_out_up");
+		LuaBlock fluidDown = lb.getChild("fluid_out_down");
+		Fluid in = fluidIn != null ? FluidRegistry.getFluid(fluidIn.getString("type")) : null;
+		int amt = fluidIn != null ? fluidIn.getInt("amount") : 0;
+		ItemMatch item = null;
+		boolean cata = false;
+		if (itemIn != null) {
+			item = new ItemMatch(crl.parseItemCollection(itemIn.getChild("items").getDataValues(), false));
+			cata = itemIn.getBoolean("is_catalyst");
+		}
+		Fluid out1 = fluidUp != null ? FluidRegistry.getFluid(fluidUp.getString("type")) : null;
+		int amt1 = fluidUp != null ? fluidUp.getInt("amount") : 0;
+		Fluid out2 = fluidDown != null ? FluidRegistry.getFluid(fluidDown.getString("type")) : null;
+		int amt2 = fluidDown != null ? fluidDown.getInt("amount") : 0;
+		if (in == null && item == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' has no ingredients!");
+		}
+		if (out1 == null && out2 == null) {
+			throw new IllegalArgumentException("Recipe '"+n+"' has no products!");
+		}
+		TileEntityElectrolyzer.addRecipe(n, in, amt, item, cata, out1, amt1, out2, amt2, lb.getInt("temperature"));
+		return true;
 	}
 
 }

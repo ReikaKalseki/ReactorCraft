@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -29,8 +30,13 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.Interfaces.RefrigeratorAttachment;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 
-public class TileEntityGasCollector extends TileEntityReactorBase implements IFluidHandler {
+public class TileEntityGasCollector extends TileEntityReactorBase implements IFluidHandler, PipeConnector, RefrigeratorAttachment {
 
 	private final HybridTank tank = new HybridTank("co2collector", 1000);
 
@@ -44,7 +50,7 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 			ticks -= 8;
 
 		readDir = dirs[meta].getOpposite();
-		Block id = this.getAdjacentLocation(readDir).getBlock();
+		Block id = this.getAdjacentLocation(readDir).getBlock(world);
 		if (id == Blocks.lit_furnace) {
 			TileEntityFurnace te = (TileEntityFurnace)this.getAdjacentTileEntity(readDir);
 			ItemStack fuel = te.getStackInSlot(1);
@@ -54,6 +60,10 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 					tank.addLiquid(10, FluidRegistry.getFluid("rc co2"));
 			}
 		}
+		else if (id == MachineRegistry.REFRIGERATOR.getBlock() && this.getAdjacentLocation(readDir).getBlockMetadata(world) == MachineRegistry.REFRIGERATOR.getBlockMetadata()) {
+			TileEntityRefrigerator te = (TileEntityRefrigerator)this.getAdjacentTileEntity(readDir);
+			te.addAttachment(this, readDir.getOpposite());
+		}
 		//ReikaJavaLibrary.pConsole(id+":"+tank, Side.SERVER);
 	}
 
@@ -62,8 +72,8 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	}
 
 	public boolean hasFurnace() {
-		Block id = this.getAdjacentLocation(readDir).getBlock();
-		return id == Blocks.furnace || id == Blocks.lit_furnace;
+		Block id = this.getAdjacentLocation(readDir).getBlock(worldObj);
+		return id == Blocks.furnace || id == Blocks.lit_furnace || id == MachineRegistry.REFRIGERATOR.getBlock() && this.getAdjacentLocation(readDir).getBlockMetadata(worldObj) == MachineRegistry.REFRIGERATOR.getBlockMetadata();
 	}
 
 	@Override
@@ -123,6 +133,26 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return ReikaAABBHelper.getBlockAABB(this).expand(0.5, 0.5, 0.5);
+	}
+
+	@Override
+	public void onCompleteCycle(int ln2) {
+		tank.addLiquid(ln2*2/7, FluidRegistry.getFluid("rc liquid oxygen"));
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m.isStandardPipe();
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry m, ForgeDirection side) {
+		return this.canConnectToPipe(m) && this.getFlowForSide(side) != Flow.NONE;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == readDir.getOpposite() ? Flow.OUTPUT : Flow.NONE;
 	}
 
 }

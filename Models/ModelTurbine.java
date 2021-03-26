@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,13 +17,17 @@ package Reika.ReactorCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelTurbine extends RotaryModelBase
@@ -35,6 +39,8 @@ public class ModelTurbine extends RotaryModelBase
 	protected final int stage;
 
 	private int compiledList = -1;
+
+	private EntityVillager villagerRender;
 
 	public ModelTurbine(int stage)
 	{
@@ -142,13 +148,42 @@ public class ModelTurbine extends RotaryModelBase
 	}
 
 	private void renderBlades(TileEntity te, int damage, double vo, float phi) {
-		for (int i = 0; i < 360; i += this.getAngularSeparation()*(damage+1)) {
+		double da = this.getAngularSeparation()*(damage+1);
+		for (int i = 0; i < 360; i += da) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(0, vo, 0);
 			GL11.glRotatef(i+phi, 0, 0, 1);
 			GL11.glTranslated(0, -vo, 0);
 			GL11.glRotatef(-this.getBladeTwist(), 0, 1, 0);
-			blade.render(te, f5);
+			if (te.hasWorldObj() && OldTextureLoader.instance.loadOldTextures()) {
+				if (villagerRender == null)
+					villagerRender = new EntityVillager(te.worldObj);
+				//RenderManager.instance.renderEntitySimple(villagerRender, ReikaRenderHelper.getPartialTickTime());
+				int n = 2;
+				switch(stage) {
+					case 0:
+						n = 5;
+						break;
+					case 1:
+						n = 4;
+						break;
+					case 2:
+						n = 3;
+						break;
+				}
+				if ((i/da)%n == 0) {
+					double s = this.getBladeLength()/20F;
+					if (stage <= 1) {
+						s *= -0.75;
+						GL11.glTranslated(0, 1.375, 0);
+					}
+					GL11.glScaled(1, s, 1);
+					RenderManager.instance.renderEntityWithPosYaw(villagerRender, 0, 0, 0, 0, ReikaRenderHelper.getPartialTickTime());
+				}
+			}
+			else {
+				blade.render(te, f5);
+			}
 			GL11.glPopMatrix();
 		}
 	}

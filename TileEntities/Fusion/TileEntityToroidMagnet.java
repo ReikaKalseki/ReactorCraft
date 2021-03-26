@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,12 +20,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
+import Reika.DragonAPI.Interfaces.TileEntity.NonIFluidTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -45,7 +48,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
 public class TileEntityToroidMagnet extends TileEntityReactorBase implements Screwdriverable, Shockable, MultiBlockTile, FusionReactorToroidPart,
-ChunkLoadingTile, NeutronTile {
+ChunkLoadingTile, NeutronTile, NonIFluidTank {
 
 	//0 is +x(E), rotates to -z(N)
 	private Aim aim = Aim.N;
@@ -579,5 +582,21 @@ ChunkLoadingTile, NeutronTile {
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
+	}
+
+	@Override
+	public boolean allowAutomation() {
+		return true;
+	}
+
+	@Override
+	public int addFluid(Fluid fluid, int amount, boolean doFill) {
+		if (fluid != RotaryCraft.nitrogenFluid)
+			return 0;
+		int add = tank.canTakeIn(fluid, 1) ? Math.min(tank.getRemainingSpace(), amount) : 0;
+		if (doFill && add > 0) {
+			tank.addLiquid(add, fluid);
+		}
+		return add;
 	}
 }

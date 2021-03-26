@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes.ElementGroup;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects;
@@ -27,6 +28,7 @@ import Reika.ReactorCraft.Base.ItemReactorMulti;
 import Reika.ReactorCraft.Entities.EntityNuclearWaste;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

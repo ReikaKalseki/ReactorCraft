@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.HydrogenExplosion;
 import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
@@ -42,6 +44,7 @@ import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
 
@@ -69,8 +72,8 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote && this.isFissile() && rand.nextInt(20) == 0)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), NeutronType.DECAY));
+		if (!world.isRemote && this.isFissile() && rand.nextInt(this.getDecayNeutronChance()) == 0)
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(false), NeutronType.DECAY));
 
 		if (DragonAPICore.debugtest) {
 			ReikaInventoryHelper.clearInventory(this);
@@ -103,6 +106,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 			ReikaParticleHelper.SMOKE.spawnAroundBlockWithOutset(world, x, y, z, 4, 0.0625);
 		}
+	}
+
+	protected int getDecayNeutronChance() {
+		return 20;
 	}
 
 	protected int getWarningTemperature() {
@@ -290,23 +297,19 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	protected final void spawnNeutronBurst(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
-		for (int i = 0; i < 3; i++)
-			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(), this.getNeutronType()));
+		NeutronType n = this.getNeutronType();
+		if (n == null) {
+			ReactorCraft.logger.logError("Reactor core "+this+" has no neutron type and thus a null or invalid reactor type, but is still spawning neutrons!");
+			return;
+		}
+		for (int i = 0; i < 3; i++) {
+			world.spawnEntityInWorld(new EntityNeutron(world, x, y, z, this.getRandomDirection(ReactorOptions.VERTNEUTRONS.getState()), n));
+		}
 	}
 
 	protected final NeutronType getNeutronType() {
-		switch(this.getMachine().getReactorType()) {
-			case BREEDER:
-				return NeutronType.BREEDER;
-			case FISSION:
-				return NeutronType.FISSION;
-			case FUSION:
-				return NeutronType.FUSION;
-			case THORIUM:
-				return NeutronType.THORIUM;
-			default:
-				return null;
-		}
+		ReactorType r = this.getReactorType();
+		return r != null ? r.getNeutronType() : null;
 	}
 
 	@Override
@@ -343,14 +346,19 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		}
 	}
 
+	protected int getRestingTemperature(World world, int x, int y, int z) {
+		return ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+	}
+
 	@Override
 	protected void updateTemperature(World world, int x, int y, int z) {
 		super.updateTemperature(world, x, y, z);
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		int Tamb = this.getRestingTemperature(world, x, y, z);
 		int dT = temperature-Tamb;
 
 		if (dT != 0) {
 			int d = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 64;
+			d = this.getAmbientHeatLossFactor(world, x, y, z, d, Tamb);
 			temperature -= (1+dT/d);
 		}
 
@@ -360,20 +368,20 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				Block id = world.getBlock(dx, dy, dz);
-				int meta = world.getBlockMetadata(dx, dy, dz);
-				if (id == this.getTileEntityBlockID() && meta == ReactorTiles.TEList[this.getIndex()].getBlockMetadata()) {
+				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
+				if (r == this.getMachine()) {
 					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
-						temperature -= dTemp/16;
-						te.temperature += dTemp/16;
+						int d = this.getSameCoreHeatConductionFraction();
+						temperature -= dTemp/d;
+						te.temperature += dTemp/d*this.getHeatConductionEfficiency(te);
 					}
 				}
 			}
 		}
 
-		if (temperature >= 500) {
+		if (temperature >= this.getWarningTemperature()+100) {
 			ReactorAchievements.HOTCORE.triggerAchievement(this.getPlacer());
 		}
 
@@ -391,6 +399,14 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		else if (hydrogen > 0) {
 			hydrogen--;
 		}
+	}
+
+	private int getSameCoreHeatConductionFraction() {
+		return 16;
+	}
+
+	protected int getAmbientHeatLossFactor(World world, int x, int y, int z, int base, int Tamb) {
+		return base;
 	}
 
 	@Override

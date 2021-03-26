@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -102,11 +103,6 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 	public void overheat(World world, int x, int y, int z) {
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 		world.setBlock(x, y, z, Blocks.lava);
-	}
-
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
 	}
 
 	@Override

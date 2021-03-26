@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.ReactorCraft.Auxiliary.ReactorBookData;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
@@ -38,6 +39,7 @@ public enum ReactorBook implements HandbookEntry {
 	HTGRS("HTGR", ReactorTiles.PEBBLEBED.getCraftedProduct()),
 	FISSION("Fission", ReactorTiles.FUEL.getCraftedProduct()),
 	BREEDER("Breeder", ReactorTiles.BREEDER.getCraftedProduct()),
+	THORIUMSEC("Thorium", ReactorTiles.THORIUM.getCraftedProduct()),
 	FUSION("Fusion", ReactorTiles.MAGNET.getCraftedProduct()),
 	ACC("Accessory", ReactorTiles.MAGNETPIPE.getCraftedProduct()),
 	TOOLS("Tools", ReactorItems.GOGGLES.getStackOf()),

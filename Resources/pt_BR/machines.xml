@@ -33,6 +33,7 @@
 			O eletrolizador usa descargas elétricas para decompor os materiais em seus constituintes, tais como sal em sódio e cloro, ou água em hidrogênio e oxigênio. Os produtos pesados são inseridos por baixo, enquanto os leves, por cima. Note que os sólidos devem ser derretidos antes de serem capazes de ser processados.
 		</desc>
 		<note>
+			Energia para eletrolizar sal: %dW
 			Entrada de energia: Qualquer lado horizontal
 			Temperatura necessária para derreter sal: %d°C
 		</note>
@@ -304,7 +305,6 @@
 		</desc>
 		<note>
 			Saída de RF: Por trás
-			
 			Pode ter seus modos alterados com uma chave de fenda
 		</note>
 	</generator>

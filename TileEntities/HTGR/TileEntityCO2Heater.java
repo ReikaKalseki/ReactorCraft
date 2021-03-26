@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,10 +12,12 @@ package Reika.ReactorCraft.TileEntities.HTGR;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.ReactorCraft.Base.TileEntityIntermediateBoiler;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
@@ -65,6 +67,11 @@ public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 4, true);
 		for (int i = 0; i < 4; i++)
 			ReikaItemHelper.dropItem(world, x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), ItemStacks.scrap);
+	}
+
+	@Override
+	protected ReactorType getDefaultReactorType() {
+		return ReactorType.HTGR;
 	}
 
 }

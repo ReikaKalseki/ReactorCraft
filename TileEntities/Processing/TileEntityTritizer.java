@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
@@ -27,8 +28,8 @@ import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
+import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -164,6 +165,16 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 			output = FluidRegistry.getFluid(out);
 		}
 
+		private void onPerform(TileEntityTritizer te) {
+			switch(this) {
+				case D20:
+					ReactorAchievements.HEAVYWATER.triggerAchievement(te.getPlacer());
+					break;
+				default:
+					break;
+			}
+		}
+
 		public static Reactions getReactionFrom(Fluid in) {
 			for (int i = 0; i < reactionList.length; i++) {
 				Reactions r = reactionList[i];
@@ -225,26 +236,6 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		if (side == ForgeDirection.DOWN)
 			return Flow.OUTPUT;
 		return Flow.NONE;
-	}
-
-	@Override
-	public int getTemperature() {
-		return temperature;
-	}
-
-	@Override
-	public void setTemperature(int T) {
-		temperature = T;
-	}
-
-	@Override
-	public int getMaxTemperature() {
-		return 1000;
-	}
-
-	@Override
-	public boolean canDumpHeatInto(LiquidStates liq) {
-		return liq != LiquidStates.EMPTY;
 	}
 
 	@Override

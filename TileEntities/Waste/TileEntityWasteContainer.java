@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
@@ -218,11 +219,6 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		}
 	}
 
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
-	}
-
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}
@@ -235,6 +231,16 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 	@Override
 	public boolean onNeutron(EntityNeutron e, World world, int x, int y, int z) {
 		return false;
+	}
+
+	@Override
+	protected boolean canBeAccelerated() {
+		return false;
+	}
+
+	@Override
+	protected double getBaseDecayRate() {
+		return 1;
 	}
 
 }

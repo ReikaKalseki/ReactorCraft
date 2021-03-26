@@ -1,42 +1,34 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.Registry;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.ReactorCraft.ReactorCraft;
 
 public enum ReactorPackets {
 
-	CPU(0, 2);
+	CPUTOGGLE(),
+	CPURAISE(),
+	CPULOWER(),
+	ORERADIATION(),
+	;
 
-	private int min;
-	private int max;
+	private final int numInts;
 
-	private ReactorPackets(int l, int h)
-	{
-		min = l;
-		max = h;
+	private static final ReactorPackets[] list = values();
+
+	private ReactorPackets() {
+		this(0);
 	}
 
-	private ReactorPackets(int id)
-	{
-		min = id;
-		max = id;
-	}
-
-	public int getMinValue() {
-		return min;
-	}
-
-	public int getMaxValue() {
-		return max;
+	private ReactorPackets(int ints) {
+		numInts = ints;
 	}
 
 	public boolean isLongPacket() {
@@ -44,20 +36,12 @@ public enum ReactorPackets {
 	}
 
 	public int getNumberDataInts() {
-		if (this == CPU)
-			return 0;
-		return 1;
-	}
-
-	public boolean hasOneID() {
-		return (max == min);
+		return numInts;
 	}
 
 	public static ReactorPackets getEnum(int index) {
-		for (ReactorPackets e : ReactorPackets.values()) {
-			if (ReikaMathLibrary.isValueInsideBoundsIncl(e.getMinValue(), e.getMaxValue(), index))
-				return e;
-		}
+		if (index >= 0 && index < list.length)
+			return list[index];
 		ReactorCraft.logger.logError("Index "+index+" does not correspond to an existing packet classification!");
 		return null;
 	}

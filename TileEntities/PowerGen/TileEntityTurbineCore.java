@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -39,6 +40,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -54,6 +56,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -180,8 +183,15 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 			steam = 0;
 		}
 		else {
-			if (soundTimer.checkCap() && stage == 0)
-				ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
+			if (stage == 0) {
+				if (OldTextureLoader.instance.loadOldTextures()) {
+					if (this.getTicksExisted()%4 == 0)
+						ReikaSoundHelper.playSoundFromServerAtBlock(world, x, y, z, "mob.villager.idle", 1, 1, true);
+				}
+				else if (soundTimer.checkCap()) {
+					ReactorSounds.TURBINE.playSoundAtBlock(world, x, y, z, 2F, 1F);
+				}
+			}
 			lubeTimer.update();
 			if (!tank.isEmpty() && !world.isRemote && lubeTimer.checkCap())
 				tank.removeLiquid(this.getConsumedLubricant());
@@ -442,11 +452,13 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 				canAccel = true;
 			}
 		}
-		if (canAccel && world.isRemote) {
+		if (canAccel && world.isRemote && world.getClosestPlayer(x+0.5, y+0.5, z+0.5, 64) != null) {
 			ForgeDirection dir = this.getSteamMovement();
 			for (int i = 0; i < this.getNumberStagesTotal(); i++) {
-				TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
-				double r = te.getRadius()*2.4-2;
+				TileEntity te = world.getTileEntity(x+dir.offsetX, y, z+dir.offsetZ);
+				if (!(te instanceof TileEntityTurbineCore))
+					break;
+				double r = ((TileEntityTurbineCore)te).getRadius()*2.4-2;
 				for (int n = 0; n < 2; n++) {
 					double v = ReikaRandomHelper.getRandomBetween(0.03125, 0.25);
 					double dx = x+0.5+dir.offsetX*i;

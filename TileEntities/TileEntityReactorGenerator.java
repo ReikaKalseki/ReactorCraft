@@ -1,18 +1,13 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities;
-
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
 
 import java.util.Collection;
 
@@ -23,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -38,6 +34,7 @@ import Reika.ElectriCraft.Network.WireNetwork;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Base.BlockMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
+import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
@@ -45,10 +42,15 @@ import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
+
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler", "ic2.api.energy.tile.IEnergySource", "Reika.ElectriCraft.API.WrappableWireSource"})
 public class TileEntityReactorGenerator extends TileEntityReactorBase implements IEnergyHandler, IEnergySource, Screwdriverable, MultiBlockTile,
@@ -104,6 +106,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 		if (power > 0) {
 			ForgeDirection write = this.getFacing().getOpposite();
 			TileEntity tile = this.getAdjacentTileEntity(write);
+			ReactorSounds rs = null;
 			switch(mode) {
 				case RF:
 					if (tile instanceof IEnergyReceiver) {
@@ -118,6 +121,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 						int used = rc.receiveEnergy(this.getFacing(), (int)this.getGenUnits(), false);
 						//}
 					}
+					rs = ReactorSounds.GENERATOR_RF;
 					break;
 				case EU:
 					if (tile instanceof IEnergySink) {
@@ -126,9 +130,14 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 							double leftover = rc.injectEnergy(this.getFacing(), (int)this.getGenUnits(), this.getSourceTier());
 						}
 					}
+					rs = ReactorSounds.GENERATOR_EU;
 					break;
 				case ELC: //handled by ELC logic
+					rs = ReactorSounds.GENERATOR_ELC;
 					break;
+			}
+			if (rs != null) {
+				rs.playSoundAtBlock(this, 2, 1);
 			}
 		}
 	}
@@ -412,7 +421,10 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 
 	@Override
 	public int getTorque() {
-		return Math.min(torquein, TileEntityReactorFlywheel.MAXTORQUE); //clamp for the same reason
+		TileEntityTurbineCore te = this.getTurbine(worldObj, xCoord, yCoord, zCoord);
+		if (te == null)
+			return 0;
+		return Math.min(torquein, TileEntityReactorFlywheel.clampTorque(te)); //clamp for the same reason
 	}
 
 	@Override

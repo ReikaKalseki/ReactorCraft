@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
@@ -27,14 +28,15 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.Feedable;
 import Reika.ReactorCraft.Auxiliary.PebbleBedArrangement;
 import Reika.ReactorCraft.Auxiliary.ReactorBlock;
-import Reika.ReactorCraft.Auxiliary.Temperatured;
+import Reika.ReactorCraft.Auxiliary.TemperaturedReactorTyped;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
-public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements Temperatured, Feedable, ReactorBlock, BreakAction {
+public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implements TemperaturedReactorTyped, Feedable, ReactorBlock, BreakAction {
 
 	protected StepTimer tempTimer = new StepTimer(20);
 
@@ -175,7 +177,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int dT = temperature-Tamb;
 
 		if (dT != 0) {
-			int f = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 32 : 96;
+			int f = ReikaWorldHelper.isExposedToAir(world, x, y, z) ? 24 : 96;
 			temperature -= (1+dT/f);
 		}
 
@@ -377,6 +379,11 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("dmg", damage);
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.HTGR;
 	}
 
 }

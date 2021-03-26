@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,14 +16,14 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.ReactorCraft.Auxiliary.RadiationEffects;
 import Reika.ReactorCraft.Registry.ReactorPackets;
-import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityCPU;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityControlRod;
 
@@ -56,15 +56,6 @@ public class ReactorPacketCore implements PacketHandler {
 				case FULLSOUND:
 					break;
 				case SOUND:
-					control = inputStream.readInt();
-					ReactorSounds s = ReactorSounds.soundList[control];
-					double sx = inputStream.readDouble();
-					double sy = inputStream.readDouble();
-					double sz = inputStream.readDouble();
-					float v = inputStream.readFloat();
-					float p = inputStream.readFloat();
-					boolean att = inputStream.readBoolean();
-					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p, att);
 					return;
 				case STRING:
 					stringdata = packet.readString();
@@ -174,19 +165,19 @@ public class ReactorPacketCore implements PacketHandler {
 		TileEntity te = world.getTileEntity(x, y, z);
 		try {
 			switch (pack) {
-				case CPU:
-					if (control == ReactorPackets.CPU.getMinValue()) {
-						((TileEntityControlRod)te).toggle(true);
-					}
-					else if (control == ReactorPackets.CPU.getMinValue()+1) {
-						TileEntityCPU cpu = (TileEntityCPU)te;
-						cpu.raiseAllRods();
-					}
-					else if (control == ReactorPackets.CPU.getMinValue()+2) {
-						TileEntityCPU cpu = (TileEntityCPU)te;
-						cpu.lowerAllRods();
-					}
+				case CPUTOGGLE:
+					((TileEntityControlRod)te).toggle(true, true);
 					break;
+				case CPURAISE:
+					((TileEntityCPU)te).raiseAllRods();
+					break;
+				case CPULOWER:
+					((TileEntityCPU)te).lowerAllRods();
+					break;
+				case ORERADIATION: {
+					RadiationEffects.instance.doOreIrradiation(world, x, y, z, ep);
+					break;
+				}
 			}
 		}
 		catch (Exception e) {

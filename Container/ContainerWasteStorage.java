@@ -10,6 +10,7 @@
 package Reika.ReactorCraft.Container;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.ReactorCraft.Auxiliary.SlotNuclearWaste;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;

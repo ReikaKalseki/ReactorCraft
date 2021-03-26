@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,13 +11,15 @@ package Reika.ReactorCraft.Registry;
 
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.config.Property;
+
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
 import Reika.DragonAPI.Interfaces.Configuration.BoundedConfig;
+import Reika.DragonAPI.Interfaces.Configuration.DecimalConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
 import Reika.DragonAPI.Interfaces.Configuration.UserSpecificConfig;
 import Reika.ReactorCraft.ReactorCraft;
 
-public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfig, UserSpecificConfig {
+public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfig, DecimalConfig, UserSpecificConfig {
 
 	VISIBLENEUTRONS("Visible Neutrons", true),
 	SILVERORE("Generate Silver Ore Even If Other Mods Do", true),
@@ -32,11 +34,16 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	OREDENSITY("Ore Density Percentage", 100),
 	DISCRETE("Ore Discretization", 1),
 	DYECRAFT("Allow Fluorite Recoloring", false),
-	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false);
+	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false),
+	VERTNEUTRONS("Fission Neutrons Can Move Vertically", false),
+	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F),
+	RADIOORE("Make Fuel Ores Weakly Radioactive", false),
+	;
 
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
+	private float defaultFloat;
 	private Class type;
 
 	public static final ReactorOptions[] optionList = ReactorOptions.values();
@@ -53,12 +60,22 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 		type = int.class;
 	}
 
+	private ReactorOptions(String l, float d) {
+		label = l;
+		defaultFloat = d;
+		type = float.class;
+	}
+
 	public boolean isBoolean() {
 		return type == boolean.class;
 	}
 
 	public boolean isNumeric() {
 		return type == int.class;
+	}
+
+	public boolean isDecimal() {
+		return type == float.class;
 	}
 
 	public Class getPropertyType() {
@@ -77,6 +94,10 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 		return (Integer)ReactorCraft.config.getControl(this.ordinal());
 	}
 
+	public float getFloat() {
+		return (Float)ReactorCraft.config.getControl(this.ordinal());
+	}
+
 	public boolean isDummiedOut() {
 		return type == null;
 	}
@@ -89,6 +110,11 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	@Override
 	public int getDefaultValue() {
 		return defaultValue;
+	}
+
+	@Override
+	public float getDefaultFloat() {
+		return defaultFloat;
 	}
 
 	@Override

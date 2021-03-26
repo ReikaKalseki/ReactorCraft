@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,9 @@ package Reika.ReactorCraft;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 import net.bdew.gendustry.api.GendustryAPI;
@@ -35,7 +38,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.aspects.Aspect;
+
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.ChromatiCraft.API.CrystalPotionInterface;
@@ -46,11 +49,12 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.IDCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
-import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.RetroGenController;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
@@ -58,19 +62,21 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Base.EnumOreBlock;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
+import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
+import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
-import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Auxiliary.ClearSteamCommand;
 import Reika.ReactorCraft.Auxiliary.IronFinderOverlay;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
@@ -84,9 +90,10 @@ import Reika.ReactorCraft.Auxiliary.ReactorBookTracker;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
-import Reika.ReactorCraft.Auxiliary.Lua.ReactorLuaMethods;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
+import Reika.ReactorCraft.Entities.EntityNeutron;
+import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.ReactorCraft.Registry.FluoriteTypes;
 import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -105,6 +112,7 @@ import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -122,6 +130,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thaumcraft.api.aspects.Aspect;
 
 @Mod( modid = "ReactorCraft", name="ReactorCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
 public class ReactorCraft extends DragonAPIMod {
@@ -141,10 +150,9 @@ public class ReactorCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
-	private boolean isLocked = false;
-
-	public static Item[] items = new Item[ReactorItems.itemList.length];
-	public static Block[] blocks = new Block[ReactorBlocks.blockList.length];
+	public static final Item[] items = new Item[ReactorItems.itemList.length];
+	public static final Block[] blocks = new Block[ReactorBlocks.blockList.length];
+	private static final Collection<Fluid> fluids = new ArrayList();
 
 	public static final Fluid D2O = new Fluid("rc heavy water").setDensity(1100).setViscosity(1050);
 	public static final Fluid HF = new Fluid("rc hydrofluoric acid").setDensity(115).setViscosity(10).setGaseous(true);
@@ -154,10 +162,12 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(1100);
 	public static final Fluid CL = new Fluid("rc chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 	public static final Fluid O = new Fluid("rc oxygen").setDensity(138).setViscosity(20).setGaseous(true);
+	public static final Fluid Oliq = new Fluid("rc liquid oxygen").setDensity(1141).setViscosity(195).setGaseous(false).setTemperature(90);
 
 	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
 	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000).setLuminosity(8);
+	public static final Fluid NA_warm = new Fluid("rc warmsodium").setDensity(864).setViscosity(650).setTemperature(800).setLuminosity(6);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
@@ -173,7 +183,8 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid LI = new Fluid("rc lithium").setDensity(516).setViscosity(645).setTemperature(454).setLuminosity(6);
 
 	public static final Fluid LIFBe = new Fluid("rc lifbe").setDensity(6300).setViscosity(800*3).setTemperature(773);
-	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850*3).setTemperature(773);
+	public static final Fluid LIFBe_fuel = new Fluid("rc lifbe fuel").setDensity(6750).setViscosity(850*3).setTemperature(473);
+	public static final Fluid LIFBe_fuel_preheat = new Fluid("rc lifbe fuel preheat").setDensity(6700).setViscosity(850*5/2).setTemperature(673);
 	public static final Fluid LIFBe_hot = new Fluid("rc hot lifbe").setDensity(6000).setViscosity(800*3).setTemperature(1273).setLuminosity(8);
 
 	public static PotionRadiation radiation;
@@ -189,7 +200,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static CommonProxy proxy;
 
 	public final boolean isLocked() {
-		return isLocked || RotaryCraft.instance.isLocked();
+		return !ModLockController.instance.verify(this) || RotaryCraft.instance.isLocked();
 	}
 
 	private final boolean checkForLock() {
@@ -233,22 +244,7 @@ public class ReactorCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		proxy.registerSounds();
-
-		isLocked = this.checkForLock();
-		if (this.isLocked()) {
-			ReikaJavaLibrary.pConsole("");
-			ReikaJavaLibrary.pConsole("\t========================================= REACTORCRAFT ===============================================");
-			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of ReactorCraft.");
-			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
-			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
-			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
-			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
-			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
-			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the ReactorCraft content, and then reload the game. All functionality");
-			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
-			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
-			ReikaJavaLibrary.pConsole("");
-		}
+		ModLockController.instance.registerMod(this);
 
 		logger = new ModLogger(instance, false);
 		if (DragonOptions.FILELOG.getState())
@@ -284,8 +280,11 @@ public class ReactorCraft extends DragonAPIMod {
 			ReactorAchievements.registerAchievements();
 		}
 
-		PotionCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
+		IDCollisionTracker.instance.addPotionID(instance, config.getRadiationPotionID(), PotionRadiation.class);
 		radiation = (PotionRadiation)new PotionRadiation(config.getRadiationPotionID()).setPotionName("Radiation Sickness");
+
+		OreDictionary.registerOre("depletedUranium", ReactorItems.DEPLETED.getItemInstance());
+		OreDictionary.registerOre("depletedUranium", ReactorItems.OLDPELLET.getItemInstance());
 
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
@@ -313,6 +312,25 @@ public class ReactorCraft extends DragonAPIMod {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
+
+		if (this.checkForLock()) {
+			ModLockController.instance.unverify(this);
+		}
+		if (this.isLocked()) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= REACTORCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of ReactorCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the ReactorCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
+
 		if (this.isLocked() && !RotaryCraft.instance.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
 		if (!this.isLocked()) {
@@ -377,33 +395,25 @@ public class ReactorCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.CHROMATICRAFT, "Dense pitchblende generation in its biomes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Dense pitchblende generation in its biomes");
 
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.FUEL.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.BREEDERFUEL.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PLUTONIUM.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.FUEL.getItemInstance(), false);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.BREEDERFUEL.getItemInstance(), false);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PLUTONIUM.getItemInstance(), false);
 		//SensitiveItemRegistry.instance.registerItem(this, ReactorItems.THORIUM.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PELLET.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.fueldust, true);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.PELLET.getItemInstance(), false);
+		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.fueldust, false);
 		SensitiveItemRegistry.instance.registerItem(this, ReactorStacks.thordust, true);
-		SensitiveItemRegistry.instance.registerItem(this, ReactorItems.CRAFTING.getItemInstance(), false);
+		//SensitiveItemRegistry.instance.registerItem(this, ReactorItems.CRAFTING.getItemInstance(), false);
+		for (int i = 0; i < CraftingItems.partList.length; i++) {
+			CraftingItems ci = CraftingItems.partList[i];
+			if (ci.isGating()) {
+				SensitiveItemRegistry.instance.registerItem(this, ci.getItem(), false);
+			}
+		}
 
-		SensitiveFluidRegistry.instance.registerFluid("rc fusion plasma");
-		SensitiveFluidRegistry.instance.registerFluid("rc deuterium");
-		SensitiveFluidRegistry.instance.registerFluid("rc tritium");
-		SensitiveFluidRegistry.instance.registerFluid("rc hydrofluoric acid");
-		SensitiveFluidRegistry.instance.registerFluid("rc uranium hexafluoride");
-		SensitiveFluidRegistry.instance.registerFluid("rc sodium");
-		SensitiveFluidRegistry.instance.registerFluid("rc chlorine");
-		SensitiveFluidRegistry.instance.registerFluid("rc oxygen");
-		SensitiveFluidRegistry.instance.registerFluid("rc lowpammonia");
-		SensitiveFluidRegistry.instance.registerFluid("rc lowpwater");
-		SensitiveFluidRegistry.instance.registerFluid("rc hotsodium");
-		SensitiveFluidRegistry.instance.registerFluid("rc co2");
-		SensitiveFluidRegistry.instance.registerFluid("rc hot co2");
-		SensitiveFluidRegistry.instance.registerFluid("rc corium");
-		SensitiveFluidRegistry.instance.registerFluid("rc lithium");
-		SensitiveFluidRegistry.instance.registerFluid("rc lifbe");
-		SensitiveFluidRegistry.instance.registerFluid("rc lifbe fuel");
-		SensitiveFluidRegistry.instance.registerFluid("rc hot lifbe");
+		for (Fluid f : getFluids()) {
+			if (f != D2O && f != NH3 && f != CORIUM && f != WASTE)
+				SensitiveFluidRegistry.instance.registerFluid(f);
+		}
 
 		this.finishTiming();
 	}
@@ -413,8 +423,10 @@ public class ReactorCraft extends DragonAPIMod {
 	public void postload(FMLPostInitializationEvent evt) {
 		this.startTiming(LoadPhase.POSTLOAD);
 
-		if (!this.isLocked())
+		if (!this.isLocked()) {
 			ReactorRecipes.addModInterface();
+			ReactorRecipes.loadCustomRecipeFiles();
+		}
 
 		//for (int i = 0; i < FluoriteTypes.colorList.length; i++) {
 		//	FluoriteTypes fl = FluoriteTypes.colorList[i];
@@ -426,7 +438,9 @@ public class ReactorCraft extends DragonAPIMod {
 			BlockColorInterface.addGPRBlockColor(r.getBlock(), r.getBlockMetadata(), 200, 200, 200);
 		}
 
-		ReikaJavaLibrary.initClass(ReactorLuaMethods.class);
+		LuaMethod.registerMethods("Reika.ReactorCraft.Auxiliary.Lua");
+
+		EntityNeutron.initTransparencyBlocks();
 
 		proxy.loadDonatorRender();
 
@@ -445,6 +459,8 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			CrystalPotionInterface.addBadPotionForIgnore(radiation);
 		}
+
+		ReikaPotionHelper.addBadPotion(radiation);
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			for (int i = 0; i < ReactorOres.oreList.length; i++) {
@@ -533,6 +549,7 @@ public class ReactorCraft extends DragonAPIMod {
 			NA.setIcons(na);
 			CL.setIcons(cl);
 			O.setIcons(o);
+			Oliq.setIcons(o);
 
 			H2.setIcons(h2);
 			H3.setIcons(h3);
@@ -541,6 +558,7 @@ public class ReactorCraft extends DragonAPIMod {
 			NH3_lo.setIcons(nh3);
 			H2O_lo.setIcons(Blocks.water.getIcon(1, 0));
 			NA_hot.setIcons(nahot);
+			NA_warm.setIcons(nahot);
 
 			CO2.setIcons(co2);
 			CO2_hot.setIcons(co2);
@@ -552,10 +570,15 @@ public class ReactorCraft extends DragonAPIMod {
 
 			LIFBe.setIcons(lifbe);
 			LIFBe_fuel.setIcons(lifbe_fuel);
+			LIFBe_fuel_preheat.setIcons(lifbe_fuel);
 			LIFBe_hot.setIcons(lifbe_hot);
 
 			solarFlare = event.map.registerIcon("ReactorCraft:solarflare");
 		}
+	}
+
+	public static Collection<Fluid> getFluids() {
+		return Collections.unmodifiableCollection(fluids);
 	}
 
 	private static void addItems() {
@@ -578,34 +601,42 @@ public class ReactorCraft extends DragonAPIMod {
 
 	private static void addLiquids() {
 		logger.log("Loading And Registering Liquids");
-		FluidRegistry.registerFluid(D2O);
-		FluidRegistry.registerFluid(HF);
-		FluidRegistry.registerFluid(UF6);
+		addFluid(D2O);
+		addFluid(HF);
+		addFluid(UF6);
 
-		FluidRegistry.registerFluid(NH3);
-		FluidRegistry.registerFluid(NA);
-		FluidRegistry.registerFluid(CL);
-		FluidRegistry.registerFluid(O);
+		addFluid(NH3);
+		addFluid(NA);
+		addFluid(CL);
+		addFluid(O);
+		addFluid(Oliq);
 
-		FluidRegistry.registerFluid(H2);
-		FluidRegistry.registerFluid(H3);
-		FluidRegistry.registerFluid(PLASMA);
+		addFluid(H2);
+		addFluid(H3);
+		addFluid(PLASMA);
 
-		FluidRegistry.registerFluid(NH3_lo);
-		FluidRegistry.registerFluid(H2O_lo);
-		FluidRegistry.registerFluid(NA_hot);
+		addFluid(NH3_lo);
+		addFluid(H2O_lo);
+		addFluid(NA_hot);
+		addFluid(NA_warm);
 
-		FluidRegistry.registerFluid(CO2);
-		FluidRegistry.registerFluid(CO2_hot);
+		addFluid(CO2);
+		addFluid(CO2_hot);
 
-		FluidRegistry.registerFluid(CORIUM);
-		FluidRegistry.registerFluid(WASTE);
+		addFluid(CORIUM);
+		addFluid(WASTE);
 
-		FluidRegistry.registerFluid(LI);
+		addFluid(LI);
 
-		FluidRegistry.registerFluid(LIFBe);
-		FluidRegistry.registerFluid(LIFBe_hot);
-		FluidRegistry.registerFluid(LIFBe_fuel);
+		addFluid(LIFBe);
+		addFluid(LIFBe_hot);
+		addFluid(LIFBe_fuel);
+		addFluid(LIFBe_fuel_preheat);
+	}
+
+	private static void addFluid(Fluid f) {
+		fluids.add(f);
+		FluidRegistry.registerFluid(f);
 	}
 
 	private static void addLiquidContainers() {
@@ -670,7 +701,7 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	@SubscribeEvent
-	public void cancelFramez(FrameUsageEvent evt) {
+	public void cancelFramez(TileEntityMoveEvent evt) {
 		if (!this.isMovable(evt.tile)) {
 			evt.setCanceled(true);
 		}

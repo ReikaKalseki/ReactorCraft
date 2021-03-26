@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
+
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickType;
@@ -24,6 +25,7 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.RadiationEffects.RadiationIntensity;
+
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class PotionRadiation extends Potion implements PermaPotion {
@@ -52,15 +54,17 @@ public class PotionRadiation extends Potion implements PermaPotion {
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 
+			int food = ep.getFoodStats().getFoodLevel();
+			float sat = ep.getFoodStats().getSaturationLevel(); //0-5
+
 			ReikaPlayerAPI.setPlayerWalkSpeed(ep, 0.075F);
-			ReikaPlayerAPI.setFoodLevel(ep, 1);
-			ReikaPlayerAPI.setSaturationLevel(ep, 0);
+			ReikaPlayerAPI.setFoodLevel(ep, Math.min(food, Math.max(1, 8-2*level)));
+			ReikaPlayerAPI.setSaturationLevel(ep, Math.max(0, 4-level));
 		}
 	}
 
 	@Override
-	public boolean isReady(int time, int amp)
-	{
+	public boolean isReady(int time, int amp) {
 		return time%20 == 5;
 	}
 

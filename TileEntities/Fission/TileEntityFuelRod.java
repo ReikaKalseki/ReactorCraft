@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,7 @@ package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -18,6 +19,7 @@ import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorFuel;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
 
 public class TileEntityFuelRod extends TileEntityNuclearCore {
@@ -26,7 +28,11 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
-
+	/*
+	private int getSameCoreHeatConductionFraction() {
+		return 12;
+	}
+	 */
 	@Override
 	public int getIndex() {
 		return ReactorTiles.FUEL.ordinal();
@@ -103,5 +109,10 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 	@Override
 	public boolean canDumpHeatInto(LiquidStates liq) {
 		return liq.isWater();
+	}
+
+	@Override
+	public ReactorType getReactorType() {
+		return ReactorType.FISSION;
 	}
 }

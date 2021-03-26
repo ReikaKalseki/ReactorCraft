@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -22,12 +23,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
@@ -159,9 +162,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	}
 
 	private void harvest(Extraction e, World world, int x, int y, int z) {
-		if (e instanceof HeavyWaterExtraction)
-			ReactorAchievements.HEAVYWATER.triggerAchievement(this.getPlacer());
 		tank.fill(new FluidStack(e.output, e.getExtractedAmount(world, x, y, z)), true);
+		e.onHarvest(world, x, y, z, this.getPlacer());
 	}
 
 	@Override
@@ -286,6 +288,10 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 			output = f;
 		}
 
+		protected void onHarvest(World world, int x, int y, int z, EntityPlayer placer) {
+
+		}
+
 		protected abstract boolean canPerform(World world, int x, int y, int z);
 
 		protected abstract int getExtractedAmount(World world, int x, int y, int z);
@@ -303,7 +309,16 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 
 		@Override
 		protected boolean canPerform(World world, int x, int y, int z) {
-			return y < MAXY && ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && this.isOceanFloor(world, x, y, z);
+			return this.isValidWorld(world) && y < MAXY && ReikaBiomeHelper.isOcean(world.getBiomeGenForCoords(x, z)) && this.isOceanFloor(world, x, y, z);
+		}
+
+		private boolean isValidWorld(World world) {
+			return ReactorCraft.config.isDimensionValidForHeavyWater(world.provider.dimensionId);
+		}
+
+		@Override
+		protected void onHarvest(World world, int x, int y, int z, EntityPlayer placer) {
+			ReactorAchievements.HEAVYWATER.triggerAchievement(placer);
 		}
 
 		private boolean isOceanFloor(World world, int x, int y, int z) {

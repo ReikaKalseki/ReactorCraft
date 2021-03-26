@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
@@ -76,6 +77,7 @@ import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ReactorTiles implements TileEnum {
@@ -375,7 +377,7 @@ public enum ReactorTiles implements TileEnum {
 	public boolean isPipe() {
 		return this == GASPIPE || this == MAGNETPIPE;
 	}
-
+	/*
 	public ReactorType getReactorType() {
 		switch (this) {
 			case ABSORBER:
@@ -398,11 +400,15 @@ public enum ReactorTiles implements TileEnum {
 			case PEBBLEBED:
 				return ReactorType.HTGR;
 			case THORIUM:
+			case FUELDUMP:
 				return ReactorType.THORIUM;
+			case SOLAR:
+			case SOLARTOP:
+				return ReactorType.SOLAR;
 			default:
 				return null;
 		}
-	}
+	}*/
 
 	public boolean isTurbine() {
 		return TileEntityTurbineCore.class.isAssignableFrom(teClass);

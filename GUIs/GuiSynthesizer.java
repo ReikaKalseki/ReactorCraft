@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,9 +11,10 @@ package Reika.ReactorCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import Reika.DragonAPI.Instantiable.GUI.TankDisplay;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.ReactorCraft.Base.ReactorGuiBase;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
@@ -62,10 +63,14 @@ public class GuiSynthesizer extends ReactorGuiBase {
 		int y = ReikaGuiAPI.instance.getMouseRealY()-k;
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+16, j+33, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Water", x, y);
+			String in = tile.getInputFluid();
+			if (in != null)
+				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, in, x, y);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+133, j+150, k+17, k+78)) {
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, "Ammonia", x, y);
+			String out = tile.getOutputFluid();
+			if (out != null)
+				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, out, x, y);
 		}
 	}
 

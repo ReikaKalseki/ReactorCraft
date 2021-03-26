@@ -1,36 +1,64 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.Base;
 
+import java.util.Collection;
+
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.ReactorCraft.Auxiliary.ReactorCoreTE;
+
+import Reika.DragonAPI.Instantiable.Data.Proportionality;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTIO;
+import Reika.ReactorCraft.Auxiliary.TypedReactorCoreTE;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityWaterCell.LiquidStates;
+
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements ReactorCoreTE {
+public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMachine implements TypedReactorCoreTE {
 
 	protected int steam;
-	protected ReactorType type;
+	protected Proportionality<ReactorType> type = new Proportionality();
 
-	public final void setReactorType(ReactorType t) {
-		type = t;
+	protected TileEntityNuclearBoiler() {
+		this.setReactorType(this.getDefaultReactorType(), 1);
+	}
+
+	protected abstract ReactorType getDefaultReactorType();
+
+	public final void setReactorType(ReactorType t, double amt) {
+		type.addValue(t, amt);
+	}
+
+	public final void setReactorTypes(Proportionality<ReactorType> p) {
+		for (ReactorType r : p.getElements()) {
+			this.setReactorType(r, p.getValue(r));
+		}
 	}
 
 	public final ReactorType getReactorType() {
-		return type;
+		return type.getLargestCategory();
+	}
+
+	public final Collection<ReactorType> getReactorTypeSet() {
+		return type.getElements();
+	}
+
+	public final double getReactorTypeFraction(ReactorType r) {
+		return type.getFraction(r);
 	}
 
 	@Override
@@ -145,5 +173,21 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 		int s = steam;
 		steam = 0;
 		return s;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		type.readFromNBT(NBT.getCompoundTag("types"), (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		type.writeToNBT(tag, (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+		NBT.setTag("types", tag);
 	}
 }

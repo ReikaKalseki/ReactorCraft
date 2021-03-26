@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,11 +11,11 @@ package Reika.ReactorCraft.Auxiliary.Lua;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.ReactorCraft.Base.TileEntityNuclearCore;
 import Reika.ReactorCraft.Registry.ReactorItems;
 import Reika.ReactorCraft.Registry.ReactorTiles;
-import dan200.computercraft.api.lua.LuaException;
 
 public class LuaReactorCheckFuel extends LuaMethod {
 
@@ -24,7 +24,7 @@ public class LuaReactorCheckFuel extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
 		ReactorTiles r = tile.getMachine();
 		int fuel = 0;
@@ -54,7 +54,7 @@ public class LuaReactorCheckFuel extends LuaMethod {
 				}
 			}
 		}
-		return new Object[]{String.format("%.3f%s", fuel/(float)maxfuel, "%")};
+		return new Object[]{String.format("%.3f%s", 100F*fuel/maxfuel, "%")};
 	}
 
 	@Override

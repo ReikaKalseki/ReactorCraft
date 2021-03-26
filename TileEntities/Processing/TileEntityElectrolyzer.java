@@ -1,46 +1,48 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.Processing;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
 import Reika.ReactorCraft.Base.TileEntityInventoriedReactorBase;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.RotaryCraft.API.Interfaces.Shockable;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
-import Reika.RotaryCraft.API.Power.PowerTransferHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements ReactorPowerReceiver, IFluidHandler,
+public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements IFluidHandler,
 PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	public static final int SODIUM_MELT = 98;
@@ -63,12 +65,14 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	private int temperature;
 
-	private int omega;
-	private int torque;
-	private long power;
-	private int iotick = 512;
+	//private int omega;
+	//private int torque;
+	//private long power;
+	//private int iotick = 512;
 
-	public static final int SALTPOWER = 131072;
+	//public static final int SALTPOWER = 131072;
+
+	private Electrolysis recipe;
 
 	@Override
 	public int getIndex() {
@@ -92,81 +96,53 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	public int getTimerScaled(int d) {
-		return d * timer.getTick() / timer.getCap();
+		return d * time / timer.getCap();
 	}
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public void updateEntity(World world, int x, int y, int z, int meta) {/*
 		if (iotick > 0)
 			iotick -= 8;
 
 		if (!PowerTransferHelper.checkPowerFromAllSides(this, true)) {
 			this.noInputMachine();
-		}
+		}*/
 
 		tempTimer.update();
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
-		if (this.canMakeSodium()) {
-			if (timer.checkCap())
-				this.makeSodium();
-		}
-		else if (this.canMakeHydrogen()) {
-			if (timer.checkCap())
-				this.makeHydrogen();
-		}
-		else {
-			timer.reset();
+		if (recipe == null)
+			recipe = this.findRecipe();
+		if (!world.isRemote) {
+			if (recipe != null && recipe.requirementsMet(this)) {
+				if (timer.checkCap())
+					recipe.run(this);
+			}
+			else {
+				recipe = null;
+				timer.reset();
+			}
+			time = timer.getTick();
 		}
 
-		time = timer.getTick();
 		//ReikaJavaLibrary.pConsole(timer.getFraction());
 
 		//ReikaJavaLibrary.pConsole(this.getSide()+":"+input+":"+tankH+":"+tankL);
 	}
 
-	private boolean hasSalt() {
-		return this.isSalt(inv[0]);
-	}
-
-	private boolean canMakeSodium() {
-		if (tankL.isFull() || tankH.isFull())
-			return false;
-		return power >= SALTPOWER && temperature >= SALT_MELT && this.hasSalt();
-	}
-
-	private boolean canMakeHydrogen() {
-		if (tankL.isFull() || tankH.isFull())
-			return false;
-		return this.hasHeavyWater();
-	}
-
-	private boolean hasHeavyWater() {
-		return !input.isEmpty() && input.getLevel() > 100 && input.getActualFluid().equals(FluidRegistry.getFluid("rc heavy water"));
-	}
-
-	private void makeSodium() {
-		ReikaInventoryHelper.decrStack(0, inv);
-		tankH.addLiquid(100, FluidRegistry.getFluid("rc sodium"));
-		tankL.addLiquid(100, FluidRegistry.getFluid("rc chlorine"));
-	}
-
-	private void makeHydrogen() {
-		input.removeLiquid(100);
-		tankH.addLiquid(50, FluidRegistry.getFluid("rc oxygen"));
-		tankL.addLiquid(100, FluidRegistry.getFluid("rc deuterium"));
-	}
-
-	@Deprecated
-	private Fluid getHydrogenIsotope() {
-		return FluidRegistry.getFluid("rc deuterium");
+	private Electrolysis findRecipe() {
+		for (Electrolysis e : Electrolysis.recipes) {
+			if (e.requirementsMet(this))
+				return e;
+		}
+		return null;
 	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
-
+	/*
 	@Override
 	public int getOmega() {
 		return omega;
@@ -191,7 +167,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	public void setIORenderAlpha(int io) {
 		iotick = io;
 	}
-
+	 */
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m.isStandardPipe();
@@ -235,7 +211,13 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0 && fluid.equals(FluidRegistry.getFluid("rc heavy water"));
+		if (from.offsetY != 0)
+			return false;
+		for (Electrolysis e : Electrolysis.recipes) {
+			if (e.uses(fluid))
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -247,7 +229,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tankH.getInfo(), tankL.getInfo(), input.getInfo()};
 	}
-
+	/*
 	@Override
 	public void setOmega(int omega) {
 		this.omega = omega;
@@ -279,7 +261,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		torque = 0;
 		power = 0;
 	}
-
+	 */
 	@Override
 	public boolean canRemoveItem(int i, ItemStack itemstack) {
 		return false;
@@ -292,20 +274,11 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return this.isSalt(itemstack);
-	}
-
-	public static boolean isSalt(ItemStack itemstack) {
-		if (itemstack == null)
-			return false;
-		if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.salt))
-			return true;
-		List<ItemStack> li = OreDictionary.getOres("salt");
-		if (ReikaItemHelper.collectionContainsItemStack(li, itemstack))
-			return true;
-		li = OreDictionary.getOres("dustSalt");
-		if (ReikaItemHelper.collectionContainsItemStack(li, itemstack))
-			return true;
+		for (Electrolysis e : Electrolysis.recipes) {
+			if (e.uses(itemstack)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -373,7 +346,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 
 	@Override
 	public void onDischarge(int charge, double range) {
-		if (this.canMakeSodium() || this.canMakeHydrogen()) {
+		if (recipe != null) {
 			int extra = charge-this.getMinDischarge();
 			int n = extra > 0 ? (int)Math.sqrt(extra)/16 : 1;
 			if (n == 0)
@@ -416,13 +389,15 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		tankL.writeToNBT(NBT);
 		input.writeToNBT(NBT);
 
+		NBT.setInteger("temp", temperature);
+		//NBT.setInteger("time", time);
+
+		/*
 		NBT.setInteger("omg", omega);
 		NBT.setInteger("tq", torque);
 		NBT.setLong("pwr", power);
 
-		NBT.setInteger("temp", temperature);
-
-		NBT.setInteger("io", iotick);
+		NBT.setInteger("io", iotick);*/
 	}
 
 	@Override
@@ -433,13 +408,15 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 		tankL.readFromNBT(NBT);
 		input.readFromNBT(NBT);
 
+		temperature = NBT.getInteger("temp");
+		//time = NBT.getInteger("time");
+
+		/*
 		omega = NBT.getInteger("omg");
 		torque = NBT.getInteger("tq");
 		power = NBT.getLong("pwr");
 
-		temperature = NBT.getInteger("temp");
-
-		iotick = NBT.getInteger("io");
+		iotick = NBT.getInteger("io");*/
 	}
 
 	public boolean addHeavyWater(int amt) {
@@ -478,7 +455,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	public int getInputLevel() {
 		return input.getLevel();
 	}
-
+	/*
 	@Override
 	public int getMinTorque(int available) {
 		return 8;
@@ -498,11 +475,7 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	public long getMinPower() {
 		return 0;
 	}
-
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
-	}
+	 */
 
 	@Override
 	public boolean allowExternalHeating() {
@@ -522,6 +495,111 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	@Override
 	public void resetAmbientTemperatureTimer() {
 		tempTimer.reset();
+	}
+
+	public static enum Electrolysis {
+		SALT(new ItemMatch("salt/dustSalt").addItem(new KeyedItemStack(ItemStacks.salt)), false, FluidRegistry.getFluid("rc chlorine"), 100, FluidRegistry.getFluid("rc sodium"), 100, SALT_MELT),
+		HEAVYWATER(FluidRegistry.getFluid("rc heavy water"), 100, null, false, FluidRegistry.getFluid("rc deuterium"), 100, FluidRegistry.getFluid("rc oxygen"), 50);
+
+		public final FluidStack requiredFluid;
+		private final ItemMatch requiredItem;
+		public final boolean consumeItem;
+		public final FluidStack upperOutput;
+		public final FluidStack lowerOutput;
+		public final int requiredTemperature;
+
+		private static Electrolysis[] recipes = values();
+
+		private Electrolysis(ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2) {
+			this(null, 0, item, cata, out1, amt1, out2, amt2, 0);
+		}
+
+		private Electrolysis(ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2, int temp) {
+			this(null, 0, item, cata, out1, amt1, out2, amt2, temp);
+		}
+
+		private Electrolysis(Fluid in, int amt, ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2) {
+			this(in, amt, item, cata, out1, amt1, out2, amt2, 0);
+		}
+
+		private Electrolysis(Fluid in, int amt, ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2, int temp) {
+			requiredFluid = in != null ? new FluidStack(in, amt) : null;
+			requiredItem = item != null ? item.copy() : null;
+			consumeItem = !cata;
+			upperOutput = out1 != null ? new FluidStack(out1, amt1) : null;
+			lowerOutput = out2 != null ? new FluidStack(out2, amt2) : null;
+			requiredTemperature = temp;
+		}
+
+		public boolean requirementsMet(TileEntityElectrolyzer te) {
+			if (requiredFluid != null) {
+				if (te.input.getActualFluid() != requiredFluid.getFluid() || te.input.getLevel() < requiredFluid.amount)
+					return false;
+			}
+			if (requiredItem != null) {
+				if (te.inv[0] == null || !requiredItem.match(te.inv[0]))
+					return false;
+			}
+			if (upperOutput != null) {
+				if (te.tankL.isFull() || (!te.tankL.isEmpty() && te.tankL.getActualFluid() != upperOutput.getFluid()))
+					return false;
+			}
+			if (lowerOutput != null) {
+				if (te.tankH.isFull() || (!te.tankH.isEmpty() && te.tankH.getActualFluid() != lowerOutput.getFluid()))
+					return false;
+			}
+			return te.temperature >= requiredTemperature;
+		}
+
+		private void run(TileEntityElectrolyzer te) {
+			if (requiredFluid != null) {
+				te.input.removeLiquid(requiredFluid.amount);
+			}
+			if (requiredItem != null && consumeItem) {
+				ReikaInventoryHelper.decrStack(0, te.inv);
+			}
+			if (upperOutput != null) {
+				te.tankL.addLiquid(upperOutput.amount, upperOutput.getFluid());
+			}
+			if (lowerOutput != null) {
+				te.tankH.addLiquid(lowerOutput.amount, lowerOutput.getFluid());
+			}
+		}
+
+		public boolean makes(Fluid f) {
+			return (upperOutput != null && upperOutput.getFluid() == f) || (lowerOutput != null && lowerOutput.getFluid() == f);
+		}
+
+		public boolean uses(Fluid f) {
+			return requiredFluid != null && requiredFluid.getFluid() == f;
+		}
+
+		public boolean uses(ItemStack is) {
+			return requiredItem != null && requiredItem.match(is);
+		}
+
+		public static Electrolysis[] getRecipes() {
+			return Arrays.copyOf(recipes, recipes.length);
+		}
+
+		public boolean hasItemRequirement() {
+			return requiredItem != null;
+		}
+
+		public Collection<ItemStack> getItemListForDisplay() {
+			Collection<ItemStack> ret = new ArrayList();
+			for (KeyedItemStack ks : requiredItem.getItemList()) {
+				ret.add(ks.getItemStack());
+			}
+			return ret;
+		}
+	}
+
+	public static void addRecipe(String name, Fluid in, int amt, ItemMatch item, boolean cata, Fluid out1, int amt1, Fluid out2, int amt2, int temp) {
+		Class[] types = new Class[]{Fluid.class, int.class, ItemMatch.class, boolean.class, Fluid.class, int.class, Fluid.class, int.class, int.class};
+		Object[] args = new Object[]{in, amt, item, cata, out1, amt1, out2, amt2, temp};
+		Electrolysis c = EnumHelper.addEnum(Electrolysis.class, name.toUpperCase(), types, args);
+		Electrolysis.recipes = Electrolysis.values();
 	}
 
 }

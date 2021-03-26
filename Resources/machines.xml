@@ -33,14 +33,13 @@
 			The electrolyzer uses electrical discharges to decompose materials into their constituents, such as salt into sodium and chlorine or water into hydrogen and oxygen. The heavier of the products is drawn from the bottom, while the lighter is drawn from the top. Note that solids must be melted down before they are able to be processed.
 		</desc>
 		<note>
-			Power to electrolyze salt: %dW
 			Power Input: Any horizontal side
 			Required temperature to melt salt: %dC
 		</note>
 	</electrolyzer>
 	<synthesizer>
 		<desc>
-			The synthesizer is used to make ammonia, which is a more effective working fluid in reactors than water. To do this, it requires water, ammonium chloride, and quicklime.
+			The synthesizer is primarily used to make ammonia, which is a more effective working fluid in reactors than water. To do this, it requires water, ammonium chloride, and quicklime. It can also process a few other fluids.
 		</desc>
 		<note>
 			Ammonia Synthesis Temperature: %dC
@@ -301,10 +300,12 @@
 	</reflector>
 	<generator>
 		<desc>
-			The generator convers shaft power directly from a turbine into RF power for ease of transport or use in other mods. Note that it is a multiblock that must be directly connected to the turbine. Also be aware that the extreme power supply this generator provides exceeds the capacities of many RF transport systems.
+			The generator convers shaft power directly from a turbine into other forms of power for ease of transport or use in other mods. Note that it is a multiblock that must be directly connected to the turbine. Also be aware that the extreme power supply this generator provides exceeds the capacities of many transport systems.
 		</desc>
 		<note>
-			RF Output: Back
+			Converted Output: Back
+			
+			Can be mode-switched with the screwdriver
 		</note>
 	</generator>
 	<bigturbine>

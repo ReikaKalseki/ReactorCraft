@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,16 +26,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Rendering.StructureRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
@@ -154,12 +154,14 @@ public class GuiReactorBook extends GuiHandbook {
 			case 6:
 				return ReactorBook.BREEDERDESC.getScreen();
 			case 7:
-				return ReactorBook.FUSIONDESC.getScreen();
+				return ReactorBook.THORIUMDESC.getScreen();
 			case 8:
-				return ReactorBook.ACCDESC.getScreen();
+				return ReactorBook.FUSIONDESC.getScreen();
 			case 9:
-				return ReactorBook.TOOLDESC.getScreen();
+				return ReactorBook.ACCDESC.getScreen();
 			case 10:
+				return ReactorBook.TOOLDESC.getScreen();
+			case 11:
 				return ReactorBook.RESOURCEDESC.getScreen();
 		}
 		return 0;
@@ -299,7 +301,7 @@ public class GuiReactorBook extends GuiHandbook {
 					r.draw3D(posX, posY, ptick, true);
 				}
 				else if (structureMode == 1) {
-					r.drawSlice(posX, posY);
+					r.drawSlice(posX, posY, fontRendererObj);
 				}
 				else if (structureMode == 2) {
 					this.drawTally(s, posX, posY);
@@ -345,6 +347,8 @@ public class GuiReactorBook extends GuiHandbook {
 	@Override
 	protected PageType getGuiLayout() {
 		ReactorBook h = (ReactorBook)this.getEntry();
+		if (this.isOnTOC())
+			return PageType.TOC;
 		if (h.isParent())
 			return PageType.PLAIN;
 		if (h == ReactorBook.STRUCTURES && subpage > 0)

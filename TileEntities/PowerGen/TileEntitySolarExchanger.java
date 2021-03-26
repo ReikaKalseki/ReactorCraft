@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
 import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Base.TankedReactorPowerReceiver;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -89,7 +90,7 @@ public class TileEntitySolarExchanger extends TankedReactorPowerReceiver impleme
 	@Override
 	public int receiveSodium(int amt) {
 		amt = Math.min(amt, tank.getRemainingSpace());
-		tank.addLiquid(amt, ReactorCraft.NA_hot);
+		tank.addLiquid(amt, ReactorCraft.NA_warm);
 		return amt;
 	}
 
