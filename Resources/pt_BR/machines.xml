@@ -271,8 +271,8 @@
 			O extrator de fluido, quando submerso em (e tendo pelo menos três lados em contato com) um fluido, pode centrifugá-lo para obter vestígios de outro fluido que foi misturado. Por exemplo, água pesada pode ser centrifugada do fundo dos oceanos (abaixo de y=%d e com pelo menos %dm de água acima), ou o lítio derretido pode ser retirado da superfície da lava.
 		</desc>
 		<note>
-			Minimum Power: %dW
-			Minimum Torque: %d Nm
+			Potência Mínima: %dW
+			Torque Mínimo: %d Nm
 		</note>
 	</fluidextractor>
 	<wastecontainer>
