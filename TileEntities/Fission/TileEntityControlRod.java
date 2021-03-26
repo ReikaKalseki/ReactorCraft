@@ -11,10 +11,12 @@ package Reika.ReactorCraft.TileEntities.Fission;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.ReactorCraft.Auxiliary.LinkableReactorCore;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
@@ -197,6 +199,11 @@ public class TileEntityControlRod extends TileEntityReactorBase implements Linka
 	@Override
 	public ReactorType getReactorType() {
 		return ReactorType.FISSION;
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return ReikaAABBHelper.getBlockAABB(this).addCoord(0, 2, 0);
 	}
 
 	private static enum Motions {

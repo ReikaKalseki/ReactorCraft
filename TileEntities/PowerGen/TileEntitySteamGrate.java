@@ -59,7 +59,7 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 			return false;
 		if (this.hasRedstoneSignal() != requireRedstone)
 			return false;
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+		if (AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, false))
 			return false;
 		return ((BlockSteam)ReactorBlocks.STEAM.getBlockInstance()).canMoveInto(world, x, y+1, z);
 	}

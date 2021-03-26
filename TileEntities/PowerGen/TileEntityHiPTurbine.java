@@ -205,7 +205,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	}
 
 	private boolean dumpLiquid(World world, int x, int y, int z, int meta) {
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+		if (AtmosphereHandler.isNoAtmo(world, x+this.getSteamMovement().offsetX, y, z+this.getSteamMovement().offsetZ, blockType, false))
 			return false;
 		return this.getStage() == this.getNumberStagesTotal()-1;
 	}

@@ -64,6 +64,7 @@ import Reika.DragonAPI.Base.EnumOreBlock;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
+import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -458,6 +459,8 @@ public class ReactorCraft extends DragonAPIMod {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			CrystalPotionInterface.addBadPotionForIgnore(radiation);
 		}
+
+		ReikaPotionHelper.addBadPotion(radiation);
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			for (int i = 0; i < ReactorOres.oreList.length; i++) {

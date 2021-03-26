@@ -21,7 +21,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaNuclearHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.ReactorCraft.Auxiliary.WasteManager;
@@ -46,28 +45,36 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 
 	public abstract boolean isValidIsotope(Isotopes i);
 
-	protected final int getAccelerationFactor(World world, int x, int y, int z) {
+	protected abstract boolean canBeAccelerated();
+
+	protected abstract double getBaseDecayRate();
+
+	private final double getAccelerationFactor() {
+		double base = this.getBaseDecayRate();
+		if (this.canBeAccelerated())
+			base = Math.pow(base, this.getAcceleratorBoost());
+		return base*192;
+	}
+
+	private final double getAcceleratorBoost() {
 		if (!ModList.CHROMATICRAFT.isLoaded()) {
 			return 1;
 		}
 		CrystalElementProxy e = CrystalElementAccessor.getByEnum("LIGHTBLUE");
-		int tier = AdjacencyUpgradeAPI.getAdjacentUpgradeTier(world, x, y, z, e);
+		int tier = AdjacencyUpgradeAPI.getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
 		if (tier <= 0)
 			return 1;
-		return ReikaMathLibrary.logbase2((long)AdjacencyUpgradeAPI.getFactor(e, tier));
+		return Math.sqrt(AdjacencyUpgradeAPI.getFactor(e, tier));
 	}
 
 	protected final void decayWaste() {
-		this.decayWaste(1);
-	}
-
-	protected final void decayWaste(long mult) {
+		double mult = this.getAccelerationFactor();
 		if (this.accountForOutGameTime())
 			mult *= (1+this.getSkippedTicks());
 		for (int i = 0; i < this.getSizeInventory(); i++) {
 			if (inv[i] != null && inv[i].getItem() == ReactorItems.WASTE.getItemInstance()) {
 				Isotopes atom = Isotopes.getIsotope(inv[i].getItemDamage());
-				if (ReikaRandomHelper.doWithChance(mult*0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
+				if (ReikaRandomHelper.doWithChance(mult/this.getBaseDecayRate()*0.5*ReikaNuclearHelper.getDecayChanceFromHalflife(Math.log(atom.getMCHalfLife())))) {
 					//ReikaJavaLibrary.pConsole("Radiating from "+atom);
 					if (this.leaksRadiation() && rand.nextBoolean())
 						this.leakRadiation(worldObj, xCoord, yCoord, zCoord);

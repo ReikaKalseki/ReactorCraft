@@ -47,10 +47,10 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 		if (rand.nextInt(20) == 0)
 			this.sickenMobs(world, x, y, z);
 
-		this.decayWaste(this.getAccelerationFactor(world, x, y, z));
-
-		if (!world.isRemote)
+		if (!world.isRemote) {
+			this.decayWaste();
 			this.feed();
+		}
 
 		if (world.provider.isHellWorld || ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) > 100) {
 			if (this.hasWaste()) {
@@ -220,6 +220,16 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 			inv[inv.length-1] = null;
 			return is;
 		}
+	}
+
+	@Override
+	protected boolean canBeAccelerated() {
+		return true;
+	}
+
+	@Override
+	protected double getBaseDecayRate() {
+		return 1.75;
 	}
 
 }

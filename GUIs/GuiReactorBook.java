@@ -301,7 +301,7 @@ public class GuiReactorBook extends GuiHandbook {
 					r.draw3D(posX, posY, ptick, true);
 				}
 				else if (structureMode == 1) {
-					r.drawSlice(posX, posY);
+					r.drawSlice(posX, posY, fontRendererObj);
 				}
 				else if (structureMode == 2) {
 					this.drawTally(s, posX, posY);

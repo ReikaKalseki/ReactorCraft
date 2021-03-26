@@ -233,4 +233,14 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 		return false;
 	}
 
+	@Override
+	protected boolean canBeAccelerated() {
+		return false;
+	}
+
+	@Override
+	protected double getBaseDecayRate() {
+		return 1;
+	}
+
 }
