@@ -317,10 +317,12 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			String s = String.format("%s contains %d m^3 of steam.", this.getTEName(), sl.getSteam());
 			li.add(s);
 			Proportionality<ReactorType> types = sl.getSourceReactorType();
-			li.add( "Reactor source types: ");
-			for (ReactorType r : types.getElements()) {
-				double frac = types.getFraction(r);
-				li.add("  "+r+": "+frac*100+"%%");
+			if (!types.isEmpty()) {
+				li.add( "Reactor source types: ");
+				for (ReactorType r : types.getElements()) {
+					double frac = types.getFraction(r);
+					li.add("  "+r+": "+frac*100+"%%");
+				}
 			}
 		}
 		if (this instanceof TileEntityHeatPipe) {

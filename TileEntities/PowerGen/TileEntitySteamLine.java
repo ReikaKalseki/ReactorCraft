@@ -127,7 +127,7 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 			steam += dS/2+1;
 			te.steam -= dS/2+1;
 			fluid = te.fluid;
-			this.addSources(te.source);
+			this.addSources(te);
 		}
 	}
 
@@ -197,13 +197,14 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		((TileEntitySteamLine)from).steam -= amt;
 		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
-		this.addSources(((TileEntitySteamLine)from).source);
+		this.addSources((TileEntitySteamLine)from);
 	}
 
-	private void addSources(Proportionality<ReactorType> p) {
-		for (ReactorType r : p.getElements()) {
-			source.addValue(r, p.getValue(r));
+	private void addSources(TileEntitySteamLine from) {
+		for (ReactorType r : from.source.getElements()) {
+			source.addValue(r, from.source.getValue(r));
 		}
+		from.source.clear();
 	}
 
 	public Proportionality<ReactorType> getSourceReactorType() {

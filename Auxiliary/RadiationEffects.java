@@ -31,6 +31,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
+import Reika.DragonAPI.Instantiable.BasicModEntry;
 import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -60,6 +62,7 @@ import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridNode;
 import appeng.api.util.DimensionalCoord;
 import appeng.api.util.IReadOnlyCollection;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
@@ -70,7 +73,22 @@ public class RadiationEffects {
 
 	private static final Random rand = new Random();
 
+	private static Class electricalAgeBlock;
+
 	public static final RadiationEffects instance = new RadiationEffects();
+
+	static {
+		String modid = "Eln";
+		if (Loader.isModLoaded(modid)) {
+			try {
+				electricalAgeBlock = Class.forName("mods.eln.node.six.SixNode");
+			}
+			catch (Exception e) {
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(new BasicModEntry(modid), e);
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private final RayTracer tracer = new RayTracer(0, 0, 0, 0, 0, 0);
 
@@ -193,6 +211,8 @@ public class RadiationEffects {
 		if (id == Blocks.air)
 			return;
 		if (id == Blocks.deadbush)
+			return;
+		if (electricalAgeBlock == id.getClass())
 			return;
 
 		if (ri.isAtLeast(RadiationIntensity.HIGHLEVEL)) {

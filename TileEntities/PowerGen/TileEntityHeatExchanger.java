@@ -114,7 +114,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		for (int i = 0; i < Exchange.list.length; i++) {
 			Exchange e = Exchange.list[i];
 			Fluid in = e.hotFluid;
-			if (in.equals(tank.getActualFluid()))
+			if (in != null && in.equals(tank.getActualFluid()))
 				return e;
 		}
 		return null;
@@ -196,7 +196,8 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
 		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM),
 		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, null),
-		SOLARSODIUM(ReactorCraft.NA_warm, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT*0.625F, 400, ReactorType.SOLAR);
+		SOLARSODIUM(ReactorCraft.NA_warm, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT*0.625F, 400, ReactorType.SOLAR),
+		NITROGEN("rc liquid nitrogen", "nitrogen", 12, -ReikaThermoHelper.NITROGEN_HEAT-ReikaThermoHelper.NITROGEN_BOIL_ENTHALPY, 500, null);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;

@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <resource>
 	<fluorite>
 		Fluorita é um cristal que aparece naturalmente na rocha. Fluorita vem em várias cores, mas todas vão fluorescer (emitir luz) na presença de neutrons ou radiação, permitindo que sejam usados como um Pseudo-Contador Geiger. Fluorita tem uma grande concentração de fluor, que é útil para fazer Ácido Hidrosulfurico durante o processo de enriquecimento do urânio.
