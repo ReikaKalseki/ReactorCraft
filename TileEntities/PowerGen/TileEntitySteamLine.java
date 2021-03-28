@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.ReactorCraft.TileEntities.PowerGen;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -83,6 +85,8 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 				int s = te.removeSteam();
 				steam += s;
 				for (ReactorType rt : te.getReactorTypeSet()) {
+					if (rt == null)
+						continue;
 					double f = te.getReactorTypeFraction(rt);
 					source.addValue(rt, s*f);
 				}
@@ -124,10 +128,12 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		int dS = te.steam-steam;
 		if (dS > 0) {
 			//ReikaJavaLibrary.pConsole(steam+":"+te.steam);
-			steam += dS/2+1;
-			te.steam -= dS/2+1;
+			int amt = dS/2+1;
+			float frac = amt/(float)te.steam;
+			steam += amt;
+			te.steam -= amt;
 			fluid = te.fluid;
-			this.addSources(te);
+			this.addSources(te, frac);
 		}
 	}
 
@@ -194,17 +200,19 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 
 	@Override
 	public void transferFrom(PumpablePipe from, int amt) {
+		float frac = (float)amt/((TileEntitySteamLine)from).steam;
 		((TileEntitySteamLine)from).steam -= amt;
 		fluid = ((TileEntitySteamLine)from).fluid;
 		steam += amt;
-		this.addSources((TileEntitySteamLine)from);
+		this.addSources((TileEntitySteamLine)from, frac);
 	}
 
-	private void addSources(TileEntitySteamLine from) {
-		for (ReactorType r : from.source.getElements()) {
-			source.addValue(r, from.source.getValue(r));
+	private void addSources(TileEntitySteamLine from, float frac) {
+		for (ReactorType r : new ArrayList<ReactorType>(from.source.getElements())) {
+			double val = from.source.getValue(r)*frac;
+			source.addValue(r, val);
+			from.source.addValue(r, -val);
 		}
-		from.source.clear();
 	}
 
 	public Proportionality<ReactorType> getSourceReactorType() {
