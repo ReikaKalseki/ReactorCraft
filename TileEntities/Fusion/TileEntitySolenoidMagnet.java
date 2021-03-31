@@ -45,6 +45,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	public static final int MINOMEGA = 256;
 	public static final int MAX_SPEED = 8192;
 	public static final int MINTORQUE = 32768;
+	private static final int MAX_SAFE_SPEED = 30;
 
 	@Override
 	public int getIndex() {
@@ -80,6 +81,16 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 
 		//this.animateWithTick(world, x, y, z);
 
+		float v = 0.1F;
+		if (this.canTurn()) {
+			if (speed > MAX_SAFE_SPEED)
+				v *= 3;
+			speed = Math.min(speed+v, this.getMaxRenderSpeed());
+		}
+		else {
+			speed = Math.max(0, speed-v);
+		}
+
 		if (DragonAPICore.debugtest) {
 			hasMultiBlock = true;
 			torque = MINTORQUE*8;
@@ -100,7 +111,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		if (!hasMultiBlock || !this.arePowerReqsMet()) {
 			this.removeFromToroids();
 		}
-		if (hasMultiBlock && torque >= MINTORQUE && omega > MAX_SPEED) { //violently fail
+		if (hasMultiBlock && torque >= MINTORQUE && speed > MAX_SAFE_SPEED*4) { //violently fail
 			world.setBlockToAir(x, y, z);
 			new FlyingBlocksExplosion(this, 16).doExplosion();
 		}
@@ -125,17 +136,6 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		float v = 0.1F;
-		if (this.canTurn()) {
-			if (speed < this.getMaxRenderSpeed())
-				speed += v;
-		}
-		else {
-			if (speed >= v)
-				speed -= v;
-			else
-				speed = 0;
-		}
 		if (hasMultiBlock) {
 			phi += speed;
 		}
@@ -144,14 +144,16 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	}
 
 	private float getMaxRenderSpeed() {
-		if (omega >= 4096)
-			return 32;
+		if (omega > MAX_SPEED)
+			return 512;
+		else if (omega >= 4096)
+			return MAX_SAFE_SPEED;
 		else if (omega >= 2048)
-			return 24;
+			return 20F;
 		else if (omega >= 1024)
-			return 16;
+			return 7.5F;
 		else
-			return 8;
+			return 4.5F;
 	}
 
 	public boolean canTurn() {

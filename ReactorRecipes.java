@@ -46,6 +46,7 @@ import Reika.ReactorCraft.Registry.ReactorOres;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -365,37 +366,48 @@ public class ReactorRecipes {
 
 	private static void loadRecipeFile(String id) {
 		CustomRecipeList crl = new CustomRecipeList(ReactorCraft.instance, id);
-		crl.load();
-		for (LuaBlock lb : crl.getEntries()) {
-			Exception e = null;
-			boolean flag = false;
-			String n = lb.getString("type");
-			try {
-				if (LuaBlock.isErrorCode(n))
-					throw new IllegalArgumentException("Custom recipes require a specified name!");
-				if (!ReikaStringParser.isValidVariableName(n))
-					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
-				switch(id) {
-					case "electrolyzer":
-						flag = addCustomElectrolyzerRecipe(n, lb, crl);
-						break;
-					case "synthesizer":
-						flag = addCustomSynthesizerRecipe(n, lb, crl);
-						break;
+		if (crl.load()) {
+			for (LuaBlock lb : crl.getEntries()) {
+				Exception e = null;
+				boolean flag = false;
+				String n = lb.getString("type");
+				try {
+					if (LuaBlock.isErrorCode(n))
+						throw new IllegalArgumentException("Custom recipes require a specified name!");
+					if (!ReikaStringParser.isValidVariableName(n))
+						throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
+					switch(id) {
+						case "electrolyzer":
+							flag = addCustomElectrolyzerRecipe(n, lb, crl);
+							break;
+						case "synthesizer":
+							flag = addCustomSynthesizerRecipe(n, lb, crl);
+							break;
+						case "tritizer":
+							flag = addCustomTritizerRecipe(n, lb, crl);
+							break;
+					}
+				}
+				catch (Exception ex) {
+					e = ex;
+					flag = false;
+				}
+				if (flag) {
+					ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+n+"'");
+				}
+				else {
+					ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+n+"'");
+					if (e != null)
+						e.printStackTrace();
 				}
 			}
-			catch (Exception ex) {
-				e = ex;
-				flag = false;
-			}
-			if (flag) {
-				ReactorCraft.logger.log("Loaded custom "+id+" recipe '"+n+"'");
-			}
-			else {
-				ReactorCraft.logger.logError("Could not load custom "+id+" recipe '"+n+"'");
-				if (e != null)
-					e.printStackTrace();
-			}
+		}
+		else {/*
+			crl.createFolders();
+			crl.addToExample(createLuaBlock(Electrolysis.HEAVYWATER));
+			crl.addToExample(createLuaBlock(FluidSynthesis.AMMONIA));
+			crl.addToExample(createLuaBlock(Reactions.TRITIUM));
+			crl.createExampleFile();*/
 		}
 	}
 
@@ -444,6 +456,23 @@ public class ReactorRecipes {
 			throw new IllegalArgumentException("Recipe '"+n+"' has no products!");
 		}
 		TileEntityElectrolyzer.addRecipe(n, in, amt, item, cata, out1, amt1, out2, amt2, lb.getInt("temperature"));
+		return true;
+	}
+
+	private static boolean addCustomTritizerRecipe(String n, LuaBlock lb, CustomRecipeList crl) {
+		String fluidIn = lb.getString("fluid_in");
+		String fluidOut = lb.getString("fluid_out");
+		int chance = lb.getInt("interaction_chance");
+		int amount = lb.getInt("converted_amount");
+		Fluid in = fluidIn != null ? FluidRegistry.getFluid(fluidIn) : null;
+		Fluid out = fluidOut != null ? FluidRegistry.getFluid(fluidOut) : null;
+		if (in == null)
+			throw new IllegalArgumentException("Input fluid '"+fluidIn+"' does not exist!");
+		if (out == null)
+			throw new IllegalArgumentException("Output fluid '"+fluidOut+"' does not exist!");
+		if (amount > TileEntityTritizer.CAPACITY)
+			throw new IllegalArgumentException("Fluid amount exceeds tank capacity!");
+		TileEntityTritizer.addRecipe(n, in, out, chance, amount);
 		return true;
 	}
 

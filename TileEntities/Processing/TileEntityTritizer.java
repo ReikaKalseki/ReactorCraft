@@ -12,6 +12,7 @@ package Reika.ReactorCraft.TileEntities.Processing;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -147,7 +148,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		return input.getLevel() >= amt && output.canTakeIn(amt) && input.getActualFluid().equals(r.input);
 	}
 
-	private static enum Reactions {
+	public static enum Reactions {
 		TRITIUM("rc deuterium", "rc tritium", 75, 25),
 		D20("water", "rc heavy water", 25, 100);
 
@@ -156,13 +157,17 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		public final int chance;
 		public final int amount;
 
-		private static final Reactions[] reactionList = values();
+		private static Reactions[] reactionList = values();
 
 		private Reactions(String in, String out, int chance, int amt) {
+			this(FluidRegistry.getFluid(in), FluidRegistry.getFluid(out), chance, amt);
+		}
+
+		private Reactions(Fluid in, Fluid out, int chance, int amt) {
 			this.chance = chance;
 			amount = amt;
-			input = FluidRegistry.getFluid(in);
-			output = FluidRegistry.getFluid(out);
+			input = in;
+			output = out;
 		}
 
 		private void onPerform(TileEntityTritizer te) {
@@ -183,6 +188,13 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 			}
 			return null;
 		}
+	}
+
+	public static void addRecipe(String name, Fluid in, Fluid out, int chance, int amt) {
+		Class[] types = new Class[]{Fluid.class, Fluid.class, int.class, int.class};
+		Object[] args = new Object[]{in, out, chance, amt};
+		Reactions c = EnumHelper.addEnum(Reactions.class, name.toUpperCase(), types, args);
+		Reactions.reactionList = Reactions.values();
 	}
 
 	@Override
