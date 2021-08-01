@@ -753,6 +753,11 @@ public class ReactorCraft extends DragonAPIMod {
 	}
 
 	@Override
+	public URL getBugSite() {
+		return DragonAPICore.getReikaGithubPage();
+	}
+
+	@Override
 	public String getUpdateCheckURL() {
 		return CommandableUpdateChecker.reikaURL;
 	}
