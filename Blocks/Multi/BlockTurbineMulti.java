@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,12 +23,12 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 
-public class BlockTurbineMulti extends BlockMultiBlock {
+public class BlockTurbineMulti extends BlockReCMultiBlock {
 
 	private final SlicedBlockBlueprint setup;
 
@@ -311,16 +311,6 @@ public class BlockTurbineMulti extends BlockMultiBlock {
 		int my = blocks.getMinY()+blocks.getSizeY()/2;
 		int mz = blocks.getMinZ()+blocks.getSizeZ()/2;
 		return ReactorTiles.getTE(world, mx, my, mz) == ReactorTiles.BIGTURBINE ? world.getTileEntity(mx, my, mz) : null;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
 	}
 
 	public SlicedBlockBlueprint getBlueprint() {

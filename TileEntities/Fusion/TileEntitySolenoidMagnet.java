@@ -22,7 +22,7 @@ import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.NeutronTile;
 import Reika.ReactorCraft.Auxiliary.ReactorPowerReceiver;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Blocks.Multi.BlockSolenoidMulti;
 import Reika.ReactorCraft.Entities.EntityNeutron;
@@ -343,8 +343,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 				int dy = yCoord+dir.offsetY;
 				int dz = zCoord+dir.offsetZ;
 				Block b = worldObj.getBlock(dx, dy, dz);
-				if (b instanceof BlockMultiBlock) {
-					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				if (b instanceof BlockReCMultiBlock) {
+					((BlockReCMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
 				}
 			}
 		}

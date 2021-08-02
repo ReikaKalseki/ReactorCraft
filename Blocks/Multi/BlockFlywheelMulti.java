@@ -18,11 +18,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorFlywheel;
 
-public class BlockFlywheelMulti extends BlockMultiBlock {
+public class BlockFlywheelMulti extends BlockReCMultiBlock {
 
 	public BlockFlywheelMulti(Material par2Material) {
 		super(par2Material);

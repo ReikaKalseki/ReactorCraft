@@ -23,12 +23,12 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionInjector;
 
-public class BlockInjectorMulti extends BlockMultiBlock implements NeutronBlock {
+public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlock {
 
 	public BlockInjectorMulti(Material par2Material) {
 		super(par2Material);

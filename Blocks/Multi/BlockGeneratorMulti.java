@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,11 +23,11 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.TileEntityReactorGenerator;
 
-public class BlockGeneratorMulti extends BlockMultiBlock {
+public class BlockGeneratorMulti extends BlockReCMultiBlock {
 
 	public BlockGeneratorMulti(Material par2Material) {
 		super(par2Material);
@@ -50,16 +50,6 @@ public class BlockGeneratorMulti extends BlockMultiBlock {
 			return false;
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		return ReactorTiles.getTE(world, x+dir.offsetX*l, y, z+dir.offsetZ*l) == ReactorTiles.GENERATOR;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
 	}
 
 	private boolean checkCore(World world, int x, int y, int z, ForgeDirection dir) {

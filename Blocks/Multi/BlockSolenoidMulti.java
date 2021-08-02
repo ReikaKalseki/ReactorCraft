@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,13 +19,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntitySolenoidMagnet;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
 
-public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerable, NeutronBlock {
+public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducerable, NeutronBlock {
 
 	public BlockSolenoidMulti(Material par2Material) {
 		super(par2Material);
@@ -410,16 +410,6 @@ public class BlockSolenoidMulti extends BlockMultiBlock implements Transducerabl
 	@Override
 	public boolean canTriggerMultiBlockCheck(World world, int x, int y, int z, int meta) {
 		return true;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
 	}
 
 	@Override

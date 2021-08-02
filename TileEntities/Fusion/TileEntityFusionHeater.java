@@ -25,7 +25,7 @@ import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorAchievements;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -242,8 +242,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 				int dy = yCoord+dir.offsetY;
 				int dz = zCoord+dir.offsetZ;
 				Block b = worldObj.getBlock(dx, dy, dz);
-				if (b instanceof BlockMultiBlock) {
-					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				if (b instanceof BlockReCMultiBlock) {
+					((BlockReCMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
 				}
 			}
 		}

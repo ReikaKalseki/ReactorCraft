@@ -27,7 +27,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.ReactorCraft.Auxiliary.FusionReactorToroidPart;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
 import Reika.ReactorCraft.Auxiliary.NeutronTile;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityPlasma;
@@ -230,8 +230,8 @@ ToggleTile, NeutronTile {
 				int dy = yCoord+dir.offsetY;
 				int dz = zCoord+dir.offsetZ;
 				Block b = worldObj.getBlock(dx, dy, dz);
-				if (b instanceof BlockMultiBlock) {
-					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				if (b instanceof BlockReCMultiBlock) {
+					((BlockReCMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
 				}
 			}
 		}

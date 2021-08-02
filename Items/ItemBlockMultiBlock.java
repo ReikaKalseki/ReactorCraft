@@ -17,7 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,8 +40,8 @@ public final class ItemBlockMultiBlock extends ItemBlock {
 		}
 	}
 
-	public BlockMultiBlock getMultiBlockInstance() {
-		return (BlockMultiBlock)field_150939_a;
+	public BlockReCMultiBlock getMultiBlockInstance() {
+		return (BlockReCMultiBlock)field_150939_a;
 	}
 
 	private int getDataValues() {

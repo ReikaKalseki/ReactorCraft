@@ -25,12 +25,12 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class BlockHeaterMulti extends BlockMultiBlock implements SemiTransparent {
+public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTransparent {
 
 	public BlockHeaterMulti(Material par2Material) {
 		super(par2Material);

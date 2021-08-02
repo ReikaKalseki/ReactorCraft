@@ -30,7 +30,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BCMachineHandler;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
@@ -409,8 +409,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 				int dy = yCoord+dir.offsetY;
 				int dz = zCoord+dir.offsetZ;
 				Block b = worldObj.getBlock(dx, dy, dz);
-				if (b instanceof BlockMultiBlock) {
-					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				if (b instanceof BlockReCMultiBlock) {
+					((BlockReCMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
 				}
 			}
 		}

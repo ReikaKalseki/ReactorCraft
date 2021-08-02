@@ -32,7 +32,7 @@ import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.ElectriCraft.API.WrappableWireSource;
 import Reika.ElectriCraft.Network.WireNetwork;
 import Reika.ReactorCraft.Auxiliary.MultiBlockTile;
-import Reika.ReactorCraft.Base.BlockMultiBlock;
+import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
@@ -397,8 +397,8 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 				int dy = yCoord+dir.offsetY;
 				int dz = zCoord+dir.offsetZ;
 				Block b = worldObj.getBlock(dx, dy, dz);
-				if (b instanceof BlockMultiBlock) {
-					((BlockMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
+				if (b instanceof BlockReCMultiBlock) {
+					((BlockReCMultiBlock)b).breakMultiBlock(worldObj, dx, dy, dz);
 				}
 			}
 		}
