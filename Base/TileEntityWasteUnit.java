@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI;
+import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.ChromatiCraft.API.CrystalElementAccessor;
 import Reika.ChromatiCraft.API.CrystalElementAccessor.CrystalElementProxy;
 import Reika.DragonAPI.ModList;
@@ -61,10 +61,10 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 			return 1;
 		}
 		CrystalElementProxy e = CrystalElementAccessor.getByEnum("LIGHTBLUE");
-		int tier = AdjacencyUpgradeAPI.getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
+		int tier = ChromatiAPI.adjacency.getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
 		if (tier <= 0)
 			return 1;
-		return Math.sqrt(AdjacencyUpgradeAPI.getFactor(e, tier));
+		return Math.sqrt(ChromatiAPI.adjacency.getFactor(e, tier));
 	}
 
 	protected final void decayWaste() {

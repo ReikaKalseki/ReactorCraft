@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -34,7 +34,7 @@ public class BlockFlywheelMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		if (blocks.getSize() != 20)
@@ -132,7 +132,7 @@ public class BlockFlywheelMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	protected void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {

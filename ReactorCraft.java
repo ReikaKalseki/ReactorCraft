@@ -41,7 +41,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
-import Reika.ChromatiCraft.API.CrystalPotionInterface;
+import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -457,7 +457,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		if (ModList.CHROMATICRAFT.isLoaded()) {
-			CrystalPotionInterface.addBadPotionForIgnore(radiation);
+			ChromatiAPI.potions.addBadPotionForIgnore(radiation);
 		}
 
 		ReikaPotionHelper.addBadPotion(radiation);

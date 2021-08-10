@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.BlockMultiBlock;
 import Reika.ReactorCraft.ReactorCraft;
 
-public abstract class BlockReCMultiBlock extends BlockMultiBlock {
+public abstract class BlockReCMultiBlock extends BlockMultiBlock<Boolean> {
 
 	public BlockReCMultiBlock(Material par2Material) {
 		super(par2Material);

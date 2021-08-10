@@ -129,7 +129,7 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 		if (id == ReactorBlocks.SOLENOIDMULTI.getBlockInstance()) {
 			BlockSolenoidMulti b = (BlockSolenoidMulti)ReactorBlocks.SOLENOIDMULTI.getBlockInstance();
 			if (b.checkForFullMultiBlock(world, x, y-1, z, ForgeDirection.UNKNOWN)) {
-				b.onCreateFullMultiBlock(world, x, y-1, z);
+				b.onCreateFullMultiBlock(world, x, y-1, z, true);
 			}
 		}
 	}

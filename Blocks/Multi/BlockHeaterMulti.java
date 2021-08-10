@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -42,7 +42,7 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.HEATER));
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-6, y-6, z-6, x+6, y+6, z+6);
@@ -264,7 +264,7 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 	}
 
 	@Override
-	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	public void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6);
 		for (int i = 0; i < blocks.getSize(); i++) {

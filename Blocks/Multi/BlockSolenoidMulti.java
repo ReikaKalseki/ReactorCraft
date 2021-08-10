@@ -37,7 +37,7 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-20, y-3, z-20, x+20, y+3, z+20, 1);
 		int midX = blocks.getMinX()+blocks.getSizeX()/2;
@@ -319,7 +319,7 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 	}
 
 	@Override
-	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	public void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-20, y-3, z-20, x+20, y+3, z+20, 1);
 		for (int i = 0; i < blocks.getSize(); i++) {

@@ -182,7 +182,7 @@ public class BlockTurbineMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-12, y-12, z-12, x+12, y+12, z+12);
 		int sx;
@@ -257,7 +257,7 @@ public class BlockTurbineMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	protected void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		Block tid = ReactorTiles.BIGTURBINE.getBlock();
 		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.BIGTURBINE));

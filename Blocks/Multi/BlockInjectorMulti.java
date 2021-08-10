@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -40,7 +40,7 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		dir = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, this, 7);
 		if (dir == null)
 			return false;
@@ -270,7 +270,7 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 	}
 
 	@Override
-	public void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	public void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		BlockArray blocks = new BlockArray();
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		for (int i = 0; i < blocks.getSize(); i++) {

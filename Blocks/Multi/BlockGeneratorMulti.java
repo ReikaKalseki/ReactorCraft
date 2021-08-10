@@ -39,7 +39,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	public boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
 		if (!this.checkCore(world, x, y, z, dir))
 			return false;
 		if (!this.checkWindings(world, x, y, z, dir))
@@ -234,7 +234,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	protected void onCreateFullMultiBlock(World world, int x, int y, int z) {
+	protected void onCreateFullMultiBlock(World world, int x, int y, int z, Boolean complete) {
 		BlockArray blocks = new BlockArray();
 		Set<BlockKey> set = ReikaJavaLibrary.getSet(new BlockKey(this), new BlockKey(ReactorTiles.GENERATOR));
 		blocks.recursiveAddMultipleWithBounds(world, x, y, z, set, x-12, y-4, z-12, x+12, y+4, z+12);
