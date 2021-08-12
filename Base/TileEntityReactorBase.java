@@ -79,7 +79,11 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	@Override
 	public final boolean canUpdate() {
-		return !ReactorCraft.instance.isLocked();
+		return !ReactorCraft.instance.isLocked() && this.isTickingTE();
+	}
+
+	protected boolean isTickingTE() {
+		return true;
 	}
 
 	@Override

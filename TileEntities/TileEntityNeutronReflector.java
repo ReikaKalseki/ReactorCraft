@@ -46,4 +46,9 @@ public class TileEntityNeutronReflector extends TileEntityReactorBase implements
 
 	}
 
+	@Override
+	protected boolean isTickingTE() {
+		return false;
+	}
+
 }
