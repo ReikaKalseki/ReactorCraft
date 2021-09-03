@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,10 +24,10 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 
 public enum RadiationShield {
 
-	STEEL("Steel", 90, 95, new BlockKey(ItemStacks.steelblock)),
+	STEEL("Steel", 90, 95, BlockKey.fromItem(ItemStacks.steelblock)),
 	CONCRETE("Concrete", 60, 70, new BlockKey(ReactorBlocks.MATS.getBlockInstance(), MatBlocks.CONCRETE.ordinal())),
 	WATER("Water", 30, 10, new BlockKey(Blocks.water), new BlockKey(Blocks.flowing_water)),
-	BEDINGOT("Bedrock Ingot", 97.5, 100, new BlockKey(ItemStacks.bedingotblock)),
+	BEDINGOT("Bedrock Ingot", 97.5, 100, BlockKey.fromItem(ItemStacks.bedingotblock)),
 	LEAD("Lead", 75, 50, "blockLead"),
 	OBSIDIAN("Obsidian", 50, 80, new BlockKey(Blocks.obsidian)),
 	BLASTGLASS("Blast Glass", 80, 20, new BlockKey(BlockRegistry.BLASTGLASS.getBlockInstance()));

@@ -363,6 +363,8 @@ public class ReactorCraft extends DragonAPIMod {
 			FMLInterModComms.sendMessage(ModList.MINEFACTORY.modLabel, "addLaserPreferredOre", tag);
 		}
 
+		FMLInterModComms.sendMessage(ModList.ARSMAGICA.modLabel, "adb", String.valueOf(radiation.id));
+
 		FMLInterModComms.sendMessage("Randomod", "blacklist", this.getModContainer().getModId());
 
 		PackModificationTracker.instance.addMod(this, config);

@@ -209,7 +209,11 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 
 	private void addSources(TileEntitySteamLine from, float frac) {
 		for (ReactorType r : new ArrayList<ReactorType>(from.source.getElements())) {
+			if (r == null)
+				continue;
 			double val = from.source.getValue(r)*frac;
+			if (Double.isNaN(val) || Double.isInfinite(val))
+				continue;
 			source.addValue(r, val);
 			from.source.addValue(r, -val);
 		}
