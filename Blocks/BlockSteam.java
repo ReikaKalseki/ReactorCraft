@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,6 +41,7 @@ import Reika.ReactorCraft.Registry.MatBlocks;
 import Reika.ReactorCraft.Registry.ReactorBlocks;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class BlockSteam extends Block {
 
@@ -414,7 +414,8 @@ public class BlockSteam extends Block {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e) {
 		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
-			e.attackEntityFrom(DamageSource.onFire, 1);
+			RotaryCraft.heatDamage.lastMachine = null;
+			e.attackEntityFrom(RotaryCraft.heatDamage, 1);
 			int meta = world.getBlockMetadata(x, y, z);
 			if ((meta&4) != 0) {
 				if (e instanceof EntityLivingBase)

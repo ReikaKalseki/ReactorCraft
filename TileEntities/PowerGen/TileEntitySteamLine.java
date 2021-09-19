@@ -23,20 +23,22 @@ import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTIO;
+import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.SteamTile;
 import Reika.ReactorCraft.Base.TileEntityLine;
+import Reika.ReactorCraft.Registry.ReactorOptions;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
 import Reika.ReactorCraft.Registry.WorkingFluid;
 import Reika.ReactorCraft.TileEntities.TileEntitySteamDiffuser;
 import Reika.ReactorCraft.TileEntities.Fission.TileEntityReactorBoiler;
+import Reika.RotaryCraft.API.Interfaces.PressureTile;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
 
-public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe, SteamTile {
+public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe, SteamTile, PressureTile {
 
-	//private double storedEnergy;
 	private int steam;
 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
@@ -56,6 +58,11 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 
 		if (steam <= 0) {
 			fluid = WorkingFluid.EMPTY;
+			source.clear();
+		}
+		else if (this.getPressure() > this.getMaxPressure()) {
+			this.delete();
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2, true);
 		}
 	}
 
@@ -169,6 +176,9 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 		super.readFromNBT(NBT);
 
 		source.readFromNBT(NBT.getCompoundTag("sources"), (NBTIO<ReactorType>)ReikaNBTHelper.getEnumConverter(ReactorType.class));
+		if (source.removeValue(null) > 0) {
+			ReactorCraft.logger.logError(this+" loaded null-containing steam type map from NBT: "+NBT);
+		}
 	}
 
 	@Override
@@ -220,11 +230,21 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 	}
 
 	public Proportionality<ReactorType> getSourceReactorType() {
-		return source;
+		return source.copy();
 	}
 
 	@Override
 	public IIcon getTexture() {
 		return Blocks.wool.getIcon(0, this.isInWorld() ? 15 : 7);
+	}
+
+	@Override
+	public int getPressure() {
+		return steam;
+	}
+
+	@Override
+	public int getMaxPressure() {
+		return ReactorOptions.STEAMLINECAP.getValue();
 	}
 }

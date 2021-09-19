@@ -38,6 +38,7 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	VERTNEUTRONS("Fission Neutrons Can Move Vertically", false),
 	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F),
 	RADIOORE("Make Fuel Ores Weakly Radioactive", false),
+	STEAMLINECAP("Steam Line Capacity", Integer.MAX_VALUE),
 	;
 
 	private String label;

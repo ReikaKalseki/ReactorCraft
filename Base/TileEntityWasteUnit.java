@@ -61,10 +61,10 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 			return 1;
 		}
 		CrystalElementProxy e = CrystalElementAccessor.getByEnum("LIGHTBLUE");
-		int tier = ChromatiAPI.adjacency.getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
+		int tier = ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
 		if (tier <= 0)
 			return 1;
-		return Math.sqrt(ChromatiAPI.adjacency.getFactor(e, tier));
+		return Math.sqrt(ChromatiAPI.getAPI().adjacency().getFactor(e, tier));
 	}
 
 	protected final void decayWaste() {

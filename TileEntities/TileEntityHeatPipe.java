@@ -14,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -30,6 +29,7 @@ import Reika.ReactorCraft.Base.TileEntityLine;
 import Reika.ReactorCraft.Base.TileEntityNuclearBoiler;
 import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.Registry.ReactorType;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HeatConduction;
 
 
@@ -211,7 +211,8 @@ public class TileEntityHeatPipe extends TileEntityLine {
 	@Override
 	public void onEntityCollided(Entity e) {
 		if (temperature >= 100) {
-			e.attackEntityFrom(DamageSource.inFire, temperature/100);
+			RotaryCraft.heatDamage.lastMachine = this;
+			e.attackEntityFrom(RotaryCraft.heatDamage, temperature/100);
 		}
 	}
 

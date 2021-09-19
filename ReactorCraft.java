@@ -459,7 +459,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 
 		if (ModList.CHROMATICRAFT.isLoaded()) {
-			ChromatiAPI.potions.addBadPotionForIgnore(radiation);
+			ChromatiAPI.getAPI().potions().addBadPotionForIgnore(radiation);
 		}
 
 		ReikaPotionHelper.addBadPotion(radiation);
