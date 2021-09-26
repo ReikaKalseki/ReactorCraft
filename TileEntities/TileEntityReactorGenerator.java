@@ -24,6 +24,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.FlyingBlocksExplosion;
+import Reika.DragonAPI.Instantiable.Math.MovingAverage;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
@@ -36,6 +37,7 @@ import Reika.ReactorCraft.Base.BlockReCMultiBlock;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Registry.ReactorSounds;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityHiPTurbine;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
@@ -69,6 +71,10 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 
 	private boolean hasMultiblock;
 
+	private final MovingAverage torqueAvg = new MovingAverage(20);
+	private double currentAverage;
+	private double lastAverage;
+
 	public boolean hasMultiBlock() {
 		return hasMultiblock || DragonAPICore.debugtest;
 	}
@@ -98,6 +104,12 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 		else {
 			omegain = torquein = 0;
 		}
+		torqueAvg.addValue(torquein);
+		lastAverage = currentAverage;
+		currentAverage = torqueAvg.getAverage();
+		if (Math.abs(currentAverage-lastAverage) <= Math.min(lastAverage, currentAverage)*0.05) {
+			currentAverage = lastAverage;
+		}
 
 		power = (long)omegain*(long)torquein;
 
@@ -107,6 +119,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 			ForgeDirection write = this.getFacing().getOpposite();
 			TileEntity tile = this.getAdjacentTileEntity(write);
 			ReactorSounds rs = null;
+			int len = 1;
 			switch(mode) {
 				case RF:
 					if (tile instanceof IEnergyReceiver) {
@@ -122,6 +135,7 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 						//}
 					}
 					rs = ReactorSounds.GENERATOR_RF;
+					len = 129;
 					break;
 				case EU:
 					if (tile instanceof IEnergySink) {
@@ -131,13 +145,18 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 						}
 					}
 					rs = ReactorSounds.GENERATOR_EU;
+					len = 100;
 					break;
 				case ELC: //handled by ELC logic
 					rs = ReactorSounds.GENERATOR_ELC;
+					len = 94;
 					break;
 			}
-			if (rs != null) {
+			if (rs != null && this.getTicksExisted()%len == 0) {
 				rs.playSoundAtBlock(this, 2, 1);
+				int l = this.getGeneratorLength();
+				rs.playSoundAtBlock(worldObj, xCoord+this.getFacing().offsetX*l, yCoord, zCoord+this.getFacing().offsetZ*l, 2, 1);
+				rs.playSoundAtBlock(worldObj, xCoord+this.getFacing().offsetX*l/2, yCoord, zCoord+this.getFacing().offsetZ*l/2, 2, 1);
 			}
 		}
 	}
@@ -416,7 +435,9 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 
 	@Override
 	public int getOmega() {
-		return omegain;
+		TileEntityTurbineCore te = this.getTurbine(worldObj, xCoord, yCoord, zCoord);
+		int lim = te instanceof TileEntityHiPTurbine ? TileEntityHiPTurbine.GEN_OMEGA : TileEntityTurbineCore.GEN_OMEGA;
+		return Math.min(omegain, (int)(lim*0.995));
 	}
 
 	@Override
@@ -424,7 +445,16 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 		TileEntityTurbineCore te = this.getTurbine(worldObj, xCoord, yCoord, zCoord);
 		if (te == null)
 			return 0;
-		return Math.min(torquein, TileEntityReactorFlywheel.clampTorque(te)); //clamp for the same reason
+		double max = te.getTorque();
+		if (te instanceof TileEntityHiPTurbine) {
+
+		}
+		else {
+			max = te.isAmmonia() ? TileEntityTurbineCore.TORQUE_CAP*0.95 : TileEntityTurbineCore.TORQUE_CAP*1.95;
+		}
+		/*
+		return Math.min(torquein, TileEntityReactorFlywheel.clampTorque(te)); //clamp for the same reason*/
+		return (int)Math.min(max, currentAverage);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,7 +39,7 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 	//public static final int MAXSPEED = 8192;
 	//public static final int MINTORQUE = 32768;
 	private static final int MAXTORQUE = 12750;
-	private static final int MAXTORQUE_AMMONIA = 12750*2;
+	private static final int MAXTORQUE_AMMONIA = MAXTORQUE*2;
 
 	public boolean hasMultiBlock() {
 		return hasMultiBlock;

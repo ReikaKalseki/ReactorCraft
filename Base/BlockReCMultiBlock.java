@@ -56,4 +56,9 @@ public abstract class BlockReCMultiBlock extends BlockMultiBlock<Boolean> {
 		return false;
 	}
 
+	@Override
+	public boolean isNormalCube() {
+		return true;
+	}
+
 }
