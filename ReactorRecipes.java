@@ -114,6 +114,15 @@ public class ReactorRecipes {
 			}
 		}
 
+		if (ModList.THERMALEXPANSION.isLoaded()) {
+			ItemStack wool = ReikaItemHelper.lookupItem("ThermalExpansion:Rockwool");
+			if (wool != null) {
+				wool = wool.copy();
+				wool.setItemDamage(OreDictionary.WILDCARD_VALUE);
+				GameRegistry.addRecipe(ReactorStacks.insulCore, "WWW", "WSW", "WWW", 'W', wool, 'S', ItemStacks.steelingot);
+			}
+		}
+
 		GameRegistry.addRecipe(new ShapelessFluidInputRecipe(MatBlocks.CONCRETE.getStackOf(4), Blocks.clay, Blocks.sand, Blocks.gravel, FluidRegistry.WATER));
 		if (FluidRegistry.getFluid("oil") != null)
 			GameRegistry.addRecipe(new ShapelessFluidInputRecipe(MatBlocks.CONCRETE.getStackOf(6), Blocks.sand, Blocks.gravel, FluidRegistry.getFluid("oil")));
@@ -132,7 +141,7 @@ public class ReactorRecipes {
 	private static void addMultiblocks() {
 		Block id = ReactorBlocks.HEATERMULTI.getBlockInstance();
 		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SBS", "BLB", "SBS", 'B', BlockRegistry.BLASTGLASS.getStackOf(), 'S', ItemStacks.steelingot, 'L', ItemStacks.lens);
-		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "WSW", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(ReactorStacks.insulCore, "WWW", "WSW", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SOS", "OSO", "SOS", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "OSO", "SSS", "OSO", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 4), "SSS", "SOS", "SSS", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);

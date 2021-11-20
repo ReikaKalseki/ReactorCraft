@@ -232,6 +232,8 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 			if (i != null) {
 				if (i.overridesRightClick(is))
 					return false;
+				if ((i == ItemRegistry.METER || i == ItemRegistry.SCREWDRIVER) && r == ReactorTiles.MAGNET)
+					((TileEntityToroidMagnet)tile).refreshAlpha();
 			}
 			if (is.getItem() == ReactorItems.REMOTE.getItemInstance())
 				return false;

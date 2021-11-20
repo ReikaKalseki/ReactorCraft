@@ -417,7 +417,7 @@ ChunkLoadingTile, NeutronTile, NonIFluidTank {
 
 	@Override
 	public boolean onRightClick(World world, int x, int y, int z, ForgeDirection side) {
-		alpha = 512;
+		this.refreshAlpha();
 		this.incrementAim();
 		return true;
 	}
@@ -433,6 +433,10 @@ ChunkLoadingTile, NeutronTile, NonIFluidTank {
 	public int getPreviousOrdinal() {
 		int o = this.getOrdinal();
 		return o > 0 ? o : Aim.list.length-1;
+	}
+
+	public void refreshAlpha() {
+		alpha = 512;
 	}
 
 	public int getAlpha() {

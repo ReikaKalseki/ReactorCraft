@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,17 +12,21 @@ package Reika.ReactorCraft.Renders;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelMagnet;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RenderMagnet extends ReactorRenderBase
 {
@@ -83,7 +87,9 @@ public class RenderMagnet extends ReactorRenderBase
 		if (!tile.isInWorld())
 			return;
 		int a = tile.getAlpha();
-		//a = 255;
+		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
+		if (ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf()))
+			a = 255;
 		if (a <= 0)
 			return;
 		ReikaRenderHelper.prepareGeoDraw(true);

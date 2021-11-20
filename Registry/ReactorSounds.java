@@ -17,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
-import Reika.DragonAPI.Interfaces.Registry.SoundEnum;
+import Reika.DragonAPI.Interfaces.Registry.CustomDistanceSound;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.ReactorCraft.ReactorCraft;
@@ -27,7 +27,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public enum ReactorSounds implements SoundEnum {
+public enum ReactorSounds implements CustomDistanceSound {
 
 	TURBINE("#turbine-vol"),
 	FUSION("fusion"),
@@ -154,5 +154,15 @@ public enum ReactorSounds implements SoundEnum {
 	@Override
 	public boolean preload() {
 		return false;
+	}
+
+	@Override
+	public float getAudibleDistance() {
+		switch(this) {
+			case FUSION:
+				return 32;
+			default:
+				return -1;
+		}
 	}
 }

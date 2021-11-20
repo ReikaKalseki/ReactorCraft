@@ -496,6 +496,10 @@ public class ReactorCraft extends DragonAPIMod {
 
 				ReikaThaumHelper.addAspects(drop, Aspect.CRYSTAL, 2);
 			}
+
+			if (ModList.SATISFORESTRY.isLoaded()) {
+
+			}
 		}
 
 		this.finishTiming();
