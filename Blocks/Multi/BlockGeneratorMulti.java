@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.FilledBlockArray.BlockMatchFailCallback;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -39,20 +40,20 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
-		if (!this.checkCore(world, x, y, z, dir))
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
+		if (!this.checkCore(world, x, y, z, dir, call))
 			return false;
-		if (!this.checkWindings(world, x, y, z, dir))
+		if (!this.checkWindings(world, x, y, z, dir, call))
 			return false;
-		if (!this.checkHousing(world, x, y, z, dir))
+		if (!this.checkHousing(world, x, y, z, dir, call))
 			return false;
-		if (!this.checkEndCap(world, x, y, z, dir))
+		if (!this.checkEndCap(world, x, y, z, dir, call))
 			return false;
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		return ReactorTiles.getTE(world, x+dir.offsetX*l, y, z+dir.offsetZ*l) == ReactorTiles.GENERATOR;
 	}
 
-	private boolean checkCore(World world, int x, int y, int z, ForgeDirection dir) {
+	private boolean checkCore(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		for (int i = 0; i < l; i++) {
 			int dx = x+dir.offsetX*i;
@@ -60,6 +61,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 			Block b = world.getBlock(dx, y, dz);
 			int meta = world.getBlockMetadata(dx, y, dz);
 			if (b != this || meta != 0) {
+				call.onBlockFailure(world, dx, y, dz, new BlockKey(this, 0));
 				return false;
 			}
 		}
@@ -69,10 +71,11 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 		if (te instanceof TileEntityReactorGenerator) {
 			return dir == ((TileEntityReactorGenerator)te).getFacing().getOpposite();
 		}
+		call.onBlockFailure(world, dx, y, dz, new BlockKey(ReactorTiles.GENERATOR));
 		return false;
 	}
 
-	private boolean checkWindings(World world, int x, int y, int z, ForgeDirection dir) {
+	private boolean checkWindings(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 		for (int i = 0; i < l; i++) {
@@ -92,13 +95,16 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 				Block id3 = world.getBlock(dx, dy, dz);
 				int meta3 = world.getBlockMetadata(dx, dy, dz);
 				if (id != this || meta != seekmeta) {
+					call.onBlockFailure(world, ddx, dy, ddz, new BlockKey(this, seekmeta));
 					return false;
 				}
 				if (id2 != this || meta2 != seekmeta) {
+					call.onBlockFailure(world, ddx2, dy, ddz2, new BlockKey(this, seekmeta));
 					return false;
 				}
 				if (k != 0) {
 					if (id3 != this || meta3 != seekmeta) {
+						call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, seekmeta));
 						return false;
 					}
 				}
@@ -107,7 +113,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 		return true;
 	}
 
-	private boolean checkHousing(World world, int x, int y, int z, ForgeDirection dir) {
+	private boolean checkHousing(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 
@@ -130,12 +136,15 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 				if (i == 1 && k == 2)
 					seekmeta = 3;
 				if (id != this || meta != 2) {
+					call.onBlockFailure(world, ddx, dy, ddz, new BlockKey(this, 2));
 					return false;
 				}
 				if (id2 != this || meta2 != 2) {
+					call.onBlockFailure(world, ddx2, dy, ddz2, new BlockKey(this, 2));
 					return false;
 				}
 				if (id3 != this || meta3 != seekmeta) {
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, seekmeta));
 					return false;
 				}
 			}
@@ -152,9 +161,11 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 				Block id2 = world.getBlock(ddx2, dy, ddz2);
 				int meta2 = world.getBlockMetadata(ddx2, dy, ddz2);
 				if (id != this || meta != 2) {
+					call.onBlockFailure(world, ddx, dy, ddz, new BlockKey(this, 2));
 					return false;
 				}
 				if (id2 != this || meta2 != 2) {
+					call.onBlockFailure(world, ddx2, dy, ddz2, new BlockKey(this, 2));
 					return false;
 				}
 			}
@@ -163,7 +174,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 		return true;
 	}
 
-	private boolean checkEndCap(World world, int x, int y, int z, ForgeDirection dir) {
+	private boolean checkEndCap(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		int l = TileEntityReactorGenerator.getGeneratorLength()-1;
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 		int dx = x+dir.offsetX*l;
@@ -177,6 +188,7 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 					Block id = world.getBlock(ddx, dy, ddz);
 					int meta = world.getBlockMetadata(ddx, dy, ddz);
 					if (id != this || meta != 2) {
+						call.onBlockFailure(world, ddx, dy, ddz, new BlockKey(this, 2));
 						return false;
 					}
 				}
@@ -195,9 +207,11 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 			Block id2 = world.getBlock(ddx2, y+2, ddz2);
 			int meta2 = world.getBlockMetadata(ddx2, y+2, ddz2);
 			if (id != this || meta != 2) {
+				call.onBlockFailure(world, ddx, y+2, ddz, new BlockKey(this, 2));
 				return false;
 			}
 			if (id2 != this || meta2 != 2) {
+				call.onBlockFailure(world, ddx2, y+2, ddz2, new BlockKey(this, 2));
 				return false;
 			}
 
@@ -206,9 +220,11 @@ public class BlockGeneratorMulti extends BlockReCMultiBlock {
 			id2 = world.getBlock(ddx2, y-2, ddz2);
 			meta2 = world.getBlockMetadata(ddx2, y-2, ddz2);
 			if (id != this || meta != 2) {
+				call.onBlockFailure(world, ddx, y-2, ddz, new BlockKey(this, 2));
 				return false;
 			}
 			if (id2 != this || meta2 != 2) {
+				call.onBlockFailure(world, ddx2, y-2, ddz2, new BlockKey(this, 2));
 				return false;
 			}
 		}

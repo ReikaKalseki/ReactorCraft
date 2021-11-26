@@ -18,7 +18,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.FilledBlockArray.BlockMatchFailCallback;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -40,7 +42,7 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 	}
 
 	@Override
-	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		dir = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, this, 7);
 		if (dir == null)
 			return false;
@@ -49,223 +51,196 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 		blocks.recursiveAddWithBounds(world, x, y, z, this, x-8, y-5, z-8, x+8, y+5, z+8);
 		while (world.getBlock(x, y-1, z) == this && world.getBlockMetadata(x, y-1, z) == 5)
 			y--;
-		if (!this.checkTop(world, x, y, z, dir, left, blocks))
+		if (!this.checkTop(world, x, y, z, dir, left, blocks, call))
 			return false;
-		if (!this.checkBottom(world, x, y, z, dir, left, blocks))
+		if (!this.checkBottom(world, x, y, z, dir, left, blocks, call))
 			return false;
-		if (!this.checkSides(world, x, y, z, dir, left, blocks))
+		if (!this.checkSides(world, x, y, z, dir, left, blocks, call))
 			return false;
-		if (!this.checkCorners(world, x, y, z, dir, left, blocks))
+		if (!this.checkCorners(world, x, y, z, dir, left, blocks, call))
 			return false;
-		if (!this.checkFiller(world, x, y, z, dir, left, blocks))
+		if (!this.checkFiller(world, x, y, z, dir, left, blocks, call))
 			return false;
-		if (!this.checkPipes(world, x, y, z, dir, left, blocks))
+		if (!this.checkPipes(world, x, y, z, dir, left, blocks, call))
 			return false;
 		return true;
 	}
 
-	private boolean checkCorners(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
-		for (int i = 0; i <= 4; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 4)
-				return false;
+	private boolean checkAt(World world, int dx, int dy, int dz, int metas, BlockMatchFailCallback call) {
+		return this.checkAt(world, dx, dy, dz, this, metas, call);
+	}
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 4)
+	private boolean checkAt(World world, int dx, int dy, int dz, Block bs, int metas, BlockMatchFailCallback call) {
+		Block b = world.getBlock(dx, dy, dz);
+		int meta = world.getBlockMetadata(dx, dy, dz);
+		if (b != this || meta != 4) {
+			call.onBlockFailure(world, dx, dy, dz, new BlockKey(bs, metas));
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkCorners(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
+		for (int i = 0; i <= 4; i++) {
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y+3, z+dir.offsetZ*i+left.offsetZ, 4, call)) {
 				return false;
+			}
+
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y+3, z+dir.offsetZ*i-left.offsetZ, 4, call)) {
+				return false;
+			}
 		}
 		for (int i = 5; i <= 6; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 4)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ, 4, call)) {
 				return false;
+			}
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 4)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ, 4, call)) {
 				return false;
+			}
 		}
 		for (int i = 7; i <= 8; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 4)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ, 4, call)) {
 				return false;
+			}
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 4)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ, 4, call)) {
 				return false;
+			}
 		}
 
 		for (int i = 0; i <= 8; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 1)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y-1, z+dir.offsetZ*i+left.offsetZ, 1, call)) {
 				return false;
+			}
 		}
 		for (int i = 0; i <= 8; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i-left.offsetX, y-1, z+dir.offsetZ*i-left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y-1, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 1)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y-1, z+dir.offsetZ*i-left.offsetZ, 1, call)) {
 				return false;
+			}
 		}
 
 
 
 		for (int k = 0; k <= 2; k++) {
-			Block b = world.getBlock(x+left.offsetX, y+k, z+left.offsetZ);
-			int meta = world.getBlockMetadata(x+left.offsetX, y+k, z+left.offsetZ);
-			if (b != this || meta != 6)
+			if (!this.checkAt(world, x+left.offsetX, y+k, z+left.offsetZ, 6, call)) {
 				return false;
+			}
 
-			b = world.getBlock(x-left.offsetX, y+k, z-left.offsetZ);
-			meta = world.getBlockMetadata(x-left.offsetX, y+k, z-left.offsetZ);
-			if (b != this || meta != 6)
+			if (!this.checkAt(world, x-left.offsetX, y+k, z-left.offsetZ, 6, call)) {
 				return false;
+			}
 		}
 
-		Block b = world.getBlock(x+left.offsetX+dir.offsetX*8, y, z+left.offsetZ+dir.offsetZ*8);
-		int meta = world.getBlockMetadata(x+left.offsetX, y, z+left.offsetZ+dir.offsetZ*8);
-		if (b != this || meta != 6)
+		if (!this.checkAt(world, x+left.offsetX+dir.offsetX*8, y, z+left.offsetZ+dir.offsetZ*8, 6, call)) {
 			return false;
+		}
 
-		b = world.getBlock(x-left.offsetX+dir.offsetX*8, y, z-left.offsetZ+dir.offsetZ*8);
-		meta = world.getBlockMetadata(x-left.offsetX+dir.offsetX*8, y, z-left.offsetZ+dir.offsetZ*8);
-		if (b != this || meta != 6)
+		if (!this.checkAt(world, x-left.offsetX+dir.offsetX*8, y, z-left.offsetZ+dir.offsetZ*8, 6, call)) {
 			return false;
+		}
 
 		return true;
 	}
 
-	private boolean checkTop(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
+	private boolean checkTop(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 0; i <= 4; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y+3, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+3, z+dir.offsetZ*i);
-			if (b != this || meta != 3)
+			if (!this.checkAt(world, x+dir.offsetX*i, y+3, z+dir.offsetZ*i, 3, call)) {
 				return false;
+			}
 		}
 		for (int i = 5; i <= 6; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			if (b != this || meta != 3)
+			if (!this.checkAt(world, x+dir.offsetX*i, y+2, z+dir.offsetZ*i, 3, call)) {
 				return false;
+			}
 		}
 		for (int i = 7; i <= 8; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			if (b != this || meta != 3)
+			if (!this.checkAt(world, x+dir.offsetX*i, y+1, z+dir.offsetZ*i, 3, call)) {
 				return false;
+			}
 		}
 		return true;
 	}
 
-	private boolean checkBottom(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
+	private boolean checkBottom(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 0; i <= 8; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y-1, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y-1, z+dir.offsetZ*i);
-			if (b != this || meta != 0)
+			if (!this.checkAt(world, x+dir.offsetX*i, y-1, z+dir.offsetZ*i, 0, call))
 				return false;
 		}
 		return true;
 	}
 
-	private boolean checkSides(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
+	private boolean checkSides(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 1; i <= 1; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ, 2, call))
 				return false;
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ, 2, call))
 				return false;
 		}
 		for (int i = 3; i <= 7; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y, z+dir.offsetZ*i+left.offsetZ, 2, call))
 				return false;
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y, z+dir.offsetZ*i-left.offsetZ, 2, call))
 				return false;
 		}
 		for (int i = 1; i <= 6; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y+1, z+dir.offsetZ*i+left.offsetZ, 2, call))
 				return false;
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y+1, z+dir.offsetZ*i-left.offsetZ, 2, call))
 				return false;
 		}
 		for (int i = 1; i <= 4; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i+left.offsetX, y+2, z+dir.offsetZ*i+left.offsetZ, 2, call))
 				return false;
 
-			b = world.getBlock(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			meta = world.getBlockMetadata(x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ);
-			if (b != this || meta != 2)
+			if (!this.checkAt(world, x+dir.offsetX*i-left.offsetX, y+2, z+dir.offsetZ*i-left.offsetZ, 2, call))
 				return false;
 		}
 		for (int i = 0; i <= 2; i++) {
-			Block b = world.getBlock(x, y+i, z);
-			int meta = world.getBlockMetadata(x, y+i, z);
-			if (b != this || meta != 5)
+			if (!this.checkAt(world, x, y+i, z, 5, call))
 				return false;
 		}
 
-		Block b = world.getBlock(x+dir.offsetX*2+left.offsetX, y, z+dir.offsetZ*2+left.offsetZ);
-		int meta = world.getBlockMetadata(x+dir.offsetX*2+left.offsetX, y, z+dir.offsetZ*2+left.offsetZ);
-		if (b != Blocks.air)
+		if (!this.checkAt(world, x+dir.offsetX*2+left.offsetX, y, z+dir.offsetZ*2+left.offsetZ, Blocks.air, 0, call))
 			return false;
-		b = world.getBlock(x+dir.offsetX*2-left.offsetX, y, z+dir.offsetZ*2-left.offsetZ);
-		meta = world.getBlockMetadata(x+dir.offsetX*2-left.offsetX, y, z+dir.offsetZ*2-left.offsetZ);
-		if (b != Blocks.air)
+		if (!this.checkAt(world, x+dir.offsetX*2-left.offsetX, y, z+dir.offsetZ*2-left.offsetZ, Blocks.air, 0, call))
 			return false;
 
 		return true;
 	}
 
-	private boolean checkFiller(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
+	private boolean checkFiller(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 1; i <= 1; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y, z+dir.offsetZ*i);
-			if (b != this || meta != 7)
+			if (!this.checkAt(world, x+dir.offsetX*i, y, z+dir.offsetZ*i, 7, call))
 				return false;
 		}
 		for (int i = 1; i <= 6; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+1, z+dir.offsetZ*i);
-			if (b != this || meta != 7)
+			if (!this.checkAt(world, x+dir.offsetX*i, y+1, z+dir.offsetZ*i, 7, call))
 				return false;
 		}
 		for (int i = 1; i <= 4; i++) {
-			Block b = world.getBlock(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			int meta = world.getBlockMetadata(x+dir.offsetX*i, y+2, z+dir.offsetZ*i);
-			if (b != this || meta != 7)
+			if (!this.checkAt(world, x+dir.offsetX*i, y+2, z+dir.offsetZ*i, 7, call))
 				return false;
 		}
 		return true;
 	}
 
-	private boolean checkPipes(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks) {
+	private boolean checkPipes(World world, int x, int y, int z, ForgeDirection dir, ForgeDirection left, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 3; i <= 8; i++) {
 			Block b = world.getBlock(x+dir.offsetX*i, y, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y, z+dir.offsetZ*i);
-			if (ReactorTiles.getMachineFromIDandMetadata(b, meta) != ReactorTiles.MAGNETPIPE)
+			if (ReactorTiles.getMachineFromIDandMetadata(b, meta) != ReactorTiles.MAGNETPIPE) {
+				call.onBlockFailure(world, x+dir.offsetX*i, y, z+dir.offsetZ*i, new BlockKey(ReactorTiles.MAGNETPIPE));
 				return false;
+			}
 		}
-		if (ReactorTiles.getTE(world, x+dir.offsetX*2, y, z+dir.offsetZ*2) != ReactorTiles.INJECTOR)
+		if (ReactorTiles.getTE(world, x+dir.offsetX*2, y, z+dir.offsetZ*2) != ReactorTiles.INJECTOR) {
+			call.onBlockFailure(world, x+dir.offsetX*2, y, z+dir.offsetZ*2, new BlockKey(ReactorTiles.INJECTOR));
 			return false;
+		}
 		return true;
 	}
 

@@ -15,7 +15,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.FilledBlockArray.BlockMatchFailCallback;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.ReactorCraft.Base.BlockReCMultiBlock;
@@ -34,7 +36,7 @@ public class BlockFlywheelMulti extends BlockReCMultiBlock {
 	}
 
 	@Override
-	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir) {
+	public Boolean checkForFullMultiBlock(World world, int x, int y, int z, ForgeDirection dir, BlockMatchFailCallback call) {
 		StructuredBlockArray blocks = new StructuredBlockArray(world);
 		blocks.recursiveAddWithBoundsRanged(world, x, y, z, this, x-6, y-6, z-6, x+6, y+6, z+6, 1);
 		if (blocks.getSize() != 20)
@@ -42,8 +44,10 @@ public class BlockFlywheelMulti extends BlockReCMultiBlock {
 		int midX = blocks.getMinX()+blocks.getSizeX()/2;
 		int midY = blocks.getMinY()+blocks.getSizeY()/2;
 		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
-		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.FLYWHEEL)
+		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.FLYWHEEL) {
+			call.onBlockFailure(world, midX, midY, midZ, new BlockKey(ReactorTiles.FLYWHEEL));
 			return false;
+		}
 		TileEntityReactorFlywheel te = (TileEntityReactorFlywheel)world.getTileEntity(midX, midY, midZ);
 		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(te.getFacing());
 
@@ -51,56 +55,88 @@ public class BlockFlywheelMulti extends BlockReCMultiBlock {
 			int dx = midX+left.offsetX*i;
 			int dz = midZ+left.offsetZ*i;
 			int m = i == 1 ? 0 : 2;
-			if (world.getBlock(dx, midY, dz) != this || world.getBlockMetadata(dx, midY, dz) != m)
+			if (world.getBlock(dx, midY, dz) != this || world.getBlockMetadata(dx, midY, dz) != m) {
+				call.onBlockFailure(world, dx, midY, dz, new BlockKey(this, m));
 				return false;
+			}
 			dx = midX-left.offsetX*i;
 			dz = midZ-left.offsetZ*i;
-			if (world.getBlock(dx, midY, dz) != this || world.getBlockMetadata(dx, midY, dz) != m)
+			if (world.getBlock(dx, midY, dz) != this || world.getBlockMetadata(dx, midY, dz) != m) {
+				call.onBlockFailure(world, dx, midY, dz, new BlockKey(this, m));
 				return false;
-			if (world.getBlock(midX, midY-i, midZ) != this || world.getBlockMetadata(midX, midY-i, midZ) != m)
+			}
+			if (world.getBlock(midX, midY-i, midZ) != this || world.getBlockMetadata(midX, midY-i, midZ) != m) {
+				call.onBlockFailure(world, midX, midY-i, midZ, new BlockKey(this, m));
 				return false;
-			if (world.getBlock(midX, midY+i, midZ) != this || world.getBlockMetadata(midX, midY+i, midZ) != m)
+			}
+			if (world.getBlock(midX, midY+i, midZ) != this || world.getBlockMetadata(midX, midY+i, midZ) != m) {
+				call.onBlockFailure(world, midX, midY-i, midZ, new BlockKey(this, m));
 				return false;
+			}
 		}
 
 		int dx = midX+left.offsetX;
 		int dz = midZ+left.offsetZ;
-		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 1)
+		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 1) {
+			call.onBlockFailure(world, dx, midY+1, dz, new BlockKey(this, 1));
 			return false;
-		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 1)
+		}
+		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 1) {
+			call.onBlockFailure(world, dx, midY-1, dz, new BlockKey(this, 1));
 			return false;
+		}
 		dx = midX-left.offsetX;
 		dz = midZ-left.offsetZ;
-		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 1)
+		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 1) {
+			call.onBlockFailure(world, dx, midY+1, dz, new BlockKey(this, 1));
 			return false;
-		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 1)
+		}
+		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 1) {
+			call.onBlockFailure(world, dx, midY-1, dz, new BlockKey(this, 1));
 			return false;
+		}
 
 		dx = midX+left.offsetX;
 		dz = midZ+left.offsetZ;
-		if (world.getBlock(dx, midY+2, dz) != this || world.getBlockMetadata(dx, midY+2, dz) != 2)
+		if (world.getBlock(dx, midY+2, dz) != this || world.getBlockMetadata(dx, midY+2, dz) != 2) {
+			call.onBlockFailure(world, dx, midY+2, dz, new BlockKey(this, 2));
 			return false;
-		if (world.getBlock(dx, midY-2, dz) != this || world.getBlockMetadata(dx, midY-2, dz) != 2)
+		}
+		if (world.getBlock(dx, midY-2, dz) != this || world.getBlockMetadata(dx, midY-2, dz) != 2) {
+			call.onBlockFailure(world, dx, midY-2, dz, new BlockKey(this, 2));
 			return false;
+		}
 		dx = midX-left.offsetX;
 		dz = midZ-left.offsetZ;
-		if (world.getBlock(dx, midY+2, dz) != this || world.getBlockMetadata(dx, midY+2, dz) != 2)
+		if (world.getBlock(dx, midY+2, dz) != this || world.getBlockMetadata(dx, midY+2, dz) != 2) {
+			call.onBlockFailure(world, dx, midY+2, dz, new BlockKey(this, 2));
 			return false;
-		if (world.getBlock(dx, midY-2, dz) != this || world.getBlockMetadata(dx, midY-2, dz) != 2)
+		}
+		if (world.getBlock(dx, midY-2, dz) != this || world.getBlockMetadata(dx, midY-2, dz) != 2) {
+			call.onBlockFailure(world, dx, midY-2, dz, new BlockKey(this, 2));
 			return false;
+		}
 
 		dx = midX+left.offsetX*2;
 		dz = midZ+left.offsetZ*2;
-		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 2)
+		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 2) {
+			call.onBlockFailure(world, dx, midY+1, dz, new BlockKey(this, 2));
 			return false;
-		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 2)
+		}
+		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 2) {
+			call.onBlockFailure(world, dx, midY-1, dz, new BlockKey(this, 2));
 			return false;
+		}
 		dx = midX-left.offsetX*2;
 		dz = midZ-left.offsetZ*2;
-		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 2)
+		if (world.getBlock(dx, midY+1, dz) != this || world.getBlockMetadata(dx, midY+1, dz) != 2) {
+			call.onBlockFailure(world, dx, midY+1, dz, new BlockKey(this, 2));
 			return false;
-		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 2)
+		}
+		if (world.getBlock(dx, midY-1, dz) != this || world.getBlockMetadata(dx, midY-1, dz) != 2) {
+			call.onBlockFailure(world, dx, midY-1, dz, new BlockKey(this, 2));
 			return false;
+		}
 
 		return true;
 	}
