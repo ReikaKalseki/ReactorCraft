@@ -191,7 +191,7 @@ public class BlockTurbineMulti extends BlockReCMultiBlock {
 		int n = this.checkForTurbines(world, x, y, z, dir, blocks); //only accept steam emitter at last turb stage
 		if (n <= 0 || n > 7)
 			return false;
-		if (!this.checkForShape(world, x, y, z, dir, blocks, n))
+		if (!this.checkForShape(world, x, y, z, dir, blocks, n, call))
 			return false;
 		return true;
 	}
@@ -217,7 +217,7 @@ public class BlockTurbineMulti extends BlockReCMultiBlock {
 		return c;
 	}
 
-	private boolean checkForShape(World world, int x, int y, int z, ForgeDirection dir, StructuredBlockArray blocks, int turbines) {
+	private boolean checkForShape(World world, int x, int y, int z, ForgeDirection dir, StructuredBlockArray blocks, int turbines, BlockMatchFailCallback call) {
 		int start = setup.getLength()-turbines-1;
 		int mx = blocks.getMinX()+blocks.getSizeX()/2;
 		int my = blocks.getMinY()+blocks.getSizeY()/2;
@@ -228,7 +228,7 @@ public class BlockTurbineMulti extends BlockReCMultiBlock {
 			int d = i-start;
 			int dx = sx+d*dir.offsetX;
 			int dz = sz+d*dir.offsetZ;
-			boolean match = setup.checkAgainst(world, dx, my, dz, 5, 5, dir, i);
+			boolean match = setup.checkAgainst(world, dx, my, dz, 5, 5, dir, i, call);
 			if (!match)
 				return false;
 		}

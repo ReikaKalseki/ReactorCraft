@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.FilledBlockArray.BlockMatchFailCallback;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.StructuredBlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.ReactorCraft.Auxiliary.NeutronBlock;
 import Reika.ReactorCraft.Base.BlockReCMultiBlock;
@@ -44,36 +45,38 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 		int midX = blocks.getMinX()+blocks.getSizeX()/2;
 		int midY = blocks.getMinY()+blocks.getSizeY()/2;
 		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
-		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.SOLENOID)
+		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.SOLENOID) {
+			call.onBlockFailure(world, midX, midY, midZ, new BlockKey(ReactorTiles.SOLENOID));
 			return false;
+		}
 
-		if (!this.checkUpper(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkUpper(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
-		if (!this.checkLower(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkLower(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
-		if (!this.checkMiddle(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkMiddle(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
-		if (!this.checkCorners(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkCorners(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
-		if (!this.checkSpokes(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkSpokes(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
-		if (!this.checkCore(world, x, y, z, midX, midY, midZ, dir, blocks))
+		if (!this.checkCore(world, x, y, z, midX, midY, midZ, dir, blocks, call))
 			return false;
 
 		return true;
 	}
 
-	private boolean checkCore(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkCore(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = 0; j <= 1; j++) {
 				for (int k = -1; k <= 1; k++) {
 					if (i != 0 || j != 0 || k != 0) {
 						Block id = world.getBlock(midX+i, midY+j, midZ+k);
 						int meta = world.getBlockMetadata(midX+i, midY+j, midZ+k);
-						if (id != this)
+						if (id != this || meta != 5) {
+							call.onBlockFailure(world, midX+i, midY+j, midZ+k, new BlockKey(this, 5));
 							return false;
-						if (meta != 5)
-							return false;
+						}
 					}
 				}
 			}
@@ -81,90 +84,91 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 		return true;
 	}
 
-	private boolean checkSpokes(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkSpokes(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 2; i <= 7; i++) {
 			Block id = world.getBlock(midX+i, midY, midZ);
 			int meta = world.getBlockMetadata(midX+i, midY, midZ);
-			if (id != this)
+
+			if (id != this || meta != 4) {
+				call.onBlockFailure(world, midX+i, midY, midZ, new BlockKey(this, 4));
 				return false;
-			if (meta != 4)
-				return false;
+			}
 
 			id = world.getBlock(midX-i, midY, midZ);
 			meta = world.getBlockMetadata(midX-i, midY, midZ);
-			if (id != this)
+			if (id != this || meta != 4) {
+				call.onBlockFailure(world, midX-i, midY, midZ, new BlockKey(this, 4));
 				return false;
-			if (meta != 4)
-				return false;
+			}
 
 			id = world.getBlock(midX, midY, midZ+i);
 			meta = world.getBlockMetadata(midX, midY, midZ+i);
-			if (id != this)
+			if (id != this || meta != 4) {
+				call.onBlockFailure(world, midX, midY, midZ+i, new BlockKey(this, 4));
 				return false;
-			if (meta != 4)
-				return false;
+			}
 
 			id = world.getBlock(midX, midY, midZ-i);
 			meta = world.getBlockMetadata(midX, midY, midZ-i);
-			if (id != this)
+			if (id != this || meta != 4) {
+				call.onBlockFailure(world, midX, midY, midZ-i, new BlockKey(this, 4));
 				return false;
-			if (meta != 4)
-				return false;
+			}
 
 			if (i < 6) {
 				id = world.getBlock(midX+i, midY, midZ+i);
 				meta = world.getBlockMetadata(midX+i, midY, midZ+i);
 				//ReikaJavaLibrary.pConsole(i+" > "+id+":"+meta);
-				if (id != this)
+				if (id != this || meta != 4) {
+					call.onBlockFailure(world, midX+i, midY, midZ+i, new BlockKey(this, 4));
 					return false;
-				if (meta != 4)
-					return false;
+				}
 
 				id = world.getBlock(midX-i, midY, midZ+i);
 				meta = world.getBlockMetadata(midX-i, midY, midZ+i);
-				if (id != this)
+				if (id != this || meta != 4) {
+					call.onBlockFailure(world, midX-i, midY, midZ+i, new BlockKey(this, 4));
 					return false;
-				if (meta != 4)
-					return false;
+				}
 
 				id = world.getBlock(midX+i, midY, midZ-i);
 				meta = world.getBlockMetadata(midX+i, midY, midZ-i);
-				if (id != this)
+				if (id != this || meta != 4) {
+					call.onBlockFailure(world, midX+i, midY, midZ-i, new BlockKey(this, 4));
 					return false;
-				if (meta != 4)
-					return false;
+				}
 
 				id = world.getBlock(midX-i, midY, midZ-i);
 				meta = world.getBlockMetadata(midX-i, midY, midZ-i);
-				if (id != this)
+				if (id != this || meta != 4) {
+					call.onBlockFailure(world, midX-i, midY, midZ-i, new BlockKey(this, 4));
 					return false;
-				if (meta != 4)
-					return false;
+				}
 			}
 		}
 		return true;
 	}
 
-	private boolean checkCorners(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkCorners(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = 6; i <= 6; i++) {
 			Block id = world.getBlock(midX-i, midY+1, midZ-i);
 			int meta = world.getBlockMetadata(midX-i, midY+1, midZ-i);
-			if (id != this)
+			if (id != this || meta != 1) {
+				call.onBlockFailure(world, midX-i, midY+1, midZ-i, new BlockKey(this, 1));
 				return false;
-			if (meta != 1)
-				return false;
+			}
 
 			id = world.getBlock(midX-i, midY-1, midZ-i);
 			meta = world.getBlockMetadata(midX-i, midY-1, midZ-i);
-			if (id != this)
+			if (id != this || meta != 1) {
+				call.onBlockFailure(world, midX-i, midY-1, midZ-i, new BlockKey(this, 1));
 				return false;
-			if (meta != 1)
-				return false;
+			}
 		}
 		return true;
 	}
 
-	private boolean checkMiddle(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkMiddle(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = -5; i <= 5; i++) {
 			int d = Math.abs(i) >= 4 ? 7 : 8;
 			int dx = midX-d;
@@ -174,40 +178,40 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+i;
 			dz = midZ+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dz = midZ-d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 		}
 		return true;
 	}
 
-	private boolean checkLower(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkLower(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = -5; i <= 5; i++) {
 			int d = Math.abs(i) >= 4 ? 7 : 8;
 			int dx = midX-d;
@@ -217,40 +221,40 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+i;
 			dz = midZ+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dz = midZ-d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || meta != m) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 		}
 		return true;
 	}
 
-	private boolean checkUpper(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks) {
+	private boolean checkUpper(World world, int x, int y, int z, int midX, int midY, int midZ, ForgeDirection dir, StructuredBlockArray blocks, BlockMatchFailCallback call) {
 		for (int i = -5; i <= 5; i++) {
 			int d = Math.abs(i) >= 4 ? 7 : 8;
 			int dx = midX-d;
@@ -260,35 +264,35 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || m != meta) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || m != meta) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dx = midX+i;
 			dz = midZ+d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || m != meta) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 
 			dz = midZ-d;
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != this)
+			if (id != this || m != meta) {
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
-			if (m != meta)
-				return false;
+			}
 		}
 		return true;
 	}

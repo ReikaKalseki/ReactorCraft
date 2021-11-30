@@ -229,11 +229,13 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 			return false;
 		if (is != null) {
 			ItemRegistry i = ItemRegistry.getEntry(is);
+			if ((i == ItemRegistry.METER || RotaryAux.isHoldingScrewdriver(ep)) && r == ReactorTiles.MAGNET)
+				((TileEntityToroidMagnet)tile).refreshAlpha();
 			if (i != null) {
 				if (i.overridesRightClick(is))
 					return false;
-				if ((i == ItemRegistry.METER || i == ItemRegistry.SCREWDRIVER) && r == ReactorTiles.MAGNET)
-					((TileEntityToroidMagnet)tile).refreshAlpha();
+				if (RotaryAux.isHoldingScrewdriver(ep))
+					return false;
 			}
 			if (is.getItem() == ReactorItems.REMOTE.getItemInstance())
 				return false;
