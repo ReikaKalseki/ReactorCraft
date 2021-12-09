@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import Reika.ReactorCraft.Registry.ReactorTiles;
 
-
+//TODO Incomplete item
 
 //Stackable, 3x3 wide, power out top of top one, cold fluid out bottom of bottom one; each one adds some torque and some efficiency, up to 6(?)
 //Handles any fluid identically (easy to use, no bonuses from ammonia; can also handle hot CO2
@@ -27,7 +27,7 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected boolean intakeSteam(World world, int x, int y, int z, int meta) {
-		return false; //TODO
+		return false;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 
 	@Override
 	protected float getTorqueFactor() {
-		return 0; //TODO
+		return 0;
 	}
 
 	@Override
@@ -62,12 +62,12 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 
 	@Override
 	public int getMaxTorque() {
-		return 0; //TODO
+		return 0;
 	}
 
 	@Override
 	public int getMaxSpeed() {
-		return 0; //TODO
+		return 0;
 	}
 
 	@Override

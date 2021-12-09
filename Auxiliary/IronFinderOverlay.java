@@ -15,6 +15,7 @@ import java.util.Set;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,6 +78,8 @@ public class IronFinderOverlay {
 					double dz = c.zCoord+0.5-ep.posZ;
 
 					Block b = c.getBlock(ep.worldObj);
+					if (b instanceof BlockAir)
+						continue;
 					IIcon[] icons = new IIcon[]{b.getIcon(1, c.getBlockMetadata(ep.worldObj))};
 					if (ModList.MIMICRY.isLoaded() && b == MimicryHandler.getInstance().oreID) {
 						icons = new IIcon[]{icons[0], this.getMimichiteOreOverlay(b)};
@@ -120,6 +123,8 @@ public class IronFinderOverlay {
 						//left.add(e);
 
 						for (IIcon ico : icons) {
+							if (ico == null)
+								continue;
 							float u = ico.getMinU();
 							float v = ico.getMinV();
 							float du = ico.getMaxU();
@@ -157,6 +162,8 @@ public class IronFinderOverlay {
 						//right.add(e);
 
 						for (IIcon ico : icons) {
+							if (ico == null)
+								continue;
 							float u = ico.getMinU();
 							float v = ico.getMinV();
 							float du = ico.getMaxU();
@@ -198,6 +205,8 @@ public class IronFinderOverlay {
 						v5.draw();
 
 						for (IIcon ico : icons) {
+							if (ico == null)
+								continue;
 							float u = ico.getMinU();
 							float v = ico.getMinV();
 							float du = ico.getMaxU();
