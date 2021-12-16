@@ -247,12 +247,12 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	public abstract boolean isFissile();
 
 	@Override
-	public final boolean canEnterFromSide(ForgeDirection dir) {
+	public final boolean canItemEnterFromSide(ForgeDirection dir) {
 		return dir == ForgeDirection.UP;
 	}
 
 	@Override
-	public final boolean canExitToSide(ForgeDirection dir) {
+	public final boolean canItemExitToSide(ForgeDirection dir) {
 		return dir == ForgeDirection.DOWN;
 	}
 

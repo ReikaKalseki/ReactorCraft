@@ -428,12 +428,12 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	}
 
 	@Override
-	public boolean canEnterFromSide(ForgeDirection dir) {
+	public boolean canItemEnterFromSide(ForgeDirection dir) {
 		return true;
 	}
 
 	@Override
-	public boolean canExitToSide(ForgeDirection dir) {
+	public boolean canItemExitToSide(ForgeDirection dir) {
 		return false;
 	}
 

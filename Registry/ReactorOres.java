@@ -37,7 +37,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ExtraUtilsHandler;
-import Reika.ReactorCraft.ReactorCraft;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 
 public enum ReactorOres implements OreEnum {
@@ -255,11 +254,11 @@ public enum ReactorOres implements OreEnum {
 	}
 
 	private boolean shouldGen() {
-		if (ReactorCraft.config.isOreGenEnabled(this))
+		if (shouldGen)
 			return true;
 		if (ModList.CONDENSEDORES.isLoaded() && CondensedOreAPI.instance.doesBlockGenerate(this.getBlock(), this.getBlockMetadata()))
 			return false;
-		return shouldGen || !this.hasEquivalents();
+		return !this.hasEquivalents();
 	}
 
 	public boolean hasEquivalents() {

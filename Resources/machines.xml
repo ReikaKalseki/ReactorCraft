@@ -314,6 +314,8 @@
 		</desc>
 		<note>
 			Max Speed: %d rad/s
+			
+			Can be disabled with a redstone input to any of the injector blocks
 		</note>
 	</bigturbine>
 	<turbinemeter>

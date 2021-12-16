@@ -126,12 +126,12 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 	}
 
 	@Override
-	public final boolean canEnterFromSide(ForgeDirection dir) {
+	public final boolean canItemEnterFromSide(ForgeDirection dir) {
 		return true;
 	}
 
 	@Override
-	public final boolean canExitToSide(ForgeDirection dir) {
+	public final boolean canItemExitToSide(ForgeDirection dir) {
 		return true;
 	}
 

@@ -319,13 +319,13 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public boolean canEnterFromSide(ForgeDirection dir) {
+	public boolean canItemEnterFromSide(ForgeDirection dir) {
 		return false;
 	}
 
 	@Override
-	public boolean canExitToSide(ForgeDirection dir) {
-		return dir.offsetY == 0;
+	public boolean canItemExitToSide(ForgeDirection dir) {
+		return dir.offsetY != 0;
 	}
 
 	@Override

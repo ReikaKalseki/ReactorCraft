@@ -231,12 +231,12 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	}
 
 	@Override
-	public boolean canEnterFromSide(ForgeDirection dir) {
+	public boolean canItemEnterFromSide(ForgeDirection dir) {
 		return dir == ForgeDirection.UP;
 	}
 
 	@Override
-	public boolean canExitToSide(ForgeDirection dir) {
+	public boolean canItemExitToSide(ForgeDirection dir) {
 		return dir == ForgeDirection.DOWN;
 	}
 

@@ -82,12 +82,12 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 
 	@Override
 	public final boolean canExtractItem(int slot, ItemStack is, int j) {
-		return this.canRemoveItem(slot, is) && this.canExitToSide(dirs[j]);
+		return this.canRemoveItem(slot, is) && this.canItemExitToSide(dirs[j]);
 	}
 
-	public abstract boolean canEnterFromSide(ForgeDirection dir);
+	public abstract boolean canItemEnterFromSide(ForgeDirection dir);
 
-	public abstract boolean canExitToSide(ForgeDirection dir);
+	public abstract boolean canItemExitToSide(ForgeDirection dir);
 
 	public abstract boolean canRemoveItem(int slot, ItemStack is);
 
@@ -102,7 +102,7 @@ public abstract class TileEntityInventoriedReactorBase extends TileEntityReactor
 	public final boolean canInsertItem(int i, ItemStack is, int j) {
 		if (this instanceof InertIInv)
 			return false;
-		return this.isItemValidForSlot(i, is) && this.canEnterFromSide(dirs[j]);
+		return this.isItemValidForSlot(i, is) && this.canItemEnterFromSide(dirs[j]);
 	}
 
 	@Override
