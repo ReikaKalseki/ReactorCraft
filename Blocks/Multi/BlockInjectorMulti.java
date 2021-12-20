@@ -74,7 +74,8 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		if (b != this || meta != 4) {
-			call.onBlockFailure(world, dx, dy, dz, new BlockKey(bs, metas));
+			if (call != null)
+				call.onBlockFailure(world, dx, dy, dz, new BlockKey(bs, metas));
 			return false;
 		}
 		return true;
@@ -233,12 +234,14 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 			Block b = world.getBlock(x+dir.offsetX*i, y, z+dir.offsetZ*i);
 			int meta = world.getBlockMetadata(x+dir.offsetX*i, y, z+dir.offsetZ*i);
 			if (ReactorTiles.getMachineFromIDandMetadata(b, meta) != ReactorTiles.MAGNETPIPE) {
-				call.onBlockFailure(world, x+dir.offsetX*i, y, z+dir.offsetZ*i, new BlockKey(ReactorTiles.MAGNETPIPE));
+				if (call != null)
+					call.onBlockFailure(world, x+dir.offsetX*i, y, z+dir.offsetZ*i, new BlockKey(ReactorTiles.MAGNETPIPE));
 				return false;
 			}
 		}
 		if (ReactorTiles.getTE(world, x+dir.offsetX*2, y, z+dir.offsetZ*2) != ReactorTiles.INJECTOR) {
-			call.onBlockFailure(world, x+dir.offsetX*2, y, z+dir.offsetZ*2, new BlockKey(ReactorTiles.INJECTOR));
+			if (call != null)
+				call.onBlockFailure(world, x+dir.offsetX*2, y, z+dir.offsetZ*2, new BlockKey(ReactorTiles.INJECTOR));
 			return false;
 		}
 		return true;

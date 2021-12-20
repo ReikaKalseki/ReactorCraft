@@ -66,7 +66,8 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 		int mz = blocks.getMinZ();
 		for (int i = 3; i <= 6; i++) {
 			if (ReactorTiles.getTE(world, mx+2, my+i, mz+2) != ReactorTiles.MAGNETPIPE) {
-				call.onBlockFailure(world, mx+2, my+i, mz+2, new BlockKey(ReactorTiles.MAGNETPIPE));
+				if (call != null)
+					call.onBlockFailure(world, mx+2, my+i, mz+2, new BlockKey(ReactorTiles.MAGNETPIPE));
 				return false;
 			}
 		}
@@ -85,7 +86,8 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 						int dy = blocks.getMinY()+j;
 						int dz = blocks.getMinZ()+k;
 						if (ReactorTiles.getTE(blocks.world, dx, dy, dz) != ReactorTiles.MAGNETPIPE) {
-							call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.MAGNETPIPE));
+							if (call != null)
+								call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.MAGNETPIPE));
 							return false;
 						}
 					}
@@ -97,7 +99,8 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 						if (block == null) {
 							MachineRegistry m = MachineRegistry.getMachine(blocks.world, dx, dy, dz);
 							if (m == null || !m.isStandardPipe()) {
-								call.onBlockFailure(world, dx, dy, dz, new BlockKey(MachineRegistry.PIPE));
+								if (call != null)
+									call.onBlockFailure(world, dx, dy, dz, new BlockKey(MachineRegistry.PIPE));
 								return false;
 							}
 						}
@@ -106,14 +109,16 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 							int meta = block.metadata;
 							if (i == 2 && j == 2 && k == 2) {
 								if (id != ReactorTiles.HEATER.getBlock() || meta != ReactorTiles.HEATER.getBlockMetadata()) {
-									call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.HEATER));
+									if (call != null)
+										call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.HEATER));
 									return false;
 								}
 							}
 							else {
 								if (id == this) {
 									if (meta > 1) {
-										call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, 1));
+										if (call != null)
+											call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, 1));
 										return false;
 									}
 									else
@@ -123,12 +128,14 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 								}
 								else if (MachineRegistry.getMachineFromIDandMetadata(id, meta) != null && MachineRegistry.getMachineFromIDandMetadata(id, meta).isStandardPipe()) {
 									if (j != 2) {
-										call.onBlockFailure(world, dx, dy, dz, new BlockKey(this));
+										if (call != null)
+											call.onBlockFailure(world, dx, dy, dz, new BlockKey(this));
 										return false;
 									}
 								}
 								else {
-									call.onBlockFailure(world, dx, dy, dz, new BlockKey(this));
+									if (call != null)
+										call.onBlockFailure(world, dx, dy, dz, new BlockKey(this));
 									return false;
 								}
 							}
@@ -149,51 +156,59 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 					int dy = blocks.getMinY()+4;
 					int dz = blocks.getMinZ()+k;
 					if (ReactorTiles.getTE(blocks.world, dx, dy, dz) != ReactorTiles.MAGNETPIPE) {
-						call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.MAGNETPIPE));
+						if (call != null)
+							call.onBlockFailure(world, dx, dy, dz, new BlockKey(ReactorTiles.MAGNETPIPE));
 						return false;
 					}
 				}
 				else {
 					BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, k);
 					if (block == null || block.blockID != this || block.metadata != 4) {
-						call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+k, new BlockKey(this, 4));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+k, new BlockKey(this, 4));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, k);
 					if (block == null || block.blockID != this || block.metadata != 1) {
-						call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+k, new BlockKey(this, 1));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+k, new BlockKey(this, 1));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(i, 5, k);
 					int meta2 = (i == 2 || k == 2) ? 3 : 2;
 					if (block == null || block.blockID != this || block.metadata != meta2) {
-						call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+5, blocks.getMinZ()+k, new BlockKey(this, meta2));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+5, blocks.getMinZ()+k, new BlockKey(this, meta2));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(i, k, 0);
 					if (block == null || block.blockID != this || block.metadata != 4) {
-						call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+k, blocks.getMinZ()+0, new BlockKey(this, 4));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+k, blocks.getMinZ()+0, new BlockKey(this, 4));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(i, k, 4);
 					if (block == null || block.blockID != this || block.metadata != 4) {
-						call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+k, blocks.getMinZ()+4, new BlockKey(this, 4));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+k, blocks.getMinZ()+4, new BlockKey(this, 4));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(0, k, i);
 					if (block == null || block.blockID != this || block.metadata != 4) {
-						call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+k, blocks.getMinZ()+i, new BlockKey(this, 4));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+k, blocks.getMinZ()+i, new BlockKey(this, 4));
 						return false;
 					}
 
 					block = blocks.getBlockKeyRelativeToMinXYZ(4, k, i);
 					if (block == null || block.blockID != this || block.metadata != 4) {
-						call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+k, blocks.getMinZ()+i, new BlockKey(this, 4));
+						if (call != null)
+							call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+k, blocks.getMinZ()+i, new BlockKey(this, 4));
 						return false;
 					}
 				}
@@ -206,73 +221,85 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 		for (int i = 1; i < 4; i++) {
 			BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, 0);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(0, i, 0);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, i);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+i, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+i, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(i, 0, 4);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, i);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+i, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+i, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, 4);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, i);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+i, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+i, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(i, 4, 0);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+i, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, i);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+i, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+i, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(4, i, 0);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(0, i, 4);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+i, blocks.getMinZ()+4, new BlockKey(this, 3));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+i, blocks.getMinZ()+4, new BlockKey(this, 3));
 				return false;
 			}
 
 			block = blocks.getBlockKeyRelativeToMinXYZ(4, i, 4);
 			if (block == null || block.blockID != this || block.metadata != 3) {
-				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 4));
+				if (call != null)
+					call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+i, blocks.getMinZ()+0, new BlockKey(this, 4));
 				return false;
 			}
 		}
@@ -283,42 +310,50 @@ public class BlockHeaterMulti extends BlockReCMultiBlock implements SemiTranspar
 		BlockKey block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, 0);
 		//ReikaJavaLibrary.pConsole(block.getMinX()+", "+block.getMinY()+", "+block.getMinZ());
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, 0);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+0, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(0, 0, 4);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(4, 0, 4);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+0, blocks.getMinZ()+4, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, 0);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, 0);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+0, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(0, 4, 4);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+0, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 2));
 			return false;
 		}
 		block = blocks.getBlockKeyRelativeToMinXYZ(4, 4, 4);
 		if (block == null || block.blockID != this || block.metadata != 2) {
-			call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 2));
+			if (call != null)
+				call.onBlockFailure(world, blocks.getMinX()+4, blocks.getMinY()+4, blocks.getMinZ()+4, new BlockKey(this, 2));
 			return false;
 		}
 

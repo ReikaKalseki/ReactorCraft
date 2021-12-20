@@ -46,7 +46,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 		int midY = blocks.getMinY()+blocks.getSizeY()/2;
 		int midZ = blocks.getMinZ()+blocks.getSizeZ()/2;
 		if (ReactorTiles.getTE(world, midX, midY, midZ) != ReactorTiles.SOLENOID) {
-			call.onBlockFailure(world, midX, midY, midZ, new BlockKey(ReactorTiles.SOLENOID));
+			if (call != null)
+				call.onBlockFailure(world, midX, midY, midZ, new BlockKey(ReactorTiles.SOLENOID));
 			return false;
 		}
 
@@ -74,7 +75,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 						Block id = world.getBlock(midX+i, midY+j, midZ+k);
 						int meta = world.getBlockMetadata(midX+i, midY+j, midZ+k);
 						if (id != this || meta != 5) {
-							call.onBlockFailure(world, midX+i, midY+j, midZ+k, new BlockKey(this, 5));
+							if (call != null)
+								call.onBlockFailure(world, midX+i, midY+j, midZ+k, new BlockKey(this, 5));
 							return false;
 						}
 					}
@@ -90,28 +92,32 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			int meta = world.getBlockMetadata(midX+i, midY, midZ);
 
 			if (id != this || meta != 4) {
-				call.onBlockFailure(world, midX+i, midY, midZ, new BlockKey(this, 4));
+				if (call != null)
+					call.onBlockFailure(world, midX+i, midY, midZ, new BlockKey(this, 4));
 				return false;
 			}
 
 			id = world.getBlock(midX-i, midY, midZ);
 			meta = world.getBlockMetadata(midX-i, midY, midZ);
 			if (id != this || meta != 4) {
-				call.onBlockFailure(world, midX-i, midY, midZ, new BlockKey(this, 4));
+				if (call != null)
+					call.onBlockFailure(world, midX-i, midY, midZ, new BlockKey(this, 4));
 				return false;
 			}
 
 			id = world.getBlock(midX, midY, midZ+i);
 			meta = world.getBlockMetadata(midX, midY, midZ+i);
 			if (id != this || meta != 4) {
-				call.onBlockFailure(world, midX, midY, midZ+i, new BlockKey(this, 4));
+				if (call != null)
+					call.onBlockFailure(world, midX, midY, midZ+i, new BlockKey(this, 4));
 				return false;
 			}
 
 			id = world.getBlock(midX, midY, midZ-i);
 			meta = world.getBlockMetadata(midX, midY, midZ-i);
 			if (id != this || meta != 4) {
-				call.onBlockFailure(world, midX, midY, midZ-i, new BlockKey(this, 4));
+				if (call != null)
+					call.onBlockFailure(world, midX, midY, midZ-i, new BlockKey(this, 4));
 				return false;
 			}
 
@@ -120,28 +126,32 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 				meta = world.getBlockMetadata(midX+i, midY, midZ+i);
 				//ReikaJavaLibrary.pConsole(i+" > "+id+":"+meta);
 				if (id != this || meta != 4) {
-					call.onBlockFailure(world, midX+i, midY, midZ+i, new BlockKey(this, 4));
+					if (call != null)
+						call.onBlockFailure(world, midX+i, midY, midZ+i, new BlockKey(this, 4));
 					return false;
 				}
 
 				id = world.getBlock(midX-i, midY, midZ+i);
 				meta = world.getBlockMetadata(midX-i, midY, midZ+i);
 				if (id != this || meta != 4) {
-					call.onBlockFailure(world, midX-i, midY, midZ+i, new BlockKey(this, 4));
+					if (call != null)
+						call.onBlockFailure(world, midX-i, midY, midZ+i, new BlockKey(this, 4));
 					return false;
 				}
 
 				id = world.getBlock(midX+i, midY, midZ-i);
 				meta = world.getBlockMetadata(midX+i, midY, midZ-i);
 				if (id != this || meta != 4) {
-					call.onBlockFailure(world, midX+i, midY, midZ-i, new BlockKey(this, 4));
+					if (call != null)
+						call.onBlockFailure(world, midX+i, midY, midZ-i, new BlockKey(this, 4));
 					return false;
 				}
 
 				id = world.getBlock(midX-i, midY, midZ-i);
 				meta = world.getBlockMetadata(midX-i, midY, midZ-i);
 				if (id != this || meta != 4) {
-					call.onBlockFailure(world, midX-i, midY, midZ-i, new BlockKey(this, 4));
+					if (call != null)
+						call.onBlockFailure(world, midX-i, midY, midZ-i, new BlockKey(this, 4));
 					return false;
 				}
 			}
@@ -154,14 +164,16 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			Block id = world.getBlock(midX-i, midY+1, midZ-i);
 			int meta = world.getBlockMetadata(midX-i, midY+1, midZ-i);
 			if (id != this || meta != 1) {
-				call.onBlockFailure(world, midX-i, midY+1, midZ-i, new BlockKey(this, 1));
+				if (call != null)
+					call.onBlockFailure(world, midX-i, midY+1, midZ-i, new BlockKey(this, 1));
 				return false;
 			}
 
 			id = world.getBlock(midX-i, midY-1, midZ-i);
 			meta = world.getBlockMetadata(midX-i, midY-1, midZ-i);
 			if (id != this || meta != 1) {
-				call.onBlockFailure(world, midX-i, midY-1, midZ-i, new BlockKey(this, 1));
+				if (call != null)
+					call.onBlockFailure(world, midX-i, midY-1, midZ-i, new BlockKey(this, 1));
 				return false;
 			}
 		}
@@ -179,7 +191,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -187,7 +200,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -196,7 +210,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -204,7 +219,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 		}
@@ -222,7 +238,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -230,7 +247,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -239,7 +257,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -247,7 +266,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || meta != m) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 		}
@@ -265,7 +285,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			Block id = world.getBlock(dx, dy, dz);
 			int meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || m != meta) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -273,7 +294,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || m != meta) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -282,7 +304,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || m != meta) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 
@@ -290,7 +313,8 @@ public class BlockSolenoidMulti extends BlockReCMultiBlock implements Transducer
 			id = world.getBlock(dx, dy, dz);
 			meta = world.getBlockMetadata(dx, dy, dz);
 			if (id != this || m != meta) {
-				call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
+				if (call != null)
+					call.onBlockFailure(world, dx, dy, dz, new BlockKey(this, m));
 				return false;
 			}
 		}
