@@ -73,7 +73,7 @@ public class BlockInjectorMulti extends BlockReCMultiBlock implements NeutronBlo
 	private boolean checkAt(World world, int dx, int dy, int dz, Block bs, int metas, BlockMatchFailCallback call) {
 		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		if (b != this || meta != 4) {
+		if (b != bs || meta != metas) {
 			if (call != null)
 				call.onBlockFailure(world, dx, dy, dz, new BlockKey(bs, metas));
 			return false;

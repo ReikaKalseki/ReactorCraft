@@ -101,8 +101,8 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 	private void cool(Exchange e) {
 		tank.removeLiquid(COOL_AMOUNT);
 		output.addLiquid(COOL_AMOUNT*e.expansionRatio, e.coldFluid);
-		double c = e.heatCapacity;
-		temperature += c*COOL_AMOUNT;
+		double eff = Math.min(1, Math.max(0.1, 1-(temperature-100)/(e.maxTemperature-100D)));
+		temperature += e.heatCapacity*COOL_AMOUNT*eff;
 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;

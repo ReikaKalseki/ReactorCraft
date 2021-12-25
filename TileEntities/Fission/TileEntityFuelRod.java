@@ -81,7 +81,7 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 					return true;
 				if (this.isFissile()) {
 					ReactorFuel f = this.getFuel();
-					if (ReikaRandomHelper.doWithChance(f.fissionChance)) {
+					if (ReikaRandomHelper.doWithChance(f.fissionChance+f.voidCoefficient*(temperature-100))) {
 						ReactorAchievements.FISSION.triggerAchievement(this.getPlacer());
 						if (ReikaRandomHelper.doWithChance(f.consumeChance)) {
 							ItemStack is = inv[3];

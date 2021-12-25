@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,8 +16,8 @@ import net.minecraft.item.ItemStack;
 
 public enum ReactorFuel {
 
-	URANIUM(ReactorItems.FUEL.getItemInstance(), 25, 3, 5, 20),
-	PLUTONIUM(ReactorItems.PLUTONIUM.getItemInstance(), 30, 4, 10, 30);
+	URANIUM(ReactorItems.FUEL.getItemInstance(), 25, 3, 5, 20, 0),
+	PLUTONIUM(ReactorItems.PLUTONIUM.getItemInstance(), 30, 4, 10, 30, 0.025F);
 	//THORIUM(ReactorItems.THORIUM.getItemInstance(), 20, 3, 2, 15);
 
 	private final Item fuel;
@@ -25,16 +25,18 @@ public enum ReactorFuel {
 	public final int consumeChance;
 	public final int wasteChance;
 	public final int temperatureStep;
+	public final float voidCoefficient;
 
 	private static final HashMap<Item, ReactorFuel> itemMap = new HashMap();
 	public static final ReactorFuel[] fuelList = values();
 
-	private ReactorFuel(Item item, int fiss, int con, int waste, int temp) {
+	private ReactorFuel(Item item, int fiss, int con, int waste, int temp, float v) {
 		fuel = item;
 		fissionChance = fiss;
 		consumeChance = con;
 		wasteChance = waste;
 		temperatureStep = temp;
+		voidCoefficient = v;
 	}
 
 	public boolean canProducePower() {
