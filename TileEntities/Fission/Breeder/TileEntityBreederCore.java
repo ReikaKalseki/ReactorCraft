@@ -100,7 +100,7 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 		if (!world.isRemote) {
 			if (this.checkPoisonedChance())
 				return true;
-			if (ReikaRandomHelper.doWithChance(25) && this.isFissile() && ReikaRandomHelper.doWithChance(e.getNeutronSpeed().getInteractionMultiplier())) {
+			if (ReikaRandomHelper.doWithChance(25+temperature/100) && this.isFissile() && ReikaRandomHelper.doWithChance(e.getNeutronSpeed().getInteractionMultiplier())) {
 				int slot = ReikaInventoryHelper.locateInInventory(ReactorItems.BREEDERFUEL.getItemInstance(), inv);
 				if (slot != -1) {
 					if (e.getType().canTriggerFuelConversion() && ReikaRandomHelper.doWithChance(5*e.getNeutronSpeed().getWasteConversionMultiplier())) {

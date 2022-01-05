@@ -171,14 +171,14 @@ public class ReactorRecipes {
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "W W", " S ", "W W", 'W', ReikaItemHelper.blackWool, 'S', ItemStacks.steelingot);
 
 		id = ReactorBlocks.TURBINEMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sss", "sss", "sss", 's', ItemStacks.prop);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sis", "ici", "sis", 's', ItemStacks.prop, 'c', ItemStacks.springtungsten, 'i', ItemStacks.silumin);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "BBB", "SSS", "ppp", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', ItemStacks.prop);
-		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bPb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "PbP", "bIb", "PbP", 'P', ItemStacks.pipe, 'b', ItemStacks.basepanel, 'I', MachineRegistry.PIPEPUMP.getCraftedProduct());
 
 		id = ReactorBlocks.FLYWHEELMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sSs", "SCS", "sSs", 's', ItemStacks.steelingot, 'S', ItemStacks.steelblock, 'C', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "sSs", "SCS", "sSs", 's', ItemStacks.springtungsten, 'S', ItemStacks.steelblock, 'C', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 		GameRegistry.addRecipe(new ItemStack(id, 1, 1), "WWW", "SSS", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
-		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "sss", "sSs", "sss", 's', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "sSs", "SSS", "sSs", 's', ItemStacks.basepanel, 'S', ItemStacks.springingot);
 	}
 
 	private static void addCrafting() {

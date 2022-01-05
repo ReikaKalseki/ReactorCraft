@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
@@ -44,7 +45,10 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector {
+import buildcraft.api.tiles.IHasWork;
+
+@Strippable("buildcraft.api.tiles.IHasWork")
+public class TileEntityUProcessor extends TileEntityInventoriedReactorBase implements IFluidHandler, PipeConnector, IHasWork {
 
 	private final HybridTank output = new HybridTank("uprocout", 3000);
 	private final HybridTank intermediate = new HybridTank("uprocmid", 3000);
@@ -477,6 +481,12 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 				facing = ForgeDirection.SOUTH;
 				break;
 		}
+	}
+
+	@Override
+	public boolean hasWork() {
+		Processes p = this.getProcess();
+		return p != null && output.canTakeIn(p.outputFluid, p.outputFluidProduced);
 	}
 
 }

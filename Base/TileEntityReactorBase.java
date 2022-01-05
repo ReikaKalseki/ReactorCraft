@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -148,7 +149,8 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	protected void updateTemperature(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(temperature, Side.SERVER);
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		float af = 1+1.5F*MathHelper.clamp_float((temperature-100)/500F, 0, 1);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z, af);
 
 		if (world.provider.dimensionId != -1)
 			Tamb = Math.min(Tamb, 95);
@@ -209,6 +211,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 							tr.setTemperature(newT);
 							if (this instanceof TileEntityReactorBoiler && !(tr instanceof TileEntityReactorBoiler) && tr instanceof TypedReactorCoreTE) {
 								((TileEntityReactorBoiler)this).setReactorType(((TypedReactorCoreTE)tr).getReactorType(), add);
+							}
+							else if (this instanceof TileEntityNuclearBoiler && tr.getClass() == this.getClass()) {
+								((TileEntityNuclearBoiler)this).setReactorType(((TileEntityNuclearBoiler)tr).getReactorType(), add);
 							}
 						}
 					}

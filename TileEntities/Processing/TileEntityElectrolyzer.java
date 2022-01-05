@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
@@ -42,8 +43,11 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import buildcraft.api.tiles.IHasWork;
+
+@Strippable("buildcraft.api.tiles.IHasWork")
 public class TileEntityElectrolyzer extends TileEntityInventoriedReactorBase implements IFluidHandler,
-PipeConnector, TemperatureTE, ThermalMachine, Shockable {
+PipeConnector, TemperatureTE, ThermalMachine, Shockable, IHasWork {
 
 	public static final int SODIUM_MELT = 98;
 
@@ -495,6 +499,11 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable {
 	@Override
 	public void resetAmbientTemperatureTimer() {
 		tempTimer.reset();
+	}
+
+	@Override
+	public boolean hasWork() {
+		return recipe != null && tankH.canTakeIn(recipe.lowerOutput) && tankL.canTakeIn(recipe.upperOutput);
 	}
 
 	public static enum Electrolysis {

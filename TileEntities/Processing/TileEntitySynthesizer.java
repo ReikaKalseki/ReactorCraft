@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
@@ -41,10 +42,12 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import buildcraft.api.tiles.IHasWork;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine, PipeConnector {
+@Strippable("buildcraft.api.tiles.IHasWork")
+public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase implements IFluidHandler, ThermalMachine, PipeConnector, IHasWork {
 
 	private static final int WATER_PER_AMMONIA = 250;
 	private static final int AMMONIA_PER_STEP = 1000;
@@ -408,6 +411,11 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	@Override
 	public void resetAmbientTemperatureTimer() {
 		tempTimer.reset();
+	}
+
+	@Override
+	public boolean hasWork() {
+		return recipe != null && tank.canTakeIn(recipe.output, recipe.fluidProduced);
 	}
 
 }

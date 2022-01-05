@@ -70,7 +70,7 @@ public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
 	}
 
 	@Override
-	protected ReactorType getDefaultReactorType() {
+	public ReactorType getDefaultReactorType() {
 		return ReactorType.HTGR;
 	}
 

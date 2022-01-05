@@ -224,7 +224,7 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 	}
 
 	@Override
-	protected ReactorType getDefaultReactorType() {
+	public ReactorType getDefaultReactorType() {
 		return ReactorType.FISSION;
 	}
 

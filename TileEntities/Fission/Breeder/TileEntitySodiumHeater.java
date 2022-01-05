@@ -82,7 +82,7 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 	}
 
 	@Override
-	protected ReactorType getDefaultReactorType() {
+	public ReactorType getDefaultReactorType() {
 		return ReactorType.BREEDER;
 	}
 

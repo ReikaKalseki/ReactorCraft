@@ -92,9 +92,11 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 				int s = te.removeSteam();
 				steam += s;
 				for (ReactorType rt : te.getReactorTypeSet()) {
-					if (rt == null)
-						continue;
 					double f = te.getReactorTypeFraction(rt);
+					if (rt == null || rt == ReactorType.NONE)
+						rt = te.getReactorType();
+					if (rt == null || rt == ReactorType.NONE)
+						rt = te.getDefaultReactorType();
 					source.addValue(rt, s*f);
 				}
 			}

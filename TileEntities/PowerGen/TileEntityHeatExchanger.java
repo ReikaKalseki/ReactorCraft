@@ -92,7 +92,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 					temperature -= dT/4;
 					int add = dT/4;
 					te.setTemperature(te.getTemperature()+add);
-					te.setReactorType(e != null ? e.type : ReactorType.NULL, add);
+					te.setReactorType(e != null ? e.type : ReactorType.NONE, add);
 				}
 			}
 		}
@@ -195,9 +195,9 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		SODIUM(ReactorCraft.NA_hot, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
 		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
 		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM),
-		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, null),
+		OXYGEN("rc liquid oxygen", "rc oxygen", 4, -ReikaThermoHelper.OXYGEN_HEAT-ReikaThermoHelper.OXYGEN_BOIL_ENTHALPY, 500, ReactorType.NONE),
 		SOLARSODIUM(ReactorCraft.NA_warm, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT*0.625F, 400, ReactorType.SOLAR),
-		NITROGEN("rc liquid nitrogen", "nitrogen", 12, -ReikaThermoHelper.NITROGEN_HEAT-ReikaThermoHelper.NITROGEN_BOIL_ENTHALPY, 500, null);
+		NITROGEN("rc liquid nitrogen", "nitrogen", 12, -ReikaThermoHelper.NITROGEN_HEAT-ReikaThermoHelper.NITROGEN_BOIL_ENTHALPY, 500, ReactorType.NONE);
 
 		public final Fluid hotFluid;
 		public final Fluid coldFluid;

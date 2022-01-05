@@ -37,7 +37,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 		this.setReactorType(this.getDefaultReactorType(), 1);
 	}
 
-	protected abstract ReactorType getDefaultReactorType();
+	public abstract ReactorType getDefaultReactorType();
 
 	public final void setReactorType(ReactorType t, double amt) {
 		type.addValue(t, amt);

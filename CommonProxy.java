@@ -20,7 +20,7 @@ public class CommonProxy {
 	public static int lampRender;
 	public static int hazmat;
 
-	protected SoundLoader sounds = new SoundLoader(ReactorSounds.class);
+	protected static final SoundLoader sounds = new SoundLoader(ReactorSounds.class);
 
 	public void registerRenderers()
 	{

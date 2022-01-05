@@ -19,7 +19,7 @@ public enum ReactorType {
 	THORIUM(),
 	FUSION(),
 	SOLAR(),
-	NULL();
+	NONE();
 
 	public double getHPTurbineMultiplier() {
 		switch(this) {
@@ -31,7 +31,7 @@ public enum ReactorType {
 				return 0.25F;
 			case SOLAR:
 				return 0.4F;
-			case NULL:
+			case NONE:
 				return 0;
 			default:
 				return 1;
@@ -61,7 +61,7 @@ public enum ReactorType {
 				return 0;
 			case THORIUM:
 				return 0.25F;
-			case NULL:
+			case NONE:
 				return 0;
 			default:
 				return 0.5F;
