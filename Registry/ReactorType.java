@@ -28,9 +28,9 @@ public enum ReactorType {
 			case FUSION:
 				return 1.5F;
 			case HTGR:
-				return 0.25F;
+				return 0.35F;
 			case SOLAR:
-				return 0.4F;
+				return 0.15F;
 			case NONE:
 				return 0;
 			default:
