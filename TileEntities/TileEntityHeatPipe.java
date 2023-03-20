@@ -63,8 +63,8 @@ public class TileEntityHeatPipe extends TileEntityLine {
 		if (!world.isRemote) {
 			this.balanceHeat(world, x, y, z);
 
-			if (this.getTicksExisted()%32 == 0 && false) {
-				this.ventHeat(world, x, y, z);
+			if (this.getTicksExisted()%32 == 0) {
+				//this.ventHeat(world, x, y, z); //TODO fix heat pipe heat loss
 			}
 		}
 	}

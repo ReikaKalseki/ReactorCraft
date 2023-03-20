@@ -10,11 +10,13 @@
 package Reika.ReactorCraft;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import net.bdew.gendustry.api.GendustryAPI;
 import net.minecraft.block.Block;
@@ -68,6 +70,7 @@ import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
@@ -131,6 +134,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import thaumcraft.api.aspects.Aspect;
+import vazkii.botania.api.recipe.ElvenPortalUpdateEvent;
 
 @Mod( modid = "ReactorCraft", name="ReactorCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI;required-after:RotaryCraft")
 public class ReactorCraft extends DragonAPIMod {
@@ -727,6 +731,33 @@ public class ReactorCraft extends DragonAPIMod {
 		if (evt.source.damageType.contains("radiation")) {
 			if (RadiationEffects.instance.hasHazmatSuit(evt.entityLiving)) {
 				evt.setCanceled(true);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	@ModDependent(ModList.BOTANIA)
+	public void alfheimNuclearWaste(ElvenPortalUpdateEvent evt) {
+		if (evt.open) {
+			Iterator<ItemStack> it = evt.stacksInside.iterator();
+			TileEntity te = evt.portalTile;
+			while (it.hasNext()) {
+				ItemStack is = it.next();
+				if (is == null) {
+					it.remove();
+					continue;
+				}
+				if (ReactorItems.WASTE.matchWith(is)) {
+					ReikaItemHelper.dropItem(te.worldObj, te.xCoord+0.5, te.yCoord+1.5, te.zCoord+0.5, is);
+					it.remove();
+					try {
+						Field f = te.getClass().getDeclaredField("closeNow");
+						f.setBoolean(te, true);
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}

@@ -69,7 +69,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 
 	@Override
 	public String getRecipeName() {
-		return "Centrifuge";
+		return "Isotope Centrifuge";
 	}
 
 	@Override
