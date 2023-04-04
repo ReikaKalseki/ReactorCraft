@@ -98,10 +98,10 @@ public class ReactorRecipes {
 		for (int i = 0; i < ReactorItems.MAGNET.getNumberMetadatas()-1; i++)
 			RecipesCompactor.getRecipes().addRecipe(ReactorItems.MAGNET.getStackOfMetadata(i), ReactorItems.MAGNET.getCraftedMetadataProduct(2, i+1), 10000*(1+i), 100);
 
-		TileEntityFuelConverter.Conversions.addRecipe("LIFBE", "rc lifbe", "rc lifbe fuel", 100, 1, 100, new ItemMatch("dustThorium"));
+		TileEntityFuelConverter.addRecipe("rc lifbe", "rc lifbe fuel", 10, 1, 0.1, new ItemMatch("dustThorium"));
 
 		if (ModList.IC2.isLoaded() && !IC2Handler.getInstance().isIC2Classic())
-			TileEntityFuelConverter.Conversions.addRecipe("Distill", "rc lowpwater", "ic2distilledwater", 25, 1, 40, new ItemMatch(ReactorStacks.lime));
+			TileEntityFuelConverter.addRecipe("rc lowpwater", "ic2distilledwater", 25, 1, 0.25, new ItemMatch(ReactorStacks.lime));
 	}
 
 	public static void addModInterface() {
