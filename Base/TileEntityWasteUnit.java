@@ -151,17 +151,17 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		return this.countWaste() > 0;
 	}
 
-	public final double getHalfLife(ItemStack is) {
+	public static double getHalfLife(ItemStack is) {
 		if (is.getItem() != ReactorItems.WASTE.getItemInstance())
 			return 0;
-		return WasteManager.getWasteList().get(is.getItemDamage()).getMCHalfLife();
+		return Isotopes.getIsotope(is.getItemDamage()).getMCHalfLife();//WasteManager.getWasteList().get(is.getItemDamage()).getMCHalfLife();
 	}
 
-	protected final boolean isLongLivedWaste(ItemStack is) {
-		return is.getItem() == ReactorItems.WASTE.getItemInstance() && this.getHalfLife(is) > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
+	public static boolean isLongLivedWaste(ItemStack is) {
+		return is.getItem() == ReactorItems.WASTE.getItemInstance() && getHalfLife(is) > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
 	}
 
-	protected final boolean isLongLivedWaste(Isotopes i) {
+	public static boolean isLongLivedWaste(Isotopes i) {
 		return i.getMCHalfLife() > 6*ReikaTimeHelper.YEAR.getMinecraftDuration();
 	}
 

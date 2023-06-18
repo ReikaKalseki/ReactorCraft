@@ -32,6 +32,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -294,7 +295,7 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 
 	private void getFluidContainers() {
 		if (inv[1] != null) {
-			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+			FluidStack fs = ReikaFluidHelper.getFluidForItem(inv[1]);
 			if (fs != null && Processes.processMap.get(fs.getFluid().getName()) != null && this.canAcceptMoreInput(fs.amount)) {
 				input.fill(fs.copy(), true);
 				inv[1] = FluidContainerRegistry.drainFluidContainer(inv[1]);
@@ -348,14 +349,14 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	public static Processes getProcessByFluidItem(ItemStack is) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(is);
 		if (fs == null)
 			return null;
 		return Processes.processMap.get(fs.getFluid().getName());
 	}
 
 	public static Processes getProcessByFluidOutputItem(ItemStack is) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(is);
 		if (fs == null)
 			return null;
 		return Processes.processOutputMap.get(fs.getFluid().getName());

@@ -127,7 +127,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		if (input.isEmpty())
 			return false;
 		NeutronType type = e.getType();
-		if (type.canIrradiateLiquids()) {
+		if (type.canIrradiateMaterials()) {
 			Reactions r = Reactions.getReactionFrom(input.getActualFluid());
 			if (!world.isRemote && this.canMake(r) && ReikaRandomHelper.doWithChance(r.chance)) {
 				this.make(r);

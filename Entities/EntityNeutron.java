@@ -237,7 +237,7 @@ public class EntityNeutron extends ParticleEntity implements IEntityAdditionalSp
 			return this != FUSION;
 		}
 
-		public boolean canIrradiateLiquids() {
+		public boolean canIrradiateMaterials() {
 			return this == FISSION || this == FUSION || this == BREEDER || this == THORIUM;
 		}
 

@@ -384,6 +384,14 @@
 			Requires %dW at %d rad/s
 		</note>
 	</solar>
+	<wastedecayer>
+		<desc>
+			The forced fission chamber is used to bombard nuclear waste with neutrons to encourage it to fragment into products which are more easily disposed of than the original isotopes.
+		</desc>
+		<note>
+			Operates most efficiently around %dC and with fast neutrons (if enabled)
+		</note>
+	</wastedecayer>
 	<name>
 		<desc>
 			

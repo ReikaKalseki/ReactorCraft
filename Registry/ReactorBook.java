@@ -63,6 +63,7 @@ public enum ReactorBook implements HandbookEntry {
 	ELECTROLYZER(ReactorTiles.ELECTROLYZER),
 	SYNTHESIZER(ReactorTiles.SYNTHESIZER),
 	TRITIZER(ReactorTiles.TRITIZER),
+	WASTEDECAYER(ReactorTiles.WASTEDECAYER),
 
 	GENDESC("Power Generation Machines", ""),
 	BOILER(ReactorTiles.BOILER),

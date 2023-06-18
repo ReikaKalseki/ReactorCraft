@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,6 +24,7 @@ import Reika.ReactorCraft.Container.ContainerProcessor;
 import Reika.ReactorCraft.Container.ContainerSynthesizer;
 import Reika.ReactorCraft.Container.ContainerThoriumCore;
 import Reika.ReactorCraft.Container.ContainerWasteContainer;
+import Reika.ReactorCraft.Container.ContainerWasteDecayer;
 import Reika.ReactorCraft.Container.ContainerWasteStorage;
 import Reika.ReactorCraft.GUIs.GuiCPU;
 import Reika.ReactorCraft.GUIs.GuiCentrifuge;
@@ -36,6 +37,7 @@ import Reika.ReactorCraft.GUIs.GuiReactorBookPage;
 import Reika.ReactorCraft.GUIs.GuiSynthesizer;
 import Reika.ReactorCraft.GUIs.GuiThoriumCore;
 import Reika.ReactorCraft.GUIs.GuiWasteContainer;
+import Reika.ReactorCraft.GUIs.GuiWasteDecayer;
 import Reika.ReactorCraft.GUIs.GuiWasteStorage;
 import Reika.ReactorCraft.Registry.ReactorBook;
 import Reika.ReactorCraft.Registry.ReactorItems;
@@ -47,6 +49,7 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityWasteDecayer;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
 
@@ -70,6 +73,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 						return new ContainerThoriumCore(player, (TileEntityThoriumCore)te);
 					case WASTECONTAINER:
 						return new ContainerWasteContainer(player, (TileEntityWasteContainer)te);
+					case WASTEDECAYER:
+						return new ContainerWasteDecayer(player, (TileEntityWasteDecayer)te);
 					case PROCESSOR:
 						return new ContainerProcessor(player, (TileEntityUProcessor)te);
 					case CENTRIFUGE:
@@ -116,6 +121,8 @@ public class ReactorGuiHandler implements IGuiHandler {
 					return new GuiThoriumCore(player, (TileEntityThoriumCore)te);
 				case WASTECONTAINER:
 					return new GuiWasteContainer(player, (TileEntityWasteContainer)te);
+				case WASTEDECAYER:
+					return new GuiWasteDecayer(player, (TileEntityWasteDecayer)te);
 				case PROCESSOR:
 					return new GuiProcessor(player, (TileEntityUProcessor)te);
 				case CENTRIFUGE:

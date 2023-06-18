@@ -27,7 +27,7 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	CALCITEORE("Generate Calcite Ore Even If Other Mods Do", true),
 	CADMIUMORE("Generate Cadmium Ore Even If Other Mods Do", true),
 	INDIUMORE("Generate Indium Ore Even If Other Mods Do", true),
-	RETROGEN("Retrogen Ores", false),
+	//RETROGEN("Retrogen Ores", false),
 	RAINBOW("Rainbow Fluorite", false),
 	TOROIDCHARGE("Toroid Spark Delay", 4),
 	CHUNKLOADING("Fission Cores Chunkload When Active", true),

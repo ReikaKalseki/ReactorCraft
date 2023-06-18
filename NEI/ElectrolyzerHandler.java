@@ -17,9 +17,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
@@ -129,7 +129,7 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(result);
 		if (fs != null) {
 			for (Electrolysis e : Electrolysis.getRecipes()) {
 				if (e.makes(fs.getFluid())) {
@@ -146,7 +146,7 @@ public class ElectrolyzerHandler extends TemplateRecipeHandler {
 				arecipes.add(new ElectrolyzerRecipe(e));
 			}
 		}
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(ingredient);
 		if (fs != null) {
 			for (Electrolysis e : Electrolysis.getRecipes()) {
 				if (e.uses(fs.getFluid())) {

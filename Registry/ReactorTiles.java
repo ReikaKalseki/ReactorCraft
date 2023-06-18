@@ -71,6 +71,7 @@ import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityTritizer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityUProcessor;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityWasteDecayer;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteContainer;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWastePipe;
 import Reika.ReactorCraft.TileEntities.Waste.TileEntityWasteStorage;
@@ -126,7 +127,8 @@ public enum ReactorTiles implements TileEnum {
 	SOLAR("machine.solarexchange",				ReactorBlocks.MODELMACHINE,		TileEntitySolarExchanger.class,	11, "RenderSolarExchanger"),
 	SOLARTOP("machine.solartop",				ReactorBlocks.MODELMACHINE,		TileEntitySolarTop.class,		12, "RenderSolarTop"),
 	MINITURBINE("machine.miniturbine", 			ReactorBlocks.MODELREACTOR,		TileEntityCentrifugalTurbine.class,	8, "RenderMiniTurbine"),
-	HEATPIPE("machine.heatpipe", 				ReactorBlocks.LINE,				TileEntityHeatPipe.class, 		3, "RenderWaterLine");
+	HEATPIPE("machine.heatpipe", 				ReactorBlocks.LINE,				TileEntityHeatPipe.class, 		3, "RenderWaterLine"),
+	WASTEDECAYER("machine.wastedecayer",		ReactorBlocks.REACTOR,			TileEntityWasteDecayer.class,	14);
 
 	private final String name;
 	private final Class teClass;
@@ -248,6 +250,7 @@ public enum ReactorTiles implements TileEnum {
 			case BREEDER:
 			case TRITIZER:
 			case THORIUM:
+			case WASTEDECAYER:
 				return 5;
 			case INJECTOR:
 				return 3;

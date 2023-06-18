@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,14 +26,20 @@ public class ModelExchanger extends RotaryModelBase
 {
 	//fields
 	LODModelPart Shape1;
-	LODModelPart Shape2;
+	LODModelPart Shape2b3;
 	LODModelPart Shape1a;
-	LODModelPart Shape2a;
-	LODModelPart Shape2b;
-	LODModelPart Shape2c;
+	LODModelPart Shape2c2;
 	LODModelPart Shape1b;
-	LODModelPart Shape2d;
+	LODModelPart p3;
 	LODModelPart Shape1c;
+	LODModelPart Shape7;
+	LODModelPart Shape2b;
+	LODModelPart Shape2b2;
+	LODModelPart p4;
+	LODModelPart p2;
+	LODModelPart p1;
+	LODModelPart Shape2c;
+	LODModelPart Shape2;
 
 	public ModelExchanger()
 	{
@@ -46,68 +52,109 @@ public class ModelExchanger extends RotaryModelBase
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new LODModelPart(this, 67, 19);
-		Shape2.addBox(0F, 0F, 0F, 12, 2, 12);
-		Shape2.setRotationPoint(-6F, 9F, -6F);
-		Shape2.setTextureSize(128, 128);
-		Shape2.mirror = true;
-		this.setRotation(Shape2, 0F, 0F, 0F);
+		Shape2b3 = new LODModelPart(this, 105, 0);
+		Shape2b3.addBox(0F, 0F, 0F, 3, 14, 3);
+		Shape2b3.setRotationPoint(-6F, 9F, 3F);
+		Shape2b3.setTextureSize(128, 128);
+		Shape2b3.mirror = true;
+		this.setRotation(Shape2b3, 0F, 0F, 0F);
 		Shape1a = new LODModelPart(this, 0, 0);
 		Shape1a.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1a.setRotationPoint(-8F, 8F, -8F);
 		Shape1a.setTextureSize(128, 128);
 		Shape1a.mirror = true;
 		this.setRotation(Shape1a, 0F, 0F, 0F);
-		Shape2a = new LODModelPart(this, 67, 19);
-		Shape2a.addBox(0F, 0F, 0F, 12, 2, 12);
-		Shape2a.setRotationPoint(-6F, 21F, -6F);
-		Shape2a.setTextureSize(128, 128);
-		Shape2a.mirror = true;
-		this.setRotation(Shape2a, 0F, 0F, 0F);
-		Shape2b = new LODModelPart(this, 0, 19);
-		Shape2b.addBox(0F, 0F, 0F, 14, 2, 14);
-		Shape2b.setRotationPoint(-7F, 18F, -7F);
-		Shape2b.setTextureSize(128, 128);
-		Shape2b.mirror = true;
-		this.setRotation(Shape2b, 0F, 0F, 0F);
-		Shape2c = new LODModelPart(this, 0, 57);
-		Shape2c.addBox(0F, 0F, 0F, 16, 4, 16);
-		Shape2c.setRotationPoint(-8F, 14F, -8F);
-		Shape2c.setTextureSize(128, 128);
-		Shape2c.mirror = true;
-		this.setRotation(Shape2c, 0F, 0F, 0F);
+		Shape2c2 = new LODModelPart(this, 0, 79);
+		Shape2c2.addBox(0F, 0F, 0F, 18, 2, 18);
+		Shape2c2.setRotationPoint(-9F, 15F, -9F);
+		Shape2c2.setTextureSize(128, 128);
+		Shape2c2.mirror = true;
+		this.setRotation(Shape2c2, 0F, 0F, 0F);
 		Shape1b = new LODModelPart(this, 0, 37);
 		Shape1b.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1b.setRotationPoint(-8F, 20F, -8F);
 		Shape1b.setTextureSize(128, 128);
 		Shape1b.mirror = true;
 		this.setRotation(Shape1b, 0F, 0F, 0F);
-		Shape2d = new LODModelPart(this, 0, 19);
-		Shape2d.addBox(0F, 0F, 0F, 14, 2, 14);
-		Shape2d.setRotationPoint(-7F, 12F, -7F);
-		Shape2d.setTextureSize(128, 128);
-		Shape2d.mirror = true;
-		this.setRotation(Shape2d, 0F, 0F, 0F);
+		p3 = new LODModelPart(this, 86, 32);
+		p3.addBox(0F, 0F, 0F, 5, 8, 5);
+		p3.setRotationPoint(2F, 12F, 2F);
+		p3.setTextureSize(128, 128);
+		p3.mirror = true;
+		this.setRotation(p3, 0F, 0F, 0F);
 		Shape1c = new LODModelPart(this, 0, 0);
 		Shape1c.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1c.setRotationPoint(-8F, 23F, -8F);
 		Shape1c.setTextureSize(128, 128);
 		Shape1c.mirror = true;
 		this.setRotation(Shape1c, 0F, 0F, 0F);
+		Shape7 = new LODModelPart(this, 66, 46);
+		Shape7.addBox(0F, 0F, 0F, 4, 14, 4);
+		Shape7.setRotationPoint(-2F, 9F, -2F);
+		Shape7.setTextureSize(128, 128);
+		Shape7.mirror = true;
+		this.setRotation(Shape7, 0F, 0F, 0F);
+		Shape2b = new LODModelPart(this, 79, 0);
+		Shape2b.addBox(0F, 0F, 0F, 3, 14, 3);
+		Shape2b.setRotationPoint(3F, 9F, -6F);
+		Shape2b.setTextureSize(128, 128);
+		Shape2b.mirror = true;
+		this.setRotation(Shape2b, 0F, 0F, 0F);
+		Shape2b2 = new LODModelPart(this, 92, 0);
+		Shape2b2.addBox(0F, 0F, 0F, 3, 14, 3);
+		Shape2b2.setRotationPoint(3F, 9F, 3F);
+		Shape2b2.setTextureSize(128, 128);
+		Shape2b2.mirror = true;
+		this.setRotation(Shape2b2, 0F, 0F, 0F);
+		p4 = new LODModelPart(this, 65, 32);
+		p4.addBox(0F, 0F, 0F, 5, 8, 5);
+		p4.setRotationPoint(-7F, 12F, 2F);
+		p4.setTextureSize(128, 128);
+		p4.mirror = true;
+		this.setRotation(p4, 0F, 0F, 0F);
+		p2 = new LODModelPart(this, 86, 19);
+		p2.addBox(0F, 0F, 0F, 5, 8, 5);
+		p2.setRotationPoint(2F, 12F, -7F);
+		p2.setTextureSize(128, 128);
+		p2.mirror = true;
+		this.setRotation(p2, 0F, 0F, 0F);
+		p1 = new LODModelPart(this, 65, 19);
+		p1.addBox(0F, 0F, 0F, 5, 8, 5);
+		p1.setRotationPoint(-7F, 12F, -7F);
+		p1.setTextureSize(128, 128);
+		p1.mirror = true;
+		this.setRotation(p1, 0F, 0F, 0F);
+		Shape2c = new LODModelPart(this, 0, 57);
+		Shape2c.addBox(0F, 0F, 0F, 16, 4, 16);
+		Shape2c.setRotationPoint(-8F, 14F, -8F);
+		Shape2c.setTextureSize(128, 128);
+		Shape2c.mirror = true;
+		this.setRotation(Shape2c, 0F, 0F, 0F);
+		Shape2 = new LODModelPart(this, 66, 0);
+		Shape2.addBox(0F, 0F, 0F, 3, 14, 3);
+		Shape2.setRotationPoint(-6F, 9F, -6F);
+		Shape2.setTextureSize(128, 128);
+		Shape2.mirror = true;
+		this.setRotation(Shape2, 0F, 0F, 0F);
 	}
 
 	@Override
-	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
-	{
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
 		Shape1.render(te, f5);
-		Shape2.render(te, f5);
+		Shape2b3.render(te, f5);
 		Shape1a.render(te, f5);
-		Shape2a.render(te, f5);
-		Shape2b.render(te, f5);
-		Shape2c.render(te, f5);
+		Shape2c2.render(te, f5);
 		Shape1b.render(te, f5);
-		Shape2d.render(te, f5);
+		p3.render(te, f5);
 		Shape1c.render(te, f5);
+		Shape7.render(te, f5);
+		Shape2b.render(te, f5);
+		Shape2b2.render(te, f5);
+		p4.render(te, f5);
+		p2.render(te, f5);
+		p1.render(te, f5);
+		Shape2c.render(te, f5);
+		Shape2.render(te, f5);
 	}
 
 	@Override

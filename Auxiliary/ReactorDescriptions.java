@@ -43,6 +43,7 @@ import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntityElectrolyzer;
 import Reika.ReactorCraft.TileEntities.Processing.TileEntitySynthesizer;
+import Reika.ReactorCraft.TileEntities.Processing.TileEntityWasteDecayer;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -259,6 +260,7 @@ public final class ReactorDescriptions {
 		addData(ReactorTiles.SOLARTOP, ReactorTiles.SOLARTOP.getName());
 		addData(ReactorTiles.SOLAR, ReactorTiles.SOLAR.getName());
 		addNotes(ReactorTiles.SOLAR, TileEntitySolarExchanger.MINPOWER, TileEntitySolarExchanger.MINSPEED);
+		addNotes(ReactorTiles.WASTEDECAYER, TileEntityWasteDecayer.OPTIMAL_TEMP);
 
 		notes.put(ReactorBook.SHIELDING, RadiationShield.getDataAsString());
 	}

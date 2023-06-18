@@ -22,6 +22,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
@@ -156,7 +157,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		if (ReikaItemHelper.matchStacks(ReactorStacks.uf6can, ingredient))
 			arecipes.add(new CentrifugeRecipe(Centrifuging.UF6));
 		else if (FluidContainerRegistry.isFilledContainer(ingredient)) {
-			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+			FluidStack fs = ReikaFluidHelper.getFluidForItem(ingredient);
 			if (fs != null) {
 				Centrifuging c = TileEntityCentrifuge.getRecipe(fs.getFluid());
 				if (c != null) {

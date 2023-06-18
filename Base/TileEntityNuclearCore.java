@@ -202,9 +202,10 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 	private void collapseInventory() {
 		for (int i = 0; i < 4; i++) {
 			for (int k = 3; k > 0; k--) {
-				if (inv[k] == null) {
+				if (inv[k] == null && inv[k-1] != null) {
 					inv[k] = inv[k-1];
 					inv[k-1] = null;
+					return;
 				}
 			}
 		}

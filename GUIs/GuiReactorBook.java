@@ -298,7 +298,7 @@ public class GuiReactorBook extends GuiHandbook {
 						r.rotate(0.75, 0, 0);
 					}
 
-					r.draw3D(posX, posY, ptick, true);
+					r.draw3D(0, 0, ptick, true);
 				}
 				else if (structureMode == 1) {
 					r.drawSlice(posX, posY, fontRendererObj);

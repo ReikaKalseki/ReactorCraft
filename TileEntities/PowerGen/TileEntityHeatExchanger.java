@@ -53,6 +53,8 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 
 	private StepTimer temp = new StepTimer(20);
 
+	private Exchange currentRecipe;
+
 	@Override
 	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tank.getInfo(), output.getInfo()};
@@ -67,18 +69,21 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 
-		Exchange e = this.getExchange();
-
-		if (this.canCool(e))
-			this.cool(e);
+		currentRecipe = this.getExchange();
+		if (this.canCool())
+			this.cool();
 		temp.update();
 		if (temp.checkCap()) {
-			this.distributeHeat(world, x, y, z, e);
+			this.distributeHeat(world, x, y, z);
 			this.updateTemperature(world, x, y, z, meta);
 		}
 	}
 
-	private void distributeHeat(World world, int x, int y, int z, Exchange e) {
+	public Exchange getCurrentRecipe() {
+		return currentRecipe;
+	}
+
+	private void distributeHeat(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -92,17 +97,17 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 					temperature -= dT/4;
 					int add = dT/4;
 					te.setTemperature(te.getTemperature()+add);
-					te.setReactorType(e != null ? e.type : ReactorType.NONE, add);
+					te.setReactorType(currentRecipe != null ? currentRecipe.type : ReactorType.NONE, add);
 				}
 			}
 		}
 	}
 
-	private void cool(Exchange e) {
+	private void cool() {
 		tank.removeLiquid(COOL_AMOUNT);
-		output.addLiquid(COOL_AMOUNT*e.expansionRatio, e.coldFluid);
-		double eff = Math.min(1, Math.max(0.1, 1-(temperature-100)/(e.maxTemperature-100D)));
-		temperature += e.heatCapacity*COOL_AMOUNT*eff;
+		output.addLiquid(COOL_AMOUNT*currentRecipe.expansionRatio, currentRecipe.coldFluid);
+		double eff = Math.min(1, Math.max(0.1, 1-(temperature-100)/(currentRecipe.maxTemperature-100D)));
+		temperature += currentRecipe.heatCapacity*COOL_AMOUNT*eff;
 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
@@ -129,13 +134,13 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 		return false;
 	}
 
-	private boolean canCool(Exchange e) {
-		if (e == null)
+	private boolean canCool() {
+		if (currentRecipe == null)
 			return false;
 		if (!this.sufficientPower())
 			return false;
 
-		return temperature < e.maxTemperature && tank.getLevel() >= COOL_AMOUNT && output.getRemainingSpace() >= COOL_AMOUNT*e.expansionRatio && this.canCoolFluid(tank.getActualFluid());
+		return temperature < currentRecipe.maxTemperature && tank.getLevel() >= COOL_AMOUNT && output.getRemainingSpace() >= COOL_AMOUNT*currentRecipe.expansionRatio && this.canCoolFluid(tank.getActualFluid());
 	}
 
 	@Override
@@ -191,7 +196,7 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 	}
 
 	//Add API to allow others to add fluids
-	protected static enum Exchange {
+	public static enum Exchange {
 		SODIUM(ReactorCraft.NA_hot, ReactorCraft.NA, ReikaThermoHelper.SODIUM_HEAT, 600, ReactorType.BREEDER),
 		CO2("rc hot co2", "rc co2", ReikaThermoHelper.CO2_HEAT, TileEntityPebbleBed.MINTEMP, ReactorType.HTGR),
 		LIFBE("rc hot lifbe", "rc lifbe", ReikaThermoHelper.LIFBE_HEAT, 1000, ReactorType.THORIUM),

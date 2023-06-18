@@ -20,9 +20,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
@@ -98,7 +98,7 @@ public class SynthesizerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(result);
 		if (fs != null) {
 			for (FluidSynthesis rec : FluidSynthesis.values()) {
 				if (rec.output.equals(fs.getFluid())) {
@@ -110,7 +110,7 @@ public class SynthesizerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(ingredient);
 		for (FluidSynthesis rec : FluidSynthesis.values()) {
 			if (fs != null && rec.input.equals(fs.getFluid())) {
 				arecipes.add(new SynthesizerRecipe(rec));

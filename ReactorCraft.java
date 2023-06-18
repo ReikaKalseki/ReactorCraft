@@ -343,7 +343,7 @@ public class ReactorCraft extends DragonAPIMod {
 		}
 		this.addEntities();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new ReactorGuiHandler());
-		RetroGenController.instance.addHybridGenerator(ReactorOreGenerator.instance, 0, ReactorOptions.RETROGEN.getState());
+		RetroGenController.instance.addHybridGenerator(ReactorOreGenerator.instance, 0);
 
 		ItemStackRepository.instance.registerClass(this, ReactorStacks.class);
 

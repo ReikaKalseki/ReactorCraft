@@ -140,7 +140,7 @@ public class ReactorRecipes {
 
 	private static void addMultiblocks() {
 		Block id = ReactorBlocks.HEATERMULTI.getBlockInstance();
-		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SBS", "BLB", "SBS", 'B', BlockRegistry.BLASTGLASS.getStackOf(), 'S', ItemStacks.steelingot, 'L', ItemStacks.lens);
+		GameRegistry.addRecipe(new ItemStack(id, 1, 0), "SBS", "BLB", "SBS", 'B', BlockRegistry.BLASTGLASS.getStackOf(), 'S', ItemStacks.tungsteningot, 'L', ItemStacks.lens);
 		GameRegistry.addRecipe(ReactorStacks.insulCore, "WWW", "WSW", "WWW", 'W', Blocks.wool, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 2), "SOS", "OSO", "SOS", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(new ItemStack(id, 1, 3), "OSO", "SSS", "OSO", 'O', ReactorStacks.insulCore, 'S', ItemStacks.steelingot);
@@ -326,7 +326,8 @@ public class ReactorRecipes {
 		ReactorTiles.SYNTHESIZER.addCrafting("SpS", "pMp", "ShS", 'S', ItemStacks.steelingot, 'M', ItemStacks.mixer, 'p', ItemStacks.basepanel, 'h', ItemStacks.igniter);
 		ReactorTiles.SODIUMBOILER.addCrafting(" i ", "ibi", " i ", 'b', ReactorTiles.BOILER.getCraftedProduct(), 'i', Items.iron_ingot);
 		ReactorTiles.BREEDER.addCrafting("SPS", "PCP", "SPS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ReactorTiles.FUEL.getCraftedProduct());
-		ReactorTiles.TRITIZER.addCrafting("SPS", "GPG", "SPS", 'G', Blocks.glass, 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot);
+		ReactorTiles.TRITIZER.addCrafting("SPS", "GPG", "SPS", 'G', BlockRegistry.BLASTGLASS.getBlockInstance(), 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot);
+		ReactorTiles.WASTEDECAYER.addCrafting("SHS", "GPG", "SHS", 'H', Blocks.hopper, 'G', BlockRegistry.BLASTGLASS.getBlockInstance(), 'P', ReactorTiles.WASTECONTAINER.getCraftedProduct(), 'S', ItemStacks.silumin);
 		ReactorTiles.GASPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "CGC", "CGC", "CGC", 'C', Blocks.hardened_clay, 'G', Blocks.glass);
 		ReactorTiles.ELECTROLYZER.addCrafting("SPS", "PRP", "BPB", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 		ReactorTiles.EXCHANGER.addCrafting("FPF", "GIG", "FPF", 'P', ItemStacks.pipe, 'I', ItemStacks.impeller, 'G', Items.gold_ingot, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct());
