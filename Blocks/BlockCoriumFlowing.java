@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -63,8 +63,8 @@ public class BlockCoriumFlowing extends BlockFluidClassic {
 		}
 		world.setBlock(x, y, z, this, l, 3);
 		if (world.getBlock(x, y, z) != b || world.getBlockMetadata(x, y, z) != meta) {
-			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
-			if (world.getEntitiesWithinAABB(EntityRadiation.class, box).size() < 40) {
+			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(12, 12, 12);
+			if (world.getEntitiesWithinAABB(EntityRadiation.class, box).size() < 24) {
 				if (ReikaRandomHelper.doWithChance(0.02))
 					RadiationEffects.instance.contaminateArea(world, x, y+ReikaRandomHelper.getSafeRandomInt(3), z, 8, 1, 0, false, RadiationIntensity.LETHAL);
 				if (ReikaRandomHelper.doWithChance(0.1))

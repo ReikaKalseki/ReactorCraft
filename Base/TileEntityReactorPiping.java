@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,13 +29,14 @@ import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.ReactorCraft.Registry.ReactorTiles;
+import Reika.RotaryCraft.API.Interfaces.RCPipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.TransferAmount;
 
-public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct, PumpablePipe {
+public abstract class TileEntityReactorPiping extends TileEntityReactorBase implements RenderableDuct, PumpablePipe, RCPipe {
 
 	protected Fluid fluid;
 	protected int level;
@@ -227,12 +228,24 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	public final void removeLiquid(int toremove) {
-		this.setLevel(this.getLevel()-toremove);
+	public final int removeLiquid(int max) {
+		int has = this.getFluidLevel();
+		int rem = Math.min(max, has);
+		this.setLevel(has-rem);
+		return rem;
 	}
 
 	public final void addFluid(int toadd) {
-		this.setLevel(this.getLevel()+toadd);
+		this.setLevel(this.getFluidLevel()+toadd);
+	}
+
+	public final boolean addFluid(Fluid f, int toadd) {
+		Fluid has = this.getFluidType();
+		if (has != null && has != f)
+			return false;
+		this.setFluid(f);
+		this.addFluid(toadd);
+		return true;
 	}
 
 	private final void intakeFluid(World world, int x, int y, int z) {

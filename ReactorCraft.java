@@ -163,7 +163,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid UF6 = new Fluid("rc uranium hexafluoride").setDensity(15).setViscosity(10).setGaseous(true);
 
 	public static final Fluid NH3 = new Fluid("rc ammonia").setDensity(682).setViscosity(600);
-	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(1100);
+	public static final Fluid NA = new Fluid("rc sodium").setDensity(927).setViscosity(700).setTemperature(800);
 	public static final Fluid CL = new Fluid("rc chlorine").setDensity(320).setViscosity(12).setGaseous(true);
 	public static final Fluid O = new Fluid("rc oxygen").setDensity(138).setViscosity(20).setGaseous(true);
 	public static final Fluid Oliq = new Fluid("rc liquid oxygen").setDensity(1141).setViscosity(195).setGaseous(false).setTemperature(90);
@@ -171,7 +171,7 @@ public class ReactorCraft extends DragonAPIMod {
 	public static final Fluid NH3_lo = new Fluid("rc lowpammonia").setDensity(200).setViscosity(600);
 	public static final Fluid H2O_lo = new Fluid("rc lowpwater").setDensity(800).setViscosity(800);
 	public static final Fluid NA_hot = new Fluid("rc hotsodium").setDensity(720).setViscosity(650).setTemperature(2000).setLuminosity(8);
-	public static final Fluid NA_warm = new Fluid("rc warmsodium").setDensity(864).setViscosity(650).setTemperature(800).setLuminosity(6);
+	public static final Fluid NA_warm = new Fluid("rc warmsodium").setDensity(864).setViscosity(650).setTemperature(1100).setLuminosity(6);
 
 	public static final Fluid H2 = new Fluid("rc deuterium").setDensity(-1).setViscosity(10).setGaseous(true);
 	public static final Fluid H3 = new Fluid("rc tritium").setDensity(-1).setViscosity(10).setGaseous(true);
