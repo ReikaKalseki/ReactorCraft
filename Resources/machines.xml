@@ -266,7 +266,7 @@
 	</heavypump>
 	<fluidextractor>
 		<desc>
-			The fluid extractor, when submerged in (and has at least three sides in contact with) a fluid, can centrifuge it and obtain trace quantities of another fluid that was mixed in. For example, heavy water can be centrifuged out of the bottom of oceans (below y=%d and with at least %dm of water above), or molten lithium can be skimmed off the surface of lava.
+			The fluid extractor, when submerged in and surrounded by source blocks of a fluid, can centrifuge it and obtain trace quantities of another fluid that was mixed in. For example, heavy water can be centrifuged out of the bottom of oceans (below y=%d and with at least %dm of water above), or molten lithium can be skimmed off the surface of lava.
 		</desc>
 		<note>
 			Minimum Power: %dW

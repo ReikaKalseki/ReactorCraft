@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -137,7 +137,7 @@ public class RenderProcessor extends ReactorRenderBase
 			//GL11.glScaled(1, 1/3D, 1);
 			GL11.glScaled(0.99, 0.98, 0.99);
 
-			GL11.glCallList(displayList[(int)(amount / (3000D) * (ReikaLiquidRenderer.LEVELS - 1))]);
+			GL11.glCallList(displayList[(int)(Math.min(1, amount / (3000D)) * (ReikaLiquidRenderer.LEVELS - 1))]);
 
 			GL11.glPopAttrib();
 			GL11.glPopMatrix();
