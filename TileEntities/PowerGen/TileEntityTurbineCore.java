@@ -947,4 +947,9 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		return 0;
 	}
 
+	public void repairCC(int tier) {
+		if (damage > 0 && rand.nextFloat() < tier*0.1F)
+			damage--;
+	}
+
 }

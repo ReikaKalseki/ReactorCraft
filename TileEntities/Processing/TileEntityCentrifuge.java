@@ -60,7 +60,7 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	public int split; //timer
 
 	public TileEntityCentrifuge() {
-		ReikaJavaLibrary.initClass(Centrifuging.class);
+		ReikaJavaLibrary.initClass(Centrifuging.class, true);
 	}
 
 	@Override
@@ -372,12 +372,12 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	public static Collection<Centrifuging> getRecipes() {
-		ReikaJavaLibrary.initClass(Centrifuging.class);
+		ReikaJavaLibrary.initClass(Centrifuging.class, true);
 		return Collections.unmodifiableCollection(recipes.values());
 	}
 
 	public static Centrifuging getRecipe(Fluid f) {
-		ReikaJavaLibrary.initClass(Centrifuging.class);
+		ReikaJavaLibrary.initClass(Centrifuging.class, true);
 		return recipes.get(f);
 	}
 

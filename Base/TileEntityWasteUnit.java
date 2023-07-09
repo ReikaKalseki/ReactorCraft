@@ -16,8 +16,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.ChromatiCraft.API.CrystalElementAccessor;
-import Reika.ChromatiCraft.API.CrystalElementAccessor.CrystalElementProxy;
+import Reika.ChromatiCraft.API.Interfaces.AdjacencyCheckHandler;
+import Reika.ChromatiCraft.Base.TileEntity.TileEntityAdjacencyUpgrade;
+import Reika.ChromatiCraft.Registry.CrystalElement;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.Isotopes;
@@ -27,10 +30,18 @@ import Reika.ReactorCraft.Auxiliary.WasteManager;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Entities.EntityNeutron.NeutronType;
 import Reika.ReactorCraft.Registry.ReactorItems;
+import Reika.ReactorCraft.Registry.ReactorTiles;
 
 public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBase {
 
+	private static AdjacencyCheckHandler adjacency;
+
 	private long lastTickTime = -1;
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	public static void registerAdjacency() {
+		adjacency = TileEntityAdjacencyUpgrade.getOrCreateAdjacencyCheckHandler(CrystalElement.LIGHTBLUE, "Accelerate waste decay", ReactorTiles.STORAGE.getCraftedProduct(), ReactorTiles.WASTEDECAYER.getCraftedProduct());
+	}
 
 	protected void fill() {
 		for (int i = 0; i < this.getSizeInventory(); i++) {
@@ -60,11 +71,10 @@ public abstract class TileEntityWasteUnit extends TileEntityInventoriedReactorBa
 		if (!ModList.CHROMATICRAFT.isLoaded()) {
 			return 1;
 		}
-		CrystalElementProxy e = CrystalElementAccessor.getByEnum("LIGHTBLUE");
-		int tier = ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, e);
+		int tier = adjacency.getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord);
 		if (tier <= 0)
 			return 1;
-		return Math.sqrt(ChromatiAPI.getAPI().adjacency().getFactor(e, tier));
+		return Math.sqrt(ChromatiAPI.getAPI().adjacency().getFactor(CrystalElementAccessor.getByEnum("LIGHTBLUE"), tier));
 	}
 
 	protected final void decayWaste() {

@@ -13,6 +13,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,9 +42,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import Reika.ChromatiCraft.API.AcceleratorBlacklist;
-import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
+import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI.BlacklistReason;
 import Reika.ChromatiCraft.API.ChromatiAPI;
+import Reika.ChromatiCraft.API.Interfaces.CustomHealing.CustomTileHealing;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -94,6 +95,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorDescriptions;
 import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Auxiliary.ReactorTab;
 import Reika.ReactorCraft.Base.TileEntityReactorPiping;
+import Reika.ReactorCraft.Base.TileEntityWasteUnit;
 import Reika.ReactorCraft.Blocks.BlockTritiumLamp.TileEntityTritiumLamp;
 import Reika.ReactorCraft.Entities.EntityNeutron;
 import Reika.ReactorCraft.Registry.CraftingItems;
@@ -109,6 +111,7 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityFusionHeater;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamInjector;
 import Reika.ReactorCraft.TileEntities.PowerGen.TileEntitySteamLine;
+import Reika.ReactorCraft.TileEntities.PowerGen.TileEntityTurbineCore;
 import Reika.ReactorCraft.World.ReactorOreGenerator;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
@@ -456,7 +459,7 @@ public class ReactorCraft extends DragonAPIMod {
 			ReactorTiles m = ReactorTiles.TEList[i];
 			if (m != ReactorTiles.PROCESSOR) {
 				if (ModList.CHROMATICRAFT.isLoaded()) {
-					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+					ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), m.getCraftedProduct(), BlacklistReason.EXPLOIT);
 				}
 				TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 			}
@@ -464,6 +467,7 @@ public class ReactorCraft extends DragonAPIMod {
 
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			ChromatiAPI.getAPI().potions().addBadPotionForIgnore(radiation);
+			TileEntityWasteUnit.registerAdjacency();
 		}
 
 		ReikaPotionHelper.addBadPotion(radiation);
@@ -504,6 +508,30 @@ public class ReactorCraft extends DragonAPIMod {
 			if (ModList.SATISFORESTRY.isLoaded()) {
 
 			}
+		}
+
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			ChromatiAPI.getAPI().adjacency().addCustomHealing(TileEntityTurbineCore.class, new CustomTileHealing() {
+				@Override
+				public boolean runOnClient() {
+					return false;
+				}
+
+				@Override
+				public String getDescription() {
+					return "Repair steam turbine damage";
+				}
+
+				@Override
+				public Collection<ItemStack> getItems() {
+					return Arrays.asList(ReactorTiles.TURBINECORE.getCraftedProduct());
+				}
+
+				@Override
+				public void tick(TileEntity te, int tier) {
+					((TileEntityTurbineCore)te).repairCC(tier);
+				}
+			});
 		}
 
 		this.finishTiming();
@@ -603,7 +631,7 @@ public class ReactorCraft extends DragonAPIMod {
 		ReikaRegistryHelper.instantiateAndRegisterBlocks(instance, ReactorBlocks.blockList, blocks);
 		for (int i = 0; i < ReactorTiles.TEList.length; i++) {
 			GameRegistry.registerTileEntity(ReactorTiles.TEList[i].getTEClass(), "Reactor"+ReactorTiles.TEList[i].getName());
-			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass());
+			ReikaJavaLibrary.initClass(ReactorTiles.TEList[i].getTEClass(), true);
 		}
 		GameRegistry.registerTileEntity(TileEntitySteamInjector.class, "ReactorSteamInjector");
 		GameRegistry.registerTileEntity(TileEntityTritiumLamp.class, "ReactorTritiumLamp");

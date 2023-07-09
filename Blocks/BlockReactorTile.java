@@ -41,6 +41,7 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -557,6 +558,7 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 			tip.add(String.format("Coolant: %dmB", ((TileEntityToroidMagnet)te).getCoolant()));
 			tip.add(String.format("Direction: %s", ((TileEntityToroidMagnet)te).getAim().toString()));
 		}
+		ReikaJavaLibrary.removeDuplicates(tip);
 		return tip;
 	}
 
