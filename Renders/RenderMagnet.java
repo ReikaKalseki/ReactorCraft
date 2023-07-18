@@ -14,19 +14,18 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.ReactorCraft.Base.ReactorRenderBase;
 import Reika.ReactorCraft.Base.TileEntityReactorBase;
 import Reika.ReactorCraft.Models.ModelMagnet;
 import Reika.ReactorCraft.TileEntities.Fusion.TileEntityToroidMagnet;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 
 public class RenderMagnet extends ReactorRenderBase
 {
@@ -87,8 +86,8 @@ public class RenderMagnet extends ReactorRenderBase
 		if (!tile.isInWorld())
 			return;
 		int a = tile.getAlpha();
-		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
-		if (ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf()))
+		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
+		if (ep.getEntityData().hasKey(ItemIOGoggles.NBT_KEY) && ep.getEntityData().getLong(ItemIOGoggles.NBT_KEY) >= ep.worldObj.getTotalWorldTime()-10)
 			a = 255;
 		if (a <= 0)
 			return;

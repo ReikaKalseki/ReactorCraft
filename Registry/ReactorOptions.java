@@ -28,15 +28,15 @@ public enum ReactorOptions implements IntegerConfig, BooleanConfig, BoundedConfi
 	CADMIUMORE("Generate Cadmium Ore Even If Other Mods Do", true),
 	INDIUMORE("Generate Indium Ore Even If Other Mods Do", true),
 	//RETROGEN("Retrogen Ores", false),
-	RAINBOW("Rainbow Fluorite", false),
-	TOROIDCHARGE("Toroid Spark Delay", 4),
+	RAINBOW("Rainbow Fluorite", false), //Whether fluorite should only be one metadata value that drops and renders as all colors, rather than distinct veins of each
+	TOROIDCHARGE("Toroid Spark Delay", 4), //How quickly toroid magnets conduct charge, affecting performance cost and required energy
 	CHUNKLOADING("Fission Cores Chunkload When Active", true),
 	OREDENSITY("Ore Density Percentage", 100),
-	DISCRETE("Ore Discretization", 1),
+	DISCRETE("Ore Discretization", 1), //How much to "clump" the ore into larger but fewer veins. Largely useless now that CondensedOres exists.
 	DYECRAFT("Allow Fluorite Recoloring", false),
-	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false),
+	FASTNEUTRONS("Enable Fast and Thermal Neutrons", false), //Whether neutrons use a fast/thermal and moderation system. Reactions tend to emit fast neutrons and fission prefers thermal neutrons. Research this physics property for more information
 	VERTNEUTRONS("Fission Neutrons Can Move Vertically", false),
-	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F),
+	LODESTONERFMULT("Lodestone-Redstone RF Generation Multiplier", 1F), //How much RF is generated from redstone on lodestone blocks
 	RADIOORE("Make Fuel Ores Weakly Radioactive", false),
 	STEAMLINECAP("Steam Line Capacity", Integer.MAX_VALUE),
 	;

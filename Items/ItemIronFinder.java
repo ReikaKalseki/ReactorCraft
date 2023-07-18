@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import Reika.ChromatiCraft.Items.Tools.ItemAuraPouch;
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -58,6 +59,13 @@ public class ItemIronFinder extends ReactorItemBase {
 
 	public ItemIronFinder(int tex) {
 		super(tex);
+		if (ModList.CHROMATICRAFT.isLoaded())
+			this.setAuraPouchEffect();
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private void setAuraPouchEffect() {
+		ItemAuraPouch.setSpecialEffect(ItemAuraPouch.WORKS_IN_POUCH_EFFECT_DESC, this);
 	}
 
 	@Override
