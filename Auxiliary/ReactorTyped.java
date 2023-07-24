@@ -7,6 +7,6 @@ public interface ReactorTyped {
 
 	public ReactorType getReactorType();
 
-	public ReactorTiles getMachine();
+	public ReactorTiles getTile();
 
 }

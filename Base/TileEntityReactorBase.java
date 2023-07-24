@@ -12,7 +12,6 @@ package Reika.ReactorCraft.Base;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -20,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Base.TileEntityRegistryBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Proportionality;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
@@ -54,7 +53,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
 import li.cil.oc.api.network.Visibility;
 
-public abstract class TileEntityReactorBase extends TileEntityBase implements RenderFetcher, Transducerable {
+public abstract class TileEntityReactorBase extends TileEntityRegistryBase<ReactorTiles> implements RenderFetcher, Transducerable {
 
 	protected ForgeDirection[] dirs = ForgeDirection.values();
 
@@ -67,15 +66,15 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	private final HashMap<String, LuaMethod> methodNames = new HashMap();
 
 	public final TextureFetcher getRenderer() {
-		if (ReactorTiles.TEList[this.getIndex()].hasRender())
-			return ReactorRenderList.getRenderForMachine(ReactorTiles.TEList[this.getIndex()]);
+		if (this.getTile().hasRender())
+			return ReactorRenderList.getRenderForMachine(this.getTile());
 		else
 			return null;
 	}
 
 	@Override
 	public final boolean allowTickAcceleration() {
-		return ReactorTiles.TEList[this.getIndex()].allowTickAcceleration();
+		return this.getTile().allowTickAcceleration();
 	}
 
 	@Override
@@ -88,20 +87,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	}
 
 	@Override
-	public final Block getTileEntityBlockID() {
-		return ReactorTiles.TEList[this.getIndex()].getBlock();
-	}
-
-	public final ReactorTiles getMachine() {
-		return ReactorTiles.TEList[this.getIndex()];
-	}
-
-	@Override
-	protected String getTEName() {
-		return ReactorTiles.TEList[this.getIndex()].getName();
-	}
-
-	public abstract int getIndex();
+	public abstract ReactorTiles getTile();
 
 	public int getTextureState(ForgeDirection side) {
 		return 0;
@@ -137,13 +123,9 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	}
 
-	public boolean isThisTE(Block id, int meta) {
-		return id == this.getTileEntityBlockID() && meta == this.getIndex();
-	}
-
 	@Override
 	public boolean shouldRenderInPass(int pass) {
-		ReactorTiles r = ReactorTiles.TEList[this.getIndex()];
+		ReactorTiles r = this.getTile();
 		return pass == 0 || ((r.renderInPass1() || this instanceof ShaftMachine) && pass == 1);
 	}
 
@@ -173,7 +155,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 			}
 		}
 
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
@@ -253,7 +235,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	/** For transferring heat TO that reactor block. */
 	protected float getHeatConductionEfficiency(TemperaturedReactorTyped other) {
-		ReactorTiles r0 = other.getMachine();
+		ReactorTiles r0 = other.getTile();
 		if (r0 == ReactorTiles.CONTROL || r0 == ReactorTiles.CPU)
 			return this.getControlCPUHeatEfficiency();
 		ReactorType r1 = this instanceof ReactorTyped ? ((ReactorTyped)this).getReactorType() : null;
@@ -346,7 +328,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
 	public final Visibility getOCNetworkVisibility() {
-		return this.getMachine().isPipe() || this.getMachine() == ReactorTiles.REFLECTOR ? Visibility.None : Visibility.Network;
+		return this.getTile().isPipe() || this.getTile() == ReactorTiles.REFLECTOR ? Visibility.None : Visibility.Network;
 	}
 
 	@Override
@@ -372,7 +354,7 @@ public abstract class TileEntityReactorBase extends TileEntityBase implements Re
 
 	public double heatEnergyPerDegree() {
 		double base = ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
-		if (this.getMachine().isReactorCore() || this.getMachine() == ReactorTiles.EXCHANGER)
+		if (this.getTile().isReactorCore() || this.getTile() == ReactorTiles.EXCHANGER)
 			base *= 50;
 		return base;
 	}

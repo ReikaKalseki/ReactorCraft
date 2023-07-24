@@ -54,8 +54,8 @@ public class TileEntityReactorFlywheel extends TileEntityReactorBase implements 
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.FLYWHEEL.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.FLYWHEEL;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,8 +24,8 @@ import Reika.ReactorCraft.Registry.ReactorTiles;
 public class TileEntityGasDuct extends TileEntityReactorPiping {
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.GASPIPE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.GASPIPE;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class TileEntityGasDuct extends TileEntityReactorPiping {
 		World world = worldObj;
 		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return id != this.getMachine().getBlock() || meta != this.getMachine().getBlockMetadata();
+		return id != this.getTile().getBlock() || meta != this.getTile().getBlockMetadata();
 	}
 
 	@Override

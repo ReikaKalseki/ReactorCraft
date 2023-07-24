@@ -118,8 +118,8 @@ public class TileEntitySteamGrate extends TileEntityReactorBase implements Screw
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.GRATE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.GRATE;
 	}
 
 	@Override

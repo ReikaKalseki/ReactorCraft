@@ -370,7 +370,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-				if (r == this.getMachine()) {
+				if (r == this.getTile()) {
 					TileEntityNuclearCore te = (TileEntityNuclearCore)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
@@ -472,7 +472,7 @@ public abstract class TileEntityNuclearCore extends TileEntityInventoriedReactor
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
 		if (r2 == src && r == src)

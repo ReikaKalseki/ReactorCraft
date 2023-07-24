@@ -211,8 +211,8 @@ WrappableWireSource, PowerSourceTracker, EMPControl {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.GENERATOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.GENERATOR;
 	}
 
 	@Override

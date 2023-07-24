@@ -43,8 +43,8 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 	private final HybridTank output = new HybridTank("tritizerout", CAPACITY);
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.TRITIZER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.TRITIZER;
 	}
 
 	@Override
@@ -258,7 +258,7 @@ public class TileEntityTritizer extends TileEntityReactorBase implements Reactor
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
 		if (r2 == src && r == src)

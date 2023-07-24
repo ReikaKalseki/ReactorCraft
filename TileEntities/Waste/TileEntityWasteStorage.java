@@ -109,8 +109,8 @@ public class TileEntityWasteStorage extends TileEntityWasteUnit implements Range
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.STORAGE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.STORAGE;
 	}
 
 	@Override

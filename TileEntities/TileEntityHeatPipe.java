@@ -52,8 +52,8 @@ public class TileEntityHeatPipe extends TileEntityLine {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.HEATPIPE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.HEATPIPE;
 	}
 
 	@Override

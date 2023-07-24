@@ -143,8 +143,8 @@ public class TileEntitySynthesizer extends TileEntityInventoriedReactorBase impl
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.SYNTHESIZER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.SYNTHESIZER;
 	}
 
 	@Override

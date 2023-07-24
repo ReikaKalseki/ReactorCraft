@@ -91,8 +91,8 @@ public class TileEntityCentrifugalTurbine extends TileEntityTurbineCore {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.MINITURBINE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.MINITURBINE;
 	}
 
 }

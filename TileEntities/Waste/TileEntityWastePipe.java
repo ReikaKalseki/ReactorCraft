@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -32,8 +32,8 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 public class TileEntityWastePipe extends TileEntityReactorPiping implements NeutronTile {
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.WASTEPIPE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.WASTEPIPE;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class TileEntityWastePipe extends TileEntityReactorPiping implements Neut
 		World world = worldObj;
 		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return id != this.getMachine().getBlock() || meta != this.getMachine().getBlockMetadata();
+		return id != this.getTile().getBlock() || meta != this.getTile().getBlockMetadata();
 	}
 
 	@Override

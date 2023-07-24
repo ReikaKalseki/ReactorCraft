@@ -61,8 +61,8 @@ public class TileEntityHeavyPump extends TileEntityReactorBase implements Reacto
 	private final HybridTank tank = new HybridTank("heavypump", 8000);
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.FLUIDEXTRACTOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.FLUIDEXTRACTOR;
 	}
 
 	@Override

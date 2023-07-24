@@ -48,8 +48,8 @@ public class TileEntityCO2Heater extends TileEntityIntermediateBoiler {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.CO2HEATER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.CO2HEATER;
 	}
 
 	@Override

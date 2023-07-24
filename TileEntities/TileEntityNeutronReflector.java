@@ -32,8 +32,8 @@ public class TileEntityNeutronReflector extends TileEntityReactorBase implements
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.REFLECTOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.REFLECTOR;
 	}
 
 	@Override

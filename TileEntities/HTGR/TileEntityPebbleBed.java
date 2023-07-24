@@ -189,7 +189,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 				int dz = z+dir.offsetZ;
 				ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
 
-				if (r == this.getMachine()) {
+				if (r == this.getTile()) {
 					TileEntityPebbleBed te = (TileEntityPebbleBed)world.getTileEntity(dx, dy, dz);
 					int dTemp = temperature-te.temperature;
 					if (dTemp > 0) {
@@ -252,8 +252,8 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.PEBBLEBED.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.PEBBLEBED;
 	}
 
 	@Override
@@ -356,7 +356,7 @@ public class TileEntityPebbleBed extends TileEntityInventoriedReactorBase implem
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
 		if (r2 == src && r == src)

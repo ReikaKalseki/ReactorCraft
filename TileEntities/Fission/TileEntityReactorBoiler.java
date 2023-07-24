@@ -51,8 +51,8 @@ public class TileEntityReactorBoiler extends TileEntityNuclearBoiler implements 
 	private WorkingFluid fluid = WorkingFluid.EMPTY;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.BOILER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.BOILER;
 	}
 
 	@Override

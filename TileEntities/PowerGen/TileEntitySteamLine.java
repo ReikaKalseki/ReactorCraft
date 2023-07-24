@@ -45,8 +45,8 @@ public class TileEntitySteamLine extends TileEntityLine implements PumpablePipe,
 	private Proportionality<ReactorType> source = new Proportionality();
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.STEAMLINE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.STEAMLINE;
 	}
 
 	@Override

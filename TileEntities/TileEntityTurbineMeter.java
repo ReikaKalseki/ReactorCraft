@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,8 +26,8 @@ public class TileEntityTurbineMeter extends TileEntityReactorBase {
 	private int lvl;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.TURBINEMETER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.TURBINEMETER;
 	}
 
 	@Override

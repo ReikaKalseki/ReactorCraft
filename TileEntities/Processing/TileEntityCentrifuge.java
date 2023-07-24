@@ -64,8 +64,8 @@ public class TileEntityCentrifuge extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.CENTRIFUGE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.CENTRIFUGE;
 	}
 
 	@Override

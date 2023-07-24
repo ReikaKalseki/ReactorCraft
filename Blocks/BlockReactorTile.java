@@ -36,10 +36,8 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.Base.BlockTEBase;
+import Reika.DragonAPI.Base.BlockTileEnum;
 import Reika.DragonAPI.Base.TileEntityBase;
-import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
-import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -79,7 +77,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public class BlockReactorTile extends BlockTEBase implements MachineRegistryBlock, IWailaDataProvider {
+public class BlockReactorTile extends BlockTileEnum<TileEntityReactorBase, ReactorTiles> implements IWailaDataProvider {
 
 	protected static final IIcon[][][] icons = new IIcon[ReactorTiles.TEList.length][6][16];
 
@@ -115,9 +113,8 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int meta) {
-		TileEntity te = ReactorTiles.createTEFromIDAndMetadata(this, meta);
-		return te;
+	public TileEntityReactorBase createTileEntity(World world, int meta) {
+		return (TileEntityReactorBase)ReactorTiles.createTEFromIDAndMetadata(this, meta);
 	}
 
 	@Override
@@ -578,8 +575,13 @@ public class BlockReactorTile extends BlockTEBase implements MachineRegistryBloc
 	}
 
 	@Override
-	public final TileEnum getMachine(IBlockAccess world, int x, int y, int z) {
+	public final ReactorTiles getMapping(IBlockAccess world, int x, int y, int z) {
 		return ReactorTiles.getTE(world, x, y, z);
+	}
+
+	@Override
+	public ReactorTiles getMapping(int meta) {
+		return ReactorTiles.getMachineFromIDandMetadata(this, meta);
 	}
 
 }

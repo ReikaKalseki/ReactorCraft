@@ -38,8 +38,8 @@ public class TileEntityWasteContainer extends TileEntityWasteUnit implements Tem
 	public static final int HEIGHT = 3;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.WASTECONTAINER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.WASTECONTAINER;
 	}
 
 	@Override

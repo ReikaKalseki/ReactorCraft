@@ -157,7 +157,7 @@ public abstract class TileEntityNuclearBoiler extends TileEntityTankedReactorMac
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
 		if (r2 == src && r == src)

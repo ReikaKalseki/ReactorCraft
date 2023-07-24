@@ -26,7 +26,7 @@ public class LuaReactorCheckFuel extends LuaMethod {
 	@Override
 	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityNuclearCore tile = (TileEntityNuclearCore)te;
-		ReactorTiles r = tile.getMachine();
+		ReactorTiles r = tile.getTile();
 		int fuel = 0;
 		int maxfuel = 1;
 		if (r == ReactorTiles.BREEDER) {

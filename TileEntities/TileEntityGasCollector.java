@@ -107,8 +107,8 @@ public class TileEntityGasCollector extends TileEntityReactorBase implements IFl
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.COLLECTOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.COLLECTOR;
 	}
 
 	@Override

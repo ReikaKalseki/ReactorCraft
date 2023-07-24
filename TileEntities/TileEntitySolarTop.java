@@ -32,12 +32,12 @@ public class TileEntitySolarTop extends TileEntityReactorBase implements Tempera
 
 	@Override
 	public boolean isActive() {
-		return ReactorTiles.getTE(worldObj, xCoord, yCoord+1, zCoord) == this.getMachine() && this.getAdjacentTileEntity(ForgeDirection.DOWN) instanceof TileEntitySolar;
+		return ReactorTiles.getTE(worldObj, xCoord, yCoord+1, zCoord) == this.getTile() && this.getAdjacentTileEntity(ForgeDirection.DOWN) instanceof TileEntitySolar;
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.SOLARTOP.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.SOLARTOP;
 	}
 
 	@Override

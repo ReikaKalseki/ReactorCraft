@@ -102,7 +102,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 					}
 				}
 					 */
-					if (r == this.getMachine()) {
+					if (r == this.getTile()) {
 						this.balanceLiquidsWith((TileEntityThoriumCore)this.getAdjacentTileEntity(dir));
 					}
 				}
@@ -173,7 +173,7 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	@Override
 	protected float getHeatConductionEfficiency(TemperaturedReactorTyped other) {
 		boolean rest = temperature-this.getRestingTemperature(worldObj, xCoord, yCoord, zCoord) < 50;
-		switch(other.getMachine()) {
+		switch(other.getTile()) {
 			case BOILER:
 				return rest ? 0.125F : 0.75F;
 			case FUEL:
@@ -328,8 +328,8 @@ public class TileEntityThoriumCore extends TileEntityNuclearCore implements Iner
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.THORIUM.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.THORIUM;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -83,29 +83,29 @@ public class TileEntityFuelDump extends TileEntityTankedReactorMachine {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return this.hasTile() ? this.getTile().drain(from, resource, doDrain) : null;
+		return this.hasTile() ? this.getCore().drain(from, resource, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return this.hasTile() ? this.getTile().drain(from, maxDrain, doDrain) : null;
+		return this.hasTile() ? this.getCore().drain(from, maxDrain, doDrain) : null;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return this.hasTile() ? this.getTile().canDrain(from, fluid) : false;
+		return this.hasTile() ? this.getCore().canDrain(from, fluid) : false;
 	}
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return this.hasTile() ? this.getTile().canConnectToPipe(m) : false;
+		return this.hasTile() ? this.getCore().canConnectToPipe(m) : false;
 	}
 
 	private boolean hasTile() {
 		return this.getAdjacentTileEntity(ForgeDirection.UP) instanceof TileEntityThoriumCore;
 	}
 
-	private TileEntityThoriumCore getTile() {
+	private TileEntityThoriumCore getCore() {
 		return (TileEntityThoriumCore)this.getAdjacentTileEntity(ForgeDirection.UP);
 	}
 
@@ -125,8 +125,8 @@ public class TileEntityFuelDump extends TileEntityTankedReactorMachine {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.FUELDUMP.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.FUELDUMP;
 	}
 
 	@Override

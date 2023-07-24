@@ -67,7 +67,7 @@ public abstract class TileEntityIntermediateBoiler extends TileEntityNuclearBoil
 
 	private void transferFluid(World world, int x, int y, int z) {
 		ReactorTiles r = ReactorTiles.getTE(world, x, y+1, z);
-		if (r == this.getMachine()) {
+		if (r == this.getTile()) {
 			TileEntityIntermediateBoiler te = (TileEntityIntermediateBoiler)world.getTileEntity(x, y+1, z);
 			if (!te.tank.isFull() && !tank.isEmpty()) {
 				int amt = Math.min(tank.getLevel(), Math.min(100, te.tank.getCapacity()-te.tank.getLevel()));

@@ -79,8 +79,8 @@ PipeConnector, TemperatureTE, ThermalMachine, Shockable, IHasWork {
 	private Electrolysis recipe;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.ELECTROLYZER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.ELECTROLYZER;
 	}
 
 	public int getCapacity() {

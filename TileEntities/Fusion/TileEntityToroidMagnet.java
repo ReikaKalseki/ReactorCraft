@@ -80,8 +80,8 @@ ChunkLoadingTile, NeutronTile, NonIFluidTank {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.MAGNET.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.MAGNET;
 	}
 
 	@Override

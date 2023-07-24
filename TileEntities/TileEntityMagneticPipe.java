@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -46,8 +46,8 @@ public class TileEntityMagneticPipe extends TileEntityReactorPiping implements S
 	private StepTimer chargeTimer = new StepTimer(20);
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.MAGNETPIPE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.MAGNETPIPE;
 	}
 
 	@Override

@@ -61,8 +61,8 @@ public class TileEntityHeatExchanger extends TankedReactorPowerReceiver implemen
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.EXCHANGER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.EXCHANGER;
 	}
 
 	@Override

@@ -100,8 +100,8 @@ public class TileEntityFusionHeater extends TileEntityReactorBase implements Tem
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.HEATER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.HEATER;
 	}
 
 	@Override

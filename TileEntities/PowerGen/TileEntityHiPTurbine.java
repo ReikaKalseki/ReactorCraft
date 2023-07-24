@@ -233,8 +233,8 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.BIGTURBINE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.BIGTURBINE;
 	}
 
 	@Override
@@ -337,7 +337,7 @@ public class TileEntityHiPTurbine extends TileEntityTurbineCore implements Multi
 				}
 			}
 		}
-		else if (r == this.getMachine()) {
+		else if (r == this.getTile()) {
 			TileEntityHiPTurbine te = (TileEntityHiPTurbine)this.getAdjacentTileEntity(dir);
 			fluid = te.fluid;
 		}

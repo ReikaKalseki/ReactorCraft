@@ -68,8 +68,8 @@ public class TileEntityControlRod extends TileEntityReactorBase implements Linka
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.CONTROL.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.CONTROL;
 	}
 
 	public void toggle(boolean sound, boolean spread) {

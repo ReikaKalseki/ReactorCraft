@@ -52,8 +52,8 @@ public class TileEntitySodiumHeater extends TileEntityIntermediateBoiler {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.SODIUMBOILER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.SODIUMBOILER;
 	}
 
 	@Override

@@ -63,7 +63,6 @@ public enum ReactorBook implements HandbookEntry {
 	ELECTROLYZER(ReactorTiles.ELECTROLYZER),
 	SYNTHESIZER(ReactorTiles.SYNTHESIZER),
 	TRITIZER(ReactorTiles.TRITIZER),
-	WASTEDECAYER(ReactorTiles.WASTEDECAYER),
 
 	GENDESC("Power Generation Machines", ""),
 	BOILER(ReactorTiles.BOILER),
@@ -85,6 +84,7 @@ public enum ReactorBook implements HandbookEntry {
 	CONTROLROD(ReactorTiles.CONTROL),
 	WATERCELL(ReactorTiles.COOLANT),
 	CPU(ReactorTiles.CPU),
+	WASTEDECAYER(ReactorTiles.WASTEDECAYER),
 
 	BREEDERDESC("Breeder Reactor Components", ""),
 	BREEDERCORE(ReactorTiles.BREEDER),

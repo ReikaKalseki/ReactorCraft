@@ -48,8 +48,8 @@ public class TileEntitySolenoidMagnet extends TileEntityReactorBase implements R
 	private static final int MAX_SAFE_SPEED = 30;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.SOLENOID.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.SOLENOID;
 	}
 
 	public boolean hasMultiBlock() {

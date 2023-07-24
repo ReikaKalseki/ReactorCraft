@@ -141,8 +141,8 @@ public class TileEntityBreederCore extends TileEntityNuclearCore {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.BREEDER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.BREEDER;
 	}
 
 	@Override

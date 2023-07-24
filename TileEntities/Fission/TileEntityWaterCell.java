@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -43,7 +43,7 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		thermalTicker.update();
-		if (ReactorTiles.getTE(world, x, y-1, z) == this.getMachine()) {
+		if (ReactorTiles.getTE(world, x, y-1, z) == this.getTile()) {
 			TileEntityWaterCell te = (TileEntityWaterCell)world.getTileEntity(x, y-1, z);
 			if (te.getLiquidState() == LiquidStates.EMPTY && this.getLiquidState() != LiquidStates.EMPTY) {
 				te.setLiquidState(this.getLiquidState());
@@ -122,8 +122,8 @@ public class TileEntityWaterCell extends TileEntityReactorBase implements Reacto
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.COOLANT.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.COOLANT;
 	}
 
 	@Override

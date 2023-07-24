@@ -146,8 +146,8 @@ public class TileEntityUProcessor extends TileEntityInventoriedReactorBase imple
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.PROCESSOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.PROCESSOR;
 	}
 
 	@Override

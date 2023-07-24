@@ -47,7 +47,7 @@ public abstract class TileEntityLine extends TileEntityReactorBase {
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		if (id == Blocks.air)
 			return false;
-		if (ReactorTiles.getMachineFromIDandMetadata(id, meta) == this.getMachine())
+		if (ReactorTiles.getMachineFromIDandMetadata(id, meta) == this.getTile())
 			return true;
 		TileEntity te = world.getTileEntity(dx, dy, dz);
 		if (te instanceof WorldRift)
@@ -105,7 +105,7 @@ public abstract class TileEntityLine extends TileEntityReactorBase {
 			int dy = x+dir.offsetY;
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
-			if (m == this.getMachine()) {
+			if (m == this.getTile()) {
 				TileEntityLine te = (TileEntityLine)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = false;
 				world.func_147479_m(dx, dy, dz);
@@ -120,7 +120,7 @@ public abstract class TileEntityLine extends TileEntityReactorBase {
 			int dy = x+dir.offsetY;
 			int dz = x+dir.offsetZ;
 			ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
-			if (m == this.getMachine()) {
+			if (m == this.getTile()) {
 				TileEntityLine te = (TileEntityLine)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = true;
 				world.func_147479_m(dx, dy, dz);
@@ -132,7 +132,7 @@ public abstract class TileEntityLine extends TileEntityReactorBase {
 		int x = xCoord+dir.offsetX;
 		int y = yCoord+dir.offsetY;
 		int z = zCoord+dir.offsetZ;
-		ReactorTiles m = this.getMachine();
+		ReactorTiles m = this.getTile();
 		ReactorTiles m2 = ReactorTiles.getTE(worldObj, x, y, z);
 		if (m == m2)
 			return true;

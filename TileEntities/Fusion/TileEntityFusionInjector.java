@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -169,8 +169,8 @@ ToggleTile, NeutronTile {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.INJECTOR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.INJECTOR;
 	}
 
 	@Override

@@ -132,8 +132,8 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.TURBINECORE.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.TURBINECORE;
 	}
 
 	@Override
@@ -226,7 +226,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		int dy = y+dir.offsetY;
 		int dz = z+dir.offsetZ;
 		ReactorTiles r = ReactorTiles.getTE(world, dx, dy, dz);
-		if (r == this.getMachine()) {
+		if (r == this.getTile()) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)world.getTileEntity(dx, dy, dz);
 			int max = Math.min(tank.getRemainingSpace(), 1000);
 			int dl = te.tank.getLevel()-tank.getLevel();
@@ -351,7 +351,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 	}
 
 	public final boolean isAtEndOFLine() {
-		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
+		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getTile()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(readx, ready, readz);
 			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
 				return false;
@@ -404,7 +404,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 	}
 
 	private final int calcStage() {
-		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
+		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getTile()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(readx, ready, readz);
 			if (tile.writex == xCoord && tile.writey == yCoord && tile.writez == zCoord) {
 				int stage = tile.calcStage();
@@ -592,7 +592,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 	public final int getNumberStagesTotal() {
 		if (this.needsMultiblock() && !this.hasMultiBlock())
 			return 0;
-		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
+		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getTile()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(writex, writey, writez);
 			if (tile.readx == xCoord && tile.ready == yCoord && tile.readz == zCoord) {
 				if (tile.hasMultiBlock() || !tile.needsMultiblock())
@@ -603,13 +603,13 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 	}
 
 	private void followHead(World world, int x, int y, int z, int meta) {
-		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getMachine()) {
+		if (ReactorTiles.getTE(worldObj, readx, ready, readz) == this.getTile()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)world.getTileEntity(readx, ready, readz);
 			if (tile.writex == x && tile.writey == y && tile.writez == z) {
 				this.copyDataFrom(tile);
 			}
 		}
-		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getMachine()) {
+		if (ReactorTiles.getTE(worldObj, writex, writey, writez) == this.getTile()) {
 			TileEntityTurbineCore tile = (TileEntityTurbineCore)worldObj.getTileEntity(writex, writey, writez); //write!
 			if (tile.readx == x && tile.ready == y && tile.readz == z) {
 				if (tile.inter != null)
@@ -855,7 +855,7 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
 		ReactorTiles m = ReactorTiles.getTE(worldObj, dx, dy, dz);
-		if (m == this.getMachine()) {
+		if (m == this.getTile()) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getAdjacentTileEntity(dir);
 			te.forcedlube = this.getLubricantToDrop();
 		}
@@ -864,14 +864,14 @@ MultiBlockTile, BreakAction, ToggleTile, PowerSourceTracker {
 		dy = yCoord+dir.offsetY;
 		dz = zCoord+dir.offsetZ;
 		m = ReactorTiles.getTE(worldObj, dx, dy, dz);
-		if (m == this.getMachine()) {
+		if (m == this.getTile()) {
 			TileEntityTurbineCore te = (TileEntityTurbineCore)this.getAdjacentTileEntity(dir);
 			te.forcedlube = this.getLubricantToDrop();
 		}
 	}
 
 	public final void setLubricant(ItemStack is) {
-		if (ReikaItemHelper.matchStacks(this.getMachine().getCraftedProduct(), is)) {
+		if (ReikaItemHelper.matchStacks(this.getTile().getCraftedProduct(), is)) {
 			if (is.stackTagCompound != null) {
 				int lube = is.stackTagCompound.getInteger("lube");
 				tank.setContents(lube, FluidRegistry.getFluid("rc lubricant"));

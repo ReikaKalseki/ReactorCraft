@@ -33,9 +33,10 @@ public class TileEntityFuelRod extends TileEntityNuclearCore {
 		return 12;
 	}
 	 */
+
 	@Override
-	public int getIndex() {
-		return ReactorTiles.FUEL.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.FUEL;
 	}
 
 	@Override

@@ -151,8 +151,8 @@ public class TileEntityCPU extends TileEntityReactorBase implements ReactorPower
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.CPU.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.CPU;
 	}
 
 	public ReactorControlLayout getLayout() {

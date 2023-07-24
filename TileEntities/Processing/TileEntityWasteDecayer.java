@@ -38,8 +38,8 @@ public class TileEntityWasteDecayer extends TileEntityInventoriedReactorBase imp
 	public static final int OPTIMAL_TEMP = 400;
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.WASTEDECAYER.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.WASTEDECAYER;
 	}
 
 	@Override
@@ -213,7 +213,7 @@ public class TileEntityWasteDecayer extends TileEntityInventoriedReactorBase imp
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
-		ReactorTiles src = this.getMachine();
+		ReactorTiles src = this.getTile();
 		ReactorTiles r = ReactorTiles.getTE(world, x, y-1, z);
 		ReactorTiles r2 = ReactorTiles.getTE(world, x, y+1, z);
 		if (r2 == src && r == src)

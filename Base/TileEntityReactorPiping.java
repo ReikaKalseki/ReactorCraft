@@ -90,7 +90,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 		if (id == Blocks.air)
 			return false;
 		ReactorTiles m = ReactorTiles.getTE(world, dx, dy, dz);
-		if (m == this.getMachine())
+		if (m == this.getTile())
 			return true;
 		TileEntity te = this.getTileEntity(dx, dy, dz);
 		return (te instanceof PipeConnector || te instanceof IFluidHandler) && this.isInteractableTile(te);
@@ -441,7 +441,7 @@ public abstract class TileEntityReactorPiping extends TileEntityReactorBase impl
 
 	@Override
 	public final boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
-		return p instanceof TileEntityReactorPiping && this.getMachine() == ((TileEntityReactorPiping)p).getMachine();
+		return p instanceof TileEntityReactorPiping && this.getTile() == ((TileEntityReactorPiping)p).getTile();
 	}
 
 	@Override

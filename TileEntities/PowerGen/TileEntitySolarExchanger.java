@@ -73,8 +73,8 @@ public class TileEntitySolarExchanger extends TankedReactorPowerReceiver impleme
 	}
 
 	@Override
-	public int getIndex() {
-		return ReactorTiles.SOLAR.ordinal();
+	public ReactorTiles getTile() {
+		return ReactorTiles.SOLAR;
 	}
 
 	@Override
